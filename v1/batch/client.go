@@ -4,11 +4,11 @@ package batch
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -37,28 +37,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Bundle multiple requests to Connect V1 API endpoints as a single
-// request.
-//
-// The **V1SubmitBatch** endpoint does not require an access token
-// in the request header. Instead, provide an `access_token` parameter for
-// each request included in the batch.
-//
-// **V1SubmitBatch** responds with an array that contains response objects for
-// each of the batched requests. There is no guarantee of the order in
-// which batched requests are performed.
-//
-// **IMPORTANT**
-//
-// You cannot include more than 30 requests in a single batch and
-// recursive requests to **V1SubmitBatch** are not allowed. In
-// other words, none of the requests included in a batch can itself be a
-// request to the **V1SubmitBatch** endpoint.
 func (c *Client) Submit(
 	ctx context.Context,
-	request *squaregosdk.BatchRequest,
 	opts ...option.RequestOption,
-) ([]*squaregosdk.BatchResponse, error) {
+) error {
 	options := core.NewRequestOptions(opts...)
 
 	baseURL := "https://connect.squareupsandbox.com"
@@ -72,7 +54,6 @@ func (c *Client) Submit(
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response []*squaregosdk.BatchResponse
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
@@ -83,11 +64,9 @@ func (c *Client) Submit(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
 		},
 	); err != nil {
-		return nil, err
+		return err
 	}
-	return response, nil
+	return nil
 }

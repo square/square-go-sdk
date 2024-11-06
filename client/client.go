@@ -3,51 +3,52 @@
 package client
 
 import (
-	applepay "github.com/square/square-go-sdk/applepay"
-	bankaccounts "github.com/square/square-go-sdk/bankaccounts"
-	bookingcustomattributes "github.com/square/square-go-sdk/bookingcustomattributes"
-	bookingsclient "github.com/square/square-go-sdk/bookings/client"
-	cards "github.com/square/square-go-sdk/cards"
-	cashdrawersclient "github.com/square/square-go-sdk/cashdrawers/client"
-	catalogclient "github.com/square/square-go-sdk/catalog/client"
-	checkoutclient "github.com/square/square-go-sdk/checkout/client"
-	core "github.com/square/square-go-sdk/core"
-	customerclient "github.com/square/square-go-sdk/customer/client"
-	customerattributedefinitions "github.com/square/square-go-sdk/customerattributedefinitions"
-	customersclient "github.com/square/square-go-sdk/customers/client"
-	devicesclient "github.com/square/square-go-sdk/devices/client"
-	disputesclient "github.com/square/square-go-sdk/disputes/client"
-	employees "github.com/square/square-go-sdk/employees"
-	events "github.com/square/square-go-sdk/events"
-	giftcardsclient "github.com/square/square-go-sdk/giftcards/client"
-	inventory "github.com/square/square-go-sdk/inventory"
-	invoices "github.com/square/square-go-sdk/invoices"
-	laborclient "github.com/square/square-go-sdk/labor/client"
-	locationcustomattributes "github.com/square/square-go-sdk/locationcustomattributes"
-	locationsclient "github.com/square/square-go-sdk/locations/client"
-	loyaltyclient "github.com/square/square-go-sdk/loyalty/client"
-	merchantcustomattributes "github.com/square/square-go-sdk/merchantcustomattributes"
-	merchants "github.com/square/square-go-sdk/merchants"
-	mobile "github.com/square/square-go-sdk/mobile"
-	oauth "github.com/square/square-go-sdk/oauth"
-	option "github.com/square/square-go-sdk/option"
-	ordercustomattributes "github.com/square/square-go-sdk/ordercustomattributes"
-	orders "github.com/square/square-go-sdk/orders"
-	payments "github.com/square/square-go-sdk/payments"
-	payouts "github.com/square/square-go-sdk/payouts"
-	refunds "github.com/square/square-go-sdk/refunds"
-	sites "github.com/square/square-go-sdk/sites"
-	snippets "github.com/square/square-go-sdk/snippets"
-	subscriptions "github.com/square/square-go-sdk/subscriptions"
-	teamclient "github.com/square/square-go-sdk/team/client"
-	teammembers "github.com/square/square-go-sdk/teammembers"
-	terminalclient "github.com/square/square-go-sdk/terminal/client"
-	v1client "github.com/square/square-go-sdk/v1/client"
-	v1locations "github.com/square/square-go-sdk/v1locations"
-	vendors "github.com/square/square-go-sdk/vendors"
-	webhooksclient "github.com/square/square-go-sdk/webhooks/client"
 	http "net/http"
 	os "os"
+
+	applepay "github.com/fern-demo/square-go-sdk/applepay"
+	bankaccounts "github.com/fern-demo/square-go-sdk/bankaccounts"
+	bookingcustomattributes "github.com/fern-demo/square-go-sdk/bookingcustomattributes"
+	bookingsclient "github.com/fern-demo/square-go-sdk/bookings/client"
+	cards "github.com/fern-demo/square-go-sdk/cards"
+	cashdrawersclient "github.com/fern-demo/square-go-sdk/cashdrawers/client"
+	catalogclient "github.com/fern-demo/square-go-sdk/catalog/client"
+	checkoutclient "github.com/fern-demo/square-go-sdk/checkout/client"
+	core "github.com/fern-demo/square-go-sdk/core"
+	customerclient "github.com/fern-demo/square-go-sdk/customer/client"
+	customerattributedefinitions "github.com/fern-demo/square-go-sdk/customerattributedefinitions"
+	customersclient "github.com/fern-demo/square-go-sdk/customers/client"
+	devicesclient "github.com/fern-demo/square-go-sdk/devices/client"
+	disputesclient "github.com/fern-demo/square-go-sdk/disputes/client"
+	employees "github.com/fern-demo/square-go-sdk/employees"
+	events "github.com/fern-demo/square-go-sdk/events"
+	giftcardsclient "github.com/fern-demo/square-go-sdk/giftcards/client"
+	inventory "github.com/fern-demo/square-go-sdk/inventory"
+	invoices "github.com/fern-demo/square-go-sdk/invoices"
+	laborclient "github.com/fern-demo/square-go-sdk/labor/client"
+	locationcustomattributes "github.com/fern-demo/square-go-sdk/locationcustomattributes"
+	locationsclient "github.com/fern-demo/square-go-sdk/locations/client"
+	loyaltyclient "github.com/fern-demo/square-go-sdk/loyalty/client"
+	merchantcustomattributes "github.com/fern-demo/square-go-sdk/merchantcustomattributes"
+	merchants "github.com/fern-demo/square-go-sdk/merchants"
+	mobile "github.com/fern-demo/square-go-sdk/mobile"
+	oauth "github.com/fern-demo/square-go-sdk/oauth"
+	option "github.com/fern-demo/square-go-sdk/option"
+	ordercustomattributes "github.com/fern-demo/square-go-sdk/ordercustomattributes"
+	orders "github.com/fern-demo/square-go-sdk/orders"
+	payments "github.com/fern-demo/square-go-sdk/payments"
+	payouts "github.com/fern-demo/square-go-sdk/payouts"
+	refunds "github.com/fern-demo/square-go-sdk/refunds"
+	sites "github.com/fern-demo/square-go-sdk/sites"
+	snippets "github.com/fern-demo/square-go-sdk/snippets"
+	subscriptions "github.com/fern-demo/square-go-sdk/subscriptions"
+	teamclient "github.com/fern-demo/square-go-sdk/team/client"
+	teammembers "github.com/fern-demo/square-go-sdk/teammembers"
+	terminalclient "github.com/fern-demo/square-go-sdk/terminal/client"
+	v1client "github.com/fern-demo/square-go-sdk/v1/client"
+	v1transactions "github.com/fern-demo/square-go-sdk/v1transactions"
+	vendors "github.com/fern-demo/square-go-sdk/vendors"
+	webhooksclient "github.com/fern-demo/square-go-sdk/webhooks/client"
 )
 
 type Client struct {
@@ -57,7 +58,7 @@ type Client struct {
 
 	Mobile                       *mobile.Client
 	OAuth                        *oauth.Client
-	V1Locations                  *v1locations.Client
+	V1Transactions               *v1transactions.Client
 	ApplePay                     *applepay.Client
 	BankAccounts                 *bankaccounts.Client
 	Bookings                     *bookingsclient.Client
@@ -117,7 +118,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		header:                       options.ToHeader(),
 		Mobile:                       mobile.NewClient(opts...),
 		OAuth:                        oauth.NewClient(opts...),
-		V1Locations:                  v1locations.NewClient(opts...),
+		V1Transactions:               v1transactions.NewClient(opts...),
 		ApplePay:                     applepay.NewClient(opts...),
 		BankAccounts:                 bankaccounts.NewClient(opts...),
 		Bookings:                     bookingsclient.NewClient(opts...),

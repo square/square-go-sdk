@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	evidence "github.com/square/square-go-sdk/disputes/evidence"
-	option "github.com/square/square-go-sdk/option"
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	evidence "github.com/fern-demo/square-go-sdk/disputes/evidence"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -298,8 +299,8 @@ func (c *Client) CreateEvidenceText(
 // Submits evidence to the cardholder's bank.
 //
 // The evidence submitted by this endpoint includes evidence uploaded
-// using the [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) and
-// [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText) endpoints and
+// using the [CreateDisputeEvidenceFile]($e/Disputes/CreateDisputeEvidenceFile) and
+// [CreateDisputeEvidenceText]($e/Disputes/CreateDisputeEvidenceText) endpoints and
 // evidence automatically provided by Square, when available. Evidence cannot be removed from
 // a dispute after submission.
 func (c *Client) SubmitEvidence(

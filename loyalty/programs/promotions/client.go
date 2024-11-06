@@ -5,12 +5,13 @@ package promotions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	programs "github.com/square/square-go-sdk/loyalty/programs"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	programs "github.com/fern-demo/square-go-sdk/loyalty/programs"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -39,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the loyalty promotions associated with a [loyalty program](entity:LoyaltyProgram).
+// Lists the loyalty promotions associated with a [loyalty program]($m/LoyaltyProgram).
 // Results are sorted by the `created_at` date in descending order (newest to oldest).
 func (c *Client) List(
 	ctx context.Context,
@@ -102,7 +103,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a loyalty promotion for a [loyalty program](entity:LoyaltyProgram). A loyalty promotion
+// Creates a loyalty promotion for a [loyalty program]($m/LoyaltyProgram). A loyalty promotion
 // enables buyers to earn points in addition to those earned from the base loyalty program.
 //
 // This endpoint sets the loyalty promotion to the `ACTIVE` or `SCHEDULED` status, depending on the

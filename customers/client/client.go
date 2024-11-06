@@ -5,14 +5,15 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	cards "github.com/square/square-go-sdk/customers/cards"
-	customattributes "github.com/square/square-go-sdk/customers/customattributes"
-	groups "github.com/square/square-go-sdk/customers/groups"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	cards "github.com/fern-demo/square-go-sdk/customers/cards"
+	customattributes "github.com/fern-demo/square-go-sdk/customers/customattributes"
+	groups "github.com/fern-demo/square-go-sdk/customers/groups"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -159,7 +160,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Creates multiple [customer profiles](entity:Customer) for a business.
+// Creates multiple [customer profiles]($m/Customer) for a business.
 //
 // This endpoint takes a map of individual create requests and returns a map of responses.
 //
@@ -294,7 +295,7 @@ func (c *Client) BulkRetrieveCustomers(
 //
 // This endpoint takes a map of individual update requests and returns a map of responses.
 //
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
+// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API]($e/Cards) or [Gift Cards API]($e/GiftCards).
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
 	request *squaregosdk.BulkUpdateCustomersRequest,
@@ -333,11 +334,11 @@ func (c *Client) BulkUpdateCustomers(
 	return response, nil
 }
 
-// Creates or updates [custom attributes](entity:CustomAttribute) for customer profiles as a bulk operation.
+// Creates or updates [custom attributes]($m/CustomAttribute) for customer profiles as a bulk operation.
 //
 // Use this endpoint to set the value of one or more custom attributes for one or more customer profiles.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which is
-// created using the [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) endpoint.
+// created using the [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) endpoint.
 //
 // This `BulkUpsertCustomerCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
 // requests and returns a map of individual upsert responses. Each upsert request has a unique ID
@@ -476,7 +477,7 @@ func (c *Client) Get(
 //
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 //
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
+// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API]($e/Cards) or [Gift Cards API]($e/GiftCards).
 func (c *Client) Update(
 	ctx context.Context,
 	// The ID of the customer to update.

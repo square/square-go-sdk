@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -102,7 +103,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a draft [invoice](entity:Invoice)
+// Creates a draft [invoice]($m/Invoice)
 // for an order created using the Orders API.
 //
 // A draft invoice remains in your account and no action is taken.

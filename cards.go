@@ -22,9 +22,6 @@ type CreateCardRequest struct {
 	Card *Card `json:"card,omitempty" url:"-"`
 }
 
-type DisableCardRequest struct {
-}
-
 type CardsListRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.

@@ -4,12 +4,13 @@ package object
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	catalog "github.com/square/square-go-sdk/catalog"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	catalog "github.com/fern-demo/square-go-sdk/catalog"
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -38,7 +39,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Creates a new or updates the specified [CatalogObject](entity:CatalogObject).
+// Creates a new or updates the specified [CatalogObject]($m/CatalogObject).
 //
 // To ensure consistency, only one update request is processed at a time per seller account.
 // While one (batch or non-batch) update request is being processed, other (batched and non-batched)
@@ -81,13 +82,13 @@ func (c *Client) Upsert(
 	return response, nil
 }
 
-// Returns a single [CatalogItem](entity:CatalogItem) as a
-// [CatalogObject](entity:CatalogObject) based on the provided ID. The returned
-// object includes all of the relevant [CatalogItem](entity:CatalogItem)
-// information including: [CatalogItemVariation](entity:CatalogItemVariation)
+// Returns a single [CatalogItem]($m/CatalogItem) as a
+// [CatalogObject]($m/CatalogObject) based on the provided ID. The returned
+// object includes all of the relevant [CatalogItem]($m/CatalogItem)
+// information including: [CatalogItemVariation]($m/CatalogItemVariation)
 // children, references to its
-// [CatalogModifierList](entity:CatalogModifierList) objects, and the ids of
-// any [CatalogTax](entity:CatalogTax) objects that apply to it.
+// [CatalogModifierList]($m/CatalogModifierList) objects, and the ids of
+// any [CatalogTax]($m/CatalogTax) objects that apply to it.
 func (c *Client) Get(
 	ctx context.Context,
 	// The object ID of any type of catalog objects to be retrieved.
@@ -135,12 +136,12 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Deletes a single [CatalogObject](entity:CatalogObject) based on the
+// Deletes a single [CatalogObject]($m/CatalogObject) based on the
 // provided ID and returns the set of successfully deleted IDs in the response.
 // Deletion is a cascading event such that all children of the targeted object
-// are also deleted. For example, deleting a [CatalogItem](entity:CatalogItem)
+// are also deleted. For example, deleting a [CatalogItem]($m/CatalogItem)
 // will also delete all of its
-// [CatalogItemVariation](entity:CatalogItemVariation) children.
+// [CatalogItemVariation]($m/CatalogItemVariation) children.
 //
 // To ensure consistency, only one delete request is processed at a time per seller account.
 // While one (batch or non-batch) delete request is being processed, other (batched and non-batched)

@@ -4,12 +4,13 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	transactions "github.com/square/square-go-sdk/locations/transactions"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	transactions "github.com/fern-demo/square-go-sdk/locations/transactions"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {

@@ -1,1 +1,5 @@
 # Specify files that shouldn't be modified by Fern
+
+README.md
+webhooks/client/verify_signature.go
+verify_signature.go

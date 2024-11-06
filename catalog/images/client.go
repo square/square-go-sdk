@@ -5,14 +5,17 @@ package images
 import (
 	bytes "bytes"
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	catalog "github.com/square/square-go-sdk/catalog"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
+	"fmt"
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	"net/textproto"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	catalog "github.com/fern-demo/square-go-sdk/catalog"
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -41,8 +44,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Uploads an image file to be represented by a [CatalogImage](entity:CatalogImage) object that can be linked to an existing
-// [CatalogObject](entity:CatalogObject) instance. The resulting `CatalogImage` is unattached to any `CatalogObject` if the `object_id`
+// Uploads an image file to be represented by a [CatalogImage]($m/CatalogImage) object that can be linked to an existing
+// [CatalogObject]($m/CatalogObject) instance. The resulting `CatalogImage` is unattached to any `CatalogObject` if the `object_id`
 // is not specified.
 //
 // This `CreateCatalogImage` endpoint accepts HTTP multipart/form-data requests with a JSON part and an image file part in
@@ -70,11 +73,11 @@ func (c *Client) Create(
 	requestBuffer := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(requestBuffer)
 	if imageFile != nil {
-		imageFileFilename := "imageFile_filename"
-		if named, ok := imageFile.(interface{ Name() string }); ok {
-			imageFileFilename = named.Name()
-		}
-		imageFilePart, err := writer.CreateFormFile("image_file", imageFileFilename)
+		h := make(textproto.MIMEHeader)
+		h.Set("Content-Disposition",
+			fmt.Sprintf(`form-data; name="imageFile"; filename="imageFile_filename"`))
+		h.Set("Content-Type", "image/jpeg")
+		imageFilePart, err := writer.CreatePart(h)
 		if err != nil {
 			return nil, err
 		}
@@ -111,7 +114,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Uploads a new image file to replace the existing one in the specified [CatalogImage](entity:CatalogImage) object.
+// Uploads a new image file to replace the existing one in the specified [CatalogImage]($m/CatalogImage) object.
 //
 // This `UpdateCatalogImage` endpoint accepts HTTP multipart/form-data requests with a JSON part and an image file part in
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.

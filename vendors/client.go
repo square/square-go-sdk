@@ -4,11 +4,12 @@ package vendors
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -37,7 +38,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Creates one or more [Vendor](entity:Vendor) objects to represent suppliers to a seller.
+// Creates one or more [Vendor]($m/Vendor) objects to represent suppliers to a seller.
 func (c *Client) BatchCreate(
 	ctx context.Context,
 	request *squaregosdk.BatchCreateVendorsRequest,
@@ -76,7 +77,7 @@ func (c *Client) BatchCreate(
 	return response, nil
 }
 
-// Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.
+// Retrieves one or more vendors of specified [Vendor]($m/Vendor) IDs.
 func (c *Client) BatchGet(
 	ctx context.Context,
 	request *squaregosdk.BatchGetVendorsRequest,
@@ -115,7 +116,7 @@ func (c *Client) BatchGet(
 	return response, nil
 }
 
-// Updates one or more of existing [Vendor](entity:Vendor) objects as suppliers to a seller.
+// Updates one or more of existing [Vendor]($m/Vendor) objects as suppliers to a seller.
 func (c *Client) BatchUpdate(
 	ctx context.Context,
 	request *squaregosdk.BatchUpdateVendorsRequest,
@@ -154,7 +155,7 @@ func (c *Client) BatchUpdate(
 	return response, nil
 }
 
-// Creates a single [Vendor](entity:Vendor) object to represent a supplier to a seller.
+// Creates a single [Vendor]($m/Vendor) object to represent a supplier to a seller.
 func (c *Client) Create(
 	ctx context.Context,
 	request *squaregosdk.CreateVendorRequest,
@@ -193,7 +194,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Searches for vendors using a filter against supported [Vendor](entity:Vendor) properties and a supported sorter.
+// Searches for vendors using a filter against supported [Vendor]($m/Vendor) properties and a supported sorter.
 func (c *Client) Search(
 	ctx context.Context,
 	request *squaregosdk.SearchVendorsRequest,
@@ -232,7 +233,7 @@ func (c *Client) Search(
 	return response, nil
 }
 
-// Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
+// Retrieves the vendor of a specified [Vendor]($m/Vendor) ID.
 func (c *Client) Get(
 	ctx context.Context,
 	// ID of the [Vendor](entity:Vendor) to retrieve.
@@ -271,7 +272,7 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
+// Updates an existing [Vendor]($m/Vendor) object as a supplier to a seller.
 func (c *Client) Update(
 	ctx context.Context,
 	// ID of the [Vendor](entity:Vendor) to retrieve.

@@ -4,12 +4,13 @@ package eventtypes
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
-	webhooks "github.com/square/square-go-sdk/webhooks"
 	http "net/http"
 	os "os"
+
+	squaregosdk "github.com/fern-demo/square-go-sdk"
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
+	webhooks "github.com/fern-demo/square-go-sdk/webhooks"
 )
 
 type Client struct {

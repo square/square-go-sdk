@@ -3,12 +3,13 @@
 package client
 
 import (
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
-	eventtypes "github.com/square/square-go-sdk/webhooks/eventtypes"
-	subscriptions "github.com/square/square-go-sdk/webhooks/subscriptions"
 	http "net/http"
 	os "os"
+
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
+	eventtypes "github.com/fern-demo/square-go-sdk/webhooks/eventtypes"
+	subscriptions "github.com/fern-demo/square-go-sdk/webhooks/subscriptions"
 )
 
 type Client struct {

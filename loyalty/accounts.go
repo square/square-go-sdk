@@ -3,7 +3,7 @@
 package loyalty
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	squaregosdk "github.com/fern-demo/square-go-sdk"
 )
 
 type AccumulateLoyaltyPointsRequest struct {

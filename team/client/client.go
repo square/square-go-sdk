@@ -3,11 +3,12 @@
 package client
 
 import (
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
-	wagesetting "github.com/square/square-go-sdk/team/wagesetting"
 	http "net/http"
 	os "os"
+
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
+	wagesetting "github.com/fern-demo/square-go-sdk/team/wagesetting"
 )
 
 type Client struct {

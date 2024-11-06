@@ -3,7 +3,7 @@
 package checkout
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	squaregosdk "github.com/fern-demo/square-go-sdk"
 )
 
 type CreatePaymentLinkRequest struct {

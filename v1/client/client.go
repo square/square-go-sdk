@@ -3,13 +3,12 @@
 package client
 
 import (
-	core "github.com/square/square-go-sdk/core"
-	option "github.com/square/square-go-sdk/option"
-	batch "github.com/square/square-go-sdk/v1/batch"
-	transactionsclient "github.com/square/square-go-sdk/v1/transactions/client"
-	webhooks "github.com/square/square-go-sdk/v1/webhooks"
 	http "net/http"
 	os "os"
+
+	core "github.com/fern-demo/square-go-sdk/core"
+	option "github.com/fern-demo/square-go-sdk/option"
+	batch "github.com/fern-demo/square-go-sdk/v1/batch"
 )
 
 type Client struct {
@@ -17,9 +16,7 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
-	Batch        *batch.Client
-	Webhooks     *webhooks.Client
-	Transactions *transactionsclient.Client
+	Batch *batch.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -38,9 +35,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:       options.ToHeader(),
-		Batch:        batch.NewClient(opts...),
-		Webhooks:     webhooks.NewClient(opts...),
-		Transactions: transactionsclient.NewClient(opts...),
+		header: options.ToHeader(),
+		Batch:  batch.NewClient(opts...),
 	}
 }
