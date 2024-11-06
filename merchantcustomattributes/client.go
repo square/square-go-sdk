@@ -4,12 +4,11 @@ package merchantcustomattributes
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -38,7 +37,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the merchant-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the merchant-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
@@ -87,12 +86,12 @@ func (c *Client) ListMerchantCustomAttributeDefinitions(
 	return response, nil
 }
 
-// Creates a merchant-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
+// Creates a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to define a custom attribute that can be associated with a merchant connecting to your application.
 // A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
 // for a custom attribute. After the definition is created, you can call
-// [UpsertMerchantCustomAttribute]($e/MerchantCustomAttributes/UpsertMerchantCustomAttribute) or
-// [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes)
+// [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) or
+// [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
 // to set the custom attribute for a merchant.
 func (c *Client) CreateMerchantCustomAttributeDefinition(
 	ctx context.Context,
@@ -132,7 +131,7 @@ func (c *Client) CreateMerchantCustomAttributeDefinition(
 	return response, nil
 }
 
-// Retrieves a merchant-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
+// Retrieves a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) RetrieveMerchantCustomAttributeDefinition(
@@ -183,7 +182,7 @@ func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 	return response, nil
 }
 
-// Updates a merchant-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
+// Updates a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
 // `schema` for a `Selection` data type.
 // Only the definition owner can update a custom attribute definition.
@@ -227,7 +226,7 @@ func (c *Client) UpdateMerchantCustomAttributeDefinition(
 	return response, nil
 }
 
-// Deletes a merchant-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
+// Deletes a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 // Deleting a custom attribute definition also deletes the corresponding custom attribute from
 // the merchant.
 // Only the definition owner can delete a custom attribute definition.
@@ -269,7 +268,7 @@ func (c *Client) DeleteMerchantCustomAttributeDefinition(
 	return response, nil
 }
 
-// Deletes [custom attributes]($m/CustomAttribute) for a merchant as a bulk operation.
+// Deletes [custom attributes](entity:CustomAttribute) for a merchant as a bulk operation.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) BulkDeleteMerchantCustomAttributes(
@@ -310,10 +309,10 @@ func (c *Client) BulkDeleteMerchantCustomAttributes(
 	return response, nil
 }
 
-// Creates or updates [custom attributes]($m/CustomAttribute) for a merchant as a bulk operation.
+// Creates or updates [custom attributes](entity:CustomAttribute) for a merchant as a bulk operation.
 // Use this endpoint to set the value of one or more custom attributes for a merchant.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which is
-// created using the [CreateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/CreateMerchantCustomAttributeDefinition) endpoint.
+// created using the [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) endpoint.
 // This `BulkUpsertMerchantCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
 // requests and returns a map of individual upsert responses. Each upsert request has a unique ID
 // and provides a merchant ID and custom attribute. Each upsert response is returned with the ID
@@ -358,7 +357,7 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 	return response, nil
 }
 
-// Lists the [custom attributes]($m/CustomAttribute) associated with a merchant.
+// Lists the [custom attributes](entity:CustomAttribute) associated with a merchant.
 // You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
 // in the same call.
 // When all response pages are retrieved, the results include all custom attributes that are
@@ -411,7 +410,7 @@ func (c *Client) ListMerchantCustomAttributes(
 	return response, nil
 }
 
-// Retrieves a [custom attribute]($m/CustomAttribute) associated with a merchant.
+// Retrieves a [custom attribute](entity:CustomAttribute) associated with a merchant.
 // You can use the `with_definition` query parameter to also retrieve the custom attribute definition
 // in the same call.
 // To retrieve a custom attribute owned by another application, the `visibility` setting must be
@@ -471,10 +470,10 @@ func (c *Client) RetrieveMerchantCustomAttribute(
 	return response, nil
 }
 
-// Creates or updates a [custom attribute]($m/CustomAttribute) for a merchant.
+// Creates or updates a [custom attribute](entity:CustomAttribute) for a merchant.
 // Use this endpoint to set the value of a custom attribute for a specified merchant.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which
-// is created using the [CreateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/CreateMerchantCustomAttributeDefinition) endpoint.
+// is created using the [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) endpoint.
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) UpsertMerchantCustomAttribute(
@@ -525,7 +524,7 @@ func (c *Client) UpsertMerchantCustomAttribute(
 	return response, nil
 }
 
-// Deletes a [custom attribute]($m/CustomAttribute) associated with a merchant.
+// Deletes a [custom attribute](entity:CustomAttribute) associated with a merchant.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) DeleteMerchantCustomAttribute(

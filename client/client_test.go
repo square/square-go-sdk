@@ -3,12 +3,11 @@
 package client
 
 import (
+	option "github.com/square/square-go-sdk/option"
+	assert "github.com/stretchr/testify/assert"
 	http "net/http"
 	testing "testing"
 	time "time"
-
-	option "github.com/fern-demo/square-go-sdk/option"
-	assert "github.com/stretchr/testify/assert"
 )
 
 func TestNewClient(t *testing.T) {

@@ -5,13 +5,12 @@ package client
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	activities "github.com/square/square-go-sdk/giftcards/activities"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	activities "github.com/fern-demo/square-go-sdk/giftcards/activities"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -105,8 +104,8 @@ func (c *Client) List(
 
 // Creates a digital gift card or registers a physical (plastic) gift card. The resulting gift card
 // has a `PENDING` state. To activate a gift card so that it can be redeemed for purchases, call
-// [CreateGiftCardActivity]($e/GiftCardActivities/CreateGiftCardActivity) and create an `ACTIVATE`
-// activity with the initial balance. Alternatively, you can use [RefundPayment]($e/Refunds/RefundPayment)
+// [CreateGiftCardActivity](api-endpoint:GiftCardActivities-CreateGiftCardActivity) and create an `ACTIVATE`
+// activity with the initial balance. Alternatively, you can use [RefundPayment](api-endpoint:Refunds-RefundPayment)
 // to refund a payment to the new gift card.
 func (c *Client) Create(
 	ctx context.Context,

@@ -3,10 +3,9 @@
 package option
 
 import (
+	core "github.com/square/square-go-sdk/core"
 	http "net/http"
 	url "net/url"
-
-	core "github.com/fern-demo/square-go-sdk/core"
 )
 
 // RequestOption adapts the behavior of an indivdual request.

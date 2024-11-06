@@ -4,13 +4,12 @@ package checkouts
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
+	terminal "github.com/square/square-go-sdk/terminal"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
-	terminal "github.com/fern-demo/square-go-sdk/terminal"
 )
 
 type Client struct {
@@ -162,6 +161,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	// The unique ID for the desired `TerminalCheckout`.
 	checkoutID string,
+	request *terminal.CancelTerminalCheckoutRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -188,6 +188,7 @@ func (c *Client) Cancel(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

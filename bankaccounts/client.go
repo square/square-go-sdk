@@ -5,12 +5,11 @@ package bankaccounts
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -39,7 +38,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Returns a list of [BankAccount]($m/BankAccount) objects linked to a Square account.
+// Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square account.
 func (c *Client) List(
 	ctx context.Context,
 	request *squaregosdk.BankAccountsListRequest,
@@ -98,7 +97,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Returns details of a [BankAccount]($m/BankAccount) identified by V1 bank account ID.
+// Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
 func (c *Client) GetByV1ID(
 	ctx context.Context,
 	// Connect V1 ID of the desired `BankAccount`. For more information, see
@@ -138,7 +137,7 @@ func (c *Client) GetByV1ID(
 	return response, nil
 }
 
-// Returns details of a [BankAccount]($m/BankAccount)
+// Returns details of a [BankAccount](entity:BankAccount)
 // linked to a Square account.
 func (c *Client) Get(
 	ctx context.Context,

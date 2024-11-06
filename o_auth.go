@@ -2,6 +2,40 @@
 
 package square
 
+type OAuthAuthorizeRequest struct {
+	// The Square-issued ID for your application, which is available on
+	// the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
+	ClientID string `json:"-" url:"client_id"`
+	// A space-separated list of the permissions that the application is requesting.
+	// Default: "`MERCHANT_PROFILE_READ PAYMENTS_READ SETTLEMENTS_READ BANK_ACCOUNTS_READ`"
+	Scope *OAuthPermission `json:"-" url:"scope,omitempty"`
+	// The locale to present the permission request form in. Square detects
+	// the appropriate locale automatically. Only provide this value if the
+	// application can definitively determine the preferred locale.
+	//
+	// Currently supported values: `en-IE`, `en-US`, `en-CA`, `es-US`, `fr-CA`, and
+	// `ja-JP`.
+	Locale *string `json:"-" url:"locale,omitempty"`
+	// If `false`, the user must log in to their Square account to
+	// view the Permission Request form, even if they already have a valid user
+	// session. This value has no effect in the Square Sandbox.
+	// Default: `true`
+	Session *bool `json:"-" url:"session,omitempty"`
+	// When provided, `state` is passed to the configured redirect URL after
+	// the Permission Request form is submitted. You can include `state` and verify
+	// its value to help protect against cross-site request forgery.
+	State *string `json:"-" url:"state,omitempty"`
+	// When provided, the OAuth flow uses PKCE to authorize. The `code_challenge` will be associated
+	// with the authorization_code and a `code_verifier` will need to passed in to obtain the access token.
+	CodeChallenge *string `json:"-" url:"code_challenge,omitempty"`
+	// The redirect URL assigned on the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
+	// This field is required to use a dynamic port at runtime (PKCE only). To use a dynamic port, use the literal "&lt;port&gt;"
+	// as a placeholder for a port in the **Redirect URL** box in the [Developer Dashboard](https://developer.squareup.com/apps),
+	// for example, "http://localhost:&lt;port&gt;". When you call the `Authorize` endpoint from an application, pass in the actual
+	// port in this field. For example: `https://connect.squareup.com/oauth2/authorize?client_id={YOUR_APP_ID}&scope=MERCHANT_PROFILE_READ&redirect_uri=http://localhost:8000`
+	RedirectURI *string `json:"-" url:"redirect_uri,omitempty"`
+}
+
 type ObtainTokenRequest struct {
 	// The Square-issued ID of your application, which is available on the **OAuth** page in the
 	// [Developer Dashboard](https://developer.squareup.com/apps).
@@ -47,6 +81,11 @@ type ObtainTokenRequest struct {
 	// Must be provided when using the PKCE OAuth flow if `grant_type` is set to `authorization_code`. The `code_verifier` is used to verify against the
 	// `code_challenge` associated with the `authorization_code`.
 	CodeVerifier *string `json:"code_verifier,omitempty" url:"-"`
+}
+
+type RenewTokenRequest struct {
+	// The token you want to renew.
+	AccessToken *string `json:"access_token,omitempty" url:"-"`
 }
 
 type RevokeTokenRequest struct {

@@ -4,12 +4,11 @@ package orders
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -38,13 +37,13 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Creates a new [order]($m/Order) that can include information about products for
+// Creates a new [order](entity:Order) that can include information about products for
 // purchase and settings to apply to the purchase.
 //
 // To pay for a created order, see
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
 //
-// You can modify open orders using the [UpdateOrder]($e/Orders/UpdateOrder) endpoint.
+// You can modify open orders using the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 func (c *Client) Create(
 	ctx context.Context,
 	request *squaregosdk.CreateOrderRequest,
@@ -83,7 +82,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Retrieves a set of [orders]($m/Order) by their IDs.
+// Retrieves a set of [orders](entity:Order) by their IDs.
 //
 // If a given order ID does not exist, the ID is ignored instead of generating an error.
 func (c *Client) BatchGet(
@@ -208,13 +207,13 @@ func (c *Client) Clone(
 // ecosystem (such as Point of Sale, Invoices, and Connect APIs).
 //
 // `SearchOrders` requests need to specify which locations to search and define a
-// [SearchOrdersQuery]($m/SearchOrdersQuery) object that controls
+// [SearchOrdersQuery](entity:SearchOrdersQuery) object that controls
 // how to sort or filter the results. Your `SearchOrdersQuery` can:
 //
 // Set filter criteria.
 // Set the sort order.
 // Determine whether to return results as complete `Order` objects or as
-// [OrderEntry]($m/OrderEntry) objects.
+// [OrderEntry](entity:OrderEntry) objects.
 //
 // Note that details for orders processed with Square Point of Sale while in
 // offline mode might not be transmitted to Square for up to 72 hours. Offline
@@ -258,7 +257,7 @@ func (c *Client) Search(
 	return response, nil
 }
 
-// Retrieves an [Order]($m/Order) by ID.
+// Retrieves an [Order](entity:Order) by ID.
 func (c *Client) Get(
 	ctx context.Context,
 	// The ID of the order to retrieve.
@@ -297,7 +296,7 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Updates an open [order]($m/Order) by adding, replacing, or deleting
+// Updates an open [order](entity:Order) by adding, replacing, or deleting
 // fields. Orders with a `COMPLETED` or `CANCELED` state cannot be updated.
 //
 // An `UpdateOrder` request requires the following:
@@ -352,7 +351,7 @@ func (c *Client) Update(
 	return response, nil
 }
 
-// Pay for an [order]($m/Order) using one or more approved [payments]($m/Payment)
+// Pay for an [order](entity:Order) using one or more approved [payments](entity:Payment)
 // or settle an order with a total of `0`.
 //
 // The total of the `payment_ids` listed in the request must be equal to the order
@@ -361,7 +360,7 @@ func (c *Client) Update(
 //
 // To be used with `PayOrder`, a payment must:
 //
-//   - Reference the order by specifying the `order_id` when [creating the payment]($e/Payments/CreatePayment).
+//   - Reference the order by specifying the `order_id` when [creating the payment](api-endpoint:Payments-CreatePayment).
 //     Any approved payments that reference the same `order_id` not specified in the
 //     `payment_ids` is canceled.
 //   - Be approved with [delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture).

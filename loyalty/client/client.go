@@ -4,15 +4,14 @@ package client
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	accounts "github.com/square/square-go-sdk/loyalty/accounts"
+	programsclient "github.com/square/square-go-sdk/loyalty/programs/client"
+	rewards "github.com/square/square-go-sdk/loyalty/rewards"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	accounts "github.com/fern-demo/square-go-sdk/loyalty/accounts"
-	programsclient "github.com/fern-demo/square-go-sdk/loyalty/programs/client"
-	rewards "github.com/fern-demo/square-go-sdk/loyalty/rewards"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {

@@ -5,12 +5,11 @@ package merchants
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -47,7 +46,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // to get your own merchant information or specify an OAuth token to get the
 // information for the merchant that granted your application access.
 //
-// If you know the merchant ID, you can also use the [RetrieveMerchant]($e/Merchants/RetrieveMerchant)
+// If you know the merchant ID, you can also use the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant)
 // endpoint to retrieve the merchant information.
 func (c *Client) List(
 	ctx context.Context,

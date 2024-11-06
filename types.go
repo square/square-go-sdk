@@ -5,8 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-
-	core "github.com/fern-demo/square-go-sdk/core"
+	core "github.com/square/square-go-sdk/core"
 )
 
 // Defines the request parameters for the `AcceptDispute` endpoint.
@@ -142,7 +141,7 @@ func (a *AcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents an [AccumulateLoyaltyPoints]($e/Loyalty/AccumulateLoyaltyPoints) response.
+// Represents an [AccumulateLoyaltyPoints](api-endpoint:Loyalty-AccumulateLoyaltyPoints) response.
 type AccumulateLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -242,19 +241,34 @@ func (a *AchDetails) String() string {
 type ActionCancelReason string
 
 const (
-	ActionCancelReasonBuyerCanceled  ActionCancelReason = "BUYER_CANCELED"
-	ActionCancelReasonSellerCanceled ActionCancelReason = "SELLER_CANCELED"
-	ActionCancelReasonTimedOut       ActionCancelReason = "TIMED_OUT"
+	ActionCancelReasonActionCancelReasonDoNotUse ActionCancelReason = "ACTION_CANCEL_REASON_DO_NOT_USE"
+	ActionCancelReasonBuyerCanceled              ActionCancelReason = "BUYER_CANCELED"
+	ActionCancelReasonSellerCanceled             ActionCancelReason = "SELLER_CANCELED"
+	ActionCancelReasonTimedOut                   ActionCancelReason = "TIMED_OUT"
+	ActionCancelReasonUnsupported                ActionCancelReason = "UNSUPPORTED"
+	ActionCancelReasonSellerDismissed            ActionCancelReason = "SELLER_DISMISSED"
+	ActionCancelReasonTerminalTimedOut           ActionCancelReason = "TERMINAL_TIMED_OUT"
+	ActionCancelReasonTerminalError              ActionCancelReason = "TERMINAL_ERROR"
 )
 
 func NewActionCancelReasonFromString(s string) (ActionCancelReason, error) {
 	switch s {
+	case "ACTION_CANCEL_REASON_DO_NOT_USE":
+		return ActionCancelReasonActionCancelReasonDoNotUse, nil
 	case "BUYER_CANCELED":
 		return ActionCancelReasonBuyerCanceled, nil
 	case "SELLER_CANCELED":
 		return ActionCancelReasonSellerCanceled, nil
 	case "TIMED_OUT":
 		return ActionCancelReasonTimedOut, nil
+	case "UNSUPPORTED":
+		return ActionCancelReasonUnsupported, nil
+	case "SELLER_DISMISSED":
+		return ActionCancelReasonSellerDismissed, nil
+	case "TERMINAL_TIMED_OUT":
+		return ActionCancelReasonTerminalTimedOut, nil
+	case "TERMINAL_ERROR":
+		return ActionCancelReasonTerminalError, nil
 	}
 	var t ActionCancelReason
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -267,6 +281,7 @@ func (a ActionCancelReason) Ptr() *ActionCancelReason {
 type ActivityType string
 
 const (
+	ActivityTypeUnknownPayoutEntryTypeDoNotUse        ActivityType = "UNKNOWN_PAYOUT_ENTRY_TYPE_DO_NOT_USE"
 	ActivityTypeAdjustment                            ActivityType = "ADJUSTMENT"
 	ActivityTypeAppFeeRefund                          ActivityType = "APP_FEE_REFUND"
 	ActivityTypeAppFeeRevenue                         ActivityType = "APP_FEE_REVENUE"
@@ -306,8 +321,14 @@ const (
 	ActivityTypeAutomaticBitcoinConversionsReversed   ActivityType = "AUTOMATIC_BITCOIN_CONVERSIONS_REVERSED"
 	ActivityTypeCreditCardRepayment                   ActivityType = "CREDIT_CARD_REPAYMENT"
 	ActivityTypeCreditCardRepaymentReversed           ActivityType = "CREDIT_CARD_REPAYMENT_REVERSED"
+	ActivityTypeSquareCardPayout                      ActivityType = "SQUARE_CARD_PAYOUT"
+	ActivityTypeReturnedSquareCardPayout              ActivityType = "RETURNED_SQUARE_CARD_PAYOUT"
+	ActivityTypeManualPayout                          ActivityType = "MANUAL_PAYOUT"
+	ActivityTypeReturnedManualPayout                  ActivityType = "RETURNED_MANUAL_PAYOUT"
 	ActivityTypeLocalOffersCashback                   ActivityType = "LOCAL_OFFERS_CASHBACK"
 	ActivityTypeLocalOffersFee                        ActivityType = "LOCAL_OFFERS_FEE"
+	ActivityTypeGiftCardPool                          ActivityType = "GIFT_CARD_POOL"
+	ActivityTypeGiftCardPoolReversed                  ActivityType = "GIFT_CARD_POOL_REVERSED"
 	ActivityTypePercentageProcessingEnrollment        ActivityType = "PERCENTAGE_PROCESSING_ENROLLMENT"
 	ActivityTypePercentageProcessingDeactivation      ActivityType = "PERCENTAGE_PROCESSING_DEACTIVATION"
 	ActivityTypePercentageProcessingRepayment         ActivityType = "PERCENTAGE_PROCESSING_REPAYMENT"
@@ -319,6 +340,9 @@ const (
 	ActivityTypeGiftCardLoadFeeRefund                 ActivityType = "GIFT_CARD_LOAD_FEE_REFUND"
 	ActivityTypeUndoGiftCardLoadFeeRefund             ActivityType = "UNDO_GIFT_CARD_LOAD_FEE_REFUND"
 	ActivityTypeBalanceFoldersTransfer                ActivityType = "BALANCE_FOLDERS_TRANSFER"
+	ActivityTypeCashForBusinessFeeRefund              ActivityType = "CASH_FOR_BUSINESS_FEE_REFUND"
+	ActivityTypeCashForBusinessDisputeOffset          ActivityType = "CASH_FOR_BUSINESS_DISPUTE_OFFSET"
+	ActivityTypeCashForBusinessDisputeOffsetReversed  ActivityType = "CASH_FOR_BUSINESS_DISPUTE_OFFSET_REVERSED"
 	ActivityTypeBalanceFoldersTransferReversed        ActivityType = "BALANCE_FOLDERS_TRANSFER_REVERSED"
 	ActivityTypeGiftCardPoolTransfer                  ActivityType = "GIFT_CARD_POOL_TRANSFER"
 	ActivityTypeGiftCardPoolTransferReversed          ActivityType = "GIFT_CARD_POOL_TRANSFER_REVERSED"
@@ -326,6 +350,8 @@ const (
 
 func NewActivityTypeFromString(s string) (ActivityType, error) {
 	switch s {
+	case "UNKNOWN_PAYOUT_ENTRY_TYPE_DO_NOT_USE":
+		return ActivityTypeUnknownPayoutEntryTypeDoNotUse, nil
 	case "ADJUSTMENT":
 		return ActivityTypeAdjustment, nil
 	case "APP_FEE_REFUND":
@@ -404,10 +430,22 @@ func NewActivityTypeFromString(s string) (ActivityType, error) {
 		return ActivityTypeCreditCardRepayment, nil
 	case "CREDIT_CARD_REPAYMENT_REVERSED":
 		return ActivityTypeCreditCardRepaymentReversed, nil
+	case "SQUARE_CARD_PAYOUT":
+		return ActivityTypeSquareCardPayout, nil
+	case "RETURNED_SQUARE_CARD_PAYOUT":
+		return ActivityTypeReturnedSquareCardPayout, nil
+	case "MANUAL_PAYOUT":
+		return ActivityTypeManualPayout, nil
+	case "RETURNED_MANUAL_PAYOUT":
+		return ActivityTypeReturnedManualPayout, nil
 	case "LOCAL_OFFERS_CASHBACK":
 		return ActivityTypeLocalOffersCashback, nil
 	case "LOCAL_OFFERS_FEE":
 		return ActivityTypeLocalOffersFee, nil
+	case "GIFT_CARD_POOL":
+		return ActivityTypeGiftCardPool, nil
+	case "GIFT_CARD_POOL_REVERSED":
+		return ActivityTypeGiftCardPoolReversed, nil
 	case "PERCENTAGE_PROCESSING_ENROLLMENT":
 		return ActivityTypePercentageProcessingEnrollment, nil
 	case "PERCENTAGE_PROCESSING_DEACTIVATION":
@@ -430,6 +468,12 @@ func NewActivityTypeFromString(s string) (ActivityType, error) {
 		return ActivityTypeUndoGiftCardLoadFeeRefund, nil
 	case "BALANCE_FOLDERS_TRANSFER":
 		return ActivityTypeBalanceFoldersTransfer, nil
+	case "CASH_FOR_BUSINESS_FEE_REFUND":
+		return ActivityTypeCashForBusinessFeeRefund, nil
+	case "CASH_FOR_BUSINESS_DISPUTE_OFFSET":
+		return ActivityTypeCashForBusinessDisputeOffset, nil
+	case "CASH_FOR_BUSINESS_DISPUTE_OFFSET_REVERSED":
+		return ActivityTypeCashForBusinessDisputeOffsetReversed, nil
 	case "BALANCE_FOLDERS_TRANSFER_REVERSED":
 		return ActivityTypeBalanceFoldersTransferReversed, nil
 	case "GIFT_CARD_POOL_TRANSFER":
@@ -446,7 +490,7 @@ func (a ActivityType) Ptr() *ActivityType {
 }
 
 // Defines the fields that are included in the request body of
-// a request to the [AddGroupToCustomer]($e/Customers/AddGroupToCustomer) endpoint.
+// a request to the [AddGroupToCustomer](api-endpoint:Customers-AddGroupToCustomer) endpoint.
 type AddGroupToCustomerRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -487,7 +531,7 @@ func (a *AddGroupToCustomerRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [AddGroupToCustomer]($e/Customers/AddGroupToCustomer) endpoint.
+// a request to the [AddGroupToCustomer](api-endpoint:Customers-AddGroupToCustomer) endpoint.
 type AddGroupToCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -658,7 +702,7 @@ func (a *Address) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents an [AdjustLoyaltyPoints]($e/Loyalty/AdjustLoyaltyPoints) request.
+// Represents an [AdjustLoyaltyPoints](api-endpoint:Loyalty-AdjustLoyaltyPoints) request.
 type AdjustLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -846,7 +890,51 @@ func (a ApplicationDetailsExternalSquareProduct) Ptr() *ApplicationDetailsExtern
 	return &a
 }
 
-type ApplicationType = string
+type ApplicationType string
+
+const (
+	ApplicationTypeApplicationInvalidType ApplicationType = "APPLICATION_INVALID_TYPE"
+	ApplicationTypeSquarePos              ApplicationType = "SQUARE_POS"
+	ApplicationTypeRetail                 ApplicationType = "RETAIL"
+	ApplicationTypeRestaurant             ApplicationType = "RESTAURANT"
+	ApplicationTypeInvoices               ApplicationType = "INVOICES"
+	ApplicationTypeAppointments           ApplicationType = "APPOINTMENTS"
+	ApplicationTypeKds                    ApplicationType = "KDS"
+	ApplicationTypeTerminalAPI            ApplicationType = "TERMINAL_API"
+	ApplicationTypeReaderSdk              ApplicationType = "READER_SDK"
+	ApplicationTypeFnbKiosk               ApplicationType = "FNB_KIOSK"
+)
+
+func NewApplicationTypeFromString(s string) (ApplicationType, error) {
+	switch s {
+	case "APPLICATION_INVALID_TYPE":
+		return ApplicationTypeApplicationInvalidType, nil
+	case "SQUARE_POS":
+		return ApplicationTypeSquarePos, nil
+	case "RETAIL":
+		return ApplicationTypeRetail, nil
+	case "RESTAURANT":
+		return ApplicationTypeRestaurant, nil
+	case "INVOICES":
+		return ApplicationTypeInvoices, nil
+	case "APPOINTMENTS":
+		return ApplicationTypeAppointments, nil
+	case "KDS":
+		return ApplicationTypeKds, nil
+	case "TERMINAL_API":
+		return ApplicationTypeTerminalAPI, nil
+	case "READER_SDK":
+		return ApplicationTypeReaderSdk, nil
+	case "FNB_KIOSK":
+		return ApplicationTypeFnbKiosk, nil
+	}
+	var t ApplicationType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a ApplicationType) Ptr() *ApplicationType {
+	return &a
+}
 
 // Defines an appointment segment of a booking.
 type AppointmentSegment struct {
@@ -904,11 +992,12 @@ func (a *AppointmentSegment) String() string {
 }
 
 // Defines the values for the `archived_state` query expression
-// used in [SearchCatalogItems]($e/Catalog/SearchCatalogItems)
+// used in [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
 // to return the archived, not archived or either type of catalog items.
 type ArchivedState string
 
 const (
+	ArchivedStateArchivedStateDoNotUse    ArchivedState = "ARCHIVED_STATE_DO_NOT_USE"
 	ArchivedStateArchivedStateNotArchived ArchivedState = "ARCHIVED_STATE_NOT_ARCHIVED"
 	ArchivedStateArchivedStateArchived    ArchivedState = "ARCHIVED_STATE_ARCHIVED"
 	ArchivedStateArchivedStateAll         ArchivedState = "ARCHIVED_STATE_ALL"
@@ -916,6 +1005,8 @@ const (
 
 func NewArchivedStateFromString(s string) (ArchivedState, error) {
 	switch s {
+	case "ARCHIVED_STATE_DO_NOT_USE":
+		return ArchivedStateArchivedStateDoNotUse, nil
 	case "ARCHIVED_STATE_NOT_ARCHIVED":
 		return ArchivedStateArchivedStateNotArchived, nil
 	case "ARCHIVED_STATE_ARCHIVED":
@@ -929,6 +1020,123 @@ func NewArchivedStateFromString(s string) (ArchivedState, error) {
 
 func (a ArchivedState) Ptr() *ArchivedState {
 	return &a
+}
+
+type AuthorizeRequest struct {
+	// The Square-issued ID for your application, which is available on
+	// the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
+	ClientID string `json:"client_id" url:"client_id"`
+	// A space-separated list of the permissions that the application is requesting.
+	// Default: "`MERCHANT_PROFILE_READ PAYMENTS_READ SETTLEMENTS_READ BANK_ACCOUNTS_READ`"
+	// See [OAuthPermission](#type-oauthpermission) for possible values
+	Scope []OAuthPermission `json:"scope,omitempty" url:"scope,omitempty"`
+	// The locale to present the permission request form in. Square detects
+	// the appropriate locale automatically. Only provide this value if the
+	// application can definitively determine the preferred locale.
+	//
+	// Currently supported values: `en-IE`, `en-US`, `en-CA`, `es-US`, `fr-CA`, and
+	// `ja-JP`.
+	Locale *string `json:"locale,omitempty" url:"locale,omitempty"`
+	// If `false`, the user must log in to their Square account to
+	// view the Permission Request form, even if they already have a valid user
+	// session. This value has no effect in the Square Sandbox.
+	// Default: `true`
+	Session *bool `json:"session,omitempty" url:"session,omitempty"`
+	// When provided, `state` is passed to the configured redirect URL after
+	// the Permission Request form is submitted. You can include `state` and verify
+	// its value to help protect against cross-site request forgery.
+	State *string `json:"state,omitempty" url:"state,omitempty"`
+	// When provided, the OAuth flow uses PKCE to authorize. The `code_challenge` will be associated
+	// with the authorization_code and a `code_verifier` will need to passed in to obtain the access token.
+	CodeChallenge *string `json:"code_challenge,omitempty" url:"code_challenge,omitempty"`
+	// The redirect URL assigned on the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
+	// This field is required to use a dynamic port at runtime (PKCE only). To use a dynamic port, use the literal "&lt;port&gt;"
+	// as a placeholder for a port in the **Redirect URL** box in the [Developer Dashboard](https://developer.squareup.com/apps),
+	// for example, "http://localhost:&lt;port&gt;". When you call the `Authorize` endpoint from an application, pass in the actual
+	// port in this field. For example: `https://connect.squareup.com/oauth2/authorize?client_id={YOUR_APP_ID}&scope=MERCHANT_PROFILE_READ&redirect_uri=http://localhost:8000`
+	RedirectURI *string `json:"redirect_uri,omitempty" url:"redirect_uri,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AuthorizeRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AuthorizeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler AuthorizeRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AuthorizeRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AuthorizeRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+type AuthorizeResponse struct {
+	// A valid authorization code. Authorization codes are exchanged
+	// for OAuth access tokens with the `ObtainToken` endpoint.
+	Code *string `json:"code,omitempty" url:"code,omitempty"`
+	// The same value specified in the request.
+	State *string `json:"state,omitempty" url:"state,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AuthorizeResponse) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AuthorizeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler AuthorizeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AuthorizeResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AuthorizeResponse) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
 }
 
 // Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
@@ -1070,6 +1278,291 @@ func (b *BankAccount) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+// Published when you link an external bank account to a Square
+// account in the Seller Dashboard. Square sets the initial status to
+// `VERIFICATION_IN_PROGRESS` and publishes the event.
+type BankAccountCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountCreatedEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created bank account.
+	Object *BankAccountCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEventData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountCreatedEventObject struct {
+	// The created bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEventObject) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when Square sets the status of a
+// [BankAccount](entity:BankAccount) to `DISABLED`.
+type BankAccountDisabledEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.disabled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was disabled, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountDisabledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountDisabledEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountDisabledEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the disabled bank account.
+	Object *BankAccountDisabledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountDisabledEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEventData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountDisabledEventObject struct {
+	// The disabled bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountDisabledEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEventObject) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Additional details about BANK_ACCOUNT type payments.
 type BankAccountPaymentDetails struct {
 	// The name of the bank associated with the bank account.
@@ -1160,6 +1653,7 @@ func (b BankAccountStatus) Ptr() *BankAccountStatus {
 type BankAccountType string
 
 const (
+	BankAccountTypeUnknown          BankAccountType = "UNKNOWN"
 	BankAccountTypeChecking         BankAccountType = "CHECKING"
 	BankAccountTypeSavings          BankAccountType = "SAVINGS"
 	BankAccountTypeInvestment       BankAccountType = "INVESTMENT"
@@ -1169,6 +1663,8 @@ const (
 
 func NewBankAccountTypeFromString(s string) (BankAccountType, error) {
 	switch s {
+	case "UNKNOWN":
+		return BankAccountTypeUnknown, nil
 	case "CHECKING":
 		return BankAccountTypeChecking, nil
 	case "SAVINGS":
@@ -1186,6 +1682,148 @@ func NewBankAccountTypeFromString(s string) (BankAccountType, error) {
 
 func (b BankAccountType) Ptr() *BankAccountType {
 	return &b
+}
+
+// Published when Square sets the status of a
+// [BankAccount](entity:BankAccount) to `VERIFIED`.
+type BankAccountVerifiedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.verified"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountVerifiedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountVerifiedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountVerifiedEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the verified bank account.
+	Object *BankAccountVerifiedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountVerifiedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEventData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountVerifiedEventObject struct {
+	// The verified bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountVerifiedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEventObject) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
 }
 
 type BatchChangeInventoryRequest struct {
@@ -1333,7 +1971,7 @@ func (b *BatchCreateTeamMembersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkCreateVendors]($e/Vendors/BulkCreateVendors).
+// Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
 type BatchCreateVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1679,7 +2317,7 @@ func (b *BatchGetOrdersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkRetrieveVendors]($e/Vendors/BulkRetrieveVendors).
+// Represents an output from a call to [BulkRetrieveVendors](api-endpoint:Vendors-BulkRetrieveVendors).
 type BatchGetVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1726,6 +2364,142 @@ func (b *BatchGetVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+// Represents a batched request included in a call to the **SubmitBatch**
+// endpoint.
+type BatchRequest struct {
+	// HTTP method for the API call.
+	// See [BatchRequestHttpMethod](#type-batchrequesthttpmethod) for possible values
+	Method BatchRequestHTTPMethod `json:"method" url:"method"`
+	// Endpoint path for the API call.
+	RelativePath string `json:"relative_path" url:"relative_path"`
+	// [Square access token](https://developer.squareup.com/docs/build-basics/access-tokens) for the API
+	// call.
+	AccessToken string `json:"access_token" url:"access_token"`
+	// Request body for the API call. Only used for API calls using POST.
+	Body map[string]*string `json:"body,omitempty" url:"body,omitempty"`
+	// Client-provided value to identify the request.
+	RequestID *string `json:"request_id,omitempty" url:"request_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Indicates the applicable HTTP method.
+type BatchRequestHTTPMethod string
+
+const (
+	BatchRequestHTTPMethodGet    BatchRequestHTTPMethod = "GET"
+	BatchRequestHTTPMethodPost   BatchRequestHTTPMethod = "POST"
+	BatchRequestHTTPMethodPut    BatchRequestHTTPMethod = "PUT"
+	BatchRequestHTTPMethodDelete BatchRequestHTTPMethod = "DELETE"
+)
+
+func NewBatchRequestHTTPMethodFromString(s string) (BatchRequestHTTPMethod, error) {
+	switch s {
+	case "GET":
+		return BatchRequestHTTPMethodGet, nil
+	case "POST":
+		return BatchRequestHTTPMethodPost, nil
+	case "PUT":
+		return BatchRequestHTTPMethodPut, nil
+	case "DELETE":
+		return BatchRequestHTTPMethodDelete, nil
+	}
+	var t BatchRequestHTTPMethod
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BatchRequestHTTPMethod) Ptr() *BatchRequestHTTPMethod {
+	return &b
+}
+
+// Represents an individual response for a batched request to the
+// **SubmitBatch** endpoint.
+type BatchResponse struct {
+	// HTTP status code for the response
+	StatusCode *int `json:"status_code,omitempty" url:"status_code,omitempty"`
+	// The body of the response (if any).
+	Body map[string]string `json:"body,omitempty" url:"body,omitempty"`
+	// Contains any important headers for the response, indexed by header
+	// name. For example, if the response includes a pagination header, the header
+	// value is available from `headers["Link"]`.
+	Headers map[string]string `json:"headers,omitempty" url:"headers,omitempty"`
+	// The value provided in a request for `request_id` in the corresponding
+	// `BatchRequest` (if any).
+	RequestID *string `json:"request_id,omitempty" url:"request_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 type BatchRetrieveInventoryChangesRequest struct {
 	// The filter to return results by `CatalogObject` ID.
 	// The filter is only applicable when set. The default value is null.
@@ -1736,6 +2510,9 @@ type BatchRetrieveInventoryChangesRequest struct {
 	// The filter to return results by `InventoryChangeType` values other than `TRANSFER`.
 	// The default value is `[PHYSICAL_COUNT, ADJUSTMENT]`.
 	Types []InventoryChangeType `json:"types,omitempty" url:"types,omitempty"`
+	// The filter to return results by `InventoryState` values.
+	// Use the `states` filter as its replacement.
+	Statuses []InventoryState `json:"statuses,omitempty" url:"statuses,omitempty"`
 	// The filter to return `ADJUSTMENT` query results by
 	// `InventoryState`. This filter is only applied when set.
 	// The default value is null.
@@ -1839,7 +2616,7 @@ func (b *BatchUpdateTeamMembersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkUpdateVendors]($e/Vendors/BulkUpdateVendors).
+// Represents an output from a call to [BulkUpdateVendors](api-endpoint:Vendors-BulkUpdateVendors).
 type BatchUpdateVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1934,7 +2711,7 @@ func (b *BatchUpsertCatalogObjectsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
 // request. An individual request contains a customer ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest struct {
@@ -1994,7 +2771,7 @@ func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) response,
+// Represents a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BatchUpsertCustomerCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -2041,7 +2818,7 @@ func (b *BatchUpsertCustomerCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) operation.
 type BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse struct {
 	// The ID of the customer profile associated with the custom attribute.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
@@ -2199,6 +2976,148 @@ func (b BookingBookingSource) Ptr() *BookingBookingSource {
 	return &b
 }
 
+// Published when a booking is created.
+//
+// To receive this event with buyer-level permissions, you must have `APPOINTMENTS_READ` set for the OAuth scope.
+// To receive this event with seller-level permissions, you must have `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` set for the OAuth scope.
+type BookingCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *BookingCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingCreatedEventData struct {
+	// The type of the event data object. The value is `"booking"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created booking.
+	Object *BookingCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEventData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingCreatedEventObject struct {
+	// The created booking.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEventObject) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Information about a booking creator.
 type BookingCreatorDetails struct {
 	// The seller-accessible type of the creator of the booking.
@@ -2272,7 +3191,328 @@ func (b BookingCreatorDetailsCreatorType) Ptr() *BookingCreatorDetailsCreatorTyp
 	return &b
 }
 
-// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes)
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application. Subscribe to this event to be notified
+// when your application creates a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is deleted by the subscribing application. Subscribe to this event to be notified
+// when your application deletes a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is created.
+// An application that subscribes to this event is notified when a booking custom attribute definition is created
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a booking custom attribute definition is deleted
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a booking custom attribute definition is updated
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to delete, and an optional idempotency key.
 type BookingCustomAttributeDeleteRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -2320,7 +3560,7 @@ func (b *BookingCustomAttributeDeleteRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) operation.
 type BookingCustomAttributeDeleteResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -2365,7 +3605,115 @@ func (b *BookingCustomAttributeDeleteResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes)
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is deleted.
+// Subscribe to this event to be notified
+// when your application deletes a booking custom attribute.
+type BookingCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a booking custom attribute.
+type BookingCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BookingCustomAttributeUpsertRequest struct {
@@ -2425,7 +3773,7 @@ func (b *BookingCustomAttributeUpsertRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) operation.
 type BookingCustomAttributeUpsertResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -2472,6 +3820,114 @@ func (b *BookingCustomAttributeUpsertResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+// Published when a booking [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a booking custom attribute is deleted
+// by any application for which the subscribing application has read access to the booking custom attribute.
+type BookingCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a booking custom attribute is updated
+// by any application for which the subscribing application has read access to the booking custom attribute.
+type BookingCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Supported booking statuses.
 type BookingStatus string
 
@@ -2505,6 +3961,148 @@ func NewBookingStatusFromString(s string) (BookingStatus, error) {
 
 func (b BookingStatus) Ptr() *BookingStatus {
 	return &b
+}
+
+// Published when a booking is updated or cancelled.
+//
+// To receive this event with buyer-level permissions, you must have `APPOINTMENTS_READ` set for the OAuth scope.
+// To receive this event with seller-level permissions, you must have `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` set for the OAuth scope.
+type BookingUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *BookingUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEvent) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingUpdatedEventData struct {
+	// The type of the event data object. The value is `"booking"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated booking.
+	Object *BookingUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEventData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingUpdatedEventObject struct {
+	// The updated booking.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEventObject) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
 }
 
 // A record of an employee's break during a shift.
@@ -2633,7 +4231,7 @@ func (b *BreakType) String() string {
 }
 
 // Defines the customer data provided in individual create requests for a
-// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) operation.
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
 type BulkCreateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -2707,7 +4305,7 @@ func (b *BulkCreateCustomerData) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) endpoint.
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
 type BulkCreateCustomersResponse struct {
 	// A map of responses that correspond to individual create requests, represented by
 	// key-value pairs.
@@ -2758,7 +4356,7 @@ func (b *BulkCreateCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) response,
+// Represents a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -2806,7 +4404,7 @@ func (b *BulkDeleteBookingCustomAttributesResponse) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkDeleteCustomers]($e/Customers/BulkDeleteCustomers) endpoint.
+// [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
 type BulkDeleteCustomersResponse struct {
 	// A map of responses that correspond to individual delete requests, represented by
 	// key-value pairs.
@@ -2857,7 +4455,7 @@ func (b *BulkDeleteCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest struct {
@@ -2903,7 +4501,7 @@ func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes) response,
+// Represents a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -2950,7 +4548,7 @@ func (b *BulkDeleteLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
 // request.
 type BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse struct {
 	// The ID of the location associated with the custom attribute.
@@ -2996,7 +4594,7 @@ func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDelete
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest struct {
@@ -3042,7 +4640,7 @@ func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes) response,
+// Represents a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -3089,7 +4687,7 @@ func (b *BulkDeleteMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
 // request.
 type BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse struct {
 	// Errors that occurred while processing the individual MerchantCustomAttributeDeleteRequest request
@@ -3271,7 +4869,7 @@ func (b *BulkRetrieveBookingsResponse) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkRetrieveCustomers]($e/Customers/BulkRetrieveCustomers) endpoint.
+// [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
 type BulkRetrieveCustomersResponse struct {
 	// A map of responses that correspond to individual retrieve requests, represented by
 	// key-value pairs.
@@ -3322,7 +4920,7 @@ func (b *BulkRetrieveCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Response payload for the [BulkRetrieveTeamMemberBookingProfiles]($e/Bookings/BulkRetrieveTeamMemberBookingProfiles) endpoint.
+// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
 type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
 	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`
@@ -3368,7 +4966,7 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
 }
 
 // Defines output parameters in a response of the
-// [BulkSwapPlan]($e/Subscriptions/BulkSwapPlan) endpoint.
+// [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
 type BulkSwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3414,7 +5012,7 @@ func (b *BulkSwapPlanResponse) String() string {
 }
 
 // Defines the customer data provided in individual update requests for a
-// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) operation.
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
 type BulkUpdateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -3494,7 +5092,7 @@ func (b *BulkUpdateCustomerData) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) endpoint.
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
 type BulkUpdateCustomersResponse struct {
 	// A map of responses that correspond to individual update requests, represented by
 	// key-value pairs.
@@ -3545,7 +5143,7 @@ func (b *BulkUpdateCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) response,
+// Represents a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -3592,7 +5190,7 @@ func (b *BulkUpsertBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes)
 // request. An individual request contains a location ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest struct {
@@ -3650,7 +5248,7 @@ func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) response,
+// Represents a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -3697,7 +5295,7 @@ func (b *BulkUpsertLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) operation.
 type BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse struct {
 	// The ID of the location associated with the custom attribute.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
@@ -3744,7 +5342,7 @@ func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
 // request. An individual request contains a merchant ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest struct {
@@ -3802,7 +5400,7 @@ func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) response,
+// Represents a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -3849,7 +5447,7 @@ func (b *BulkUpsertMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) operation.
 type BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse struct {
 	// The ID of the merchant associated with the custom attribute.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
@@ -4421,7 +6019,7 @@ func (b *BuyNowPayLaterDetails) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CalculateLoyaltyPoints]($e/Loyalty/CalculateLoyaltyPoints) response.
+// Represents a [CalculateLoyaltyPoints](api-endpoint:Loyalty-CalculateLoyaltyPoints) response.
 type CalculateLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4603,7 +6201,7 @@ func (c *CancelInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CancelLoyaltyPromotion]($e/Loyalty/CancelLoyaltyPromotion) request.
+// Represents a [CancelLoyaltyPromotion](api-endpoint:Loyalty-CancelLoyaltyPromotion) request.
 type CancelLoyaltyPromotionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -4643,7 +6241,7 @@ func (c *CancelLoyaltyPromotionRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CancelLoyaltyPromotion]($e/Loyalty/CancelLoyaltyPromotion) response.
+// Represents a [CancelLoyaltyPromotion](api-endpoint:Loyalty-CancelLoyaltyPromotion) response.
 // Either `loyalty_promotion` or `errors` is present in the response.
 type CancelLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
@@ -4690,7 +6288,7 @@ func (c *CancelLoyaltyPromotionResponse) String() string {
 }
 
 // Defines the response returned by
-// [CancelPaymentByIdempotencyKey]($e/Payments/CancelPaymentByIdempotencyKey).
+// [CancelPaymentByIdempotencyKey](api-endpoint:Payments-CancelPaymentByIdempotencyKey).
 // On success, `errors` is empty.
 type CancelPaymentByIdempotencyKeyResponse struct {
 	// Any errors that occurred during the request.
@@ -4735,7 +6333,7 @@ func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
 }
 
 // Describes the request to cancel (void) a payment using
-// [CancelPayment]($e/Payments/CancelPayment).
+// [CancelPayment](api-endpoint:Payments-CancelPayment).
 // You can only cancel a payment that is approved (not completed).
 // For more information, see
 // [Delayed capture of a payment](https://developer.squareup.com/docs/payments-api/take-payments/card-payments#delayed-capture-of-a-card-payment).
@@ -4778,7 +6376,7 @@ func (c *CancelPaymentRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by [CancelPayment]($e/Payments/CancelPayment).
+// Defines the response returned by [CancelPayment](api-endpoint:Payments-CancelPayment).
 type CancelPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4824,7 +6422,7 @@ func (c *CancelPaymentResponse) String() string {
 }
 
 // Defines input parameters in a request to the
-// [CancelSubscription]($e/Subscriptions/CancelSubscription) endpoint.
+// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
 type CancelSubscriptionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -4865,7 +6463,7 @@ func (c *CancelSubscriptionRequest) String() string {
 }
 
 // Defines output parameters in a response from the
-// [CancelSubscription]($e/Subscriptions/CancelSubscription) endpoint.
+// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
 type CancelSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4901,45 +6499,6 @@ func (c *CancelSubscriptionResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CancelSubscriptionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CancelTerminalActionRequest struct {
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (c *CancelTerminalActionRequest) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CancelTerminalActionRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler CancelTerminalActionRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CancelTerminalActionRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CancelTerminalActionRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -4995,45 +6554,6 @@ func (c *CancelTerminalActionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CancelTerminalCheckoutRequest struct {
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (c *CancelTerminalCheckoutRequest) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CancelTerminalCheckoutRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler CancelTerminalCheckoutRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CancelTerminalCheckoutRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CancelTerminalCheckoutRequest) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 type CancelTerminalCheckoutResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -5067,45 +6587,6 @@ func (c *CancelTerminalCheckoutResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CancelTerminalCheckoutResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CancelTerminalRefundRequest struct {
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (c *CancelTerminalRefundRequest) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CancelTerminalRefundRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler CancelTerminalRefundRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CancelTerminalRefundRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CancelTerminalRefundRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -5334,6 +6815,145 @@ func (c *Card) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Published when a Card's expiration information or pan is automatically updated.
+type CardAutomaticallyUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.automatically_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardAutomaticallyUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardAutomaticallyUpdatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the automatically updated card.
+	Object *CardAutomaticallyUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardAutomaticallyUpdatedEventObject struct {
+	// The automatically updated card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Indicates a card's brand, such as `VISA` or `MASTERCARD`.
 type CardBrand string
 
@@ -5417,6 +7037,479 @@ func NewCardCoBrandFromString(s string) (CardCoBrand, error) {
 
 func (c CardCoBrand) Ptr() *CardCoBrand {
 	return &c
+}
+
+// Published when a Card is created or imported.
+type CardCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardCreatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created card.
+	Object *CardCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardCreatedEventObject struct {
+	// The created card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a Card is disabled.
+type CardDisabledEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.disabled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardDisabledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardDisabledEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardDisabledEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the disabled card.
+	Object *CardDisabledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardDisabledEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardDisabledEventObject struct {
+	// The disabled card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardDisabledEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a Card is GDPR forgotten/vaulted.
+type CardForgottenEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.forgotten"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardForgottenEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardForgottenEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventCard struct {
+	// Unique ID for this card. Generated by Square.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The ID of a customer created using the Customers API associated with the card.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+	// Indicates whether or not a card can be used for payments.
+	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
+	// An optional user-defined reference ID that associates this card with
+	// another entity in an external system. For example, a customer ID from an
+	// external customer management system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// Current version number of the card. Increments with each card update. Requests to update an
+	// existing Card object will be rejected unless the version in the request matches the current
+	// version for the Card.
+	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+	// The ID of the merchant associated with the card.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardForgottenEventCard) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventCard) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventCard
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventCard(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventCard) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the forgotten card.
+	Object *CardForgottenEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardForgottenEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventObject struct {
+	// The forgotten card.
+	Card *CardForgottenEventCard `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardForgottenEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Reflects the current status of a card payment. Contains only non-confidential information.
@@ -5604,6 +7697,145 @@ func (c CardType) Ptr() *CardType {
 	return &c
 }
 
+// Published when a Card is updated by the developer using the UpdateCard endpoint.
+type CardUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardUpdatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated card.
+	Object *CardUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardUpdatedEventObject struct {
+	// The updated card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Additional details about `WALLET` type payments with the `brand` of `CASH_APP`.
 type CashAppDetails struct {
 	// The name of the Cash App account holder.
@@ -5759,6 +7991,16 @@ type CashDrawerShift struct {
 	EndedAt *string `json:"ended_at,omitempty" url:"ended_at,omitempty"`
 	// The time when the shift was closed, in ISO 8601 format.
 	ClosedAt *string `json:"closed_at,omitempty" url:"closed_at,omitempty"`
+	// The IDs of all employees that were logged into Square Point of Sale at any
+	// point while the cash drawer shift was open.
+	EmployeeIDs []string `json:"employee_ids,omitempty" url:"employee_ids,omitempty"`
+	// The ID of the employee that started the cash drawer shift.
+	OpeningEmployeeID *string `json:"opening_employee_id,omitempty" url:"opening_employee_id,omitempty"`
+	// The ID of the employee that ended the cash drawer shift.
+	EndingEmployeeID *string `json:"ending_employee_id,omitempty" url:"ending_employee_id,omitempty"`
+	// The ID of the employee that closed the cash drawer shift by auditing
+	// the cash drawer contents.
+	ClosingEmployeeID *string `json:"closing_employee_id,omitempty" url:"closing_employee_id,omitempty"`
 	// The free-form text description of a cash drawer by an employee.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// The amount of money in the cash drawer at the start of the shift.
@@ -5852,6 +8094,8 @@ func (c *CashDrawerShift) String() string {
 type CashDrawerShiftEvent struct {
 	// The unique ID of the event.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The ID of the employee that created the event.
+	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
 	// The type of cash drawer shift event.
 	// See [CashDrawerEventType](#type-cashdrawereventtype) for possible values
 	EventType *CashDrawerEventType `json:"event_type,omitempty" url:"event_type,omitempty"`
@@ -6177,13 +8421,16 @@ func (c *CatalogCategory) String() string {
 type CatalogCategoryType string
 
 const (
-	CatalogCategoryTypeRegularCategory CatalogCategoryType = "REGULAR_CATEGORY"
-	CatalogCategoryTypeMenuCategory    CatalogCategoryType = "MENU_CATEGORY"
-	CatalogCategoryTypeKitchenCategory CatalogCategoryType = "KITCHEN_CATEGORY"
+	CatalogCategoryTypeCatalogCategoryTypeDoNotUse CatalogCategoryType = "CATALOG_CATEGORY_TYPE_DO_NOT_USE"
+	CatalogCategoryTypeRegularCategory             CatalogCategoryType = "REGULAR_CATEGORY"
+	CatalogCategoryTypeMenuCategory                CatalogCategoryType = "MENU_CATEGORY"
+	CatalogCategoryTypeKitchenCategory             CatalogCategoryType = "KITCHEN_CATEGORY"
 )
 
 func NewCatalogCategoryTypeFromString(s string) (CatalogCategoryType, error) {
 	switch s {
+	case "CATALOG_CATEGORY_TYPE_DO_NOT_USE":
+		return CatalogCategoryTypeCatalogCategoryTypeDoNotUse, nil
 	case "REGULAR_CATEGORY":
 		return CatalogCategoryTypeRegularCategory, nil
 	case "MENU_CATEGORY":
@@ -6291,6 +8538,7 @@ func (c *CatalogCustomAttributeDefinition) String() string {
 type CatalogCustomAttributeDefinitionAppVisibility string
 
 const (
+	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityDoNotUse        CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_DO_NOT_USE"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityHidden          CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_HIDDEN"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityReadOnly        CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_READ_ONLY"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityReadWriteValues CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_READ_WRITE_VALUES"
@@ -6298,6 +8546,8 @@ const (
 
 func NewCatalogCustomAttributeDefinitionAppVisibilityFromString(s string) (CatalogCustomAttributeDefinitionAppVisibility, error) {
 	switch s {
+	case "APP_VISIBILITY_DO_NOT_USE":
+		return CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityDoNotUse, nil
 	case "APP_VISIBILITY_HIDDEN":
 		return CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityHidden, nil
 	case "APP_VISIBILITY_READ_ONLY":
@@ -6463,12 +8713,15 @@ func (c *CatalogCustomAttributeDefinitionSelectionConfigCustomAttributeSelection
 type CatalogCustomAttributeDefinitionSellerVisibility string
 
 const (
+	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityDoNotUse        CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_DO_NOT_USE"
 	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityHidden          CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_HIDDEN"
 	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityReadWriteValues CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_READ_WRITE_VALUES"
 )
 
 func NewCatalogCustomAttributeDefinitionSellerVisibilityFromString(s string) (CatalogCustomAttributeDefinitionSellerVisibility, error) {
 	switch s {
+	case "SELLER_VISIBILITY_DO_NOT_USE":
+		return CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityDoNotUse, nil
 	case "SELLER_VISIBILITY_HIDDEN":
 		return CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityHidden, nil
 	case "SELLER_VISIBILITY_READ_WRITE_VALUES":
@@ -6533,22 +8786,34 @@ func (c *CatalogCustomAttributeDefinitionStringConfig) String() string {
 type CatalogCustomAttributeDefinitionType string
 
 const (
-	CatalogCustomAttributeDefinitionTypeString    CatalogCustomAttributeDefinitionType = "STRING"
-	CatalogCustomAttributeDefinitionTypeBoolean   CatalogCustomAttributeDefinitionType = "BOOLEAN"
-	CatalogCustomAttributeDefinitionTypeNumber    CatalogCustomAttributeDefinitionType = "NUMBER"
-	CatalogCustomAttributeDefinitionTypeSelection CatalogCustomAttributeDefinitionType = "SELECTION"
+	CatalogCustomAttributeDefinitionTypeAttributeTypeDoNotUse CatalogCustomAttributeDefinitionType = "ATTRIBUTE_TYPE_DO_NOT_USE"
+	CatalogCustomAttributeDefinitionTypeString                CatalogCustomAttributeDefinitionType = "STRING"
+	CatalogCustomAttributeDefinitionTypeInteger               CatalogCustomAttributeDefinitionType = "INTEGER"
+	CatalogCustomAttributeDefinitionTypeBoolean               CatalogCustomAttributeDefinitionType = "BOOLEAN"
+	CatalogCustomAttributeDefinitionTypeNumber                CatalogCustomAttributeDefinitionType = "NUMBER"
+	CatalogCustomAttributeDefinitionTypeSelection             CatalogCustomAttributeDefinitionType = "SELECTION"
+	CatalogCustomAttributeDefinitionTypeStringInt             CatalogCustomAttributeDefinitionType = "STRING_INT"
+	CatalogCustomAttributeDefinitionTypeTokenInt              CatalogCustomAttributeDefinitionType = "TOKEN_INT"
 )
 
 func NewCatalogCustomAttributeDefinitionTypeFromString(s string) (CatalogCustomAttributeDefinitionType, error) {
 	switch s {
+	case "ATTRIBUTE_TYPE_DO_NOT_USE":
+		return CatalogCustomAttributeDefinitionTypeAttributeTypeDoNotUse, nil
 	case "STRING":
 		return CatalogCustomAttributeDefinitionTypeString, nil
+	case "INTEGER":
+		return CatalogCustomAttributeDefinitionTypeInteger, nil
 	case "BOOLEAN":
 		return CatalogCustomAttributeDefinitionTypeBoolean, nil
 	case "NUMBER":
 		return CatalogCustomAttributeDefinitionTypeNumber, nil
 	case "SELECTION":
 		return CatalogCustomAttributeDefinitionTypeSelection, nil
+	case "STRING_INT":
+		return CatalogCustomAttributeDefinitionTypeStringInt, nil
+	case "TOKEN_INT":
+		return CatalogCustomAttributeDefinitionTypeTokenInt, nil
 	}
 	var t CatalogCustomAttributeDefinitionType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -6798,9 +9063,9 @@ func (c *CatalogEcomSeoData) String() string {
 
 // A mapping between a temporary client-supplied ID and a permanent server-generated ID.
 //
-// When calling [UpsertCatalogObject]($e/Catalog/UpsertCatalogObject) or
-// [BatchUpsertCatalogObjects]($e/Catalog/BatchUpsertCatalogObjects) to
-// create a [CatalogObject]($m/CatalogObject) instance, you can supply
+// When calling [UpsertCatalogObject](api-endpoint:Catalog-UpsertCatalogObject) or
+// [BatchUpsertCatalogObjects](api-endpoint:Catalog-BatchUpsertCatalogObjects) to
+// create a [CatalogObject](entity:CatalogObject) instance, you can supply
 // a temporary ID for the to-be-created object, especially when the object is to be referenced
 // elsewhere in the same request body. This temporary ID can be any string unique within
 // the call, but must be prefixed by "#".
@@ -7070,7 +9335,7 @@ func (c *CatalogInfoResponseLimits) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A [CatalogObject]($m/CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
+// A [CatalogObject](entity:CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
 type CatalogItem struct {
 	// The item's name. This is a searchable attribute for use in applicable query filters, its value must not be empty, and the length is of Unicode code points.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
@@ -7106,6 +9371,9 @@ type CatalogItem struct {
 	// and max limits that are specific to this item. Modifier lists
 	// may also be added to or deleted from an item using `UpdateItemModifierLists`.
 	ModifierListInfo []*CatalogItemModifierListInfo `json:"modifier_list_info,omitempty" url:"modifier_list_info,omitempty"`
+	// **Retired**. The URL of an image representing this item. Retired
+	// in favor of `image_id` in [CatalogObject](entity:CatalogObject).
+	ImageURL *string `json:"image_url,omitempty" url:"image_url,omitempty"`
 	// A list of [CatalogItemVariation](entity:CatalogItemVariation) objects for this item. An item must have
 	// at least one variation.
 	Variations []*CatalogObject `json:"variations,omitempty" url:"variations,omitempty"`
@@ -7317,17 +9585,20 @@ func (c *CatalogItemFoodAndBeverageDetailsDietaryPreference) String() string {
 type CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference string
 
 const (
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree  CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "DAIRY_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceGlutenFree CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "GLUTEN_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceHalal      CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "HALAL"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceKosher     CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "KOSHER"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceNutFree    CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "NUT_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegan      CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGAN"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegetarian CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGETARIAN"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceStandardDietaryPreferenceDoNotUse CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "STANDARD_DIETARY_PREFERENCE_DO_NOT_USE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree                         CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "DAIRY_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceGlutenFree                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "GLUTEN_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceHalal                             CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "HALAL"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceKosher                            CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "KOSHER"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceNutFree                           CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "NUT_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegan                             CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGAN"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegetarian                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGETARIAN"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceFromString(s string) (CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference, error) {
 	switch s {
+	case "STANDARD_DIETARY_PREFERENCE_DO_NOT_USE":
+		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceStandardDietaryPreferenceDoNotUse, nil
 	case "DAIRY_FREE":
 		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree, nil
 	case "GLUTEN_FREE":
@@ -7355,12 +9626,15 @@ func (c CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPrefere
 type CatalogItemFoodAndBeverageDetailsDietaryPreferenceType string
 
 const (
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "STANDARD"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeCustom   CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "CUSTOM"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeDietaryPreferenceTypeDoNotUse CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "DIETARY_PREFERENCE_TYPE_DO_NOT_USE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard                      CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "STANDARD"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeCustom                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "CUSTOM"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeFromString(s string) (CatalogItemFoodAndBeverageDetailsDietaryPreferenceType, error) {
 	switch s {
+	case "DIETARY_PREFERENCE_TYPE_DO_NOT_USE":
+		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeDietaryPreferenceTypeDoNotUse, nil
 	case "STANDARD":
 		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard, nil
 	case "CUSTOM":
@@ -7427,24 +9701,27 @@ func (c *CatalogItemFoodAndBeverageDetailsIngredient) String() string {
 type CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient string
 
 const (
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CELERY"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCrustaceans CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CRUSTACEANS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientEggs        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "EGGS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFish        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "FISH"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientGluten      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "GLUTEN"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientLupin       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "LUPIN"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMilk        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MILK"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMolluscs    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MOLLUSCS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMustard     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MUSTARD"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientPeanuts     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "PEANUTS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSesame      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SESAME"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSoy         CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SOY"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSulphites   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SULPHITES"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientTreeNuts    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "TREE_NUTS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientStandardIngredientDoNotUse CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "STANDARD_INGREDIENT_DO_NOT_USE"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CELERY"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCrustaceans                CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CRUSTACEANS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientEggs                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "EGGS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFish                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "FISH"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientGluten                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "GLUTEN"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientLupin                      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "LUPIN"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMilk                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MILK"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMolluscs                   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MOLLUSCS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMustard                    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MUSTARD"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientPeanuts                    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "PEANUTS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSesame                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SESAME"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSoy                        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SOY"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSulphites                  CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SULPHITES"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientTreeNuts                   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "TREE_NUTS"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFromString(s string) (CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient, error) {
 	switch s {
+	case "STANDARD_INGREDIENT_DO_NOT_USE":
+		return CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientStandardIngredientDoNotUse, nil
 	case "CELERY":
 		return CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery, nil
 	case "CRUSTACEANS":
@@ -7765,12 +10042,17 @@ const (
 	CatalogItemProductTypeRegular                      CatalogItemProductType = "REGULAR"
 	CatalogItemProductTypeGiftCard                     CatalogItemProductType = "GIFT_CARD"
 	CatalogItemProductTypeAppointmentsService          CatalogItemProductType = "APPOINTMENTS_SERVICE"
+	CatalogItemProductTypeClassTicket                  CatalogItemProductType = "CLASS_TICKET"
 	CatalogItemProductTypeFoodAndBev                   CatalogItemProductType = "FOOD_AND_BEV"
 	CatalogItemProductTypeEvent                        CatalogItemProductType = "EVENT"
 	CatalogItemProductTypeDigital                      CatalogItemProductType = "DIGITAL"
 	CatalogItemProductTypeDonation                     CatalogItemProductType = "DONATION"
+	CatalogItemProductTypeMembership                   CatalogItemProductType = "MEMBERSHIP"
+	CatalogItemProductTypeCreditPackage                CatalogItemProductType = "CREDIT_PACKAGE"
+	CatalogItemProductTypeCombo                        CatalogItemProductType = "COMBO"
 	CatalogItemProductTypeLegacySquareOnlineService    CatalogItemProductType = "LEGACY_SQUARE_ONLINE_SERVICE"
 	CatalogItemProductTypeLegacySquareOnlineMembership CatalogItemProductType = "LEGACY_SQUARE_ONLINE_MEMBERSHIP"
+	CatalogItemProductTypeAppointmentsMembership       CatalogItemProductType = "APPOINTMENTS_MEMBERSHIP"
 )
 
 func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, error) {
@@ -7781,6 +10063,8 @@ func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, erro
 		return CatalogItemProductTypeGiftCard, nil
 	case "APPOINTMENTS_SERVICE":
 		return CatalogItemProductTypeAppointmentsService, nil
+	case "CLASS_TICKET":
+		return CatalogItemProductTypeClassTicket, nil
 	case "FOOD_AND_BEV":
 		return CatalogItemProductTypeFoodAndBev, nil
 	case "EVENT":
@@ -7789,10 +10073,18 @@ func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, erro
 		return CatalogItemProductTypeDigital, nil
 	case "DONATION":
 		return CatalogItemProductTypeDonation, nil
+	case "MEMBERSHIP":
+		return CatalogItemProductTypeMembership, nil
+	case "CREDIT_PACKAGE":
+		return CatalogItemProductTypeCreditPackage, nil
+	case "COMBO":
+		return CatalogItemProductTypeCombo, nil
 	case "LEGACY_SQUARE_ONLINE_SERVICE":
 		return CatalogItemProductTypeLegacySquareOnlineService, nil
 	case "LEGACY_SQUARE_ONLINE_MEMBERSHIP":
 		return CatalogItemProductTypeLegacySquareOnlineMembership, nil
+	case "APPOINTMENTS_MEMBERSHIP":
+		return CatalogItemProductTypeAppointmentsMembership, nil
 	}
 	var t CatalogItemProductType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -7802,7 +10094,7 @@ func (c CatalogItemProductType) Ptr() *CatalogItemProductType {
 	return &c
 }
 
-// An item variation, representing a product for sale, in the Catalog object model. Each [item]($m/CatalogItem) must have at least one
+// An item variation, representing a product for sale, in the Catalog object model. Each [item](entity:CatalogItem) must have at least one
 // item variation and can have at most 250 item variations.
 //
 // An item variation can be sellable, stockable, or both if it has a unit of measure for its count for the sold number of the variation, the stocked
@@ -7884,7 +10176,7 @@ type CatalogItemVariation struct {
 	// Tokens of employees that can perform the service represented by this variation. Only valid for
 	// variations of type `APPOINTMENTS_SERVICE`.
 	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"team_member_ids,omitempty"`
-	// The unit conversion rule, as prescribed by the [CatalogStockConversion]($m/CatalogStockConversion) type,
+	// The unit conversion rule, as prescribed by the [CatalogStockConversion](entity:CatalogStockConversion) type,
 	// that describes how this non-stockable (i.e., sellable/receivable) item variation is converted
 	// to/from the stockable item variation sharing the same parent item. With the stock conversion,
 	// you can accurately track inventory when an item variation is sold in one unit, but stocked in
@@ -11191,14 +13483,32 @@ func (c *CatalogObjectTimePeriod) String() string {
 type CatalogObjectType string
 
 const (
+	CatalogObjectTypeCatalogObjectTypeDoNotUse CatalogObjectType = "CATALOG_OBJECT_TYPE_DO_NOT_USE"
 	CatalogObjectTypeItem                      CatalogObjectType = "ITEM"
 	CatalogObjectTypeImage                     CatalogObjectType = "IMAGE"
+	CatalogObjectTypePageTile                  CatalogObjectType = "PAGE_TILE"
 	CatalogObjectTypeCategory                  CatalogObjectType = "CATEGORY"
 	CatalogObjectTypeItemVariation             CatalogObjectType = "ITEM_VARIATION"
 	CatalogObjectTypeTax                       CatalogObjectType = "TAX"
+	CatalogObjectTypePlaceholder               CatalogObjectType = "PLACEHOLDER"
 	CatalogObjectTypeDiscount                  CatalogObjectType = "DISCOUNT"
 	CatalogObjectTypeModifierList              CatalogObjectType = "MODIFIER_LIST"
 	CatalogObjectTypeModifier                  CatalogObjectType = "MODIFIER"
+	CatalogObjectTypeDiningOption              CatalogObjectType = "DINING_OPTION"
+	CatalogObjectTypeTaxExemption              CatalogObjectType = "TAX_EXEMPTION"
+	CatalogObjectTypeConfiguration             CatalogObjectType = "CONFIGURATION"
+	CatalogObjectTypeTicketGroup               CatalogObjectType = "TICKET_GROUP"
+	CatalogObjectTypeTicketTemplate            CatalogObjectType = "TICKET_TEMPLATE"
+	CatalogObjectTypePage                      CatalogObjectType = "PAGE"
+	CatalogObjectTypeMenu                      CatalogObjectType = "MENU"
+	CatalogObjectTypeTag                       CatalogObjectType = "TAG"
+	CatalogObjectTypeFloorPlan                 CatalogObjectType = "FLOOR_PLAN"
+	CatalogObjectTypeFloorPlanTile             CatalogObjectType = "FLOOR_PLAN_TILE"
+	CatalogObjectTypeVoidReason                CatalogObjectType = "VOID_REASON"
+	CatalogObjectTypeFavoritesListPosition     CatalogObjectType = "FAVORITES_LIST_POSITION"
+	CatalogObjectTypeMenuGroup                 CatalogObjectType = "MENU_GROUP"
+	CatalogObjectTypeItemVariationVendorInfo   CatalogObjectType = "ITEM_VARIATION_VENDOR_INFO"
+	CatalogObjectTypeServiceCharge             CatalogObjectType = "SERVICE_CHARGE"
 	CatalogObjectTypePricingRule               CatalogObjectType = "PRICING_RULE"
 	CatalogObjectTypeProductSet                CatalogObjectType = "PRODUCT_SET"
 	CatalogObjectTypeTimePeriod                CatalogObjectType = "TIME_PERIOD"
@@ -11208,28 +13518,73 @@ const (
 	CatalogObjectTypeItemOptionVal             CatalogObjectType = "ITEM_OPTION_VAL"
 	CatalogObjectTypeCustomAttributeDefinition CatalogObjectType = "CUSTOM_ATTRIBUTE_DEFINITION"
 	CatalogObjectTypeQuickAmountsSettings      CatalogObjectType = "QUICK_AMOUNTS_SETTINGS"
+	CatalogObjectTypeComponent                 CatalogObjectType = "COMPONENT"
+	CatalogObjectTypeComposition               CatalogObjectType = "COMPOSITION"
+	CatalogObjectTypeResource                  CatalogObjectType = "RESOURCE"
+	CatalogObjectTypeCheckoutLink              CatalogObjectType = "CHECKOUT_LINK"
+	CatalogObjectTypeAddress                   CatalogObjectType = "ADDRESS"
 	CatalogObjectTypeSubscriptionPlan          CatalogObjectType = "SUBSCRIPTION_PLAN"
 	CatalogObjectTypeAvailabilityPeriod        CatalogObjectType = "AVAILABILITY_PERIOD"
+	CatalogObjectTypeCreditRedemptionPolicy    CatalogObjectType = "CREDIT_REDEMPTION_POLICY"
+	CatalogObjectTypeAgeRestriction            CatalogObjectType = "AGE_RESTRICTION"
+	CatalogObjectTypeSalePrice                 CatalogObjectType = "SALE_PRICE"
+	CatalogObjectTypeTaxCategory               CatalogObjectType = "TAX_CATEGORY"
 )
 
 func NewCatalogObjectTypeFromString(s string) (CatalogObjectType, error) {
 	switch s {
+	case "CATALOG_OBJECT_TYPE_DO_NOT_USE":
+		return CatalogObjectTypeCatalogObjectTypeDoNotUse, nil
 	case "ITEM":
 		return CatalogObjectTypeItem, nil
 	case "IMAGE":
 		return CatalogObjectTypeImage, nil
+	case "PAGE_TILE":
+		return CatalogObjectTypePageTile, nil
 	case "CATEGORY":
 		return CatalogObjectTypeCategory, nil
 	case "ITEM_VARIATION":
 		return CatalogObjectTypeItemVariation, nil
 	case "TAX":
 		return CatalogObjectTypeTax, nil
+	case "PLACEHOLDER":
+		return CatalogObjectTypePlaceholder, nil
 	case "DISCOUNT":
 		return CatalogObjectTypeDiscount, nil
 	case "MODIFIER_LIST":
 		return CatalogObjectTypeModifierList, nil
 	case "MODIFIER":
 		return CatalogObjectTypeModifier, nil
+	case "DINING_OPTION":
+		return CatalogObjectTypeDiningOption, nil
+	case "TAX_EXEMPTION":
+		return CatalogObjectTypeTaxExemption, nil
+	case "CONFIGURATION":
+		return CatalogObjectTypeConfiguration, nil
+	case "TICKET_GROUP":
+		return CatalogObjectTypeTicketGroup, nil
+	case "TICKET_TEMPLATE":
+		return CatalogObjectTypeTicketTemplate, nil
+	case "PAGE":
+		return CatalogObjectTypePage, nil
+	case "MENU":
+		return CatalogObjectTypeMenu, nil
+	case "TAG":
+		return CatalogObjectTypeTag, nil
+	case "FLOOR_PLAN":
+		return CatalogObjectTypeFloorPlan, nil
+	case "FLOOR_PLAN_TILE":
+		return CatalogObjectTypeFloorPlanTile, nil
+	case "VOID_REASON":
+		return CatalogObjectTypeVoidReason, nil
+	case "FAVORITES_LIST_POSITION":
+		return CatalogObjectTypeFavoritesListPosition, nil
+	case "MENU_GROUP":
+		return CatalogObjectTypeMenuGroup, nil
+	case "ITEM_VARIATION_VENDOR_INFO":
+		return CatalogObjectTypeItemVariationVendorInfo, nil
+	case "SERVICE_CHARGE":
+		return CatalogObjectTypeServiceCharge, nil
 	case "PRICING_RULE":
 		return CatalogObjectTypePricingRule, nil
 	case "PRODUCT_SET":
@@ -11248,10 +13603,28 @@ func NewCatalogObjectTypeFromString(s string) (CatalogObjectType, error) {
 		return CatalogObjectTypeCustomAttributeDefinition, nil
 	case "QUICK_AMOUNTS_SETTINGS":
 		return CatalogObjectTypeQuickAmountsSettings, nil
+	case "COMPONENT":
+		return CatalogObjectTypeComponent, nil
+	case "COMPOSITION":
+		return CatalogObjectTypeComposition, nil
+	case "RESOURCE":
+		return CatalogObjectTypeResource, nil
+	case "CHECKOUT_LINK":
+		return CatalogObjectTypeCheckoutLink, nil
+	case "ADDRESS":
+		return CatalogObjectTypeAddress, nil
 	case "SUBSCRIPTION_PLAN":
 		return CatalogObjectTypeSubscriptionPlan, nil
 	case "AVAILABILITY_PERIOD":
 		return CatalogObjectTypeAvailabilityPeriod, nil
+	case "CREDIT_REDEMPTION_POLICY":
+		return CatalogObjectTypeCreditRedemptionPolicy, nil
+	case "AGE_RESTRICTION":
+		return CatalogObjectTypeAgeRestriction, nil
+	case "SALE_PRICE":
+		return CatalogObjectTypeSalePrice, nil
+	case "TAX_CATEGORY":
+		return CatalogObjectTypeTaxCategory, nil
 	}
 	var t CatalogObjectType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -11463,14 +13836,14 @@ func (c *CatalogProductSet) String() string {
 
 // A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
 //
-// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects]($e/Catalog/SearchCatalogObjects).
+// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects).
 // Any combination of the following types may be used together:
 //
-// - [exact_query]($m/CatalogQueryExact)
-// - [prefix_query]($m/CatalogQueryPrefix)
-// - [range_query]($m/CatalogQueryRange)
-// - [sorted_attribute_query]($m/CatalogQuerySortedAttribute)
-// - [text_query]($m/CatalogQueryText)
+// - [exact_query](entity:CatalogQueryExact)
+// - [prefix_query](entity:CatalogQueryPrefix)
+// - [range_query](entity:CatalogQueryRange)
+// - [sorted_attribute_query](entity:CatalogQuerySortedAttribute)
+// - [text_query](entity:CatalogQueryText)
 //
 // All other query types cannot be combined with any others.
 //
@@ -11487,7 +13860,7 @@ func (c *CatalogProductSet) String() string {
 // - `caption`: `CatalogImage`
 // - `display_name`: `CatalogItemOption`
 //
-// For example, to search for [CatalogItem]($m/CatalogItem) objects by searchable attributes, you can use
+// For example, to search for [CatalogItem](entity:CatalogItem) objects by searchable attributes, you can use
 // the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
 type CatalogQuery struct {
 	// A query expression to sort returned query result by the given attribute.
@@ -12067,12 +14440,15 @@ func (c *CatalogQuickAmount) String() string {
 type CatalogQuickAmountType string
 
 const (
-	CatalogQuickAmountTypeQuickAmountTypeManual CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_MANUAL"
-	CatalogQuickAmountTypeQuickAmountTypeAuto   CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_AUTO"
+	CatalogQuickAmountTypeQuickAmountTypeDoNotUse CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_DO_NOT_USE"
+	CatalogQuickAmountTypeQuickAmountTypeManual   CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_MANUAL"
+	CatalogQuickAmountTypeQuickAmountTypeAuto     CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_AUTO"
 )
 
 func NewCatalogQuickAmountTypeFromString(s string) (CatalogQuickAmountType, error) {
 	switch s {
+	case "QUICK_AMOUNT_TYPE_DO_NOT_USE":
+		return CatalogQuickAmountTypeQuickAmountTypeDoNotUse, nil
 	case "QUICK_AMOUNT_TYPE_MANUAL":
 		return CatalogQuickAmountTypeQuickAmountTypeManual, nil
 	case "QUICK_AMOUNT_TYPE_AUTO":
@@ -12139,13 +14515,16 @@ func (c *CatalogQuickAmountsSettings) String() string {
 type CatalogQuickAmountsSettingsOption string
 
 const (
-	CatalogQuickAmountsSettingsOptionDisabled CatalogQuickAmountsSettingsOption = "DISABLED"
-	CatalogQuickAmountsSettingsOptionManual   CatalogQuickAmountsSettingsOption = "MANUAL"
-	CatalogQuickAmountsSettingsOptionAuto     CatalogQuickAmountsSettingsOption = "AUTO"
+	CatalogQuickAmountsSettingsOptionQuickAmountsSettingsOptionDoNotUse CatalogQuickAmountsSettingsOption = "QUICK_AMOUNTS_SETTINGS_OPTION_DO_NOT_USE"
+	CatalogQuickAmountsSettingsOptionDisabled                           CatalogQuickAmountsSettingsOption = "DISABLED"
+	CatalogQuickAmountsSettingsOptionManual                             CatalogQuickAmountsSettingsOption = "MANUAL"
+	CatalogQuickAmountsSettingsOptionAuto                               CatalogQuickAmountsSettingsOption = "AUTO"
 )
 
 func NewCatalogQuickAmountsSettingsOptionFromString(s string) (CatalogQuickAmountsSettingsOption, error) {
 	switch s {
+	case "QUICK_AMOUNTS_SETTINGS_OPTION_DO_NOT_USE":
+		return CatalogQuickAmountsSettingsOptionQuickAmountsSettingsOptionDoNotUse, nil
 	case "DISABLED":
 		return CatalogQuickAmountsSettingsOptionDisabled, nil
 	case "MANUAL":
@@ -12161,7 +14540,7 @@ func (c CatalogQuickAmountsSettingsOption) Ptr() *CatalogQuickAmountsSettingsOpt
 	return &c
 }
 
-// Represents the rule of conversion between a stockable [CatalogItemVariation]($m/CatalogItemVariation)
+// Represents the rule of conversion between a stockable [CatalogItemVariation](entity:CatalogItemVariation)
 // and a non-stockable sell-by or receive-by `CatalogItemVariation` that
 // share the same underlying stock.
 type CatalogStockConversion struct {
@@ -12229,6 +14608,14 @@ type CatalogSubscriptionPlan struct {
 	// A list of SubscriptionPhase containing the [SubscriptionPhase](entity:SubscriptionPhase) for this plan.
 	// This field it required. Not including this field will throw a REQUIRED_FIELD_MISSING error
 	Phases []*SubscriptionPhase `json:"phases,omitempty" url:"phases,omitempty"`
+	// The day of the month the billing period starts.
+	//
+	// Retired in favour of the corresponding plan variation field.
+	MonthlyBillingAnchorDate *int64 `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
+	// Whether bills for this plan can be split for proration.
+	//
+	// Retired in favour of the corresponding plan variation field.
+	CanProrate *bool `json:"can_prorate,omitempty" url:"can_prorate,omitempty"`
 	// The list of subscription plan variations available for this product
 	SubscriptionPlanVariations []*CatalogObject `json:"subscription_plan_variations,omitempty" url:"subscription_plan_variations,omitempty"`
 	// The list of IDs of `CatalogItems` that are eligible for subscription by this SubscriptionPlan's variations.
@@ -12493,6 +14880,185 @@ func (c *CatalogV1ID) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Published when the catalog is updated.
+type CatalogVersionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *CatalogVersionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventCatalogVersion struct {
+	// Last modification timestamp in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventCatalogVersion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventCatalogVersion(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventData struct {
+	// Name of the affected object’s type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *CatalogVersionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventObject struct {
+	// The version of the object.
+	CatalogVersion *CatalogVersionUpdatedEventCatalogVersion `json:"catalog_version,omitempty" url:"catalog_version,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // A node in the path from a retrieved category to its root node.
 type CategoryPathToRootNode struct {
 	// The category's ID.
@@ -12539,7 +15105,7 @@ func (c *CategoryPathToRootNode) String() string {
 }
 
 // Defines output parameters in a request to the
-// [ChangeBillingAnchorDate]($e/Subscriptions/ChangeBillingAnchorDate) endpoint.
+// [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
 type ChangeBillingAnchorDateResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -12590,12 +15156,15 @@ func (c *ChangeBillingAnchorDateResponse) String() string {
 type ChangeTiming string
 
 const (
-	ChangeTimingImmediate         ChangeTiming = "IMMEDIATE"
-	ChangeTimingEndOfBillingCycle ChangeTiming = "END_OF_BILLING_CYCLE"
+	ChangeTimingDefaultChangeTimingTypeDoNotUse ChangeTiming = "DEFAULT_CHANGE_TIMING_TYPE_DO_NOT_USE"
+	ChangeTimingImmediate                       ChangeTiming = "IMMEDIATE"
+	ChangeTimingEndOfBillingCycle               ChangeTiming = "END_OF_BILLING_CYCLE"
 )
 
 func NewChangeTimingFromString(s string) (ChangeTiming, error) {
 	switch s {
+	case "DEFAULT_CHANGE_TIMING_TYPE_DO_NOT_USE":
+		return ChangeTimingDefaultChangeTimingTypeDoNotUse, nil
 	case "IMMEDIATE":
 		return ChangeTimingImmediate, nil
 	case "END_OF_BILLING_CYCLE":
@@ -13036,13 +15605,16 @@ func (c *CheckoutLocationSettingsBranding) String() string {
 type CheckoutLocationSettingsBrandingButtonShape string
 
 const (
-	CheckoutLocationSettingsBrandingButtonShapeSquared CheckoutLocationSettingsBrandingButtonShape = "SQUARED"
-	CheckoutLocationSettingsBrandingButtonShapeRounded CheckoutLocationSettingsBrandingButtonShape = "ROUNDED"
-	CheckoutLocationSettingsBrandingButtonShapePill    CheckoutLocationSettingsBrandingButtonShape = "PILL"
+	CheckoutLocationSettingsBrandingButtonShapeButtonShapeDoNotUse CheckoutLocationSettingsBrandingButtonShape = "BUTTON_SHAPE_DO_NOT_USE"
+	CheckoutLocationSettingsBrandingButtonShapeSquared             CheckoutLocationSettingsBrandingButtonShape = "SQUARED"
+	CheckoutLocationSettingsBrandingButtonShapeRounded             CheckoutLocationSettingsBrandingButtonShape = "ROUNDED"
+	CheckoutLocationSettingsBrandingButtonShapePill                CheckoutLocationSettingsBrandingButtonShape = "PILL"
 )
 
 func NewCheckoutLocationSettingsBrandingButtonShapeFromString(s string) (CheckoutLocationSettingsBrandingButtonShape, error) {
 	switch s {
+	case "BUTTON_SHAPE_DO_NOT_USE":
+		return CheckoutLocationSettingsBrandingButtonShapeButtonShapeDoNotUse, nil
 	case "SQUARED":
 		return CheckoutLocationSettingsBrandingButtonShapeSquared, nil
 	case "ROUNDED":
@@ -13061,13 +15633,16 @@ func (c CheckoutLocationSettingsBrandingButtonShape) Ptr() *CheckoutLocationSett
 type CheckoutLocationSettingsBrandingHeaderType string
 
 const (
-	CheckoutLocationSettingsBrandingHeaderTypeBusinessName  CheckoutLocationSettingsBrandingHeaderType = "BUSINESS_NAME"
-	CheckoutLocationSettingsBrandingHeaderTypeFramedLogo    CheckoutLocationSettingsBrandingHeaderType = "FRAMED_LOGO"
-	CheckoutLocationSettingsBrandingHeaderTypeFullWidthLogo CheckoutLocationSettingsBrandingHeaderType = "FULL_WIDTH_LOGO"
+	CheckoutLocationSettingsBrandingHeaderTypeHeaderTypeDoNotUse CheckoutLocationSettingsBrandingHeaderType = "HEADER_TYPE_DO_NOT_USE"
+	CheckoutLocationSettingsBrandingHeaderTypeBusinessName       CheckoutLocationSettingsBrandingHeaderType = "BUSINESS_NAME"
+	CheckoutLocationSettingsBrandingHeaderTypeFramedLogo         CheckoutLocationSettingsBrandingHeaderType = "FRAMED_LOGO"
+	CheckoutLocationSettingsBrandingHeaderTypeFullWidthLogo      CheckoutLocationSettingsBrandingHeaderType = "FULL_WIDTH_LOGO"
 )
 
 func NewCheckoutLocationSettingsBrandingHeaderTypeFromString(s string) (CheckoutLocationSettingsBrandingHeaderType, error) {
 	switch s {
+	case "HEADER_TYPE_DO_NOT_USE":
+		return CheckoutLocationSettingsBrandingHeaderTypeHeaderTypeDoNotUse, nil
 	case "BUSINESS_NAME":
 		return CheckoutLocationSettingsBrandingHeaderTypeBusinessName, nil
 	case "FRAMED_LOGO":
@@ -13522,6 +16097,7 @@ func (c *CheckoutOptions) String() string {
 type CheckoutOptionsPaymentType string
 
 const (
+	CheckoutOptionsPaymentTypePaymentTypeDoNotUse       CheckoutOptionsPaymentType = "PAYMENT_TYPE_DO_NOT_USE"
 	CheckoutOptionsPaymentTypeCardPresent               CheckoutOptionsPaymentType = "CARD_PRESENT"
 	CheckoutOptionsPaymentTypeManualCardEntry           CheckoutOptionsPaymentType = "MANUAL_CARD_ENTRY"
 	CheckoutOptionsPaymentTypeFelicaID                  CheckoutOptionsPaymentType = "FELICA_ID"
@@ -13529,10 +16105,13 @@ const (
 	CheckoutOptionsPaymentTypeFelicaTransportationGroup CheckoutOptionsPaymentType = "FELICA_TRANSPORTATION_GROUP"
 	CheckoutOptionsPaymentTypeFelicaAll                 CheckoutOptionsPaymentType = "FELICA_ALL"
 	CheckoutOptionsPaymentTypePaypay                    CheckoutOptionsPaymentType = "PAYPAY"
+	CheckoutOptionsPaymentTypeCashApp                   CheckoutOptionsPaymentType = "CASH_APP"
 )
 
 func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentType, error) {
 	switch s {
+	case "PAYMENT_TYPE_DO_NOT_USE":
+		return CheckoutOptionsPaymentTypePaymentTypeDoNotUse, nil
 	case "CARD_PRESENT":
 		return CheckoutOptionsPaymentTypeCardPresent, nil
 	case "MANUAL_CARD_ENTRY":
@@ -13547,6 +16126,8 @@ func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentTy
 		return CheckoutOptionsPaymentTypeFelicaAll, nil
 	case "PAYPAY":
 		return CheckoutOptionsPaymentTypePaypay, nil
+	case "CASH_APP":
+		return CheckoutOptionsPaymentTypeCashApp, nil
 	}
 	var t CheckoutOptionsPaymentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13600,7 +16181,7 @@ func (c *ClearpayDetails) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CloneOrder]($e/Orders/CloneOrder) endpoint.
+// a request to the [CloneOrder](api-endpoint:Orders-CloneOrder) endpoint.
 type CloneOrderResponse struct {
 	// The cloned order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -13687,7 +16268,7 @@ func (c *CollectedData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by[CompletePayment]($e/Payments/CompletePayment).
+// Defines the response returned by[CompletePayment](api-endpoint:Payments-CompletePayment).
 type CompletePaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -13791,16 +16372,29 @@ func (c *Component) String() string {
 type ComponentComponentType string
 
 const (
-	ComponentComponentTypeApplication ComponentComponentType = "APPLICATION"
-	ComponentComponentTypeCardReader  ComponentComponentType = "CARD_READER"
-	ComponentComponentTypeBattery     ComponentComponentType = "BATTERY"
-	ComponentComponentTypeWifi        ComponentComponentType = "WIFI"
-	ComponentComponentTypeEthernet    ComponentComponentType = "ETHERNET"
-	ComponentComponentTypePrinter     ComponentComponentType = "PRINTER"
+	ComponentComponentTypeComponentInvalidType ComponentComponentType = "COMPONENT_INVALID_TYPE"
+	ComponentComponentTypeApplication          ComponentComponentType = "APPLICATION"
+	ComponentComponentTypeCardReader           ComponentComponentType = "CARD_READER"
+	ComponentComponentTypeBattery              ComponentComponentType = "BATTERY"
+	ComponentComponentTypeWifi                 ComponentComponentType = "WIFI"
+	ComponentComponentTypeEthernet             ComponentComponentType = "ETHERNET"
+	ComponentComponentTypePrinter              ComponentComponentType = "PRINTER"
+	ComponentComponentTypeScale                ComponentComponentType = "SCALE"
+	ComponentComponentTypeBarcodeScanner       ComponentComponentType = "BARCODE_SCANNER"
+	ComponentComponentTypeUsbInterface         ComponentComponentType = "USB_INTERFACE"
+	ComponentComponentTypeBluetoothInterface   ComponentComponentType = "BLUETOOTH_INTERFACE"
+	ComponentComponentTypeNetworkInterface     ComponentComponentType = "NETWORK_INTERFACE"
+	ComponentComponentTypeAirprintInterface    ComponentComponentType = "AIRPRINT_INTERFACE"
+	ComponentComponentTypeAudioInterface       ComponentComponentType = "AUDIO_INTERFACE"
+	ComponentComponentTypeCellularData         ComponentComponentType = "CELLULAR_DATA"
+	ComponentComponentTypeStand                ComponentComponentType = "STAND"
+	ComponentComponentTypeScannerScale         ComponentComponentType = "SCANNER_SCALE"
 )
 
 func NewComponentComponentTypeFromString(s string) (ComponentComponentType, error) {
 	switch s {
+	case "COMPONENT_INVALID_TYPE":
+		return ComponentComponentTypeComponentInvalidType, nil
 	case "APPLICATION":
 		return ComponentComponentTypeApplication, nil
 	case "CARD_READER":
@@ -13813,6 +16407,26 @@ func NewComponentComponentTypeFromString(s string) (ComponentComponentType, erro
 		return ComponentComponentTypeEthernet, nil
 	case "PRINTER":
 		return ComponentComponentTypePrinter, nil
+	case "SCALE":
+		return ComponentComponentTypeScale, nil
+	case "BARCODE_SCANNER":
+		return ComponentComponentTypeBarcodeScanner, nil
+	case "USB_INTERFACE":
+		return ComponentComponentTypeUsbInterface, nil
+	case "BLUETOOTH_INTERFACE":
+		return ComponentComponentTypeBluetoothInterface, nil
+	case "NETWORK_INTERFACE":
+		return ComponentComponentTypeNetworkInterface, nil
+	case "AIRPRINT_INTERFACE":
+		return ComponentComponentTypeAirprintInterface, nil
+	case "AUDIO_INTERFACE":
+		return ComponentComponentTypeAudioInterface, nil
+	case "CELLULAR_DATA":
+		return ComponentComponentTypeCellularData, nil
+	case "STAND":
+		return ComponentComponentTypeStand, nil
+	case "SCANNER_SCALE":
+		return ComponentComponentTypeScannerScale, nil
 	}
 	var t ComponentComponentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14727,7 +17341,7 @@ func (c Country) Ptr() *Country {
 	return &c
 }
 
-// Represents a [CreateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/CreateBookingCustomAttributeDefinition) response.
+// Represents a [CreateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-CreateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateBookingCustomAttributeDefinitionResponse struct {
 	// The newly created custom attribute definition.
@@ -14865,7 +17479,7 @@ func (c *CreateBreakTypeResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCard]($e/Cards/CreateCard) endpoint.
+// a request to the [CreateCard](api-endpoint:Cards-CreateCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -15109,7 +17723,7 @@ func (c *CreateCustomerCardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) response.
+// Represents a [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateCustomerCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -15156,7 +17770,7 @@ func (c *CreateCustomerCustomAttributeDefinitionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCustomerGroup]($e/CustomerGroups/CreateCustomerGroup) endpoint.
+// a request to the [CreateCustomerGroup](api-endpoint:CustomerGroups-CreateCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type CreateCustomerGroupResponse struct {
@@ -15204,8 +17818,8 @@ func (c *CreateCustomerGroupResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCustomer]($e/Customers/CreateCustomer) or
-// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) endpoint.
+// a request to the [CreateCustomer](api-endpoint:Customers-CreateCustomer) or
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
 type CreateCustomerResponse struct {
@@ -15527,7 +18141,7 @@ func (c *CreateGiftCardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateInvoiceAttachment]($e/Invoices/CreateInvoiceAttachment) response.
+// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
 type CreateInvoiceAttachmentResponse struct {
 	// Metadata about the attachment that was added to the invoice.
 	Attachment *InvoiceAttachment `json:"attachment,omitempty" url:"attachment,omitempty"`
@@ -15617,7 +18231,7 @@ func (c *CreateInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/CreateLocationCustomAttributeDefinition) response.
+// Represents a [CreateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-CreateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateLocationCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -15663,7 +18277,7 @@ func (c *CreateLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response object returned by the [CreateLocation]($e/Locations/CreateLocation) endpoint.
+// The response object returned by the [CreateLocation](api-endpoint:Locations-CreateLocation) endpoint.
 type CreateLocationResponse struct {
 	// Information about [errors](https://developer.squareup.com/docs/build-basics/handling-errors) encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -15753,7 +18367,7 @@ func (c *CreateLoyaltyAccountResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateLoyaltyPromotion]($e/Loyalty/CreateLoyaltyPromotion) response.
+// Represents a [CreateLoyaltyPromotion](api-endpoint:Loyalty-CreateLoyaltyPromotion) response.
 // Either `loyalty_promotion` or `errors` is present in the response.
 type CreateLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
@@ -15844,7 +18458,7 @@ func (c *CreateLoyaltyRewardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/CreateMerchantCustomAttributeDefinition) response.
+// Represents a [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateMerchantCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -15899,6 +18513,9 @@ type CreateMobileAuthorizationCodeResponse struct {
 	// The timestamp when `authorization_code` expires, in
 	// [RFC 3339](https://tools.ietf.org/html/rfc3339) format (for example, "2016-09-04T23:59:33.123Z").
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	// An error object that provides details about how creation of the authorization
+	// code failed.
+	Error *Error `json:"error,omitempty" url:"error,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
@@ -16131,7 +18748,7 @@ func (c *CreatePaymentLinkResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by [CreatePayment]($e/Payments/CreatePayment).
+// Defines the response returned by [CreatePayment](api-endpoint:Payments-CreatePayment).
 //
 // If there are errors processing the request, the `payment` field might not be
 // present, or it might be present with a status of `FAILED`.
@@ -16348,7 +18965,7 @@ func (c *CreateShiftResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [CreateSubscription]($e/Subscriptions/CreateSubscription) endpoint.
+// [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
 type CreateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -16622,7 +19239,7 @@ func (c *CreateTerminalRefundResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents an output from a call to [CreateVendor]($e/Vendors/CreateVendor).
+// Represents an output from a call to [CreateVendor](api-endpoint:Vendors-CreateVendor).
 type CreateVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -16668,9 +19285,9 @@ func (c *CreateVendorResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateWebhookSubscription]($e/WebhookSubscriptions/CreateWebhookSubscription) endpoint.
+// a request to the [CreateWebhookSubscription](api-endpoint:WebhookSubscriptions-CreateWebhookSubscription) endpoint.
 //
-// Note: if there are errors processing the request, the [Subscription]($m/WebhookSubscription) will not be
+// Note: if there are errors processing the request, the [Subscription](entity:WebhookSubscription) will not be
 // present.
 type CreateWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -17442,6 +20059,96 @@ func (c *CustomAttributeDefinition) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Represents an object in the CustomAttributeDefinition event notification
+// payload that contains the affected custom attribute definition.
+type CustomAttributeDefinitionEventData struct {
+	// The type of the event data object. The value is `"custom_attribute_definition"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the custom attribute definition.
+	Object *CustomAttributeDefinitionEventDataObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomAttributeDefinitionEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeDefinitionEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeDefinitionEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeDefinitionEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeDefinitionEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CustomAttributeDefinitionEventDataObject struct {
+	// The custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeDefinitionEventDataObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeDefinitionEventDataObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // The level of permission that a seller or other applications requires to
 // view this custom attribute definition.
 // The `Visibility` field controls who can read and write the custom attribute values
@@ -17449,6 +20156,7 @@ func (c *CustomAttributeDefinition) String() string {
 type CustomAttributeDefinitionVisibility string
 
 const (
+	CustomAttributeDefinitionVisibilityVisibilityDoNotUse        CustomAttributeDefinitionVisibility = "VISIBILITY_DO_NOT_USE"
 	CustomAttributeDefinitionVisibilityVisibilityHidden          CustomAttributeDefinitionVisibility = "VISIBILITY_HIDDEN"
 	CustomAttributeDefinitionVisibilityVisibilityReadOnly        CustomAttributeDefinitionVisibility = "VISIBILITY_READ_ONLY"
 	CustomAttributeDefinitionVisibilityVisibilityReadWriteValues CustomAttributeDefinitionVisibility = "VISIBILITY_READ_WRITE_VALUES"
@@ -17456,6 +20164,8 @@ const (
 
 func NewCustomAttributeDefinitionVisibilityFromString(s string) (CustomAttributeDefinitionVisibility, error) {
 	switch s {
+	case "VISIBILITY_DO_NOT_USE":
+		return CustomAttributeDefinitionVisibilityVisibilityDoNotUse, nil
 	case "VISIBILITY_HIDDEN":
 		return CustomAttributeDefinitionVisibilityVisibilityHidden, nil
 	case "VISIBILITY_READ_ONLY":
@@ -17471,8 +20181,96 @@ func (c CustomAttributeDefinitionVisibility) Ptr() *CustomAttributeDefinitionVis
 	return &c
 }
 
+type CustomAttributeEventData struct {
+	// The type of the event data object. The value is `"custom_attribute"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the custom attribute.
+	Object *CustomAttributeEventDataObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomAttributeEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CustomAttributeEventDataObject struct {
+	// The custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomAttributeEventDataObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeEventDataObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeEventDataObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeEventDataObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeEventDataObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Supported custom attribute query expressions for calling the
-// [SearchCatalogItems]($e/Catalog/SearchCatalogItems)
+// [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
 // endpoint to search for items or item variations.
 type CustomAttributeFilter struct {
 	// A query expression to filter items or item variations by matching their custom attributes'
@@ -17624,6 +20422,8 @@ type Customer struct {
 	Note *string `json:"note,omitempty" url:"note,omitempty"`
 	// Represents general customer preferences.
 	Preferences *CustomerPreferences `json:"preferences,omitempty" url:"preferences,omitempty"`
+	// The customer groups and segments the customer belongs to. This deprecated field has been replaced with the dedicated `group_ids` for customer groups and the dedicated `segment_ids` field for customer segments. You can retrieve information about a given customer group and segment respectively using the Customer Groups API and Customer Segments API.
+	Groups []*CustomerGroupInfo `json:"groups,omitempty" url:"groups,omitempty"`
 	// The method used to create the customer profile.
 	// See [CustomerCreationSource](#type-customercreationsource) for possible values
 	CreationSource *CustomerCreationSource `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -17675,7 +20475,7 @@ func (c *Customer) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue]($m/CustomerCustomAttributeFilterValue) filter when
+// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
 // searching by an `Address`-type custom attribute.
 type CustomerAddressFilter struct {
 	// The postal code to search for. Only an `exact` match is supported.
@@ -17711,6 +20511,240 @@ func (c *CustomerAddressFilter) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CustomerAddressFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [customer](entity:Customer) is created. Subscribe to this event to track customer profiles affected by a merge operation.
+// For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// The `customer` object in the event notification does not include the following fields: `cards` (deprecated) and `segment_ids`.
+type CustomerCreatedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new customer.
+	Object *CustomerCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about the change that triggered the event.
+type CustomerCreatedEventEventContext struct {
+	// Information about the merge operation associated with the event.
+	Merge *CustomerCreatedEventEventContextMerge `json:"merge,omitempty" url:"merge,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreatedEventEventContext) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventEventContext) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventEventContext
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventEventContext(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventEventContext) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about a merge operation, which creates a new customer using aggregated properties from two or more existing customers.
+type CustomerCreatedEventEventContextMerge struct {
+	// The IDs of the existing customers that were merged and then deleted.
+	FromCustomerIDs []string `json:"from_customer_ids,omitempty" url:"from_customer_ids,omitempty"`
+	// The ID of the new customer created by the merge.
+	ToCustomerID *string `json:"to_customer_id,omitempty" url:"to_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreatedEventEventContextMerge) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventEventContextMerge) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventEventContextMerge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventEventContextMerge(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventEventContextMerge) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerCreatedEventObject struct {
+	// The new customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+	// Information about the change that triggered the event. This field is returned only if the customer is created by a merge operation.
+	EventContext *CustomerCreatedEventEventContext `json:"event_context,omitempty" url:"event_context,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventObject) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -17849,8 +20883,782 @@ func (c *CustomerCreationSourceFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filter. Use this filter in a set of [custom attribute filters]($m/CustomerCustomAttributeFilters) to search
-// based on the value or last updated date of a customer-related [custom attribute]($m/CustomAttribute).
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.created](webhook:customer.custom_attribute_definition.owned.created).
+type CustomerCustomAttributeDefinitionCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is created. A notification is sent when any application creates a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.created](webhook:customer.custom_attribute_definition.visible.created),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionCreatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionCreatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionCreatedPublicEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.deleted](webhook:customer.custom_attribute_definition.owned.deleted).
+type CustomerCustomAttributeDefinitionDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is deleted. A notification is sent when any application deletes a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.deleted](webhook:customer.custom_attribute_definition.visible.deleted),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionDeletedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionDeletedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionDeletedPublicEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+type CustomerCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+type CustomerCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated by
+// the application that created it.
+type CustomerCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated by
+// the application that created it.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.updated](webhook:customer.custom_attribute_definition.owned.updated).
+type CustomerCustomAttributeDefinitionUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is updated. A notification is sent when any application updates a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.updated](webhook:customer.custom_attribute_definition.visible.updated),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionUpdatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionUpdatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionUpdatedPublicEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A custom attribute definition can only be deleted
+// by the application that created it. A notification is sent when your application deletes a custom attribute
+// definition or when another application deletes a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it. A notification is sent when your application updates a custom
+// attribute definition or when another application updates a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is deleted. Custom attributes are owned by the application that created the
+// corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+//
+// This event is replaced by
+// [customer.custom_attribute.owned.deleted](webhook:customer.custom_attribute.owned.deleted).
+type CustomerCustomAttributeDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible
+// to all applications is deleted. A notification is sent when any application deletes a custom attribute
+// whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute.visible.deleted](webhook:customer.custom_attribute.visible.deleted),
+// which applies to custom attributes that are visible to the subscribing application.
+type CustomerCustomAttributeDeletedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.public.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDeletedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDeletedPublicEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
+// based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
 type CustomerCustomAttributeFilter struct {
 	// The `key` of the [custom attribute](entity:CustomAttribute) to filter by. The key is the identifier of the custom attribute
 	// (and the corresponding custom attribute definition) and can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
@@ -17905,8 +21713,8 @@ func (c *CustomerCustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A type-specific filter used in a [custom attribute filter]($m/CustomerCustomAttributeFilter) to search based on the value
-// of a customer-related [custom attribute]($m/CustomAttribute).
+// A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
+// of a customer-related [custom attribute](entity:CustomAttribute).
 type CustomerCustomAttributeFilterValue struct {
 	// A filter for a query based on the value of an `Email`-type custom attribute. This filter is case-insensitive and can
 	// include `exact` or `fuzzy`, but not both.
@@ -18004,8 +21812,8 @@ func (c *CustomerCustomAttributeFilterValue) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filters in a set of [customer filters]($m/CustomerFilter) used in a search query. Use this filter
-// to search based on [custom attributes]($m/CustomAttribute) that are assigned to customer profiles. For more information, see
+// The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
+// to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
 // [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
 type CustomerCustomAttributeFilters struct {
 	// The custom attribute filters. Each filter must specify `key` and include the `filter` field with a type-specific filter,
@@ -18039,6 +21847,581 @@ func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CustomerCustomAttributeFilters) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is deleted. Custom attributes are owned by the application that created the
+// corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+type CustomerCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+type CustomerCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+//
+// This event is replaced by
+// [customer.custom_attribute.owned.updated](webhook:customer.custom_attribute.owned.updated).
+type CustomerCustomAttributeUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible
+// to all applications is created or updated. A notification is sent when any application creates or updates
+// a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute.visible.updated](webhook:customer.custom_attribute.visible.updated),
+// which applies to custom attributes that are visible to the subscribing application.
+type CustomerCustomAttributeUpdatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.public.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeUpdatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeUpdatedPublicEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is deleted. A notification is sent when:
+//
+//   - Your application deletes a custom attribute owned by your application, regardless of the `visibility` setting.
+//   - Any application deletes a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+//     or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be deleted by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type CustomerCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is created or updated. A notification is sent when:
+//
+//   - Your application creates or updates a custom attribute owned by your application, regardless of the `visibility` setting.
+//   - Any application creates or updates a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+//     or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be created or updated by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type CustomerCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [customer](entity:Customer) is deleted. For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// The `customer` object in the event notification does not include the following fields: `cards` (deprecated), `group_ids`, and `segment_ids`.
+type CustomerDeletedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the deleted customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the deleted customer.
+	Object *CustomerDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about the change that triggered the event.
+type CustomerDeletedEventEventContext struct {
+	// Information about the merge operation associated with the event.
+	Merge *CustomerDeletedEventEventContextMerge `json:"merge,omitempty" url:"merge,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDeletedEventEventContext) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventEventContext) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventEventContext
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventEventContext(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventEventContext) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about a merge operation, which creates a new customer using aggregated properties from two or more existing customers.
+type CustomerDeletedEventEventContextMerge struct {
+	// The IDs of the existing customers that were merged and then deleted.
+	FromCustomerIDs []string `json:"from_customer_ids,omitempty" url:"from_customer_ids,omitempty"`
+	// The ID of the new customer created by the merge.
+	ToCustomerID *string `json:"to_customer_id,omitempty" url:"to_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDeletedEventEventContextMerge) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventEventContextMerge) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventEventContextMerge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventEventContextMerge(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventEventContextMerge) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerDeletedEventObject struct {
+	// The deleted customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+	// Information about the change that triggered the event. This field is returned only if the customer is deleted by a merge operation.
+	EventContext *CustomerDeletedEventEventContext `json:"event_context,omitempty" url:"event_context,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventObject) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -18096,8 +22479,8 @@ func (c *CustomerDetails) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the filtering criteria in a [search query]($m/CustomerQuery) that defines how to filter
-// customer profiles returned in [SearchCustomers]($e/Customers/SearchCustomers) results.
+// Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 type CustomerFilter struct {
 	// A filter to select customers based on their creation source.
 	CreationSource *CustomerCreationSourceFilter `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -18293,6 +22676,51 @@ func (c *CustomerGroup) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Contains some brief information about a Customer Group with its identifier included.
+type CustomerGroupInfo struct {
+	// The ID of the Customer Group.
+	ID string `json:"id" url:"id"`
+	// The name of the Customer Group.
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerGroupInfo) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerGroupInfo) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerGroupInfo
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerGroupInfo(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerGroupInfo) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Indicates whether customers should be included in, or excluded from,
 // the result set when they match the filtering criteria.
 type CustomerInclusionExclusion string
@@ -18360,7 +22788,7 @@ func (c *CustomerPreferences) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents filtering and sorting criteria for a [SearchCustomers]($e/Customers/SearchCustomers) request.
+// Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
 type CustomerQuery struct {
 	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
 	// Multiple filters are combined as `AND` statements.
@@ -18462,8 +22890,8 @@ func (c *CustomerSegment) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the sorting criteria in a [search query]($m/CustomerQuery) that defines how to sort
-// customer profiles returned in [SearchCustomers]($e/Customers/SearchCustomers) results.
+// Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 type CustomerSort struct {
 	// Indicates the fields to use as the sort key, which is either the default set of fields or `created_at`.
 	//
@@ -18539,7 +22967,7 @@ func (c CustomerSortField) Ptr() *CustomerSortField {
 	return &c
 }
 
-// Represents the tax ID associated with a [customer profile]($m/Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
+// Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
 // For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 type CustomerTaxIDs struct {
 	// The EU VAT identification number for the customer. For example, `IE3426675K`. The ID can contain alphanumeric characters only.
@@ -18633,6 +23061,149 @@ func (c *CustomerTextFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Published when a [customer](entity:Customer) is updated. For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// Updates to the following customer fields do not invoke a `customer.updated` event: `cards` (deprecated) and `segment_ids`. In addition, the `customer` object in the event notification does not include these fields.
+type CustomerUpdatedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEvent) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated customer.
+	Object *CustomerUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEventData) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerUpdatedEventObject struct {
+	// The updated customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEventObject) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type DataCollectionOptions struct {
 	// The title text to display in the data collection flow on the Terminal.
 	Title string `json:"title" url:"title"`
@@ -18687,12 +23258,15 @@ func (d *DataCollectionOptions) String() string {
 type DataCollectionOptionsInputType string
 
 const (
+	DataCollectionOptionsInputTypeInvalidType DataCollectionOptionsInputType = "INVALID_TYPE"
 	DataCollectionOptionsInputTypeEmail       DataCollectionOptionsInputType = "EMAIL"
 	DataCollectionOptionsInputTypePhoneNumber DataCollectionOptionsInputType = "PHONE_NUMBER"
 )
 
 func NewDataCollectionOptionsInputTypeFromString(s string) (DataCollectionOptionsInputType, error) {
 	switch s {
+	case "INVALID_TYPE":
+		return DataCollectionOptionsInputTypeInvalidType, nil
 	case "EMAIL":
 		return DataCollectionOptionsInputTypeEmail, nil
 	case "PHONE_NUMBER":
@@ -18794,7 +23368,7 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 	return &d
 }
 
-// Represents a [DeleteBookingCustomAttributeDefinition]($e/BookingCustomAttributes/DeleteBookingCustomAttributeDefinition) request.
+// Represents a [DeleteBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttributeDefinition) request.
 type DeleteBookingCustomAttributeDefinitionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -18834,7 +23408,7 @@ func (d *DeleteBookingCustomAttributeDefinitionRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttributeDefinition]($e/BookingCustomAttributes/DeleteBookingCustomAttributeDefinition) response
+// Represents a [DeleteBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttributeDefinition) response
 // containing error messages when errors occurred during the request. The successful response does not contain any payload.
 type DeleteBookingCustomAttributeDefinitionResponse struct {
 	// Any errors that occurred during the request.
@@ -18878,7 +23452,7 @@ func (d *DeleteBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttribute]($e/BookingCustomAttributes/DeleteBookingCustomAttribute) request.
+// Represents a [DeleteBookingCustomAttribute](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttribute) request.
 type DeleteBookingCustomAttributeRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -18918,7 +23492,7 @@ func (d *DeleteBookingCustomAttributeRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttribute]($e/BookingCustomAttributes/DeleteBookingCustomAttribute) response.
+// Represents a [DeleteBookingCustomAttribute](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteBookingCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -19220,7 +23794,7 @@ func (d *DeleteCustomerCardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/DeleteCustomerCustomAttributeDefinition) request.
+// Represents a [DeleteCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-DeleteCustomerCustomAttributeDefinition) request.
 type DeleteCustomerCustomAttributeDefinitionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19303,7 +23877,7 @@ func (d *DeleteCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteCustomerCustomAttribute]($e/CustomerCustomAttributes/DeleteCustomerCustomAttribute) request.
+// Represents a [DeleteCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-DeleteCustomerCustomAttribute) request.
 type DeleteCustomerCustomAttributeRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19343,7 +23917,7 @@ func (d *DeleteCustomerCustomAttributeRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteCustomerCustomAttribute]($e/CustomerCustomAttributes/DeleteCustomerCustomAttribute) response.
+// Represents a [DeleteCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-DeleteCustomerCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteCustomerCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -19388,7 +23962,7 @@ func (d *DeleteCustomerCustomAttributeResponse) String() string {
 }
 
 // Defines the fields that can be included in a request to the
-// [DeleteCustomerGroup]($e/CustomerGroups/DeleteCustomerGroup) endpoint.
+// [DeleteCustomerGroup](api-endpoint:CustomerGroups-DeleteCustomerGroup) endpoint.
 type DeleteCustomerGroupRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19429,7 +24003,7 @@ func (d *DeleteCustomerGroupRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DeleteCustomerGroup]($e/CustomerGroups/DeleteCustomerGroup) endpoint.
+// a request to the [DeleteCustomerGroup](api-endpoint:CustomerGroups-DeleteCustomerGroup) endpoint.
 type DeleteCustomerGroupResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -19645,7 +24219,7 @@ func (d *DeleteDisputeEvidenceResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteInvoiceAttachment]($e/Invoices/DeleteInvoiceAttachment) request.
+// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) request.
 type DeleteInvoiceAttachmentRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19685,7 +24259,7 @@ func (d *DeleteInvoiceAttachmentRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteInvoiceAttachment]($e/Invoices/DeleteInvoiceAttachment) response.
+// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
 type DeleteInvoiceAttachmentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -19816,7 +24390,7 @@ func (d *DeleteInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteLocationCustomAttributeDefinition]($e/LocationCustomAttributes/DeleteLocationCustomAttributeDefinition) request.
+// Represents a [DeleteLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-DeleteLocationCustomAttributeDefinition) request.
 type DeleteLocationCustomAttributeDefinitionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19899,7 +24473,7 @@ func (d *DeleteLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteLocationCustomAttribute]($e/LocationCustomAttributes/DeleteLocationCustomAttribute) request.
+// Represents a [DeleteLocationCustomAttribute](api-endpoint:LocationCustomAttributes-DeleteLocationCustomAttribute) request.
 type DeleteLocationCustomAttributeRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -19939,7 +24513,7 @@ func (d *DeleteLocationCustomAttributeRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteLocationCustomAttribute]($e/LocationCustomAttributes/DeleteLocationCustomAttribute) response.
+// Represents a [DeleteLocationCustomAttribute](api-endpoint:LocationCustomAttributes-DeleteLocationCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteLocationCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -20066,7 +24640,7 @@ func (d *DeleteLoyaltyRewardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/DeleteMerchantCustomAttributeDefinition) request.
+// Represents a [DeleteMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttributeDefinition) request.
 type DeleteMerchantCustomAttributeDefinitionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -20149,7 +24723,7 @@ func (d *DeleteMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteMerchantCustomAttribute]($e/MerchantCustomAttributes/DeleteMerchantCustomAttribute) request.
+// Represents a [DeleteMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttribute) request.
 type DeleteMerchantCustomAttributeRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -20189,7 +24763,7 @@ func (d *DeleteMerchantCustomAttributeRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteMerchantCustomAttribute]($e/MerchantCustomAttributes/DeleteMerchantCustomAttribute) response.
+// Represents a [DeleteMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteMerchantCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -20652,7 +25226,7 @@ func (d *DeleteSnippetResponse) String() string {
 }
 
 // Defines input parameters in a call to the
-// [DeleteSubscriptionAction]($e/Subscriptions/DeleteSubscriptionAction)
+// [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
 // endpoint.
 type DeleteSubscriptionActionRequest struct {
 	extraProperties map[string]interface{}
@@ -20693,7 +25267,7 @@ func (d *DeleteSubscriptionActionRequest) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines output parameters in a response of the [DeleteSubscriptionAction]($e/Subscriptions/DeleteSubscriptionAction)
+// Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
 // endpoint.
 type DeleteSubscriptionActionResponse struct {
 	// Errors encountered during the request.
@@ -20739,7 +25313,7 @@ func (d *DeleteSubscriptionActionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Deletes a [Subscription]($m/WebhookSubscription).
+// Deletes a [Subscription](entity:WebhookSubscription).
 type DeleteWebhookSubscriptionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -20780,7 +25354,7 @@ func (d *DeleteWebhookSubscriptionRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DeleteWebhookSubscription]($e/WebhookSubscriptions/DeleteWebhookSubscription) endpoint.
+// a request to the [DeleteWebhookSubscription](api-endpoint:WebhookSubscriptions-DeleteWebhookSubscription) endpoint.
 type DeleteWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -21060,10 +25634,6 @@ func (d *Destination) String() string {
 type DestinationDetails struct {
 	// Details about a card refund. Only populated if the destination_type is `CARD`.
 	CardDetails *DestinationDetailsCardRefundDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
-	// Details about a cash refund. Only populated if the destination_type is `CASH`.
-	CashDetails *DestinationDetailsCashRefundDetails `json:"cash_details,omitempty" url:"cash_details,omitempty"`
-	// Details about an external refund. Only populated if the destination_type is `EXTERNAL`.
-	ExternalDetails *DestinationDetailsExternalRefundDetails `json:"external_details,omitempty" url:"external_details,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -21150,127 +25720,22 @@ func (d *DestinationDetailsCardRefundDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Stores details about a cash refund. Contains only non-confidential information.
-type DestinationDetailsCashRefundDetails struct {
-	// The amount and currency of the money supplied by the seller.
-	SellerSuppliedMoney *Money `json:"seller_supplied_money,omitempty" url:"seller_supplied_money,omitempty"`
-	// The amount of change due back to the seller.
-	// This read-only field is calculated
-	// from the `amount_money` and `seller_supplied_money` fields.
-	ChangeBackMoney *Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (d *DestinationDetailsCashRefundDetails) GetExtraProperties() map[string]interface{} {
-	return d.extraProperties
-}
-
-func (d *DestinationDetailsCashRefundDetails) UnmarshalJSON(data []byte) error {
-	type unmarshaler DestinationDetailsCashRefundDetails
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*d = DestinationDetailsCashRefundDetails(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *d)
-	if err != nil {
-		return err
-	}
-	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (d *DestinationDetailsCashRefundDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(d); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", d)
-}
-
-// Stores details about an external refund. Contains only non-confidential information.
-type DestinationDetailsExternalRefundDetails struct {
-	// The type of external refund the seller paid to the buyer. It can be one of the
-	// following:
-	//
-	// - CHECK - Refunded using a physical check.
-	// - BANK_TRANSFER - Refunded using external bank transfer.
-	// - OTHER_GIFT_CARD - Refunded using a non-Square gift card.
-	// - CRYPTO - Refunded using a crypto currency.
-	// - SQUARE_CASH - Refunded using Square Cash App.
-	// - SOCIAL - Refunded using peer-to-peer payment applications.
-	// - EXTERNAL - A third-party application gathered this refund outside of Square.
-	// - EMONEY - Refunded using an E-money provider.
-	// - CARD - A credit or debit card that Square does not support.
-	// - STORED_BALANCE - Use for house accounts, store credit, and so forth.
-	// - FOOD_VOUCHER - Restaurant voucher provided by employers to employees to pay for meals
-	// - OTHER - A type not listed here.
-	Type string `json:"type" url:"type"`
-	// A description of the external refund source. For example,
-	// "Food Delivery Service".
-	Source string `json:"source" url:"source"`
-	// An ID to associate the refund to its originating source.
-	SourceID *string `json:"source_id,omitempty" url:"source_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (d *DestinationDetailsExternalRefundDetails) GetExtraProperties() map[string]interface{} {
-	return d.extraProperties
-}
-
-func (d *DestinationDetailsExternalRefundDetails) UnmarshalJSON(data []byte) error {
-	type unmarshaler DestinationDetailsExternalRefundDetails
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*d = DestinationDetailsExternalRefundDetails(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *d)
-	if err != nil {
-		return err
-	}
-	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (d *DestinationDetailsExternalRefundDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(d); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", d)
-}
-
 // List of possible destinations against which a payout can be made.
 type DestinationType string
 
 const (
-	DestinationTypeBankAccount         DestinationType = "BANK_ACCOUNT"
-	DestinationTypeCard                DestinationType = "CARD"
-	DestinationTypeSquareBalance       DestinationType = "SQUARE_BALANCE"
-	DestinationTypeSquareStoredBalance DestinationType = "SQUARE_STORED_BALANCE"
+	DestinationTypeUnknownDestinationTypeDoNotUse DestinationType = "UNKNOWN_DESTINATION_TYPE_DO_NOT_USE"
+	DestinationTypeBankAccount                    DestinationType = "BANK_ACCOUNT"
+	DestinationTypeCard                           DestinationType = "CARD"
+	DestinationTypeSquareBalance                  DestinationType = "SQUARE_BALANCE"
+	DestinationTypeSquareStoredBalance            DestinationType = "SQUARE_STORED_BALANCE"
+	DestinationTypeDestinationTypePending         DestinationType = "DESTINATION_TYPE_PENDING"
 )
 
 func NewDestinationTypeFromString(s string) (DestinationType, error) {
 	switch s {
+	case "UNKNOWN_DESTINATION_TYPE_DO_NOT_USE":
+		return DestinationTypeUnknownDestinationTypeDoNotUse, nil
 	case "BANK_ACCOUNT":
 		return DestinationTypeBankAccount, nil
 	case "CARD":
@@ -21279,6 +25744,8 @@ func NewDestinationTypeFromString(s string) (DestinationType, error) {
 		return DestinationTypeSquareBalance, nil
 	case "SQUARE_STORED_BALANCE":
 		return DestinationTypeSquareStoredBalance, nil
+	case "DESTINATION_TYPE_PENDING":
+		return DestinationTypeDestinationTypePending, nil
 	}
 	var t DestinationType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21340,7 +25807,7 @@ func (d *Device) String() string {
 type DeviceAttributes struct {
 	// The device type.
 	// See [DeviceType](#type-devicetype) for possible values
-	Type DeviceAttributesDeviceType `json:"type,omitempty" url:"type,omitempty"`
+	Type DeviceAttributesDeviceType `json:"type" url:"type"`
 	// The maker of the device.
 	Manufacturer string `json:"manufacturer" url:"manufacturer"`
 	// The specific model of the device.
@@ -21397,7 +25864,60 @@ func (d *DeviceAttributes) String() string {
 }
 
 // An enum identifier of the device type.
-type DeviceAttributesDeviceType = string
+type DeviceAttributesDeviceType string
+
+const (
+	DeviceAttributesDeviceTypeDeviceTypeInvalidType DeviceAttributesDeviceType = "DEVICE_TYPE_INVALID_TYPE"
+	DeviceAttributesDeviceTypeTerminal              DeviceAttributesDeviceType = "TERMINAL"
+	DeviceAttributesDeviceTypeRegister              DeviceAttributesDeviceType = "REGISTER"
+	DeviceAttributesDeviceTypeIos                   DeviceAttributesDeviceType = "IOS"
+	DeviceAttributesDeviceTypeAndroid               DeviceAttributesDeviceType = "ANDROID"
+	DeviceAttributesDeviceTypeCashDrawer            DeviceAttributesDeviceType = "CASH_DRAWER"
+	DeviceAttributesDeviceTypePrinter               DeviceAttributesDeviceType = "PRINTER"
+	DeviceAttributesDeviceTypeReader                DeviceAttributesDeviceType = "READER"
+	DeviceAttributesDeviceTypeScale                 DeviceAttributesDeviceType = "SCALE"
+	DeviceAttributesDeviceTypeBarcodeScanner        DeviceAttributesDeviceType = "BARCODE_SCANNER"
+	DeviceAttributesDeviceTypeStand                 DeviceAttributesDeviceType = "STAND"
+	DeviceAttributesDeviceTypeInternalPrinter       DeviceAttributesDeviceType = "INTERNAL_PRINTER"
+	DeviceAttributesDeviceTypeScannerScale          DeviceAttributesDeviceType = "SCANNER_SCALE"
+)
+
+func NewDeviceAttributesDeviceTypeFromString(s string) (DeviceAttributesDeviceType, error) {
+	switch s {
+	case "DEVICE_TYPE_INVALID_TYPE":
+		return DeviceAttributesDeviceTypeDeviceTypeInvalidType, nil
+	case "TERMINAL":
+		return DeviceAttributesDeviceTypeTerminal, nil
+	case "REGISTER":
+		return DeviceAttributesDeviceTypeRegister, nil
+	case "IOS":
+		return DeviceAttributesDeviceTypeIos, nil
+	case "ANDROID":
+		return DeviceAttributesDeviceTypeAndroid, nil
+	case "CASH_DRAWER":
+		return DeviceAttributesDeviceTypeCashDrawer, nil
+	case "PRINTER":
+		return DeviceAttributesDeviceTypePrinter, nil
+	case "READER":
+		return DeviceAttributesDeviceTypeReader, nil
+	case "SCALE":
+		return DeviceAttributesDeviceTypeScale, nil
+	case "BARCODE_SCANNER":
+		return DeviceAttributesDeviceTypeBarcodeScanner, nil
+	case "STAND":
+		return DeviceAttributesDeviceTypeStand, nil
+	case "INTERNAL_PRINTER":
+		return DeviceAttributesDeviceTypeInternalPrinter, nil
+	case "SCANNER_SCALE":
+		return DeviceAttributesDeviceTypeScannerScale, nil
+	}
+	var t DeviceAttributesDeviceType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DeviceAttributesDeviceType) Ptr() *DeviceAttributesDeviceType {
+	return &d
+}
 
 type DeviceCheckoutOptions struct {
 	// The unique ID of the device intended for this `TerminalCheckout`.
@@ -21462,7 +25982,7 @@ type DeviceCode struct {
 	// The unique id of the device that used this code. Populated when the device is paired up.
 	DeviceID *string `json:"device_id,omitempty" url:"device_id,omitempty"`
 	// The targeting product type of the device code.
-	ProductType ProductType `json:"product_type,omitempty" url:"product_type,omitempty"`
+	ProductType ProductType `json:"product_type" url:"product_type"`
 	// The location assigned to this code.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
 	// The pairing status of the device code.
@@ -21504,6 +26024,149 @@ func (d *DeviceCode) UnmarshalJSON(data []byte) error {
 }
 
 func (d *DeviceCode) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when a Square Terminal has been paired with a
+// Terminal API client and the device_id of the paired Square Terminal is
+// available.
+type DeviceCodePairedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"device.code.paired"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DeviceCodePairedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCodePairedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCodePairedEventData struct {
+	// Name of the paired object’s type, `"device_code"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the paired device code.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the paired device code.
+	Object *DeviceCodePairedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCodePairedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCodePairedEventObject struct {
+	// The created terminal checkout
+	DeviceCode *DeviceCode `json:"device_code,omitempty" url:"device_code,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCodePairedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEventObject) String() string {
 	if len(d._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
 			return value
@@ -21767,14 +26430,17 @@ func (d *DeviceComponentDetailsEthernetDetails) String() string {
 type DeviceComponentDetailsExternalPower string
 
 const (
-	DeviceComponentDetailsExternalPowerAvailableCharging     DeviceComponentDetailsExternalPower = "AVAILABLE_CHARGING"
-	DeviceComponentDetailsExternalPowerAvailableNotInUse     DeviceComponentDetailsExternalPower = "AVAILABLE_NOT_IN_USE"
-	DeviceComponentDetailsExternalPowerUnavailable           DeviceComponentDetailsExternalPower = "UNAVAILABLE"
-	DeviceComponentDetailsExternalPowerAvailableInsufficient DeviceComponentDetailsExternalPower = "AVAILABLE_INSUFFICIENT"
+	DeviceComponentDetailsExternalPowerExternalPowerInvalidType DeviceComponentDetailsExternalPower = "EXTERNAL_POWER_INVALID_TYPE"
+	DeviceComponentDetailsExternalPowerAvailableCharging        DeviceComponentDetailsExternalPower = "AVAILABLE_CHARGING"
+	DeviceComponentDetailsExternalPowerAvailableNotInUse        DeviceComponentDetailsExternalPower = "AVAILABLE_NOT_IN_USE"
+	DeviceComponentDetailsExternalPowerUnavailable              DeviceComponentDetailsExternalPower = "UNAVAILABLE"
+	DeviceComponentDetailsExternalPowerAvailableInsufficient    DeviceComponentDetailsExternalPower = "AVAILABLE_INSUFFICIENT"
 )
 
 func NewDeviceComponentDetailsExternalPowerFromString(s string) (DeviceComponentDetailsExternalPower, error) {
 	switch s {
+	case "EXTERNAL_POWER_INVALID_TYPE":
+		return DeviceComponentDetailsExternalPowerExternalPowerInvalidType, nil
 	case "AVAILABLE_CHARGING":
 		return DeviceComponentDetailsExternalPowerAvailableCharging, nil
 	case "AVAILABLE_NOT_IN_USE":
@@ -21916,6 +26582,145 @@ func (d *DeviceComponentDetailsWiFiDetails) UnmarshalJSON(data []byte) error {
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when a Device is created.
+type DeviceCreatedEvent struct {
+	// The merchant the newly created device belongs to.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents. The value is `"device.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A UUID that uniquely identifies this device creation event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The time when the device creation event was first created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The metadata associated with the device creation event.
+	Data *DeviceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCreatedEventData struct {
+	// The type of the event data object. The value is `"device"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the device.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created device.
+	Object *DeviceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCreatedEventObject struct {
+	// The created device.
+	Device *Device `json:"device,omitempty" url:"device,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEventObject) String() string {
 	if len(d._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
 			return value
@@ -22087,17 +26892,23 @@ func (d *DeviceStatus) String() string {
 type DeviceStatusCategory string
 
 const (
-	DeviceStatusCategoryAvailable      DeviceStatusCategory = "AVAILABLE"
-	DeviceStatusCategoryNeedsAttention DeviceStatusCategory = "NEEDS_ATTENTION"
-	DeviceStatusCategoryOffline        DeviceStatusCategory = "OFFLINE"
+	DeviceStatusCategoryDeviceStatusInvalidType DeviceStatusCategory = "DEVICE_STATUS_INVALID_TYPE"
+	DeviceStatusCategoryAvailable               DeviceStatusCategory = "AVAILABLE"
+	DeviceStatusCategoryNeedsAttention          DeviceStatusCategory = "NEEDS_ATTENTION"
+	DeviceStatusCategoryCritical                DeviceStatusCategory = "CRITICAL"
+	DeviceStatusCategoryOffline                 DeviceStatusCategory = "OFFLINE"
 )
 
 func NewDeviceStatusCategoryFromString(s string) (DeviceStatusCategory, error) {
 	switch s {
+	case "DEVICE_STATUS_INVALID_TYPE":
+		return DeviceStatusCategoryDeviceStatusInvalidType, nil
 	case "AVAILABLE":
 		return DeviceStatusCategoryAvailable, nil
 	case "NEEDS_ATTENTION":
 		return DeviceStatusCategoryNeedsAttention, nil
+	case "CRITICAL":
+		return DeviceStatusCategoryCritical, nil
 	case "OFFLINE":
 		return DeviceStatusCategoryOffline, nil
 	}
@@ -22158,50 +26969,8 @@ func (d *DigitalWalletDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Disables the card, preventing any further updates or charges. Disabling
-// an already disabled card is allowed but has no effect. Accessible via
-// HTTP requests at POST https://connect.squareup.com/v2/cards/{card_id}/disable
-type DisableCardRequest struct {
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (d *DisableCardRequest) GetExtraProperties() map[string]interface{} {
-	return d.extraProperties
-}
-
-func (d *DisableCardRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler DisableCardRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*d = DisableCardRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *d)
-	if err != nil {
-		return err
-	}
-	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (d *DisableCardRequest) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(d); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", d)
-}
-
 // Defines the fields that are included in the response body of
-// a request to the [DisableCard]($e/Cards/DisableCard) endpoint.
+// a request to the [DisableCard](api-endpoint:Cards-DisableCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -22249,7 +27018,7 @@ func (d *DisableCardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Disables [Event]($m/Event)s for your application.
+// Disables [Event](entity:Event)s for your application.
 type DisableEventsRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -22290,7 +27059,7 @@ func (d *DisableEventsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DisableEvents]($e/Events/DisableEvents) endpoint.
+// a request to the [DisableEvents](api-endpoint:Events-DisableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
@@ -22662,6 +27431,147 @@ func (d *Dispute) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Published when a [Dispute](entity:Dispute) is created.
+type DisputeCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeCreatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeCreatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DisputeEvidence struct {
 	// The Square-generated ID of the evidence.
 	EvidenceID *string `json:"evidence_id,omitempty" url:"evidence_id,omitempty"`
@@ -22706,6 +27616,435 @@ func (d *DisputeEvidence) UnmarshalJSON(data []byte) error {
 }
 
 func (d *DisputeEvidence) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is added to a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling either [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) or [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText).
+type DisputeEvidenceAddedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceAddedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceAddedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceAddedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceAddedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is added to a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling either [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) or [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText).
+type DisputeEvidenceCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceCreatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceCreatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is removed from a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling [DeleteDisputeEvidence](api-endpoint:Disputes-DeleteDisputeEvidence).
+type DisputeEvidenceDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceDeletedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceDeletedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEventObject) String() string {
 	if len(d._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
 			return value
@@ -22762,10 +28101,154 @@ func (d *DisputeEvidenceFile) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Published when evidence is removed from a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling [DeleteDisputeEvidence](api-endpoint:Disputes-DeleteDisputeEvidence).
+type DisputeEvidenceRemovedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceRemovedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceRemovedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceRemovedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceRemovedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 // The type of the dispute evidence.
 type DisputeEvidenceType string
 
 const (
+	DisputeEvidenceTypeUnknownType                       DisputeEvidenceType = "UNKNOWN_TYPE"
 	DisputeEvidenceTypeGenericEvidence                   DisputeEvidenceType = "GENERIC_EVIDENCE"
 	DisputeEvidenceTypeOnlineOrAppAccessLog              DisputeEvidenceType = "ONLINE_OR_APP_ACCESS_LOG"
 	DisputeEvidenceTypeAuthorizationDocumentation        DisputeEvidenceType = "AUTHORIZATION_DOCUMENTATION"
@@ -22785,6 +28268,8 @@ const (
 
 func NewDisputeEvidenceTypeFromString(s string) (DisputeEvidenceType, error) {
 	switch s {
+	case "UNKNOWN_TYPE":
+		return DisputeEvidenceTypeUnknownType, nil
 	case "GENERIC_EVIDENCE":
 		return DisputeEvidenceTypeGenericEvidence, nil
 	case "ONLINE_OR_APP_ACCESS_LOG":
@@ -22829,25 +28314,41 @@ func (d DisputeEvidenceType) Ptr() *DisputeEvidenceType {
 type DisputeReason string
 
 const (
+	DisputeReasonUnknownReason          DisputeReason = "UNKNOWN_REASON"
 	DisputeReasonAmountDiffers          DisputeReason = "AMOUNT_DIFFERS"
 	DisputeReasonCancelled              DisputeReason = "CANCELLED"
+	DisputeReasonCompliance             DisputeReason = "COMPLIANCE"
+	DisputeReasonDissatisfied           DisputeReason = "DISSATISFIED"
 	DisputeReasonDuplicate              DisputeReason = "DUPLICATE"
+	DisputeReasonFraud                  DisputeReason = "FRAUD"
 	DisputeReasonNoKnowledge            DisputeReason = "NO_KNOWLEDGE"
 	DisputeReasonNotAsDescribed         DisputeReason = "NOT_AS_DESCRIBED"
 	DisputeReasonNotReceived            DisputeReason = "NOT_RECEIVED"
 	DisputeReasonPaidByOtherMeans       DisputeReason = "PAID_BY_OTHER_MEANS"
 	DisputeReasonCustomerRequestsCredit DisputeReason = "CUSTOMER_REQUESTS_CREDIT"
+	DisputeReasonUnauthorized           DisputeReason = "UNAUTHORIZED"
+	DisputeReasonReturned               DisputeReason = "RETURNED"
+	DisputeReasonInsufficientResponse   DisputeReason = "INSUFFICIENT_RESPONSE"
+	DisputeReasonRequestDocumentation   DisputeReason = "REQUEST_DOCUMENTATION"
 	DisputeReasonEmvLiabilityShift      DisputeReason = "EMV_LIABILITY_SHIFT"
 )
 
 func NewDisputeReasonFromString(s string) (DisputeReason, error) {
 	switch s {
+	case "UNKNOWN_REASON":
+		return DisputeReasonUnknownReason, nil
 	case "AMOUNT_DIFFERS":
 		return DisputeReasonAmountDiffers, nil
 	case "CANCELLED":
 		return DisputeReasonCancelled, nil
+	case "COMPLIANCE":
+		return DisputeReasonCompliance, nil
+	case "DISSATISFIED":
+		return DisputeReasonDissatisfied, nil
 	case "DUPLICATE":
 		return DisputeReasonDuplicate, nil
+	case "FRAUD":
+		return DisputeReasonFraud, nil
 	case "NO_KNOWLEDGE":
 		return DisputeReasonNoKnowledge, nil
 	case "NOT_AS_DESCRIBED":
@@ -22858,6 +28359,14 @@ func NewDisputeReasonFromString(s string) (DisputeReason, error) {
 		return DisputeReasonPaidByOtherMeans, nil
 	case "CUSTOMER_REQUESTS_CREDIT":
 		return DisputeReasonCustomerRequestsCredit, nil
+	case "UNAUTHORIZED":
+		return DisputeReasonUnauthorized, nil
+	case "RETURNED":
+		return DisputeReasonReturned, nil
+	case "INSUFFICIENT_RESPONSE":
+		return DisputeReasonInsufficientResponse, nil
+	case "REQUEST_DOCUMENTATION":
+		return DisputeReasonRequestDocumentation, nil
 	case "EMV_LIABILITY_SHIFT":
 		return DisputeReasonEmvLiabilityShift, nil
 	}
@@ -22873,6 +28382,7 @@ func (d DisputeReason) Ptr() *DisputeReason {
 type DisputeState string
 
 const (
+	DisputeStateUnknownState            DisputeState = "UNKNOWN_STATE"
 	DisputeStateInquiryEvidenceRequired DisputeState = "INQUIRY_EVIDENCE_REQUIRED"
 	DisputeStateInquiryProcessing       DisputeState = "INQUIRY_PROCESSING"
 	DisputeStateInquiryClosed           DisputeState = "INQUIRY_CLOSED"
@@ -22881,10 +28391,13 @@ const (
 	DisputeStateWon                     DisputeState = "WON"
 	DisputeStateLost                    DisputeState = "LOST"
 	DisputeStateAccepted                DisputeState = "ACCEPTED"
+	DisputeStateWaitingThirdParty       DisputeState = "WAITING_THIRD_PARTY"
 )
 
 func NewDisputeStateFromString(s string) (DisputeState, error) {
 	switch s {
+	case "UNKNOWN_STATE":
+		return DisputeStateUnknownState, nil
 	case "INQUIRY_EVIDENCE_REQUIRED":
 		return DisputeStateInquiryEvidenceRequired, nil
 	case "INQUIRY_PROCESSING":
@@ -22901,6 +28414,8 @@ func NewDisputeStateFromString(s string) (DisputeState, error) {
 		return DisputeStateLost, nil
 	case "ACCEPTED":
 		return DisputeStateAccepted, nil
+	case "WAITING_THIRD_PARTY":
+		return DisputeStateWaitingThirdParty, nil
 	}
 	var t DisputeState
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -22908,6 +28423,292 @@ func NewDisputeStateFromString(s string) (DisputeState, error) {
 
 func (d DisputeState) Ptr() *DisputeState {
 	return &d
+}
+
+// Published when the state of a [Dispute](entity:Dispute) changes.
+// This includes the dispute resolution (WON, LOST) reported by the bank. The event
+// data includes details of what changed.
+type DisputeStateChangedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeStateChangedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateChangedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateChangedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeStateChangedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateChangedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateChangedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateChangedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when the state of a [Dispute](entity:Dispute) changes.
+// This includes the dispute resolution (WON, LOST) reported by the bank. The event
+// data includes details of what changed.
+type DisputeStateUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeStateUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEvent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateUpdatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeStateUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEventData) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateUpdatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEventObject) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
 }
 
 // The payment the cardholder disputed.
@@ -22957,14 +28758,17 @@ func (d *DisputedPayment) String() string {
 type EcomVisibility string
 
 const (
-	EcomVisibilityUnindexed   EcomVisibility = "UNINDEXED"
-	EcomVisibilityUnavailable EcomVisibility = "UNAVAILABLE"
-	EcomVisibilityHidden      EcomVisibility = "HIDDEN"
-	EcomVisibilityVisible     EcomVisibility = "VISIBLE"
+	EcomVisibilityEcomVisibilityDoNotUse EcomVisibility = "ECOM_VISIBILITY_DO_NOT_USE"
+	EcomVisibilityUnindexed              EcomVisibility = "UNINDEXED"
+	EcomVisibilityUnavailable            EcomVisibility = "UNAVAILABLE"
+	EcomVisibilityHidden                 EcomVisibility = "HIDDEN"
+	EcomVisibilityVisible                EcomVisibility = "VISIBLE"
 )
 
 func NewEcomVisibilityFromString(s string) (EcomVisibility, error) {
 	switch s {
+	case "ECOM_VISIBILITY_DO_NOT_USE":
+		return EcomVisibilityEcomVisibilityDoNotUse, nil
 	case "UNINDEXED":
 		return EcomVisibilityUnindexed, nil
 	case "UNAVAILABLE":
@@ -23054,12 +28858,15 @@ func (e *Employee) String() string {
 type EmployeeStatus string
 
 const (
+	EmployeeStatusDoNotUse EmployeeStatus = "DO_NOT_USE"
 	EmployeeStatusActive   EmployeeStatus = "ACTIVE"
 	EmployeeStatusInactive EmployeeStatus = "INACTIVE"
 )
 
 func NewEmployeeStatusFromString(s string) (EmployeeStatus, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return EmployeeStatusDoNotUse, nil
 	case "ACTIVE":
 		return EmployeeStatusActive, nil
 	case "INACTIVE":
@@ -23123,7 +28930,7 @@ func (e *EmployeeWage) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Enables [Event]($m/Event)s for your application.
+// Enables [Event](entity:Event)s for your application.
 type EnableEventsRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23164,7 +28971,7 @@ func (e *EnableEventsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [EnableEvents]($e/Events/EnableEvents) endpoint.
+// a request to the [EnableEvents](api-endpoint:Events-EnableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
@@ -23311,155 +29118,192 @@ func (e ErrorCategory) Ptr() *ErrorCategory {
 type ErrorCode string
 
 const (
-	ErrorCodeInternalServerError                           ErrorCode = "INTERNAL_SERVER_ERROR"
-	ErrorCodeUnauthorized                                  ErrorCode = "UNAUTHORIZED"
-	ErrorCodeAccessTokenExpired                            ErrorCode = "ACCESS_TOKEN_EXPIRED"
-	ErrorCodeAccessTokenRevoked                            ErrorCode = "ACCESS_TOKEN_REVOKED"
-	ErrorCodeClientDisabled                                ErrorCode = "CLIENT_DISABLED"
-	ErrorCodeForbidden                                     ErrorCode = "FORBIDDEN"
-	ErrorCodeInsufficientScopes                            ErrorCode = "INSUFFICIENT_SCOPES"
-	ErrorCodeApplicationDisabled                           ErrorCode = "APPLICATION_DISABLED"
-	ErrorCodeV1Application                                 ErrorCode = "V1_APPLICATION"
-	ErrorCodeV1AccessToken                                 ErrorCode = "V1_ACCESS_TOKEN"
-	ErrorCodeCardProcessingNotEnabled                      ErrorCode = "CARD_PROCESSING_NOT_ENABLED"
-	ErrorCodeMerchantSubscriptionNotFound                  ErrorCode = "MERCHANT_SUBSCRIPTION_NOT_FOUND"
-	ErrorCodeBadRequest                                    ErrorCode = "BAD_REQUEST"
-	ErrorCodeMissingRequiredParameter                      ErrorCode = "MISSING_REQUIRED_PARAMETER"
-	ErrorCodeIncorrectType                                 ErrorCode = "INCORRECT_TYPE"
-	ErrorCodeInvalidTime                                   ErrorCode = "INVALID_TIME"
-	ErrorCodeInvalidTimeRange                              ErrorCode = "INVALID_TIME_RANGE"
-	ErrorCodeInvalidValue                                  ErrorCode = "INVALID_VALUE"
-	ErrorCodeInvalidCursor                                 ErrorCode = "INVALID_CURSOR"
-	ErrorCodeUnknownQueryParameter                         ErrorCode = "UNKNOWN_QUERY_PARAMETER"
-	ErrorCodeConflictingParameters                         ErrorCode = "CONFLICTING_PARAMETERS"
-	ErrorCodeExpectedJSONBody                              ErrorCode = "EXPECTED_JSON_BODY"
-	ErrorCodeInvalidSortOrder                              ErrorCode = "INVALID_SORT_ORDER"
-	ErrorCodeValueRegexMismatch                            ErrorCode = "VALUE_REGEX_MISMATCH"
-	ErrorCodeValueTooShort                                 ErrorCode = "VALUE_TOO_SHORT"
-	ErrorCodeValueTooLong                                  ErrorCode = "VALUE_TOO_LONG"
-	ErrorCodeValueTooLow                                   ErrorCode = "VALUE_TOO_LOW"
-	ErrorCodeValueTooHigh                                  ErrorCode = "VALUE_TOO_HIGH"
-	ErrorCodeValueEmpty                                    ErrorCode = "VALUE_EMPTY"
-	ErrorCodeArrayLengthTooLong                            ErrorCode = "ARRAY_LENGTH_TOO_LONG"
-	ErrorCodeArrayLengthTooShort                           ErrorCode = "ARRAY_LENGTH_TOO_SHORT"
-	ErrorCodeArrayEmpty                                    ErrorCode = "ARRAY_EMPTY"
-	ErrorCodeExpectedBoolean                               ErrorCode = "EXPECTED_BOOLEAN"
-	ErrorCodeExpectedInteger                               ErrorCode = "EXPECTED_INTEGER"
-	ErrorCodeExpectedFloat                                 ErrorCode = "EXPECTED_FLOAT"
-	ErrorCodeExpectedString                                ErrorCode = "EXPECTED_STRING"
-	ErrorCodeExpectedObject                                ErrorCode = "EXPECTED_OBJECT"
-	ErrorCodeExpectedArray                                 ErrorCode = "EXPECTED_ARRAY"
-	ErrorCodeExpectedMap                                   ErrorCode = "EXPECTED_MAP"
-	ErrorCodeExpectedBase64EncodedByteArray                ErrorCode = "EXPECTED_BASE64_ENCODED_BYTE_ARRAY"
-	ErrorCodeInvalidArrayValue                             ErrorCode = "INVALID_ARRAY_VALUE"
-	ErrorCodeInvalidEnumValue                              ErrorCode = "INVALID_ENUM_VALUE"
-	ErrorCodeInvalidContentType                            ErrorCode = "INVALID_CONTENT_TYPE"
-	ErrorCodeInvalidFormValue                              ErrorCode = "INVALID_FORM_VALUE"
-	ErrorCodeCustomerNotFound                              ErrorCode = "CUSTOMER_NOT_FOUND"
-	ErrorCodeOneInstrumentExpected                         ErrorCode = "ONE_INSTRUMENT_EXPECTED"
-	ErrorCodeNoFieldsSet                                   ErrorCode = "NO_FIELDS_SET"
-	ErrorCodeTooManyMapEntries                             ErrorCode = "TOO_MANY_MAP_ENTRIES"
-	ErrorCodeMapKeyLengthTooShort                          ErrorCode = "MAP_KEY_LENGTH_TOO_SHORT"
-	ErrorCodeMapKeyLengthTooLong                           ErrorCode = "MAP_KEY_LENGTH_TOO_LONG"
-	ErrorCodeCustomerMissingName                           ErrorCode = "CUSTOMER_MISSING_NAME"
-	ErrorCodeCustomerMissingEmail                          ErrorCode = "CUSTOMER_MISSING_EMAIL"
-	ErrorCodeInvalidPauseLength                            ErrorCode = "INVALID_PAUSE_LENGTH"
-	ErrorCodeInvalidDate                                   ErrorCode = "INVALID_DATE"
-	ErrorCodeUnsupportedCountry                            ErrorCode = "UNSUPPORTED_COUNTRY"
-	ErrorCodeUnsupportedCurrency                           ErrorCode = "UNSUPPORTED_CURRENCY"
-	ErrorCodeAppleTtpPinToken                              ErrorCode = "APPLE_TTP_PIN_TOKEN"
-	ErrorCodeCardExpired                                   ErrorCode = "CARD_EXPIRED"
-	ErrorCodeInvalidExpiration                             ErrorCode = "INVALID_EXPIRATION"
-	ErrorCodeInvalidExpirationYear                         ErrorCode = "INVALID_EXPIRATION_YEAR"
-	ErrorCodeInvalidExpirationDate                         ErrorCode = "INVALID_EXPIRATION_DATE"
-	ErrorCodeUnsupportedCardBrand                          ErrorCode = "UNSUPPORTED_CARD_BRAND"
-	ErrorCodeUnsupportedEntryMethod                        ErrorCode = "UNSUPPORTED_ENTRY_METHOD"
-	ErrorCodeInvalidEncryptedCard                          ErrorCode = "INVALID_ENCRYPTED_CARD"
-	ErrorCodeInvalidCard                                   ErrorCode = "INVALID_CARD"
-	ErrorCodePaymentAmountMismatch                         ErrorCode = "PAYMENT_AMOUNT_MISMATCH"
-	ErrorCodeGenericDecline                                ErrorCode = "GENERIC_DECLINE"
-	ErrorCodeCvvFailure                                    ErrorCode = "CVV_FAILURE"
-	ErrorCodeAddressVerificationFailure                    ErrorCode = "ADDRESS_VERIFICATION_FAILURE"
-	ErrorCodeInvalidAccount                                ErrorCode = "INVALID_ACCOUNT"
-	ErrorCodeCurrencyMismatch                              ErrorCode = "CURRENCY_MISMATCH"
-	ErrorCodeInsufficientFunds                             ErrorCode = "INSUFFICIENT_FUNDS"
-	ErrorCodeInsufficientPermissions                       ErrorCode = "INSUFFICIENT_PERMISSIONS"
-	ErrorCodeCardholderInsufficientPermissions             ErrorCode = "CARDHOLDER_INSUFFICIENT_PERMISSIONS"
-	ErrorCodeInvalidLocation                               ErrorCode = "INVALID_LOCATION"
-	ErrorCodeTransactionLimit                              ErrorCode = "TRANSACTION_LIMIT"
-	ErrorCodeVoiceFailure                                  ErrorCode = "VOICE_FAILURE"
-	ErrorCodePanFailure                                    ErrorCode = "PAN_FAILURE"
-	ErrorCodeExpirationFailure                             ErrorCode = "EXPIRATION_FAILURE"
-	ErrorCodeCardNotSupported                              ErrorCode = "CARD_NOT_SUPPORTED"
-	ErrorCodeInvalidPin                                    ErrorCode = "INVALID_PIN"
-	ErrorCodeMissingPin                                    ErrorCode = "MISSING_PIN"
-	ErrorCodeMissingAccountType                            ErrorCode = "MISSING_ACCOUNT_TYPE"
-	ErrorCodeInvalidPostalCode                             ErrorCode = "INVALID_POSTAL_CODE"
-	ErrorCodeInvalidFees                                   ErrorCode = "INVALID_FEES"
-	ErrorCodeManuallyEnteredPaymentNotSupported            ErrorCode = "MANUALLY_ENTERED_PAYMENT_NOT_SUPPORTED"
-	ErrorCodePaymentLimitExceeded                          ErrorCode = "PAYMENT_LIMIT_EXCEEDED"
-	ErrorCodeGiftCardAvailableAmount                       ErrorCode = "GIFT_CARD_AVAILABLE_AMOUNT"
-	ErrorCodeAccountUnusable                               ErrorCode = "ACCOUNT_UNUSABLE"
-	ErrorCodeBuyerRefusedPayment                           ErrorCode = "BUYER_REFUSED_PAYMENT"
-	ErrorCodeDelayedTransactionExpired                     ErrorCode = "DELAYED_TRANSACTION_EXPIRED"
-	ErrorCodeDelayedTransactionCanceled                    ErrorCode = "DELAYED_TRANSACTION_CANCELED"
-	ErrorCodeDelayedTransactionCaptured                    ErrorCode = "DELAYED_TRANSACTION_CAPTURED"
-	ErrorCodeDelayedTransactionFailed                      ErrorCode = "DELAYED_TRANSACTION_FAILED"
-	ErrorCodeCardTokenExpired                              ErrorCode = "CARD_TOKEN_EXPIRED"
-	ErrorCodeCardTokenUsed                                 ErrorCode = "CARD_TOKEN_USED"
-	ErrorCodeAmountTooHigh                                 ErrorCode = "AMOUNT_TOO_HIGH"
-	ErrorCodeUnsupportedInstrumentType                     ErrorCode = "UNSUPPORTED_INSTRUMENT_TYPE"
-	ErrorCodeRefundAmountInvalid                           ErrorCode = "REFUND_AMOUNT_INVALID"
-	ErrorCodeRefundAlreadyPending                          ErrorCode = "REFUND_ALREADY_PENDING"
-	ErrorCodePaymentNotRefundable                          ErrorCode = "PAYMENT_NOT_REFUNDABLE"
-	ErrorCodeRefundDeclined                                ErrorCode = "REFUND_DECLINED"
-	ErrorCodeInsufficientPermissionsForRefund              ErrorCode = "INSUFFICIENT_PERMISSIONS_FOR_REFUND"
-	ErrorCodeInvalidCardData                               ErrorCode = "INVALID_CARD_DATA"
-	ErrorCodeSourceUsed                                    ErrorCode = "SOURCE_USED"
-	ErrorCodeSourceExpired                                 ErrorCode = "SOURCE_EXPIRED"
-	ErrorCodeUnsupportedLoyaltyRewardTier                  ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
-	ErrorCodeLocationMismatch                              ErrorCode = "LOCATION_MISMATCH"
-	ErrorCodeIdempotencyKeyReused                          ErrorCode = "IDEMPOTENCY_KEY_REUSED"
-	ErrorCodeUnexpectedValue                               ErrorCode = "UNEXPECTED_VALUE"
-	ErrorCodeSandboxNotSupported                           ErrorCode = "SANDBOX_NOT_SUPPORTED"
-	ErrorCodeInvalidEmailAddress                           ErrorCode = "INVALID_EMAIL_ADDRESS"
-	ErrorCodeInvalidPhoneNumber                            ErrorCode = "INVALID_PHONE_NUMBER"
-	ErrorCodeCheckoutExpired                               ErrorCode = "CHECKOUT_EXPIRED"
-	ErrorCodeBadCertificate                                ErrorCode = "BAD_CERTIFICATE"
-	ErrorCodeInvalidSquareVersionFormat                    ErrorCode = "INVALID_SQUARE_VERSION_FORMAT"
-	ErrorCodeAPIVersionIncompatible                        ErrorCode = "API_VERSION_INCOMPATIBLE"
-	ErrorCodeCardPresenceRequired                          ErrorCode = "CARD_PRESENCE_REQUIRED"
-	ErrorCodeUnsupportedSourceType                         ErrorCode = "UNSUPPORTED_SOURCE_TYPE"
-	ErrorCodeCardMismatch                                  ErrorCode = "CARD_MISMATCH"
-	ErrorCodePlaidError                                    ErrorCode = "PLAID_ERROR"
-	ErrorCodePlaidErrorItemLoginRequired                   ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
-	ErrorCodePlaidErrorRateLimit                           ErrorCode = "PLAID_ERROR_RATE_LIMIT"
-	ErrorCodeCardDeclined                                  ErrorCode = "CARD_DECLINED"
-	ErrorCodeVerifyCvvFailure                              ErrorCode = "VERIFY_CVV_FAILURE"
-	ErrorCodeVerifyAvsFailure                              ErrorCode = "VERIFY_AVS_FAILURE"
-	ErrorCodeCardDeclinedCallIssuer                        ErrorCode = "CARD_DECLINED_CALL_ISSUER"
-	ErrorCodeCardDeclinedVerificationRequired              ErrorCode = "CARD_DECLINED_VERIFICATION_REQUIRED"
-	ErrorCodeBadExpiration                                 ErrorCode = "BAD_EXPIRATION"
-	ErrorCodeChipInsertionRequired                         ErrorCode = "CHIP_INSERTION_REQUIRED"
-	ErrorCodeAllowablePinTriesExceeded                     ErrorCode = "ALLOWABLE_PIN_TRIES_EXCEEDED"
-	ErrorCodeReservationDeclined                           ErrorCode = "RESERVATION_DECLINED"
-	ErrorCodeUnknownBodyParameter                          ErrorCode = "UNKNOWN_BODY_PARAMETER"
-	ErrorCodeNotFound                                      ErrorCode = "NOT_FOUND"
-	ErrorCodeApplePaymentProcessingCertificateHashNotFound ErrorCode = "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND"
-	ErrorCodeMethodNotAllowed                              ErrorCode = "METHOD_NOT_ALLOWED"
-	ErrorCodeNotAcceptable                                 ErrorCode = "NOT_ACCEPTABLE"
-	ErrorCodeRequestTimeout                                ErrorCode = "REQUEST_TIMEOUT"
-	ErrorCodeConflict                                      ErrorCode = "CONFLICT"
-	ErrorCodeGone                                          ErrorCode = "GONE"
-	ErrorCodeRequestEntityTooLarge                         ErrorCode = "REQUEST_ENTITY_TOO_LARGE"
-	ErrorCodeUnsupportedMediaType                          ErrorCode = "UNSUPPORTED_MEDIA_TYPE"
-	ErrorCodeUnprocessableEntity                           ErrorCode = "UNPROCESSABLE_ENTITY"
-	ErrorCodeRateLimited                                   ErrorCode = "RATE_LIMITED"
-	ErrorCodeNotImplemented                                ErrorCode = "NOT_IMPLEMENTED"
-	ErrorCodeBadGateway                                    ErrorCode = "BAD_GATEWAY"
-	ErrorCodeServiceUnavailable                            ErrorCode = "SERVICE_UNAVAILABLE"
-	ErrorCodeTemporaryError                                ErrorCode = "TEMPORARY_ERROR"
-	ErrorCodeGatewayTimeout                                ErrorCode = "GATEWAY_TIMEOUT"
+	ErrorCodeInternalServerError                                        ErrorCode = "INTERNAL_SERVER_ERROR"
+	ErrorCodeUnauthorized                                               ErrorCode = "UNAUTHORIZED"
+	ErrorCodeAccessTokenExpired                                         ErrorCode = "ACCESS_TOKEN_EXPIRED"
+	ErrorCodeAccessTokenRevoked                                         ErrorCode = "ACCESS_TOKEN_REVOKED"
+	ErrorCodeClientDisabled                                             ErrorCode = "CLIENT_DISABLED"
+	ErrorCodeForbidden                                                  ErrorCode = "FORBIDDEN"
+	ErrorCodeInsufficientScopes                                         ErrorCode = "INSUFFICIENT_SCOPES"
+	ErrorCodeApplicationDisabled                                        ErrorCode = "APPLICATION_DISABLED"
+	ErrorCodeV1Application                                              ErrorCode = "V1_APPLICATION"
+	ErrorCodeV1AccessToken                                              ErrorCode = "V1_ACCESS_TOKEN"
+	ErrorCodeCardProcessingNotEnabled                                   ErrorCode = "CARD_PROCESSING_NOT_ENABLED"
+	ErrorCodeMerchantSubscriptionNotFound                               ErrorCode = "MERCHANT_SUBSCRIPTION_NOT_FOUND"
+	ErrorCodeBadRequest                                                 ErrorCode = "BAD_REQUEST"
+	ErrorCodeMissingRequiredParameter                                   ErrorCode = "MISSING_REQUIRED_PARAMETER"
+	ErrorCodeIncorrectType                                              ErrorCode = "INCORRECT_TYPE"
+	ErrorCodeInvalidTime                                                ErrorCode = "INVALID_TIME"
+	ErrorCodeInvalidTimeRange                                           ErrorCode = "INVALID_TIME_RANGE"
+	ErrorCodeInvalidValue                                               ErrorCode = "INVALID_VALUE"
+	ErrorCodeInvalidCursor                                              ErrorCode = "INVALID_CURSOR"
+	ErrorCodeUnknownQueryParameter                                      ErrorCode = "UNKNOWN_QUERY_PARAMETER"
+	ErrorCodeConflictingParameters                                      ErrorCode = "CONFLICTING_PARAMETERS"
+	ErrorCodeExpectedJSONBody                                           ErrorCode = "EXPECTED_JSON_BODY"
+	ErrorCodeInvalidSortOrder                                           ErrorCode = "INVALID_SORT_ORDER"
+	ErrorCodeValueRegexMismatch                                         ErrorCode = "VALUE_REGEX_MISMATCH"
+	ErrorCodeValueTooShort                                              ErrorCode = "VALUE_TOO_SHORT"
+	ErrorCodeValueTooLong                                               ErrorCode = "VALUE_TOO_LONG"
+	ErrorCodeValueTooLow                                                ErrorCode = "VALUE_TOO_LOW"
+	ErrorCodeValueTooHigh                                               ErrorCode = "VALUE_TOO_HIGH"
+	ErrorCodeValueEmpty                                                 ErrorCode = "VALUE_EMPTY"
+	ErrorCodeArrayLengthTooLong                                         ErrorCode = "ARRAY_LENGTH_TOO_LONG"
+	ErrorCodeArrayLengthTooShort                                        ErrorCode = "ARRAY_LENGTH_TOO_SHORT"
+	ErrorCodeArrayEmpty                                                 ErrorCode = "ARRAY_EMPTY"
+	ErrorCodeExpectedBoolean                                            ErrorCode = "EXPECTED_BOOLEAN"
+	ErrorCodeExpectedInteger                                            ErrorCode = "EXPECTED_INTEGER"
+	ErrorCodeExpectedFloat                                              ErrorCode = "EXPECTED_FLOAT"
+	ErrorCodeExpectedString                                             ErrorCode = "EXPECTED_STRING"
+	ErrorCodeExpectedObject                                             ErrorCode = "EXPECTED_OBJECT"
+	ErrorCodeExpectedArray                                              ErrorCode = "EXPECTED_ARRAY"
+	ErrorCodeExpectedMap                                                ErrorCode = "EXPECTED_MAP"
+	ErrorCodeExpectedBase64EncodedByteArray                             ErrorCode = "EXPECTED_BASE64_ENCODED_BYTE_ARRAY"
+	ErrorCodeInvalidArrayValue                                          ErrorCode = "INVALID_ARRAY_VALUE"
+	ErrorCodeInvalidEnumValue                                           ErrorCode = "INVALID_ENUM_VALUE"
+	ErrorCodeInvalidContentType                                         ErrorCode = "INVALID_CONTENT_TYPE"
+	ErrorCodeInvalidFormValue                                           ErrorCode = "INVALID_FORM_VALUE"
+	ErrorCodeCustomerNotFound                                           ErrorCode = "CUSTOMER_NOT_FOUND"
+	ErrorCodeBuyerNotFound                                              ErrorCode = "BUYER_NOT_FOUND"
+	ErrorCodeOneInstrumentExpected                                      ErrorCode = "ONE_INSTRUMENT_EXPECTED"
+	ErrorCodeNoFieldsSet                                                ErrorCode = "NO_FIELDS_SET"
+	ErrorCodeDeprecatedFieldSet                                         ErrorCode = "DEPRECATED_FIELD_SET"
+	ErrorCodeRetiredFieldSet                                            ErrorCode = "RETIRED_FIELD_SET"
+	ErrorCodeTooManyMapEntries                                          ErrorCode = "TOO_MANY_MAP_ENTRIES"
+	ErrorCodeMapKeyLengthTooShort                                       ErrorCode = "MAP_KEY_LENGTH_TOO_SHORT"
+	ErrorCodeMapKeyLengthTooLong                                        ErrorCode = "MAP_KEY_LENGTH_TOO_LONG"
+	ErrorCodeCustomerMissingName                                        ErrorCode = "CUSTOMER_MISSING_NAME"
+	ErrorCodeCustomerMissingEmail                                       ErrorCode = "CUSTOMER_MISSING_EMAIL"
+	ErrorCodeInvalidPauseLength                                         ErrorCode = "INVALID_PAUSE_LENGTH"
+	ErrorCodeInvalidDate                                                ErrorCode = "INVALID_DATE"
+	ErrorCodeJobTemplateNameTaken                                       ErrorCode = "JOB_TEMPLATE_NAME_TAKEN"
+	ErrorCodeClientNotSupported                                         ErrorCode = "CLIENT_NOT_SUPPORTED"
+	ErrorCodeUnsupportedCountry                                         ErrorCode = "UNSUPPORTED_COUNTRY"
+	ErrorCodeUnsupportedCurrency                                        ErrorCode = "UNSUPPORTED_CURRENCY"
+	ErrorCodeAppleTtpPinToken                                           ErrorCode = "APPLE_TTP_PIN_TOKEN"
+	ErrorCodeCardExpired                                                ErrorCode = "CARD_EXPIRED"
+	ErrorCodeInvalidExpiration                                          ErrorCode = "INVALID_EXPIRATION"
+	ErrorCodeInvalidExpirationYear                                      ErrorCode = "INVALID_EXPIRATION_YEAR"
+	ErrorCodeInvalidExpirationDate                                      ErrorCode = "INVALID_EXPIRATION_DATE"
+	ErrorCodeUnsupportedCardBrand                                       ErrorCode = "UNSUPPORTED_CARD_BRAND"
+	ErrorCodeUnsupportedEntryMethod                                     ErrorCode = "UNSUPPORTED_ENTRY_METHOD"
+	ErrorCodeInvalidEncryptedCard                                       ErrorCode = "INVALID_ENCRYPTED_CARD"
+	ErrorCodeInvalidCard                                                ErrorCode = "INVALID_CARD"
+	ErrorCodePaymentAmountMismatch                                      ErrorCode = "PAYMENT_AMOUNT_MISMATCH"
+	ErrorCodeGenericDecline                                             ErrorCode = "GENERIC_DECLINE"
+	ErrorCodeCvvFailure                                                 ErrorCode = "CVV_FAILURE"
+	ErrorCodeAddressVerificationFailure                                 ErrorCode = "ADDRESS_VERIFICATION_FAILURE"
+	ErrorCodeInvalidAccount                                             ErrorCode = "INVALID_ACCOUNT"
+	ErrorCodeCurrencyMismatch                                           ErrorCode = "CURRENCY_MISMATCH"
+	ErrorCodeInsufficientFunds                                          ErrorCode = "INSUFFICIENT_FUNDS"
+	ErrorCodeInsufficientPermissions                                    ErrorCode = "INSUFFICIENT_PERMISSIONS"
+	ErrorCodeCardholderInsufficientPermissions                          ErrorCode = "CARDHOLDER_INSUFFICIENT_PERMISSIONS"
+	ErrorCodeInvalidLocation                                            ErrorCode = "INVALID_LOCATION"
+	ErrorCodeTransactionLimit                                           ErrorCode = "TRANSACTION_LIMIT"
+	ErrorCodeVoiceFailure                                               ErrorCode = "VOICE_FAILURE"
+	ErrorCodePanFailure                                                 ErrorCode = "PAN_FAILURE"
+	ErrorCodeExpirationFailure                                          ErrorCode = "EXPIRATION_FAILURE"
+	ErrorCodeCardNotSupported                                           ErrorCode = "CARD_NOT_SUPPORTED"
+	ErrorCodeIssuerInstallmentError                                     ErrorCode = "ISSUER_INSTALLMENT_ERROR"
+	ErrorCodeInvalidPin                                                 ErrorCode = "INVALID_PIN"
+	ErrorCodeMissingPin                                                 ErrorCode = "MISSING_PIN"
+	ErrorCodeMissingAccountType                                         ErrorCode = "MISSING_ACCOUNT_TYPE"
+	ErrorCodeInvalidPostalCode                                          ErrorCode = "INVALID_POSTAL_CODE"
+	ErrorCodeInvalidFees                                                ErrorCode = "INVALID_FEES"
+	ErrorCodeManuallyEnteredPaymentNotSupported                         ErrorCode = "MANUALLY_ENTERED_PAYMENT_NOT_SUPPORTED"
+	ErrorCodePaymentLimitExceeded                                       ErrorCode = "PAYMENT_LIMIT_EXCEEDED"
+	ErrorCodeGiftCardAvailableAmount                                    ErrorCode = "GIFT_CARD_AVAILABLE_AMOUNT"
+	ErrorCodeGiftCardBuyerDailyLimitReached                             ErrorCode = "GIFT_CARD_BUYER_DAILY_LIMIT_REACHED"
+	ErrorCodeGiftCardInvalidAmount                                      ErrorCode = "GIFT_CARD_INVALID_AMOUNT"
+	ErrorCodeGiftCardMaxValueReached                                    ErrorCode = "GIFT_CARD_MAX_VALUE_REACHED"
+	ErrorCodeGiftCardMerchantMaxOutstandingBalanceReached               ErrorCode = "GIFT_CARD_MERCHANT_MAX_OUTSTANDING_BALANCE_REACHED"
+	ErrorCodeGiftCardValueAdditionLimitReached                          ErrorCode = "GIFT_CARD_VALUE_ADDITION_LIMIT_REACHED"
+	ErrorCodeAccountUnusable                                            ErrorCode = "ACCOUNT_UNUSABLE"
+	ErrorCodeBuyerRefusedPayment                                        ErrorCode = "BUYER_REFUSED_PAYMENT"
+	ErrorCodeDelayedTransactionExpired                                  ErrorCode = "DELAYED_TRANSACTION_EXPIRED"
+	ErrorCodeDelayedTransactionCanceled                                 ErrorCode = "DELAYED_TRANSACTION_CANCELED"
+	ErrorCodeDelayedTransactionCaptured                                 ErrorCode = "DELAYED_TRANSACTION_CAPTURED"
+	ErrorCodeDelayedTransactionFailed                                   ErrorCode = "DELAYED_TRANSACTION_FAILED"
+	ErrorCodeCardTokenExpired                                           ErrorCode = "CARD_TOKEN_EXPIRED"
+	ErrorCodeCardTokenUsed                                              ErrorCode = "CARD_TOKEN_USED"
+	ErrorCodeAmountTooHigh                                              ErrorCode = "AMOUNT_TOO_HIGH"
+	ErrorCodeUnsupportedInstrumentType                                  ErrorCode = "UNSUPPORTED_INSTRUMENT_TYPE"
+	ErrorCodeRefundAmountInvalid                                        ErrorCode = "REFUND_AMOUNT_INVALID"
+	ErrorCodeRefundAlreadyPending                                       ErrorCode = "REFUND_ALREADY_PENDING"
+	ErrorCodePaymentNotRefundable                                       ErrorCode = "PAYMENT_NOT_REFUNDABLE"
+	ErrorCodeRefundDeclined                                             ErrorCode = "REFUND_DECLINED"
+	ErrorCodeInsufficientPermissionsForRefund                           ErrorCode = "INSUFFICIENT_PERMISSIONS_FOR_REFUND"
+	ErrorCodeInvalidCardData                                            ErrorCode = "INVALID_CARD_DATA"
+	ErrorCodeSourceUsed                                                 ErrorCode = "SOURCE_USED"
+	ErrorCodeSourceExpired                                              ErrorCode = "SOURCE_EXPIRED"
+	ErrorCodeUnsupportedLoyaltyRewardTier                               ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
+	ErrorCodeLocationMismatch                                           ErrorCode = "LOCATION_MISMATCH"
+	ErrorCodeOrderExpired                                               ErrorCode = "ORDER_EXPIRED"
+	ErrorCodeOrderAlreadyUsed                                           ErrorCode = "ORDER_ALREADY_USED"
+	ErrorCodeOrderTooManyCatalogObjects                                 ErrorCode = "ORDER_TOO_MANY_CATALOG_OBJECTS"
+	ErrorCodeInsufficientInventory                                      ErrorCode = "INSUFFICIENT_INVENTORY"
+	ErrorCodePriceMismatch                                              ErrorCode = "PRICE_MISMATCH"
+	ErrorCodeVersionMismatch                                            ErrorCode = "VERSION_MISMATCH"
+	ErrorCodeIdempotencyKeyReused                                       ErrorCode = "IDEMPOTENCY_KEY_REUSED"
+	ErrorCodeUnexpectedValue                                            ErrorCode = "UNEXPECTED_VALUE"
+	ErrorCodeSandboxNotSupported                                        ErrorCode = "SANDBOX_NOT_SUPPORTED"
+	ErrorCodeInvalidEmailAddress                                        ErrorCode = "INVALID_EMAIL_ADDRESS"
+	ErrorCodeInvalidPhoneNumber                                         ErrorCode = "INVALID_PHONE_NUMBER"
+	ErrorCodeCheckoutExpired                                            ErrorCode = "CHECKOUT_EXPIRED"
+	ErrorCodeBadCertificate                                             ErrorCode = "BAD_CERTIFICATE"
+	ErrorCodeInvalidSquareVersionFormat                                 ErrorCode = "INVALID_SQUARE_VERSION_FORMAT"
+	ErrorCodeAPIVersionIncompatible                                     ErrorCode = "API_VERSION_INCOMPATIBLE"
+	ErrorCodeInvalidURL                                                 ErrorCode = "INVALID_URL"
+	ErrorCodeHTTPSOnly                                                  ErrorCode = "HTTPS_ONLY"
+	ErrorCodeUnreachableURL                                             ErrorCode = "UNREACHABLE_URL"
+	ErrorCodeSessionExpired                                             ErrorCode = "SESSION_EXPIRED"
+	ErrorCodeInvalidVerificationCode                                    ErrorCode = "INVALID_VERIFICATION_CODE"
+	ErrorCodeCardPresenceRequired                                       ErrorCode = "CARD_PRESENCE_REQUIRED"
+	ErrorCodeUnsupportedSourceType                                      ErrorCode = "UNSUPPORTED_SOURCE_TYPE"
+	ErrorCodeCardMismatch                                               ErrorCode = "CARD_MISMATCH"
+	ErrorCodePlaidError                                                 ErrorCode = "PLAID_ERROR"
+	ErrorCodePlaidErrorItemLoginRequired                                ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
+	ErrorCodePlaidErrorRateLimit                                        ErrorCode = "PLAID_ERROR_RATE_LIMIT"
+	ErrorCodeCalculateFulfillmentRatesNoProfilesConfigured              ErrorCode = "CALCULATE_FULFILLMENT_RATES_NO_PROFILES_CONFIGURED"
+	ErrorCodeCalculateFulfillmentRatesShipmentDestinationNotConfigured  ErrorCode = "CALCULATE_FULFILLMENT_RATES_SHIPMENT_DESTINATION_NOT_CONFIGURED"
+	ErrorCodeCalculateFulfillmentRatesInvalidRecipientAddress           ErrorCode = "CALCULATE_FULFILLMENT_RATES_INVALID_RECIPIENT_ADDRESS"
+	ErrorCodeCalculateFulfillmentRatesFulfillmentTypeNotSupported       ErrorCode = "CALCULATE_FULFILLMENT_RATES_FULFILLMENT_TYPE_NOT_SUPPORTED"
+	ErrorCodeFulfillmentRateProfileDuplicateItem                        ErrorCode = "FULFILLMENT_RATE_PROFILE_DUPLICATE_ITEM"
+	ErrorCodeFulfillmentRateProfileInvalidItem                          ErrorCode = "FULFILLMENT_RATE_PROFILE_INVALID_ITEM"
+	ErrorCodeCardDeclined                                               ErrorCode = "CARD_DECLINED"
+	ErrorCodeVerifyCvvFailure                                           ErrorCode = "VERIFY_CVV_FAILURE"
+	ErrorCodeVerifyAvsFailure                                           ErrorCode = "VERIFY_AVS_FAILURE"
+	ErrorCodeCardDeclinedCallIssuer                                     ErrorCode = "CARD_DECLINED_CALL_ISSUER"
+	ErrorCodeCardDeclinedVerificationRequired                           ErrorCode = "CARD_DECLINED_VERIFICATION_REQUIRED"
+	ErrorCodeBadExpiration                                              ErrorCode = "BAD_EXPIRATION"
+	ErrorCodeChipInsertionRequired                                      ErrorCode = "CHIP_INSERTION_REQUIRED"
+	ErrorCodeAllowablePinTriesExceeded                                  ErrorCode = "ALLOWABLE_PIN_TRIES_EXCEEDED"
+	ErrorCodeReservationDeclined                                        ErrorCode = "RESERVATION_DECLINED"
+	ErrorCodeBlockedByBlocklist                                         ErrorCode = "BLOCKED_BY_BLOCKLIST"
+	ErrorCodeFulfillmentPreferencesRestrictedDateNotUnique              ErrorCode = "FULFILLMENT_PREFERENCES_RESTRICTED_DATE_NOT_UNIQUE"
+	ErrorCodeFulfillmentPreferencesInvalidSchedulingDatetime            ErrorCode = "FULFILLMENT_PREFERENCES_INVALID_SCHEDULING_DATETIME"
+	ErrorCodeFulfillmentPreferencesInvalidFulfillmentAvailabilityWindow ErrorCode = "FULFILLMENT_PREFERENCES_INVALID_FULFILLMENT_AVAILABILITY_WINDOW"
+	ErrorCodeFulfillmentPreferencesFulfillmentScheduleNotAllowed        ErrorCode = "FULFILLMENT_PREFERENCES_FULFILLMENT_SCHEDULE_NOT_ALLOWED"
+	ErrorCodeFulfillmentPreferencesAssignmentIsImmutable                ErrorCode = "FULFILLMENT_PREFERENCES_ASSIGNMENT_IS_IMMUTABLE"
+	ErrorCodeInvalidTimezone                                            ErrorCode = "INVALID_TIMEZONE"
+	ErrorCodeUnknownBodyParameter                                       ErrorCode = "UNKNOWN_BODY_PARAMETER"
+	ErrorCodeFulfillmentPreferencesConflictingAssignmentType            ErrorCode = "FULFILLMENT_PREFERENCES_CONFLICTING_ASSIGNMENT_TYPE"
+	ErrorCodeNotFound                                                   ErrorCode = "NOT_FOUND"
+	ErrorCodeApplePaymentProcessingCertificateHashNotFound              ErrorCode = "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND"
+	ErrorCodeMethodNotAllowed                                           ErrorCode = "METHOD_NOT_ALLOWED"
+	ErrorCodeNotAcceptable                                              ErrorCode = "NOT_ACCEPTABLE"
+	ErrorCodeRequestTimeout                                             ErrorCode = "REQUEST_TIMEOUT"
+	ErrorCodeConflict                                                   ErrorCode = "CONFLICT"
+	ErrorCodeGone                                                       ErrorCode = "GONE"
+	ErrorCodeRequestEntityTooLarge                                      ErrorCode = "REQUEST_ENTITY_TOO_LARGE"
+	ErrorCodeUnsupportedMediaType                                       ErrorCode = "UNSUPPORTED_MEDIA_TYPE"
+	ErrorCodeUnprocessableEntity                                        ErrorCode = "UNPROCESSABLE_ENTITY"
+	ErrorCodeRateLimited                                                ErrorCode = "RATE_LIMITED"
+	ErrorCodeClientClosedRequest                                        ErrorCode = "CLIENT_CLOSED_REQUEST"
+	ErrorCodeNotImplemented                                             ErrorCode = "NOT_IMPLEMENTED"
+	ErrorCodeBadGateway                                                 ErrorCode = "BAD_GATEWAY"
+	ErrorCodeServiceUnavailable                                         ErrorCode = "SERVICE_UNAVAILABLE"
+	ErrorCodeTemporaryError                                             ErrorCode = "TEMPORARY_ERROR"
+	ErrorCodeGatewayTimeout                                             ErrorCode = "GATEWAY_TIMEOUT"
 )
 
 func NewErrorCodeFromString(s string) (ErrorCode, error) {
@@ -23554,10 +29398,16 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidFormValue, nil
 	case "CUSTOMER_NOT_FOUND":
 		return ErrorCodeCustomerNotFound, nil
+	case "BUYER_NOT_FOUND":
+		return ErrorCodeBuyerNotFound, nil
 	case "ONE_INSTRUMENT_EXPECTED":
 		return ErrorCodeOneInstrumentExpected, nil
 	case "NO_FIELDS_SET":
 		return ErrorCodeNoFieldsSet, nil
+	case "DEPRECATED_FIELD_SET":
+		return ErrorCodeDeprecatedFieldSet, nil
+	case "RETIRED_FIELD_SET":
+		return ErrorCodeRetiredFieldSet, nil
 	case "TOO_MANY_MAP_ENTRIES":
 		return ErrorCodeTooManyMapEntries, nil
 	case "MAP_KEY_LENGTH_TOO_SHORT":
@@ -23572,6 +29422,10 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidPauseLength, nil
 	case "INVALID_DATE":
 		return ErrorCodeInvalidDate, nil
+	case "JOB_TEMPLATE_NAME_TAKEN":
+		return ErrorCodeJobTemplateNameTaken, nil
+	case "CLIENT_NOT_SUPPORTED":
+		return ErrorCodeClientNotSupported, nil
 	case "UNSUPPORTED_COUNTRY":
 		return ErrorCodeUnsupportedCountry, nil
 	case "UNSUPPORTED_CURRENCY":
@@ -23624,6 +29478,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeExpirationFailure, nil
 	case "CARD_NOT_SUPPORTED":
 		return ErrorCodeCardNotSupported, nil
+	case "ISSUER_INSTALLMENT_ERROR":
+		return ErrorCodeIssuerInstallmentError, nil
 	case "INVALID_PIN":
 		return ErrorCodeInvalidPin, nil
 	case "MISSING_PIN":
@@ -23640,6 +29496,16 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePaymentLimitExceeded, nil
 	case "GIFT_CARD_AVAILABLE_AMOUNT":
 		return ErrorCodeGiftCardAvailableAmount, nil
+	case "GIFT_CARD_BUYER_DAILY_LIMIT_REACHED":
+		return ErrorCodeGiftCardBuyerDailyLimitReached, nil
+	case "GIFT_CARD_INVALID_AMOUNT":
+		return ErrorCodeGiftCardInvalidAmount, nil
+	case "GIFT_CARD_MAX_VALUE_REACHED":
+		return ErrorCodeGiftCardMaxValueReached, nil
+	case "GIFT_CARD_MERCHANT_MAX_OUTSTANDING_BALANCE_REACHED":
+		return ErrorCodeGiftCardMerchantMaxOutstandingBalanceReached, nil
+	case "GIFT_CARD_VALUE_ADDITION_LIMIT_REACHED":
+		return ErrorCodeGiftCardValueAdditionLimitReached, nil
 	case "ACCOUNT_UNUSABLE":
 		return ErrorCodeAccountUnusable, nil
 	case "BUYER_REFUSED_PAYMENT":
@@ -23680,6 +29546,18 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeUnsupportedLoyaltyRewardTier, nil
 	case "LOCATION_MISMATCH":
 		return ErrorCodeLocationMismatch, nil
+	case "ORDER_EXPIRED":
+		return ErrorCodeOrderExpired, nil
+	case "ORDER_ALREADY_USED":
+		return ErrorCodeOrderAlreadyUsed, nil
+	case "ORDER_TOO_MANY_CATALOG_OBJECTS":
+		return ErrorCodeOrderTooManyCatalogObjects, nil
+	case "INSUFFICIENT_INVENTORY":
+		return ErrorCodeInsufficientInventory, nil
+	case "PRICE_MISMATCH":
+		return ErrorCodePriceMismatch, nil
+	case "VERSION_MISMATCH":
+		return ErrorCodeVersionMismatch, nil
 	case "IDEMPOTENCY_KEY_REUSED":
 		return ErrorCodeIdempotencyKeyReused, nil
 	case "UNEXPECTED_VALUE":
@@ -23698,6 +29576,16 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidSquareVersionFormat, nil
 	case "API_VERSION_INCOMPATIBLE":
 		return ErrorCodeAPIVersionIncompatible, nil
+	case "INVALID_URL":
+		return ErrorCodeInvalidURL, nil
+	case "HTTPS_ONLY":
+		return ErrorCodeHTTPSOnly, nil
+	case "UNREACHABLE_URL":
+		return ErrorCodeUnreachableURL, nil
+	case "SESSION_EXPIRED":
+		return ErrorCodeSessionExpired, nil
+	case "INVALID_VERIFICATION_CODE":
+		return ErrorCodeInvalidVerificationCode, nil
 	case "CARD_PRESENCE_REQUIRED":
 		return ErrorCodeCardPresenceRequired, nil
 	case "UNSUPPORTED_SOURCE_TYPE":
@@ -23710,6 +29598,18 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePlaidErrorItemLoginRequired, nil
 	case "PLAID_ERROR_RATE_LIMIT":
 		return ErrorCodePlaidErrorRateLimit, nil
+	case "CALCULATE_FULFILLMENT_RATES_NO_PROFILES_CONFIGURED":
+		return ErrorCodeCalculateFulfillmentRatesNoProfilesConfigured, nil
+	case "CALCULATE_FULFILLMENT_RATES_SHIPMENT_DESTINATION_NOT_CONFIGURED":
+		return ErrorCodeCalculateFulfillmentRatesShipmentDestinationNotConfigured, nil
+	case "CALCULATE_FULFILLMENT_RATES_INVALID_RECIPIENT_ADDRESS":
+		return ErrorCodeCalculateFulfillmentRatesInvalidRecipientAddress, nil
+	case "CALCULATE_FULFILLMENT_RATES_FULFILLMENT_TYPE_NOT_SUPPORTED":
+		return ErrorCodeCalculateFulfillmentRatesFulfillmentTypeNotSupported, nil
+	case "FULFILLMENT_RATE_PROFILE_DUPLICATE_ITEM":
+		return ErrorCodeFulfillmentRateProfileDuplicateItem, nil
+	case "FULFILLMENT_RATE_PROFILE_INVALID_ITEM":
+		return ErrorCodeFulfillmentRateProfileInvalidItem, nil
 	case "CARD_DECLINED":
 		return ErrorCodeCardDeclined, nil
 	case "VERIFY_CVV_FAILURE":
@@ -23728,8 +29628,24 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeAllowablePinTriesExceeded, nil
 	case "RESERVATION_DECLINED":
 		return ErrorCodeReservationDeclined, nil
+	case "BLOCKED_BY_BLOCKLIST":
+		return ErrorCodeBlockedByBlocklist, nil
+	case "FULFILLMENT_PREFERENCES_RESTRICTED_DATE_NOT_UNIQUE":
+		return ErrorCodeFulfillmentPreferencesRestrictedDateNotUnique, nil
+	case "FULFILLMENT_PREFERENCES_INVALID_SCHEDULING_DATETIME":
+		return ErrorCodeFulfillmentPreferencesInvalidSchedulingDatetime, nil
+	case "FULFILLMENT_PREFERENCES_INVALID_FULFILLMENT_AVAILABILITY_WINDOW":
+		return ErrorCodeFulfillmentPreferencesInvalidFulfillmentAvailabilityWindow, nil
+	case "FULFILLMENT_PREFERENCES_FULFILLMENT_SCHEDULE_NOT_ALLOWED":
+		return ErrorCodeFulfillmentPreferencesFulfillmentScheduleNotAllowed, nil
+	case "FULFILLMENT_PREFERENCES_ASSIGNMENT_IS_IMMUTABLE":
+		return ErrorCodeFulfillmentPreferencesAssignmentIsImmutable, nil
+	case "INVALID_TIMEZONE":
+		return ErrorCodeInvalidTimezone, nil
 	case "UNKNOWN_BODY_PARAMETER":
 		return ErrorCodeUnknownBodyParameter, nil
+	case "FULFILLMENT_PREFERENCES_CONFLICTING_ASSIGNMENT_TYPE":
+		return ErrorCodeFulfillmentPreferencesConflictingAssignmentType, nil
 	case "NOT_FOUND":
 		return ErrorCodeNotFound, nil
 	case "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND":
@@ -23752,6 +29668,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeUnprocessableEntity, nil
 	case "RATE_LIMITED":
 		return ErrorCodeRateLimited, nil
+	case "CLIENT_CLOSED_REQUEST":
+		return ErrorCodeClientClosedRequest, nil
 	case "NOT_IMPLEMENTED":
 		return ErrorCodeNotImplemented, nil
 	case "BAD_GATEWAY":
@@ -23871,7 +29789,7 @@ func (e *EventData) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Contains metadata about a particular [Event]($m/Event).
+// Contains metadata about a particular [Event](entity:Event).
 type EventMetadata struct {
 	// A unique ID for the event.
 	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
@@ -23968,12 +29886,15 @@ func (e *EventTypeMetadata) String() string {
 type ExcludeStrategy string
 
 const (
-	ExcludeStrategyLeastExpensive ExcludeStrategy = "LEAST_EXPENSIVE"
-	ExcludeStrategyMostExpensive  ExcludeStrategy = "MOST_EXPENSIVE"
+	ExcludeStrategyExcludeStrategyDoNotUse ExcludeStrategy = "EXCLUDE_STRATEGY_DO_NOT_USE"
+	ExcludeStrategyLeastExpensive          ExcludeStrategy = "LEAST_EXPENSIVE"
+	ExcludeStrategyMostExpensive           ExcludeStrategy = "MOST_EXPENSIVE"
 )
 
 func NewExcludeStrategyFromString(s string) (ExcludeStrategy, error) {
 	switch s {
+	case "EXCLUDE_STRATEGY_DO_NOT_USE":
+		return ExcludeStrategyExcludeStrategyDoNotUse, nil
 	case "LEAST_EXPENSIVE":
 		return ExcludeStrategyLeastExpensive, nil
 	case "MOST_EXPENSIVE":
@@ -24388,12 +30309,15 @@ func (f *FulfillmentDeliveryDetails) String() string {
 type FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType string
 
 const (
-	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
-	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeAsap      FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
+	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
+	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled                                      FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
+	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeAsap                                           FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
 )
 
 func NewFulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFromString(s string) (FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType, error) {
 	switch s {
+	case "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
+		return FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -24484,12 +30408,15 @@ func (f *FulfillmentFulfillmentEntry) String() string {
 type FulfillmentFulfillmentLineItemApplication string
 
 const (
-	FulfillmentFulfillmentLineItemApplicationAll       FulfillmentFulfillmentLineItemApplication = "ALL"
-	FulfillmentFulfillmentLineItemApplicationEntryList FulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
+	FulfillmentFulfillmentLineItemApplicationUnknownApplication FulfillmentFulfillmentLineItemApplication = "UNKNOWN_APPLICATION"
+	FulfillmentFulfillmentLineItemApplicationAll                FulfillmentFulfillmentLineItemApplication = "ALL"
+	FulfillmentFulfillmentLineItemApplicationEntryList          FulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
 )
 
 func NewFulfillmentFulfillmentLineItemApplicationFromString(s string) (FulfillmentFulfillmentLineItemApplication, error) {
 	switch s {
+	case "UNKNOWN_APPLICATION":
+		return FulfillmentFulfillmentLineItemApplicationUnknownApplication, nil
 	case "ALL":
 		return FulfillmentFulfillmentLineItemApplicationAll, nil
 	case "ENTRY_LIST":
@@ -24663,12 +30590,15 @@ func (f *FulfillmentPickupDetailsCurbsidePickupDetails) String() string {
 type FulfillmentPickupDetailsScheduleType string
 
 const (
-	FulfillmentPickupDetailsScheduleTypeScheduled FulfillmentPickupDetailsScheduleType = "SCHEDULED"
-	FulfillmentPickupDetailsScheduleTypeAsap      FulfillmentPickupDetailsScheduleType = "ASAP"
+	FulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse FulfillmentPickupDetailsScheduleType = "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
+	FulfillmentPickupDetailsScheduleTypeScheduled                                    FulfillmentPickupDetailsScheduleType = "SCHEDULED"
+	FulfillmentPickupDetailsScheduleTypeAsap                                         FulfillmentPickupDetailsScheduleType = "ASAP"
 )
 
 func NewFulfillmentPickupDetailsScheduleTypeFromString(s string) (FulfillmentPickupDetailsScheduleType, error) {
 	switch s {
+	case "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
+		return FulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return FulfillmentPickupDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -24843,16 +30773,19 @@ func (f *FulfillmentShipmentDetails) String() string {
 type FulfillmentState string
 
 const (
-	FulfillmentStateProposed  FulfillmentState = "PROPOSED"
-	FulfillmentStateReserved  FulfillmentState = "RESERVED"
-	FulfillmentStatePrepared  FulfillmentState = "PREPARED"
-	FulfillmentStateCompleted FulfillmentState = "COMPLETED"
-	FulfillmentStateCanceled  FulfillmentState = "CANCELED"
-	FulfillmentStateFailed    FulfillmentState = "FAILED"
+	FulfillmentStateFulfillmentStateDoNotUse FulfillmentState = "FULFILLMENT_STATE_DO_NOT_USE"
+	FulfillmentStateProposed                 FulfillmentState = "PROPOSED"
+	FulfillmentStateReserved                 FulfillmentState = "RESERVED"
+	FulfillmentStatePrepared                 FulfillmentState = "PREPARED"
+	FulfillmentStateCompleted                FulfillmentState = "COMPLETED"
+	FulfillmentStateCanceled                 FulfillmentState = "CANCELED"
+	FulfillmentStateFailed                   FulfillmentState = "FAILED"
 )
 
 func NewFulfillmentStateFromString(s string) (FulfillmentState, error) {
 	switch s {
+	case "FULFILLMENT_STATE_DO_NOT_USE":
+		return FulfillmentStateFulfillmentStateDoNotUse, nil
 	case "PROPOSED":
 		return FulfillmentStateProposed, nil
 	case "RESERVED":
@@ -24878,19 +30811,40 @@ func (f FulfillmentState) Ptr() *FulfillmentState {
 type FulfillmentType string
 
 const (
-	FulfillmentTypePickup   FulfillmentType = "PICKUP"
-	FulfillmentTypeShipment FulfillmentType = "SHIPMENT"
-	FulfillmentTypeDelivery FulfillmentType = "DELIVERY"
+	FulfillmentTypeFulfillmentTypeDoNotUse FulfillmentType = "FULFILLMENT_TYPE_DO_NOT_USE"
+	FulfillmentTypeCustom                  FulfillmentType = "CUSTOM"
+	FulfillmentTypePickup                  FulfillmentType = "PICKUP"
+	FulfillmentTypeManagedDelivery         FulfillmentType = "MANAGED_DELIVERY"
+	FulfillmentTypeShipment                FulfillmentType = "SHIPMENT"
+	FulfillmentTypeDigital                 FulfillmentType = "DIGITAL"
+	FulfillmentTypeDelivery                FulfillmentType = "DELIVERY"
+	FulfillmentTypeSimple                  FulfillmentType = "SIMPLE"
+	FulfillmentTypeDineIn                  FulfillmentType = "DINE_IN"
+	FulfillmentTypeInStore                 FulfillmentType = "IN_STORE"
 )
 
 func NewFulfillmentTypeFromString(s string) (FulfillmentType, error) {
 	switch s {
+	case "FULFILLMENT_TYPE_DO_NOT_USE":
+		return FulfillmentTypeFulfillmentTypeDoNotUse, nil
+	case "CUSTOM":
+		return FulfillmentTypeCustom, nil
 	case "PICKUP":
 		return FulfillmentTypePickup, nil
+	case "MANAGED_DELIVERY":
+		return FulfillmentTypeManagedDelivery, nil
 	case "SHIPMENT":
 		return FulfillmentTypeShipment, nil
+	case "DIGITAL":
+		return FulfillmentTypeDigital, nil
 	case "DELIVERY":
 		return FulfillmentTypeDelivery, nil
+	case "SIMPLE":
+		return FulfillmentTypeSimple, nil
+	case "DINE_IN":
+		return FulfillmentTypeDineIn, nil
+	case "IN_STORE":
+		return FulfillmentTypeInStore, nil
 	}
 	var t FulfillmentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -25367,7 +31321,7 @@ func (g *GetCardRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveCard]($e/Cards/RetrieveCard) endpoint.
+// a request to the [RetrieveCard](api-endpoint:Cards-RetrieveCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -25505,7 +31459,7 @@ func (g *GetCatalogObjectResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttributeDefinition) response.
+// Represents a [RetrieveCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type GetCustomerCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -25551,7 +31505,7 @@ func (g *GetCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveCustomerCustomAttribute]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttribute) response.
+// Represents a [RetrieveCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type GetCustomerCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -25599,7 +31553,7 @@ func (g *GetCustomerCustomAttributeResponse) String() string {
 }
 
 // Defines the fields that can be included in a request to the
-// [RetrieveCustomerGroup]($e/CustomerGroups/RetrieveCustomerGroup) endpoint.
+// [RetrieveCustomerGroup](api-endpoint:CustomerGroups-RetrieveCustomerGroup) endpoint.
 type GetCustomerGroupRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -25640,7 +31594,7 @@ func (g *GetCustomerGroupRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveCustomerGroup]($e/CustomerGroups/RetrieveCustomerGroup) endpoint.
+// a request to the [RetrieveCustomerGroup](api-endpoint:CustomerGroups-RetrieveCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type GetCustomerGroupResponse struct {
@@ -26980,7 +32934,7 @@ func (g *GetInvoiceResponse) String() string {
 }
 
 // Defines the fields that are included in the request body for the
-// [RetrieveLocation]($e/Locations/RetrieveLocation) endpoint.
+// [RetrieveLocation](api-endpoint:Locations-RetrieveLocation) endpoint.
 type GetLocationRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27020,7 +32974,7 @@ func (g *GetLocationRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the fields that the [RetrieveLocation]($e/Locations/RetrieveLocation)
+// Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
 // endpoint returns in a response.
 type GetLocationResponse struct {
 	// Information about errors encountered during the request.
@@ -27151,7 +33105,7 @@ func (g *GetLoyaltyAccountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// A request to retrieve the [loyalty program]($m/LoyaltyProgram) that belongs to a seller. A seller can have only one loyalty program.
+// A request to retrieve the [loyalty program](entity:LoyaltyProgram) that belongs to a seller. A seller can have only one loyalty program.
 type GetLoyaltyProgramRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27236,7 +33190,7 @@ func (g *GetLoyaltyProgramResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveLoyaltyPromotionPromotions]($e/Loyalty/RetrieveLoyaltyPromotion) request.
+// Represents a [RetrieveLoyaltyPromotionPromotions](api-endpoint:Loyalty-RetrieveLoyaltyPromotion) request.
 type GetLoyaltyPromotionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27276,7 +33230,7 @@ func (g *GetLoyaltyPromotionRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveLoyaltyPromotionPromotions]($e/Loyalty/RetrieveLoyaltyPromotion) response.
+// Represents a [RetrieveLoyaltyPromotionPromotions](api-endpoint:Loyalty-RetrieveLoyaltyPromotion) response.
 type GetLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -27406,7 +33360,7 @@ func (g *GetLoyaltyRewardResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Request object for the [RetrieveMerchant]($e/Merchants/RetrieveMerchant) endpoint.
+// Request object for the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant) endpoint.
 type GetMerchantRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27446,7 +33400,7 @@ func (g *GetMerchantRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// The response object returned by the [RetrieveMerchant]($e/Merchants/RetrieveMerchant) endpoint.
+// The response object returned by the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant) endpoint.
 type GetMerchantResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -27658,7 +33612,7 @@ func (g *GetPaymentLinkResponse) String() string {
 }
 
 // Describes a request to retrieve a refund using
-// [GetPaymentRefund]($e/Refunds/GetPaymentRefund).
+// [GetPaymentRefund](api-endpoint:Refunds-GetPaymentRefund).
 type GetPaymentRefundRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27698,7 +33652,7 @@ func (g *GetPaymentRefundRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the response returned by [GetRefund]($e/Refunds/GetPaymentRefund).
+// Defines the response returned by [GetRefund](api-endpoint:Refunds-GetPaymentRefund).
 //
 // Note: If there are errors processing the request, the refund field might not be
 // present or it might be present in a FAILED state.
@@ -27747,7 +33701,7 @@ func (g *GetPaymentRefundResponse) String() string {
 }
 
 // Describes a request to retrieve a payment using
-// [GetPayment]($e/Payments/GetPayment).
+// [GetPayment](api-endpoint:Payments-GetPayment).
 type GetPaymentRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -27787,7 +33741,7 @@ func (g *GetPaymentRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the response returned by [GetPayment]($e/Payments/GetPayment).
+// Defines the response returned by [GetPayment](api-endpoint:Payments-GetPayment).
 type GetPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -28088,7 +34042,7 @@ func (g *GetSnippetResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) endpoint.
+// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
 type GetSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -28724,7 +34678,7 @@ func (g *GetTransactionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents an input to a call to [RetrieveVendor]($e/Vendors/RetrieveVendor).
+// Represents an input to a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
 type GetVendorRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -28764,7 +34718,7 @@ func (g *GetVendorRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents an output from a call to [RetrieveVendor]($e/Vendors/RetrieveVendor).
+// Represents an output from a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
 type GetVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -28894,7 +34848,7 @@ func (g *GetWageSettingResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Retrieves a [Subscription]($m/WebhookSubscription) using its id.
+// Retrieves a [Subscription](entity:WebhookSubscription) using its id.
 type GetWebhookSubscriptionRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -28935,9 +34889,9 @@ func (g *GetWebhookSubscriptionRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveWebhookSubscription]($e/WebhookSubscriptions/RetrieveWebhookSubscription) endpoint.
+// a request to the [RetrieveWebhookSubscription](api-endpoint:WebhookSubscriptions-RetrieveWebhookSubscription) endpoint.
 //
-// Note: if there are errors processing the request, the [Subscription]($m/WebhookSubscription) will not be
+// Note: if there are errors processing the request, the [Subscription](entity:WebhookSubscription) will not be
 // present.
 type GetWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -29048,7 +35002,7 @@ func (g *GiftCard) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents an action performed on a [gift card]($m/GiftCard) that affects its state or balance.
+// Represents an action performed on a [gift card](entity:GiftCard) that affects its state or balance.
 // A gift card activity contains information about a specific activity type. For example, a `REDEEM` activity
 // includes a `redeem_activity_details` field that contains information about the redemption.
 type GiftCardActivity struct {
@@ -29158,7 +35112,7 @@ func (g *GiftCardActivity) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `ACTIVATE` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `ACTIVATE` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityActivate struct {
 	// The amount added to the gift card. This value is a positive integer.
 	//
@@ -29231,7 +35185,7 @@ func (g *GiftCardActivityActivate) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `ADJUST_DECREMENT` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `ADJUST_DECREMENT` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityAdjustDecrement struct {
 	// The amount deducted from the gift card balance. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -29277,10 +35231,11 @@ func (g *GiftCardActivityAdjustDecrement) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for deducting money from a [gift card]($m/GiftCard).
+// Indicates the reason for deducting money from a [gift card](entity:GiftCard).
 type GiftCardActivityAdjustDecrementReason string
 
 const (
+	GiftCardActivityAdjustDecrementReasonReasonDoNotUse               GiftCardActivityAdjustDecrementReason = "REASON_DO_NOT_USE"
 	GiftCardActivityAdjustDecrementReasonSuspiciousActivity           GiftCardActivityAdjustDecrementReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityAdjustDecrementReasonBalanceAccidentallyIncreased GiftCardActivityAdjustDecrementReason = "BALANCE_ACCIDENTALLY_INCREASED"
 	GiftCardActivityAdjustDecrementReasonSupportIssue                 GiftCardActivityAdjustDecrementReason = "SUPPORT_ISSUE"
@@ -29289,6 +35244,8 @@ const (
 
 func NewGiftCardActivityAdjustDecrementReasonFromString(s string) (GiftCardActivityAdjustDecrementReason, error) {
 	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityAdjustDecrementReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityAdjustDecrementReasonSuspiciousActivity, nil
 	case "BALANCE_ACCIDENTALLY_INCREASED":
@@ -29306,7 +35263,7 @@ func (g GiftCardActivityAdjustDecrementReason) Ptr() *GiftCardActivityAdjustDecr
 	return &g
 }
 
-// Represents details about an `ADJUST_INCREMENT` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `ADJUST_INCREMENT` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityAdjustIncrement struct {
 	// The amount added to the gift card balance. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -29352,10 +35309,11 @@ func (g *GiftCardActivityAdjustIncrement) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for adding money to a [gift card]($m/GiftCard).
+// Indicates the reason for adding money to a [gift card](entity:GiftCard).
 type GiftCardActivityAdjustIncrementReason string
 
 const (
+	GiftCardActivityAdjustIncrementReasonReasonDoNotUse    GiftCardActivityAdjustIncrementReason = "REASON_DO_NOT_USE"
 	GiftCardActivityAdjustIncrementReasonComplimentary     GiftCardActivityAdjustIncrementReason = "COMPLIMENTARY"
 	GiftCardActivityAdjustIncrementReasonSupportIssue      GiftCardActivityAdjustIncrementReason = "SUPPORT_ISSUE"
 	GiftCardActivityAdjustIncrementReasonTransactionVoided GiftCardActivityAdjustIncrementReason = "TRANSACTION_VOIDED"
@@ -29363,6 +35321,8 @@ const (
 
 func NewGiftCardActivityAdjustIncrementReasonFromString(s string) (GiftCardActivityAdjustIncrementReason, error) {
 	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityAdjustIncrementReasonReasonDoNotUse, nil
 	case "COMPLIMENTARY":
 		return GiftCardActivityAdjustIncrementReasonComplimentary, nil
 	case "SUPPORT_ISSUE":
@@ -29378,11 +35338,11 @@ func (g GiftCardActivityAdjustIncrementReason) Ptr() *GiftCardActivityAdjustIncr
 	return &g
 }
 
-// Represents details about a `BLOCK` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `BLOCK` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityBlock struct {
 	// The reason the gift card was blocked.
 	// See [Reason](#type-reason) for possible values
-	Reason GiftCardActivityBlockReason `json:"reason,omitempty" url:"reason,omitempty"`
+	Reason GiftCardActivityBlockReason `json:"reason" url:"reason"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -29422,10 +35382,30 @@ func (g *GiftCardActivityBlock) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for blocking a [gift card]($m/GiftCard).
-type GiftCardActivityBlockReason = string
+// Indicates the reason for blocking a [gift card](entity:GiftCard).
+type GiftCardActivityBlockReason string
 
-// Represents details about a `CLEAR_BALANCE` [gift card activity type]($m/GiftCardActivityType).
+const (
+	GiftCardActivityBlockReasonReasonDoNotUse  GiftCardActivityBlockReason = "REASON_DO_NOT_USE"
+	GiftCardActivityBlockReasonChargebackBlock GiftCardActivityBlockReason = "CHARGEBACK_BLOCK"
+)
+
+func NewGiftCardActivityBlockReasonFromString(s string) (GiftCardActivityBlockReason, error) {
+	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityBlockReasonReasonDoNotUse, nil
+	case "CHARGEBACK_BLOCK":
+		return GiftCardActivityBlockReasonChargebackBlock, nil
+	}
+	var t GiftCardActivityBlockReason
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (g GiftCardActivityBlockReason) Ptr() *GiftCardActivityBlockReason {
+	return &g
+}
+
+// Represents details about a `CLEAR_BALANCE` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityClearBalance struct {
 	// The reason the gift card balance was cleared.
 	// See [Reason](#type-reason) for possible values
@@ -29469,10 +35449,11 @@ func (g *GiftCardActivityClearBalance) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for clearing the balance of a [gift card]($m/GiftCard).
+// Indicates the reason for clearing the balance of a [gift card](entity:GiftCard).
 type GiftCardActivityClearBalanceReason string
 
 const (
+	GiftCardActivityClearBalanceReasonReasonDoNotUse     GiftCardActivityClearBalanceReason = "REASON_DO_NOT_USE"
 	GiftCardActivityClearBalanceReasonSuspiciousActivity GiftCardActivityClearBalanceReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityClearBalanceReasonReuseGiftcard      GiftCardActivityClearBalanceReason = "REUSE_GIFTCARD"
 	GiftCardActivityClearBalanceReasonUnknownReason      GiftCardActivityClearBalanceReason = "UNKNOWN_REASON"
@@ -29480,6 +35461,8 @@ const (
 
 func NewGiftCardActivityClearBalanceReasonFromString(s string) (GiftCardActivityClearBalanceReason, error) {
 	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityClearBalanceReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityClearBalanceReasonSuspiciousActivity, nil
 	case "REUSE_GIFTCARD":
@@ -29495,7 +35478,150 @@ func (g GiftCardActivityClearBalanceReason) Ptr() *GiftCardActivityClearBalanceR
 	return &g
 }
 
-// Represents details about a `DEACTIVATE` [gift card activity type]($m/GiftCardActivityType).
+// Published when a [gift card activity](entity:GiftCardActivity) is created.
+type GiftCardActivityCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.activity.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardActivityCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents the data associated with a `gift_card.activity.created` event.
+type GiftCardActivityCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card_activity`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new gift card activity.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new gift card activity.
+	Object *GiftCardActivityCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card activity associated with a
+// `gift_card.activity.created` event.
+type GiftCardActivityCreatedEventObject struct {
+	// The new gift card activity.
+	GiftCardActivity *GiftCardActivity `json:"gift_card_activity,omitempty" url:"gift_card_activity,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents details about a `DEACTIVATE` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityDeactivate struct {
 	// The reason the gift card was deactivated.
 	// See [Reason](#type-reason) for possible values
@@ -29539,10 +35665,11 @@ func (g *GiftCardActivityDeactivate) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for deactivating a [gift card]($m/GiftCard).
+// Indicates the reason for deactivating a [gift card](entity:GiftCard).
 type GiftCardActivityDeactivateReason string
 
 const (
+	GiftCardActivityDeactivateReasonReasonDoNotUse       GiftCardActivityDeactivateReason = "REASON_DO_NOT_USE"
 	GiftCardActivityDeactivateReasonSuspiciousActivity   GiftCardActivityDeactivateReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityDeactivateReasonUnknownReason        GiftCardActivityDeactivateReason = "UNKNOWN_REASON"
 	GiftCardActivityDeactivateReasonChargebackDeactivate GiftCardActivityDeactivateReason = "CHARGEBACK_DEACTIVATE"
@@ -29550,6 +35677,8 @@ const (
 
 func NewGiftCardActivityDeactivateReasonFromString(s string) (GiftCardActivityDeactivateReason, error) {
 	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityDeactivateReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityDeactivateReasonSuspiciousActivity, nil
 	case "UNKNOWN_REASON":
@@ -29565,7 +35694,7 @@ func (g GiftCardActivityDeactivateReason) Ptr() *GiftCardActivityDeactivateReaso
 	return &g
 }
 
-// Represents details about an `IMPORT` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `IMPORT` [gift card activity type](entity:GiftCardActivityType).
 // This activity type is used when Square imports a third-party gift card, in which case the
 // `gan_source` of the gift card is set to `OTHER`.
 type GiftCardActivityImport struct {
@@ -29610,7 +35739,7 @@ func (g *GiftCardActivityImport) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `IMPORT_REVERSAL` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `IMPORT_REVERSAL` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityImportReversal struct {
 	// The amount of money cleared from the third-party gift card when
 	// the import was reversed.
@@ -29654,7 +35783,7 @@ func (g *GiftCardActivityImportReversal) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `LOAD` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `LOAD` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityLoad struct {
 	// The amount added to the gift card. This value is a positive integer.
 	//
@@ -29727,7 +35856,7 @@ func (g *GiftCardActivityLoad) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `REDEEM` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `REDEEM` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityRedeem struct {
 	// The amount deducted from the gift card for the redemption. This value is a positive integer.
 	//
@@ -29787,19 +35916,22 @@ func (g *GiftCardActivityRedeem) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the status of a [gift card]($m/GiftCard) redemption. This status is relevant only for
+// Indicates the status of a [gift card](entity:GiftCard) redemption. This status is relevant only for
 // redemptions made from Square products (such as Square Point of Sale) because Square products use a
 // two-state process. Gift cards redeemed using the Gift Card Activities API always have a `COMPLETED` status.
 type GiftCardActivityRedeemStatus string
 
 const (
-	GiftCardActivityRedeemStatusPending   GiftCardActivityRedeemStatus = "PENDING"
-	GiftCardActivityRedeemStatusCompleted GiftCardActivityRedeemStatus = "COMPLETED"
-	GiftCardActivityRedeemStatusCanceled  GiftCardActivityRedeemStatus = "CANCELED"
+	GiftCardActivityRedeemStatusTypeDoNotUse GiftCardActivityRedeemStatus = "TYPE_DO_NOT_USE"
+	GiftCardActivityRedeemStatusPending      GiftCardActivityRedeemStatus = "PENDING"
+	GiftCardActivityRedeemStatusCompleted    GiftCardActivityRedeemStatus = "COMPLETED"
+	GiftCardActivityRedeemStatusCanceled     GiftCardActivityRedeemStatus = "CANCELED"
 )
 
 func NewGiftCardActivityRedeemStatusFromString(s string) (GiftCardActivityRedeemStatus, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return GiftCardActivityRedeemStatusTypeDoNotUse, nil
 	case "PENDING":
 		return GiftCardActivityRedeemStatusPending, nil
 	case "COMPLETED":
@@ -29815,7 +35947,7 @@ func (g GiftCardActivityRedeemStatus) Ptr() *GiftCardActivityRedeemStatus {
 	return &g
 }
 
-// Represents details about a `REFUND` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `REFUND` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityRefund struct {
 	// The ID of the refunded `REDEEM` gift card activity. Square populates this field if the
 	// `payment_id` in the corresponding [RefundPayment](api-endpoint:Refunds-RefundPayment) request
@@ -29873,7 +36005,7 @@ func (g *GiftCardActivityRefund) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `TRANSFER_BALANCE_FROM` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `TRANSFER_BALANCE_FROM` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityTransferBalanceFrom struct {
 	// The ID of the gift card to which the specified amount was transferred.
 	TransferToGiftCardID string `json:"transfer_to_gift_card_id" url:"transfer_to_gift_card_id"`
@@ -29918,7 +36050,7 @@ func (g *GiftCardActivityTransferBalanceFrom) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `TRANSFER_BALANCE_TO` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about a `TRANSFER_BALANCE_TO` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityTransferBalanceTo struct {
 	// The ID of the gift card from which the specified amount was transferred.
 	TransferFromGiftCardID string `json:"transfer_from_gift_card_id" url:"transfer_from_gift_card_id"`
@@ -29963,10 +36095,11 @@ func (g *GiftCardActivityTransferBalanceTo) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the type of [gift card activity]($m/GiftCardActivity).
+// Indicates the type of [gift card activity](entity:GiftCardActivity).
 type GiftCardActivityType string
 
 const (
+	GiftCardActivityTypeTypeDoNotUse           GiftCardActivityType = "TYPE_DO_NOT_USE"
 	GiftCardActivityTypeActivate               GiftCardActivityType = "ACTIVATE"
 	GiftCardActivityTypeLoad                   GiftCardActivityType = "LOAD"
 	GiftCardActivityTypeRedeem                 GiftCardActivityType = "REDEEM"
@@ -29977,6 +36110,7 @@ const (
 	GiftCardActivityTypeRefund                 GiftCardActivityType = "REFUND"
 	GiftCardActivityTypeUnlinkedActivityRefund GiftCardActivityType = "UNLINKED_ACTIVITY_REFUND"
 	GiftCardActivityTypeImport                 GiftCardActivityType = "IMPORT"
+	GiftCardActivityTypeOther                  GiftCardActivityType = "OTHER"
 	GiftCardActivityTypeBlock                  GiftCardActivityType = "BLOCK"
 	GiftCardActivityTypeUnblock                GiftCardActivityType = "UNBLOCK"
 	GiftCardActivityTypeImportReversal         GiftCardActivityType = "IMPORT_REVERSAL"
@@ -29986,6 +36120,8 @@ const (
 
 func NewGiftCardActivityTypeFromString(s string) (GiftCardActivityType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return GiftCardActivityTypeTypeDoNotUse, nil
 	case "ACTIVATE":
 		return GiftCardActivityTypeActivate, nil
 	case "LOAD":
@@ -30006,6 +36142,8 @@ func NewGiftCardActivityTypeFromString(s string) (GiftCardActivityType, error) {
 		return GiftCardActivityTypeUnlinkedActivityRefund, nil
 	case "IMPORT":
 		return GiftCardActivityTypeImport, nil
+	case "OTHER":
+		return GiftCardActivityTypeOther, nil
 	case "BLOCK":
 		return GiftCardActivityTypeBlock, nil
 	case "UNBLOCK":
@@ -30025,11 +36163,11 @@ func (g GiftCardActivityType) Ptr() *GiftCardActivityType {
 	return &g
 }
 
-// Represents details about an `UNBLOCK` [gift card activity type]($m/GiftCardActivityType).
+// Represents details about an `UNBLOCK` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityUnblock struct {
 	// The reason the gift card was unblocked.
 	// See [Reason](#type-reason) for possible values
-	Reason GiftCardActivityUnblockReason `json:"reason,omitempty" url:"reason,omitempty"`
+	Reason GiftCardActivityUnblockReason `json:"reason" url:"reason"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -30069,10 +36207,30 @@ func (g *GiftCardActivityUnblock) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for unblocking a [gift card]($m/GiftCard).
-type GiftCardActivityUnblockReason = string
+// Indicates the reason for unblocking a [gift card](entity:GiftCard).
+type GiftCardActivityUnblockReason string
 
-// Represents details about an `UNLINKED_ACTIVITY_REFUND` [gift card activity type]($m/GiftCardActivityType).
+const (
+	GiftCardActivityUnblockReasonReasonDoNotUse    GiftCardActivityUnblockReason = "REASON_DO_NOT_USE"
+	GiftCardActivityUnblockReasonChargebackUnblock GiftCardActivityUnblockReason = "CHARGEBACK_UNBLOCK"
+)
+
+func NewGiftCardActivityUnblockReasonFromString(s string) (GiftCardActivityUnblockReason, error) {
+	switch s {
+	case "REASON_DO_NOT_USE":
+		return GiftCardActivityUnblockReasonReasonDoNotUse, nil
+	case "CHARGEBACK_UNBLOCK":
+		return GiftCardActivityUnblockReasonChargebackUnblock, nil
+	}
+	var t GiftCardActivityUnblockReason
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (g GiftCardActivityUnblockReason) Ptr() *GiftCardActivityUnblockReason {
+	return &g
+}
+
+// Represents details about an `UNLINKED_ACTIVITY_REFUND` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityUnlinkedActivityRefund struct {
 	// The amount added to the gift card for the refund. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -30119,17 +36277,601 @@ func (g *GiftCardActivityUnlinkedActivityRefund) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+// Published when a [gift card activity](entity:GiftCardActivity) is updated.
+// Subscribe to this event to be notified about the following changes:
+//
+//   - An update to the `REDEEM` activity for a gift card redemption made from a Square product (such as Square Point of Sale).
+//     These redemptions are initially assigned a `PENDING` state, but then change to a `COMPLETED` or `CANCELED` state.
+//   - An update to the `IMPORT` activity for an imported gift card when the balance is later adjusted by Square.
+type GiftCardActivityUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.activity.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardActivityUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.activity.updated` event.
+type GiftCardActivityUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card_activity`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card activity.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card activity.
+	Object *GiftCardActivityUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card activity associated with a
+// `gift_card.activity.updated` event.
+type GiftCardActivityUpdatedEventObject struct {
+	// The updated gift card activity.
+	GiftCardActivity *GiftCardActivity `json:"gift_card_activity,omitempty" url:"gift_card_activity,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [gift card](entity:GiftCard) is created.
+type GiftCardCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.created` event.
+type GiftCardCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new gift card.
+	Object *GiftCardCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card associated with a `gift_card.created` event.
+type GiftCardCreatedEventObject struct {
+	// The new gift card.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [customer](entity:Customer) is linked to a [gift card](entity:GiftCard).
+type GiftCardCustomerLinkedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.customer_linked`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCustomerLinkedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.customer_linked` event.
+type GiftCardCustomerLinkedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card and the ID of the linked customer.
+	Object *GiftCardCustomerLinkedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card and customer ID associated with a
+// `gift_card.customer_linked` event.
+type GiftCardCustomerLinkedEventObject struct {
+	// The gift card with the updated `customer_ids` field.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+	// The ID of the linked [customer](entity:Customer).
+	LinkedCustomerID *string `json:"linked_customer_id,omitempty" url:"linked_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [customer](entity:Customer) is unlinked from a [gift card](entity:GiftCard).
+type GiftCardCustomerUnlinkedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.customer_unlinked`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCustomerUnlinkedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.customer_unlinked` event.
+type GiftCardCustomerUnlinkedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card and the ID of the unlinked customer.
+	Object *GiftCardCustomerUnlinkedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card and the customer ID associated with a
+// `gift_card.customer_linked` event.
+type GiftCardCustomerUnlinkedEventObject struct {
+	// The gift card with the updated `customer_ids` field.
+	// The field is removed if the gift card is not linked to any customers.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+	// The ID of the unlinked [customer](entity:Customer).
+	UnlinkedCustomerID *string `json:"unlinked_customer_id,omitempty" url:"unlinked_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 // Indicates the source that generated the gift card
 // account number (GAN).
 type GiftCardGanSource string
 
 const (
-	GiftCardGanSourceSquare GiftCardGanSource = "SQUARE"
-	GiftCardGanSourceOther  GiftCardGanSource = "OTHER"
+	GiftCardGanSourceGanSourceDoNotUse GiftCardGanSource = "GAN_SOURCE_DO_NOT_USE"
+	GiftCardGanSourceSquare            GiftCardGanSource = "SQUARE"
+	GiftCardGanSourceOther             GiftCardGanSource = "OTHER"
 )
 
 func NewGiftCardGanSourceFromString(s string) (GiftCardGanSource, error) {
 	switch s {
+	case "GAN_SOURCE_DO_NOT_USE":
+		return GiftCardGanSourceGanSourceDoNotUse, nil
 	case "SQUARE":
 		return GiftCardGanSourceSquare, nil
 	case "OTHER":
@@ -30147,14 +36889,21 @@ func (g GiftCardGanSource) Ptr() *GiftCardGanSource {
 type GiftCardStatus string
 
 const (
-	GiftCardStatusActive      GiftCardStatus = "ACTIVE"
-	GiftCardStatusDeactivated GiftCardStatus = "DEACTIVATED"
-	GiftCardStatusBlocked     GiftCardStatus = "BLOCKED"
-	GiftCardStatusPending     GiftCardStatus = "PENDING"
+	GiftCardStatusStatusDoNotUse GiftCardStatus = "STATUS_DO_NOT_USE"
+	GiftCardStatusNotActive      GiftCardStatus = "NOT_ACTIVE"
+	GiftCardStatusActive         GiftCardStatus = "ACTIVE"
+	GiftCardStatusDeactivated    GiftCardStatus = "DEACTIVATED"
+	GiftCardStatusBlocked        GiftCardStatus = "BLOCKED"
+	GiftCardStatusPending        GiftCardStatus = "PENDING"
+	GiftCardStatusUnregistered   GiftCardStatus = "UNREGISTERED"
 )
 
 func NewGiftCardStatusFromString(s string) (GiftCardStatus, error) {
 	switch s {
+	case "STATUS_DO_NOT_USE":
+		return GiftCardStatusStatusDoNotUse, nil
+	case "NOT_ACTIVE":
+		return GiftCardStatusNotActive, nil
 	case "ACTIVE":
 		return GiftCardStatusActive, nil
 	case "DEACTIVATED":
@@ -30163,6 +36912,8 @@ func NewGiftCardStatusFromString(s string) (GiftCardStatus, error) {
 		return GiftCardStatusBlocked, nil
 	case "PENDING":
 		return GiftCardStatusPending, nil
+	case "UNREGISTERED":
+		return GiftCardStatusUnregistered, nil
 	}
 	var t GiftCardStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30176,12 +36927,15 @@ func (g GiftCardStatus) Ptr() *GiftCardStatus {
 type GiftCardType string
 
 const (
-	GiftCardTypePhysical GiftCardType = "PHYSICAL"
-	GiftCardTypeDigital  GiftCardType = "DIGITAL"
+	GiftCardTypeTypeDoNotUse GiftCardType = "TYPE_DO_NOT_USE"
+	GiftCardTypePhysical     GiftCardType = "PHYSICAL"
+	GiftCardTypeDigital      GiftCardType = "DIGITAL"
 )
 
 func NewGiftCardTypeFromString(s string) (GiftCardType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return GiftCardTypeTypeDoNotUse, nil
 	case "PHYSICAL":
 		return GiftCardTypePhysical, nil
 	case "DIGITAL":
@@ -30195,6 +36949,150 @@ func (g GiftCardType) Ptr() *GiftCardType {
 	return &g
 }
 
+// Published when a [gift card](entity:GiftCard) is updated. This includes
+// changes to the state, balance, and customer association.
+type GiftCardUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. For this event, the value is `gift_card.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEvent) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.updated` event.
+type GiftCardUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card.
+	Object *GiftCardUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEventData) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card associated with a `gift_card.updated` event.
+type GiftCardUpdatedEventObject struct {
+	// The gift card with the updated `balance_money`, `state`, or `customer_ids` field.
+	// Some events can affect both `balance_money` and `state`.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCardUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEventObject) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 // Represents a change in state or quantity of product inventory at a
 // particular time and location.
 type InventoryAdjustment struct {
@@ -30206,6 +37104,14 @@ type InventoryAdjustment struct {
 	// system.
 	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
 	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items before the adjustment. Replaced by the `from_state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	FromStatus *InventoryState `json:"from_status,omitempty" url:"from_status,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items after the adjustment. Replaced by the `to_state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	ToStatus *InventoryState `json:"to_status,omitempty" url:"to_status,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
 	// of items before the adjustment.
 	// See [InventoryState](#type-inventorystate) for possible values
 	FromState *InventoryState `json:"from_state,omitempty" url:"from_state,omitempty"`
@@ -30213,6 +37119,14 @@ type InventoryAdjustment struct {
 	// of items after the adjustment.
 	// See [InventoryState](#type-inventorystate) for possible values
 	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked before the adjustment. Replaced by
+	// `from_location_id` of [InventoryTransfer](entity:InventoryTransfer).
+	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked after the adjustment. Replaced by
+	// `to_location_id` of [InventoryTransfer](entity:InventoryTransfer).
+	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
 	// The Square-generated ID of the [Location](entity:Location) where the related
 	// quantity of items is being tracked.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
@@ -30363,12 +37277,15 @@ func (i *InventoryAdjustmentGroup) String() string {
 type InventoryAlertType string
 
 const (
-	InventoryAlertTypeNone        InventoryAlertType = "NONE"
-	InventoryAlertTypeLowQuantity InventoryAlertType = "LOW_QUANTITY"
+	InventoryAlertTypeInventoryAlertTypeDoNotUse InventoryAlertType = "INVENTORY_ALERT_TYPE_DO_NOT_USE"
+	InventoryAlertTypeNone                       InventoryAlertType = "NONE"
+	InventoryAlertTypeLowQuantity                InventoryAlertType = "LOW_QUANTITY"
 )
 
 func NewInventoryAlertTypeFromString(s string) (InventoryAlertType, error) {
 	switch s {
+	case "INVENTORY_ALERT_TYPE_DO_NOT_USE":
+		return InventoryAlertTypeInventoryAlertTypeDoNotUse, nil
 	case "NONE":
 		return InventoryAlertTypeNone, nil
 	case "LOW_QUANTITY":
@@ -30384,7 +37301,7 @@ func (i InventoryAlertType) Ptr() *InventoryAlertType {
 
 // Represents a single physical count, inventory, adjustment, or transfer
 // that is part of the history of inventory changes for a particular
-// [CatalogObject]($m/CatalogObject) instance.
+// [CatalogObject](entity:CatalogObject) instance.
 type InventoryChange struct {
 	// Indicates how the inventory change is applied. See
 	// [InventoryChangeType](entity:InventoryChangeType) for all possible values.
@@ -30449,19 +37366,25 @@ func (i *InventoryChange) String() string {
 type InventoryChangeType string
 
 const (
-	InventoryChangeTypePhysicalCount InventoryChangeType = "PHYSICAL_COUNT"
-	InventoryChangeTypeAdjustment    InventoryChangeType = "ADJUSTMENT"
-	InventoryChangeTypeTransfer      InventoryChangeType = "TRANSFER"
+	InventoryChangeTypeInventoryChangeTypeDoNotUse InventoryChangeType = "INVENTORY_CHANGE_TYPE_DO_NOT_USE"
+	InventoryChangeTypePhysicalCount               InventoryChangeType = "PHYSICAL_COUNT"
+	InventoryChangeTypeAdjustment                  InventoryChangeType = "ADJUSTMENT"
+	InventoryChangeTypeTransfer                    InventoryChangeType = "TRANSFER"
+	InventoryChangeTypeAvailability                InventoryChangeType = "AVAILABILITY"
 )
 
 func NewInventoryChangeTypeFromString(s string) (InventoryChangeType, error) {
 	switch s {
+	case "INVENTORY_CHANGE_TYPE_DO_NOT_USE":
+		return InventoryChangeTypeInventoryChangeTypeDoNotUse, nil
 	case "PHYSICAL_COUNT":
 		return InventoryChangeTypePhysicalCount, nil
 	case "ADJUSTMENT":
 		return InventoryChangeTypeAdjustment, nil
 	case "TRANSFER":
 		return InventoryChangeTypeTransfer, nil
+	case "AVAILABILITY":
+		return InventoryChangeTypeAvailability, nil
 	}
 	var t InventoryChangeType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30484,6 +37407,10 @@ type InventoryCount struct {
 	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
 	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
 	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items. Replaced by the `state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
 	// quantity of items.
 	// See [InventoryState](#type-inventorystate) for possible values
 	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
@@ -30497,10 +37424,10 @@ type InventoryCount struct {
 	// the estimated count is received.
 	CalculatedAt *string `json:"calculated_at,omitempty" url:"calculated_at,omitempty"`
 	// Whether the inventory count is for composed variation (TRUE) or not (FALSE). If true, the inventory count will not be present in the response of
-	// any of these endpoints: [BatchChangeInventory]($e/Inventory/BatchChangeInventory),
-	// [BatchRetrieveInventoryChanges]($e/Inventory/BatchRetrieveInventoryChanges),
-	// [BatchRetrieveInventoryCounts]($e/Inventory/BatchRetrieveInventoryCounts), and
-	// [RetrieveInventoryChanges]($e/Inventory/RetrieveInventoryChanges).
+	// any of these endpoints: [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory),
+	// [BatchRetrieveInventoryChanges](api-endpoint:Inventory-BatchRetrieveInventoryChanges),
+	// [BatchRetrieveInventoryCounts](api-endpoint:Inventory-BatchRetrieveInventoryCounts), and
+	// [RetrieveInventoryChanges](api-endpoint:Inventory-RetrieveInventoryChanges).
 	IsEstimated *bool `json:"is_estimated,omitempty" url:"is_estimated,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -30541,6 +37468,146 @@ func (i *InventoryCount) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// Published when the quantity is updated for a
+// [CatalogItemVariation](entity:CatalogItemVariation).
+type InventoryCountUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InventoryCountUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryCountUpdatedEventData struct {
+	// Name of the affected object’s type. For this event, the value is `inventory_counts`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *InventoryCountUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryCountUpdatedEventObject struct {
+	// The inventory counts.
+	InventoryCounts []*InventoryCount `json:"inventory_counts,omitempty" url:"inventory_counts,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // Represents the quantity of an item variation that is physically present
 // at a specific location, verified by a seller or a seller's employee. For example,
 // a physical count might come from an employee counting the item variations on
@@ -30561,6 +37628,10 @@ type InventoryPhysicalCount struct {
 	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
 	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
 	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items. It is replaced by the `state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
 	// The current [inventory state](entity:InventoryState) for the related
 	// quantity of items.
 	// See [InventoryState](#type-inventorystate) for possible values
@@ -30630,6 +37701,7 @@ func (i *InventoryPhysicalCount) String() string {
 type InventoryState string
 
 const (
+	InventoryStateInventoryStateDoNotUse  InventoryState = "INVENTORY_STATE_DO_NOT_USE"
 	InventoryStateCustom                  InventoryState = "CUSTOM"
 	InventoryStateInStock                 InventoryState = "IN_STOCK"
 	InventoryStateSold                    InventoryState = "SOLD"
@@ -30650,6 +37722,8 @@ const (
 
 func NewInventoryStateFromString(s string) (InventoryState, error) {
 	switch s {
+	case "INVENTORY_STATE_DO_NOT_USE":
+		return InventoryStateInventoryStateDoNotUse, nil
 	case "CUSTOM":
 		return InventoryStateCustom, nil
 	case "IN_STOCK":
@@ -30935,7 +38009,7 @@ func (i *Invoice) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// The payment methods that customers can use to pay an [invoice]($m/Invoice) on the Square-hosted invoice payment page.
+// The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
 type InvoiceAcceptedPaymentMethods struct {
 	// Indicates whether credit card or debit card payments are accepted. The default value is `false`.
 	Card *bool `json:"card,omitempty" url:"card,omitempty"`
@@ -30994,7 +38068,7 @@ func (i *InvoiceAcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents a file attached to an [invoice]($m/Invoice).
+// Represents a file attached to an [invoice](entity:Invoice).
 type InvoiceAttachment struct {
 	// The Square-assigned ID of the attachment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -31052,17 +38126,20 @@ func (i *InvoiceAttachment) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Indicates the automatic payment method for an [invoice payment request]($m/InvoicePaymentRequest).
+// Indicates the automatic payment method for an [invoice payment request](entity:InvoicePaymentRequest).
 type InvoiceAutomaticPaymentSource string
 
 const (
-	InvoiceAutomaticPaymentSourceNone       InvoiceAutomaticPaymentSource = "NONE"
-	InvoiceAutomaticPaymentSourceCardOnFile InvoiceAutomaticPaymentSource = "CARD_ON_FILE"
-	InvoiceAutomaticPaymentSourceBankOnFile InvoiceAutomaticPaymentSource = "BANK_ON_FILE"
+	InvoiceAutomaticPaymentSourceInvoiceAutomaticPaymentSourceDoNotUse InvoiceAutomaticPaymentSource = "INVOICE_AUTOMATIC_PAYMENT_SOURCE_DO_NOT_USE"
+	InvoiceAutomaticPaymentSourceNone                                  InvoiceAutomaticPaymentSource = "NONE"
+	InvoiceAutomaticPaymentSourceCardOnFile                            InvoiceAutomaticPaymentSource = "CARD_ON_FILE"
+	InvoiceAutomaticPaymentSourceBankOnFile                            InvoiceAutomaticPaymentSource = "BANK_ON_FILE"
 )
 
 func NewInvoiceAutomaticPaymentSourceFromString(s string) (InvoiceAutomaticPaymentSource, error) {
 	switch s {
+	case "INVOICE_AUTOMATIC_PAYMENT_SOURCE_DO_NOT_USE":
+		return InvoiceAutomaticPaymentSourceInvoiceAutomaticPaymentSourceDoNotUse, nil
 	case "NONE":
 		return InvoiceAutomaticPaymentSourceNone, nil
 	case "CARD_ON_FILE":
@@ -31076,6 +38153,284 @@ func NewInvoiceAutomaticPaymentSourceFromString(s string) (InvoiceAutomaticPayme
 
 func (i InvoiceAutomaticPaymentSource) Ptr() *InvoiceAutomaticPaymentSource {
 	return &i
+}
+
+// Published when an [Invoice](entity:Invoice) is canceled.
+type InvoiceCanceledEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.canceled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceCanceledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCanceledEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCanceledEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the canceled invoice.
+	Object *InvoiceCanceledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCanceledEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCanceledEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCanceledEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) is created.
+type InvoiceCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCreatedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created invoice.
+	Object *InvoiceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCreatedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }
 
 // An additional seller-defined and customer-facing field to include on the invoice. For more information,
@@ -31135,12 +38490,15 @@ func (i *InvoiceCustomField) String() string {
 type InvoiceCustomFieldPlacement string
 
 const (
-	InvoiceCustomFieldPlacementAboveLineItems InvoiceCustomFieldPlacement = "ABOVE_LINE_ITEMS"
-	InvoiceCustomFieldPlacementBelowLineItems InvoiceCustomFieldPlacement = "BELOW_LINE_ITEMS"
+	InvoiceCustomFieldPlacementUnknownPlacementDoNotUse InvoiceCustomFieldPlacement = "UNKNOWN_PLACEMENT_DO_NOT_USE"
+	InvoiceCustomFieldPlacementAboveLineItems           InvoiceCustomFieldPlacement = "ABOVE_LINE_ITEMS"
+	InvoiceCustomFieldPlacementBelowLineItems           InvoiceCustomFieldPlacement = "BELOW_LINE_ITEMS"
 )
 
 func NewInvoiceCustomFieldPlacementFromString(s string) (InvoiceCustomFieldPlacement, error) {
 	switch s {
+	case "UNKNOWN_PLACEMENT_DO_NOT_USE":
+		return InvoiceCustomFieldPlacementUnknownPlacementDoNotUse, nil
 	case "ABOVE_LINE_ITEMS":
 		return InvoiceCustomFieldPlacementAboveLineItems, nil
 	case "BELOW_LINE_ITEMS":
@@ -31154,17 +38512,117 @@ func (i InvoiceCustomFieldPlacement) Ptr() *InvoiceCustomFieldPlacement {
 	return &i
 }
 
-// Indicates how Square delivers the [invoice]($m/Invoice) to the customer.
+// Published when a draft [Invoice](entity:Invoice) is deleted.
+type InvoiceDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceDeletedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceDeletedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Indicates that the invoice was deleted.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceDeletedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceDeletedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Indicates how Square delivers the [invoice](entity:Invoice) to the customer.
 type InvoiceDeliveryMethod string
 
 const (
-	InvoiceDeliveryMethodEmail         InvoiceDeliveryMethod = "EMAIL"
-	InvoiceDeliveryMethodShareManually InvoiceDeliveryMethod = "SHARE_MANUALLY"
-	InvoiceDeliveryMethodSms           InvoiceDeliveryMethod = "SMS"
+	InvoiceDeliveryMethodInvoiceDeliveryMethodDoNotUse InvoiceDeliveryMethod = "INVOICE_DELIVERY_METHOD_DO_NOT_USE"
+	InvoiceDeliveryMethodEmail                         InvoiceDeliveryMethod = "EMAIL"
+	InvoiceDeliveryMethodShareManually                 InvoiceDeliveryMethod = "SHARE_MANUALLY"
+	InvoiceDeliveryMethodSms                           InvoiceDeliveryMethod = "SMS"
 )
 
 func NewInvoiceDeliveryMethodFromString(s string) (InvoiceDeliveryMethod, error) {
 	switch s {
+	case "INVOICE_DELIVERY_METHOD_DO_NOT_USE":
+		return InvoiceDeliveryMethodInvoiceDeliveryMethodDoNotUse, nil
 	case "EMAIL":
 		return InvoiceDeliveryMethodEmail, nil
 	case "SHARE_MANUALLY":
@@ -31217,6 +38675,146 @@ func (i *InvoiceFilter) UnmarshalJSON(data []byte) error {
 }
 
 func (i *InvoiceFilter) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when a payment that is associated with an [invoice](entity:Invoice) is completed.
+// For more information about invoice payments, see [Pay an invoice](https://developer.squareup.com/docs/invoices-api/pay-refund-invoices#pay-invoice).
+type InvoicePaymentMadeEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.payment_made"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoicePaymentMadeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePaymentMadeEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the invoice that was paid.
+	Object *InvoicePaymentMadeEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePaymentMadeEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEventObject) String() string {
 	if len(i._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
 			return value
@@ -31289,13 +38887,16 @@ func (i *InvoicePaymentReminder) String() string {
 type InvoicePaymentReminderStatus string
 
 const (
-	InvoicePaymentReminderStatusPending       InvoicePaymentReminderStatus = "PENDING"
-	InvoicePaymentReminderStatusNotApplicable InvoicePaymentReminderStatus = "NOT_APPLICABLE"
-	InvoicePaymentReminderStatusSent          InvoicePaymentReminderStatus = "SENT"
+	InvoicePaymentReminderStatusInvoicePaymentReminderStatusDoNotUse InvoicePaymentReminderStatus = "INVOICE_PAYMENT_REMINDER_STATUS_DO_NOT_USE"
+	InvoicePaymentReminderStatusPending                              InvoicePaymentReminderStatus = "PENDING"
+	InvoicePaymentReminderStatusNotApplicable                        InvoicePaymentReminderStatus = "NOT_APPLICABLE"
+	InvoicePaymentReminderStatusSent                                 InvoicePaymentReminderStatus = "SENT"
 )
 
 func NewInvoicePaymentReminderStatusFromString(s string) (InvoicePaymentReminderStatus, error) {
 	switch s {
+	case "INVOICE_PAYMENT_REMINDER_STATUS_DO_NOT_USE":
+		return InvoicePaymentReminderStatusInvoicePaymentReminderStatusDoNotUse, nil
 	case "PENDING":
 		return InvoicePaymentReminderStatusPending, nil
 	case "NOT_APPLICABLE":
@@ -31311,7 +38912,7 @@ func (i InvoicePaymentReminderStatus) Ptr() *InvoicePaymentReminderStatus {
 	return &i
 }
 
-// Represents a payment request for an [invoice]($m/Invoice). Invoices can specify a maximum
+// Represents a payment request for an [invoice](entity:Invoice). Invoices can specify a maximum
 // of 13 payment requests, with up to 12 `INSTALLMENT` request types. For more information,
 // see [Configuring payment requests](https://developer.squareup.com/docs/invoices-api/create-publish-invoices#payment-requests).
 //
@@ -31414,6 +39015,145 @@ func (i *InvoicePaymentRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (i *InvoicePaymentRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) transitions from a draft to a non-draft status.
+type InvoicePublishedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.published"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoicePublishedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePublishedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePublishedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the published invoice.
+	Object *InvoicePublishedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePublishedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePublishedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoicePublishedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEventObject) String() string {
 	if len(i._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
 			return value
@@ -31580,6 +39320,146 @@ func (i *InvoiceRecipientTaxIDs) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// Published when a refund is applied toward a payment of an [invoice](entity:Invoice).
+// For more information about invoice refunds, see [Refund an invoice](https://developer.squareup.com/docs/invoices-api/pay-refund-invoices#refund-invoice).
+type InvoiceRefundedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.refunded"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceRefundedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceRefundedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceRefundedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the refunded invoice.
+	Object *InvoiceRefundedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceRefundedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceRefundedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceRefundedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // Specifies the action for Square to take for processing the invoice. For example,
 // email the invoice, charge a customer's card on file, or do nothing. DEPRECATED at
 // version 2021-01-21. The corresponding `request_method` field is replaced by the
@@ -31587,17 +39467,20 @@ func (i *InvoiceRecipientTaxIDs) String() string {
 type InvoiceRequestMethod string
 
 const (
-	InvoiceRequestMethodEmail               InvoiceRequestMethod = "EMAIL"
-	InvoiceRequestMethodChargeCardOnFile    InvoiceRequestMethod = "CHARGE_CARD_ON_FILE"
-	InvoiceRequestMethodShareManually       InvoiceRequestMethod = "SHARE_MANUALLY"
-	InvoiceRequestMethodChargeBankOnFile    InvoiceRequestMethod = "CHARGE_BANK_ON_FILE"
-	InvoiceRequestMethodSms                 InvoiceRequestMethod = "SMS"
-	InvoiceRequestMethodSmsChargeCardOnFile InvoiceRequestMethod = "SMS_CHARGE_CARD_ON_FILE"
-	InvoiceRequestMethodSmsChargeBankOnFile InvoiceRequestMethod = "SMS_CHARGE_BANK_ON_FILE"
+	InvoiceRequestMethodInvoiceRequestMethodDoNotUse InvoiceRequestMethod = "INVOICE_REQUEST_METHOD_DO_NOT_USE"
+	InvoiceRequestMethodEmail                        InvoiceRequestMethod = "EMAIL"
+	InvoiceRequestMethodChargeCardOnFile             InvoiceRequestMethod = "CHARGE_CARD_ON_FILE"
+	InvoiceRequestMethodShareManually                InvoiceRequestMethod = "SHARE_MANUALLY"
+	InvoiceRequestMethodChargeBankOnFile             InvoiceRequestMethod = "CHARGE_BANK_ON_FILE"
+	InvoiceRequestMethodSms                          InvoiceRequestMethod = "SMS"
+	InvoiceRequestMethodSmsChargeCardOnFile          InvoiceRequestMethod = "SMS_CHARGE_CARD_ON_FILE"
+	InvoiceRequestMethodSmsChargeBankOnFile          InvoiceRequestMethod = "SMS_CHARGE_BANK_ON_FILE"
 )
 
 func NewInvoiceRequestMethodFromString(s string) (InvoiceRequestMethod, error) {
 	switch s {
+	case "INVOICE_REQUEST_METHOD_DO_NOT_USE":
+		return InvoiceRequestMethodInvoiceRequestMethodDoNotUse, nil
 	case "EMAIL":
 		return InvoiceRequestMethodEmail, nil
 	case "CHARGE_CARD_ON_FILE":
@@ -31626,13 +39509,16 @@ func (i InvoiceRequestMethod) Ptr() *InvoiceRequestMethod {
 type InvoiceRequestType string
 
 const (
-	InvoiceRequestTypeBalance     InvoiceRequestType = "BALANCE"
-	InvoiceRequestTypeDeposit     InvoiceRequestType = "DEPOSIT"
-	InvoiceRequestTypeInstallment InvoiceRequestType = "INSTALLMENT"
+	InvoiceRequestTypeInvoiceRequestTypeDoNotUse InvoiceRequestType = "INVOICE_REQUEST_TYPE_DO_NOT_USE"
+	InvoiceRequestTypeBalance                    InvoiceRequestType = "BALANCE"
+	InvoiceRequestTypeDeposit                    InvoiceRequestType = "DEPOSIT"
+	InvoiceRequestTypeInstallment                InvoiceRequestType = "INSTALLMENT"
 )
 
 func NewInvoiceRequestTypeFromString(s string) (InvoiceRequestType, error) {
 	switch s {
+	case "INVOICE_REQUEST_TYPE_DO_NOT_USE":
+		return InvoiceRequestTypeInvoiceRequestTypeDoNotUse, nil
 	case "BALANCE":
 		return InvoiceRequestTypeBalance, nil
 	case "DEPOSIT":
@@ -31648,11 +39534,150 @@ func (i InvoiceRequestType) Ptr() *InvoiceRequestType {
 	return &i
 }
 
+// Published when an automatic scheduled payment for an [Invoice](entity:Invoice) has failed.
+type InvoiceScheduledChargeFailedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.scheduled_charge_failed"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceScheduledChargeFailedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceScheduledChargeFailedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the invoice that experienced the failed scheduled charge.
+	Object *InvoiceScheduledChargeFailedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceScheduledChargeFailedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // Identifies the sort field and sort order.
 type InvoiceSort struct {
 	// The field to use for sorting.
 	// See [InvoiceSortField](#type-invoicesortfield) for possible values
-	Field InvoiceSortField `json:"field,omitempty" url:"field,omitempty"`
+	Field InvoiceSortField `json:"field" url:"field"`
 	// The order to use for sorting the results.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
@@ -31696,26 +39721,49 @@ func (i *InvoiceSort) String() string {
 }
 
 // The field to use for sorting.
-type InvoiceSortField = string
+type InvoiceSortField string
+
+const (
+	InvoiceSortFieldInvoiceSortFieldDoNotUse InvoiceSortField = "INVOICE_SORT_FIELD_DO_NOT_USE"
+	InvoiceSortFieldInvoiceSortDate          InvoiceSortField = "INVOICE_SORT_DATE"
+)
+
+func NewInvoiceSortFieldFromString(s string) (InvoiceSortField, error) {
+	switch s {
+	case "INVOICE_SORT_FIELD_DO_NOT_USE":
+		return InvoiceSortFieldInvoiceSortFieldDoNotUse, nil
+	case "INVOICE_SORT_DATE":
+		return InvoiceSortFieldInvoiceSortDate, nil
+	}
+	var t InvoiceSortField
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i InvoiceSortField) Ptr() *InvoiceSortField {
+	return &i
+}
 
 // Indicates the status of an invoice.
 type InvoiceStatus string
 
 const (
-	InvoiceStatusDraft             InvoiceStatus = "DRAFT"
-	InvoiceStatusUnpaid            InvoiceStatus = "UNPAID"
-	InvoiceStatusScheduled         InvoiceStatus = "SCHEDULED"
-	InvoiceStatusPartiallyPaid     InvoiceStatus = "PARTIALLY_PAID"
-	InvoiceStatusPaid              InvoiceStatus = "PAID"
-	InvoiceStatusPartiallyRefunded InvoiceStatus = "PARTIALLY_REFUNDED"
-	InvoiceStatusRefunded          InvoiceStatus = "REFUNDED"
-	InvoiceStatusCanceled          InvoiceStatus = "CANCELED"
-	InvoiceStatusFailed            InvoiceStatus = "FAILED"
-	InvoiceStatusPaymentPending    InvoiceStatus = "PAYMENT_PENDING"
+	InvoiceStatusInvoiceStatusDoNotUse InvoiceStatus = "INVOICE_STATUS_DO_NOT_USE"
+	InvoiceStatusDraft                 InvoiceStatus = "DRAFT"
+	InvoiceStatusUnpaid                InvoiceStatus = "UNPAID"
+	InvoiceStatusScheduled             InvoiceStatus = "SCHEDULED"
+	InvoiceStatusPartiallyPaid         InvoiceStatus = "PARTIALLY_PAID"
+	InvoiceStatusPaid                  InvoiceStatus = "PAID"
+	InvoiceStatusPartiallyRefunded     InvoiceStatus = "PARTIALLY_REFUNDED"
+	InvoiceStatusRefunded              InvoiceStatus = "REFUNDED"
+	InvoiceStatusCanceled              InvoiceStatus = "CANCELED"
+	InvoiceStatusFailed                InvoiceStatus = "FAILED"
+	InvoiceStatusPaymentPending        InvoiceStatus = "PAYMENT_PENDING"
 )
 
 func NewInvoiceStatusFromString(s string) (InvoiceStatus, error) {
 	switch s {
+	case "INVOICE_STATUS_DO_NOT_USE":
+		return InvoiceStatusInvoiceStatusDoNotUse, nil
 	case "DRAFT":
 		return InvoiceStatusDraft, nil
 	case "UNPAID":
@@ -31743,6 +39791,145 @@ func NewInvoiceStatusFromString(s string) (InvoiceStatus, error) {
 
 func (i InvoiceStatus) Ptr() *InvoiceStatus {
 	return &i
+}
+
+// Published when an [Invoice](entity:Invoice) is updated.
+type InvoiceUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceUpdatedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated invoice.
+	Object *InvoiceUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEventData) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceUpdatedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InvoiceUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEventObject) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }
 
 // Price and inventory alerting overrides for a `CatalogItemVariation` at a specific `Location`.
@@ -31873,13 +40060,16 @@ func (j *JobAssignment) String() string {
 type JobAssignmentPayType string
 
 const (
-	JobAssignmentPayTypeNone   JobAssignmentPayType = "NONE"
-	JobAssignmentPayTypeHourly JobAssignmentPayType = "HOURLY"
-	JobAssignmentPayTypeSalary JobAssignmentPayType = "SALARY"
+	JobAssignmentPayTypeStatusDoNotUse JobAssignmentPayType = "STATUS_DO_NOT_USE"
+	JobAssignmentPayTypeNone           JobAssignmentPayType = "NONE"
+	JobAssignmentPayTypeHourly         JobAssignmentPayType = "HOURLY"
+	JobAssignmentPayTypeSalary         JobAssignmentPayType = "SALARY"
 )
 
 func NewJobAssignmentPayTypeFromString(s string) (JobAssignmentPayType, error) {
 	switch s {
+	case "STATUS_DO_NOT_USE":
+		return JobAssignmentPayTypeStatusDoNotUse, nil
 	case "NONE":
 		return JobAssignmentPayTypeNone, nil
 	case "HOURLY":
@@ -31893,6 +40083,381 @@ func NewJobAssignmentPayTypeFromString(s string) (JobAssignmentPayType, error) {
 
 func (j JobAssignmentPayType) Ptr() *JobAssignmentPayType {
 	return &j
+}
+
+// Published when a worker starts a [Shift](entity:Shift).
+type LaborShiftCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents. For this event, the value is `shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LaborShiftCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftCreatedEventData struct {
+	// Name of the affected object’s type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *LaborShiftCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftCreatedEventObject struct {
+	// The work shift.
+	Shift *Shift `json:"shift,omitempty" url:"shift,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Shift](entity:Shift) is deleted.
+type LaborShiftDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LaborShiftDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftDeletedEventData struct {
+	// Name of the affected object’s type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Is true if the affected object was deleted. Otherwise absent.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftDeletedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftDeletedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Shift](entity:Shift) is updated.
+type LaborShiftUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents. For this event, the value is `shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LaborShiftUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftUpdatedEventData struct {
+	// Name of the affected object’s type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *LaborShiftUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftUpdatedEventObject struct {
+	// The work shift.
+	Shift *Shift `json:"shift,omitempty" url:"shift,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 // A response that contains the linked `GiftCard` object. If the request resulted in errors,
@@ -32047,7 +40612,7 @@ func (l *ListBankAccountsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListBookingCustomAttributeDefinitions]($e/BookingCustomAttributes/ListBookingCustomAttributeDefinitions) response.
+// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListBookingCustomAttributeDefinitionsResponse struct {
@@ -32099,7 +40664,7 @@ func (l *ListBookingCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListBookingCustomAttributes]($e/BookingCustomAttributes/ListBookingCustomAttributes) response.
+// Represents a [ListBookingCustomAttributes](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListBookingCustomAttributesResponse struct {
@@ -32412,7 +40977,7 @@ func (l *ListCardsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListCards]($e/Cards/ListCards) endpoint.
+// a request to the [ListCards](api-endpoint:Cards-ListCards) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -32513,6 +41078,9 @@ func (l *ListCashDrawerShiftEventsRequest) String() string {
 }
 
 type ListCashDrawerShiftEventsResponse struct {
+	// All of the events (payments, refunds, etc.) for a cash drawer during
+	// the shift.
+	Events []*CashDrawerShiftEvent `json:"events,omitempty" url:"events,omitempty"`
 	// Opaque cursor for fetching the next page. Cursor is not present in
 	// the last page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -32616,6 +41184,9 @@ func (l *ListCashDrawerShiftsRequest) String() string {
 }
 
 type ListCashDrawerShiftsResponse struct {
+	// A collection of CashDrawerShiftSummary objects for shifts that match
+	// the query.
+	Items []*CashDrawerShiftSummary `json:"items,omitempty" url:"items,omitempty"`
 	// Opaque cursor for fetching the next page of results. Cursor is not
 	// present in the last page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -32685,7 +41256,7 @@ type ListCatalogRequest struct {
 	Types *string `json:"types,omitempty" url:"types,omitempty"`
 	// The specific version of the catalog objects to be included in the response.
 	// This allows you to retrieve historical versions of objects. The specified version value is matched against
-	// the [CatalogObject]($m/CatalogObject)s' `version` attribute. If not included, results will be from the
+	// the [CatalogObject](entity:CatalogObject)s' `version` attribute. If not included, results will be from the
 	// current version of the catalog.
 	CatalogVersion *int64 `json:"catalog_version,omitempty" url:"catalog_version,omitempty"`
 
@@ -32774,7 +41345,7 @@ func (l *ListCatalogResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributeDefinitions]($e/CustomerCustomAttributes/ListCustomerCustomAttributeDefinitions) request.
+// Represents a [ListCustomerCustomAttributeDefinitions](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributeDefinitions) request.
 type ListCustomerCustomAttributeDefinitionsRequest struct {
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
@@ -32823,7 +41394,7 @@ func (l *ListCustomerCustomAttributeDefinitionsRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributeDefinitions]($e/CustomerCustomAttributes/ListCustomerCustomAttributeDefinitions) response.
+// Represents a [ListCustomerCustomAttributeDefinitions](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListCustomerCustomAttributeDefinitionsResponse struct {
@@ -32875,7 +41446,7 @@ func (l *ListCustomerCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributes]($e/CustomerCustomAttributes/ListCustomerCustomAttributes) request.
+// Represents a [ListCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributes) request.
 type ListCustomerCustomAttributesRequest struct {
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
@@ -32928,7 +41499,7 @@ func (l *ListCustomerCustomAttributesRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributes]($e/CustomerCustomAttributes/ListCustomerCustomAttributes) response.
+// Represents a [ListCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListCustomerCustomAttributesResponse struct {
@@ -32983,7 +41554,7 @@ func (l *ListCustomerCustomAttributesResponse) String() string {
 }
 
 // Defines the query parameters that can be included in a request to the
-// [ListCustomerGroups]($e/CustomerGroups/ListCustomerGroups) endpoint.
+// [ListCustomerGroups](api-endpoint:CustomerGroups-ListCustomerGroups) endpoint.
 type ListCustomerGroupsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for your original query.
@@ -33035,7 +41606,7 @@ func (l *ListCustomerGroupsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListCustomerGroups]($e/CustomerGroups/ListCustomerGroups) endpoint.
+// a request to the [ListCustomerGroups](api-endpoint:CustomerGroups-ListCustomerGroups) endpoint.
 //
 // Either `errors` or `groups` is present in a given response (never both).
 type ListCustomerGroupsResponse struct {
@@ -33909,7 +42480,7 @@ func (l *ListEmployeesResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListEventTypes]($e/Events/ListEventTypes) endpoint.
+// a request to the [ListEventTypes](api-endpoint:Events-ListEventTypes) endpoint.
 //
 // Note: if there are errors processing the request, the event types field will not be
 // present.
@@ -34339,7 +42910,7 @@ func (l *ListLocationBookingProfilesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLocationCustomAttributeDefinitions]($e/LocationCustomAttributes/ListLocationCustomAttributeDefinitions) response.
+// Represents a [ListLocationCustomAttributeDefinitions](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListLocationCustomAttributeDefinitionsResponse struct {
@@ -34391,7 +42962,7 @@ func (l *ListLocationCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLocationCustomAttributes]($e/LocationCustomAttributes/ListLocationCustomAttributes) response.
+// Represents a [ListLocationCustomAttributes](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListLocationCustomAttributesResponse struct {
@@ -34445,7 +43016,7 @@ func (l *ListLocationCustomAttributesResponse) String() string {
 }
 
 // Defines the fields that are included in requests to the
-// [ListLocations]($e/Locations/ListLocations) endpoint.
+// [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
 type ListLocationsRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -34486,7 +43057,7 @@ func (l *ListLocationsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of a request
-// to the [ListLocations]($e/Locations/ListLocations) endpoint.
+// to the [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
 //
 // Either `errors` or `locations` is present in a given response (never both).
 type ListLocationsResponse struct {
@@ -34618,7 +43189,7 @@ func (l *ListLoyaltyProgramsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLoyaltyPromotions]($e/Loyalty/ListLoyaltyPromotions) request.
+// Represents a [ListLoyaltyPromotions](api-endpoint:Loyalty-ListLoyaltyPromotions) request.
 type ListLoyaltyPromotionsRequest struct {
 	// The status to filter the results by. If a status is provided, only loyalty promotions
 	// with the specified status are returned. Otherwise, all loyalty promotions associated with
@@ -34672,7 +43243,7 @@ func (l *ListLoyaltyPromotionsRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLoyaltyPromotions]($e/Loyalty/ListLoyaltyPromotions) response.
+// Represents a [ListLoyaltyPromotions](api-endpoint:Loyalty-ListLoyaltyPromotions) response.
 // One of `loyalty_promotions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `loyalty_promotions`.
 type ListLoyaltyPromotionsResponse struct {
@@ -34723,7 +43294,7 @@ func (l *ListLoyaltyPromotionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListMerchantCustomAttributeDefinitions]($e/MerchantCustomAttributes/ListMerchantCustomAttributeDefinitions) response.
+// Represents a [ListMerchantCustomAttributeDefinitions](api-endpoint:MerchantCustomAttributes-ListMerchantCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListMerchantCustomAttributeDefinitionsResponse struct {
@@ -34775,7 +43346,7 @@ func (l *ListMerchantCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListMerchantCustomAttributes]($e/MerchantCustomAttributes/ListMerchantCustomAttributes) response.
+// Represents a [ListMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-ListMerchantCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListMerchantCustomAttributesResponse struct {
@@ -34828,7 +43399,7 @@ func (l *ListMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Request object for the [ListMerchant]($e/Merchants/ListMerchants) endpoint.
+// Request object for the [ListMerchant](api-endpoint:Merchants-ListMerchants) endpoint.
 type ListMerchantsRequest struct {
 	// The cursor generated by the previous response.
 	Cursor *int `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -34871,7 +43442,7 @@ func (l *ListMerchantsRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// The response object returned by the [ListMerchant]($e/Merchants/ListMerchants) endpoint.
+// The response object returned by the [ListMerchant](api-endpoint:Merchants-ListMerchants) endpoint.
 type ListMerchantsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -35116,7 +43687,7 @@ func (l *ListPaymentLinksResponse) String() string {
 }
 
 // Describes a request to list refunds using
-// [ListPaymentRefunds]($e/Refunds/ListPaymentRefunds).
+// [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
 //
 // The maximum results per page is 100.
 type ListPaymentRefundsRequest struct {
@@ -35202,7 +43773,7 @@ func (l *ListPaymentRefundsRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Defines the response returned by [ListPaymentRefunds]($e/Refunds/ListPaymentRefunds).
+// Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
 //
 // Either `errors` or `refunds` is present in a given response (never both).
 type ListPaymentRefundsResponse struct {
@@ -35255,7 +43826,7 @@ func (l *ListPaymentRefundsResponse) String() string {
 }
 
 // Describes a request to list payments using
-// [ListPayments]($e/Payments/ListPayments).
+// [ListPayments](api-endpoint:Payments-ListPayments).
 //
 // The maximum results per page is 100.
 type ListPaymentsRequest struct {
@@ -35350,7 +43921,7 @@ func (l *ListPaymentsRequest) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Defines the response returned by [ListPayments]($e/Payments/ListPayments).
+// Defines the response returned by [ListPayments](api-endpoint:Payments-ListPayments).
 type ListPaymentsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -35823,7 +44394,7 @@ func (l *ListSitesResponse) String() string {
 }
 
 // Defines input parameters in a request to the
-// [ListSubscriptionEvents]($e/Subscriptions/ListSubscriptionEvents)
+// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents)
 // endpoint.
 type ListSubscriptionEventsRequest struct {
 	// When the total number of resulting subscription events exceeds the limit of a paged response,
@@ -35875,7 +44446,7 @@ func (l *ListSubscriptionEventsRequest) String() string {
 }
 
 // Defines output parameters in a response from the
-// [ListSubscriptionEvents]($e/Subscriptions/ListSubscriptionEvents).
+// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
 type ListSubscriptionEventsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -36285,7 +44856,7 @@ func (l *ListWebhookEventTypesRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListWebhookEventTypes]($e/WebhookSubscriptions/ListWebhookEventTypes) endpoint.
+// a request to the [ListWebhookEventTypes](api-endpoint:WebhookSubscriptions-ListWebhookEventTypes) endpoint.
 //
 // Note: if there are errors processing the request, the event types field will not be
 // present.
@@ -36335,7 +44906,7 @@ func (l *ListWebhookEventTypesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Lists all [Subscription]($m/WebhookSubscription)s owned by your application.
+// Lists all [Subscription](entity:WebhookSubscription)s owned by your application.
 type ListWebhookSubscriptionsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
@@ -36395,7 +44966,7 @@ func (l *ListWebhookSubscriptionsRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListWebhookSubscriptions]($e/WebhookSubscriptions/ListWebhookSubscriptions) endpoint.
+// a request to the [ListWebhookSubscriptions](api-endpoint:WebhookSubscriptions-ListWebhookSubscriptions) endpoint.
 //
 // Note: if there are errors processing the request, the subscriptions field will not be
 // present.
@@ -36733,6 +45304,792 @@ func (l LocationCapability) Ptr() *LocationCapability {
 	return &l
 }
 
+// Published when a [Location](entity:Location) is created.
+type LocationCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the [Location](entity:Location) associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"location.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationCreatedEventData struct {
+	// Name of the affected object’s type, `"location"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated [Location](entity:Location).
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+type LocationCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+type LocationCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it.
+type LocationCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A custom attribute definition can only
+// be deleted by the application that created it. A notification is sent when your application deletes
+// a custom attribute definition or when another application deletes a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it. A notification is sent when your application updates a custom attribute
+// definition or when another application updates a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute)
+// owned by the subscribing application is deleted. Custom attributes are owned by the
+// application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+// Custom attributes whose `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+type LocationCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+type LocationCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is deleted. A notification is sent when:
+//
+//   - Your application deletes a custom attribute owned by your application, regardless of the `visibility` setting.
+//   - Any application deletes a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+//     or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be deleted by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type LocationCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) that is visible
+// to the subscribing application is created or updated. A notification is sent when:
+//
+//   - Your application creates or updates a custom attribute owned by your application, regardless of the `visibility` setting.
+//   - Any application creates or updates a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+//     or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be created or updated by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type LocationCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when online checkout location settings are updated
+type LocationSettingsUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"online_checkout.location_settings.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationSettingsUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationSettingsUpdatedEventData struct {
+	// Name of the updated object’s type, `"online_checkout.location_settings"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated location settings.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated location settings.
+	Object *LocationSettingsUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationSettingsUpdatedEventObject struct {
+	// The updated location settings.
+	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // A location's status.
 type LocationStatus string
 
@@ -36779,11 +46136,113 @@ func (l LocationType) Ptr() *LocationType {
 	return &l
 }
 
-// Describes a loyalty account in a [loyalty program]($m/LoyaltyProgram). For more information, see
+// Published when a [Location](entity:Location) is updated.
+type LocationUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the [Location](entity:Location) associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"location.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationUpdatedEventData struct {
+	// Name of the affected object’s type, `"location"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated [Location](entity:Location).
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Describes a loyalty account in a [loyalty program](entity:LoyaltyProgram). For more information, see
 // [Create and Retrieve Loyalty Accounts](https://developer.squareup.com/docs/loyalty-api/loyalty-accounts).
 type LoyaltyAccount struct {
 	// The Square-assigned ID of the loyalty account.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The list of mappings that the account is associated with.
+	// Currently, a buyer can only be mapped to a loyalty account using
+	// a phone number. Therefore, the list can only have one mapping.
+	// RETIRED at version 2021-05-13. Replaced by the `mapping` field.
+	Mappings []*LoyaltyAccountMapping `json:"mappings,omitempty" url:"mappings,omitempty"`
 	// The Square-assigned ID of the [loyalty program](entity:LoyaltyProgram) to which the account belongs.
 	ProgramID string `json:"program_id" url:"program_id"`
 	// The available point balance in the loyalty account. If points are scheduled to expire, they are listed in the `expiring_point_deadlines` field.
@@ -36855,6 +46314,288 @@ func (l *LoyaltyAccount) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// Published when a [loyalty account](entity:LoyaltyAccount) is created.
+type LoyaltyAccountCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.created` event.
+type LoyaltyAccountCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new loyalty account.
+	Object *LoyaltyAccountCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountCreatedEventObject struct {
+	// The loyalty account that was created.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty account](entity:LoyaltyAccount) is deleted.
+type LoyaltyAccountDeletedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.deleted` event.
+type LoyaltyAccountDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty account that was deleted.
+	Object *LoyaltyAccountDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountDeletedEventObject struct {
+	// The loyalty account that was deleted.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // Represents a set of points for a loyalty account that are scheduled to expire on a specific date.
 type LoyaltyAccountExpiringPointDeadline struct {
 	// The number of points scheduled to expire at the `expires_at` timestamp.
@@ -36907,6 +46648,14 @@ func (l *LoyaltyAccountExpiringPointDeadline) String() string {
 type LoyaltyAccountMapping struct {
 	// The Square-assigned ID of the mapping.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The mapping type, which is used with `value` to represent a phone number mapping.
+	// RETIRED at version 2021-05-13. When specifying a mapping, use the `phone_number` field instead.
+	// See [LoyaltyAccountMappingType](#type-loyaltyaccountmappingtype) for possible values
+	Type *LoyaltyAccountMappingType `json:"type,omitempty" url:"type,omitempty"`
+	// The mapping value, which is used with `type` to represent a phone number mapping.
+	// The value can be a phone number in E.164 format. For example, "+14155551111".
+	// RETIRED at version 2021-05-13. When specifying a mapping, use the `phone_number` field instead.
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 	// The timestamp when the mapping was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The phone number of the buyer, in E.164 format. For example, "+14155551111".
@@ -36951,7 +46700,168 @@ func (l *LoyaltyAccountMapping) String() string {
 }
 
 // The type of mapping.
-type LoyaltyAccountMappingType = string
+type LoyaltyAccountMappingType string
+
+const (
+	LoyaltyAccountMappingTypeTypeDoNotUse LoyaltyAccountMappingType = "TYPE_DO_NOT_USE"
+	LoyaltyAccountMappingTypePhone        LoyaltyAccountMappingType = "PHONE"
+)
+
+func NewLoyaltyAccountMappingTypeFromString(s string) (LoyaltyAccountMappingType, error) {
+	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyAccountMappingTypeTypeDoNotUse, nil
+	case "PHONE":
+		return LoyaltyAccountMappingTypePhone, nil
+	}
+	var t LoyaltyAccountMappingType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LoyaltyAccountMappingType) Ptr() *LoyaltyAccountMappingType {
+	return &l
+}
+
+// Published when a [loyalty account](entity:LoyaltyAccount) is updated.
+type LoyaltyAccountUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.updated` event.
+type LoyaltyAccountUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty account that was updated.
+	Object *LoyaltyAccountUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountUpdatedEventObject struct {
+	// The loyalty account that was updated.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
 
 // Provides information about a loyalty event.
 // For more information, see [Search for Balance-Changing Loyalty Events](https://developer.squareup.com/docs/loyalty-api/loyalty-events).
@@ -37207,6 +47117,147 @@ func (l *LoyaltyEventCreateReward) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyEventCreateReward) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty event](entity:LoyaltyEvent) is created.
+type LoyaltyEventCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.event.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyEventCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.event.created` event.
+type LoyaltyEventCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_event`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected loyalty event.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new loyalty event.
+	Object *LoyaltyEventCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyEventCreatedEventObject struct {
+	// The loyalty event that was created.
+	LoyaltyEvent *LoyaltyEvent `json:"loyalty_event,omitempty" url:"loyalty_event,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEventObject) String() string {
 	if len(l._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
 			return value
@@ -37680,12 +47731,15 @@ func (l *LoyaltyEventRedeemReward) String() string {
 type LoyaltyEventSource string
 
 const (
-	LoyaltyEventSourceSquare     LoyaltyEventSource = "SQUARE"
-	LoyaltyEventSourceLoyaltyAPI LoyaltyEventSource = "LOYALTY_API"
+	LoyaltyEventSourceSourceDoNotUse LoyaltyEventSource = "SOURCE_DO_NOT_USE"
+	LoyaltyEventSourceSquare         LoyaltyEventSource = "SQUARE"
+	LoyaltyEventSourceLoyaltyAPI     LoyaltyEventSource = "LOYALTY_API"
 )
 
 func NewLoyaltyEventSourceFromString(s string) (LoyaltyEventSource, error) {
 	switch s {
+	case "SOURCE_DO_NOT_USE":
+		return LoyaltyEventSourceSourceDoNotUse, nil
 	case "SQUARE":
 		return LoyaltyEventSourceSquare, nil
 	case "LOYALTY_API":
@@ -37703,6 +47757,8 @@ func (l LoyaltyEventSource) Ptr() *LoyaltyEventSource {
 type LoyaltyEventType string
 
 const (
+	LoyaltyEventTypeTypeDoNotUse              LoyaltyEventType = "TYPE_DO_NOT_USE"
+	LoyaltyEventTypeCreateAccount             LoyaltyEventType = "CREATE_ACCOUNT"
 	LoyaltyEventTypeAccumulatePoints          LoyaltyEventType = "ACCUMULATE_POINTS"
 	LoyaltyEventTypeCreateReward              LoyaltyEventType = "CREATE_REWARD"
 	LoyaltyEventTypeRedeemReward              LoyaltyEventType = "REDEEM_REWARD"
@@ -37711,10 +47767,15 @@ const (
 	LoyaltyEventTypeExpirePoints              LoyaltyEventType = "EXPIRE_POINTS"
 	LoyaltyEventTypeOther                     LoyaltyEventType = "OTHER"
 	LoyaltyEventTypeAccumulatePromotionPoints LoyaltyEventType = "ACCUMULATE_PROMOTION_POINTS"
+	LoyaltyEventTypeAccumulateTierPoints      LoyaltyEventType = "ACCUMULATE_TIER_POINTS"
 )
 
 func NewLoyaltyEventTypeFromString(s string) (LoyaltyEventType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyEventTypeTypeDoNotUse, nil
+	case "CREATE_ACCOUNT":
+		return LoyaltyEventTypeCreateAccount, nil
 	case "ACCUMULATE_POINTS":
 		return LoyaltyEventTypeAccumulatePoints, nil
 	case "CREATE_REWARD":
@@ -37731,6 +47792,8 @@ func NewLoyaltyEventTypeFromString(s string) (LoyaltyEventType, error) {
 		return LoyaltyEventTypeOther, nil
 	case "ACCUMULATE_PROMOTION_POINTS":
 		return LoyaltyEventTypeAccumulatePromotionPoints, nil
+	case "ACCUMULATE_TIER_POINTS":
+		return LoyaltyEventTypeAccumulateTierPoints, nil
 	}
 	var t LoyaltyEventType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -37851,7 +47914,7 @@ func (l *LoyaltyProgram) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents an accrual rule, which defines how buyers can earn points from the base [loyalty program]($m/LoyaltyProgram).
+// Represents an accrual rule, which defines how buyers can earn points from the base [loyalty program](entity:LoyaltyProgram).
 type LoyaltyProgramAccrualRule struct {
 	// The type of the accrual rule that defines how buyers can earn points.
 	// See [LoyaltyProgramAccrualRuleType](#type-loyaltyprogramaccrualruletype) for possible values
@@ -37859,6 +47922,34 @@ type LoyaltyProgramAccrualRule struct {
 	// The number of points that
 	// buyers earn based on the `accrual_type`.
 	Points *int `json:"points,omitempty" url:"points,omitempty"`
+	// When the accrual rule is visit-based (`accrual_type` is `VISIT`),
+	// this field indicates the minimum purchase required during the visit to
+	// quality for the reward.
+	VisitMinimumAmountMoney *Money `json:"visit_minimum_amount_money,omitempty" url:"visit_minimum_amount_money,omitempty"`
+	// When the accrual rule is spend-based (`accrual_type` is `SPEND`),
+	// this field indicates the amount that a buyer must spend
+	// to earn the points. For example,
+	// suppose the accrual rule is "earn 1 point for every $10 you spend".
+	// Then, buyer earns a point for every $10 they spend. If
+	// buyer spends $105, the buyer earns 10 points.
+	SpendAmountMoney *Money `json:"spend_amount_money,omitempty" url:"spend_amount_money,omitempty"`
+	// When the accrual rule is item-based or category-based, this field specifies the ID
+	// of the [catalog object](entity:CatalogObject) that buyers can purchase to earn points.
+	// If `accrual_type` is `ITEM_VARIATION`, the object is an item variation.
+	// If `accrual_type` is `CATEGORY`, the object is a category.
+	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
+	// When the accrual rule is spend-based (`accrual_type` is `SPEND`), this field
+	// lists the IDs of any `CATEGORY` catalog objects that are excluded from points accrual.
+	//
+	// You can use the [BatchRetrieveCatalogObjects](api-endpoint:Catalog-BatchRetrieveCatalogObjects)
+	// endpoint to retrieve information about the excluded categories.
+	ExcludedCategoryIDs []string `json:"excluded_category_ids,omitempty" url:"excluded_category_ids,omitempty"`
+	// When the accrual rule is spend-based (`accrual_type` is `SPEND`), this field
+	// lists the IDs of any `ITEM_VARIATION` catalog objects that are excluded from points accrual.
+	//
+	// You can use the [BatchRetrieveCatalogObjects](api-endpoint:Catalog-BatchRetrieveCatalogObjects)
+	// endpoint to retrieve information about the excluded item variations.
+	ExcludedItemVariationIDs []string `json:"excluded_item_variation_ids,omitempty" url:"excluded_item_variation_ids,omitempty"`
 	// Additional data for rules with the `VISIT` accrual type.
 	VisitData *LoyaltyProgramAccrualRuleVisitData `json:"visit_data,omitempty" url:"visit_data,omitempty"`
 	// Additional data for rules with the `SPEND` accrual type.
@@ -38056,12 +48147,15 @@ func (l *LoyaltyProgramAccrualRuleSpendData) String() string {
 type LoyaltyProgramAccrualRuleTaxMode string
 
 const (
-	LoyaltyProgramAccrualRuleTaxModeBeforeTax LoyaltyProgramAccrualRuleTaxMode = "BEFORE_TAX"
-	LoyaltyProgramAccrualRuleTaxModeAfterTax  LoyaltyProgramAccrualRuleTaxMode = "AFTER_TAX"
+	LoyaltyProgramAccrualRuleTaxModeTaxModeDoNotUse LoyaltyProgramAccrualRuleTaxMode = "TAX_MODE_DO_NOT_USE"
+	LoyaltyProgramAccrualRuleTaxModeBeforeTax       LoyaltyProgramAccrualRuleTaxMode = "BEFORE_TAX"
+	LoyaltyProgramAccrualRuleTaxModeAfterTax        LoyaltyProgramAccrualRuleTaxMode = "AFTER_TAX"
 )
 
 func NewLoyaltyProgramAccrualRuleTaxModeFromString(s string) (LoyaltyProgramAccrualRuleTaxMode, error) {
 	switch s {
+	case "TAX_MODE_DO_NOT_USE":
+		return LoyaltyProgramAccrualRuleTaxModeTaxModeDoNotUse, nil
 	case "BEFORE_TAX":
 		return LoyaltyProgramAccrualRuleTaxModeBeforeTax, nil
 	case "AFTER_TAX":
@@ -38079,6 +48173,7 @@ func (l LoyaltyProgramAccrualRuleTaxMode) Ptr() *LoyaltyProgramAccrualRuleTaxMod
 type LoyaltyProgramAccrualRuleType string
 
 const (
+	LoyaltyProgramAccrualRuleTypeTypeDoNotUse  LoyaltyProgramAccrualRuleType = "TYPE_DO_NOT_USE"
 	LoyaltyProgramAccrualRuleTypeVisit         LoyaltyProgramAccrualRuleType = "VISIT"
 	LoyaltyProgramAccrualRuleTypeSpend         LoyaltyProgramAccrualRuleType = "SPEND"
 	LoyaltyProgramAccrualRuleTypeItemVariation LoyaltyProgramAccrualRuleType = "ITEM_VARIATION"
@@ -38087,6 +48182,8 @@ const (
 
 func NewLoyaltyProgramAccrualRuleTypeFromString(s string) (LoyaltyProgramAccrualRuleType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyProgramAccrualRuleTypeTypeDoNotUse, nil
 	case "VISIT":
 		return LoyaltyProgramAccrualRuleTypeVisit, nil
 	case "SPEND":
@@ -38140,6 +48237,148 @@ func (l *LoyaltyProgramAccrualRuleVisitData) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyProgramAccrualRuleVisitData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty program](entity:LoyaltyProgram) is created.
+type LoyaltyProgramCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.program.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyProgramCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.program.created` event.
+type LoyaltyProgramCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_program`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the created loyalty program.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty program that was created.
+	Object *LoyaltyProgramCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty program associated with a `loyalty.program.created` event.
+type LoyaltyProgramCreatedEventObject struct {
+	// The loyalty program that was created.
+	LoyaltyProgram *LoyaltyProgram `json:"loyalty_program,omitempty" url:"loyalty_program,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEventObject) String() string {
 	if len(l._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
 			return value
@@ -38270,6 +48509,7 @@ func (l *LoyaltyProgramRewardDefinition) String() string {
 type LoyaltyProgramRewardDefinitionScope string
 
 const (
+	LoyaltyProgramRewardDefinitionScopeScopeDoNotUse LoyaltyProgramRewardDefinitionScope = "SCOPE_DO_NOT_USE"
 	LoyaltyProgramRewardDefinitionScopeOrder         LoyaltyProgramRewardDefinitionScope = "ORDER"
 	LoyaltyProgramRewardDefinitionScopeItemVariation LoyaltyProgramRewardDefinitionScope = "ITEM_VARIATION"
 	LoyaltyProgramRewardDefinitionScopeCategory      LoyaltyProgramRewardDefinitionScope = "CATEGORY"
@@ -38277,6 +48517,8 @@ const (
 
 func NewLoyaltyProgramRewardDefinitionScopeFromString(s string) (LoyaltyProgramRewardDefinitionScope, error) {
 	switch s {
+	case "SCOPE_DO_NOT_USE":
+		return LoyaltyProgramRewardDefinitionScopeScopeDoNotUse, nil
 	case "ORDER":
 		return LoyaltyProgramRewardDefinitionScopeOrder, nil
 	case "ITEM_VARIATION":
@@ -38298,12 +48540,15 @@ func (l LoyaltyProgramRewardDefinitionScope) Ptr() *LoyaltyProgramRewardDefiniti
 type LoyaltyProgramRewardDefinitionType string
 
 const (
+	LoyaltyProgramRewardDefinitionTypeTypeDoNotUse    LoyaltyProgramRewardDefinitionType = "TYPE_DO_NOT_USE"
 	LoyaltyProgramRewardDefinitionTypeFixedAmount     LoyaltyProgramRewardDefinitionType = "FIXED_AMOUNT"
 	LoyaltyProgramRewardDefinitionTypeFixedPercentage LoyaltyProgramRewardDefinitionType = "FIXED_PERCENTAGE"
 )
 
 func NewLoyaltyProgramRewardDefinitionTypeFromString(s string) (LoyaltyProgramRewardDefinitionType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyProgramRewardDefinitionTypeTypeDoNotUse, nil
 	case "FIXED_AMOUNT":
 		return LoyaltyProgramRewardDefinitionTypeFixedAmount, nil
 	case "FIXED_PERCENTAGE":
@@ -38379,12 +48624,15 @@ func (l *LoyaltyProgramRewardTier) String() string {
 type LoyaltyProgramStatus string
 
 const (
-	LoyaltyProgramStatusInactive LoyaltyProgramStatus = "INACTIVE"
-	LoyaltyProgramStatusActive   LoyaltyProgramStatus = "ACTIVE"
+	LoyaltyProgramStatusStatusDoNotUse LoyaltyProgramStatus = "STATUS_DO_NOT_USE"
+	LoyaltyProgramStatusInactive       LoyaltyProgramStatus = "INACTIVE"
+	LoyaltyProgramStatusActive         LoyaltyProgramStatus = "ACTIVE"
 )
 
 func NewLoyaltyProgramStatusFromString(s string) (LoyaltyProgramStatus, error) {
 	switch s {
+	case "STATUS_DO_NOT_USE":
+		return LoyaltyProgramStatusStatusDoNotUse, nil
 	case "INACTIVE":
 		return LoyaltyProgramStatusInactive, nil
 	case "ACTIVE":
@@ -38443,7 +48691,149 @@ func (l *LoyaltyProgramTerminology) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a promotion for a [loyalty program]($m/LoyaltyProgram). Loyalty promotions enable buyers
+// Published when a [loyalty program](entity:LoyaltyProgram) is updated.
+type LoyaltyProgramUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.program.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyProgramUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.program.updated` event.
+type LoyaltyProgramUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_program`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty program.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty program that was updated.
+	Object *LoyaltyProgramUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty program associated with a `loyalty.program.updated` event.
+type LoyaltyProgramUpdatedEventObject struct {
+	// The loyalty program that was updated.
+	LoyaltyProgram *LoyaltyProgram `json:"loyalty_program,omitempty" url:"loyalty_program,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a promotion for a [loyalty program](entity:LoyaltyProgram). Loyalty promotions enable buyers
 // to earn extra points on top of those earned from the base program.
 //
 // A loyalty program can have a maximum of 10 loyalty promotions with an `ACTIVE` or `SCHEDULED` status.
@@ -38529,7 +48919,7 @@ func (l *LoyaltyPromotion) String() string {
 }
 
 // Represents scheduling information that determines when purchases can qualify to earn points
-// from a [loyalty promotion]($m/LoyaltyPromotion).
+// from a [loyalty promotion](entity:LoyaltyPromotion).
 type LoyaltyPromotionAvailableTimeData struct {
 	// The date that the promotion starts, in `YYYY-MM-DD` format. Square populates this field
 	// based on the provided `time_periods`.
@@ -38589,7 +48979,149 @@ func (l *LoyaltyPromotionAvailableTimeData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents how points for a [loyalty promotion]($m/LoyaltyPromotion) are calculated,
+// Published when a [loyalty promotion](entity:LoyaltyPromotion) is created.
+type LoyaltyPromotionCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.promotion.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyPromotionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.promotion.created` event.
+type LoyaltyPromotionCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_promotion`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty promotion.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty promotion that was created.
+	Object *LoyaltyPromotionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty promotion associated with a `loyalty.promotion.created` event.
+type LoyaltyPromotionCreatedEventObject struct {
+	// The loyalty promotion that was created.
+	LoyaltyPromotion *LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"loyalty_promotion,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents how points for a [loyalty promotion](entity:LoyaltyPromotion) are calculated,
 // either by multiplying the points earned from the base program or by adding a specified number
 // of points to the points earned from the base program.
 type LoyaltyPromotionIncentive struct {
@@ -38639,7 +49171,7 @@ func (l *LoyaltyPromotionIncentive) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents the metadata for a `POINTS_ADDITION` type of [loyalty promotion incentive]($m/LoyaltyPromotionIncentive).
+// Represents the metadata for a `POINTS_ADDITION` type of [loyalty promotion incentive](entity:LoyaltyPromotionIncentive).
 type LoyaltyPromotionIncentivePointsAdditionData struct {
 	// The number of additional points to earn each time the promotion is triggered. For example,
 	// suppose a purchase qualifies for 5 points from the base loyalty program. If the purchase also
@@ -38685,7 +49217,7 @@ func (l *LoyaltyPromotionIncentivePointsAdditionData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents the metadata for a `POINTS_MULTIPLIER` type of [loyalty promotion incentive]($m/LoyaltyPromotionIncentive).
+// Represents the metadata for a `POINTS_MULTIPLIER` type of [loyalty promotion incentive](entity:LoyaltyPromotionIncentive).
 type LoyaltyPromotionIncentivePointsMultiplierData struct {
 	// The multiplier used to calculate the number of points earned each time the promotion
 	// is triggered. For example, suppose a purchase qualifies for 5 points from the base loyalty program.
@@ -38752,17 +49284,20 @@ func (l *LoyaltyPromotionIncentivePointsMultiplierData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Indicates the type of points incentive for a [loyalty promotion]($m/LoyaltyPromotion),
+// Indicates the type of points incentive for a [loyalty promotion](entity:LoyaltyPromotion),
 // which is used to determine how buyers can earn points from the promotion.
 type LoyaltyPromotionIncentiveType string
 
 const (
+	LoyaltyPromotionIncentiveTypeTypeDoNotUse     LoyaltyPromotionIncentiveType = "TYPE_DO_NOT_USE"
 	LoyaltyPromotionIncentiveTypePointsMultiplier LoyaltyPromotionIncentiveType = "POINTS_MULTIPLIER"
 	LoyaltyPromotionIncentiveTypePointsAddition   LoyaltyPromotionIncentiveType = "POINTS_ADDITION"
 )
 
 func NewLoyaltyPromotionIncentiveTypeFromString(s string) (LoyaltyPromotionIncentiveType, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyPromotionIncentiveTypeTypeDoNotUse, nil
 	case "POINTS_MULTIPLIER":
 		return LoyaltyPromotionIncentiveTypePointsMultiplier, nil
 	case "POINTS_ADDITION":
@@ -38776,18 +49311,24 @@ func (l LoyaltyPromotionIncentiveType) Ptr() *LoyaltyPromotionIncentiveType {
 	return &l
 }
 
-// Indicates the status of a [loyalty promotion]($m/LoyaltyPromotion).
+// Indicates the status of a [loyalty promotion](entity:LoyaltyPromotion).
 type LoyaltyPromotionStatus string
 
 const (
-	LoyaltyPromotionStatusActive    LoyaltyPromotionStatus = "ACTIVE"
-	LoyaltyPromotionStatusEnded     LoyaltyPromotionStatus = "ENDED"
-	LoyaltyPromotionStatusCanceled  LoyaltyPromotionStatus = "CANCELED"
-	LoyaltyPromotionStatusScheduled LoyaltyPromotionStatus = "SCHEDULED"
+	LoyaltyPromotionStatusTypeDoNotUse LoyaltyPromotionStatus = "TYPE_DO_NOT_USE"
+	LoyaltyPromotionStatusUpcoming     LoyaltyPromotionStatus = "UPCOMING"
+	LoyaltyPromotionStatusActive       LoyaltyPromotionStatus = "ACTIVE"
+	LoyaltyPromotionStatusEnded        LoyaltyPromotionStatus = "ENDED"
+	LoyaltyPromotionStatusCanceled     LoyaltyPromotionStatus = "CANCELED"
+	LoyaltyPromotionStatusScheduled    LoyaltyPromotionStatus = "SCHEDULED"
 )
 
 func NewLoyaltyPromotionStatusFromString(s string) (LoyaltyPromotionStatus, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyPromotionStatusTypeDoNotUse, nil
+	case "UPCOMING":
+		return LoyaltyPromotionStatusUpcoming, nil
 	case "ACTIVE":
 		return LoyaltyPromotionStatusActive, nil
 	case "ENDED":
@@ -38805,7 +49346,7 @@ func (l LoyaltyPromotionStatus) Ptr() *LoyaltyPromotionStatus {
 	return &l
 }
 
-// Represents the number of times a buyer can earn points during a [loyalty promotion]($m/LoyaltyPromotion).
+// Represents the number of times a buyer can earn points during a [loyalty promotion](entity:LoyaltyPromotion).
 // If this field is not set, buyers can trigger the promotion an unlimited number of times to earn points during
 // the time that the promotion is available.
 //
@@ -38855,17 +49396,20 @@ func (l *LoyaltyPromotionTriggerLimit) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Indicates the time period that the [trigger limit]($m/LoyaltyPromotionTriggerLimit) applies to,
-// which is used to determine the number of times a buyer can earn points for a [loyalty promotion]($m/LoyaltyPromotion).
+// Indicates the time period that the [trigger limit](entity:LoyaltyPromotionTriggerLimit) applies to,
+// which is used to determine the number of times a buyer can earn points for a [loyalty promotion](entity:LoyaltyPromotion).
 type LoyaltyPromotionTriggerLimitInterval string
 
 const (
-	LoyaltyPromotionTriggerLimitIntervalAllTime LoyaltyPromotionTriggerLimitInterval = "ALL_TIME"
-	LoyaltyPromotionTriggerLimitIntervalDay     LoyaltyPromotionTriggerLimitInterval = "DAY"
+	LoyaltyPromotionTriggerLimitIntervalTypeDoNotUse LoyaltyPromotionTriggerLimitInterval = "TYPE_DO_NOT_USE"
+	LoyaltyPromotionTriggerLimitIntervalAllTime      LoyaltyPromotionTriggerLimitInterval = "ALL_TIME"
+	LoyaltyPromotionTriggerLimitIntervalDay          LoyaltyPromotionTriggerLimitInterval = "DAY"
 )
 
 func NewLoyaltyPromotionTriggerLimitIntervalFromString(s string) (LoyaltyPromotionTriggerLimitInterval, error) {
 	switch s {
+	case "TYPE_DO_NOT_USE":
+		return LoyaltyPromotionTriggerLimitIntervalTypeDoNotUse, nil
 	case "ALL_TIME":
 		return LoyaltyPromotionTriggerLimitIntervalAllTime, nil
 	case "DAY":
@@ -38879,7 +49423,150 @@ func (l LoyaltyPromotionTriggerLimitInterval) Ptr() *LoyaltyPromotionTriggerLimi
 	return &l
 }
 
-// Represents a contract to redeem loyalty points for a [reward tier]($m/LoyaltyProgramRewardTier) discount. Loyalty rewards can be in an ISSUED, REDEEMED, or DELETED state.
+// Published when a [loyalty promotion](entity:LoyaltyPromotion) is updated. This event is
+// invoked only when a loyalty promotion is canceled.
+type LoyaltyPromotionUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.promotion.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyPromotionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.promotion.updated` event.
+type LoyaltyPromotionUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_promotion`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty promotion.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty promotion that was updated.
+	Object *LoyaltyPromotionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty promotion associated with a `loyalty.promotion.updated` event.
+type LoyaltyPromotionUpdatedEventObject struct {
+	// The loyalty promotion that was updated.
+	LoyaltyPromotion *LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"loyalty_promotion,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a contract to redeem loyalty points for a [reward tier](entity:LoyaltyProgramRewardTier) discount. Loyalty rewards can be in an ISSUED, REDEEMED, or DELETED state.
 // For more information, see [Manage loyalty rewards](https://developer.squareup.com/docs/loyalty-api/loyalty-rewards).
 type LoyaltyReward struct {
 	// The Square-assigned ID of the loyalty reward.
@@ -38944,13 +49631,16 @@ func (l *LoyaltyReward) String() string {
 type LoyaltyRewardStatus string
 
 const (
-	LoyaltyRewardStatusIssued   LoyaltyRewardStatus = "ISSUED"
-	LoyaltyRewardStatusRedeemed LoyaltyRewardStatus = "REDEEMED"
-	LoyaltyRewardStatusDeleted  LoyaltyRewardStatus = "DELETED"
+	LoyaltyRewardStatusStatusDoNotUse LoyaltyRewardStatus = "STATUS_DO_NOT_USE"
+	LoyaltyRewardStatusIssued         LoyaltyRewardStatus = "ISSUED"
+	LoyaltyRewardStatusRedeemed       LoyaltyRewardStatus = "REDEEMED"
+	LoyaltyRewardStatusDeleted        LoyaltyRewardStatus = "DELETED"
 )
 
 func NewLoyaltyRewardStatusFromString(s string) (LoyaltyRewardStatus, error) {
 	switch s {
+	case "STATUS_DO_NOT_USE":
+		return LoyaltyRewardStatusStatusDoNotUse, nil
 	case "ISSUED":
 		return LoyaltyRewardStatusIssued, nil
 	case "REDEEMED":
@@ -39037,6 +49727,7 @@ func (m *MeasurementUnit) String() string {
 type MeasurementUnitArea string
 
 const (
+	MeasurementUnitAreaInvalidArea            MeasurementUnitArea = "INVALID_AREA"
 	MeasurementUnitAreaImperialAcre           MeasurementUnitArea = "IMPERIAL_ACRE"
 	MeasurementUnitAreaImperialSquareInch     MeasurementUnitArea = "IMPERIAL_SQUARE_INCH"
 	MeasurementUnitAreaImperialSquareFoot     MeasurementUnitArea = "IMPERIAL_SQUARE_FOOT"
@@ -39049,6 +49740,8 @@ const (
 
 func NewMeasurementUnitAreaFromString(s string) (MeasurementUnitArea, error) {
 	switch s {
+	case "INVALID_AREA":
+		return MeasurementUnitAreaInvalidArea, nil
 	case "IMPERIAL_ACRE":
 		return MeasurementUnitAreaImperialAcre, nil
 	case "IMPERIAL_SQUARE_INCH":
@@ -39120,12 +49813,33 @@ func (m *MeasurementUnitCustom) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type MeasurementUnitGeneric = string
+type MeasurementUnitGeneric string
+
+const (
+	MeasurementUnitGenericInvalidGenericUnit MeasurementUnitGeneric = "INVALID_GENERIC_UNIT"
+	MeasurementUnitGenericUnit               MeasurementUnitGeneric = "UNIT"
+)
+
+func NewMeasurementUnitGenericFromString(s string) (MeasurementUnitGeneric, error) {
+	switch s {
+	case "INVALID_GENERIC_UNIT":
+		return MeasurementUnitGenericInvalidGenericUnit, nil
+	case "UNIT":
+		return MeasurementUnitGenericUnit, nil
+	}
+	var t MeasurementUnitGeneric
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MeasurementUnitGeneric) Ptr() *MeasurementUnitGeneric {
+	return &m
+}
 
 // The unit of length used to measure a quantity.
 type MeasurementUnitLength string
 
 const (
+	MeasurementUnitLengthInvalidLength    MeasurementUnitLength = "INVALID_LENGTH"
 	MeasurementUnitLengthImperialInch     MeasurementUnitLength = "IMPERIAL_INCH"
 	MeasurementUnitLengthImperialFoot     MeasurementUnitLength = "IMPERIAL_FOOT"
 	MeasurementUnitLengthImperialYard     MeasurementUnitLength = "IMPERIAL_YARD"
@@ -39138,6 +49852,8 @@ const (
 
 func NewMeasurementUnitLengthFromString(s string) (MeasurementUnitLength, error) {
 	switch s {
+	case "INVALID_LENGTH":
+		return MeasurementUnitLengthInvalidLength, nil
 	case "IMPERIAL_INCH":
 		return MeasurementUnitLengthImperialInch, nil
 	case "IMPERIAL_FOOT":
@@ -39167,6 +49883,7 @@ func (m MeasurementUnitLength) Ptr() *MeasurementUnitLength {
 type MeasurementUnitTime string
 
 const (
+	MeasurementUnitTimeInvalidTime        MeasurementUnitTime = "INVALID_TIME"
 	MeasurementUnitTimeGenericMillisecond MeasurementUnitTime = "GENERIC_MILLISECOND"
 	MeasurementUnitTimeGenericSecond      MeasurementUnitTime = "GENERIC_SECOND"
 	MeasurementUnitTimeGenericMinute      MeasurementUnitTime = "GENERIC_MINUTE"
@@ -39176,6 +49893,8 @@ const (
 
 func NewMeasurementUnitTimeFromString(s string) (MeasurementUnitTime, error) {
 	switch s {
+	case "INVALID_TIME":
+		return MeasurementUnitTimeInvalidTime, nil
 	case "GENERIC_MILLISECOND":
 		return MeasurementUnitTimeGenericMillisecond, nil
 	case "GENERIC_SECOND":
@@ -39199,16 +49918,20 @@ func (m MeasurementUnitTime) Ptr() *MeasurementUnitTime {
 type MeasurementUnitUnitType string
 
 const (
+	MeasurementUnitUnitTypeInvalidType MeasurementUnitUnitType = "INVALID_TYPE"
 	MeasurementUnitUnitTypeTypeCustom  MeasurementUnitUnitType = "TYPE_CUSTOM"
 	MeasurementUnitUnitTypeTypeArea    MeasurementUnitUnitType = "TYPE_AREA"
 	MeasurementUnitUnitTypeTypeLength  MeasurementUnitUnitType = "TYPE_LENGTH"
 	MeasurementUnitUnitTypeTypeVolume  MeasurementUnitUnitType = "TYPE_VOLUME"
 	MeasurementUnitUnitTypeTypeWeight  MeasurementUnitUnitType = "TYPE_WEIGHT"
+	MeasurementUnitUnitTypeTypeTime    MeasurementUnitUnitType = "TYPE_TIME"
 	MeasurementUnitUnitTypeTypeGeneric MeasurementUnitUnitType = "TYPE_GENERIC"
 )
 
 func NewMeasurementUnitUnitTypeFromString(s string) (MeasurementUnitUnitType, error) {
 	switch s {
+	case "INVALID_TYPE":
+		return MeasurementUnitUnitTypeInvalidType, nil
 	case "TYPE_CUSTOM":
 		return MeasurementUnitUnitTypeTypeCustom, nil
 	case "TYPE_AREA":
@@ -39219,6 +49942,8 @@ func NewMeasurementUnitUnitTypeFromString(s string) (MeasurementUnitUnitType, er
 		return MeasurementUnitUnitTypeTypeVolume, nil
 	case "TYPE_WEIGHT":
 		return MeasurementUnitUnitTypeTypeWeight, nil
+	case "TYPE_TIME":
+		return MeasurementUnitUnitTypeTypeTime, nil
 	case "TYPE_GENERIC":
 		return MeasurementUnitUnitTypeTypeGeneric, nil
 	}
@@ -39234,6 +49959,7 @@ func (m MeasurementUnitUnitType) Ptr() *MeasurementUnitUnitType {
 type MeasurementUnitVolume string
 
 const (
+	MeasurementUnitVolumeInvalidVolume     MeasurementUnitVolume = "INVALID_VOLUME"
 	MeasurementUnitVolumeGenericFluidOunce MeasurementUnitVolume = "GENERIC_FLUID_OUNCE"
 	MeasurementUnitVolumeGenericShot       MeasurementUnitVolume = "GENERIC_SHOT"
 	MeasurementUnitVolumeGenericCup        MeasurementUnitVolume = "GENERIC_CUP"
@@ -39249,6 +49975,8 @@ const (
 
 func NewMeasurementUnitVolumeFromString(s string) (MeasurementUnitVolume, error) {
 	switch s {
+	case "INVALID_VOLUME":
+		return MeasurementUnitVolumeInvalidVolume, nil
 	case "GENERIC_FLUID_OUNCE":
 		return MeasurementUnitVolumeGenericFluidOunce, nil
 	case "GENERIC_SHOT":
@@ -39284,6 +50012,7 @@ func (m MeasurementUnitVolume) Ptr() *MeasurementUnitVolume {
 type MeasurementUnitWeight string
 
 const (
+	MeasurementUnitWeightInvalidWeight       MeasurementUnitWeight = "INVALID_WEIGHT"
 	MeasurementUnitWeightImperialWeightOunce MeasurementUnitWeight = "IMPERIAL_WEIGHT_OUNCE"
 	MeasurementUnitWeightImperialPound       MeasurementUnitWeight = "IMPERIAL_POUND"
 	MeasurementUnitWeightImperialStone       MeasurementUnitWeight = "IMPERIAL_STONE"
@@ -39294,6 +50023,8 @@ const (
 
 func NewMeasurementUnitWeightFromString(s string) (MeasurementUnitWeight, error) {
 	switch s {
+	case "INVALID_WEIGHT":
+		return MeasurementUnitWeightInvalidWeight, nil
 	case "IMPERIAL_WEIGHT_OUNCE":
 		return MeasurementUnitWeightImperialWeightOunce, nil
 	case "IMPERIAL_POUND":
@@ -39365,6 +50096,682 @@ func (m *Merchant) UnmarshalJSON(data []byte) error {
 }
 
 func (m *Merchant) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application. Subscribe to this event to be notified
+// when your application creates a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is deleted by the subscribing application. Subscribe to this event to be notified
+// when your application deletes a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A notification is sent when your application
+// deletes a custom attribute definition or another application deletes a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A notification is sent when your application
+// updates a custom attribute definition or another application updates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is deleted. Subscribe to this event to be notified
+// when your application deletes a merchant custom attribute.
+type MerchantCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is updated. Subscribe to this event to be notified
+// when your application updates a merchant custom attribute.
+type MerchantCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a merchant custom attribute is deleted
+// by any application for which the subscribing application has read access to the merchant custom attribute.
+type MerchantCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a merchant custom attribute is updated
+// by any application for which the subscribing application has read access to the merchant custom attribute.
+type MerchantCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when online checkout merchant settings are updated
+type MerchantSettingsUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"online_checkout.merchant_settings.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *MerchantSettingsUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEvent) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MerchantSettingsUpdatedEventData struct {
+	// Name of the updated object’s type, `"online_checkout.merchant_settings"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated merchant settings.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated merchant settings.
+	Object *MerchantSettingsUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEventData) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MerchantSettingsUpdatedEventObject struct {
+	// The updated merchant settings.
+	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEventObject) String() string {
 	if len(m._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
 			return value
@@ -39504,6 +50911,409 @@ func (m *Money) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+// When you direct your user to the permissions form, you specify the
+// scope of the permissions your application will have. Personal access tokens
+// have all available permissions (at the time the application was created) by default.
+//
+// **Important:** Never request more than the minimum permissions required for your application
+// to function properly.
+type OAuthPermission string
+
+const (
+	OAuthPermissionBankAccountsRead                  OAuthPermission = "BANK_ACCOUNTS_READ"
+	OAuthPermissionCashDrawerRead                    OAuthPermission = "CASH_DRAWER_READ"
+	OAuthPermissionCustomersRead                     OAuthPermission = "CUSTOMERS_READ"
+	OAuthPermissionCustomersWrite                    OAuthPermission = "CUSTOMERS_WRITE"
+	OAuthPermissionDeviceCredentialManagement        OAuthPermission = "DEVICE_CREDENTIAL_MANAGEMENT"
+	OAuthPermissionEmployeesRead                     OAuthPermission = "EMPLOYEES_READ"
+	OAuthPermissionEmployeesWrite                    OAuthPermission = "EMPLOYEES_WRITE"
+	OAuthPermissionInventoryRead                     OAuthPermission = "INVENTORY_READ"
+	OAuthPermissionInventoryWrite                    OAuthPermission = "INVENTORY_WRITE"
+	OAuthPermissionItemsRead                         OAuthPermission = "ITEMS_READ"
+	OAuthPermissionItemsWrite                        OAuthPermission = "ITEMS_WRITE"
+	OAuthPermissionLoyaltyRead                       OAuthPermission = "LOYALTY_READ"
+	OAuthPermissionLoyaltyWrite                      OAuthPermission = "LOYALTY_WRITE"
+	OAuthPermissionMerchantProfileRead               OAuthPermission = "MERCHANT_PROFILE_READ"
+	OAuthPermissionOrdersRead                        OAuthPermission = "ORDERS_READ"
+	OAuthPermissionOrdersWrite                       OAuthPermission = "ORDERS_WRITE"
+	OAuthPermissionPaymentsRead                      OAuthPermission = "PAYMENTS_READ"
+	OAuthPermissionPaymentsWrite                     OAuthPermission = "PAYMENTS_WRITE"
+	OAuthPermissionPaymentsWriteAdditionalRecipients OAuthPermission = "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS"
+	OAuthPermissionPaymentsWriteInPerson             OAuthPermission = "PAYMENTS_WRITE_IN_PERSON"
+	OAuthPermissionSettlementsRead                   OAuthPermission = "SETTLEMENTS_READ"
+	OAuthPermissionTimecardsRead                     OAuthPermission = "TIMECARDS_READ"
+	OAuthPermissionTimecardsWrite                    OAuthPermission = "TIMECARDS_WRITE"
+	OAuthPermissionTimecardsSettingsRead             OAuthPermission = "TIMECARDS_SETTINGS_READ"
+	OAuthPermissionTimecardsSettingsWrite            OAuthPermission = "TIMECARDS_SETTINGS_WRITE"
+	OAuthPermissionAppointmentsRead                  OAuthPermission = "APPOINTMENTS_READ"
+	OAuthPermissionAppointmentsWrite                 OAuthPermission = "APPOINTMENTS_WRITE"
+	OAuthPermissionAppointmentsBusinessSettingsRead  OAuthPermission = "APPOINTMENTS_BUSINESS_SETTINGS_READ"
+	OAuthPermissionInvoicesRead                      OAuthPermission = "INVOICES_READ"
+	OAuthPermissionInvoicesWrite                     OAuthPermission = "INVOICES_WRITE"
+	OAuthPermissionSubscriptionsRead                 OAuthPermission = "SUBSCRIPTIONS_READ"
+	OAuthPermissionSubscriptionsWrite                OAuthPermission = "SUBSCRIPTIONS_WRITE"
+	OAuthPermissionDisputesRead                      OAuthPermission = "DISPUTES_READ"
+	OAuthPermissionDisputesWrite                     OAuthPermission = "DISPUTES_WRITE"
+	OAuthPermissionGiftcardsRead                     OAuthPermission = "GIFTCARDS_READ"
+	OAuthPermissionGiftcardsWrite                    OAuthPermission = "GIFTCARDS_WRITE"
+	OAuthPermissionOnlineStoreSnippetsWrite          OAuthPermission = "ONLINE_STORE_SNIPPETS_WRITE"
+	OAuthPermissionOnlineStoreSnippetsRead           OAuthPermission = "ONLINE_STORE_SNIPPETS_READ"
+	OAuthPermissionOnlineStoreSiteRead               OAuthPermission = "ONLINE_STORE_SITE_READ"
+	OAuthPermissionPaymentsWriteSharedOnfile         OAuthPermission = "PAYMENTS_WRITE_SHARED_ONFILE"
+	OAuthPermissionAppointmentsAllRead               OAuthPermission = "APPOINTMENTS_ALL_READ"
+	OAuthPermissionAppointmentsAllWrite              OAuthPermission = "APPOINTMENTS_ALL_WRITE"
+	OAuthPermissionMerchantProfileWrite              OAuthPermission = "MERCHANT_PROFILE_WRITE"
+	OAuthPermissionVendorRead                        OAuthPermission = "VENDOR_READ"
+	OAuthPermissionVendorWrite                       OAuthPermission = "VENDOR_WRITE"
+	OAuthPermissionPayoutsRead                       OAuthPermission = "PAYOUTS_READ"
+	OAuthPermissionReservationsRead                  OAuthPermission = "RESERVATIONS_READ"
+	OAuthPermissionReservationsWrite                 OAuthPermission = "RESERVATIONS_WRITE"
+	OAuthPermissionRestaurantChecksRead              OAuthPermission = "RESTAURANT_CHECKS_READ"
+	OAuthPermissionDevicesRead                       OAuthPermission = "DEVICES_READ"
+	OAuthPermissionChannelsRead                      OAuthPermission = "CHANNELS_READ"
+	OAuthPermissionChannelsCreate                    OAuthPermission = "CHANNELS_CREATE"
+	OAuthPermissionChannelsUpdate                    OAuthPermission = "CHANNELS_UPDATE"
+	OAuthPermissionAddonConfigurationsRead           OAuthPermission = "ADDON_CONFIGURATIONS_READ"
+	OAuthPermissionAddonConfigurationsWrite          OAuthPermission = "ADDON_CONFIGURATIONS_WRITE"
+	OAuthPermissionPermissionSetsRead                OAuthPermission = "PERMISSION_SETS_READ"
+	OAuthPermissionPermissionSetsWrite               OAuthPermission = "PERMISSION_SETS_WRITE"
+)
+
+func NewOAuthPermissionFromString(s string) (OAuthPermission, error) {
+	switch s {
+	case "BANK_ACCOUNTS_READ":
+		return OAuthPermissionBankAccountsRead, nil
+	case "CASH_DRAWER_READ":
+		return OAuthPermissionCashDrawerRead, nil
+	case "CUSTOMERS_READ":
+		return OAuthPermissionCustomersRead, nil
+	case "CUSTOMERS_WRITE":
+		return OAuthPermissionCustomersWrite, nil
+	case "DEVICE_CREDENTIAL_MANAGEMENT":
+		return OAuthPermissionDeviceCredentialManagement, nil
+	case "EMPLOYEES_READ":
+		return OAuthPermissionEmployeesRead, nil
+	case "EMPLOYEES_WRITE":
+		return OAuthPermissionEmployeesWrite, nil
+	case "INVENTORY_READ":
+		return OAuthPermissionInventoryRead, nil
+	case "INVENTORY_WRITE":
+		return OAuthPermissionInventoryWrite, nil
+	case "ITEMS_READ":
+		return OAuthPermissionItemsRead, nil
+	case "ITEMS_WRITE":
+		return OAuthPermissionItemsWrite, nil
+	case "LOYALTY_READ":
+		return OAuthPermissionLoyaltyRead, nil
+	case "LOYALTY_WRITE":
+		return OAuthPermissionLoyaltyWrite, nil
+	case "MERCHANT_PROFILE_READ":
+		return OAuthPermissionMerchantProfileRead, nil
+	case "ORDERS_READ":
+		return OAuthPermissionOrdersRead, nil
+	case "ORDERS_WRITE":
+		return OAuthPermissionOrdersWrite, nil
+	case "PAYMENTS_READ":
+		return OAuthPermissionPaymentsRead, nil
+	case "PAYMENTS_WRITE":
+		return OAuthPermissionPaymentsWrite, nil
+	case "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS":
+		return OAuthPermissionPaymentsWriteAdditionalRecipients, nil
+	case "PAYMENTS_WRITE_IN_PERSON":
+		return OAuthPermissionPaymentsWriteInPerson, nil
+	case "SETTLEMENTS_READ":
+		return OAuthPermissionSettlementsRead, nil
+	case "TIMECARDS_READ":
+		return OAuthPermissionTimecardsRead, nil
+	case "TIMECARDS_WRITE":
+		return OAuthPermissionTimecardsWrite, nil
+	case "TIMECARDS_SETTINGS_READ":
+		return OAuthPermissionTimecardsSettingsRead, nil
+	case "TIMECARDS_SETTINGS_WRITE":
+		return OAuthPermissionTimecardsSettingsWrite, nil
+	case "APPOINTMENTS_READ":
+		return OAuthPermissionAppointmentsRead, nil
+	case "APPOINTMENTS_WRITE":
+		return OAuthPermissionAppointmentsWrite, nil
+	case "APPOINTMENTS_BUSINESS_SETTINGS_READ":
+		return OAuthPermissionAppointmentsBusinessSettingsRead, nil
+	case "INVOICES_READ":
+		return OAuthPermissionInvoicesRead, nil
+	case "INVOICES_WRITE":
+		return OAuthPermissionInvoicesWrite, nil
+	case "SUBSCRIPTIONS_READ":
+		return OAuthPermissionSubscriptionsRead, nil
+	case "SUBSCRIPTIONS_WRITE":
+		return OAuthPermissionSubscriptionsWrite, nil
+	case "DISPUTES_READ":
+		return OAuthPermissionDisputesRead, nil
+	case "DISPUTES_WRITE":
+		return OAuthPermissionDisputesWrite, nil
+	case "GIFTCARDS_READ":
+		return OAuthPermissionGiftcardsRead, nil
+	case "GIFTCARDS_WRITE":
+		return OAuthPermissionGiftcardsWrite, nil
+	case "ONLINE_STORE_SNIPPETS_WRITE":
+		return OAuthPermissionOnlineStoreSnippetsWrite, nil
+	case "ONLINE_STORE_SNIPPETS_READ":
+		return OAuthPermissionOnlineStoreSnippetsRead, nil
+	case "ONLINE_STORE_SITE_READ":
+		return OAuthPermissionOnlineStoreSiteRead, nil
+	case "PAYMENTS_WRITE_SHARED_ONFILE":
+		return OAuthPermissionPaymentsWriteSharedOnfile, nil
+	case "APPOINTMENTS_ALL_READ":
+		return OAuthPermissionAppointmentsAllRead, nil
+	case "APPOINTMENTS_ALL_WRITE":
+		return OAuthPermissionAppointmentsAllWrite, nil
+	case "MERCHANT_PROFILE_WRITE":
+		return OAuthPermissionMerchantProfileWrite, nil
+	case "VENDOR_READ":
+		return OAuthPermissionVendorRead, nil
+	case "VENDOR_WRITE":
+		return OAuthPermissionVendorWrite, nil
+	case "PAYOUTS_READ":
+		return OAuthPermissionPayoutsRead, nil
+	case "RESERVATIONS_READ":
+		return OAuthPermissionReservationsRead, nil
+	case "RESERVATIONS_WRITE":
+		return OAuthPermissionReservationsWrite, nil
+	case "RESTAURANT_CHECKS_READ":
+		return OAuthPermissionRestaurantChecksRead, nil
+	case "DEVICES_READ":
+		return OAuthPermissionDevicesRead, nil
+	case "CHANNELS_READ":
+		return OAuthPermissionChannelsRead, nil
+	case "CHANNELS_CREATE":
+		return OAuthPermissionChannelsCreate, nil
+	case "CHANNELS_UPDATE":
+		return OAuthPermissionChannelsUpdate, nil
+	case "ADDON_CONFIGURATIONS_READ":
+		return OAuthPermissionAddonConfigurationsRead, nil
+	case "ADDON_CONFIGURATIONS_WRITE":
+		return OAuthPermissionAddonConfigurationsWrite, nil
+	case "PERMISSION_SETS_READ":
+		return OAuthPermissionPermissionSetsRead, nil
+	case "PERMISSION_SETS_WRITE":
+		return OAuthPermissionPermissionSetsWrite, nil
+	}
+	var t OAuthPermission
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OAuthPermission) Ptr() *OAuthPermission {
+	return &o
+}
+
+// Published when a merchant/application revokes all access tokens and refresh tokens granted to an application.
+type OauthAuthorizationRevokedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"oauth.authorization.revoked"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OauthAuthorizationRevokedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventData struct {
+	// Name of the affected object’s type, `"revocation"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// Not applicable, revocation is not an object
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about revocation event.
+	Object *OauthAuthorizationRevokedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventData) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventObject struct {
+	// The revocation event.
+	Revocation *OauthAuthorizationRevokedEventRevocationObject `json:"revocation,omitempty" url:"revocation,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventObject) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventRevocationObject struct {
+	// Timestamp of when the revocation event occurred, in RFC 3339 format.
+	RevokedAt *string `json:"revoked_at,omitempty" url:"revoked_at,omitempty"`
+	// Type of client that performed the revocation, either APPLICATION, MERCHANT, or SQUARE.
+	// See [OauthAuthorizationRevokedEventRevokerType](#type-oauthauthorizationrevokedeventrevokertype) for possible values
+	RevokerType *OauthAuthorizationRevokedEventRevokerType `json:"revoker_type,omitempty" url:"revoker_type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventRevocationObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventRevocationObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Defines the possible types for the revoking client.
+type OauthAuthorizationRevokedEventRevokerType string
+
+const (
+	OauthAuthorizationRevokedEventRevokerTypeApplication OauthAuthorizationRevokedEventRevokerType = "APPLICATION"
+	OauthAuthorizationRevokedEventRevokerTypeMerchant    OauthAuthorizationRevokedEventRevokerType = "MERCHANT"
+	OauthAuthorizationRevokedEventRevokerTypeSquare      OauthAuthorizationRevokedEventRevokerType = "SQUARE"
+)
+
+func NewOauthAuthorizationRevokedEventRevokerTypeFromString(s string) (OauthAuthorizationRevokedEventRevokerType, error) {
+	switch s {
+	case "APPLICATION":
+		return OauthAuthorizationRevokedEventRevokerTypeApplication, nil
+	case "MERCHANT":
+		return OauthAuthorizationRevokedEventRevokerTypeMerchant, nil
+	case "SQUARE":
+		return OauthAuthorizationRevokedEventRevokerTypeSquare, nil
+	}
+	var t OauthAuthorizationRevokedEventRevokerType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OauthAuthorizationRevokedEventRevokerType) Ptr() *OauthAuthorizationRevokedEventRevokerType {
+	return &o
+}
+
 type ObtainTokenResponse struct {
 	// A valid OAuth access token.
 	// Provide the access token in a header with every request to Connect API
@@ -39633,7 +51443,7 @@ type Order struct {
 	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
 	// The origination details of the order.
 	Source *OrderSource `json:"source,omitempty" url:"source,omitempty"`
-	// The ID of the [customer]($m/Customer) associated with the order.
+	// The ID of the [customer](entity:Customer) associated with the order.
 	//
 	// You should specify a `customer_id` on the order (or the payment) to ensure that transactions
 	// are reliably linked to customers. Omitting this field might result in the creation of new
@@ -39840,6 +51650,106 @@ func (o *OrderCreated) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
+// Published when an [Order](entity:Order) is created. This event is
+// triggered only by the [CreateOrder](api-endpoint:Orders-CreateOrder) endpoint call.
+//
+// Creating an order in the Point of Sale app will **not** publish this event.
+type OrderCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderCreatedEventData struct {
+	// Name of the affected object’s type, `"order_created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the created Order.
+	Object *OrderCreatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreatedEventData) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
 type OrderCreatedObject struct {
 	// Information about the created order.
 	OrderCreated *OrderCreated `json:"order_created,omitempty" url:"order_created,omitempty"`
@@ -39882,8 +51792,518 @@ func (o *OrderCreatedObject) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// A lightweight description of an [order]($m/Order) that is returned when
-// `returned_entries` is `true` on a [SearchOrdersRequest]($e/Orders/SearchOrders).
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is created.
+type OrderCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is deleted.
+type OrderCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is updated.
+type OrderCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is created.
+type OrderCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is deleted.
+type OrderCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is updated.
+type OrderCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is deleted.
+type OrderCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeOwnedDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is updated.
+type OrderCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeOwnedUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) that is visible to the subscribing app is deleted.
+type OrderCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeVisibleDeletedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) that is visible to the subscribing app is updated.
+type OrderCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeVisibleUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// A lightweight description of an [order](entity:Order) that is returned when
+// `returned_entries` is `true` on a [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 type OrderEntry struct {
 	// The ID of the order.
 	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
@@ -40162,12 +52582,15 @@ func (o *OrderFulfillmentDeliveryDetails) String() string {
 type OrderFulfillmentDeliveryDetailsScheduleType string
 
 const (
-	OrderFulfillmentDeliveryDetailsScheduleTypeScheduled OrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
-	OrderFulfillmentDeliveryDetailsScheduleTypeAsap      OrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
+	OrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse OrderFulfillmentDeliveryDetailsScheduleType = "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
+	OrderFulfillmentDeliveryDetailsScheduleTypeScheduled                                      OrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
+	OrderFulfillmentDeliveryDetailsScheduleTypeAsap                                           OrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
 )
 
 func NewOrderFulfillmentDeliveryDetailsScheduleTypeFromString(s string) (OrderFulfillmentDeliveryDetailsScheduleType, error) {
 	switch s {
+	case "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
+		return OrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return OrderFulfillmentDeliveryDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -40252,12 +52675,15 @@ func (o *OrderFulfillmentFulfillmentEntry) String() string {
 type OrderFulfillmentFulfillmentLineItemApplication string
 
 const (
-	OrderFulfillmentFulfillmentLineItemApplicationAll       OrderFulfillmentFulfillmentLineItemApplication = "ALL"
-	OrderFulfillmentFulfillmentLineItemApplicationEntryList OrderFulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
+	OrderFulfillmentFulfillmentLineItemApplicationUnknownApplication OrderFulfillmentFulfillmentLineItemApplication = "UNKNOWN_APPLICATION"
+	OrderFulfillmentFulfillmentLineItemApplicationAll                OrderFulfillmentFulfillmentLineItemApplication = "ALL"
+	OrderFulfillmentFulfillmentLineItemApplicationEntryList          OrderFulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
 )
 
 func NewOrderFulfillmentFulfillmentLineItemApplicationFromString(s string) (OrderFulfillmentFulfillmentLineItemApplication, error) {
 	switch s {
+	case "UNKNOWN_APPLICATION":
+		return OrderFulfillmentFulfillmentLineItemApplicationUnknownApplication, nil
 	case "ALL":
 		return OrderFulfillmentFulfillmentLineItemApplicationAll, nil
 	case "ENTRY_LIST":
@@ -40430,12 +52856,15 @@ func (o *OrderFulfillmentPickupDetailsCurbsidePickupDetails) String() string {
 type OrderFulfillmentPickupDetailsScheduleType string
 
 const (
-	OrderFulfillmentPickupDetailsScheduleTypeScheduled OrderFulfillmentPickupDetailsScheduleType = "SCHEDULED"
-	OrderFulfillmentPickupDetailsScheduleTypeAsap      OrderFulfillmentPickupDetailsScheduleType = "ASAP"
+	OrderFulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse OrderFulfillmentPickupDetailsScheduleType = "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
+	OrderFulfillmentPickupDetailsScheduleTypeScheduled                                    OrderFulfillmentPickupDetailsScheduleType = "SCHEDULED"
+	OrderFulfillmentPickupDetailsScheduleTypeAsap                                         OrderFulfillmentPickupDetailsScheduleType = "ASAP"
 )
 
 func NewOrderFulfillmentPickupDetailsScheduleTypeFromString(s string) (OrderFulfillmentPickupDetailsScheduleType, error) {
 	switch s {
+	case "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
+		return OrderFulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return OrderFulfillmentPickupDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -40605,16 +53034,19 @@ func (o *OrderFulfillmentShipmentDetails) String() string {
 type OrderFulfillmentState string
 
 const (
-	OrderFulfillmentStateProposed  OrderFulfillmentState = "PROPOSED"
-	OrderFulfillmentStateReserved  OrderFulfillmentState = "RESERVED"
-	OrderFulfillmentStatePrepared  OrderFulfillmentState = "PREPARED"
-	OrderFulfillmentStateCompleted OrderFulfillmentState = "COMPLETED"
-	OrderFulfillmentStateCanceled  OrderFulfillmentState = "CANCELED"
-	OrderFulfillmentStateFailed    OrderFulfillmentState = "FAILED"
+	OrderFulfillmentStateFulfillmentStateDoNotUse OrderFulfillmentState = "FULFILLMENT_STATE_DO_NOT_USE"
+	OrderFulfillmentStateProposed                 OrderFulfillmentState = "PROPOSED"
+	OrderFulfillmentStateReserved                 OrderFulfillmentState = "RESERVED"
+	OrderFulfillmentStatePrepared                 OrderFulfillmentState = "PREPARED"
+	OrderFulfillmentStateCompleted                OrderFulfillmentState = "COMPLETED"
+	OrderFulfillmentStateCanceled                 OrderFulfillmentState = "CANCELED"
+	OrderFulfillmentStateFailed                   OrderFulfillmentState = "FAILED"
 )
 
 func NewOrderFulfillmentStateFromString(s string) (OrderFulfillmentState, error) {
 	switch s {
+	case "FULFILLMENT_STATE_DO_NOT_USE":
+		return OrderFulfillmentStateFulfillmentStateDoNotUse, nil
 	case "PROPOSED":
 		return OrderFulfillmentStateProposed, nil
 	case "RESERVED":
@@ -40640,19 +53072,34 @@ func (o OrderFulfillmentState) Ptr() *OrderFulfillmentState {
 type OrderFulfillmentType string
 
 const (
-	OrderFulfillmentTypePickup   OrderFulfillmentType = "PICKUP"
-	OrderFulfillmentTypeShipment OrderFulfillmentType = "SHIPMENT"
-	OrderFulfillmentTypeDelivery OrderFulfillmentType = "DELIVERY"
+	OrderFulfillmentTypeFulfillmentTypeDoNotUse OrderFulfillmentType = "FULFILLMENT_TYPE_DO_NOT_USE"
+	OrderFulfillmentTypeCustom                  OrderFulfillmentType = "CUSTOM"
+	OrderFulfillmentTypePickup                  OrderFulfillmentType = "PICKUP"
+	OrderFulfillmentTypeManagedDelivery         OrderFulfillmentType = "MANAGED_DELIVERY"
+	OrderFulfillmentTypeShipment                OrderFulfillmentType = "SHIPMENT"
+	OrderFulfillmentTypeDigital                 OrderFulfillmentType = "DIGITAL"
+	OrderFulfillmentTypeDelivery                OrderFulfillmentType = "DELIVERY"
+	OrderFulfillmentTypeSimple                  OrderFulfillmentType = "SIMPLE"
 )
 
 func NewOrderFulfillmentTypeFromString(s string) (OrderFulfillmentType, error) {
 	switch s {
+	case "FULFILLMENT_TYPE_DO_NOT_USE":
+		return OrderFulfillmentTypeFulfillmentTypeDoNotUse, nil
+	case "CUSTOM":
+		return OrderFulfillmentTypeCustom, nil
 	case "PICKUP":
 		return OrderFulfillmentTypePickup, nil
+	case "MANAGED_DELIVERY":
+		return OrderFulfillmentTypeManagedDelivery, nil
 	case "SHIPMENT":
 		return OrderFulfillmentTypeShipment, nil
+	case "DIGITAL":
+		return OrderFulfillmentTypeDigital, nil
 	case "DELIVERY":
 		return OrderFulfillmentTypeDelivery, nil
+	case "SIMPLE":
+		return OrderFulfillmentTypeSimple, nil
 	}
 	var t OrderFulfillmentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -40710,6 +53157,105 @@ func (o *OrderFulfillmentUpdated) UnmarshalJSON(data []byte) error {
 }
 
 func (o *OrderFulfillmentUpdated) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an [OrderFulfillment](entity:OrderFulfillment)
+// is created or updated. This event is triggered only by the
+// [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint call.
+type OrderFulfillmentUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.fulfillment.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderFulfillmentUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderFulfillmentUpdatedEventData struct {
+	// Name of the affected object’s type, `"order_fulfillment_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the updated Order.
+	Object *OrderFulfillmentUpdatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedEventData) String() string {
 	if len(o._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
 			return value
@@ -41297,19 +53843,25 @@ func (o OrderLineItemDiscountType) Ptr() *OrderLineItemDiscountType {
 type OrderLineItemItemType string
 
 const (
-	OrderLineItemItemTypeItem         OrderLineItemItemType = "ITEM"
-	OrderLineItemItemTypeCustomAmount OrderLineItemItemType = "CUSTOM_AMOUNT"
-	OrderLineItemItemTypeGiftCard     OrderLineItemItemType = "GIFT_CARD"
+	OrderLineItemItemTypeDoNotUse      OrderLineItemItemType = "DO_NOT_USE"
+	OrderLineItemItemTypeItem          OrderLineItemItemType = "ITEM"
+	OrderLineItemItemTypeCustomAmount  OrderLineItemItemType = "CUSTOM_AMOUNT"
+	OrderLineItemItemTypeGiftCard      OrderLineItemItemType = "GIFT_CARD"
+	OrderLineItemItemTypeCreditPackage OrderLineItemItemType = "CREDIT_PACKAGE"
 )
 
 func NewOrderLineItemItemTypeFromString(s string) (OrderLineItemItemType, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return OrderLineItemItemTypeDoNotUse, nil
 	case "ITEM":
 		return OrderLineItemItemTypeItem, nil
 	case "CUSTOM_AMOUNT":
 		return OrderLineItemItemTypeCustomAmount, nil
 	case "GIFT_CARD":
 		return OrderLineItemItemTypeGiftCard, nil
+	case "CREDIT_PACKAGE":
+		return OrderLineItemItemTypeCreditPackage, nil
 	}
 	var t OrderLineItemItemType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -41319,7 +53871,7 @@ func (o OrderLineItemItemType) Ptr() *OrderLineItemItemType {
 	return &o
 }
 
-// A [CatalogModifier]($m/CatalogModifier).
+// A [CatalogModifier](entity:CatalogModifier).
 type OrderLineItemModifier struct {
 	// A unique ID that identifies the modifier only within this order.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -41759,7 +54311,7 @@ func (o *OrderMoneyAmounts) String() string {
 
 // Pricing options for an order. The options affect how the order's price is calculated.
 // They can be used, for example, to apply automatic price adjustments that are based on preconfigured
-// [pricing rules]($m/CatalogPricingRule).
+// [pricing rules](entity:CatalogPricingRule).
 type OrderPricingOptions struct {
 	// The option to determine whether pricing rule-based
 	// discounts are automatically applied to an order.
@@ -42632,14 +55184,18 @@ func (o *OrderServiceCharge) String() string {
 type OrderServiceChargeCalculationPhase string
 
 const (
-	OrderServiceChargeCalculationPhaseSubtotalPhase              OrderServiceChargeCalculationPhase = "SUBTOTAL_PHASE"
-	OrderServiceChargeCalculationPhaseTotalPhase                 OrderServiceChargeCalculationPhase = "TOTAL_PHASE"
-	OrderServiceChargeCalculationPhaseApportionedPercentagePhase OrderServiceChargeCalculationPhase = "APPORTIONED_PERCENTAGE_PHASE"
-	OrderServiceChargeCalculationPhaseApportionedAmountPhase     OrderServiceChargeCalculationPhase = "APPORTIONED_AMOUNT_PHASE"
+	OrderServiceChargeCalculationPhaseServiceChargeCalculationPhaseDoNotUse OrderServiceChargeCalculationPhase = "SERVICE_CHARGE_CALCULATION_PHASE_DO_NOT_USE"
+	OrderServiceChargeCalculationPhaseSubtotalPhase                         OrderServiceChargeCalculationPhase = "SUBTOTAL_PHASE"
+	OrderServiceChargeCalculationPhaseTotalPhase                            OrderServiceChargeCalculationPhase = "TOTAL_PHASE"
+	OrderServiceChargeCalculationPhaseApportionedPercentagePhase            OrderServiceChargeCalculationPhase = "APPORTIONED_PERCENTAGE_PHASE"
+	OrderServiceChargeCalculationPhaseApportionedAmountPhase                OrderServiceChargeCalculationPhase = "APPORTIONED_AMOUNT_PHASE"
+	OrderServiceChargeCalculationPhaseCardSurchargePhase                    OrderServiceChargeCalculationPhase = "CARD_SURCHARGE_PHASE"
 )
 
 func NewOrderServiceChargeCalculationPhaseFromString(s string) (OrderServiceChargeCalculationPhase, error) {
 	switch s {
+	case "SERVICE_CHARGE_CALCULATION_PHASE_DO_NOT_USE":
+		return OrderServiceChargeCalculationPhaseServiceChargeCalculationPhaseDoNotUse, nil
 	case "SUBTOTAL_PHASE":
 		return OrderServiceChargeCalculationPhaseSubtotalPhase, nil
 	case "TOTAL_PHASE":
@@ -42648,6 +55204,8 @@ func NewOrderServiceChargeCalculationPhaseFromString(s string) (OrderServiceChar
 		return OrderServiceChargeCalculationPhaseApportionedPercentagePhase, nil
 	case "APPORTIONED_AMOUNT_PHASE":
 		return OrderServiceChargeCalculationPhaseApportionedAmountPhase, nil
+	case "CARD_SURCHARGE_PHASE":
+		return OrderServiceChargeCalculationPhaseCardSurchargePhase, nil
 	}
 	var t OrderServiceChargeCalculationPhase
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -42689,12 +55247,15 @@ func (o OrderServiceChargeScope) Ptr() *OrderServiceChargeScope {
 type OrderServiceChargeTreatmentType string
 
 const (
-	OrderServiceChargeTreatmentTypeLineItemTreatment    OrderServiceChargeTreatmentType = "LINE_ITEM_TREATMENT"
-	OrderServiceChargeTreatmentTypeApportionedTreatment OrderServiceChargeTreatmentType = "APPORTIONED_TREATMENT"
+	OrderServiceChargeTreatmentTypeServiceChargeTreatmentTypeDoNotUse OrderServiceChargeTreatmentType = "SERVICE_CHARGE_TREATMENT_TYPE_DO_NOT_USE"
+	OrderServiceChargeTreatmentTypeLineItemTreatment                  OrderServiceChargeTreatmentType = "LINE_ITEM_TREATMENT"
+	OrderServiceChargeTreatmentTypeApportionedTreatment               OrderServiceChargeTreatmentType = "APPORTIONED_TREATMENT"
 )
 
 func NewOrderServiceChargeTreatmentTypeFromString(s string) (OrderServiceChargeTreatmentType, error) {
 	switch s {
+	case "SERVICE_CHARGE_TREATMENT_TYPE_DO_NOT_USE":
+		return OrderServiceChargeTreatmentTypeServiceChargeTreatmentTypeDoNotUse, nil
 	case "LINE_ITEM_TREATMENT":
 		return OrderServiceChargeTreatmentTypeLineItemTreatment, nil
 	case "APPORTIONED_TREATMENT":
@@ -42711,16 +55272,22 @@ func (o OrderServiceChargeTreatmentType) Ptr() *OrderServiceChargeTreatmentType 
 type OrderServiceChargeType string
 
 const (
-	OrderServiceChargeTypeAutoGratuity OrderServiceChargeType = "AUTO_GRATUITY"
-	OrderServiceChargeTypeCustom       OrderServiceChargeType = "CUSTOM"
+	OrderServiceChargeTypeServiceChargeTypeDoNotUse OrderServiceChargeType = "SERVICE_CHARGE_TYPE_DO_NOT_USE"
+	OrderServiceChargeTypeAutoGratuity              OrderServiceChargeType = "AUTO_GRATUITY"
+	OrderServiceChargeTypeCustom                    OrderServiceChargeType = "CUSTOM"
+	OrderServiceChargeTypeCardSurcharge             OrderServiceChargeType = "CARD_SURCHARGE"
 )
 
 func NewOrderServiceChargeTypeFromString(s string) (OrderServiceChargeType, error) {
 	switch s {
+	case "SERVICE_CHARGE_TYPE_DO_NOT_USE":
+		return OrderServiceChargeTypeServiceChargeTypeDoNotUse, nil
 	case "AUTO_GRATUITY":
 		return OrderServiceChargeTypeAutoGratuity, nil
 	case "CUSTOM":
 		return OrderServiceChargeTypeCustom, nil
+	case "CARD_SURCHARGE":
+		return OrderServiceChargeTypeCardSurcharge, nil
 	}
 	var t OrderServiceChargeType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -42778,6 +55345,7 @@ func (o *OrderSource) String() string {
 type OrderState string
 
 const (
+	OrderStateDoNotUse  OrderState = "DO_NOT_USE"
 	OrderStateOpen      OrderState = "OPEN"
 	OrderStateCompleted OrderState = "COMPLETED"
 	OrderStateCanceled  OrderState = "CANCELED"
@@ -42786,6 +55354,8 @@ const (
 
 func NewOrderStateFromString(s string) (OrderState, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return OrderStateDoNotUse, nil
 	case "OPEN":
 		return OrderStateOpen, nil
 	case "COMPLETED":
@@ -42849,6 +55419,105 @@ func (o *OrderUpdated) UnmarshalJSON(data []byte) error {
 }
 
 func (o *OrderUpdated) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an [Order](entity:Order) is updated. This
+// event is triggered only by the [UpdateOrder](api-endpoint:Orders-UpdateOrder)
+// endpoint call.
+type OrderUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdatedEvent) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderUpdatedEventData struct {
+	// Name of the affected object’s type, `"order_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the updated Order.
+	Object *OrderUpdatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OrderUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdatedEventData) String() string {
 	if len(o._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
 			return value
@@ -42948,7 +55617,7 @@ func (p *PaginationCursor) String() string {
 }
 
 // Defines output parameters in a response from the
-// [PauseSubscription]($e/Subscriptions/PauseSubscription) endpoint.
+// [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
 type PauseSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -42996,7 +55665,7 @@ func (p *PauseSubscriptionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of a request to the
-// [PayOrder]($e/Orders/PayOrder) endpoint.
+// [PayOrder](api-endpoint:Orders-PayOrder) endpoint.
 type PayOrderResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -44200,6 +56869,145 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Published when a [Payment](entity:Payment) is created.
+type PaymentCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"payment.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PaymentCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEvent) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentCreatedEventData struct {
+	// Name of the affected object’s type, `"payment"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected payment.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created payment.
+	Object *PaymentCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEventData) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentCreatedEventObject struct {
+	// The created payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEventObject) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaymentLink struct {
 	// The Square-assigned ID of the payment link.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -44392,12 +57200,15 @@ func (p *PaymentOptions) String() string {
 type PaymentOptionsDelayAction string
 
 const (
-	PaymentOptionsDelayActionCancel   PaymentOptionsDelayAction = "CANCEL"
-	PaymentOptionsDelayActionComplete PaymentOptionsDelayAction = "COMPLETE"
+	PaymentOptionsDelayActionInvalidType PaymentOptionsDelayAction = "INVALID_TYPE"
+	PaymentOptionsDelayActionCancel      PaymentOptionsDelayAction = "CANCEL"
+	PaymentOptionsDelayActionComplete    PaymentOptionsDelayAction = "COMPLETE"
 )
 
 func NewPaymentOptionsDelayActionFromString(s string) (PaymentOptionsDelayAction, error) {
 	switch s {
+	case "INVALID_TYPE":
+		return PaymentOptionsDelayActionInvalidType, nil
 	case "CANCEL":
 		return PaymentOptionsDelayActionCancel, nil
 	case "COMPLETE":
@@ -44485,6 +57296,147 @@ func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaymentRefund) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Published when a [Payment](entity:Payment) is updated.
+// Typically the `payment.status`, or `card_details.status` fields are updated
+// as a payment is canceled, authorized, or completed.
+type PaymentUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"payment.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PaymentUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEvent) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentUpdatedEventData struct {
+	// Name of the affected object’s type, `"payment"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected payment.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated payment.
+	Object *PaymentUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEventData) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentUpdatedEventObject struct {
+	// The updated payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEventObject) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -44667,6 +57619,147 @@ func (p *PayoutEntry) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// Published when a [Payout](entity:Payout) has failed.
+type PayoutFailedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event that this represents, `payout.failed`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutFailedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutFailedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEvent) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutFailedEventData struct {
+	// The name of the affected object's type, `payout`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the failed payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the failed payout.
+	Object *PayoutFailedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutFailedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEventData) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutFailedEventObject struct {
+	// The payout that failed.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutFailedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEventObject) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // Represents a payout fee that can incur as part of a payout.
 type PayoutFee struct {
 	// The money amount of the payout fee.
@@ -44719,12 +57812,15 @@ func (p *PayoutFee) String() string {
 type PayoutFeeType string
 
 const (
-	PayoutFeeTypeTransferFee      PayoutFeeType = "TRANSFER_FEE"
-	PayoutFeeTypeTaxOnTransferFee PayoutFeeType = "TAX_ON_TRANSFER_FEE"
+	PayoutFeeTypeUnknownPayoutFeeTypeDoNotUse PayoutFeeType = "UNKNOWN_PAYOUT_FEE_TYPE_DO_NOT_USE"
+	PayoutFeeTypeTransferFee                  PayoutFeeType = "TRANSFER_FEE"
+	PayoutFeeTypeTaxOnTransferFee             PayoutFeeType = "TAX_ON_TRANSFER_FEE"
 )
 
 func NewPayoutFeeTypeFromString(s string) (PayoutFeeType, error) {
 	switch s {
+	case "UNKNOWN_PAYOUT_FEE_TYPE_DO_NOT_USE":
+		return PayoutFeeTypeUnknownPayoutFeeTypeDoNotUse, nil
 	case "TRANSFER_FEE":
 		return PayoutFeeTypeTransferFee, nil
 	case "TAX_ON_TRANSFER_FEE":
@@ -44738,23 +57834,311 @@ func (p PayoutFeeType) Ptr() *PayoutFeeType {
 	return &p
 }
 
+// Published when a [Payout](entity:Payout) is complete.
+type PayoutPaidEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"payout.paid"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutPaidEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutPaidEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEvent) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutPaidEventData struct {
+	// Name of the affected object’s type, `"payout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the completed payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the completed payout.
+	Object *PayoutPaidEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutPaidEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEventData) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutPaidEventObject struct {
+	// The payout that has completed.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutPaidEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEventObject) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Published when a [Payout](entity:Payout) is sent.
+type PayoutSentEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"payout.sent"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutSentEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutSentEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEvent) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutSentEventData struct {
+	// Name of the affected object’s type, `"payout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the sent payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the sent payout.
+	Object *PayoutSentEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutSentEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEventData) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutSentEventObject struct {
+	// The payout that was sent.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PayoutSentEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEventObject) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // Payout status types
 type PayoutStatus string
 
 const (
-	PayoutStatusSent   PayoutStatus = "SENT"
-	PayoutStatusFailed PayoutStatus = "FAILED"
-	PayoutStatusPaid   PayoutStatus = "PAID"
+	PayoutStatusUnknownPayoutStatusDoNotUse PayoutStatus = "UNKNOWN_PAYOUT_STATUS_DO_NOT_USE"
+	PayoutStatusSent                        PayoutStatus = "SENT"
+	PayoutStatusFailed                      PayoutStatus = "FAILED"
+	PayoutStatusPaid                        PayoutStatus = "PAID"
+	PayoutStatusPending                     PayoutStatus = "PENDING"
 )
 
 func NewPayoutStatusFromString(s string) (PayoutStatus, error) {
 	switch s {
+	case "UNKNOWN_PAYOUT_STATUS_DO_NOT_USE":
+		return PayoutStatusUnknownPayoutStatusDoNotUse, nil
 	case "SENT":
 		return PayoutStatusSent, nil
 	case "FAILED":
 		return PayoutStatusFailed, nil
 	case "PAID":
 		return PayoutStatusPaid, nil
+	case "PENDING":
+		return PayoutStatusPending, nil
 	}
 	var t PayoutStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -44771,12 +58155,15 @@ func (p PayoutStatus) Ptr() *PayoutStatus {
 type PayoutType string
 
 const (
-	PayoutTypeBatch  PayoutType = "BATCH"
-	PayoutTypeSimple PayoutType = "SIMPLE"
+	PayoutTypeUnknownPayoutTypeDoNotUse PayoutType = "UNKNOWN_PAYOUT_TYPE_DO_NOT_USE"
+	PayoutTypeBatch                     PayoutType = "BATCH"
+	PayoutTypeSimple                    PayoutType = "SIMPLE"
 )
 
 func NewPayoutTypeFromString(s string) (PayoutType, error) {
 	switch s {
+	case "UNKNOWN_PAYOUT_TYPE_DO_NOT_USE":
+		return PayoutTypeUnknownPayoutTypeDoNotUse, nil
 	case "BATCH":
 		return PayoutTypeBatch, nil
 	case "SIMPLE":
@@ -44987,20 +58374,27 @@ func (p *ProcessingFee) String() string {
 type Product string
 
 const (
-	ProductSquarePos         Product = "SQUARE_POS"
-	ProductExternalAPI       Product = "EXTERNAL_API"
-	ProductBilling           Product = "BILLING"
-	ProductAppointments      Product = "APPOINTMENTS"
-	ProductInvoices          Product = "INVOICES"
-	ProductOnlineStore       Product = "ONLINE_STORE"
-	ProductPayroll           Product = "PAYROLL"
-	ProductDashboard         Product = "DASHBOARD"
-	ProductItemLibraryImport Product = "ITEM_LIBRARY_IMPORT"
-	ProductOther             Product = "OTHER"
+	ProductProductDoNotUse    Product = "PRODUCT_DO_NOT_USE"
+	ProductSquarePos          Product = "SQUARE_POS"
+	ProductExternalAPI        Product = "EXTERNAL_API"
+	ProductBilling            Product = "BILLING"
+	ProductAppointments       Product = "APPOINTMENTS"
+	ProductInvoices           Product = "INVOICES"
+	ProductOnlineStore        Product = "ONLINE_STORE"
+	ProductPayroll            Product = "PAYROLL"
+	ProductDashboard          Product = "DASHBOARD"
+	ProductItemLibraryImport  Product = "ITEM_LIBRARY_IMPORT"
+	ProductRetail             Product = "RETAIL"
+	ProductRestaurant         Product = "RESTAURANT"
+	ProductCustomersDirectory Product = "CUSTOMERS_DIRECTORY"
+	ProductChannels           Product = "CHANNELS"
+	ProductOther              Product = "OTHER"
 )
 
 func NewProductFromString(s string) (Product, error) {
 	switch s {
+	case "PRODUCT_DO_NOT_USE":
+		return ProductProductDoNotUse, nil
 	case "SQUARE_POS":
 		return ProductSquarePos, nil
 	case "EXTERNAL_API":
@@ -45019,6 +58413,14 @@ func NewProductFromString(s string) (Product, error) {
 		return ProductDashboard, nil
 	case "ITEM_LIBRARY_IMPORT":
 		return ProductItemLibraryImport, nil
+	case "RETAIL":
+		return ProductRetail, nil
+	case "RESTAURANT":
+		return ProductRestaurant, nil
+	case "CUSTOMERS_DIRECTORY":
+		return ProductCustomersDirectory, nil
+	case "CHANNELS":
+		return ProductChannels, nil
 	case "OTHER":
 		return ProductOther, nil
 	}
@@ -45030,7 +58432,51 @@ func (p Product) Ptr() *Product {
 	return &p
 }
 
-type ProductType = string
+type ProductType string
+
+const (
+	ProductTypeUnknown          ProductType = "UNKNOWN"
+	ProductTypeRegister         ProductType = "REGISTER"
+	ProductTypeRestaurant       ProductType = "RESTAURANT"
+	ProductTypeRetail           ProductType = "RETAIL"
+	ProductTypePaySdk           ProductType = "PAY_SDK"
+	ProductTypeTerminalAPI      ProductType = "TERMINAL_API"
+	ProductTypeKds              ProductType = "KDS"
+	ProductTypeKdsExpo          ProductType = "KDS_EXPO"
+	ProductTypeRestaurantMobile ProductType = "RESTAURANT_MOBILE"
+	ProductTypeFnbkiosk         ProductType = "FNBKIOSK"
+)
+
+func NewProductTypeFromString(s string) (ProductType, error) {
+	switch s {
+	case "UNKNOWN":
+		return ProductTypeUnknown, nil
+	case "REGISTER":
+		return ProductTypeRegister, nil
+	case "RESTAURANT":
+		return ProductTypeRestaurant, nil
+	case "RETAIL":
+		return ProductTypeRetail, nil
+	case "PAY_SDK":
+		return ProductTypePaySdk, nil
+	case "TERMINAL_API":
+		return ProductTypeTerminalAPI, nil
+	case "KDS":
+		return ProductTypeKds, nil
+	case "KDS_EXPO":
+		return ProductTypeKdsExpo, nil
+	case "RESTAURANT_MOBILE":
+		return ProductTypeRestaurantMobile, nil
+	case "FNBKIOSK":
+		return ProductTypeFnbkiosk, nil
+	}
+	var t ProductType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProductType) Ptr() *ProductType {
+	return &p
+}
 
 // Describes a `PublishInvoice` response.
 type PublishInvoiceResponse struct {
@@ -45428,8 +58874,147 @@ func (r *Refund) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// Published when a [Refund](entity:PaymentRefund) is created.
+type RefundCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"refund.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *RefundCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEvent) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundCreatedEventData struct {
+	// Name of the affected object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created refund.
+	Object *RefundCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEventData) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundCreatedEventObject struct {
+	// The created refund.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEventObject) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Defines the response returned by
-// [RefundPayment]($e/Refunds/RefundPayment).
+// [RefundPayment](api-endpoint:Refunds-RefundPayment).
 //
 // If there are errors processing the request, the `refund` field might not be
 // present, or it might be present with a status of `FAILED`.
@@ -45506,8 +59091,148 @@ func (r RefundStatus) Ptr() *RefundStatus {
 	return &r
 }
 
+// Published when a [Refund](entity:PaymentRefund) is updated.
+// Typically the `refund.status` changes when a refund is completed.
+type RefundUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"refund.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *RefundUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEvent) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundUpdatedEventData struct {
+	// Name of the affected object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated refund.
+	Object *RefundUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEventData) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundUpdatedEventObject struct {
+	// The updated refund.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEventObject) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Defines the fields that are included in the response body of
-// a request to the [RegisterDomain]($e/ApplePay/RegisterDomain) endpoint.
+// a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
 //
 // Either `errors` or `status` are present in a given response (never both).
 type RegisterDomainResponse struct {
@@ -45563,6 +59288,7 @@ type RegisterDomainResponseStatus string
 const (
 	RegisterDomainResponseStatusPending  RegisterDomainResponseStatus = "PENDING"
 	RegisterDomainResponseStatusVerified RegisterDomainResponseStatus = "VERIFIED"
+	RegisterDomainResponseStatusDoNotUse RegisterDomainResponseStatus = "DO_NOT_USE"
 )
 
 func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponseStatus, error) {
@@ -45571,6 +59297,8 @@ func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponse
 		return RegisterDomainResponseStatusPending, nil
 	case "VERIFIED":
 		return RegisterDomainResponseStatusVerified, nil
+	case "DO_NOT_USE":
+		return RegisterDomainResponseStatusDoNotUse, nil
 	}
 	var t RegisterDomainResponseStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -45581,7 +59309,7 @@ func (r RegisterDomainResponseStatus) Ptr() *RegisterDomainResponseStatus {
 }
 
 // Defines the fields that are included in the request body of
-// a request to the [RemoveGroupFromCustomer]($e/Customers/RemoveGroupFromCustomer) endpoint.
+// a request to the [RemoveGroupFromCustomer](api-endpoint:Customers-RemoveGroupFromCustomer) endpoint.
 type RemoveGroupFromCustomerRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -45622,7 +59350,7 @@ func (r *RemoveGroupFromCustomerRequest) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RemoveGroupFromCustomer]($e/Customers/RemoveGroupFromCustomer)
+// a request to the [RemoveGroupFromCustomer](api-endpoint:Customers-RemoveGroupFromCustomer)
 // endpoint.
 type RemoveGroupFromCustomerResponse struct {
 	// Any errors that occurred during the request.
@@ -45666,8 +59394,69 @@ func (r *RemoveGroupFromCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+type RenewTokenResponse struct {
+	// The renewed access token.
+	// This value might be different from the `access_token` you provided in your request.
+	// You provide this token in a header with every request to Connect API endpoints.
+	// See [Request and response headers](https://developer.squareup.com/docs/api/connect/v2/#requestandresponseheaders) for the format of this header.
+	AccessToken *string `json:"access_token,omitempty" url:"access_token,omitempty"`
+	// This value is always _bearer_.
+	TokenType *string `json:"token_type,omitempty" url:"token_type,omitempty"`
+	// The date when the `access_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	// The ID of the authorizing merchant's business.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// **LEGACY FIELD**. The ID of the merchant subscription associated with
+	// the authorization. The ID is only present if the merchant signed up for a subscription
+	// during authorization.
+	SubscriptionID *string `json:"subscription_id,omitempty" url:"subscription_id,omitempty"`
+	// **LEGACY FIELD**. The ID of the subscription plan the merchant signed
+	// up for. The ID is only present if the merchant signed up for a subscription plan during
+	// authorization.
+	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RenewTokenResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RenewTokenResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RenewTokenResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RenewTokenResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RenewTokenResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Defines output parameters in a response from the
-// [ResumeSubscription]($e/Subscriptions/ResumeSubscription) endpoint.
+// [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
 type ResumeSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -45714,7 +59503,7 @@ func (r *ResumeSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveBookingCustomAttributeDefinition]($e/BookingCustomAttributes/RetrieveBookingCustomAttributeDefinition) response.
+// Represents a [RetrieveBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -45760,7 +59549,7 @@ func (r *RetrieveBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveBookingCustomAttribute]($e/BookingCustomAttributes/RetrieveBookingCustomAttribute) response.
+// Represents a [RetrieveBookingCustomAttribute](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -45867,7 +59656,7 @@ type RetrieveCatalogObjectRequest struct {
 	IncludeRelatedObjects *bool `json:"include_related_objects,omitempty" url:"include_related_objects,omitempty"`
 	// Requests objects as of a specific version of the catalog. This allows you to retrieve historical
 	// versions of objects. The value to retrieve a specific version of an object can be found
-	// in the version field of [CatalogObject]($m/CatalogObject)s. If not included, results will
+	// in the version field of [CatalogObject](entity:CatalogObject)s. If not included, results will
 	// be from the current version of the catalog.
 	CatalogVersion *int64 `json:"catalog_version,omitempty" url:"catalog_version,omitempty"`
 	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists
@@ -45914,7 +59703,7 @@ func (r *RetrieveCatalogObjectRequest) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttributeDefinition) request.
+// Represents a [RetrieveCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttributeDefinition) request.
 type RetrieveCustomerCustomAttributeDefinitionRequest struct {
 	// The current version of the custom attribute definition, which is used for strongly consistent
 	// reads to guarantee that you receive the most up-to-date data. When included in the request,
@@ -45960,7 +59749,7 @@ func (r *RetrieveCustomerCustomAttributeDefinitionRequest) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveCustomerCustomAttribute]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttribute) request.
+// Represents a [RetrieveCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttribute) request.
 type RetrieveCustomerCustomAttributeRequest struct {
 	// Indicates whether to return the [custom attribute definition](entity:CustomAttributeDefinition) in the `definition` field of
 	// the custom attribute. Set this parameter to `true` to get the name and description of the custom
@@ -46189,7 +59978,7 @@ func (r *RetrieveLocationBookingProfileResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveLocationCustomAttributeDefinition]($e/LocationCustomAttributes/RetrieveLocationCustomAttributeDefinition) response.
+// Represents a [RetrieveLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -46235,7 +60024,7 @@ func (r *RetrieveLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveLocationCustomAttribute]($e/LocationCustomAttributes/RetrieveLocationCustomAttribute) response.
+// Represents a [RetrieveLocationCustomAttribute](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -46365,7 +60154,7 @@ func (r *RetrieveLocationSettingsResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttributeDefinition) response.
+// Represents a [RetrieveMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -46411,7 +60200,7 @@ func (r *RetrieveMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveMerchantCustomAttribute]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttribute) response.
+// Represents a [RetrieveMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -46632,7 +60421,7 @@ func (r *RetrieveOrderCustomAttributeResponse) String() string {
 }
 
 // Defines input parameters in a request to the
-// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) endpoint.
+// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
 type RetrieveSubscriptionRequest struct {
 	// A query parameter to specify related information to be included in the response.
 	//
@@ -46869,6 +60658,7 @@ func (r *RiskEvaluation) String() string {
 type RiskEvaluationRiskLevel string
 
 const (
+	RiskEvaluationRiskLevelDoNotUse RiskEvaluationRiskLevel = "DO_NOT_USE"
 	RiskEvaluationRiskLevelPending  RiskEvaluationRiskLevel = "PENDING"
 	RiskEvaluationRiskLevelNormal   RiskEvaluationRiskLevel = "NORMAL"
 	RiskEvaluationRiskLevelModerate RiskEvaluationRiskLevel = "MODERATE"
@@ -46877,6 +60667,8 @@ const (
 
 func NewRiskEvaluationRiskLevelFromString(s string) (RiskEvaluationRiskLevel, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return RiskEvaluationRiskLevelDoNotUse, nil
 	case "PENDING":
 		return RiskEvaluationRiskLevelPending, nil
 	case "NORMAL":
@@ -47091,12 +60883,15 @@ func (s *SearchAvailabilityResponse) String() string {
 type SearchCatalogItemsRequestStockLevel string
 
 const (
-	SearchCatalogItemsRequestStockLevelOut SearchCatalogItemsRequestStockLevel = "OUT"
-	SearchCatalogItemsRequestStockLevelLow SearchCatalogItemsRequestStockLevel = "LOW"
+	SearchCatalogItemsRequestStockLevelStockLevelDoNotUse SearchCatalogItemsRequestStockLevel = "STOCK_LEVEL_DO_NOT_USE"
+	SearchCatalogItemsRequestStockLevelOut                SearchCatalogItemsRequestStockLevel = "OUT"
+	SearchCatalogItemsRequestStockLevelLow                SearchCatalogItemsRequestStockLevel = "LOW"
 )
 
 func NewSearchCatalogItemsRequestStockLevelFromString(s string) (SearchCatalogItemsRequestStockLevel, error) {
 	switch s {
+	case "STOCK_LEVEL_DO_NOT_USE":
+		return SearchCatalogItemsRequestStockLevelStockLevelDoNotUse, nil
 	case "OUT":
 		return SearchCatalogItemsRequestStockLevelOut, nil
 	case "LOW":
@@ -47110,7 +60905,7 @@ func (s SearchCatalogItemsRequestStockLevel) Ptr() *SearchCatalogItemsRequestSto
 	return &s
 }
 
-// Defines the response body returned from the [SearchCatalogItems]($e/Catalog/SearchCatalogItems) endpoint.
+// Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
 type SearchCatalogItemsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -47367,7 +61162,7 @@ func (s *SearchEventsQuery) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [SearchEvents]($e/Events/SearchEvents) endpoint.
+// a request to the [SearchEvents](api-endpoint:Events-SearchEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
@@ -47773,7 +61568,7 @@ func (s *SearchLoyaltyRewardsResponse) String() string {
 
 // A filter based on the order `customer_id` and any tender `customer_id`
 // associated with the order. It does not filter based on the
-// [FulfillmentRecipient]($m/FulfillmentRecipient) `customer_id`.
+// [FulfillmentRecipient](entity:FulfillmentRecipient) `customer_id`.
 type SearchOrdersCustomerFilter struct {
 	// A list of customer IDs to filter by.
 	//
@@ -47827,7 +61622,7 @@ func (s *SearchOrdersCustomerFilter) String() string {
 // is absent, it defaults to the time of the first request for the cursor.
 //
 // **Important:** If you use the `DateTimeFilter` in a `SearchOrders` query,
-// you must set the `sort_field` in [OrdersSort]($m/SearchOrdersSort)
+// you must set the `sort_field` in [OrdersSort](entity:SearchOrdersSort)
 // to the same field you filter for. For example, if you set the `CLOSED_AT` field
 // in `DateTimeFilter`, you must set the `sort_field` in `SearchOrdersSort` to
 // `CLOSED_AT`. Otherwise, `SearchOrders` throws an error.
@@ -47940,7 +61735,7 @@ func (s *SearchOrdersFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Filter based on [order fulfillment]($m/Fulfillment) information.
+// Filter based on [order fulfillment](entity:Fulfillment) information.
 type SearchOrdersFulfillmentFilter struct {
 	// A list of [fulfillment types](entity:FulfillmentType) to filter
 	// for. The list returns orders if any of its fulfillments match any of the fulfillment types
@@ -48037,7 +61832,7 @@ func (s *SearchOrdersQuery) String() string {
 }
 
 // Either the `order_entries` or `orders` field is set, depending on whether
-// `return_entries` is set on the [SearchOrdersRequest]($e/Orders/SearchOrders).
+// `return_entries` is set on the [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 type SearchOrdersResponse struct {
 	// A list of [OrderEntries](entity:OrderEntry) that fit the query
 	// conditions. The list is populated only if `return_entries` is set to `true` in the request.
@@ -48152,19 +61947,31 @@ func (s *SearchOrdersSort) String() string {
 type SearchOrdersSortField string
 
 const (
+	SearchOrdersSortFieldDoNotUse  SearchOrdersSortField = "DO_NOT_USE"
 	SearchOrdersSortFieldCreatedAt SearchOrdersSortField = "CREATED_AT"
 	SearchOrdersSortFieldUpdatedAt SearchOrdersSortField = "UPDATED_AT"
 	SearchOrdersSortFieldClosedAt  SearchOrdersSortField = "CLOSED_AT"
+	SearchOrdersSortFieldPaidAt    SearchOrdersSortField = "PAID_AT"
+	SearchOrdersSortFieldScore     SearchOrdersSortField = "SCORE"
+	SearchOrdersSortFieldDueAt     SearchOrdersSortField = "DUE_AT"
 )
 
 func NewSearchOrdersSortFieldFromString(s string) (SearchOrdersSortField, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return SearchOrdersSortFieldDoNotUse, nil
 	case "CREATED_AT":
 		return SearchOrdersSortFieldCreatedAt, nil
 	case "UPDATED_AT":
 		return SearchOrdersSortFieldUpdatedAt, nil
 	case "CLOSED_AT":
 		return SearchOrdersSortFieldClosedAt, nil
+	case "PAID_AT":
+		return SearchOrdersSortFieldPaidAt, nil
+	case "SCORE":
+		return SearchOrdersSortFieldScore, nil
+	case "DUE_AT":
+		return SearchOrdersSortFieldDueAt, nil
 	}
 	var t SearchOrdersSortField
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -48314,7 +62121,7 @@ func (s *SearchShiftsResponse) String() string {
 }
 
 // Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
-// the [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
+// the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 type SearchSubscriptionsFilter struct {
 	// A filter to select subscriptions based on the subscribing customer IDs.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
@@ -48405,7 +62212,7 @@ func (s *SearchSubscriptionsQuery) String() string {
 }
 
 // Defines output parameters in a response from the
-// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
+// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 type SearchSubscriptionsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -48799,7 +62606,7 @@ func (s *SearchVendorsRequestFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines a sorter used to sort results from [SearchVendors]($e/Vendors/SearchVendors).
+// Defines a sorter used to sort results from [SearchVendors](api-endpoint:Vendors-SearchVendors).
 type SearchVendorsRequestSort struct {
 	// Specifies the sort key to sort the returned vendors.
 	// See [Field](#type-field) for possible values
@@ -48846,7 +62653,7 @@ func (s *SearchVendorsRequestSort) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// The field to sort the returned [Vendor]($m/Vendor) objects by.
+// The field to sort the returned [Vendor](entity:Vendor) objects by.
 type SearchVendorsRequestSortField string
 
 const (
@@ -48869,7 +62676,7 @@ func (s SearchVendorsRequestSortField) Ptr() *SearchVendorsRequestSortField {
 	return &s
 }
 
-// Represents an output from a call to [SearchVendors]($e/Vendors/SearchVendors).
+// Represents an output from a call to [SearchVendors](api-endpoint:Vendors-SearchVendors).
 type SearchVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -49205,12 +63012,15 @@ func (s *ShiftFilter) String() string {
 type ShiftFilterStatus string
 
 const (
-	ShiftFilterStatusOpen   ShiftFilterStatus = "OPEN"
-	ShiftFilterStatusClosed ShiftFilterStatus = "CLOSED"
+	ShiftFilterStatusDoNotUse ShiftFilterStatus = "DO_NOT_USE"
+	ShiftFilterStatusOpen     ShiftFilterStatus = "OPEN"
+	ShiftFilterStatusClosed   ShiftFilterStatus = "CLOSED"
 )
 
 func NewShiftFilterStatusFromString(s string) (ShiftFilterStatus, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return ShiftFilterStatusDoNotUse, nil
 	case "OPEN":
 		return ShiftFilterStatusOpen, nil
 	case "CLOSED":
@@ -49320,6 +63130,7 @@ func (s *ShiftSort) String() string {
 type ShiftSortField string
 
 const (
+	ShiftSortFieldDoNotUse  ShiftSortField = "DO_NOT_USE"
 	ShiftSortFieldStartAt   ShiftSortField = "START_AT"
 	ShiftSortFieldEndAt     ShiftSortField = "END_AT"
 	ShiftSortFieldCreatedAt ShiftSortField = "CREATED_AT"
@@ -49328,6 +63139,8 @@ const (
 
 func NewShiftSortFieldFromString(s string) (ShiftSortField, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return ShiftSortFieldDoNotUse, nil
 	case "START_AT":
 		return ShiftSortFieldStartAt, nil
 	case "END_AT":
@@ -49349,12 +63162,15 @@ func (s ShiftSortField) Ptr() *ShiftSortField {
 type ShiftStatus string
 
 const (
-	ShiftStatusOpen   ShiftStatus = "OPEN"
-	ShiftStatusClosed ShiftStatus = "CLOSED"
+	ShiftStatusUnknownStatus ShiftStatus = "UNKNOWN_STATUS"
+	ShiftStatusOpen          ShiftStatus = "OPEN"
+	ShiftStatusClosed        ShiftStatus = "CLOSED"
 )
 
 func NewShiftStatusFromString(s string) (ShiftStatus, error) {
 	switch s {
+	case "UNKNOWN_STATUS":
+		return ShiftStatusUnknownStatus, nil
 	case "OPEN":
 		return ShiftStatusOpen, nil
 	case "CLOSED":
@@ -49475,6 +63291,7 @@ func (s *ShiftWorkday) String() string {
 type ShiftWorkdayMatcher string
 
 const (
+	ShiftWorkdayMatcherDoNotUse     ShiftWorkdayMatcher = "DO_NOT_USE"
 	ShiftWorkdayMatcherStartAt      ShiftWorkdayMatcher = "START_AT"
 	ShiftWorkdayMatcherEndAt        ShiftWorkdayMatcher = "END_AT"
 	ShiftWorkdayMatcherIntersection ShiftWorkdayMatcher = "INTERSECTION"
@@ -49482,6 +63299,8 @@ const (
 
 func NewShiftWorkdayMatcherFromString(s string) (ShiftWorkdayMatcher, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return ShiftWorkdayMatcherDoNotUse, nil
 	case "START_AT":
 		return ShiftWorkdayMatcherStartAt, nil
 	case "END_AT":
@@ -50084,6 +63903,8 @@ type Subscription struct {
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// The ID of the location associated with the subscription.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The ID of the subscribed-to [subscription plan](entity:CatalogSubscriptionPlan).
+	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
 	// The ID of the subscribed-to [subscription plan variation](entity:CatalogSubscriptionPlanVariation).
 	PlanVariationID *string `json:"plan_variation_id,omitempty" url:"plan_variation_id,omitempty"`
 	// The ID of the subscribing [customer](entity:Customer) profile.
@@ -50132,6 +63953,16 @@ type Subscription struct {
 	// The ID of the [subscriber's](entity:Customer) [card](entity:Card)
 	// used to charge for the subscription.
 	CardID *string `json:"card_id,omitempty" url:"card_id,omitempty"`
+	// The `YYYY-MM-DD`-formatted date (for example, 2013-01-15) up to when the subscriber is invoiced for the
+	// subscription.
+	//
+	// After the invoice is sent for a given billing period,
+	// this date will be the last day of the billing period.
+	// For example,
+	// suppose for the month of May a subscriber gets an invoice
+	// (or charged the card) on May 1. For the monthly billing scenario,
+	// this date is then set to May 31.
+	PaidUntilDate *string `json:"paid_until_date,omitempty" url:"paid_until_date,omitempty"`
 	// Timezone that will be used in date calculations for the subscription.
 	// Defaults to the timezone of the location based on `location_id`.
 	// Format: the IANA Timezone Database identifier for the location timezone (for example, `America/Los_Angeles`).
@@ -50139,9 +63970,9 @@ type Subscription struct {
 	// The origination details of the subscription.
 	Source *SubscriptionSource `json:"source,omitempty" url:"source,omitempty"`
 	// The list of scheduled actions on this subscription. It is set only in the response from
-	// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) with the query parameter
+	// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) with the query parameter
 	// of `include=actions` or from
-	// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) with the input parameter
+	// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) with the input parameter
 	// of `include:["actions"]`.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 	// The day of the month on which the subscription will issue invoices and publish orders.
@@ -50196,6 +64027,8 @@ type SubscriptionAction struct {
 	Type *SubscriptionActionType `json:"type,omitempty" url:"type,omitempty"`
 	// The `YYYY-MM-DD`-formatted date when the action occurs on the subscription.
 	EffectiveDate *string `json:"effective_date,omitempty" url:"effective_date,omitempty"`
+	// The target subscription plan a subscription switches to, for a `SWAP_PLAN` action.
+	NewPlanID *string `json:"new_plan_id,omitempty" url:"new_plan_id,omitempty"`
 	// The new billing anchor day value, for a `CHANGE_BILLING_ANCHOR_DATE` action.
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
 	// A list of Phases, to pass phase-specific information used in the swap.
@@ -50245,15 +64078,18 @@ func (s *SubscriptionAction) String() string {
 type SubscriptionActionType string
 
 const (
-	SubscriptionActionTypeCancel                  SubscriptionActionType = "CANCEL"
-	SubscriptionActionTypePause                   SubscriptionActionType = "PAUSE"
-	SubscriptionActionTypeResume                  SubscriptionActionType = "RESUME"
-	SubscriptionActionTypeSwapPlan                SubscriptionActionType = "SWAP_PLAN"
-	SubscriptionActionTypeChangeBillingAnchorDate SubscriptionActionType = "CHANGE_BILLING_ANCHOR_DATE"
+	SubscriptionActionTypeDefaultSubscriptionActionTypeDoNotUse SubscriptionActionType = "DEFAULT_SUBSCRIPTION_ACTION_TYPE_DO_NOT_USE"
+	SubscriptionActionTypeCancel                                SubscriptionActionType = "CANCEL"
+	SubscriptionActionTypePause                                 SubscriptionActionType = "PAUSE"
+	SubscriptionActionTypeResume                                SubscriptionActionType = "RESUME"
+	SubscriptionActionTypeSwapPlan                              SubscriptionActionType = "SWAP_PLAN"
+	SubscriptionActionTypeChangeBillingAnchorDate               SubscriptionActionType = "CHANGE_BILLING_ANCHOR_DATE"
 )
 
 func NewSubscriptionActionTypeFromString(s string) (SubscriptionActionType, error) {
 	switch s {
+	case "DEFAULT_SUBSCRIPTION_ACTION_TYPE_DO_NOT_USE":
+		return SubscriptionActionTypeDefaultSubscriptionActionTypeDoNotUse, nil
 	case "CANCEL":
 		return SubscriptionActionTypeCancel, nil
 	case "PAUSE":
@@ -50273,27 +64109,30 @@ func (s SubscriptionActionType) Ptr() *SubscriptionActionType {
 	return &s
 }
 
-// Determines the billing cadence of a [Subscription]($m/Subscription)
+// Determines the billing cadence of a [Subscription](entity:Subscription)
 type SubscriptionCadence string
 
 const (
-	SubscriptionCadenceDaily           SubscriptionCadence = "DAILY"
-	SubscriptionCadenceWeekly          SubscriptionCadence = "WEEKLY"
-	SubscriptionCadenceEveryTwoWeeks   SubscriptionCadence = "EVERY_TWO_WEEKS"
-	SubscriptionCadenceThirtyDays      SubscriptionCadence = "THIRTY_DAYS"
-	SubscriptionCadenceSixtyDays       SubscriptionCadence = "SIXTY_DAYS"
-	SubscriptionCadenceNinetyDays      SubscriptionCadence = "NINETY_DAYS"
-	SubscriptionCadenceMonthly         SubscriptionCadence = "MONTHLY"
-	SubscriptionCadenceEveryTwoMonths  SubscriptionCadence = "EVERY_TWO_MONTHS"
-	SubscriptionCadenceQuarterly       SubscriptionCadence = "QUARTERLY"
-	SubscriptionCadenceEveryFourMonths SubscriptionCadence = "EVERY_FOUR_MONTHS"
-	SubscriptionCadenceEverySixMonths  SubscriptionCadence = "EVERY_SIX_MONTHS"
-	SubscriptionCadenceAnnual          SubscriptionCadence = "ANNUAL"
-	SubscriptionCadenceEveryTwoYears   SubscriptionCadence = "EVERY_TWO_YEARS"
+	SubscriptionCadenceSubscriptionCadenceDoNotUse SubscriptionCadence = "SUBSCRIPTION_CADENCE_DO_NOT_USE"
+	SubscriptionCadenceDaily                       SubscriptionCadence = "DAILY"
+	SubscriptionCadenceWeekly                      SubscriptionCadence = "WEEKLY"
+	SubscriptionCadenceEveryTwoWeeks               SubscriptionCadence = "EVERY_TWO_WEEKS"
+	SubscriptionCadenceThirtyDays                  SubscriptionCadence = "THIRTY_DAYS"
+	SubscriptionCadenceSixtyDays                   SubscriptionCadence = "SIXTY_DAYS"
+	SubscriptionCadenceNinetyDays                  SubscriptionCadence = "NINETY_DAYS"
+	SubscriptionCadenceMonthly                     SubscriptionCadence = "MONTHLY"
+	SubscriptionCadenceEveryTwoMonths              SubscriptionCadence = "EVERY_TWO_MONTHS"
+	SubscriptionCadenceQuarterly                   SubscriptionCadence = "QUARTERLY"
+	SubscriptionCadenceEveryFourMonths             SubscriptionCadence = "EVERY_FOUR_MONTHS"
+	SubscriptionCadenceEverySixMonths              SubscriptionCadence = "EVERY_SIX_MONTHS"
+	SubscriptionCadenceAnnual                      SubscriptionCadence = "ANNUAL"
+	SubscriptionCadenceEveryTwoYears               SubscriptionCadence = "EVERY_TWO_YEARS"
 )
 
 func NewSubscriptionCadenceFromString(s string) (SubscriptionCadence, error) {
 	switch s {
+	case "SUBSCRIPTION_CADENCE_DO_NOT_USE":
+		return SubscriptionCadenceSubscriptionCadenceDoNotUse, nil
 	case "DAILY":
 		return SubscriptionCadenceDaily, nil
 	case "WEEKLY":
@@ -50329,6 +64168,145 @@ func (s SubscriptionCadence) Ptr() *SubscriptionCadence {
 	return &s
 }
 
+// Published when a [Subscription](entity:Subscription) is created.
+type SubscriptionCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"subscription.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *SubscriptionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEvent) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionCreatedEventData struct {
+	// Name of the affected object’s type, `"subscription"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected subscription.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created subscription.
+	Object *SubscriptionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEventData) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionCreatedEventObject struct {
+	// The created subscription.
+	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEventObject) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 // Describes changes to a subscription and the subscription status.
 type SubscriptionEvent struct {
 	// The ID of the subscription event.
@@ -50338,6 +64316,8 @@ type SubscriptionEvent struct {
 	SubscriptionEventType SubscriptionEventSubscriptionEventType `json:"subscription_event_type" url:"subscription_event_type"`
 	// The `YYYY-MM-DD`-formatted date (for example, 2013-01-15) when the subscription event occurred.
 	EffectiveDate string `json:"effective_date" url:"effective_date"`
+	// The ID of the subscription plan associated with the subscription.
+	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
 	// The day-of-the-month the billing anchor date was changed to, if applicable.
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
 	// Additional information about the subscription event.
@@ -50441,6 +64421,7 @@ const (
 	SubscriptionEventInfoCodeCustomerNoEmail             SubscriptionEventInfoCode = "CUSTOMER_NO_EMAIL"
 	SubscriptionEventInfoCodeCustomerNoName              SubscriptionEventInfoCode = "CUSTOMER_NO_NAME"
 	SubscriptionEventInfoCodeUserProvided                SubscriptionEventInfoCode = "USER_PROVIDED"
+	SubscriptionEventInfoCodeInvoiceInvalid              SubscriptionEventInfoCode = "INVOICE_INVALID"
 )
 
 func NewSubscriptionEventInfoCodeFromString(s string) (SubscriptionEventInfoCode, error) {
@@ -50457,6 +64438,8 @@ func NewSubscriptionEventInfoCodeFromString(s string) (SubscriptionEventInfoCode
 		return SubscriptionEventInfoCodeCustomerNoName, nil
 	case "USER_PROVIDED":
 		return SubscriptionEventInfoCodeUserProvided, nil
+	case "INVOICE_INVALID":
+		return SubscriptionEventInfoCodeInvoiceInvalid, nil
 	}
 	var t SubscriptionEventInfoCode
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -50470,17 +64453,20 @@ func (s SubscriptionEventInfoCode) Ptr() *SubscriptionEventInfoCode {
 type SubscriptionEventSubscriptionEventType string
 
 const (
-	SubscriptionEventSubscriptionEventTypeStartSubscription        SubscriptionEventSubscriptionEventType = "START_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypePlanChange               SubscriptionEventSubscriptionEventType = "PLAN_CHANGE"
-	SubscriptionEventSubscriptionEventTypeStopSubscription         SubscriptionEventSubscriptionEventType = "STOP_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeDeactivateSubscription   SubscriptionEventSubscriptionEventType = "DEACTIVATE_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeResumeSubscription       SubscriptionEventSubscriptionEventType = "RESUME_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypePauseSubscription        SubscriptionEventSubscriptionEventType = "PAUSE_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeBillingAnchorDateChanged SubscriptionEventSubscriptionEventType = "BILLING_ANCHOR_DATE_CHANGED"
+	SubscriptionEventSubscriptionEventTypeDefaultSubscriptionEventTypeDoNotUse SubscriptionEventSubscriptionEventType = "DEFAULT_SUBSCRIPTION_EVENT_TYPE_DO_NOT_USE"
+	SubscriptionEventSubscriptionEventTypeStartSubscription                    SubscriptionEventSubscriptionEventType = "START_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypePlanChange                           SubscriptionEventSubscriptionEventType = "PLAN_CHANGE"
+	SubscriptionEventSubscriptionEventTypeStopSubscription                     SubscriptionEventSubscriptionEventType = "STOP_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeDeactivateSubscription               SubscriptionEventSubscriptionEventType = "DEACTIVATE_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeResumeSubscription                   SubscriptionEventSubscriptionEventType = "RESUME_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypePauseSubscription                    SubscriptionEventSubscriptionEventType = "PAUSE_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeBillingAnchorDateChanged             SubscriptionEventSubscriptionEventType = "BILLING_ANCHOR_DATE_CHANGED"
 )
 
 func NewSubscriptionEventSubscriptionEventTypeFromString(s string) (SubscriptionEventSubscriptionEventType, error) {
 	switch s {
+	case "DEFAULT_SUBSCRIPTION_EVENT_TYPE_DO_NOT_USE":
+		return SubscriptionEventSubscriptionEventTypeDefaultSubscriptionEventTypeDoNotUse, nil
 	case "START_SUBSCRIPTION":
 		return SubscriptionEventSubscriptionEventTypeStartSubscription, nil
 	case "PLAN_CHANGE":
@@ -50606,16 +64592,19 @@ func (s *SubscriptionPricing) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Determines the pricing of a [Subscription]($m/Subscription)
+// Determines the pricing of a [Subscription](entity:Subscription)
 type SubscriptionPricingType string
 
 const (
-	SubscriptionPricingTypeStatic   SubscriptionPricingType = "STATIC"
-	SubscriptionPricingTypeRelative SubscriptionPricingType = "RELATIVE"
+	SubscriptionPricingTypeSubscriptionPricingDoNotUse SubscriptionPricingType = "SUBSCRIPTION_PRICING_DO_NOT_USE"
+	SubscriptionPricingTypeStatic                      SubscriptionPricingType = "STATIC"
+	SubscriptionPricingTypeRelative                    SubscriptionPricingType = "RELATIVE"
 )
 
 func NewSubscriptionPricingTypeFromString(s string) (SubscriptionPricingType, error) {
 	switch s {
+	case "SUBSCRIPTION_PRICING_DO_NOT_USE":
+		return SubscriptionPricingTypeSubscriptionPricingDoNotUse, nil
 	case "STATIC":
 		return SubscriptionPricingTypeStatic, nil
 	case "RELATIVE":
@@ -50678,15 +64667,18 @@ func (s *SubscriptionSource) String() string {
 type SubscriptionStatus string
 
 const (
-	SubscriptionStatusPending     SubscriptionStatus = "PENDING"
-	SubscriptionStatusActive      SubscriptionStatus = "ACTIVE"
-	SubscriptionStatusCanceled    SubscriptionStatus = "CANCELED"
-	SubscriptionStatusDeactivated SubscriptionStatus = "DEACTIVATED"
-	SubscriptionStatusPaused      SubscriptionStatus = "PAUSED"
+	SubscriptionStatusDefaultSubscriptionStatusDoNotUse SubscriptionStatus = "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE"
+	SubscriptionStatusPending                           SubscriptionStatus = "PENDING"
+	SubscriptionStatusActive                            SubscriptionStatus = "ACTIVE"
+	SubscriptionStatusCanceled                          SubscriptionStatus = "CANCELED"
+	SubscriptionStatusDeactivated                       SubscriptionStatus = "DEACTIVATED"
+	SubscriptionStatusPaused                            SubscriptionStatus = "PAUSED"
 )
 
 func NewSubscriptionStatusFromString(s string) (SubscriptionStatus, error) {
 	switch s {
+	case "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE":
+		return SubscriptionStatusDefaultSubscriptionStatusDoNotUse, nil
 	case "PENDING":
 		return SubscriptionStatusPending, nil
 	case "ACTIVE":
@@ -50760,8 +64752,149 @@ func (s *SubscriptionTestResult) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+// Published when a [Subscription](entity:Subscription) is updated.
+// Typically the `subscription.status` is updated as subscriptions become active
+// or cancelled.
+type SubscriptionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"subscription.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *SubscriptionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEvent) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionUpdatedEventData struct {
+	// Name of the affected object’s type, `"subscription"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected subscription.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated subscription.
+	Object *SubscriptionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEventData) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionUpdatedEventObject struct {
+	// The updated subscription.
+	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEventObject) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 // Defines output parameters in a response of the
-// [SwapPlan]($e/Subscriptions/SwapPlan) endpoint.
+// [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
 type SwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -51030,12 +65163,15 @@ func (t *TeamMemberAssignedLocations) String() string {
 type TeamMemberAssignedLocationsAssignmentType string
 
 const (
+	TeamMemberAssignedLocationsAssignmentTypeDoNotUse                     TeamMemberAssignedLocationsAssignmentType = "DO_NOT_USE"
 	TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations TeamMemberAssignedLocationsAssignmentType = "ALL_CURRENT_AND_FUTURE_LOCATIONS"
 	TeamMemberAssignedLocationsAssignmentTypeExplicitLocations            TeamMemberAssignedLocationsAssignmentType = "EXPLICIT_LOCATIONS"
 )
 
 func NewTeamMemberAssignedLocationsAssignmentTypeFromString(s string) (TeamMemberAssignedLocationsAssignmentType, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return TeamMemberAssignedLocationsAssignmentTypeDoNotUse, nil
 	case "ALL_CURRENT_AND_FUTURE_LOCATIONS":
 		return TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations, nil
 	case "EXPLICIT_LOCATIONS":
@@ -51100,17 +65236,159 @@ func (t *TeamMemberBookingProfile) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a Team Member is created.
+type TeamMemberCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberCreatedEventData struct {
+	// Name of the affected object’s type, `"team_member"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created team member.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created team member.
+	Object *TeamMemberCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberCreatedEventObject struct {
+	// The created team member.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Enumerates the possible invitation statuses the team member can have within a business.
 type TeamMemberInvitationStatus string
 
 const (
-	TeamMemberInvitationStatusUninvited TeamMemberInvitationStatus = "UNINVITED"
-	TeamMemberInvitationStatusPending   TeamMemberInvitationStatus = "PENDING"
-	TeamMemberInvitationStatusAccepted  TeamMemberInvitationStatus = "ACCEPTED"
+	TeamMemberInvitationStatusInvitationStatusDoNotUse TeamMemberInvitationStatus = "INVITATION_STATUS_DO_NOT_USE"
+	TeamMemberInvitationStatusUninvited                TeamMemberInvitationStatus = "UNINVITED"
+	TeamMemberInvitationStatusPending                  TeamMemberInvitationStatus = "PENDING"
+	TeamMemberInvitationStatusAccepted                 TeamMemberInvitationStatus = "ACCEPTED"
 )
 
 func NewTeamMemberInvitationStatusFromString(s string) (TeamMemberInvitationStatus, error) {
 	switch s {
+	case "INVITATION_STATUS_DO_NOT_USE":
+		return TeamMemberInvitationStatusInvitationStatusDoNotUse, nil
 	case "UNINVITED":
 		return TeamMemberInvitationStatusUninvited, nil
 	case "PENDING":
@@ -51130,12 +65408,15 @@ func (t TeamMemberInvitationStatus) Ptr() *TeamMemberInvitationStatus {
 type TeamMemberStatus string
 
 const (
-	TeamMemberStatusActive   TeamMemberStatus = "ACTIVE"
-	TeamMemberStatusInactive TeamMemberStatus = "INACTIVE"
+	TeamMemberStatusStatusDoNotUse TeamMemberStatus = "STATUS_DO_NOT_USE"
+	TeamMemberStatusActive         TeamMemberStatus = "ACTIVE"
+	TeamMemberStatusInactive       TeamMemberStatus = "INACTIVE"
 )
 
 func NewTeamMemberStatusFromString(s string) (TeamMemberStatus, error) {
 	switch s {
+	case "STATUS_DO_NOT_USE":
+		return TeamMemberStatusStatusDoNotUse, nil
 	case "ACTIVE":
 		return TeamMemberStatusActive, nil
 	case "INACTIVE":
@@ -51147,6 +65428,145 @@ func NewTeamMemberStatusFromString(s string) (TeamMemberStatus, error) {
 
 func (t TeamMemberStatus) Ptr() *TeamMemberStatus {
 	return &t
+}
+
+// Published when a Team Member is updated.
+type TeamMemberUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberUpdatedEventData struct {
+	// Name of the affected object’s type, `"team_member"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected team member.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated team member.
+	Object *TeamMemberUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberUpdatedEventObject struct {
+	// The updated team member.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
 
 // The hourly wage rate that a team member earns on a `Shift` for doing the job
@@ -51194,6 +65614,145 @@ func (t *TeamMemberWage) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TeamMemberWage) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a Wage Setting is updated.
+type TeamMemberWageSettingUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.wage_setting.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberWageSettingUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberWageSettingUpdatedEventData struct {
+	// Name of the affected object’s type, `"wage_setting"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated team member wage setting.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated team member wage setting.
+	Object *TeamMemberWageSettingUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberWageSettingUpdatedEventObject struct {
+	// The updated team member wage setting.
+	WageSetting *WageSetting `json:"wage_setting,omitempty" url:"wage_setting,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -51301,7 +65860,7 @@ func (t *Tender) String() string {
 
 // Represents the details of a tender with `type` `BANK_ACCOUNT`.
 //
-// See [BankAccountPaymentDetails]($m/BankAccountPaymentDetails)
+// See [BankAccountPaymentDetails](entity:BankAccountPaymentDetails)
 // for more exposed details of a bank account payment.
 type TenderBankAccountDetails struct {
 	// The bank account payment's current state.
@@ -51708,16 +66267,20 @@ func (t TenderSquareAccountDetailsStatus) Ptr() *TenderSquareAccountDetailsStatu
 type TenderType string
 
 const (
-	TenderTypeCard           TenderType = "CARD"
-	TenderTypeCash           TenderType = "CASH"
-	TenderTypeThirdPartyCard TenderType = "THIRD_PARTY_CARD"
-	TenderTypeSquareGiftCard TenderType = "SQUARE_GIFT_CARD"
-	TenderTypeNoSale         TenderType = "NO_SALE"
-	TenderTypeBankAccount    TenderType = "BANK_ACCOUNT"
-	TenderTypeWallet         TenderType = "WALLET"
-	TenderTypeBuyNowPayLater TenderType = "BUY_NOW_PAY_LATER"
-	TenderTypeSquareAccount  TenderType = "SQUARE_ACCOUNT"
-	TenderTypeOther          TenderType = "OTHER"
+	TenderTypeCard             TenderType = "CARD"
+	TenderTypeCash             TenderType = "CASH"
+	TenderTypeThirdPartyCard   TenderType = "THIRD_PARTY_CARD"
+	TenderTypeSquareGiftCard   TenderType = "SQUARE_GIFT_CARD"
+	TenderTypeNoSale           TenderType = "NO_SALE"
+	TenderTypeCheck            TenderType = "CHECK"
+	TenderTypeMerchantGiftCard TenderType = "MERCHANT_GIFT_CARD"
+	TenderTypeThirdPartyEMoney TenderType = "THIRD_PARTY_E_MONEY"
+	TenderTypeBankAccount      TenderType = "BANK_ACCOUNT"
+	TenderTypeWallet           TenderType = "WALLET"
+	TenderTypeBuyNowPayLater   TenderType = "BUY_NOW_PAY_LATER"
+	TenderTypeSquareAccount    TenderType = "SQUARE_ACCOUNT"
+	TenderTypeBankTransfer     TenderType = "BANK_TRANSFER"
+	TenderTypeOther            TenderType = "OTHER"
 )
 
 func NewTenderTypeFromString(s string) (TenderType, error) {
@@ -51732,6 +66295,12 @@ func NewTenderTypeFromString(s string) (TenderType, error) {
 		return TenderTypeSquareGiftCard, nil
 	case "NO_SALE":
 		return TenderTypeNoSale, nil
+	case "CHECK":
+		return TenderTypeCheck, nil
+	case "MERCHANT_GIFT_CARD":
+		return TenderTypeMerchantGiftCard, nil
+	case "THIRD_PARTY_E_MONEY":
+		return TenderTypeThirdPartyEMoney, nil
 	case "BANK_ACCOUNT":
 		return TenderTypeBankAccount, nil
 	case "WALLET":
@@ -51740,6 +66309,8 @@ func NewTenderTypeFromString(s string) (TenderType, error) {
 		return TenderTypeBuyNowPayLater, nil
 	case "SQUARE_ACCOUNT":
 		return TenderTypeSquareAccount, nil
+	case "BANK_TRANSFER":
+		return TenderTypeBankTransfer, nil
 	case "OTHER":
 		return TenderTypeOther, nil
 	}
@@ -51857,18 +66428,33 @@ func (t *TerminalAction) String() string {
 type TerminalActionActionType string
 
 const (
-	TerminalActionActionTypeQrCode         TerminalActionActionType = "QR_CODE"
-	TerminalActionActionTypePing           TerminalActionActionType = "PING"
-	TerminalActionActionTypeSaveCard       TerminalActionActionType = "SAVE_CARD"
-	TerminalActionActionTypeSignature      TerminalActionActionType = "SIGNATURE"
-	TerminalActionActionTypeConfirmation   TerminalActionActionType = "CONFIRMATION"
-	TerminalActionActionTypeReceipt        TerminalActionActionType = "RECEIPT"
-	TerminalActionActionTypeDataCollection TerminalActionActionType = "DATA_COLLECTION"
-	TerminalActionActionTypeSelect         TerminalActionActionType = "SELECT"
+	TerminalActionActionTypeInvalidType           TerminalActionActionType = "INVALID_TYPE"
+	TerminalActionActionTypeUnsupportedActionType TerminalActionActionType = "UNSUPPORTED_ACTION_TYPE"
+	TerminalActionActionTypeCheckout              TerminalActionActionType = "CHECKOUT"
+	TerminalActionActionTypeRefund                TerminalActionActionType = "REFUND"
+	TerminalActionActionTypeQrCode                TerminalActionActionType = "QR_CODE"
+	TerminalActionActionTypePing                  TerminalActionActionType = "PING"
+	TerminalActionActionTypeSaveCard              TerminalActionActionType = "SAVE_CARD"
+	TerminalActionActionTypeSignature             TerminalActionActionType = "SIGNATURE"
+	TerminalActionActionTypeConfirmation          TerminalActionActionType = "CONFIRMATION"
+	TerminalActionActionTypeReceipt               TerminalActionActionType = "RECEIPT"
+	TerminalActionActionTypeDataCollection        TerminalActionActionType = "DATA_COLLECTION"
+	TerminalActionActionTypeSelect                TerminalActionActionType = "SELECT"
+	TerminalActionActionTypeStack                 TerminalActionActionType = "STACK"
+	TerminalActionActionTypeConfig                TerminalActionActionType = "CONFIG"
+	TerminalActionActionTypeInternalPing          TerminalActionActionType = "INTERNAL_PING"
 )
 
 func NewTerminalActionActionTypeFromString(s string) (TerminalActionActionType, error) {
 	switch s {
+	case "INVALID_TYPE":
+		return TerminalActionActionTypeInvalidType, nil
+	case "UNSUPPORTED_ACTION_TYPE":
+		return TerminalActionActionTypeUnsupportedActionType, nil
+	case "CHECKOUT":
+		return TerminalActionActionTypeCheckout, nil
+	case "REFUND":
+		return TerminalActionActionTypeRefund, nil
 	case "QR_CODE":
 		return TerminalActionActionTypeQrCode, nil
 	case "PING":
@@ -51885,6 +66471,12 @@ func NewTerminalActionActionTypeFromString(s string) (TerminalActionActionType, 
 		return TerminalActionActionTypeDataCollection, nil
 	case "SELECT":
 		return TerminalActionActionTypeSelect, nil
+	case "STACK":
+		return TerminalActionActionTypeStack, nil
+	case "CONFIG":
+		return TerminalActionActionTypeConfig, nil
+	case "INTERNAL_PING":
+		return TerminalActionActionTypeInternalPing, nil
 	}
 	var t TerminalActionActionType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -51892,6 +66484,145 @@ func NewTerminalActionActionTypeFromString(s string) (TerminalActionActionType, 
 
 func (t TerminalActionActionType) Ptr() *TerminalActionActionType {
 	return &t
+}
+
+// Published when a TerminalAction is created.
+type TerminalActionCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.action.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalActionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionCreatedEventData struct {
+	// Name of the created object’s type, `"action"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal action.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal action.
+	Object *TerminalActionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionCreatedEventObject struct {
+	// The created terminal action.
+	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
 
 type TerminalActionQuery struct {
@@ -52037,6 +66768,145 @@ func (t *TerminalActionQuerySort) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a TerminalAction is updated.
+type TerminalActionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.action.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalActionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionUpdatedEventData struct {
+	// Name of the updated object’s type, `"action"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal action.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal action.
+	Object *TerminalActionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionUpdatedEventObject struct {
+	// The updated terminal action.
+	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Represents a checkout processed by the Square Terminal.
 type TerminalCheckout struct {
 	// A unique ID for this `TerminalCheckout`.
@@ -52139,6 +67009,145 @@ func (t *TerminalCheckout) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalCheckout) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a [TerminalCheckout](entity:TerminalCheckout) is created.
+type TerminalCheckoutCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.checkout.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalCheckoutCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutCreatedEventData struct {
+	// Name of the created object’s type, `"checkout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal checkout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal checkout
+	Object *TerminalCheckoutCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutCreatedEventObject struct {
+	// The created terminal checkout
+	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEventObject) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -52288,6 +67297,145 @@ func (t *TerminalCheckoutQuerySort) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a [TerminalCheckout](entity:TerminalCheckout) is updated.
+type TerminalCheckoutUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.checkout.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalCheckoutUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutUpdatedEventData struct {
+	// Name of the updated object’s type, `"checkout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal checkout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal checkout
+	Object *TerminalCheckoutUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutUpdatedEventObject struct {
+	// The updated terminal checkout
+	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Represents a payment refund processed by the Square Terminal. Only supports Interac (Canadian debit network) payment refunds.
 type TerminalRefund struct {
 	// A unique ID for this `TerminalRefund`.
@@ -52357,6 +67505,145 @@ func (t *TerminalRefund) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalRefund) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a Terminal API refund is created.
+type TerminalRefundCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.refund.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalRefundCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundCreatedEventData struct {
+	// Name of the created object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal refund.
+	Object *TerminalRefundCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundCreatedEventObject struct {
+	// The created terminal refund.
+	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEventObject) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -52507,10 +67794,149 @@ func (t *TerminalRefundQuerySort) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a Terminal API refund is updated.
+type TerminalRefundUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.refund.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalRefundUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEvent) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundUpdatedEventData struct {
+	// Name of the updated object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal refund.
+	Object *TerminalRefundUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEventData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundUpdatedEventObject struct {
+	// The updated terminal refund.
+	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEventObject) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Defines the fields that are included in the response body of
-// a request to the [TestWebhookSubscription]($e/WebhookSubscriptions/TestWebhookSubscription) endpoint.
+// a request to the [TestWebhookSubscription](api-endpoint:WebhookSubscriptions-TestWebhookSubscription) endpoint.
 //
-// Note: If there are errors processing the request, the [SubscriptionTestResult]($m/SubscriptionTestResult) field is not
+// Note: If there are errors processing the request, the [SubscriptionTestResult](entity:SubscriptionTestResult) field is not
 // present.
 type TestWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -52857,7 +68283,7 @@ func (u *UnlinkCustomerFromGiftCardResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/UpdateBookingCustomAttributeDefinition) response.
+// Represents an [UpdateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-UpdateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateBookingCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -53084,7 +68510,7 @@ func (u *UpdateCatalogImageResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/UpdateCustomerCustomAttributeDefinition) response.
+// Represents an [UpdateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-UpdateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateCustomerCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -53131,7 +68557,7 @@ func (u *UpdateCustomerCustomAttributeDefinitionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateCustomerGroup]($e/CustomerGroups/UpdateCustomerGroup) endpoint.
+// a request to the [UpdateCustomerGroup](api-endpoint:CustomerGroups-UpdateCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type UpdateCustomerGroupResponse struct {
@@ -53179,8 +68605,8 @@ func (u *UpdateCustomerGroupResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateCustomer]($e/Customers/UpdateCustomer) or
-// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) endpoint.
+// a request to the [UpdateCustomer](api-endpoint:Customers-UpdateCustomer) or
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
 type UpdateCustomerResponse struct {
@@ -53360,7 +68786,7 @@ func (u *UpdateItemTaxesResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/UpdateLocationCustomAttributeDefinition) response.
+// Represents an [UpdateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-UpdateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateLocationCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -53406,7 +68832,7 @@ func (u *UpdateLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// The response object returned by the [UpdateLocation]($e/Locations/UpdateLocation) endpoint.
+// The response object returned by the [UpdateLocation](api-endpoint:Locations-UpdateLocation) endpoint.
 type UpdateLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -53495,7 +68921,7 @@ func (u *UpdateLocationSettingsResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/UpdateMerchantCustomAttributeDefinition) response.
+// Represents an [UpdateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-UpdateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateMerchantCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -53631,7 +69057,7 @@ func (u *UpdateOrderCustomAttributeDefinitionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateOrder]($e/Orders/UpdateOrder) endpoint.
+// a request to the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 type UpdateOrderResponse struct {
 	// The updated order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -53721,7 +69147,7 @@ func (u *UpdatePaymentLinkResponse) String() string {
 }
 
 // Defines the response returned by
-// [UpdatePayment]($e/Payments/UpdatePayment).
+// [UpdatePayment](api-endpoint:Payments-UpdatePayment).
 type UpdatePaymentResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -53814,7 +69240,7 @@ func (u *UpdateShiftResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [UpdateSubscription]($e/Subscriptions/UpdateSubscription) endpoint.
+// [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
 type UpdateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -53947,7 +69373,7 @@ func (u *UpdateTeamMemberResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an input to a call to [UpdateVendor]($e/Vendors/UpdateVendor).
+// Represents an input to a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 type UpdateVendorRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
 	// request.
@@ -53997,7 +69423,7 @@ func (u *UpdateVendorRequest) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an output from a call to [UpdateVendor]($e/Vendors/UpdateVendor).
+// Represents an output from a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 type UpdateVendorResponse struct {
 	// Errors occurred when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -54089,9 +69515,9 @@ func (u *UpdateWageSettingResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateWebhookSubscription]($e/WebhookSubscriptions/UpdateWebhookSubscription) endpoint.
+// a request to the [UpdateWebhookSubscription](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscription) endpoint.
 //
-// Note: If there are errors processing the request, the [Subscription]($m/WebhookSubscription) is not
+// Note: If there are errors processing the request, the [Subscription](entity:WebhookSubscription) is not
 // present.
 type UpdateWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -54138,9 +69564,9 @@ func (u *UpdateWebhookSubscriptionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateWebhookSubscriptionSignatureKey]($e/WebhookSubscriptions/UpdateWebhookSubscriptionSignatureKey) endpoint.
+// a request to the [UpdateWebhookSubscriptionSignatureKey](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscriptionSignatureKey) endpoint.
 //
-// Note: If there are errors processing the request, the [Subscription]($m/WebhookSubscription) is not
+// Note: If there are errors processing the request, the [Subscription](entity:WebhookSubscription) is not
 // present.
 type UpdateWebhookSubscriptionSignatureKeyResponse struct {
 	// Information on errors encountered during the request.
@@ -54233,7 +69659,7 @@ func (u *UpdateWorkweekConfigResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertBookingCustomAttribute]($e/BookingCustomAttributes/UpsertBookingCustomAttribute) response.
+// Represents an [UpsertBookingCustomAttribute](api-endpoint:BookingCustomAttributes-UpsertBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertBookingCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -54325,7 +69751,7 @@ func (u *UpsertCatalogObjectResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertCustomerCustomAttribute]($e/CustomerCustomAttributes/UpsertCustomerCustomAttribute) response.
+// Represents an [UpsertCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-UpsertCustomerCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertCustomerCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -54371,7 +69797,7 @@ func (u *UpsertCustomerCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertLocationCustomAttribute]($e/LocationCustomAttributes/UpsertLocationCustomAttribute) response.
+// Represents an [UpsertLocationCustomAttribute](api-endpoint:LocationCustomAttributes-UpsertLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertLocationCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -54417,7 +69843,7 @@ func (u *UpsertLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertMerchantCustomAttribute]($e/MerchantCustomAttributes/UpsertMerchantCustomAttribute) response.
+// Represents an [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertMerchantCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -54553,6 +69979,28 @@ func (u *UpsertSnippetResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+type V1CreateRefundRequestType string
+
+const (
+	V1CreateRefundRequestTypeFull    V1CreateRefundRequestType = "FULL"
+	V1CreateRefundRequestTypePartial V1CreateRefundRequestType = "PARTIAL"
+)
+
+func NewV1CreateRefundRequestTypeFromString(s string) (V1CreateRefundRequestType, error) {
+	switch s {
+	case "FULL":
+		return V1CreateRefundRequestTypeFull, nil
+	case "PARTIAL":
+		return V1CreateRefundRequestTypePartial, nil
+	}
+	var t V1CreateRefundRequestType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1CreateRefundRequestType) Ptr() *V1CreateRefundRequestType {
+	return &v
+}
+
 type V1Device struct {
 	// The device's Square-issued ID.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -54597,28 +70045,22 @@ func (v *V1Device) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-type V1GetPaymentRequest = interface{}
-
-type V1GetSettlementRequest = interface{}
-
-type V1ListOrdersResponse struct {
-	Items []*V1Order `json:"items,omitempty" url:"items,omitempty"`
-
+type V1GetPaymentRequest struct {
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (v *V1ListOrdersResponse) GetExtraProperties() map[string]interface{} {
+func (v *V1GetPaymentRequest) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
-func (v *V1ListOrdersResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1ListOrdersResponse
+func (v *V1GetPaymentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1GetPaymentRequest
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*v = V1ListOrdersResponse(value)
+	*v = V1GetPaymentRequest(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *v)
 	if err != nil {
@@ -54630,7 +70072,870 @@ func (v *V1ListOrdersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V1ListOrdersResponse) String() string {
+func (v *V1GetPaymentRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1GetSettlementRequest struct {
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1GetSettlementRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1GetSettlementRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1GetSettlementRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1GetSettlementRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1GetSettlementRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Published when the inventory quantity for a catalog item is updated.
+type V1InventoryUpdatedWebhook struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target merchant associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, i.e. `INVENTORY_UPDATED`.
+	EventType *string `json:"event_type,omitempty" url:"event_type,omitempty"`
+	// The ID of the V1 Item whose inventory was updated.
+	EntityID *string `json:"entity_id,omitempty" url:"entity_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1InventoryUpdatedWebhook) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1InventoryUpdatedWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1InventoryUpdatedWebhook
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1InventoryUpdatedWebhook(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1InventoryUpdatedWebhook) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListLocationsRequest struct {
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListLocationsRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListLocationsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListLocationsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListLocationsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListLocationsRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListLocationsResponse struct {
+	Items []*V1Merchant `json:"items,omitempty" url:"items,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListLocationsResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListLocationsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListLocationsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListLocationsResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListLocationsResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListPaymentsRequest struct {
+	// The order in which payments are listed in the response.
+	// See [SortOrder](#type-sortorder) for possible values
+	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+	// The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
+	BeginTime *string `json:"begin_time,omitempty" url:"begin_time,omitempty"`
+	// The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
+	EndTime *string `json:"end_time,omitempty" url:"end_time,omitempty"`
+	// The maximum number of payments to return in a single response. This value cannot exceed 200.
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+	// A pagination cursor to retrieve the next set of results for your
+	// original query to the endpoint.
+	BatchToken *string `json:"batch_token,omitempty" url:"batch_token,omitempty"`
+	// Indicates whether or not to include partial payments in the response. Partial payments will have the tenders collected so far, but the itemizations will be empty until the payment is completed.
+	IncludePartial *bool `json:"include_partial,omitempty" url:"include_partial,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListPaymentsRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListPaymentsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListPaymentsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListPaymentsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListPaymentsRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListPaymentsResponse struct {
+	Items []*V1Payment `json:"items,omitempty" url:"items,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListPaymentsResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListPaymentsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListPaymentsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListPaymentsResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListPaymentsResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListRefundsRequest struct {
+	// The order in which payments are listed in the response.
+	// See [SortOrder](#type-sortorder) for possible values
+	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+	// The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
+	BeginTime *string `json:"begin_time,omitempty" url:"begin_time,omitempty"`
+	// The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
+	EndTime *string `json:"end_time,omitempty" url:"end_time,omitempty"`
+	// The approximate number of refunds to return in a single response. Default: 100. Max: 200. Response may contain more results than the prescribed limit when refunds are made simultaneously to multiple tenders in a payment or when refunds are generated in an exchange to account for the value of returned goods.
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+	// A pagination cursor to retrieve the next set of results for your
+	// original query to the endpoint.
+	BatchToken *string `json:"batch_token,omitempty" url:"batch_token,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListRefundsRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListRefundsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListRefundsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListRefundsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListRefundsRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListRefundsResponse struct {
+	Items []*V1Refund `json:"items,omitempty" url:"items,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListRefundsResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListRefundsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListRefundsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListRefundsResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListRefundsResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListSettlementsRequest struct {
+	// The order in which settlements are listed in the response.
+	// See [SortOrder](#type-sortorder) for possible values
+	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+	// The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
+	BeginTime *string `json:"begin_time,omitempty" url:"begin_time,omitempty"`
+	// The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
+	EndTime *string `json:"end_time,omitempty" url:"end_time,omitempty"`
+	// The maximum number of settlements to return in a single response. This value cannot exceed 200.
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+	// Provide this parameter to retrieve only settlements with a particular status (SENT or FAILED).
+	// See [V1ListSettlementsRequestStatus](#type-v1listsettlementsrequeststatus) for possible values
+	Status *V1ListSettlementsRequestStatus `json:"status,omitempty" url:"status,omitempty"`
+	// A pagination cursor to retrieve the next set of results for your
+	// original query to the endpoint.
+	BatchToken *string `json:"batch_token,omitempty" url:"batch_token,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListSettlementsRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListSettlementsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListSettlementsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListSettlementsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListSettlementsRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1ListSettlementsRequestStatus string
+
+const (
+	V1ListSettlementsRequestStatusSent   V1ListSettlementsRequestStatus = "SENT"
+	V1ListSettlementsRequestStatusFailed V1ListSettlementsRequestStatus = "FAILED"
+)
+
+func NewV1ListSettlementsRequestStatusFromString(s string) (V1ListSettlementsRequestStatus, error) {
+	switch s {
+	case "SENT":
+		return V1ListSettlementsRequestStatusSent, nil
+	case "FAILED":
+		return V1ListSettlementsRequestStatusFailed, nil
+	}
+	var t V1ListSettlementsRequestStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1ListSettlementsRequestStatus) Ptr() *V1ListSettlementsRequestStatus {
+	return &v
+}
+
+type V1ListSettlementsResponse struct {
+	Items []*V1Settlement `json:"items,omitempty" url:"items,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListSettlementsResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListSettlementsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListSettlementsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListSettlementsResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListSettlementsResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Deprecated. V1ListWebhooksRequest
+type V1ListWebhooksRequest struct {
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListWebhooksRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListWebhooksRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListWebhooksRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListWebhooksRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListWebhooksRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Deprecated. V1ListWebhooksResponse
+type V1ListWebhooksResponse struct {
+	// A list of webhook event enums.
+	// See [V1WebhooksEvents](#type-v1webhooksevents) for possible values
+	Events []V1WebhooksEvents `json:"events,omitempty" url:"events,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1ListWebhooksResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1ListWebhooksResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1ListWebhooksResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1ListWebhooksResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1ListWebhooksResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the **RetrieveBusiness** endpoint.
+type V1Merchant struct {
+	// The merchant account's unique identifier.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The name associated with the merchant account.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The email address associated with the merchant account.
+	Email *string `json:"email,omitempty" url:"email,omitempty"`
+	// Indicates whether the merchant account corresponds to a single-location account (LOCATION) or a business account (BUSINESS). This value is almost always LOCATION.
+	// See [V1MerchantAccountType](#type-v1merchantaccounttype) for possible values
+	AccountType *V1MerchantAccountType `json:"account_type,omitempty" url:"account_type,omitempty"`
+	// Capabilities that are enabled for the merchant's Square account. Capabilities that are not listed in this array are not enabled for the account.
+	AccountCapabilities []string `json:"account_capabilities,omitempty" url:"account_capabilities,omitempty"`
+	// The country associated with the merchant account, in ISO 3166-1-alpha-2 format.
+	CountryCode *string `json:"country_code,omitempty" url:"country_code,omitempty"`
+	// The language associated with the merchant account, in BCP 47 format.
+	LanguageCode *string `json:"language_code,omitempty" url:"language_code,omitempty"`
+	// The currency associated with the merchant account, in ISO 4217 format. For example, the currency code for US dollars is USD.
+	CurrencyCode *string `json:"currency_code,omitempty" url:"currency_code,omitempty"`
+	// The name of the merchant's business.
+	BusinessName *string `json:"business_name,omitempty" url:"business_name,omitempty"`
+	// The address of the merchant's business.
+	BusinessAddress *Address `json:"business_address,omitempty" url:"business_address,omitempty"`
+	// The phone number of the merchant's business.
+	BusinessPhone *V1PhoneNumber `json:"business_phone,omitempty" url:"business_phone,omitempty"`
+	// The type of business operated by the merchant.
+	// See [V1MerchantBusinessType](#type-v1merchantbusinesstype) for possible values
+	BusinessType *V1MerchantBusinessType `json:"business_type,omitempty" url:"business_type,omitempty"`
+	// The merchant's shipping address.
+	ShippingAddress *Address `json:"shipping_address,omitempty" url:"shipping_address,omitempty"`
+	// Additional information for a single-location account specified by its associated business account, if it has one.
+	LocationDetails *V1MerchantLocationDetails `json:"location_details,omitempty" url:"location_details,omitempty"`
+	// The URL of the merchant's online store.
+	MarketURL *string `json:"market_url,omitempty" url:"market_url,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1Merchant) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1Merchant) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1Merchant
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1Merchant(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1Merchant) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1MerchantAccountType string
+
+const (
+	V1MerchantAccountTypeLocation V1MerchantAccountType = "LOCATION"
+	V1MerchantAccountTypeBusiness V1MerchantAccountType = "BUSINESS"
+)
+
+func NewV1MerchantAccountTypeFromString(s string) (V1MerchantAccountType, error) {
+	switch s {
+	case "LOCATION":
+		return V1MerchantAccountTypeLocation, nil
+	case "BUSINESS":
+		return V1MerchantAccountTypeBusiness, nil
+	}
+	var t V1MerchantAccountType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1MerchantAccountType) Ptr() *V1MerchantAccountType {
+	return &v
+}
+
+type V1MerchantBusinessType string
+
+const (
+	V1MerchantBusinessTypeAccounting                                         V1MerchantBusinessType = "ACCOUNTING"
+	V1MerchantBusinessTypeApparelAndAccessoryShops                           V1MerchantBusinessType = "APPAREL_AND_ACCESSORY_SHOPS"
+	V1MerchantBusinessTypeArtDealersGalleries                                V1MerchantBusinessType = "ART_DEALERS_GALLERIES"
+	V1MerchantBusinessTypeArtDesignAndPhotography                            V1MerchantBusinessType = "ART_DESIGN_AND_PHOTOGRAPHY"
+	V1MerchantBusinessTypeBarClubLounge                                      V1MerchantBusinessType = "BAR_CLUB_LOUNGE"
+	V1MerchantBusinessTypeBeautyAndBarberShops                               V1MerchantBusinessType = "BEAUTY_AND_BARBER_SHOPS"
+	V1MerchantBusinessTypeBookStores                                         V1MerchantBusinessType = "BOOK_STORES"
+	V1MerchantBusinessTypeBusinessServices                                   V1MerchantBusinessType = "BUSINESS_SERVICES"
+	V1MerchantBusinessTypeCatering                                           V1MerchantBusinessType = "CATERING"
+	V1MerchantBusinessTypeCharitableSocialServiceOrganizations               V1MerchantBusinessType = "CHARITABLE_SOCIAL_SERVICE_ORGANIZATIONS"
+	V1MerchantBusinessTypeCharitibleOrgs                                     V1MerchantBusinessType = "CHARITIBLE_ORGS"
+	V1MerchantBusinessTypeCleaningServices                                   V1MerchantBusinessType = "CLEANING_SERVICES"
+	V1MerchantBusinessTypeComputerEquipmentSoftwareMaintenanceRepairServices V1MerchantBusinessType = "COMPUTER_EQUIPMENT_SOFTWARE_MAINTENANCE_REPAIR_SERVICES"
+	V1MerchantBusinessTypeConsultant                                         V1MerchantBusinessType = "CONSULTANT"
+	V1MerchantBusinessTypeContractors                                        V1MerchantBusinessType = "CONTRACTORS"
+	V1MerchantBusinessTypeDeliveryServices                                   V1MerchantBusinessType = "DELIVERY_SERVICES"
+	V1MerchantBusinessTypeDentistry                                          V1MerchantBusinessType = "DENTISTRY"
+	V1MerchantBusinessTypeEducation                                          V1MerchantBusinessType = "EDUCATION"
+	V1MerchantBusinessTypeFoodStoresConvenienceStoresAndSpecialtyMarkets     V1MerchantBusinessType = "FOOD_STORES_CONVENIENCE_STORES_AND_SPECIALTY_MARKETS"
+	V1MerchantBusinessTypeFoodTruckCart                                      V1MerchantBusinessType = "FOOD_TRUCK_CART"
+	V1MerchantBusinessTypeFurnitureHomeAndOfficeEquipment                    V1MerchantBusinessType = "FURNITURE_HOME_AND_OFFICE_EQUIPMENT"
+	V1MerchantBusinessTypeFurnitureHomeGoods                                 V1MerchantBusinessType = "FURNITURE_HOME_GOODS"
+	V1MerchantBusinessTypeHotelsAndLodging                                   V1MerchantBusinessType = "HOTELS_AND_LODGING"
+	V1MerchantBusinessTypeIndividualUse                                      V1MerchantBusinessType = "INDIVIDUAL_USE"
+	V1MerchantBusinessTypeJewelryAndWatches                                  V1MerchantBusinessType = "JEWELRY_AND_WATCHES"
+	V1MerchantBusinessTypeLandscapingAndHorticulturalServices                V1MerchantBusinessType = "LANDSCAPING_AND_HORTICULTURAL_SERVICES"
+	V1MerchantBusinessTypeLanguageSchools                                    V1MerchantBusinessType = "LANGUAGE_SCHOOLS"
+	V1MerchantBusinessTypeLegalServices                                      V1MerchantBusinessType = "LEGAL_SERVICES"
+	V1MerchantBusinessTypeMedicalPractitioners                               V1MerchantBusinessType = "MEDICAL_PRACTITIONERS"
+	V1MerchantBusinessTypeMedicalServicesAndHealthPractitioners              V1MerchantBusinessType = "MEDICAL_SERVICES_AND_HEALTH_PRACTITIONERS"
+	V1MerchantBusinessTypeMembershipOrganizations                            V1MerchantBusinessType = "MEMBERSHIP_ORGANIZATIONS"
+	V1MerchantBusinessTypeMusicAndEntertainment                              V1MerchantBusinessType = "MUSIC_AND_ENTERTAINMENT"
+	V1MerchantBusinessTypeOther                                              V1MerchantBusinessType = "OTHER"
+	V1MerchantBusinessTypeOutdoorMarkets                                     V1MerchantBusinessType = "OUTDOOR_MARKETS"
+	V1MerchantBusinessTypePersonalServices                                   V1MerchantBusinessType = "PERSONAL_SERVICES"
+	V1MerchantBusinessTypePoliticalOrganizations                             V1MerchantBusinessType = "POLITICAL_ORGANIZATIONS"
+	V1MerchantBusinessTypeProfessionalServices                               V1MerchantBusinessType = "PROFESSIONAL_SERVICES"
+	V1MerchantBusinessTypeRealEstate                                         V1MerchantBusinessType = "REAL_ESTATE"
+	V1MerchantBusinessTypeRecreationServices                                 V1MerchantBusinessType = "RECREATION_SERVICES"
+	V1MerchantBusinessTypeRepairShopsAndRelatedServices                      V1MerchantBusinessType = "REPAIR_SHOPS_AND_RELATED_SERVICES"
+	V1MerchantBusinessTypeRestaurants                                        V1MerchantBusinessType = "RESTAURANTS"
+	V1MerchantBusinessTypeRetailShops                                        V1MerchantBusinessType = "RETAIL_SHOPS"
+	V1MerchantBusinessTypeSchoolsAndEducationalServices                      V1MerchantBusinessType = "SCHOOLS_AND_EDUCATIONAL_SERVICES"
+	V1MerchantBusinessTypeSportingGoods                                      V1MerchantBusinessType = "SPORTING_GOODS"
+	V1MerchantBusinessTypeTaxicabsAndLimousines                              V1MerchantBusinessType = "TAXICABS_AND_LIMOUSINES"
+	V1MerchantBusinessTypeTicketSales                                        V1MerchantBusinessType = "TICKET_SALES"
+	V1MerchantBusinessTypeTourism                                            V1MerchantBusinessType = "TOURISM"
+	V1MerchantBusinessTypeTravelTourism                                      V1MerchantBusinessType = "TRAVEL_TOURISM"
+	V1MerchantBusinessTypeVeterinaryServices                                 V1MerchantBusinessType = "VETERINARY_SERVICES"
+	V1MerchantBusinessTypeWebDevDesign                                       V1MerchantBusinessType = "WEB_DEV_DESIGN"
+)
+
+func NewV1MerchantBusinessTypeFromString(s string) (V1MerchantBusinessType, error) {
+	switch s {
+	case "ACCOUNTING":
+		return V1MerchantBusinessTypeAccounting, nil
+	case "APPAREL_AND_ACCESSORY_SHOPS":
+		return V1MerchantBusinessTypeApparelAndAccessoryShops, nil
+	case "ART_DEALERS_GALLERIES":
+		return V1MerchantBusinessTypeArtDealersGalleries, nil
+	case "ART_DESIGN_AND_PHOTOGRAPHY":
+		return V1MerchantBusinessTypeArtDesignAndPhotography, nil
+	case "BAR_CLUB_LOUNGE":
+		return V1MerchantBusinessTypeBarClubLounge, nil
+	case "BEAUTY_AND_BARBER_SHOPS":
+		return V1MerchantBusinessTypeBeautyAndBarberShops, nil
+	case "BOOK_STORES":
+		return V1MerchantBusinessTypeBookStores, nil
+	case "BUSINESS_SERVICES":
+		return V1MerchantBusinessTypeBusinessServices, nil
+	case "CATERING":
+		return V1MerchantBusinessTypeCatering, nil
+	case "CHARITABLE_SOCIAL_SERVICE_ORGANIZATIONS":
+		return V1MerchantBusinessTypeCharitableSocialServiceOrganizations, nil
+	case "CHARITIBLE_ORGS":
+		return V1MerchantBusinessTypeCharitibleOrgs, nil
+	case "CLEANING_SERVICES":
+		return V1MerchantBusinessTypeCleaningServices, nil
+	case "COMPUTER_EQUIPMENT_SOFTWARE_MAINTENANCE_REPAIR_SERVICES":
+		return V1MerchantBusinessTypeComputerEquipmentSoftwareMaintenanceRepairServices, nil
+	case "CONSULTANT":
+		return V1MerchantBusinessTypeConsultant, nil
+	case "CONTRACTORS":
+		return V1MerchantBusinessTypeContractors, nil
+	case "DELIVERY_SERVICES":
+		return V1MerchantBusinessTypeDeliveryServices, nil
+	case "DENTISTRY":
+		return V1MerchantBusinessTypeDentistry, nil
+	case "EDUCATION":
+		return V1MerchantBusinessTypeEducation, nil
+	case "FOOD_STORES_CONVENIENCE_STORES_AND_SPECIALTY_MARKETS":
+		return V1MerchantBusinessTypeFoodStoresConvenienceStoresAndSpecialtyMarkets, nil
+	case "FOOD_TRUCK_CART":
+		return V1MerchantBusinessTypeFoodTruckCart, nil
+	case "FURNITURE_HOME_AND_OFFICE_EQUIPMENT":
+		return V1MerchantBusinessTypeFurnitureHomeAndOfficeEquipment, nil
+	case "FURNITURE_HOME_GOODS":
+		return V1MerchantBusinessTypeFurnitureHomeGoods, nil
+	case "HOTELS_AND_LODGING":
+		return V1MerchantBusinessTypeHotelsAndLodging, nil
+	case "INDIVIDUAL_USE":
+		return V1MerchantBusinessTypeIndividualUse, nil
+	case "JEWELRY_AND_WATCHES":
+		return V1MerchantBusinessTypeJewelryAndWatches, nil
+	case "LANDSCAPING_AND_HORTICULTURAL_SERVICES":
+		return V1MerchantBusinessTypeLandscapingAndHorticulturalServices, nil
+	case "LANGUAGE_SCHOOLS":
+		return V1MerchantBusinessTypeLanguageSchools, nil
+	case "LEGAL_SERVICES":
+		return V1MerchantBusinessTypeLegalServices, nil
+	case "MEDICAL_PRACTITIONERS":
+		return V1MerchantBusinessTypeMedicalPractitioners, nil
+	case "MEDICAL_SERVICES_AND_HEALTH_PRACTITIONERS":
+		return V1MerchantBusinessTypeMedicalServicesAndHealthPractitioners, nil
+	case "MEMBERSHIP_ORGANIZATIONS":
+		return V1MerchantBusinessTypeMembershipOrganizations, nil
+	case "MUSIC_AND_ENTERTAINMENT":
+		return V1MerchantBusinessTypeMusicAndEntertainment, nil
+	case "OTHER":
+		return V1MerchantBusinessTypeOther, nil
+	case "OUTDOOR_MARKETS":
+		return V1MerchantBusinessTypeOutdoorMarkets, nil
+	case "PERSONAL_SERVICES":
+		return V1MerchantBusinessTypePersonalServices, nil
+	case "POLITICAL_ORGANIZATIONS":
+		return V1MerchantBusinessTypePoliticalOrganizations, nil
+	case "PROFESSIONAL_SERVICES":
+		return V1MerchantBusinessTypeProfessionalServices, nil
+	case "REAL_ESTATE":
+		return V1MerchantBusinessTypeRealEstate, nil
+	case "RECREATION_SERVICES":
+		return V1MerchantBusinessTypeRecreationServices, nil
+	case "REPAIR_SHOPS_AND_RELATED_SERVICES":
+		return V1MerchantBusinessTypeRepairShopsAndRelatedServices, nil
+	case "RESTAURANTS":
+		return V1MerchantBusinessTypeRestaurants, nil
+	case "RETAIL_SHOPS":
+		return V1MerchantBusinessTypeRetailShops, nil
+	case "SCHOOLS_AND_EDUCATIONAL_SERVICES":
+		return V1MerchantBusinessTypeSchoolsAndEducationalServices, nil
+	case "SPORTING_GOODS":
+		return V1MerchantBusinessTypeSportingGoods, nil
+	case "TAXICABS_AND_LIMOUSINES":
+		return V1MerchantBusinessTypeTaxicabsAndLimousines, nil
+	case "TICKET_SALES":
+		return V1MerchantBusinessTypeTicketSales, nil
+	case "TOURISM":
+		return V1MerchantBusinessTypeTourism, nil
+	case "TRAVEL_TOURISM":
+		return V1MerchantBusinessTypeTravelTourism, nil
+	case "VETERINARY_SERVICES":
+		return V1MerchantBusinessTypeVeterinaryServices, nil
+	case "WEB_DEV_DESIGN":
+		return V1MerchantBusinessTypeWebDevDesign, nil
+	}
+	var t V1MerchantBusinessType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1MerchantBusinessType) Ptr() *V1MerchantBusinessType {
+	return &v
+}
+
+// Additional information for a single-location account specified by its associated business account, if it has one.
+type V1MerchantLocationDetails struct {
+	// The nickname assigned to the single-location account by the parent business. This value appears in the parent business's multi-location dashboard.
+	Nickname *string `json:"nickname,omitempty" url:"nickname,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1MerchantLocationDetails) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1MerchantLocationDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1MerchantLocationDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1MerchantLocationDetails(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1MerchantLocationDetails) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
@@ -54687,75 +70992,502 @@ func (v *V1Money) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// V1Order
-type V1Order struct {
+// A payment represents a paid transaction between a Square merchant and a
+// customer. Payment details are usually available from Connect API endpoints
+// within a few minutes after the transaction completes.
+//
+// Each Payment object includes several fields that end in `_money`. These fields
+// describe the various amounts of money that contribute to the payment total:
+//
+// <ul>
+// <li>
+// Monetary values are <b>positive</b> if they represent an
+// <em>increase</em> in the amount of money the merchant receives (e.g.,
+// <code>tax_money</code>, <code>tip_money</code>).
+// </li>
+// <li>
+// Monetary values are <b>negative</b> if they represent an
+// <em>decrease</em> in the amount of money the merchant receives (e.g.,
+// <code>discount_money</code>, <code>refunded_money</code>).
+// </li>
+// </ul>
+type V1Payment struct {
+	// The payment's unique identifier.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The unique identifier of the merchant that took the payment.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The time when the payment was created, in ISO 8601 format. Reflects the time of the first payment if the object represents an incomplete partial payment, and the time of the last or complete payment otherwise.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The unique identifier of the Square account that took the payment.
+	CreatorID *string `json:"creator_id,omitempty" url:"creator_id,omitempty"`
+	// The device that took the payment.
+	Device *V1Device `json:"device,omitempty" url:"device,omitempty"`
+	// The URL of the payment's detail page in the merchant dashboard. The merchant must be signed in to the merchant dashboard to view this page.
+	PaymentURL *string `json:"payment_url,omitempty" url:"payment_url,omitempty"`
+	// The URL of the receipt for the payment. Note that for split tender
+	// payments, this URL corresponds to the receipt for the first tender
+	// listed in the payment's tender field. Each Tender object has its own
+	// receipt_url field you can use to get the other receipts associated with
+	// a split tender payment.
+	ReceiptURL *string `json:"receipt_url,omitempty" url:"receipt_url,omitempty"`
+	// The sum of all inclusive taxes associated with the payment.
+	InclusiveTaxMoney *V1Money `json:"inclusive_tax_money,omitempty" url:"inclusive_tax_money,omitempty"`
+	// The sum of all additive taxes associated with the payment.
+	AdditiveTaxMoney *V1Money `json:"additive_tax_money,omitempty" url:"additive_tax_money,omitempty"`
+	// The total of all taxes applied to the payment. This is always the sum of inclusive_tax_money and additive_tax_money.
+	TaxMoney *V1Money `json:"tax_money,omitempty" url:"tax_money,omitempty"`
+	// The total of all tips applied to the payment.
+	TipMoney *V1Money `json:"tip_money,omitempty" url:"tip_money,omitempty"`
+	// The total of all discounts applied to the payment.
+	DiscountMoney *V1Money `json:"discount_money,omitempty" url:"discount_money,omitempty"`
+	// The total of all discounts applied to the payment.
+	TotalCollectedMoney *V1Money `json:"total_collected_money,omitempty" url:"total_collected_money,omitempty"`
+	// The total of all processing fees collected by Square for the payment.
+	ProcessingFeeMoney *V1Money `json:"processing_fee_money,omitempty" url:"processing_fee_money,omitempty"`
+	// The amount to be deposited into the merchant's bank account for the payment.
+	NetTotalMoney *V1Money `json:"net_total_money,omitempty" url:"net_total_money,omitempty"`
+	// The total of all refunds applied to the payment.
+	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
+	// The total of all sales, including any applicable taxes, rounded to the smallest legal unit of currency (e.g., the nearest penny in USD, the nearest nickel in CAD)
+	SwedishRoundingMoney *V1Money `json:"swedish_rounding_money,omitempty" url:"swedish_rounding_money,omitempty"`
+	// The total of all sales, including any applicable taxes.
+	GrossSalesMoney *V1Money `json:"gross_sales_money,omitempty" url:"gross_sales_money,omitempty"`
+	// The total of all sales, minus any applicable taxes.
+	NetSalesMoney *V1Money `json:"net_sales_money,omitempty" url:"net_sales_money,omitempty"`
+	// All of the inclusive taxes associated with the payment.
+	InclusiveTax []*V1PaymentTax `json:"inclusive_tax,omitempty" url:"inclusive_tax,omitempty"`
+	// All of the additive taxes associated with the payment.
+	AdditiveTax []*V1PaymentTax `json:"additive_tax,omitempty" url:"additive_tax,omitempty"`
+	// All of the tenders associated with the payment.
+	Tender []*V1Tender `json:"tender,omitempty" url:"tender,omitempty"`
+	// All of the refunds applied to the payment. Note that the value of all refunds on a payment can exceed the value of all tenders if a merchant chooses to refund money to a tender after previously accepting returned goods as part of an exchange.
+	Refunds []*V1Refund `json:"refunds,omitempty" url:"refunds,omitempty"`
+	// The items purchased in the payment.
+	Itemizations []*V1PaymentItemization `json:"itemizations,omitempty" url:"itemizations,omitempty"`
+	// The total of all surcharges applied to the payment.
+	SurchargeMoney *V1Money `json:"surcharge_money,omitempty" url:"surcharge_money,omitempty"`
+	// A list of all surcharges associated with the payment.
+	Surcharges []*V1PaymentSurcharge `json:"surcharges,omitempty" url:"surcharges,omitempty"`
+	// Indicates whether or not the payment is only partially paid for.
+	// If true, this payment will have the tenders collected so far, but the
+	// itemizations will be empty until the payment is completed.
+	IsPartial *bool `json:"is_partial,omitempty" url:"is_partial,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1Payment) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1Payment) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1Payment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1Payment(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1Payment) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// V1PaymentDiscount
+type V1PaymentDiscount struct {
+	// The discount's name.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The amount of money that this discount adds to the payment (note that this value is always negative or zero).
+	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
+	// The ID of the applied discount, if available. Discounts applied in older versions of Square Register might not have an ID.
+	DiscountID *string `json:"discount_id,omitempty" url:"discount_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1PaymentDiscount) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1PaymentDiscount) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentDiscount
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1PaymentDiscount(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1PaymentDiscount) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// V1PaymentItemDetail
+type V1PaymentItemDetail struct {
+	// The name of the item's merchant-defined category, if any.
+	CategoryName *string `json:"category_name,omitempty" url:"category_name,omitempty"`
+	// The item's merchant-defined SKU, if any.
+	Sku *string `json:"sku,omitempty" url:"sku,omitempty"`
+	// The unique ID of the item purchased, if any.
+	ItemID *string `json:"item_id,omitempty" url:"item_id,omitempty"`
+	// The unique ID of the item variation purchased, if any.
+	ItemVariationID *string `json:"item_variation_id,omitempty" url:"item_variation_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1PaymentItemDetail) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1PaymentItemDetail) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentItemDetail
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1PaymentItemDetail(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1PaymentItemDetail) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Payment include an` itemizations` field that lists the items purchased,
+// along with associated fees, modifiers, and discounts. Each itemization has an
+// `itemization_type` field that indicates which of the following the itemization
+// represents:
+//
+// <ul>
+// <li>An item variation from the merchant's item library</li>
+// <li>A custom monetary amount</li>
+// <li>
+// An action performed on a Square gift card, such as activating or
+// reloading it.
+// </li>
+// </ul>
+//
+// \*Note**: itemization information included in a `Payment` object reflects
+// details collected **at the time of the payment\*\*. Details such as the name or
+// price of items might have changed since the payment was processed.
+type V1PaymentItemization struct {
+	// The item's name.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The quantity of the item purchased. This can be a decimal value.
+	Quantity *float64 `json:"quantity,omitempty" url:"quantity,omitempty"`
+	// The type of purchase that the itemization represents, such as an ITEM or CUSTOM_AMOUNT
+	// See [V1PaymentItemizationItemizationType](#type-v1paymentitemizationitemizationtype) for possible values
+	ItemizationType *V1PaymentItemizationItemizationType `json:"itemization_type,omitempty" url:"itemization_type,omitempty"`
+	// Details of the item, including its unique identifier and the identifier of the item variation purchased.
+	ItemDetail *V1PaymentItemDetail `json:"item_detail,omitempty" url:"item_detail,omitempty"`
+	// Notes entered by the merchant about the item at the time of payment, if any.
+	Notes *string `json:"notes,omitempty" url:"notes,omitempty"`
+	// The name of the item variation purchased, if any.
+	ItemVariationName *string `json:"item_variation_name,omitempty" url:"item_variation_name,omitempty"`
+	// The total cost of the item, including all taxes and discounts.
+	TotalMoney *V1Money `json:"total_money,omitempty" url:"total_money,omitempty"`
+	// The cost of a single unit of this item.
+	SingleQuantityMoney *V1Money `json:"single_quantity_money,omitempty" url:"single_quantity_money,omitempty"`
+	// The total cost of the itemization and its modifiers, not including taxes or discounts.
+	GrossSalesMoney *V1Money `json:"gross_sales_money,omitempty" url:"gross_sales_money,omitempty"`
+	// The total of all discounts applied to the itemization. This value is always negative or zero.
+	DiscountMoney *V1Money `json:"discount_money,omitempty" url:"discount_money,omitempty"`
+	// The sum of gross_sales_money and discount_money.
+	NetSalesMoney *V1Money `json:"net_sales_money,omitempty" url:"net_sales_money,omitempty"`
+	// All taxes applied to this itemization.
+	Taxes []*V1PaymentTax `json:"taxes,omitempty" url:"taxes,omitempty"`
+	// All discounts applied to this itemization.
+	Discounts []*V1PaymentDiscount `json:"discounts,omitempty" url:"discounts,omitempty"`
+	// All modifier options applied to this itemization.
+	Modifiers []*V1PaymentModifier `json:"modifiers,omitempty" url:"modifiers,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1PaymentItemization) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1PaymentItemization) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentItemization
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1PaymentItemization(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1PaymentItemization) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1PaymentItemizationItemizationType string
+
+const (
+	V1PaymentItemizationItemizationTypeItem               V1PaymentItemizationItemizationType = "ITEM"
+	V1PaymentItemizationItemizationTypeCustomAmount       V1PaymentItemizationItemizationType = "CUSTOM_AMOUNT"
+	V1PaymentItemizationItemizationTypeGiftCardActivation V1PaymentItemizationItemizationType = "GIFT_CARD_ACTIVATION"
+	V1PaymentItemizationItemizationTypeGiftCardReload     V1PaymentItemizationItemizationType = "GIFT_CARD_RELOAD"
+	V1PaymentItemizationItemizationTypeGiftCardUnknown    V1PaymentItemizationItemizationType = "GIFT_CARD_UNKNOWN"
+	V1PaymentItemizationItemizationTypeOther              V1PaymentItemizationItemizationType = "OTHER"
+)
+
+func NewV1PaymentItemizationItemizationTypeFromString(s string) (V1PaymentItemizationItemizationType, error) {
+	switch s {
+	case "ITEM":
+		return V1PaymentItemizationItemizationTypeItem, nil
+	case "CUSTOM_AMOUNT":
+		return V1PaymentItemizationItemizationTypeCustomAmount, nil
+	case "GIFT_CARD_ACTIVATION":
+		return V1PaymentItemizationItemizationTypeGiftCardActivation, nil
+	case "GIFT_CARD_RELOAD":
+		return V1PaymentItemizationItemizationTypeGiftCardReload, nil
+	case "GIFT_CARD_UNKNOWN":
+		return V1PaymentItemizationItemizationTypeGiftCardUnknown, nil
+	case "OTHER":
+		return V1PaymentItemizationItemizationTypeOther, nil
+	}
+	var t V1PaymentItemizationItemizationType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1PaymentItemizationItemizationType) Ptr() *V1PaymentItemizationItemizationType {
+	return &v
+}
+
+// V1PaymentModifier
+type V1PaymentModifier struct {
+	// The modifier option's name.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The amount of money that this modifier option adds to the payment.
+	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
+	// The ID of the applied modifier option, if available. Modifier options applied in older versions of Square Register might not have an ID.
+	ModifierOptionID *string `json:"modifier_option_id,omitempty" url:"modifier_option_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1PaymentModifier) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1PaymentModifier) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentModifier
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1PaymentModifier(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1PaymentModifier) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// V1PaymentSurcharge
+type V1PaymentSurcharge struct {
+	// The name of the surcharge.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The amount of money applied to the order as a result of the surcharge.
+	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
+	// The amount of the surcharge as a percentage. The percentage is provided as a string representing the decimal equivalent of the percentage. For example, "0.7" corresponds to a 7% surcharge. Exactly one of rate or amount_money should be set.
+	Rate *string `json:"rate,omitempty" url:"rate,omitempty"`
+	// The amount of the surcharge as a Money object. Exactly one of rate or amount_money should be set.
+	AmountMoney *V1Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
+	// Indicates the source of the surcharge. For example, if it was applied as an automatic gratuity for a large group.
+	// See [V1PaymentSurchargeType](#type-v1paymentsurchargetype) for possible values
+	Type *V1PaymentSurchargeType `json:"type,omitempty" url:"type,omitempty"`
+	// Indicates whether the surcharge is taxable.
+	Taxable *bool `json:"taxable,omitempty" url:"taxable,omitempty"`
+	// The list of taxes that should be applied to the surcharge.
+	Taxes []*V1PaymentTax `json:"taxes,omitempty" url:"taxes,omitempty"`
+	// A Square-issued unique identifier associated with the surcharge.
+	SurchargeID *string `json:"surcharge_id,omitempty" url:"surcharge_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1PaymentSurcharge) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1PaymentSurcharge) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentSurcharge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1PaymentSurcharge(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1PaymentSurcharge) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1PaymentSurchargeType string
+
+const (
+	V1PaymentSurchargeTypeUnknown      V1PaymentSurchargeType = "UNKNOWN"
+	V1PaymentSurchargeTypeAutoGratuity V1PaymentSurchargeType = "AUTO_GRATUITY"
+	V1PaymentSurchargeTypeCustom       V1PaymentSurchargeType = "CUSTOM"
+)
+
+func NewV1PaymentSurchargeTypeFromString(s string) (V1PaymentSurchargeType, error) {
+	switch s {
+	case "UNKNOWN":
+		return V1PaymentSurchargeTypeUnknown, nil
+	case "AUTO_GRATUITY":
+		return V1PaymentSurchargeTypeAutoGratuity, nil
+	case "CUSTOM":
+		return V1PaymentSurchargeTypeCustom, nil
+	}
+	var t V1PaymentSurchargeType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1PaymentSurchargeType) Ptr() *V1PaymentSurchargeType {
+	return &v
+}
+
+// V1PaymentTax
+type V1PaymentTax struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-	// The order's unique identifier.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The email address of the order's buyer.
-	BuyerEmail *string `json:"buyer_email,omitempty" url:"buyer_email,omitempty"`
-	// The name of the order's buyer.
-	RecipientName *string `json:"recipient_name,omitempty" url:"recipient_name,omitempty"`
-	// The phone number to use for the order's delivery.
-	RecipientPhoneNumber *string `json:"recipient_phone_number,omitempty" url:"recipient_phone_number,omitempty"`
+	// The merchant-defined name of the tax.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// The amount of money that this tax adds to the payment.
+	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
+	// The rate of the tax, as a string representation of a decimal number. A value of 0.07 corresponds to a rate of 7%.
+	Rate *string `json:"rate,omitempty" url:"rate,omitempty"`
 	// Whether the tax is an ADDITIVE tax or an INCLUSIVE tax.
-	// See [V1OrderState](#type-v1orderstate) for possible values
-	State *V1OrderState `json:"state,omitempty" url:"state,omitempty"`
-	// The address to ship the order to.
-	ShippingAddress *Address `json:"shipping_address,omitempty" url:"shipping_address,omitempty"`
-	// The amount of all items purchased in the order, before taxes and shipping.
-	SubtotalMoney *V1Money `json:"subtotal_money,omitempty" url:"subtotal_money,omitempty"`
-	// The shipping cost for the order.
-	TotalShippingMoney *V1Money `json:"total_shipping_money,omitempty" url:"total_shipping_money,omitempty"`
-	// The total of all taxes applied to the order.
-	TotalTaxMoney *V1Money `json:"total_tax_money,omitempty" url:"total_tax_money,omitempty"`
-	// The total cost of the order.
-	TotalPriceMoney *V1Money `json:"total_price_money,omitempty" url:"total_price_money,omitempty"`
-	// The total of all discounts applied to the order.
-	TotalDiscountMoney *V1Money `json:"total_discount_money,omitempty" url:"total_discount_money,omitempty"`
-	// The time when the order was created, in ISO 8601 format.
-	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The time when the order was last modified, in ISO 8601 format.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The time when the order expires if no action is taken, in ISO 8601 format.
-	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
-	// The unique identifier of the payment associated with the order.
-	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
-	// A note provided by the buyer when the order was created, if any.
-	BuyerNote *string `json:"buyer_note,omitempty" url:"buyer_note,omitempty"`
-	// A note provided by the merchant when the order's state was set to COMPLETED, if any
-	CompletedNote *string `json:"completed_note,omitempty" url:"completed_note,omitempty"`
-	// A note provided by the merchant when the order's state was set to REFUNDED, if any.
-	RefundedNote *string `json:"refunded_note,omitempty" url:"refunded_note,omitempty"`
-	// A note provided by the merchant when the order's state was set to CANCELED, if any.
-	CanceledNote *string `json:"canceled_note,omitempty" url:"canceled_note,omitempty"`
-	// The tender used to pay for the order.
-	Tender *V1Tender `json:"tender,omitempty" url:"tender,omitempty"`
-	// The history of actions associated with the order.
-	OrderHistory []*V1OrderHistoryEntry `json:"order_history,omitempty" url:"order_history,omitempty"`
-	// The promo code provided by the buyer, if any.
-	PromoCode *string `json:"promo_code,omitempty" url:"promo_code,omitempty"`
-	// For Bitcoin transactions, the address that the buyer sent Bitcoin to.
-	BtcReceiveAddress *string `json:"btc_receive_address,omitempty" url:"btc_receive_address,omitempty"`
-	// For Bitcoin transactions, the price of the buyer's order in satoshi (100 million satoshi equals 1 BTC).
-	BtcPriceSatoshi *float64 `json:"btc_price_satoshi,omitempty" url:"btc_price_satoshi,omitempty"`
+	// See [V1PaymentTaxInclusionType](#type-v1paymenttaxinclusiontype) for possible values
+	InclusionType *V1PaymentTaxInclusionType `json:"inclusion_type,omitempty" url:"inclusion_type,omitempty"`
+	// The ID of the tax, if available. Taxes applied in older versions of Square Register might not have an ID.
+	FeeID *string `json:"fee_id,omitempty" url:"fee_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (v *V1Order) GetExtraProperties() map[string]interface{} {
+func (v *V1PaymentTax) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
-func (v *V1Order) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Order
+func (v *V1PaymentTax) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentTax
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*v = V1Order(value)
+	*v = V1PaymentTax(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *v)
 	if err != nil {
@@ -54767,7 +71499,7 @@ func (v *V1Order) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V1Order) String() string {
+func (v *V1PaymentTax) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
@@ -54779,29 +71511,55 @@ func (v *V1Order) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// V1OrderHistoryEntry
-type V1OrderHistoryEntry struct {
-	// The type of action performed on the order.
-	// See [V1OrderHistoryEntryAction](#type-v1orderhistoryentryaction) for possible values
-	Action *V1OrderHistoryEntryAction `json:"action,omitempty" url:"action,omitempty"`
-	// The time when the action was performed, in ISO 8601 format.
-	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+type V1PaymentTaxInclusionType string
+
+const (
+	V1PaymentTaxInclusionTypeAdditive  V1PaymentTaxInclusionType = "ADDITIVE"
+	V1PaymentTaxInclusionTypeInclusive V1PaymentTaxInclusionType = "INCLUSIVE"
+)
+
+func NewV1PaymentTaxInclusionTypeFromString(s string) (V1PaymentTaxInclusionType, error) {
+	switch s {
+	case "ADDITIVE":
+		return V1PaymentTaxInclusionTypeAdditive, nil
+	case "INCLUSIVE":
+		return V1PaymentTaxInclusionTypeInclusive, nil
+	}
+	var t V1PaymentTaxInclusionType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1PaymentTaxInclusionType) Ptr() *V1PaymentTaxInclusionType {
+	return &v
+}
+
+// Published when a charge is made or refunded through the Square
+// Point of Sale app or the Transactions API.
+type V1PaymentUpdatedWebhook struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target merchant associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, i.e. `PAYMENT_UPDATED`.
+	EventType *string `json:"event_type,omitempty" url:"event_type,omitempty"`
+	// The ID of the updated V1 Payment.
+	EntityID *string `json:"entity_id,omitempty" url:"entity_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (v *V1OrderHistoryEntry) GetExtraProperties() map[string]interface{} {
+func (v *V1PaymentUpdatedWebhook) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
-func (v *V1OrderHistoryEntry) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1OrderHistoryEntry
+func (v *V1PaymentUpdatedWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1PaymentUpdatedWebhook
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*v = V1OrderHistoryEntry(value)
+	*v = V1PaymentUpdatedWebhook(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *v)
 	if err != nil {
@@ -54813,7 +71571,7 @@ func (v *V1OrderHistoryEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V1OrderHistoryEntry) String() string {
+func (v *V1PaymentUpdatedWebhook) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
@@ -54823,77 +71581,6 @@ func (v *V1OrderHistoryEntry) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", v)
-}
-
-type V1OrderHistoryEntryAction string
-
-const (
-	V1OrderHistoryEntryActionOrderPlaced     V1OrderHistoryEntryAction = "ORDER_PLACED"
-	V1OrderHistoryEntryActionDeclined        V1OrderHistoryEntryAction = "DECLINED"
-	V1OrderHistoryEntryActionPaymentReceived V1OrderHistoryEntryAction = "PAYMENT_RECEIVED"
-	V1OrderHistoryEntryActionCanceled        V1OrderHistoryEntryAction = "CANCELED"
-	V1OrderHistoryEntryActionCompleted       V1OrderHistoryEntryAction = "COMPLETED"
-	V1OrderHistoryEntryActionRefunded        V1OrderHistoryEntryAction = "REFUNDED"
-	V1OrderHistoryEntryActionExpired         V1OrderHistoryEntryAction = "EXPIRED"
-)
-
-func NewV1OrderHistoryEntryActionFromString(s string) (V1OrderHistoryEntryAction, error) {
-	switch s {
-	case "ORDER_PLACED":
-		return V1OrderHistoryEntryActionOrderPlaced, nil
-	case "DECLINED":
-		return V1OrderHistoryEntryActionDeclined, nil
-	case "PAYMENT_RECEIVED":
-		return V1OrderHistoryEntryActionPaymentReceived, nil
-	case "CANCELED":
-		return V1OrderHistoryEntryActionCanceled, nil
-	case "COMPLETED":
-		return V1OrderHistoryEntryActionCompleted, nil
-	case "REFUNDED":
-		return V1OrderHistoryEntryActionRefunded, nil
-	case "EXPIRED":
-		return V1OrderHistoryEntryActionExpired, nil
-	}
-	var t V1OrderHistoryEntryAction
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1OrderHistoryEntryAction) Ptr() *V1OrderHistoryEntryAction {
-	return &v
-}
-
-type V1OrderState string
-
-const (
-	V1OrderStatePending   V1OrderState = "PENDING"
-	V1OrderStateOpen      V1OrderState = "OPEN"
-	V1OrderStateCompleted V1OrderState = "COMPLETED"
-	V1OrderStateCanceled  V1OrderState = "CANCELED"
-	V1OrderStateRefunded  V1OrderState = "REFUNDED"
-	V1OrderStateRejected  V1OrderState = "REJECTED"
-)
-
-func NewV1OrderStateFromString(s string) (V1OrderState, error) {
-	switch s {
-	case "PENDING":
-		return V1OrderStatePending, nil
-	case "OPEN":
-		return V1OrderStateOpen, nil
-	case "COMPLETED":
-		return V1OrderStateCompleted, nil
-	case "CANCELED":
-		return V1OrderStateCanceled, nil
-	case "REFUNDED":
-		return V1OrderStateRefunded, nil
-	case "REJECTED":
-		return V1OrderStateRejected, nil
-	}
-	var t V1OrderState
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1OrderState) Ptr() *V1OrderState {
-	return &v
 }
 
 // Represents a phone number.
@@ -54941,22 +71628,60 @@ func (v *V1PhoneNumber) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-type V1RetrieveOrderRequest struct {
+// V1Refund
+type V1Refund struct {
+	// The type of refund
+	// See [V1RefundType](#type-v1refundtype) for possible values
+	Type *V1RefundType `json:"type,omitempty" url:"type,omitempty"`
+	// The merchant-specified reason for the refund.
+	Reason *string `json:"reason,omitempty" url:"reason,omitempty"`
+	// The amount of money refunded. This amount is always negative.
+	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
+	// The amount of processing fee money refunded. This amount is always positive.
+	RefundedProcessingFeeMoney *V1Money `json:"refunded_processing_fee_money,omitempty" url:"refunded_processing_fee_money,omitempty"`
+	// The total amount of tax money refunded. This amount is always negative.
+	RefundedTaxMoney *V1Money `json:"refunded_tax_money,omitempty" url:"refunded_tax_money,omitempty"`
+	// The amount of additive tax money refunded. This amount is always negative.
+	RefundedAdditiveTaxMoney *V1Money `json:"refunded_additive_tax_money,omitempty" url:"refunded_additive_tax_money,omitempty"`
+	// All of the additive taxes associated with the refund.
+	RefundedAdditiveTax []*V1PaymentTax `json:"refunded_additive_tax,omitempty" url:"refunded_additive_tax,omitempty"`
+	// The amount of inclusive tax money refunded. This amount is always negative.
+	RefundedInclusiveTaxMoney *V1Money `json:"refunded_inclusive_tax_money,omitempty" url:"refunded_inclusive_tax_money,omitempty"`
+	// All of the inclusive taxes associated with the refund.
+	RefundedInclusiveTax []*V1PaymentTax `json:"refunded_inclusive_tax,omitempty" url:"refunded_inclusive_tax,omitempty"`
+	// The amount of tip money refunded. This amount is always negative.
+	RefundedTipMoney *V1Money `json:"refunded_tip_money,omitempty" url:"refunded_tip_money,omitempty"`
+	// The amount of discount money refunded. This amount is always positive.
+	RefundedDiscountMoney *V1Money `json:"refunded_discount_money,omitempty" url:"refunded_discount_money,omitempty"`
+	// The amount of surcharge money refunded. This amount is always negative.
+	RefundedSurchargeMoney *V1Money `json:"refunded_surcharge_money,omitempty" url:"refunded_surcharge_money,omitempty"`
+	// A list of all surcharges associated with the refund.
+	RefundedSurcharges []*V1PaymentSurcharge `json:"refunded_surcharges,omitempty" url:"refunded_surcharges,omitempty"`
+	// The time when the merchant initiated the refund for Square to process, in ISO 8601 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The time when Square processed the refund on behalf of the merchant, in ISO 8601 format.
+	ProcessedAt *string `json:"processed_at,omitempty" url:"processed_at,omitempty"`
+	// A Square-issued ID associated with the refund. For single-tender refunds, payment_id is the ID of the original payment ID. For split-tender refunds, payment_id is the ID of the original tender. For exchange-based refunds (is_exchange == true), payment_id is the ID of the original payment ID even if the payment includes other tenders.
+	PaymentID  *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// Indicates whether or not the refund is associated with an exchange. If is_exchange is true, the refund reflects the value of goods returned in the exchange not the total money refunded.
+	IsExchange *bool `json:"is_exchange,omitempty" url:"is_exchange,omitempty"`
+
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (v *V1RetrieveOrderRequest) GetExtraProperties() map[string]interface{} {
+func (v *V1Refund) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
-func (v *V1RetrieveOrderRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1RetrieveOrderRequest
+func (v *V1Refund) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1Refund
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*v = V1RetrieveOrderRequest(value)
+	*v = V1Refund(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *v)
 	if err != nil {
@@ -54968,7 +71693,359 @@ func (v *V1RetrieveOrderRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V1RetrieveOrderRequest) String() string {
+func (v *V1Refund) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1RefundType string
+
+const (
+	V1RefundTypeFull    V1RefundType = "FULL"
+	V1RefundTypePartial V1RefundType = "PARTIAL"
+)
+
+func NewV1RefundTypeFromString(s string) (V1RefundType, error) {
+	switch s {
+	case "FULL":
+		return V1RefundTypeFull, nil
+	case "PARTIAL":
+		return V1RefundTypePartial, nil
+	}
+	var t V1RefundType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1RefundType) Ptr() *V1RefundType {
+	return &v
+}
+
+type V1RetrieveBusinessRequest struct {
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1RetrieveBusinessRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1RetrieveBusinessRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1RetrieveBusinessRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1RetrieveBusinessRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1RetrieveBusinessRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// V1Settlement
+type V1Settlement struct {
+	// The settlement's unique identifier.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The settlement's current status.
+	// See [V1SettlementStatus](#type-v1settlementstatus) for possible values
+	Status *V1SettlementStatus `json:"status,omitempty" url:"status,omitempty"`
+	// The amount of money involved in the settlement. A positive amount indicates a deposit, and a negative amount indicates a withdrawal. This amount is never zero.
+	TotalMoney *V1Money `json:"total_money,omitempty" url:"total_money,omitempty"`
+	// The time when the settlement was submitted for deposit or withdrawal, in ISO 8601 format.
+	InitiatedAt *string `json:"initiated_at,omitempty" url:"initiated_at,omitempty"`
+	// The Square-issued unique identifier for the bank account associated with the settlement.
+	BankAccountID *string `json:"bank_account_id,omitempty" url:"bank_account_id,omitempty"`
+	// The entries included in this settlement.
+	Entries []*V1SettlementEntry `json:"entries,omitempty" url:"entries,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1Settlement) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1Settlement) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1Settlement
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1Settlement(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1Settlement) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// V1SettlementEntry
+type V1SettlementEntry struct {
+	// The settlement's unique identifier.
+	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+	// The settlement's current status.
+	// See [V1SettlementEntryType](#type-v1settlemententrytype) for possible values
+	Type *V1SettlementEntryType `json:"type,omitempty" url:"type,omitempty"`
+	// The total amount of money this entry contributes to the total settlement amount.
+	AmountMoney *V1Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
+	// The amount of all Square fees associated with this settlement entry. This value is always negative or zero.
+	FeeMoney *V1Money `json:"fee_money,omitempty" url:"fee_money,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1SettlementEntry) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1SettlementEntry) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1SettlementEntry
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1SettlementEntry(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1SettlementEntry) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1SettlementEntryType string
+
+const (
+	V1SettlementEntryTypeAdjustment                   V1SettlementEntryType = "ADJUSTMENT"
+	V1SettlementEntryTypeBalanceCharge                V1SettlementEntryType = "BALANCE_CHARGE"
+	V1SettlementEntryTypeCharge                       V1SettlementEntryType = "CHARGE"
+	V1SettlementEntryTypeFreeProcessing               V1SettlementEntryType = "FREE_PROCESSING"
+	V1SettlementEntryTypeHoldAdjustment               V1SettlementEntryType = "HOLD_ADJUSTMENT"
+	V1SettlementEntryTypePaidServiceFee               V1SettlementEntryType = "PAID_SERVICE_FEE"
+	V1SettlementEntryTypePaidServiceFeeRefund         V1SettlementEntryType = "PAID_SERVICE_FEE_REFUND"
+	V1SettlementEntryTypeRedemptionCode               V1SettlementEntryType = "REDEMPTION_CODE"
+	V1SettlementEntryTypeRefund                       V1SettlementEntryType = "REFUND"
+	V1SettlementEntryTypeReturnedPayout               V1SettlementEntryType = "RETURNED_PAYOUT"
+	V1SettlementEntryTypeSquareCapitalAdvance         V1SettlementEntryType = "SQUARE_CAPITAL_ADVANCE"
+	V1SettlementEntryTypeSquareCapitalPayment         V1SettlementEntryType = "SQUARE_CAPITAL_PAYMENT"
+	V1SettlementEntryTypeSquareCapitalReversedPayment V1SettlementEntryType = "SQUARE_CAPITAL_REVERSED_PAYMENT"
+	V1SettlementEntryTypeSubscriptionFee              V1SettlementEntryType = "SUBSCRIPTION_FEE"
+	V1SettlementEntryTypeSubscriptionFeeRefund        V1SettlementEntryType = "SUBSCRIPTION_FEE_REFUND"
+	V1SettlementEntryTypeOther                        V1SettlementEntryType = "OTHER"
+	V1SettlementEntryTypeIncentedPayment              V1SettlementEntryType = "INCENTED_PAYMENT"
+	V1SettlementEntryTypeReturnedAchEntry             V1SettlementEntryType = "RETURNED_ACH_ENTRY"
+	V1SettlementEntryTypeReturnedSquare275            V1SettlementEntryType = "RETURNED_SQUARE_275"
+	V1SettlementEntryTypeSquare275                    V1SettlementEntryType = "SQUARE_275"
+	V1SettlementEntryTypeSquareCard                   V1SettlementEntryType = "SQUARE_CARD"
+)
+
+func NewV1SettlementEntryTypeFromString(s string) (V1SettlementEntryType, error) {
+	switch s {
+	case "ADJUSTMENT":
+		return V1SettlementEntryTypeAdjustment, nil
+	case "BALANCE_CHARGE":
+		return V1SettlementEntryTypeBalanceCharge, nil
+	case "CHARGE":
+		return V1SettlementEntryTypeCharge, nil
+	case "FREE_PROCESSING":
+		return V1SettlementEntryTypeFreeProcessing, nil
+	case "HOLD_ADJUSTMENT":
+		return V1SettlementEntryTypeHoldAdjustment, nil
+	case "PAID_SERVICE_FEE":
+		return V1SettlementEntryTypePaidServiceFee, nil
+	case "PAID_SERVICE_FEE_REFUND":
+		return V1SettlementEntryTypePaidServiceFeeRefund, nil
+	case "REDEMPTION_CODE":
+		return V1SettlementEntryTypeRedemptionCode, nil
+	case "REFUND":
+		return V1SettlementEntryTypeRefund, nil
+	case "RETURNED_PAYOUT":
+		return V1SettlementEntryTypeReturnedPayout, nil
+	case "SQUARE_CAPITAL_ADVANCE":
+		return V1SettlementEntryTypeSquareCapitalAdvance, nil
+	case "SQUARE_CAPITAL_PAYMENT":
+		return V1SettlementEntryTypeSquareCapitalPayment, nil
+	case "SQUARE_CAPITAL_REVERSED_PAYMENT":
+		return V1SettlementEntryTypeSquareCapitalReversedPayment, nil
+	case "SUBSCRIPTION_FEE":
+		return V1SettlementEntryTypeSubscriptionFee, nil
+	case "SUBSCRIPTION_FEE_REFUND":
+		return V1SettlementEntryTypeSubscriptionFeeRefund, nil
+	case "OTHER":
+		return V1SettlementEntryTypeOther, nil
+	case "INCENTED_PAYMENT":
+		return V1SettlementEntryTypeIncentedPayment, nil
+	case "RETURNED_ACH_ENTRY":
+		return V1SettlementEntryTypeReturnedAchEntry, nil
+	case "RETURNED_SQUARE_275":
+		return V1SettlementEntryTypeReturnedSquare275, nil
+	case "SQUARE_275":
+		return V1SettlementEntryTypeSquare275, nil
+	case "SQUARE_CARD":
+		return V1SettlementEntryTypeSquareCard, nil
+	}
+	var t V1SettlementEntryType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1SettlementEntryType) Ptr() *V1SettlementEntryType {
+	return &v
+}
+
+type V1SettlementStatus string
+
+const (
+	V1SettlementStatusFailed V1SettlementStatus = "FAILED"
+	V1SettlementStatusSent   V1SettlementStatus = "SENT"
+)
+
+func NewV1SettlementStatusFromString(s string) (V1SettlementStatus, error) {
+	switch s {
+	case "FAILED":
+		return V1SettlementStatusFailed, nil
+	case "SENT":
+		return V1SettlementStatusSent, nil
+	}
+	var t V1SettlementStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v V1SettlementStatus) Ptr() *V1SettlementStatus {
+	return &v
+}
+
+type V1SubmitBatchRequest struct {
+	// The set of API actions to perform.
+	Requests []*BatchRequest `json:"requests,omitempty" url:"requests,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1SubmitBatchRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1SubmitBatchRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1SubmitBatchRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1SubmitBatchRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1SubmitBatchRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type V1SubmitBatchResponse struct {
+	// An array of `BatchResponse` objects corresponding to requests. The
+	// index of each response in the array matches the index of the
+	// corresponding request.
+	Items []*BatchResponse `json:"items,omitempty" url:"items,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1SubmitBatchResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1SubmitBatchResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1SubmitBatchResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1SubmitBatchResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1SubmitBatchResponse) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
@@ -55198,30 +72275,142 @@ func (v V1TenderType) Ptr() *V1TenderType {
 	return &v
 }
 
-type V1UpdateOrderRequestAction string
+// Published when a timecard is created in the Seller Dashboard
+// or an employee clocks in using the Square Point of Sale app.
+type V1TimecardUpdatedWebhook struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target merchant associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, i.e. `TIMECARD_UPDATED`.
+	EventType *string `json:"event_type,omitempty" url:"event_type,omitempty"`
+	// The ID of the updated V1 Timecard.
+	EntityID *string `json:"entity_id,omitempty" url:"entity_id,omitempty"`
 
-const (
-	V1UpdateOrderRequestActionComplete V1UpdateOrderRequestAction = "COMPLETE"
-	V1UpdateOrderRequestActionCancel   V1UpdateOrderRequestAction = "CANCEL"
-	V1UpdateOrderRequestActionRefund   V1UpdateOrderRequestAction = "REFUND"
-)
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
 
-func NewV1UpdateOrderRequestActionFromString(s string) (V1UpdateOrderRequestAction, error) {
-	switch s {
-	case "COMPLETE":
-		return V1UpdateOrderRequestActionComplete, nil
-	case "CANCEL":
-		return V1UpdateOrderRequestActionCancel, nil
-	case "REFUND":
-		return V1UpdateOrderRequestActionRefund, nil
+func (v *V1TimecardUpdatedWebhook) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1TimecardUpdatedWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1TimecardUpdatedWebhook
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
 	}
-	var t V1UpdateOrderRequestAction
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
+	*v = V1TimecardUpdatedWebhook(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
 }
 
-func (v V1UpdateOrderRequestAction) Ptr() *V1UpdateOrderRequestAction {
-	return &v
+func (v *V1TimecardUpdatedWebhook) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
 }
+
+// Deprecated. V1UpdateWebhooksRequest
+type V1UpdateWebhooksRequest struct {
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1UpdateWebhooksRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1UpdateWebhooksRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1UpdateWebhooksRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1UpdateWebhooksRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1UpdateWebhooksRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Deprecated. V1UpdateWebhooksResponse
+type V1UpdateWebhooksResponse struct {
+	// A list of webhook event enums the location is currently subscribed to.
+	// See [V1WebhooksEvents](#type-v1webhooksevents) for possible values
+	Events []V1WebhooksEvents `json:"events,omitempty" url:"events,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *V1UpdateWebhooksResponse) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *V1UpdateWebhooksResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1UpdateWebhooksResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = V1UpdateWebhooksResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *V1UpdateWebhooksResponse) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Deprecated. V1WebhooksEvents
+type V1WebhooksEvents = string
 
 // Represents a supplier to a seller.
 type Vendor struct {
@@ -55289,7 +72478,7 @@ func (v *Vendor) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// Represents a contact of a [Vendor]($m/Vendor).
+// Represents a contact of a [Vendor](entity:Vendor).
 type VendorContact struct {
 	// A unique Square-generated ID for the [VendorContact](entity:VendorContact).
 	// This field is required when attempting to update a [VendorContact](entity:VendorContact).
@@ -55344,17 +72533,168 @@ func (v *VendorContact) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// The status of the [Vendor]($m/Vendor),
-// whether a [Vendor]($m/Vendor) is active or inactive.
+// Published when a [Vendor](entity:Vendor) is created.
+type VendorCreatedEvent struct {
+	// The ID of a seller associated with this event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of a location associated with the event, if the event is associated with the location of the seller.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of this event. The value is `"vendor.created".`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for this event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The RFC 3339-formatted time when the underlying event data object is created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with this event.
+	Data *VendorCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEvent) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Defines the `vendor.created` event data structure.
+type VendorCreatedEventData struct {
+	// The type of the event data object. The value is `vendor`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created vendor.
+	Object *VendorCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEventData) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VendorCreatedEventObject struct {
+	// The operation on the vendor that caused the event to be published. The value is `CREATED`.
+	// See [Operation](#type-operation) for possible values
+	Operation *VendorCreatedEventObjectOperation `json:"operation,omitempty" url:"operation,omitempty"`
+	// The created vendor as the result of the specified operation.
+	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEventObject) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// The operation that can be performed against a vendor to cause the event to be published.
+type VendorCreatedEventObjectOperation = string
+
+// The status of the [Vendor](entity:Vendor),
+// whether a [Vendor](entity:Vendor) is active or inactive.
 type VendorStatus string
 
 const (
+	VendorStatusDoNotUse VendorStatus = "DO_NOT_USE"
 	VendorStatusActive   VendorStatus = "ACTIVE"
 	VendorStatusInactive VendorStatus = "INACTIVE"
 )
 
 func NewVendorStatusFromString(s string) (VendorStatus, error) {
 	switch s {
+	case "DO_NOT_USE":
+		return VendorStatusDoNotUse, nil
 	case "ACTIVE":
 		return VendorStatusActive, nil
 	case "INACTIVE":
@@ -55368,17 +72708,168 @@ func (v VendorStatus) Ptr() *VendorStatus {
 	return &v
 }
 
+// Published when a [Vendor](entity:Vendor) is updated.
+type VendorUpdatedEvent struct {
+	// The ID of a seller associated with this event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of a seller location associated with this event, if the event is associated with the location.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of this event. The value is `"vendor.updated".`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for this webhoook event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The RFC 3339-formatted time when the underlying event data object is created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with this event.
+	Data *VendorUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEvent) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Defines the `vendor.updated` event data structure.
+type VendorUpdatedEventData struct {
+	// The type of the event data object. The value is `vendor`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing updated vendor.
+	Object *VendorUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEventData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEventData) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VendorUpdatedEventObject struct {
+	// The operation on the vendor that caused the event to be published. The value is `UPDATED`.
+	// See [Operation](#type-operation) for possible values
+	Operation *VendorUpdatedEventObjectOperation `json:"operation,omitempty" url:"operation,omitempty"`
+	// The updated vendor as the result of the specified operation.
+	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VendorUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEventObject(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEventObject) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// The operation that can be performed against a vendor to cause the event to be published.
+type VendorUpdatedEventObjectOperation = string
+
 // Enumeration of visibility-filter values used to set the ability to view custom attributes or custom attribute definitions.
 type VisibilityFilter string
 
 const (
-	VisibilityFilterAll       VisibilityFilter = "ALL"
-	VisibilityFilterRead      VisibilityFilter = "READ"
-	VisibilityFilterReadWrite VisibilityFilter = "READ_WRITE"
+	VisibilityFilterVisibilityFilterDoNotUse VisibilityFilter = "VISIBILITY_FILTER_DO_NOT_USE"
+	VisibilityFilterAll                      VisibilityFilter = "ALL"
+	VisibilityFilterRead                     VisibilityFilter = "READ"
+	VisibilityFilterReadWrite                VisibilityFilter = "READ_WRITE"
 )
 
 func NewVisibilityFilterFromString(s string) (VisibilityFilter, error) {
 	switch s {
+	case "VISIBILITY_FILTER_DO_NOT_USE":
+		return VisibilityFilterVisibilityFilterDoNotUse, nil
 	case "ALL":
 		return VisibilityFilterAll, nil
 	case "READ":
@@ -55605,17 +73096,20 @@ func (w *WebhookSubscription) String() string {
 type Weekday string
 
 const (
-	WeekdayMon Weekday = "MON"
-	WeekdayTue Weekday = "TUE"
-	WeekdayWed Weekday = "WED"
-	WeekdayThu Weekday = "THU"
-	WeekdayFri Weekday = "FRI"
-	WeekdaySat Weekday = "SAT"
-	WeekdaySun Weekday = "SUN"
+	WeekdayUnknownWeekday Weekday = "UNKNOWN_WEEKDAY"
+	WeekdayMon            Weekday = "MON"
+	WeekdayTue            Weekday = "TUE"
+	WeekdayWed            Weekday = "WED"
+	WeekdayThu            Weekday = "THU"
+	WeekdayFri            Weekday = "FRI"
+	WeekdaySat            Weekday = "SAT"
+	WeekdaySun            Weekday = "SUN"
 )
 
 func NewWeekdayFromString(s string) (Weekday, error) {
 	switch s {
+	case "UNKNOWN_WEEKDAY":
+		return WeekdayUnknownWeekday, nil
 	case "MON":
 		return WeekdayMon, nil
 	case "TUE":

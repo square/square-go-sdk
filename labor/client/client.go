@@ -5,17 +5,16 @@ package client
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	breaktypes "github.com/square/square-go-sdk/labor/breaktypes"
+	employeewages "github.com/square/square-go-sdk/labor/employeewages"
+	shifts "github.com/square/square-go-sdk/labor/shifts"
+	teammemberwages "github.com/square/square-go-sdk/labor/teammemberwages"
+	workweekconfigs "github.com/square/square-go-sdk/labor/workweekconfigs"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	breaktypes "github.com/fern-demo/square-go-sdk/labor/breaktypes"
-	employeewages "github.com/fern-demo/square-go-sdk/labor/employeewages"
-	shifts "github.com/fern-demo/square-go-sdk/labor/shifts"
-	teammemberwages "github.com/fern-demo/square-go-sdk/labor/teammemberwages"
-	workweekconfigs "github.com/fern-demo/square-go-sdk/labor/workweekconfigs"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {

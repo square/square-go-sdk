@@ -4,12 +4,11 @@ package oauth
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -36,6 +35,130 @@ func NewClient(opts ...option.RequestOption) *Client {
 		),
 		header: options.ToHeader(),
 	}
+}
+
+// As part of a URL sent to a seller to authorize permissions for
+// the developer, `Authorize` displays an authorization page and a
+// list of requested permissions.
+//
+// The completed URL looks similar to the following example:
+// https://connect.squareup.com/oauth2/authorize?client_id={YOUR_APP_ID}&scope=CUSTOMERS_WRITE+CUSTOMERS_READ&session=False&state=82201dd8d83d23cc8a48caf52b
+//
+// The seller can approve or deny the permissions. If approved,` Authorize`
+// returns an `AuthorizeResponse` that is sent to the redirect URL and includes
+// a state string and an authorization code. The code is used in the `ObtainToken`
+// call to obtain an access token and a refresh token that the developer uses
+// to manage resources on behalf of the seller.
+//
+// **Important:** The `AuthorizeResponse` is sent to the redirect URL that you set on
+// the **OAuth** page of your application in the Developer Dashboard.
+//
+// If an error occurs or the seller denies the request, `Authorize` returns an
+// error response that includes `error` and `error_description` values. If the
+// error is due to the seller denying the request, the error value is `access_denied`
+// and the `error_description` is `user_denied`.
+func (c *Client) Authorize(
+	ctx context.Context,
+	request *squaregosdk.OAuthAuthorizeRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.AuthorizeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://connect.squareupsandbox.com"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/oauth2/authorize"
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *squaregosdk.AuthorizeResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// `RenewToken` is deprecated. For information about refreshing OAuth access tokens, see
+// [Migrate from Renew to Refresh OAuth Tokens](https://developer.squareup.com/docs/oauth-api/migrate-to-refresh-tokens).
+//
+// Renews an OAuth access token before it expires.
+//
+// OAuth access tokens besides your application's personal access token expire after 30 days.
+// You can also renew expired tokens within 15 days of their expiration.
+// You cannot renew an access token that has been expired for more than 15 days.
+// Instead, the associated user must recomplete the OAuth flow from the beginning.
+//
+// **Important:** The `Authorization` header for this endpoint must have the
+// following format:
+//
+// ```
+// Authorization: Client APPLICATION_SECRET
+// ```
+//
+// Replace `APPLICATION_SECRET` with the application secret on the **Credentials**
+// page in the [Developer Dashboard](https://developer.squareup.com/apps).
+func (c *Client) RenewToken(
+	ctx context.Context,
+	// Your application ID, which is available on the **OAuth** page in the [Developer Dashboard](https://developer.squareup.com/apps).
+	clientID string,
+	request *squaregosdk.RenewTokenRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.RenewTokenResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://connect.squareupsandbox.com"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/oauth2/clients/%v/access-token/renew", clientID)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *squaregosdk.RenewTokenResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 // Revokes an access token generated with the OAuth flow.
@@ -193,73 +316,4 @@ func (c *Client) RetrieveTokenStatus(
 		return nil, err
 	}
 	return response, nil
-}
-
-func (c *Client) Authorize(
-	ctx context.Context,
-	opts ...option.RequestOption,
-) error {
-	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := baseURL + "/oauth2/authorize"
-
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
-
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
-			Headers:         headers,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-		},
-	); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *Client) RenewToken(
-	ctx context.Context,
-	clientID string,
-	opts ...option.RequestOption,
-) error {
-	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := core.EncodeURL(baseURL+"/oauth2/clients/%v/access-token/renew", clientID)
-
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
-
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
-			Headers:         headers,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-		},
-	); err != nil {
-		return err
-	}
-	return nil
 }

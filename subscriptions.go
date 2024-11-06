@@ -27,6 +27,10 @@ type ChangeBillingAnchorDateRequest struct {
 }
 
 type SwapPlanRequest struct {
+	// The ID of the new subscription plan.
+	//
+	// Retired in favour of `new_plan_variation_id`.
+	NewPlanID *string `json:"new_plan_id,omitempty" url:"-"`
 	// The ID of the new subscription plan variation.
 	//
 	// This field is required.
@@ -44,6 +48,14 @@ type CreateSubscriptionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The ID of the location the subscription is associated with.
 	LocationID string `json:"location_id" url:"-"`
+	// The ID of the [subscription plan](https://developer.squareup.com/docs/subscriptions-api/plans-and-variations) created using the Catalog API.
+	//
+	// Retired in favour of `plan_variation_id`.
+	//
+	// For more information, see
+	// [Set Up and Manage a Subscription Plan](https://developer.squareup.com/docs/subscriptions-api/setup-plan) and
+	// [Subscriptions Walkthrough](https://developer.squareup.com/docs/subscriptions-api/walkthrough).
+	PlanID *string `json:"plan_id,omitempty" url:"-"`
 	// The ID of the [subscription plan variation](https://developer.squareup.com/docs/subscriptions-api/plans-and-variations#plan-variations) created using the Catalog API.
 	PlanVariationID *string `json:"plan_variation_id,omitempty" url:"-"`
 	// The ID of the [customer](entity:Customer) subscribing to the subscription plan variation.

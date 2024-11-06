@@ -5,13 +5,12 @@ package activities
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	giftcards "github.com/square/square-go-sdk/giftcards"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	giftcards "github.com/fern-demo/square-go-sdk/giftcards"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -102,7 +101,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a gift card activity to manage the balance or state of a [gift card]($m/GiftCard).
+// Creates a gift card activity to manage the balance or state of a [gift card](entity:GiftCard).
 // For example, create an `ACTIVATE` activity to activate a gift card with an initial balance before first use.
 func (c *Client) Create(
 	ctx context.Context,

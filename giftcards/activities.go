@@ -3,7 +3,7 @@
 package giftcards
 
 import (
-	squaregosdk "github.com/fern-demo/square-go-sdk"
+	squaregosdk "github.com/square/square-go-sdk"
 )
 
 type CreateGiftCardActivityRequest struct {

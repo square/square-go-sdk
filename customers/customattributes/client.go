@@ -5,13 +5,12 @@ package customattributes
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	customers "github.com/square/square-go-sdk/customers"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	customers "github.com/fern-demo/square-go-sdk/customers"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -40,7 +39,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the [custom attributes]($m/CustomAttribute) associated with a customer profile.
+// Lists the [custom attributes](entity:CustomAttribute) associated with a customer profile.
 //
 // You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
 // in the same call.
@@ -108,7 +107,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Retrieves a [custom attribute]($m/CustomAttribute) associated with a customer profile.
+// Retrieves a [custom attribute](entity:CustomAttribute) associated with a customer profile.
 //
 // You can use the `with_definition` query parameter to also retrieve the custom attribute definition
 // in the same call.
@@ -171,11 +170,11 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Creates or updates a [custom attribute]($m/CustomAttribute) for a customer profile.
+// Creates or updates a [custom attribute](entity:CustomAttribute) for a customer profile.
 //
 // Use this endpoint to set the value of a custom attribute for a specified customer profile.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which
-// is created using the [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) endpoint.
+// is created using the [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) endpoint.
 //
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
@@ -228,7 +227,7 @@ func (c *Client) Upsert(
 	return response, nil
 }
 
-// Deletes a [custom attribute]($m/CustomAttribute) associated with a customer profile.
+// Deletes a [custom attribute](entity:CustomAttribute) associated with a customer profile.
 //
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes

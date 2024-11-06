@@ -4,14 +4,13 @@ package client
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	loyalty "github.com/square/square-go-sdk/loyalty"
+	promotions "github.com/square/square-go-sdk/loyalty/programs/promotions"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	loyalty "github.com/fern-demo/square-go-sdk/loyalty"
-	promotions "github.com/fern-demo/square-go-sdk/loyalty/programs/promotions"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -129,14 +128,14 @@ func (c *Client) Get(
 //
 //   - If you are using the Orders API to manage orders, provide the `order_id` and (optional) `loyalty_account_id`.
 //     Square reads the order to compute the points earned from the base loyalty program and an associated
-//     [loyalty promotion]($m/LoyaltyPromotion).
+//     [loyalty promotion](entity:LoyaltyPromotion).
 //
 //   - If you are not using the Orders API to manage orders, provide `transaction_amount_money` with the
 //     purchase amount. Square uses this amount to calculate the points earned from the base loyalty program,
 //     but not points earned from a loyalty promotion. For spend-based and visit-based programs, the `tax_mode`
 //     setting of the accrual rule indicates how taxes should be treated for loyalty points accrual.
 //     If the purchase qualifies for program points, call
-//     [ListLoyaltyPromotions]($e/Loyalty/ListLoyaltyPromotions) and perform a client-side computation
+//     [ListLoyaltyPromotions](api-endpoint:Loyalty-ListLoyaltyPromotions) and perform a client-side computation
 //     to calculate whether the purchase also qualifies for promotion points. For more information, see
 //     [Calculating promotion points](https://developer.squareup.com/docs/loyalty-api/loyalty-promotions#calculate-promotion-points).
 func (c *Client) Calculate(

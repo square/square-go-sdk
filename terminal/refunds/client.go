@@ -4,13 +4,12 @@ package refunds
 
 import (
 	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
+	terminal "github.com/square/square-go-sdk/terminal"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
-	terminal "github.com/fern-demo/square-go-sdk/terminal"
 )
 
 type Client struct {
@@ -39,7 +38,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Creates a request to refund an Interac payment completed on a Square Terminal. Refunds for Interac payments on a Square Terminal are supported only for Interac debit cards in Canada. Other refunds for Terminal payments should use the Refunds API. For more information, see [Refunds API]($e/Refunds).
+// Creates a request to refund an Interac payment completed on a Square Terminal. Refunds for Interac payments on a Square Terminal are supported only for Interac debit cards in Canada. Other refunds for Terminal payments should use the Refunds API. For more information, see [Refunds API](api:Refunds).
 func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalRefundRequest,
@@ -161,6 +160,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	// The unique ID for the desired `TerminalRefund`.
 	terminalRefundID string,
+	request *terminal.CancelTerminalRefundRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -187,6 +187,7 @@ func (c *Client) Cancel(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

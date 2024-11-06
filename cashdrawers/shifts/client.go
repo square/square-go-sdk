@@ -5,13 +5,12 @@ package shifts
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	cashdrawers "github.com/square/square-go-sdk/cashdrawers"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	cashdrawers "github.com/fern-demo/square-go-sdk/cashdrawers"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -86,7 +85,7 @@ func (c *Client) List(
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftsResponse) *core.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary] {
 		next := response.Cursor
-		results := response.CashDrawerShifts
+		results := response.Items
 		return &core.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary]{
 			Next:    next,
 			Results: results,
@@ -101,7 +100,7 @@ func (c *Client) List(
 }
 
 // Provides the summary details for a single cash drawer shift. See
-// [ListCashDrawerShiftEvents]($e/CashDrawers/ListCashDrawerShiftEvents) for a list of cash drawer shift events.
+// [ListCashDrawerShiftEvents](api-endpoint:CashDrawers-ListCashDrawerShiftEvents) for a list of cash drawer shift events.
 func (c *Client) Get(
 	ctx context.Context,
 	// The shift ID.
@@ -196,7 +195,7 @@ func (c *Client) ListEvents(
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftEventsResponse) *core.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent] {
 		next := response.Cursor
-		results := response.CashDrawerShiftEvents
+		results := response.Events
 		return &core.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent]{
 			Next:    next,
 			Results: results,

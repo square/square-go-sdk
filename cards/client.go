@@ -5,12 +5,11 @@ package cards
 import (
 	context "context"
 	fmt "fmt"
+	squaregosdk "github.com/square/square-go-sdk"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	squaregosdk "github.com/fern-demo/square-go-sdk"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
@@ -183,6 +182,7 @@ func (c *Client) Disable(
 	ctx context.Context,
 	// Unique ID for the desired Card.
 	cardID string,
+	request *squaregosdk.DisableCardRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DisableCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -209,6 +209,7 @@ func (c *Client) Disable(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

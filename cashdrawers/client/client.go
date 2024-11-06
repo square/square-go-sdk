@@ -3,12 +3,11 @@
 package client
 
 import (
+	shifts "github.com/square/square-go-sdk/cashdrawers/shifts"
+	core "github.com/square/square-go-sdk/core"
+	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
-
-	shifts "github.com/fern-demo/square-go-sdk/cashdrawers/shifts"
-	core "github.com/fern-demo/square-go-sdk/core"
-	option "github.com/fern-demo/square-go-sdk/option"
 )
 
 type Client struct {
