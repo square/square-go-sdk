@@ -6,6 +6,7 @@ import (
 	context "context"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
@@ -13,7 +14,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -27,8 +28,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -57,7 +58,7 @@ func (c *Client) ListLocationCustomAttributeDefinitions(
 	}
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -65,12 +66,12 @@ func (c *Client) ListLocationCustomAttributeDefinitions(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.ListLocationCustomAttributeDefinitionsResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -109,12 +110,13 @@ func (c *Client) CreateLocationCustomAttributeDefinition(
 	}
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -151,9 +153,9 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -161,12 +163,12 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -202,14 +204,15 @@ func (c *Client) UpdateLocationCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -245,14 +248,14 @@ func (c *Client) DeleteLocationCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -287,12 +290,13 @@ func (c *Client) BulkDeleteLocationCustomAttributes(
 	}
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-delete"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkDeleteLocationCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -335,12 +339,13 @@ func (c *Client) BulkUpsertLocationCustomAttributes(
 	}
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-upsert"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpsertLocationCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -379,9 +384,9 @@ func (c *Client) ListLocationCustomAttributes(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/locations/%v/custom-attributes", locationID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v/custom-attributes", locationID)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -389,12 +394,12 @@ func (c *Client) ListLocationCustomAttributes(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.ListLocationCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -435,13 +440,13 @@ func (c *Client) RetrieveLocationCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
 		locationID,
 		key,
 	)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -449,12 +454,12 @@ func (c *Client) RetrieveLocationCustomAttribute(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.RetrieveLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -496,18 +501,19 @@ func (c *Client) UpsertLocationCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
 		locationID,
 		key,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -546,18 +552,18 @@ func (c *Client) DeleteLocationCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
 		locationID,
 		key,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,

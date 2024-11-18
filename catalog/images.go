@@ -4,12 +4,15 @@ package catalog
 
 import (
 	squaregosdk "github.com/square/square-go-sdk"
+	io "io"
 )
 
 type ImagesCreateRequest struct {
-	Request *squaregosdk.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	ImageFile io.Reader                              `json:"-" url:"-"`
+	Request   *squaregosdk.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }
 
 type ImagesUpdateRequest struct {
-	Request *squaregosdk.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	ImageFile io.Reader                              `json:"-" url:"-"`
+	Request   *squaregosdk.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }

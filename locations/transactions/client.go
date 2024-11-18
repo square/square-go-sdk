@@ -6,6 +6,7 @@ import (
 	context "context"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	locations "github.com/square/square-go-sdk/locations"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
@@ -14,7 +15,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -28,8 +29,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -60,9 +61,9 @@ func (c *Client) List(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/locations/%v/transactions", locationID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v/transactions", locationID)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -70,12 +71,12 @@ func (c *Client) List(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.ListTransactionsResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -109,18 +110,18 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v",
 		locationID,
 		transactionID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetTransactionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -156,18 +157,18 @@ func (c *Client) Capture(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v/capture",
 		locationID,
 		transactionID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.CaptureTransactionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -203,18 +204,18 @@ func (c *Client) Void(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v/void",
 		locationID,
 		transactionID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.VoidTransactionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,

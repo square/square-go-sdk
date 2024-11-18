@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type RefundPaymentRequest struct {
 	//	A unique string that identifies this `RefundPayment` request. The key can be any valid string
 	//
@@ -114,4 +120,510 @@ type RefundsListRequest struct {
 	//
 	// Default: 100
 	Limit *int `json:"-" url:"limit,omitempty"`
+}
+
+// Details about a refund's destination.
+type DestinationDetails struct {
+	// Details about a card refund. Only populated if the destination_type is `CARD`.
+	CardDetails *DestinationDetailsCardRefundDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DestinationDetails) GetCardDetails() *DestinationDetailsCardRefundDetails {
+	if d == nil {
+		return nil
+	}
+	return d.CardDetails
+}
+
+func (d *DestinationDetails) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DestinationDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler DestinationDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DestinationDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DestinationDetails) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DestinationDetailsCardRefundDetails struct {
+	// The card's non-confidential details.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+	// The method used to enter the card's details for the refund. The method can be
+	// `KEYED`, `SWIPED`, `EMV`, `ON_FILE`, or `CONTACTLESS`.
+	EntryMethod *string `json:"entry_method,omitempty" url:"entry_method,omitempty"`
+	// The authorization code provided by the issuer when a refund is approved.
+	AuthResultCode *string `json:"auth_result_code,omitempty" url:"auth_result_code,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DestinationDetailsCardRefundDetails) GetCard() *Card {
+	if d == nil {
+		return nil
+	}
+	return d.Card
+}
+
+func (d *DestinationDetailsCardRefundDetails) GetEntryMethod() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EntryMethod
+}
+
+func (d *DestinationDetailsCardRefundDetails) GetAuthResultCode() *string {
+	if d == nil {
+		return nil
+	}
+	return d.AuthResultCode
+}
+
+func (d *DestinationDetailsCardRefundDetails) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DestinationDetailsCardRefundDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler DestinationDetailsCardRefundDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DestinationDetailsCardRefundDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DestinationDetailsCardRefundDetails) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Defines the response returned by [GetRefund](api-endpoint:Refunds-GetPaymentRefund).
+//
+// Note: If there are errors processing the request, the refund field might not be
+// present or it might be present in a FAILED state.
+type GetPaymentRefundResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested `PaymentRefund`.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetPaymentRefundResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetPaymentRefundResponse) GetRefund() *PaymentRefund {
+	if g == nil {
+		return nil
+	}
+	return g.Refund
+}
+
+func (g *GetPaymentRefundResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetPaymentRefundResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetPaymentRefundResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetPaymentRefundResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetPaymentRefundResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
+//
+// Either `errors` or `refunds` is present in a given response (never both).
+type ListPaymentRefundsResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The list of requested refunds.
+	Refunds []*PaymentRefund `json:"refunds,omitempty" url:"refunds,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If empty,
+	// this is the final response.
+	//
+	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListPaymentRefundsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListPaymentRefundsResponse) GetRefunds() []*PaymentRefund {
+	if l == nil {
+		return nil
+	}
+	return l.Refunds
+}
+
+func (l *ListPaymentRefundsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListPaymentRefundsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListPaymentRefundsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListPaymentRefundsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListPaymentRefundsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListPaymentRefundsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a refund of a payment made using Square. Contains information about
+// the original payment and the amount of money refunded.
+type PaymentRefund struct {
+	// The unique ID for this refund, generated by Square.
+	ID string `json:"id" url:"id"`
+	// The refund's status:
+	//
+	// - `PENDING` - Awaiting approval.
+	// - `COMPLETED` - Successfully completed.
+	// - `REJECTED` - The refund was rejected.
+	// - `FAILED` - An error occurred.
+	Status *string `json:"status,omitempty" url:"status,omitempty"`
+	// The location ID associated with the payment this refund is attached to.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// Flag indicating whether or not the refund is linked to an existing payment in Square.
+	Unlinked *bool `json:"unlinked,omitempty" url:"unlinked,omitempty"`
+	// The destination type for this refund.
+	//
+	// Current values include `CARD`, `BANK_ACCOUNT`, `WALLET`, `BUY_NOW_PAY_LATER`, `CASH`,
+	// `EXTERNAL`, and `SQUARE_ACCOUNT`.
+	DestinationType *string `json:"destination_type,omitempty" url:"destination_type,omitempty"`
+	// Contains information about the refund destination. This field is populated only if
+	// `destination_id` is defined in the `RefundPayment` request.
+	DestinationDetails *DestinationDetails `json:"destination_details,omitempty" url:"destination_details,omitempty"`
+	// The amount of money refunded. This amount is specified in the smallest denomination
+	// of the applicable currency (for example, US dollar amounts are specified in cents).
+	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
+	// The amount of money the application developer contributed to help cover the refunded amount.
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"app_fee_money,omitempty"`
+	// Processing fees and fee adjustments assessed by Square for this refund.
+	ProcessingFee []*ProcessingFee `json:"processing_fee,omitempty" url:"processing_fee,omitempty"`
+	// The ID of the payment associated with this refund.
+	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+	// The ID of the order associated with the refund.
+	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
+	// The reason for the refund.
+	Reason *string `json:"reason,omitempty" url:"reason,omitempty"`
+	// The timestamp of when the refund was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp of when the refund was last updated, in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// An optional ID of the team member associated with taking the payment.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaymentRefund) GetID() string {
+	if p == nil {
+		return ""
+	}
+	return p.ID
+}
+
+func (p *PaymentRefund) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *PaymentRefund) GetLocationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LocationID
+}
+
+func (p *PaymentRefund) GetUnlinked() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Unlinked
+}
+
+func (p *PaymentRefund) GetDestinationType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DestinationType
+}
+
+func (p *PaymentRefund) GetDestinationDetails() *DestinationDetails {
+	if p == nil {
+		return nil
+	}
+	return p.DestinationDetails
+}
+
+func (p *PaymentRefund) GetAmountMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.AmountMoney
+}
+
+func (p *PaymentRefund) GetAppFeeMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.AppFeeMoney
+}
+
+func (p *PaymentRefund) GetProcessingFee() []*ProcessingFee {
+	if p == nil {
+		return nil
+	}
+	return p.ProcessingFee
+}
+
+func (p *PaymentRefund) GetPaymentID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.PaymentID
+}
+
+func (p *PaymentRefund) GetOrderID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OrderID
+}
+
+func (p *PaymentRefund) GetReason() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Reason
+}
+
+func (p *PaymentRefund) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PaymentRefund) GetUpdatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UpdatedAt
+}
+
+func (p *PaymentRefund) GetTeamMemberID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TeamMemberID
+}
+
+func (p *PaymentRefund) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentRefund
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentRefund(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentRefund) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Defines the response returned by
+// [RefundPayment](api-endpoint:Refunds-RefundPayment).
+//
+// If there are errors processing the request, the `refund` field might not be
+// present, or it might be present with a status of `FAILED`.
+type RefundPaymentResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully created `PaymentRefund`.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RefundPaymentResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RefundPaymentResponse) GetRefund() *PaymentRefund {
+	if r == nil {
+		return nil
+	}
+	return r.Refund
+}
+
+func (r *RefundPaymentResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundPaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundPaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundPaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundPaymentResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }

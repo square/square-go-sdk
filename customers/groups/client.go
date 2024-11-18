@@ -8,6 +8,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	customers "github.com/square/square-go-sdk/customers"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
@@ -15,7 +16,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -29,8 +30,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -56,14 +57,14 @@ func (c *Client) List(
 	}
 	endpointURL := baseURL + "/v2/customers/groups"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	prepareCall := func(pageRequest *core.PageRequest[*string]) *core.CallParams {
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
 		}
@@ -71,7 +72,7 @@ func (c *Client) List(
 		if len(queryParams) > 0 {
 			nextURL += "?" + queryParams.Encode()
 		}
-		return &core.CallParams{
+		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -82,15 +83,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCustomerGroupsResponse) *core.PageResponse[*string, *squaregosdk.CustomerGroup] {
+	readPageResponse := func(response *squaregosdk.ListCustomerGroupsResponse) *internal.PageResponse[*string, *squaregosdk.CustomerGroup] {
 		next := response.Cursor
 		results := response.Groups
-		return &core.PageResponse[*string, *squaregosdk.CustomerGroup]{
+		return &internal.PageResponse[*string, *squaregosdk.CustomerGroup]{
 			Next:    next,
 			Results: results,
 		}
 	}
-	pager := core.NewCursorPager(
+	pager := internal.NewCursorPager(
 		c.caller,
 		prepareCall,
 		readPageResponse,
@@ -117,12 +118,13 @@ func (c *Client) Create(
 	}
 	endpointURL := baseURL + "/v2/customers/groups"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -155,14 +157,14 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -195,14 +197,15 @@ func (c *Client) Update(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -235,14 +238,14 @@ func (c *Client) Delete(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/customers/groups/%v", groupID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -279,18 +282,18 @@ func (c *Client) Add(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v/groups/%v",
 		customerID,
 		groupID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.AddGroupToCustomerResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -327,18 +330,18 @@ func (c *Client) Remove(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v/groups/%v",
 		customerID,
 		groupID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.RemoveGroupFromCustomerResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,

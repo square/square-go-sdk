@@ -6,6 +6,7 @@ import (
 	context "context"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
@@ -13,7 +14,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -27,8 +28,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -60,12 +61,13 @@ func (c *Client) Create(
 	}
 	endpointURL := baseURL + "/v2/orders"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -101,12 +103,13 @@ func (c *Client) BatchGet(
 	}
 	endpointURL := baseURL + "/v2/orders/batch-retrieve"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchGetOrdersResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -140,12 +143,13 @@ func (c *Client) Calculate(
 	}
 	endpointURL := baseURL + "/v2/orders/calculate"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CalculateOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -180,12 +184,13 @@ func (c *Client) Clone(
 	}
 	endpointURL := baseURL + "/v2/orders/clone"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CloneOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -235,12 +240,13 @@ func (c *Client) Search(
 	}
 	endpointURL := baseURL + "/v2/orders/search"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.SearchOrdersResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -273,14 +279,14 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/%v", orderID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/%v", orderID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -327,14 +333,15 @@ func (c *Client) Update(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/%v", orderID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/%v", orderID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -381,14 +388,15 @@ func (c *Client) Pay(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/%v/pay", orderID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/%v/pay", orderID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.PayOrderResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,

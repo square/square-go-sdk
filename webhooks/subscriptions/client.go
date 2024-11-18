@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	webhooks "github.com/square/square-go-sdk/webhooks"
 	http "net/http"
@@ -15,7 +16,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -29,8 +30,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -56,14 +57,14 @@ func (c *Client) List(
 	}
 	endpointURL := baseURL + "/v2/webhooks/subscriptions"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	prepareCall := func(pageRequest *core.PageRequest[*string]) *core.CallParams {
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
 		}
@@ -71,7 +72,7 @@ func (c *Client) List(
 		if len(queryParams) > 0 {
 			nextURL += "?" + queryParams.Encode()
 		}
-		return &core.CallParams{
+		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -82,15 +83,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListWebhookSubscriptionsResponse) *core.PageResponse[*string, *squaregosdk.WebhookSubscription] {
+	readPageResponse := func(response *squaregosdk.ListWebhookSubscriptionsResponse) *internal.PageResponse[*string, *squaregosdk.WebhookSubscription] {
 		next := response.Cursor
 		results := response.Subscriptions
-		return &core.PageResponse[*string, *squaregosdk.WebhookSubscription]{
+		return &internal.PageResponse[*string, *squaregosdk.WebhookSubscription]{
 			Next:    next,
 			Results: results,
 		}
 	}
-	pager := core.NewCursorPager(
+	pager := internal.NewCursorPager(
 		c.caller,
 		prepareCall,
 		readPageResponse,
@@ -115,12 +116,13 @@ func (c *Client) Create(
 	}
 	endpointURL := baseURL + "/v2/webhooks/subscriptions"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -153,14 +155,14 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -193,14 +195,15 @@ func (c *Client) Update(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -233,14 +236,14 @@ func (c *Client) Delete(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v", subscriptionID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -273,14 +276,15 @@ func (c *Client) UpdateSignatureKey(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v/signature-key", subscriptionID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v/signature-key", subscriptionID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateWebhookSubscriptionSignatureKeyResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -314,14 +318,15 @@ func (c *Client) Test(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v/test", subscriptionID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/webhooks/subscriptions/%v/test", subscriptionID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.TestWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,

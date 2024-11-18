@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type SearchCatalogItemsRequest struct {
 	// The text filter expression to return items or item variations containing specified text in
 	// the `name`, `description`, or `abbreviation` attribute value of an item, or in
@@ -207,4 +213,1923 @@ type SearchCatalogObjectsRequest struct {
 	// and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned
 	// in the response payload.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
+}
+
+// Defines the values for the `archived_state` query expression
+// used in [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// to return the archived, not archived or either type of catalog items.
+type ArchivedState string
+
+const (
+	ArchivedStateArchivedStateDoNotUse    ArchivedState = "ARCHIVED_STATE_DO_NOT_USE"
+	ArchivedStateArchivedStateNotArchived ArchivedState = "ARCHIVED_STATE_NOT_ARCHIVED"
+	ArchivedStateArchivedStateArchived    ArchivedState = "ARCHIVED_STATE_ARCHIVED"
+	ArchivedStateArchivedStateAll         ArchivedState = "ARCHIVED_STATE_ALL"
+)
+
+func NewArchivedStateFromString(s string) (ArchivedState, error) {
+	switch s {
+	case "ARCHIVED_STATE_DO_NOT_USE":
+		return ArchivedStateArchivedStateDoNotUse, nil
+	case "ARCHIVED_STATE_NOT_ARCHIVED":
+		return ArchivedStateArchivedStateNotArchived, nil
+	case "ARCHIVED_STATE_ARCHIVED":
+		return ArchivedStateArchivedStateArchived, nil
+	case "ARCHIVED_STATE_ALL":
+		return ArchivedStateArchivedStateAll, nil
+	}
+	var t ArchivedState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a ArchivedState) Ptr() *ArchivedState {
+	return &a
+}
+
+type BatchDeleteCatalogObjectsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The IDs of all CatalogObjects deleted by this request.
+	DeletedObjectIDs []string `json:"deleted_object_ids,omitempty" url:"deleted_object_ids,omitempty"`
+	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this deletion in RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
+	DeletedAt *string `json:"deleted_at,omitempty" url:"deleted_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) GetDeletedObjectIDs() []string {
+	if b == nil {
+		return nil
+	}
+	return b.DeletedObjectIDs
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) GetDeletedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.DeletedAt
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchDeleteCatalogObjectsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchDeleteCatalogObjectsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchDeleteCatalogObjectsResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchGetCatalogObjectsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// A list of [CatalogObject](entity:CatalogObject)s returned.
+	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+	// A list of [CatalogObject](entity:CatalogObject)s referenced by the object in the `objects` field.
+	RelatedObjects []*CatalogObject `json:"related_objects,omitempty" url:"related_objects,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchGetCatalogObjectsResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchGetCatalogObjectsResponse) GetObjects() []*CatalogObject {
+	if b == nil {
+		return nil
+	}
+	return b.Objects
+}
+
+func (b *BatchGetCatalogObjectsResponse) GetRelatedObjects() []*CatalogObject {
+	if b == nil {
+		return nil
+	}
+	return b.RelatedObjects
+}
+
+func (b *BatchGetCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchGetCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetCatalogObjectsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchGetCatalogObjectsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchGetCatalogObjectsResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchUpsertCatalogObjectsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The created successfully created CatalogObjects.
+	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this update in RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// The mapping between client and server IDs for this upsert.
+	IDMappings []*CatalogIDMapping `json:"id_mappings,omitempty" url:"id_mappings,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) GetObjects() []*CatalogObject {
+	if b == nil {
+		return nil
+	}
+	return b.Objects
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) GetUpdatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.UpdatedAt
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) GetIDMappings() []*CatalogIDMapping {
+	if b == nil {
+		return nil
+	}
+	return b.IDMappings
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpsertCatalogObjectsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchUpsertCatalogObjectsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchUpsertCatalogObjectsResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type CatalogInfoResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// Limits that apply to this API.
+	Limits *CatalogInfoResponseLimits `json:"limits,omitempty" url:"limits,omitempty"`
+	// Names and abbreviations for standard units.
+	StandardUnitDescriptionGroup *StandardUnitDescriptionGroup `json:"standard_unit_description_group,omitempty" url:"standard_unit_description_group,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogInfoResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CatalogInfoResponse) GetLimits() *CatalogInfoResponseLimits {
+	if c == nil {
+		return nil
+	}
+	return c.Limits
+}
+
+func (c *CatalogInfoResponse) GetStandardUnitDescriptionGroup() *StandardUnitDescriptionGroup {
+	if c == nil {
+		return nil
+	}
+	return c.StandardUnitDescriptionGroup
+}
+
+func (c *CatalogInfoResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogInfoResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogInfoResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogInfoResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogInfoResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogInfoResponseLimits struct {
+	// The maximum number of objects that may appear within a single batch in a
+	// `/v2/catalog/batch-upsert` request.
+	BatchUpsertMaxObjectsPerBatch *int `json:"batch_upsert_max_objects_per_batch,omitempty" url:"batch_upsert_max_objects_per_batch,omitempty"`
+	// The maximum number of objects that may appear across all batches in a
+	// `/v2/catalog/batch-upsert` request.
+	BatchUpsertMaxTotalObjects *int `json:"batch_upsert_max_total_objects,omitempty" url:"batch_upsert_max_total_objects,omitempty"`
+	// The maximum number of object IDs that may appear in a `/v2/catalog/batch-retrieve`
+	// request.
+	BatchRetrieveMaxObjectIDs *int `json:"batch_retrieve_max_object_ids,omitempty" url:"batch_retrieve_max_object_ids,omitempty"`
+	// The maximum number of results that may be returned in a page of a
+	// `/v2/catalog/search` response.
+	SearchMaxPageLimit *int `json:"search_max_page_limit,omitempty" url:"search_max_page_limit,omitempty"`
+	// The maximum number of object IDs that may be included in a single
+	// `/v2/catalog/batch-delete` request.
+	BatchDeleteMaxObjectIDs *int `json:"batch_delete_max_object_ids,omitempty" url:"batch_delete_max_object_ids,omitempty"`
+	// The maximum number of item IDs that may be included in a single
+	// `/v2/catalog/update-item-taxes` request.
+	UpdateItemTaxesMaxItemIDs *int `json:"update_item_taxes_max_item_ids,omitempty" url:"update_item_taxes_max_item_ids,omitempty"`
+	// The maximum number of tax IDs to be enabled that may be included in a single
+	// `/v2/catalog/update-item-taxes` request.
+	UpdateItemTaxesMaxTaxesToEnable *int `json:"update_item_taxes_max_taxes_to_enable,omitempty" url:"update_item_taxes_max_taxes_to_enable,omitempty"`
+	// The maximum number of tax IDs to be disabled that may be included in a single
+	// `/v2/catalog/update-item-taxes` request.
+	UpdateItemTaxesMaxTaxesToDisable *int `json:"update_item_taxes_max_taxes_to_disable,omitempty" url:"update_item_taxes_max_taxes_to_disable,omitempty"`
+	// The maximum number of item IDs that may be included in a single
+	// `/v2/catalog/update-item-modifier-lists` request.
+	UpdateItemModifierListsMaxItemIDs *int `json:"update_item_modifier_lists_max_item_ids,omitempty" url:"update_item_modifier_lists_max_item_ids,omitempty"`
+	// The maximum number of modifier list IDs to be enabled that may be included in
+	// a single `/v2/catalog/update-item-modifier-lists` request.
+	UpdateItemModifierListsMaxModifierListsToEnable *int `json:"update_item_modifier_lists_max_modifier_lists_to_enable,omitempty" url:"update_item_modifier_lists_max_modifier_lists_to_enable,omitempty"`
+	// The maximum number of modifier list IDs to be disabled that may be included in
+	// a single `/v2/catalog/update-item-modifier-lists` request.
+	UpdateItemModifierListsMaxModifierListsToDisable *int `json:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty" url:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogInfoResponseLimits) GetBatchUpsertMaxObjectsPerBatch() *int {
+	if c == nil {
+		return nil
+	}
+	return c.BatchUpsertMaxObjectsPerBatch
+}
+
+func (c *CatalogInfoResponseLimits) GetBatchUpsertMaxTotalObjects() *int {
+	if c == nil {
+		return nil
+	}
+	return c.BatchUpsertMaxTotalObjects
+}
+
+func (c *CatalogInfoResponseLimits) GetBatchRetrieveMaxObjectIDs() *int {
+	if c == nil {
+		return nil
+	}
+	return c.BatchRetrieveMaxObjectIDs
+}
+
+func (c *CatalogInfoResponseLimits) GetSearchMaxPageLimit() *int {
+	if c == nil {
+		return nil
+	}
+	return c.SearchMaxPageLimit
+}
+
+func (c *CatalogInfoResponseLimits) GetBatchDeleteMaxObjectIDs() *int {
+	if c == nil {
+		return nil
+	}
+	return c.BatchDeleteMaxObjectIDs
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemTaxesMaxItemIDs() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemTaxesMaxItemIDs
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemTaxesMaxTaxesToEnable() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemTaxesMaxTaxesToEnable
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemTaxesMaxTaxesToDisable() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemTaxesMaxTaxesToDisable
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemModifierListsMaxItemIDs() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemModifierListsMaxItemIDs
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemModifierListsMaxModifierListsToEnable() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemModifierListsMaxModifierListsToEnable
+}
+
+func (c *CatalogInfoResponseLimits) GetUpdateItemModifierListsMaxModifierListsToDisable() *int {
+	if c == nil {
+		return nil
+	}
+	return c.UpdateItemModifierListsMaxModifierListsToDisable
+}
+
+func (c *CatalogInfoResponseLimits) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogInfoResponseLimits) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogInfoResponseLimits
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogInfoResponseLimits(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogInfoResponseLimits) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A batch of catalog objects.
+type CatalogObjectBatch struct {
+	// A list of CatalogObjects belonging to this batch.
+	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogObjectBatch) GetObjects() []*CatalogObject {
+	if c == nil {
+		return nil
+	}
+	return c.Objects
+}
+
+func (c *CatalogObjectBatch) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogObjectBatch) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogObjectBatch
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogObjectBatch(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogObjectBatch) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
+//
+// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects).
+// Any combination of the following types may be used together:
+//
+// - [exact_query](entity:CatalogQueryExact)
+// - [prefix_query](entity:CatalogQueryPrefix)
+// - [range_query](entity:CatalogQueryRange)
+// - [sorted_attribute_query](entity:CatalogQuerySortedAttribute)
+// - [text_query](entity:CatalogQueryText)
+//
+// All other query types cannot be combined with any others.
+//
+// When a query filter is based on an attribute, the attribute must be searchable.
+// Searchable attributes are listed as follows, along their parent types that can be searched for with applicable query filters.
+//
+// Searchable attribute and objects queryable by searchable attributes:
+//
+// - `name`: `CatalogItem`, `CatalogItemVariation`, `CatalogCategory`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, `CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
+// - `description`: `CatalogItem`, `CatalogItemOptionValue`
+// - `abbreviation`: `CatalogItem`
+// - `upc`: `CatalogItemVariation`
+// - `sku`: `CatalogItemVariation`
+// - `caption`: `CatalogImage`
+// - `display_name`: `CatalogItemOption`
+//
+// For example, to search for [CatalogItem](entity:CatalogItem) objects by searchable attributes, you can use
+// the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
+type CatalogQuery struct {
+	// A query expression to sort returned query result by the given attribute.
+	SortedAttributeQuery *CatalogQuerySortedAttribute `json:"sorted_attribute_query,omitempty" url:"sorted_attribute_query,omitempty"`
+	// An exact query expression to return objects with attribute name and value
+	// matching the specified attribute name and value exactly. Value matching is case insensitive.
+	ExactQuery *CatalogQueryExact `json:"exact_query,omitempty" url:"exact_query,omitempty"`
+	// A set query expression to return objects with attribute name and value
+	// matching the specified attribute name and any of the specified attribute values exactly.
+	// Value matching is case insensitive.
+	SetQuery *CatalogQuerySet `json:"set_query,omitempty" url:"set_query,omitempty"`
+	// A prefix query expression to return objects with attribute values
+	// that have a prefix matching the specified string value. Value matching is case insensitive.
+	PrefixQuery *CatalogQueryPrefix `json:"prefix_query,omitempty" url:"prefix_query,omitempty"`
+	// A range query expression to return objects with numeric values
+	// that lie in the specified range.
+	RangeQuery *CatalogQueryRange `json:"range_query,omitempty" url:"range_query,omitempty"`
+	// A text query expression to return objects whose searchable attributes contain all of the given
+	// keywords, irrespective of their order. For example, if a `CatalogItem` contains custom attribute values of
+	// `{"name": "t-shirt"}` and `{"description": "Small, Purple"}`, the query filter of `{"keywords": ["shirt", "sma", "purp"]}`
+	// returns this item.
+	TextQuery *CatalogQueryText `json:"text_query,omitempty" url:"text_query,omitempty"`
+	// A query expression to return items that have any of the specified taxes (as identified by the corresponding `CatalogTax` object IDs) enabled.
+	ItemsForTaxQuery *CatalogQueryItemsForTax `json:"items_for_tax_query,omitempty" url:"items_for_tax_query,omitempty"`
+	// A query expression to return items that have any of the given modifier list (as identified by the corresponding `CatalogModifierList`s IDs) enabled.
+	ItemsForModifierListQuery *CatalogQueryItemsForModifierList `json:"items_for_modifier_list_query,omitempty" url:"items_for_modifier_list_query,omitempty"`
+	// A query expression to return items that contains the specified item options (as identified the corresponding `CatalogItemOption` IDs).
+	ItemsForItemOptionsQuery *CatalogQueryItemsForItemOptions `json:"items_for_item_options_query,omitempty" url:"items_for_item_options_query,omitempty"`
+	// A query expression to return item variations (of the [CatalogItemVariation](entity:CatalogItemVariation) type) that
+	// contain all of the specified `CatalogItemOption` IDs.
+	ItemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues `json:"item_variations_for_item_option_values_query,omitempty" url:"item_variations_for_item_option_values_query,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQuery) GetSortedAttributeQuery() *CatalogQuerySortedAttribute {
+	if c == nil {
+		return nil
+	}
+	return c.SortedAttributeQuery
+}
+
+func (c *CatalogQuery) GetExactQuery() *CatalogQueryExact {
+	if c == nil {
+		return nil
+	}
+	return c.ExactQuery
+}
+
+func (c *CatalogQuery) GetSetQuery() *CatalogQuerySet {
+	if c == nil {
+		return nil
+	}
+	return c.SetQuery
+}
+
+func (c *CatalogQuery) GetPrefixQuery() *CatalogQueryPrefix {
+	if c == nil {
+		return nil
+	}
+	return c.PrefixQuery
+}
+
+func (c *CatalogQuery) GetRangeQuery() *CatalogQueryRange {
+	if c == nil {
+		return nil
+	}
+	return c.RangeQuery
+}
+
+func (c *CatalogQuery) GetTextQuery() *CatalogQueryText {
+	if c == nil {
+		return nil
+	}
+	return c.TextQuery
+}
+
+func (c *CatalogQuery) GetItemsForTaxQuery() *CatalogQueryItemsForTax {
+	if c == nil {
+		return nil
+	}
+	return c.ItemsForTaxQuery
+}
+
+func (c *CatalogQuery) GetItemsForModifierListQuery() *CatalogQueryItemsForModifierList {
+	if c == nil {
+		return nil
+	}
+	return c.ItemsForModifierListQuery
+}
+
+func (c *CatalogQuery) GetItemsForItemOptionsQuery() *CatalogQueryItemsForItemOptions {
+	if c == nil {
+		return nil
+	}
+	return c.ItemsForItemOptionsQuery
+}
+
+func (c *CatalogQuery) GetItemVariationsForItemOptionValuesQuery() *CatalogQueryItemVariationsForItemOptionValues {
+	if c == nil {
+		return nil
+	}
+	return c.ItemVariationsForItemOptionValuesQuery
+}
+
+func (c *CatalogQuery) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQuery) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQuery
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQuery(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQuery) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the search result by exact match of the specified attribute name and value.
+type CatalogQueryExact struct {
+	// The name of the attribute to be searched. Matching of the attribute name is exact.
+	AttributeName string `json:"attribute_name" url:"attribute_name"`
+	// The desired value of the search attribute. Matching of the attribute value is case insensitive and can be partial.
+	// For example, if a specified value of "sma", objects with the named attribute value of "Small", "small" are both matched.
+	AttributeValue string `json:"attribute_value" url:"attribute_value"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryExact) GetAttributeName() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeName
+}
+
+func (c *CatalogQueryExact) GetAttributeValue() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeValue
+}
+
+func (c *CatalogQueryExact) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryExact) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryExact
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryExact(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryExact) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the item variations containing the specified item option value IDs.
+type CatalogQueryItemVariationsForItemOptionValues struct {
+	// A set of `CatalogItemOptionValue` IDs to be used to find associated
+	// `CatalogItemVariation`s. All ItemVariations that contain all of the given
+	// Item Option Values (in any order) will be returned.
+	ItemOptionValueIDs []string `json:"item_option_value_ids,omitempty" url:"item_option_value_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryItemVariationsForItemOptionValues) GetItemOptionValueIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.ItemOptionValueIDs
+}
+
+func (c *CatalogQueryItemVariationsForItemOptionValues) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryItemVariationsForItemOptionValues) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryItemVariationsForItemOptionValues
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryItemVariationsForItemOptionValues(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the items containing the specified item option IDs.
+type CatalogQueryItemsForItemOptions struct {
+	// A set of `CatalogItemOption` IDs to be used to find associated
+	// `CatalogItem`s. All Items that contain all of the given Item Options (in any order)
+	// will be returned.
+	ItemOptionIDs []string `json:"item_option_ids,omitempty" url:"item_option_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryItemsForItemOptions) GetItemOptionIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.ItemOptionIDs
+}
+
+func (c *CatalogQueryItemsForItemOptions) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForItemOptions) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryItemsForItemOptions
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryItemsForItemOptions(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryItemsForItemOptions) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the items containing the specified modifier list IDs.
+type CatalogQueryItemsForModifierList struct {
+	// A set of `CatalogModifierList` IDs to be used to find associated `CatalogItem`s.
+	ModifierListIDs []string `json:"modifier_list_ids,omitempty" url:"modifier_list_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryItemsForModifierList) GetModifierListIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.ModifierListIDs
+}
+
+func (c *CatalogQueryItemsForModifierList) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForModifierList) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryItemsForModifierList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryItemsForModifierList(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryItemsForModifierList) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the items containing the specified tax IDs.
+type CatalogQueryItemsForTax struct {
+	// A set of `CatalogTax` IDs to be used to find associated `CatalogItem`s.
+	TaxIDs []string `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryItemsForTax) GetTaxIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.TaxIDs
+}
+
+func (c *CatalogQueryItemsForTax) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForTax) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryItemsForTax
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryItemsForTax(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryItemsForTax) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the search result whose named attribute values are prefixed by the specified attribute value.
+type CatalogQueryPrefix struct {
+	// The name of the attribute to be searched.
+	AttributeName string `json:"attribute_name" url:"attribute_name"`
+	// The desired prefix of the search attribute value.
+	AttributePrefix string `json:"attribute_prefix" url:"attribute_prefix"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryPrefix) GetAttributeName() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeName
+}
+
+func (c *CatalogQueryPrefix) GetAttributePrefix() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributePrefix
+}
+
+func (c *CatalogQueryPrefix) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryPrefix) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryPrefix
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryPrefix(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryPrefix) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the search result whose named attribute values fall between the specified range.
+type CatalogQueryRange struct {
+	// The name of the attribute to be searched.
+	AttributeName string `json:"attribute_name" url:"attribute_name"`
+	// The desired minimum value for the search attribute (inclusive).
+	AttributeMinValue *int64 `json:"attribute_min_value,omitempty" url:"attribute_min_value,omitempty"`
+	// The desired maximum value for the search attribute (inclusive).
+	AttributeMaxValue *int64 `json:"attribute_max_value,omitempty" url:"attribute_max_value,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryRange) GetAttributeName() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeName
+}
+
+func (c *CatalogQueryRange) GetAttributeMinValue() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.AttributeMinValue
+}
+
+func (c *CatalogQueryRange) GetAttributeMaxValue() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.AttributeMaxValue
+}
+
+func (c *CatalogQueryRange) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryRange) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryRange
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryRange(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryRange) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the search result(s) by exact match of the specified `attribute_name` and any of
+// the `attribute_values`.
+type CatalogQuerySet struct {
+	// The name of the attribute to be searched. Matching of the attribute name is exact.
+	AttributeName string `json:"attribute_name" url:"attribute_name"`
+	// The desired values of the search attribute. Matching of the attribute values is exact and case insensitive.
+	// A maximum of 250 values may be searched in a request.
+	AttributeValues []string `json:"attribute_values,omitempty" url:"attribute_values,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQuerySet) GetAttributeName() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeName
+}
+
+func (c *CatalogQuerySet) GetAttributeValues() []string {
+	if c == nil {
+		return nil
+	}
+	return c.AttributeValues
+}
+
+func (c *CatalogQuerySet) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQuerySet) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQuerySet
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQuerySet(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQuerySet) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query expression to specify the key to sort search results.
+type CatalogQuerySortedAttribute struct {
+	// The attribute whose value is used as the sort key.
+	AttributeName string `json:"attribute_name" url:"attribute_name"`
+	// The first attribute value to be returned by the query. Ascending sorts will return only
+	// objects with this value or greater, while descending sorts will return only objects with this value
+	// or less. If unset, start at the beginning (for ascending sorts) or end (for descending sorts).
+	InitialAttributeValue *string `json:"initial_attribute_value,omitempty" url:"initial_attribute_value,omitempty"`
+	// The desired sort order, `"ASC"` (ascending) or `"DESC"` (descending).
+	// See [SortOrder](#type-sortorder) for possible values
+	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQuerySortedAttribute) GetAttributeName() string {
+	if c == nil {
+		return ""
+	}
+	return c.AttributeName
+}
+
+func (c *CatalogQuerySortedAttribute) GetInitialAttributeValue() *string {
+	if c == nil {
+		return nil
+	}
+	return c.InitialAttributeValue
+}
+
+func (c *CatalogQuerySortedAttribute) GetSortOrder() *SortOrder {
+	if c == nil {
+		return nil
+	}
+	return c.SortOrder
+}
+
+func (c *CatalogQuerySortedAttribute) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQuerySortedAttribute) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQuerySortedAttribute
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQuerySortedAttribute(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQuerySortedAttribute) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The query filter to return the search result whose searchable attribute values contain all of the specified keywords or tokens, independent of the token order or case.
+type CatalogQueryText struct {
+	// A list of 1, 2, or 3 search keywords. Keywords with fewer than 3 alphanumeric characters are ignored.
+	Keywords []string `json:"keywords,omitempty" url:"keywords,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CatalogQueryText) GetKeywords() []string {
+	if c == nil {
+		return nil
+	}
+	return c.Keywords
+}
+
+func (c *CatalogQueryText) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogQueryText) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryText
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryText(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryText) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Supported custom attribute query expressions for calling the
+// [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// endpoint to search for items or item variations.
+type CustomAttributeFilter struct {
+	// A query expression to filter items or item variations by matching their custom attributes'
+	// `custom_attribute_definition_id` property value against the the specified id.
+	// Exactly one of `custom_attribute_definition_id` or `key` must be specified.
+	CustomAttributeDefinitionID *string `json:"custom_attribute_definition_id,omitempty" url:"custom_attribute_definition_id,omitempty"`
+	// A query expression to filter items or item variations by matching their custom attributes'
+	// `key` property value against the specified key.
+	// Exactly one of `custom_attribute_definition_id` or `key` must be specified.
+	Key *string `json:"key,omitempty" url:"key,omitempty"`
+	// A query expression to filter items or item variations by matching their custom attributes'
+	// `string_value` property value against the specified text.
+	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
+	StringFilter *string `json:"string_filter,omitempty" url:"string_filter,omitempty"`
+	// A query expression to filter items or item variations with their custom attributes
+	// containing a number value within the specified range.
+	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
+	NumberFilter *Range `json:"number_filter,omitempty" url:"number_filter,omitempty"`
+	// A query expression to filter items or item variations by matching their custom attributes'
+	// `selection_uid_values` values against the specified selection uids.
+	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
+	SelectionUIDsFilter []string `json:"selection_uids_filter,omitempty" url:"selection_uids_filter,omitempty"`
+	// A query expression to filter items or item variations by matching their custom attributes'
+	// `boolean_value` property values against the specified Boolean expression.
+	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
+	BoolFilter *bool `json:"bool_filter,omitempty" url:"bool_filter,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomAttributeFilter) GetCustomAttributeDefinitionID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttributeDefinitionID
+}
+
+func (c *CustomAttributeFilter) GetKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Key
+}
+
+func (c *CustomAttributeFilter) GetStringFilter() *string {
+	if c == nil {
+		return nil
+	}
+	return c.StringFilter
+}
+
+func (c *CustomAttributeFilter) GetNumberFilter() *Range {
+	if c == nil {
+		return nil
+	}
+	return c.NumberFilter
+}
+
+func (c *CustomAttributeFilter) GetSelectionUIDsFilter() []string {
+	if c == nil {
+		return nil
+	}
+	return c.SelectionUIDsFilter
+}
+
+func (c *CustomAttributeFilter) GetBoolFilter() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.BoolFilter
+}
+
+func (c *CustomAttributeFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type ListCatalogResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset, this is the final response.
+	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The CatalogObjects returned.
+	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListCatalogResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListCatalogResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListCatalogResponse) GetObjects() []*CatalogObject {
+	if l == nil {
+		return nil
+	}
+	return l.Objects
+}
+
+func (l *ListCatalogResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListCatalogResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListCatalogResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListCatalogResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListCatalogResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The range of a number value between the specified lower and upper bounds.
+type Range struct {
+	// The lower bound of the number range. At least one of `min` or `max` must be specified.
+	// If unspecified, the results will have no minimum value.
+	Min *string `json:"min,omitempty" url:"min,omitempty"`
+	// The upper bound of the number range. At least one of `min` or `max` must be specified.
+	// If unspecified, the results will have no maximum value.
+	Max *string `json:"max,omitempty" url:"max,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *Range) GetMin() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Min
+}
+
+func (r *Range) GetMax() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Max
+}
+
+func (r *Range) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *Range) UnmarshalJSON(data []byte) error {
+	type unmarshaler Range
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = Range(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *Range) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Defines supported stock levels of the item inventory.
+type SearchCatalogItemsRequestStockLevel string
+
+const (
+	SearchCatalogItemsRequestStockLevelStockLevelDoNotUse SearchCatalogItemsRequestStockLevel = "STOCK_LEVEL_DO_NOT_USE"
+	SearchCatalogItemsRequestStockLevelOut                SearchCatalogItemsRequestStockLevel = "OUT"
+	SearchCatalogItemsRequestStockLevelLow                SearchCatalogItemsRequestStockLevel = "LOW"
+)
+
+func NewSearchCatalogItemsRequestStockLevelFromString(s string) (SearchCatalogItemsRequestStockLevel, error) {
+	switch s {
+	case "STOCK_LEVEL_DO_NOT_USE":
+		return SearchCatalogItemsRequestStockLevelStockLevelDoNotUse, nil
+	case "OUT":
+		return SearchCatalogItemsRequestStockLevelOut, nil
+	case "LOW":
+		return SearchCatalogItemsRequestStockLevelLow, nil
+	}
+	var t SearchCatalogItemsRequestStockLevel
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s SearchCatalogItemsRequestStockLevel) Ptr() *SearchCatalogItemsRequestStockLevel {
+	return &s
+}
+
+// Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
+type SearchCatalogItemsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// Returned items matching the specified query expressions.
+	Items []*CatalogObject `json:"items,omitempty" url:"items,omitempty"`
+	// Pagination token used in the next request to return more of the search result.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Ids of returned item variations matching the specified query expression.
+	MatchedVariationIDs []string `json:"matched_variation_ids,omitempty" url:"matched_variation_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchCatalogItemsResponse) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SearchCatalogItemsResponse) GetItems() []*CatalogObject {
+	if s == nil {
+		return nil
+	}
+	return s.Items
+}
+
+func (s *SearchCatalogItemsResponse) GetCursor() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Cursor
+}
+
+func (s *SearchCatalogItemsResponse) GetMatchedVariationIDs() []string {
+	if s == nil {
+		return nil
+	}
+	return s.MatchedVariationIDs
+}
+
+func (s *SearchCatalogItemsResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchCatalogItemsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCatalogItemsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchCatalogItemsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchCatalogItemsResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchCatalogObjectsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset, this is the final response.
+	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The CatalogObjects returned.
+	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+	// A list of CatalogObjects referenced by the objects in the `objects` field.
+	RelatedObjects []*CatalogObject `json:"related_objects,omitempty" url:"related_objects,omitempty"`
+	// When the associated product catalog was last updated. Will
+	// match the value for `end_time` or `cursor` if either field is included in the `SearchCatalog` request.
+	LatestTime *string `json:"latest_time,omitempty" url:"latest_time,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchCatalogObjectsResponse) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SearchCatalogObjectsResponse) GetCursor() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Cursor
+}
+
+func (s *SearchCatalogObjectsResponse) GetObjects() []*CatalogObject {
+	if s == nil {
+		return nil
+	}
+	return s.Objects
+}
+
+func (s *SearchCatalogObjectsResponse) GetRelatedObjects() []*CatalogObject {
+	if s == nil {
+		return nil
+	}
+	return s.RelatedObjects
+}
+
+func (s *SearchCatalogObjectsResponse) GetLatestTime() *string {
+	if s == nil {
+		return nil
+	}
+	return s.LatestTime
+}
+
+func (s *SearchCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCatalogObjectsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchCatalogObjectsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchCatalogObjectsResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Contains the name and abbreviation for standard measurement unit.
+type StandardUnitDescription struct {
+	// Identifies the measurement unit being described.
+	Unit *MeasurementUnit `json:"unit,omitempty" url:"unit,omitempty"`
+	// UI display name of the measurement unit. For example, 'Pound'.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// UI display abbreviation for the measurement unit. For example, 'lb'.
+	Abbreviation *string `json:"abbreviation,omitempty" url:"abbreviation,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StandardUnitDescription) GetUnit() *MeasurementUnit {
+	if s == nil {
+		return nil
+	}
+	return s.Unit
+}
+
+func (s *StandardUnitDescription) GetName() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Name
+}
+
+func (s *StandardUnitDescription) GetAbbreviation() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Abbreviation
+}
+
+func (s *StandardUnitDescription) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *StandardUnitDescription) UnmarshalJSON(data []byte) error {
+	type unmarshaler StandardUnitDescription
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StandardUnitDescription(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StandardUnitDescription) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Group of standard measurement units.
+type StandardUnitDescriptionGroup struct {
+	// List of standard (non-custom) measurement units in this description group.
+	StandardUnitDescriptions []*StandardUnitDescription `json:"standard_unit_descriptions,omitempty" url:"standard_unit_descriptions,omitempty"`
+	// IETF language tag.
+	LanguageCode *string `json:"language_code,omitempty" url:"language_code,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StandardUnitDescriptionGroup) GetStandardUnitDescriptions() []*StandardUnitDescription {
+	if s == nil {
+		return nil
+	}
+	return s.StandardUnitDescriptions
+}
+
+func (s *StandardUnitDescriptionGroup) GetLanguageCode() *string {
+	if s == nil {
+		return nil
+	}
+	return s.LanguageCode
+}
+
+func (s *StandardUnitDescriptionGroup) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *StandardUnitDescriptionGroup) UnmarshalJSON(data []byte) error {
+	type unmarshaler StandardUnitDescriptionGroup
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StandardUnitDescriptionGroup(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StandardUnitDescriptionGroup) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type UpdateItemModifierListsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The database [timestamp](https://developer.squareup.com/docs/build-basics/common-data-types/working-with-dates) of this update in RFC 3339 format, e.g., `2016-09-04T23:59:33.123Z`.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateItemModifierListsResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateItemModifierListsResponse) GetUpdatedAt() *string {
+	if u == nil {
+		return nil
+	}
+	return u.UpdatedAt
+}
+
+func (u *UpdateItemModifierListsResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateItemModifierListsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateItemModifierListsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateItemModifierListsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateItemModifierListsResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+type UpdateItemTaxesResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this update in RFC 3339 format, e.g., `2016-09-04T23:59:33.123Z`.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateItemTaxesResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateItemTaxesResponse) GetUpdatedAt() *string {
+	if u == nil {
+		return nil
+	}
+	return u.UpdatedAt
+}
+
+func (u *UpdateItemTaxesResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateItemTaxesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateItemTaxesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateItemTaxesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateItemTaxesResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

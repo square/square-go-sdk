@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type InventoryChangesRequest struct {
 	// The [Location](entity:Location) IDs to look up as a comma-separated
 	// list. An empty list queries all locations.
@@ -22,4 +28,1900 @@ type InventoryGetRequest struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+}
+
+type BatchChangeInventoryRequest struct {
+	// A client-supplied, universally unique identifier (UUID) for the
+	// request.
+	//
+	// See [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) in the
+	// [API Development 101](https://developer.squareup.com/docs/buildbasics) section for more
+	// information.
+	IdempotencyKey string `json:"idempotency_key" url:"idempotency_key"`
+	// The set of physical counts and inventory adjustments to be made.
+	// Changes are applied based on the client-supplied timestamp and may be sent
+	// out of order.
+	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
+	// Indicates whether the current physical count should be ignored if
+	// the quantity is unchanged since the last physical count. Default: `true`.
+	IgnoreUnchangedCounts *bool `json:"ignore_unchanged_counts,omitempty" url:"ignore_unchanged_counts,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchChangeInventoryRequest) GetIdempotencyKey() string {
+	if b == nil {
+		return ""
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BatchChangeInventoryRequest) GetChanges() []*InventoryChange {
+	if b == nil {
+		return nil
+	}
+	return b.Changes
+}
+
+func (b *BatchChangeInventoryRequest) GetIgnoreUnchangedCounts() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.IgnoreUnchangedCounts
+}
+
+func (b *BatchChangeInventoryRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchChangeInventoryRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchChangeInventoryRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchChangeInventoryRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchChangeInventoryRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchChangeInventoryResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The current counts for all objects referenced in the request.
+	Counts []*InventoryCount `json:"counts,omitempty" url:"counts,omitempty"`
+	// Changes created for the request.
+	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchChangeInventoryResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchChangeInventoryResponse) GetCounts() []*InventoryCount {
+	if b == nil {
+		return nil
+	}
+	return b.Counts
+}
+
+func (b *BatchChangeInventoryResponse) GetChanges() []*InventoryChange {
+	if b == nil {
+		return nil
+	}
+	return b.Changes
+}
+
+func (b *BatchChangeInventoryResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchChangeInventoryResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchChangeInventoryResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchChangeInventoryResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchChangeInventoryResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchGetInventoryChangesResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The current calculated inventory changes for the requested objects
+	// and locations.
+	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset,
+	// this is the final response.
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchGetInventoryChangesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchGetInventoryChangesResponse) GetChanges() []*InventoryChange {
+	if b == nil {
+		return nil
+	}
+	return b.Changes
+}
+
+func (b *BatchGetInventoryChangesResponse) GetCursor() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Cursor
+}
+
+func (b *BatchGetInventoryChangesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchGetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetInventoryChangesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchGetInventoryChangesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchGetInventoryChangesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchGetInventoryCountsRequest struct {
+	// The filter to return results by `CatalogObject` ID.
+	// The filter is applicable only when set. The default is null.
+	CatalogObjectIDs []string `json:"catalog_object_ids,omitempty" url:"catalog_object_ids,omitempty"`
+	// The filter to return results by `Location` ID.
+	// This filter is applicable only when set. The default is null.
+	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
+	// The filter to return results with their `calculated_at` value
+	// after the given time as specified in an RFC 3339 timestamp.
+	// The default value is the UNIX epoch of (`1970-01-01T00:00:00Z`).
+	UpdatedAfter *string `json:"updated_after,omitempty" url:"updated_after,omitempty"`
+	// A pagination cursor returned by a previous call to this endpoint.
+	// Provide this to retrieve the next set of results for the original query.
+	//
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The filter to return results by `InventoryState`. The filter is only applicable when set.
+	// Ignored are untracked states of `NONE`, `SOLD`, and `UNLINKED_RETURN`.
+	// The default is null.
+	States []InventoryState `json:"states,omitempty" url:"states,omitempty"`
+	// The number of [records](entity:InventoryCount) to return.
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchGetInventoryCountsRequest) GetCatalogObjectIDs() []string {
+	if b == nil {
+		return nil
+	}
+	return b.CatalogObjectIDs
+}
+
+func (b *BatchGetInventoryCountsRequest) GetLocationIDs() []string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationIDs
+}
+
+func (b *BatchGetInventoryCountsRequest) GetUpdatedAfter() *string {
+	if b == nil {
+		return nil
+	}
+	return b.UpdatedAfter
+}
+
+func (b *BatchGetInventoryCountsRequest) GetCursor() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Cursor
+}
+
+func (b *BatchGetInventoryCountsRequest) GetStates() []InventoryState {
+	if b == nil {
+		return nil
+	}
+	return b.States
+}
+
+func (b *BatchGetInventoryCountsRequest) GetLimit() *int {
+	if b == nil {
+		return nil
+	}
+	return b.Limit
+}
+
+func (b *BatchGetInventoryCountsRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchGetInventoryCountsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetInventoryCountsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchGetInventoryCountsRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchGetInventoryCountsRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchGetInventoryCountsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The current calculated inventory counts for the requested objects
+	// and locations.
+	Counts []*InventoryCount `json:"counts,omitempty" url:"counts,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset,
+	// this is the final response.
+	//
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchGetInventoryCountsResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchGetInventoryCountsResponse) GetCounts() []*InventoryCount {
+	if b == nil {
+		return nil
+	}
+	return b.Counts
+}
+
+func (b *BatchGetInventoryCountsResponse) GetCursor() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Cursor
+}
+
+func (b *BatchGetInventoryCountsResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchGetInventoryCountsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetInventoryCountsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchGetInventoryCountsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchGetInventoryCountsResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchRetrieveInventoryChangesRequest struct {
+	// The filter to return results by `CatalogObject` ID.
+	// The filter is only applicable when set. The default value is null.
+	CatalogObjectIDs []string `json:"catalog_object_ids,omitempty" url:"catalog_object_ids,omitempty"`
+	// The filter to return results by `Location` ID.
+	// The filter is only applicable when set. The default value is null.
+	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
+	// The filter to return results by `InventoryChangeType` values other than `TRANSFER`.
+	// The default value is `[PHYSICAL_COUNT, ADJUSTMENT]`.
+	Types []InventoryChangeType `json:"types,omitempty" url:"types,omitempty"`
+	// The filter to return results by `InventoryState` values.
+	// Use the `states` filter as its replacement.
+	Statuses []InventoryState `json:"statuses,omitempty" url:"statuses,omitempty"`
+	// The filter to return `ADJUSTMENT` query results by
+	// `InventoryState`. This filter is only applied when set.
+	// The default value is null.
+	States []InventoryState `json:"states,omitempty" url:"states,omitempty"`
+	// The filter to return results with their `calculated_at` value
+	// after the given time as specified in an RFC 3339 timestamp.
+	// The default value is the UNIX epoch of (`1970-01-01T00:00:00Z`).
+	UpdatedAfter *string `json:"updated_after,omitempty" url:"updated_after,omitempty"`
+	// The filter to return results with their `created_at` or `calculated_at` value
+	// strictly before the given time as specified in an RFC 3339 timestamp.
+	// The default value is the UNIX epoch of (`1970-01-01T00:00:00Z`).
+	UpdatedBefore *string `json:"updated_before,omitempty" url:"updated_before,omitempty"`
+	// A pagination cursor returned by a previous call to this endpoint.
+	// Provide this to retrieve the next set of results for the original query.
+	//
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The number of [records](entity:InventoryChange) to return.
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetCatalogObjectIDs() []string {
+	if b == nil {
+		return nil
+	}
+	return b.CatalogObjectIDs
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetLocationIDs() []string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationIDs
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetTypes() []InventoryChangeType {
+	if b == nil {
+		return nil
+	}
+	return b.Types
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetStatuses() []InventoryState {
+	if b == nil {
+		return nil
+	}
+	return b.Statuses
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetStates() []InventoryState {
+	if b == nil {
+		return nil
+	}
+	return b.States
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetUpdatedAfter() *string {
+	if b == nil {
+		return nil
+	}
+	return b.UpdatedAfter
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetUpdatedBefore() *string {
+	if b == nil {
+		return nil
+	}
+	return b.UpdatedBefore
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetCursor() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Cursor
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetLimit() *int {
+	if b == nil {
+		return nil
+	}
+	return b.Limit
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchRetrieveInventoryChangesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchRetrieveInventoryChangesRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type GetInventoryAdjustmentResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested [InventoryAdjustment](entity:InventoryAdjustment).
+	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetInventoryAdjustmentResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetInventoryAdjustmentResponse) GetAdjustment() *InventoryAdjustment {
+	if g == nil {
+		return nil
+	}
+	return g.Adjustment
+}
+
+func (g *GetInventoryAdjustmentResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetInventoryAdjustmentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetInventoryAdjustmentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetInventoryAdjustmentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetInventoryAdjustmentResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GetInventoryChangesResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The set of inventory changes for the requested object and locations.
+	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset,
+	// this is the final response.
+	//
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetInventoryChangesResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetInventoryChangesResponse) GetChanges() []*InventoryChange {
+	if g == nil {
+		return nil
+	}
+	return g.Changes
+}
+
+func (g *GetInventoryChangesResponse) GetCursor() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Cursor
+}
+
+func (g *GetInventoryChangesResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetInventoryChangesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetInventoryChangesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetInventoryChangesResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GetInventoryCountResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The current calculated inventory counts for the requested object and
+	// locations.
+	Counts []*InventoryCount `json:"counts,omitempty" url:"counts,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If unset,
+	// this is the final response.
+	//
+	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetInventoryCountResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetInventoryCountResponse) GetCounts() []*InventoryCount {
+	if g == nil {
+		return nil
+	}
+	return g.Counts
+}
+
+func (g *GetInventoryCountResponse) GetCursor() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Cursor
+}
+
+func (g *GetInventoryCountResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetInventoryCountResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetInventoryCountResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetInventoryCountResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetInventoryCountResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GetInventoryPhysicalCountResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested [InventoryPhysicalCount](entity:InventoryPhysicalCount).
+	Count *InventoryPhysicalCount `json:"count,omitempty" url:"count,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetInventoryPhysicalCountResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetInventoryPhysicalCountResponse) GetCount() *InventoryPhysicalCount {
+	if g == nil {
+		return nil
+	}
+	return g.Count
+}
+
+func (g *GetInventoryPhysicalCountResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetInventoryPhysicalCountResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetInventoryPhysicalCountResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetInventoryPhysicalCountResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetInventoryPhysicalCountResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GetInventoryTransferResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested [InventoryTransfer](entity:InventoryTransfer).
+	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetInventoryTransferResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetInventoryTransferResponse) GetTransfer() *InventoryTransfer {
+	if g == nil {
+		return nil
+	}
+	return g.Transfer
+}
+
+func (g *GetInventoryTransferResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetInventoryTransferResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetInventoryTransferResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetInventoryTransferResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetInventoryTransferResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents a change in state or quantity of product inventory at a
+// particular time and location.
+type InventoryAdjustment struct {
+	// A unique ID generated by Square for the
+	// `InventoryAdjustment`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An optional ID provided by the application to tie the
+	// `InventoryAdjustment` to an external
+	// system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items before the adjustment. Replaced by the `from_state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	FromStatus *InventoryState `json:"from_status,omitempty" url:"from_status,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items after the adjustment. Replaced by the `to_state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	ToStatus *InventoryState `json:"to_status,omitempty" url:"to_status,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items before the adjustment.
+	// See [InventoryState](#type-inventorystate) for possible values
+	FromState *InventoryState `json:"from_state,omitempty" url:"from_state,omitempty"`
+	// The [inventory state](entity:InventoryState) of the related quantity
+	// of items after the adjustment.
+	// See [InventoryState](#type-inventorystate) for possible values
+	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked before the adjustment. Replaced by
+	// `from_location_id` of [InventoryTransfer](entity:InventoryTransfer).
+	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked after the adjustment. Replaced by
+	// `to_location_id` of [InventoryTransfer](entity:InventoryTransfer).
+	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The Square-generated ID of the
+	// [CatalogObject](entity:CatalogObject) being tracked.
+	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
+	// The [type](entity:CatalogObjectType) of the [CatalogObject](entity:CatalogObject) being tracked.
+	//
+	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
+	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
+	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
+	// The number of items affected by the adjustment as a decimal string.
+	// Can support up to 5 digits after the decimal point.
+	Quantity *string `json:"quantity,omitempty" url:"quantity,omitempty"`
+	// The total price paid for goods associated with the
+	// adjustment. Present if and only if `to_state` is `SOLD`. Always
+	// non-negative.
+	TotalPriceMoney *Money `json:"total_price_money,omitempty" url:"total_price_money,omitempty"`
+	// A client-generated RFC 3339-formatted timestamp that indicates when
+	// the inventory adjustment took place. For inventory adjustment updates, the `occurred_at`
+	// timestamp cannot be older than 24 hours or in the future relative to the
+	// time of the request.
+	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when the inventory adjustment is received.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Information about the application that caused the
+	// inventory adjustment.
+	Source *SourceApplication `json:"source,omitempty" url:"source,omitempty"`
+	// The Square-generated ID of the [Employee](entity:Employee) responsible for the
+	// inventory adjustment.
+	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
+	// The Square-generated ID of the [Team Member](entity:TeamMember) responsible for the
+	// inventory adjustment.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+	// The Square-generated ID of the [Transaction](entity:Transaction) that
+	// caused the adjustment. Only relevant for payment-related state
+	// transitions.
+	TransactionID *string `json:"transaction_id,omitempty" url:"transaction_id,omitempty"`
+	// The Square-generated ID of the [Refund](entity:Refund) that
+	// caused the adjustment. Only relevant for refund-related state
+	// transitions.
+	RefundID *string `json:"refund_id,omitempty" url:"refund_id,omitempty"`
+	// The Square-generated ID of the purchase order that caused the
+	// adjustment. Only relevant for state transitions from the Square for Retail
+	// app.
+	PurchaseOrderID *string `json:"purchase_order_id,omitempty" url:"purchase_order_id,omitempty"`
+	// The Square-generated ID of the goods receipt that caused the
+	// adjustment. Only relevant for state transitions from the Square for Retail
+	// app.
+	GoodsReceiptID *string `json:"goods_receipt_id,omitempty" url:"goods_receipt_id,omitempty"`
+	// An adjustment group bundling the related adjustments of item variations through stock conversions in a single inventory event.
+	AdjustmentGroup *InventoryAdjustmentGroup `json:"adjustment_group,omitempty" url:"adjustment_group,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryAdjustment) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryAdjustment) GetReferenceID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ReferenceID
+}
+
+func (i *InventoryAdjustment) GetFromStatus() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.FromStatus
+}
+
+func (i *InventoryAdjustment) GetToStatus() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.ToStatus
+}
+
+func (i *InventoryAdjustment) GetFromState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.FromState
+}
+
+func (i *InventoryAdjustment) GetToState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.ToState
+}
+
+func (i *InventoryAdjustment) GetFromLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.FromLocationID
+}
+
+func (i *InventoryAdjustment) GetToLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ToLocationID
+}
+
+func (i *InventoryAdjustment) GetLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.LocationID
+}
+
+func (i *InventoryAdjustment) GetCatalogObjectID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectID
+}
+
+func (i *InventoryAdjustment) GetCatalogObjectType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectType
+}
+
+func (i *InventoryAdjustment) GetQuantity() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Quantity
+}
+
+func (i *InventoryAdjustment) GetTotalPriceMoney() *Money {
+	if i == nil {
+		return nil
+	}
+	return i.TotalPriceMoney
+}
+
+func (i *InventoryAdjustment) GetOccurredAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.OccurredAt
+}
+
+func (i *InventoryAdjustment) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InventoryAdjustment) GetSource() *SourceApplication {
+	if i == nil {
+		return nil
+	}
+	return i.Source
+}
+
+func (i *InventoryAdjustment) GetEmployeeID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EmployeeID
+}
+
+func (i *InventoryAdjustment) GetTeamMemberID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TeamMemberID
+}
+
+func (i *InventoryAdjustment) GetTransactionID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TransactionID
+}
+
+func (i *InventoryAdjustment) GetRefundID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.RefundID
+}
+
+func (i *InventoryAdjustment) GetPurchaseOrderID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.PurchaseOrderID
+}
+
+func (i *InventoryAdjustment) GetGoodsReceiptID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.GoodsReceiptID
+}
+
+func (i *InventoryAdjustment) GetAdjustmentGroup() *InventoryAdjustmentGroup {
+	if i == nil {
+		return nil
+	}
+	return i.AdjustmentGroup
+}
+
+func (i *InventoryAdjustment) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryAdjustment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryAdjustment(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryAdjustment) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryAdjustmentGroup struct {
+	// A unique ID generated by Square for the
+	// `InventoryAdjustmentGroup`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The inventory adjustment of the composed variation.
+	RootAdjustmentID *string `json:"root_adjustment_id,omitempty" url:"root_adjustment_id,omitempty"`
+	// Representative `from_state` for adjustments within the group. For example, for a group adjustment from `IN_STOCK` to `SOLD`,
+	// there can be two component adjustments in the group: one from `IN_STOCK`to `COMPOSED` and the other one from `COMPOSED` to `SOLD`.
+	// Here, the representative `from_state` for the `InventoryAdjustmentGroup` is `IN_STOCK`.
+	// See [InventoryState](#type-inventorystate) for possible values
+	FromState *InventoryState `json:"from_state,omitempty" url:"from_state,omitempty"`
+	// Representative `to_state` for adjustments within group. For example, for a group adjustment from `IN_STOCK` to `SOLD`,
+	// the two component adjustments in the group can be from `IN_STOCK` to `COMPOSED` and from `COMPOSED` to `SOLD`.
+	// Here, the representative `to_state` of the `InventoryAdjustmentGroup` is `SOLD`.
+	// See [InventoryState](#type-inventorystate) for possible values
+	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryAdjustmentGroup) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryAdjustmentGroup) GetRootAdjustmentID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.RootAdjustmentID
+}
+
+func (i *InventoryAdjustmentGroup) GetFromState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.FromState
+}
+
+func (i *InventoryAdjustmentGroup) GetToState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.ToState
+}
+
+func (i *InventoryAdjustmentGroup) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryAdjustmentGroup) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryAdjustmentGroup
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryAdjustmentGroup(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryAdjustmentGroup) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Represents a single physical count, inventory, adjustment, or transfer
+// that is part of the history of inventory changes for a particular
+// [CatalogObject](entity:CatalogObject) instance.
+type InventoryChange struct {
+	// Indicates how the inventory change is applied. See
+	// [InventoryChangeType](entity:InventoryChangeType) for all possible values.
+	// See [InventoryChangeType](#type-inventorychangetype) for possible values
+	Type *InventoryChangeType `json:"type,omitempty" url:"type,omitempty"`
+	// Contains details about the physical count when `type` is
+	// `PHYSICAL_COUNT`, and is unset for all other change types.
+	PhysicalCount *InventoryPhysicalCount `json:"physical_count,omitempty" url:"physical_count,omitempty"`
+	// Contains details about the inventory adjustment when `type` is
+	// `ADJUSTMENT`, and is unset for all other change types.
+	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
+	// Contains details about the inventory transfer when `type` is
+	// `TRANSFER`, and is unset for all other change types.
+	//
+	// _Note:_ An [InventoryTransfer](entity:InventoryTransfer) object can only be set in the input to the
+	// [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory) endpoint when the seller has an active Retail Plus subscription.
+	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
+	// The [CatalogMeasurementUnit](entity:CatalogMeasurementUnit) object representing the catalog measurement unit associated with the inventory change.
+	MeasurementUnit *CatalogMeasurementUnit `json:"measurement_unit,omitempty" url:"measurement_unit,omitempty"`
+	// The ID of the [CatalogMeasurementUnit](entity:CatalogMeasurementUnit) object representing the catalog measurement unit associated with the inventory change.
+	MeasurementUnitID *string `json:"measurement_unit_id,omitempty" url:"measurement_unit_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryChange) GetType() *InventoryChangeType {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InventoryChange) GetPhysicalCount() *InventoryPhysicalCount {
+	if i == nil {
+		return nil
+	}
+	return i.PhysicalCount
+}
+
+func (i *InventoryChange) GetAdjustment() *InventoryAdjustment {
+	if i == nil {
+		return nil
+	}
+	return i.Adjustment
+}
+
+func (i *InventoryChange) GetTransfer() *InventoryTransfer {
+	if i == nil {
+		return nil
+	}
+	return i.Transfer
+}
+
+func (i *InventoryChange) GetMeasurementUnit() *CatalogMeasurementUnit {
+	if i == nil {
+		return nil
+	}
+	return i.MeasurementUnit
+}
+
+func (i *InventoryChange) GetMeasurementUnitID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MeasurementUnitID
+}
+
+func (i *InventoryChange) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryChange) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryChange
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryChange(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryChange) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Indicates how the inventory change was applied to a tracked product quantity.
+type InventoryChangeType string
+
+const (
+	InventoryChangeTypeInventoryChangeTypeDoNotUse InventoryChangeType = "INVENTORY_CHANGE_TYPE_DO_NOT_USE"
+	InventoryChangeTypePhysicalCount               InventoryChangeType = "PHYSICAL_COUNT"
+	InventoryChangeTypeAdjustment                  InventoryChangeType = "ADJUSTMENT"
+	InventoryChangeTypeTransfer                    InventoryChangeType = "TRANSFER"
+	InventoryChangeTypeAvailability                InventoryChangeType = "AVAILABILITY"
+)
+
+func NewInventoryChangeTypeFromString(s string) (InventoryChangeType, error) {
+	switch s {
+	case "INVENTORY_CHANGE_TYPE_DO_NOT_USE":
+		return InventoryChangeTypeInventoryChangeTypeDoNotUse, nil
+	case "PHYSICAL_COUNT":
+		return InventoryChangeTypePhysicalCount, nil
+	case "ADJUSTMENT":
+		return InventoryChangeTypeAdjustment, nil
+	case "TRANSFER":
+		return InventoryChangeTypeTransfer, nil
+	case "AVAILABILITY":
+		return InventoryChangeTypeAvailability, nil
+	}
+	var t InventoryChangeType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i InventoryChangeType) Ptr() *InventoryChangeType {
+	return &i
+}
+
+// Represents Square-estimated quantity of items in a particular state at a
+// particular seller location based on the known history of physical counts and
+// inventory adjustments.
+type InventoryCount struct {
+	// The Square-generated ID of the
+	// [CatalogObject](entity:CatalogObject) being tracked.
+	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
+	// The [type](entity:CatalogObjectType) of the [CatalogObject](entity:CatalogObject) being tracked.
+	//
+	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
+	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
+	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items. Replaced by the `state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items.
+	// See [InventoryState](#type-inventorystate) for possible values
+	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The number of items affected by the estimated count as a decimal string.
+	// Can support up to 5 digits after the decimal point.
+	Quantity *string `json:"quantity,omitempty" url:"quantity,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when the most recent physical count or adjustment affecting
+	// the estimated count is received.
+	CalculatedAt *string `json:"calculated_at,omitempty" url:"calculated_at,omitempty"`
+	// Whether the inventory count is for composed variation (TRUE) or not (FALSE). If true, the inventory count will not be present in the response of
+	// any of these endpoints: [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory),
+	// [BatchRetrieveInventoryChanges](api-endpoint:Inventory-BatchRetrieveInventoryChanges),
+	// [BatchRetrieveInventoryCounts](api-endpoint:Inventory-BatchRetrieveInventoryCounts), and
+	// [RetrieveInventoryChanges](api-endpoint:Inventory-RetrieveInventoryChanges).
+	IsEstimated *bool `json:"is_estimated,omitempty" url:"is_estimated,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryCount) GetCatalogObjectID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectID
+}
+
+func (i *InventoryCount) GetCatalogObjectType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectType
+}
+
+func (i *InventoryCount) GetStatus() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.Status
+}
+
+func (i *InventoryCount) GetState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.State
+}
+
+func (i *InventoryCount) GetLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.LocationID
+}
+
+func (i *InventoryCount) GetQuantity() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Quantity
+}
+
+func (i *InventoryCount) GetCalculatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CalculatedAt
+}
+
+func (i *InventoryCount) GetIsEstimated() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.IsEstimated
+}
+
+func (i *InventoryCount) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCount) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCount
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCount(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCount) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Represents the quantity of an item variation that is physically present
+// at a specific location, verified by a seller or a seller's employee. For example,
+// a physical count might come from an employee counting the item variations on
+// hand or from syncing with an external system.
+type InventoryPhysicalCount struct {
+	// A unique Square-generated ID for the
+	// [InventoryPhysicalCount](entity:InventoryPhysicalCount).
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An optional ID provided by the application to tie the
+	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to an external
+	// system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// The Square-generated ID of the
+	// [CatalogObject](entity:CatalogObject) being tracked.
+	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
+	// The [type](entity:CatalogObjectType) of the [CatalogObject](entity:CatalogObject) being tracked.
+	//
+	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
+	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
+	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items. It is replaced by the `state` field.
+	// See [InventoryState](#type-inventorystate) for possible values
+	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
+	// The current [inventory state](entity:InventoryState) for the related
+	// quantity of items.
+	// See [InventoryState](#type-inventorystate) for possible values
+	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The number of items affected by the physical count as a decimal string.
+	// The number can support up to 5 digits after the decimal point.
+	Quantity *string `json:"quantity,omitempty" url:"quantity,omitempty"`
+	// Information about the application with which the
+	// physical count is submitted.
+	Source *SourceApplication `json:"source,omitempty" url:"source,omitempty"`
+	// The Square-generated ID of the [Employee](entity:Employee) responsible for the
+	// physical count.
+	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
+	// The Square-generated ID of the [Team Member](entity:TeamMember) responsible for the
+	// physical count.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+	// A client-generated RFC 3339-formatted timestamp that indicates when
+	// the physical count was examined. For physical count updates, the `occurred_at`
+	// timestamp cannot be older than 24 hours or in the future relative to the
+	// time of the request.
+	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when the physical count is received.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryPhysicalCount) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryPhysicalCount) GetReferenceID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ReferenceID
+}
+
+func (i *InventoryPhysicalCount) GetCatalogObjectID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectID
+}
+
+func (i *InventoryPhysicalCount) GetCatalogObjectType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectType
+}
+
+func (i *InventoryPhysicalCount) GetStatus() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.Status
+}
+
+func (i *InventoryPhysicalCount) GetState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.State
+}
+
+func (i *InventoryPhysicalCount) GetLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.LocationID
+}
+
+func (i *InventoryPhysicalCount) GetQuantity() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Quantity
+}
+
+func (i *InventoryPhysicalCount) GetSource() *SourceApplication {
+	if i == nil {
+		return nil
+	}
+	return i.Source
+}
+
+func (i *InventoryPhysicalCount) GetEmployeeID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EmployeeID
+}
+
+func (i *InventoryPhysicalCount) GetTeamMemberID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TeamMemberID
+}
+
+func (i *InventoryPhysicalCount) GetOccurredAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.OccurredAt
+}
+
+func (i *InventoryPhysicalCount) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InventoryPhysicalCount) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryPhysicalCount
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryPhysicalCount(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryPhysicalCount) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Indicates the state of a tracked item quantity in the lifecycle of goods.
+type InventoryState string
+
+const (
+	InventoryStateInventoryStateDoNotUse  InventoryState = "INVENTORY_STATE_DO_NOT_USE"
+	InventoryStateCustom                  InventoryState = "CUSTOM"
+	InventoryStateInStock                 InventoryState = "IN_STOCK"
+	InventoryStateSold                    InventoryState = "SOLD"
+	InventoryStateReturnedByCustomer      InventoryState = "RETURNED_BY_CUSTOMER"
+	InventoryStateReservedForSale         InventoryState = "RESERVED_FOR_SALE"
+	InventoryStateSoldOnline              InventoryState = "SOLD_ONLINE"
+	InventoryStateOrderedFromVendor       InventoryState = "ORDERED_FROM_VENDOR"
+	InventoryStateReceivedFromVendor      InventoryState = "RECEIVED_FROM_VENDOR"
+	InventoryStateInTransitTo             InventoryState = "IN_TRANSIT_TO"
+	InventoryStateNone                    InventoryState = "NONE"
+	InventoryStateWaste                   InventoryState = "WASTE"
+	InventoryStateUnlinkedReturn          InventoryState = "UNLINKED_RETURN"
+	InventoryStateComposed                InventoryState = "COMPOSED"
+	InventoryStateDecomposed              InventoryState = "DECOMPOSED"
+	InventoryStateSupportedByNewerVersion InventoryState = "SUPPORTED_BY_NEWER_VERSION"
+	InventoryStateInTransit               InventoryState = "IN_TRANSIT"
+)
+
+func NewInventoryStateFromString(s string) (InventoryState, error) {
+	switch s {
+	case "INVENTORY_STATE_DO_NOT_USE":
+		return InventoryStateInventoryStateDoNotUse, nil
+	case "CUSTOM":
+		return InventoryStateCustom, nil
+	case "IN_STOCK":
+		return InventoryStateInStock, nil
+	case "SOLD":
+		return InventoryStateSold, nil
+	case "RETURNED_BY_CUSTOMER":
+		return InventoryStateReturnedByCustomer, nil
+	case "RESERVED_FOR_SALE":
+		return InventoryStateReservedForSale, nil
+	case "SOLD_ONLINE":
+		return InventoryStateSoldOnline, nil
+	case "ORDERED_FROM_VENDOR":
+		return InventoryStateOrderedFromVendor, nil
+	case "RECEIVED_FROM_VENDOR":
+		return InventoryStateReceivedFromVendor, nil
+	case "IN_TRANSIT_TO":
+		return InventoryStateInTransitTo, nil
+	case "NONE":
+		return InventoryStateNone, nil
+	case "WASTE":
+		return InventoryStateWaste, nil
+	case "UNLINKED_RETURN":
+		return InventoryStateUnlinkedReturn, nil
+	case "COMPOSED":
+		return InventoryStateComposed, nil
+	case "DECOMPOSED":
+		return InventoryStateDecomposed, nil
+	case "SUPPORTED_BY_NEWER_VERSION":
+		return InventoryStateSupportedByNewerVersion, nil
+	case "IN_TRANSIT":
+		return InventoryStateInTransit, nil
+	}
+	var t InventoryState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i InventoryState) Ptr() *InventoryState {
+	return &i
+}
+
+// Represents the transfer of a quantity of product inventory at a
+// particular time from one location to another.
+type InventoryTransfer struct {
+	// A unique ID generated by Square for the
+	// `InventoryTransfer`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An optional ID provided by the application to tie the
+	// `InventoryTransfer` to an external system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// The [inventory state](entity:InventoryState) for the quantity of
+	// items being transferred.
+	// See [InventoryState](#type-inventorystate) for possible values
+	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items was tracked before the transfer.
+	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items was tracked after the transfer.
+	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
+	// The Square-generated ID of the
+	// [CatalogObject](entity:CatalogObject) being tracked.
+	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
+	// The [type](entity:CatalogObjectType) of the [CatalogObject](entity:CatalogObject) being tracked.
+	//
+	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
+	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
+	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
+	// The number of items affected by the transfer as a decimal string.
+	// Can support up to 5 digits after the decimal point.
+	Quantity *string `json:"quantity,omitempty" url:"quantity,omitempty"`
+	// A client-generated RFC 3339-formatted timestamp that indicates when
+	// the transfer took place. For write actions, the `occurred_at` timestamp
+	// cannot be older than 24 hours or in the future relative to the time of the
+	// request.
+	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when Square
+	// received the transfer request.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Information about the application that initiated the
+	// inventory transfer.
+	Source *SourceApplication `json:"source,omitempty" url:"source,omitempty"`
+	// The Square-generated ID of the [Employee](entity:Employee) responsible for the
+	// inventory transfer.
+	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
+	// The Square-generated ID of the [Team Member](entity:TeamMember) responsible for the
+	// inventory transfer.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InventoryTransfer) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryTransfer) GetReferenceID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ReferenceID
+}
+
+func (i *InventoryTransfer) GetState() *InventoryState {
+	if i == nil {
+		return nil
+	}
+	return i.State
+}
+
+func (i *InventoryTransfer) GetFromLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.FromLocationID
+}
+
+func (i *InventoryTransfer) GetToLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ToLocationID
+}
+
+func (i *InventoryTransfer) GetCatalogObjectID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectID
+}
+
+func (i *InventoryTransfer) GetCatalogObjectType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CatalogObjectType
+}
+
+func (i *InventoryTransfer) GetQuantity() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Quantity
+}
+
+func (i *InventoryTransfer) GetOccurredAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.OccurredAt
+}
+
+func (i *InventoryTransfer) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InventoryTransfer) GetSource() *SourceApplication {
+	if i == nil {
+		return nil
+	}
+	return i.Source
+}
+
+func (i *InventoryTransfer) GetEmployeeID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EmployeeID
+}
+
+func (i *InventoryTransfer) GetTeamMemberID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.TeamMemberID
+}
+
+func (i *InventoryTransfer) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryTransfer) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryTransfer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryTransfer(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryTransfer) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }

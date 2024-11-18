@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BulkDeleteOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual delete operations for custom attributes.
 	Values map[string]*BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
@@ -97,4 +103,793 @@ type UpsertOrderCustomAttributeRequest struct {
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+}
+
+// Represents one delete within the bulk operation.
+type BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute struct {
+	// The key of the custom attribute to delete. This key must match the key
+	// of an existing custom attribute definition.
+	Key *string `json:"key,omitempty" url:"key,omitempty"`
+	// The ID of the target [order](entity:Order).
+	OrderID string `json:"order_id" url:"order_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) GetKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Key
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) GetOrderID() string {
+	if b == nil {
+		return ""
+	}
+	return b.OrderID
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response from deleting one or more order custom attributes.
+type BulkDeleteOrderCustomAttributesResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// A map of responses that correspond to individual delete requests. Each response has the same ID
+	// as the corresponding request and contains either a `custom_attribute` or an `errors` field.
+	Values map[string]*DeleteOrderCustomAttributeResponse `json:"values,omitempty" url:"values,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkDeleteOrderCustomAttributesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkDeleteOrderCustomAttributesResponse) GetValues() map[string]*DeleteOrderCustomAttributeResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Values
+}
+
+func (b *BulkDeleteOrderCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkDeleteOrderCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteOrderCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkDeleteOrderCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkDeleteOrderCustomAttributesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents one upsert within the bulk operation.
+type BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute struct {
+	// The custom attribute to create or update, with the following fields:
+	//
+	//   - `value`. This value must conform to the `schema` specified by the definition.
+	//     For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
+	//
+	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	//     control, include this optional field and specify the current version of the custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// A unique identifier for this request, used to ensure idempotency.
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
+	// The ID of the target [order](entity:Order).
+	OrderID string `json:"order_id" url:"order_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) GetCustomAttribute() *CustomAttribute {
+	if b == nil {
+		return nil
+	}
+	return b.CustomAttribute
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) GetIdempotencyKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) GetOrderID() string {
+	if b == nil {
+		return ""
+	}
+	return b.OrderID
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response from a bulk upsert of order custom attributes.
+type BulkUpsertOrderCustomAttributesResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// A map of responses that correspond to individual upsert operations for custom attributes.
+	Values map[string]*UpsertOrderCustomAttributeResponse `json:"values,omitempty" url:"values,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkUpsertOrderCustomAttributesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkUpsertOrderCustomAttributesResponse) GetValues() map[string]*UpsertOrderCustomAttributeResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Values
+}
+
+func (b *BulkUpsertOrderCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkUpsertOrderCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertOrderCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkUpsertOrderCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkUpsertOrderCustomAttributesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response from creating an order custom attribute definition.
+type CreateOrderCustomAttributeDefinitionResponse struct {
+	// The new custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateOrderCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttributeDefinition
+}
+
+func (c *CreateOrderCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateOrderCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateOrderCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateOrderCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateOrderCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateOrderCustomAttributeDefinitionResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a response from deleting an order custom attribute definition.
+type DeleteOrderCustomAttributeDefinitionResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeleteOrderCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteOrderCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteOrderCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteOrderCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteOrderCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteOrderCustomAttributeDefinitionResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Represents a response from deleting an order custom attribute.
+type DeleteOrderCustomAttributeResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeleteOrderCustomAttributeResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteOrderCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteOrderCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteOrderCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteOrderCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteOrderCustomAttributeResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Represents a response from listing order custom attribute definitions.
+type ListOrderCustomAttributeDefinitionsResponse struct {
+	// The retrieved custom attribute definitions. If no custom attribute definitions are found, Square returns an empty object (`{}`).
+	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
+	// The cursor to provide in your next call to this endpoint to retrieve the next page of results for your original request.
+	// This field is present only if the request succeeded and additional results are available.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributeDefinitions
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListOrderCustomAttributeDefinitionsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListOrderCustomAttributeDefinitionsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListOrderCustomAttributeDefinitionsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a response from listing order custom attributes.
+type ListOrderCustomAttributesResponse struct {
+	// The retrieved custom attributes. If no custom attribute are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to provide in your next call to this endpoint to retrieve the next page of results for your original request.
+	// This field is present only if the request succeeded and additional results are available.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListOrderCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListOrderCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListOrderCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListOrderCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListOrderCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListOrderCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListOrderCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListOrderCustomAttributesResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a response from getting an order custom attribute definition.
+type RetrieveOrderCustomAttributeDefinitionResponse struct {
+	// The retrieved custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveOrderCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if r == nil {
+		return nil
+	}
+	return r.CustomAttributeDefinition
+}
+
+func (r *RetrieveOrderCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveOrderCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveOrderCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveOrderCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveOrderCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveOrderCustomAttributeDefinitionResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents a response from getting an order custom attribute.
+type RetrieveOrderCustomAttributeResponse struct {
+	// The retrieved custom attribute. If `with_definition` was set to `true` in the request, the custom attribute definition is returned in the `definition field.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveOrderCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
+	if r == nil {
+		return nil
+	}
+	return r.CustomAttribute
+}
+
+func (r *RetrieveOrderCustomAttributeResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveOrderCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveOrderCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveOrderCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveOrderCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveOrderCustomAttributeResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents a response from updating an order custom attribute definition.
+type UpdateOrderCustomAttributeDefinitionResponse struct {
+	// The updated order custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if u == nil {
+		return nil
+	}
+	return u.CustomAttributeDefinition
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateOrderCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateOrderCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Represents a response from upserting order custom attribute definitions.
+type UpsertOrderCustomAttributeResponse struct {
+	// The order custom attribute that was created or modified.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpsertOrderCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
+	if u == nil {
+		return nil
+	}
+	return u.CustomAttribute
+}
+
+func (u *UpsertOrderCustomAttributeResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpsertOrderCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpsertOrderCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertOrderCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpsertOrderCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpsertOrderCustomAttributeResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

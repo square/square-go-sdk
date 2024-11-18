@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BulkDeleteBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual Delete requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkDeleteBookingCustomAttributes` request and the
@@ -116,4 +122,947 @@ type UpsertBookingCustomAttributeRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+}
+
+// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes)
+// request. An individual request contains a booking ID, the custom attribute to delete, and an optional idempotency key.
+type BookingCustomAttributeDeleteRequest struct {
+	// The ID of the target [booking](entity:Booking).
+	BookingID string `json:"booking_id" url:"booking_id"`
+	// The key of the custom attribute to delete. This key must match the `key` of a
+	// custom attribute definition in the Square seller account. If the requesting application is not
+	// the definition owner, you must use the qualified key.
+	Key string `json:"key" url:"key"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDeleteRequest) GetBookingID() string {
+	if b == nil {
+		return ""
+	}
+	return b.BookingID
+}
+
+func (b *BookingCustomAttributeDeleteRequest) GetKey() string {
+	if b == nil {
+		return ""
+	}
+	return b.Key
+}
+
+func (b *BookingCustomAttributeDeleteRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDeleteRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDeleteRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDeleteRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDeleteRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) operation.
+type BookingCustomAttributeDeleteResponse struct {
+	// The ID of the [booking](entity:Booking) associated with the custom attribute.
+	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
+	// Any errors that occurred while processing the individual request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeDeleteResponse) GetBookingID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BookingID
+}
+
+func (b *BookingCustomAttributeDeleteResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BookingCustomAttributeDeleteResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDeleteResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDeleteResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDeleteResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDeleteResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes)
+// request. An individual request contains a booking ID, the custom attribute to create or update,
+// and an optional idempotency key.
+type BookingCustomAttributeUpsertRequest struct {
+	// The ID of the target [booking](entity:Booking).
+	BookingID string `json:"booking_id" url:"booking_id"`
+	// The custom attribute to create or update, with following fields:
+	//
+	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
+	//
+	//   - `value`. This value must conform to the `schema` specified by the definition.
+	//     For more information, see [Value data types](https://developer.squareup.com/docs/booking-custom-attributes-api/custom-attributes#value-data-types).
+	//
+	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	//     control for update operations, include this optional field in the request and set the
+	//     value to the current version of the custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// A unique identifier for this individual upsert request, used to ensure idempotency.
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeUpsertRequest) GetBookingID() string {
+	if b == nil {
+		return ""
+	}
+	return b.BookingID
+}
+
+func (b *BookingCustomAttributeUpsertRequest) GetCustomAttribute() *CustomAttribute {
+	if b == nil {
+		return nil
+	}
+	return b.CustomAttribute
+}
+
+func (b *BookingCustomAttributeUpsertRequest) GetIdempotencyKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BookingCustomAttributeUpsertRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeUpsertRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeUpsertRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeUpsertRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeUpsertRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) operation.
+type BookingCustomAttributeUpsertResponse struct {
+	// The ID of the [booking](entity:Booking) associated with the custom attribute.
+	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
+	// The new or updated custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred while processing the individual request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCustomAttributeUpsertResponse) GetBookingID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BookingID
+}
+
+func (b *BookingCustomAttributeUpsertResponse) GetCustomAttribute() *CustomAttribute {
+	if b == nil {
+		return nil
+	}
+	return b.CustomAttribute
+}
+
+func (b *BookingCustomAttributeUpsertResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BookingCustomAttributeUpsertResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeUpsertResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeUpsertResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeUpsertResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeUpsertResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) response,
+// which contains a map of responses that each corresponds to an individual delete request.
+type BulkDeleteBookingCustomAttributesResponse struct {
+	// A map of responses that correspond to individual delete requests. Each response has the
+	// same ID as the corresponding request and contains `booking_id` and `errors` field.
+	Values map[string]*BookingCustomAttributeDeleteResponse `json:"values,omitempty" url:"values,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkDeleteBookingCustomAttributesResponse) GetValues() map[string]*BookingCustomAttributeDeleteResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Values
+}
+
+func (b *BulkDeleteBookingCustomAttributesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkDeleteBookingCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkDeleteBookingCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteBookingCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkDeleteBookingCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkDeleteBookingCustomAttributesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) response,
+// which contains a map of responses that each corresponds to an individual upsert request.
+type BulkUpsertBookingCustomAttributesResponse struct {
+	// A map of responses that correspond to individual upsert requests. Each response has the
+	// same ID as the corresponding request and contains either a `booking_id` and `custom_attribute` or an `errors` field.
+	Values map[string]*BookingCustomAttributeUpsertResponse `json:"values,omitempty" url:"values,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkUpsertBookingCustomAttributesResponse) GetValues() map[string]*BookingCustomAttributeUpsertResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Values
+}
+
+func (b *BulkUpsertBookingCustomAttributesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkUpsertBookingCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkUpsertBookingCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertBookingCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkUpsertBookingCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkUpsertBookingCustomAttributesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a [CreateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-CreateBookingCustomAttributeDefinition) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type CreateBookingCustomAttributeDefinitionResponse struct {
+	// The newly created custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateBookingCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttributeDefinition
+}
+
+func (c *CreateBookingCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateBookingCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateBookingCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBookingCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBookingCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBookingCustomAttributeDefinitionResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a [DeleteBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttributeDefinition) response
+// containing error messages when errors occurred during the request. The successful response does not contain any payload.
+type DeleteBookingCustomAttributeDefinitionResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeleteBookingCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteBookingCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteBookingCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteBookingCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteBookingCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteBookingCustomAttributeDefinitionResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Represents a [DeleteBookingCustomAttribute](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttribute) response.
+// Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
+type DeleteBookingCustomAttributeResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeleteBookingCustomAttributeResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteBookingCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteBookingCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteBookingCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteBookingCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteBookingCustomAttributeResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
+// Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
+// If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
+type ListBookingCustomAttributeDefinitionsResponse struct {
+	// The retrieved custom attribute definitions. If no custom attribute definitions are found,
+	// Square returns an empty object (`{}`).
+	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
+	// The cursor to provide in your next call to this endpoint to retrieve the next page of
+	// results for your original request. This field is present only if the request succeeded and
+	// additional results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributeDefinitions
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBookingCustomAttributeDefinitionsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBookingCustomAttributeDefinitionsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a [ListBookingCustomAttributes](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributes) response.
+// Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
+// results are available, the `cursor` field is also present along with `custom_attributes`.
+type ListBookingCustomAttributesResponse struct {
+	// The retrieved custom attributes. If `with_definitions` was set to `true` in the request,
+	// the custom attribute definition is returned in the `definition` field of each custom attribute.
+	//
+	// If no custom attributes are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to use in your next call to this endpoint to retrieve the next page of results
+	// for your original request. This field is present only if the request succeeded and additional
+	// results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListBookingCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListBookingCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBookingCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBookingCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBookingCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBookingCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBookingCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBookingCustomAttributesResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a [RetrieveBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttributeDefinition) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type RetrieveBookingCustomAttributeDefinitionResponse struct {
+	// The retrieved custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveBookingCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if r == nil {
+		return nil
+	}
+	return r.CustomAttributeDefinition
+}
+
+func (r *RetrieveBookingCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveBookingCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveBookingCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveBookingCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveBookingCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveBookingCustomAttributeDefinitionResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents a [RetrieveBookingCustomAttribute](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttribute) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type RetrieveBookingCustomAttributeResponse struct {
+	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
+	// the custom attribute definition is returned in the `definition` field.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveBookingCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
+	if r == nil {
+		return nil
+	}
+	return r.CustomAttribute
+}
+
+func (r *RetrieveBookingCustomAttributeResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveBookingCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveBookingCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveBookingCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveBookingCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveBookingCustomAttributeResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents an [UpdateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-UpdateBookingCustomAttributeDefinition) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type UpdateBookingCustomAttributeDefinitionResponse struct {
+	// The updated custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if u == nil {
+		return nil
+	}
+	return u.CustomAttributeDefinition
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBookingCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateBookingCustomAttributeDefinitionResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Represents an [UpsertBookingCustomAttribute](api-endpoint:BookingCustomAttributes-UpsertBookingCustomAttribute) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type UpsertBookingCustomAttributeResponse struct {
+	// The new or updated custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpsertBookingCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
+	if u == nil {
+		return nil
+	}
+	return u.CustomAttribute
+}
+
+func (u *UpsertBookingCustomAttributeResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpsertBookingCustomAttributeResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpsertBookingCustomAttributeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertBookingCustomAttributeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpsertBookingCustomAttributeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpsertBookingCustomAttributeResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

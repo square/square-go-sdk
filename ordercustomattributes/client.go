@@ -6,6 +6,7 @@ import (
 	context "context"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
 	os "os"
@@ -13,7 +14,7 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -27,8 +28,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -59,7 +60,7 @@ func (c *Client) ListOrderCustomAttributeDefinitions(
 	}
 	endpointURL := baseURL + "/v2/orders/custom-attribute-definitions"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -67,12 +68,12 @@ func (c *Client) ListOrderCustomAttributeDefinitions(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.ListOrderCustomAttributeDefinitionsResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -109,12 +110,13 @@ func (c *Client) CreateOrderCustomAttributeDefinition(
 	}
 	endpointURL := baseURL + "/v2/orders/custom-attribute-definitions"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -152,9 +154,9 @@ func (c *Client) RetrieveOrderCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -162,12 +164,12 @@ func (c *Client) RetrieveOrderCustomAttributeDefinition(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.RetrieveOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -202,14 +204,15 @@ func (c *Client) UpdateOrderCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -244,14 +247,14 @@ func (c *Client) DeleteOrderCustomAttributeDefinition(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/custom-attribute-definitions/%v", key)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -297,12 +300,13 @@ func (c *Client) BulkDeleteOrderCustomAttributes(
 	}
 	endpointURL := baseURL + "/v2/orders/custom-attributes/bulk-delete"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkDeleteOrderCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -349,12 +353,13 @@ func (c *Client) BulkUpsertOrderCustomAttributes(
 	}
 	endpointURL := baseURL + "/v2/orders/custom-attributes/bulk-upsert"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpsertOrderCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -395,9 +400,9 @@ func (c *Client) ListOrderCustomAttributes(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/orders/%v/custom-attributes", orderID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/orders/%v/custom-attributes", orderID)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -405,12 +410,12 @@ func (c *Client) ListOrderCustomAttributes(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.ListOrderCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -453,13 +458,13 @@ func (c *Client) RetrieveOrderCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",
 		orderID,
 		customAttributeKey,
 	)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -467,12 +472,12 @@ func (c *Client) RetrieveOrderCustomAttribute(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.RetrieveOrderCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -516,18 +521,19 @@ func (c *Client) UpsertOrderCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",
 		orderID,
 		customAttributeKey,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertOrderCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -567,18 +573,18 @@ func (c *Client) DeleteOrderCustomAttribute(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",
 		orderID,
 		customAttributeKey,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteOrderCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,

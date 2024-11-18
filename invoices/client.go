@@ -3,21 +3,19 @@
 package invoices
 
 import (
-	bytes "bytes"
 	context "context"
 	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
-	io "io"
-	multipart "mime/multipart"
 	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -31,8 +29,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -60,14 +58,14 @@ func (c *Client) List(
 	}
 	endpointURL := baseURL + "/v2/invoices"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	prepareCall := func(pageRequest *core.PageRequest[*string]) *core.CallParams {
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
 		}
@@ -75,7 +73,7 @@ func (c *Client) List(
 		if len(queryParams) > 0 {
 			nextURL += "?" + queryParams.Encode()
 		}
-		return &core.CallParams{
+		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -86,15 +84,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListInvoicesResponse) *core.PageResponse[*string, *squaregosdk.Invoice] {
+	readPageResponse := func(response *squaregosdk.ListInvoicesResponse) *internal.PageResponse[*string, *squaregosdk.Invoice] {
 		next := response.Cursor
 		results := response.Invoices
-		return &core.PageResponse[*string, *squaregosdk.Invoice]{
+		return &internal.PageResponse[*string, *squaregosdk.Invoice]{
 			Next:    next,
 			Results: results,
 		}
 	}
-	pager := core.NewCursorPager(
+	pager := internal.NewCursorPager(
 		c.caller,
 		prepareCall,
 		readPageResponse,
@@ -123,12 +121,13 @@ func (c *Client) Create(
 	}
 	endpointURL := baseURL + "/v2/invoices"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -168,12 +167,13 @@ func (c *Client) Search(
 	}
 	endpointURL := baseURL + "/v2/invoices/search"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.SearchInvoicesResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -206,14 +206,14 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -249,14 +249,15 @@ func (c *Client) Update(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -292,9 +293,9 @@ func (c *Client) Delete(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v", invoiceID)
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
@@ -302,12 +303,12 @@ func (c *Client) Delete(
 		endpointURL += "?" + queryParams.Encode()
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -333,7 +334,6 @@ func (c *Client) CreateInvoiceAttachment(
 	ctx context.Context,
 	// The ID of the [invoice](entity:Invoice) to attach the file to.
 	invoiceID string,
-	imageFile io.Reader,
 	request *squaregosdk.CreateInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateInvoiceAttachmentResponse, error) {
@@ -346,39 +346,30 @@ func (c *Client) CreateInvoiceAttachment(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v/attachments", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v/attachments", invoiceID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response *squaregosdk.CreateInvoiceAttachmentResponse
-	requestBuffer := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(requestBuffer)
-	if imageFile != nil {
-		imageFileFilename := "imageFile_filename"
-		if named, ok := imageFile.(interface{ Name() string }); ok {
-			imageFileFilename = named.Name()
-		}
-		imageFilePart, err := writer.CreateFormFile("image_file", imageFileFilename)
-		if err != nil {
-			return nil, err
-		}
-		if _, err := io.Copy(imageFilePart, imageFile); err != nil {
+	writer := internal.NewMultipartWriter()
+	if request.ImageFile != nil {
+		if err := writer.WriteFile("image_file", request.ImageFile, internal.WithDefaultContentType("image/jpeg")); err != nil {
 			return nil, err
 		}
 	}
 	if request.Request != nil {
-		if err := core.WriteMultipartJSON(writer, "request", request.Request); err != nil {
+		if err := writer.WriteJSON("request", request.Request, internal.WithDefaultContentType("application/json; charset=utf-8")); err != nil {
 			return nil, err
 		}
 	}
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
-	headers.Set("Content-Type", writer.FormDataContentType())
+	headers.Set("Content-Type", writer.ContentType())
 
+	var response *squaregosdk.CreateInvoiceAttachmentResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -386,7 +377,7 @@ func (c *Client) CreateInvoiceAttachment(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         requestBuffer,
+			Request:         writer.Buffer(),
 			Response:        &response,
 		},
 	); err != nil {
@@ -414,18 +405,18 @@ func (c *Client) DeleteInvoiceAttachment(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
+	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/invoices/%v/attachments/%v",
 		invoiceID,
 		attachmentID,
 	)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.DeleteInvoiceAttachmentResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
 			MaxAttempts:     options.MaxAttempts,
@@ -461,14 +452,15 @@ func (c *Client) Cancel(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v/cancel", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v/cancel", invoiceID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CancelInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -515,14 +507,15 @@ func (c *Client) Publisb(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/invoices/%v/publish", invoiceID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/invoices/%v/publish", invoiceID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.PublishInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,

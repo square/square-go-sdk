@@ -1,6 +1,10 @@
-package core
+package internal
 
-import "context"
+import (
+	"context"
+
+	"github.com/square/square-go-sdk/core"
+)
 
 // PagerMode represents the different types of pagination modes.
 type PagerMode uint
@@ -80,7 +84,7 @@ func (p *Pager[
 	Cursor,
 	Response,
 	Results,
-]) GetPage(ctx context.Context, cursor Cursor) (*Page[Results], error) {
+]) GetPage(ctx context.Context, cursor Cursor) (*core.Page[Results], error) {
 	var response Response
 	pageRequest := &PageRequest[Cursor]{
 		Cursor:   cursor,
@@ -95,27 +99,27 @@ func (p *Pager[
 	pageResponse := p.readPageResponse(response)
 
 	if p.mode == PagerModeOffset {
-		return &Page[Results]{
+		return &core.Page[Results]{
 			Results: pageResponse.Results,
-			nextPage: func(ctx context.Context) (*Page[Results], error) {
+			NextPageFunc: func(ctx context.Context) (*core.Page[Results], error) {
 				page, err := p.GetPage(ctx, pageResponse.Next)
 				if err != nil {
 					return nil, err
 				}
 				if len(page.Results) == 0 {
-					return nil, ErrNoPages
+					return nil, core.ErrNoPages
 				}
 				return page, nil
 			},
 		}, nil
 	}
 
-	return &Page[Results]{
+	return &core.Page[Results]{
 		Results: pageResponse.Results,
-		nextPage: func(ctx context.Context) (*Page[Results], error) {
+		NextPageFunc: func(ctx context.Context) (*core.Page[Results], error) {
 			var next Cursor
 			if pageResponse.Next == next {
-				return nil, ErrNoPages
+				return nil, core.ErrNoPages
 			}
 			return p.GetPage(ctx, pageResponse.Next)
 		},

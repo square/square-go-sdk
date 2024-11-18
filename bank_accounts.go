@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BankAccountsListRequest struct {
 	// The pagination cursor returned by a previous call to this endpoint.
 	// Use it in the next `ListBankAccounts` request to retrieve the next set
@@ -16,4 +22,466 @@ type BankAccountsListRequest struct {
 	// Location ID. You can specify this optional filter
 	// to retrieve only the linked bank accounts belonging to a specific location.
 	LocationID *string `json:"-" url:"location_id,omitempty"`
+}
+
+// Represents a bank account. For more information about
+// linking a bank account to a Square account, see
+// [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
+type BankAccount struct {
+	// The unique, Square-issued identifier for the bank account.
+	ID string `json:"id" url:"id"`
+	// The last few digits of the account number.
+	AccountNumberSuffix string `json:"account_number_suffix" url:"account_number_suffix"`
+	// The ISO 3166 Alpha-2 country code where the bank account is based.
+	// See [Country](#type-country) for possible values
+	Country Country `json:"country" url:"country"`
+	// The 3-character ISO 4217 currency code indicating the operating
+	// currency of the bank account. For example, the currency code for US dollars
+	// is `USD`.
+	// See [Currency](#type-currency) for possible values
+	Currency Currency `json:"currency" url:"currency"`
+	// The financial purpose of the associated bank account.
+	// See [BankAccountType](#type-bankaccounttype) for possible values
+	AccountType BankAccountType `json:"account_type" url:"account_type"`
+	// Name of the account holder. This name must match the name
+	// on the targeted bank account record.
+	HolderName string `json:"holder_name" url:"holder_name"`
+	// Primary identifier for the bank. For more information, see
+	// [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
+	PrimaryBankIdentificationNumber string `json:"primary_bank_identification_number" url:"primary_bank_identification_number"`
+	// Secondary identifier for the bank. For more information, see
+	// [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
+	SecondaryBankIdentificationNumber *string `json:"secondary_bank_identification_number,omitempty" url:"secondary_bank_identification_number,omitempty"`
+	// Reference identifier that will be displayed to UK bank account owners
+	// when collecting direct debit authorization. Only required for UK bank accounts.
+	DebitMandateReferenceID *string `json:"debit_mandate_reference_id,omitempty" url:"debit_mandate_reference_id,omitempty"`
+	// Client-provided identifier for linking the banking account to an entity
+	// in a third-party system (for example, a bank account number or a user identifier).
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// The location to which the bank account belongs.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// Read-only. The current verification status of this BankAccount object.
+	// See [BankAccountStatus](#type-bankaccountstatus) for possible values
+	Status BankAccountStatus `json:"status" url:"status"`
+	// Indicates whether it is possible for Square to send money to this bank account.
+	Creditable bool `json:"creditable" url:"creditable"`
+	// Indicates whether it is possible for Square to take money from this
+	// bank account.
+	Debitable bool `json:"debitable" url:"debitable"`
+	// A Square-assigned, unique identifier for the bank account based on the
+	// account information. The account fingerprint can be used to compare account
+	// entries and determine if the they represent the same real-world bank account.
+	Fingerprint *string `json:"fingerprint,omitempty" url:"fingerprint,omitempty"`
+	// The current version of the `BankAccount`.
+	Version *int `json:"version,omitempty" url:"version,omitempty"`
+	// Read only. Name of actual financial institution.
+	// For example "Bank of America".
+	BankName *string `json:"bank_name,omitempty" url:"bank_name,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccount) GetID() string {
+	if b == nil {
+		return ""
+	}
+	return b.ID
+}
+
+func (b *BankAccount) GetAccountNumberSuffix() string {
+	if b == nil {
+		return ""
+	}
+	return b.AccountNumberSuffix
+}
+
+func (b *BankAccount) GetCountry() Country {
+	if b == nil {
+		return ""
+	}
+	return b.Country
+}
+
+func (b *BankAccount) GetCurrency() Currency {
+	if b == nil {
+		return ""
+	}
+	return b.Currency
+}
+
+func (b *BankAccount) GetAccountType() BankAccountType {
+	if b == nil {
+		return ""
+	}
+	return b.AccountType
+}
+
+func (b *BankAccount) GetHolderName() string {
+	if b == nil {
+		return ""
+	}
+	return b.HolderName
+}
+
+func (b *BankAccount) GetPrimaryBankIdentificationNumber() string {
+	if b == nil {
+		return ""
+	}
+	return b.PrimaryBankIdentificationNumber
+}
+
+func (b *BankAccount) GetSecondaryBankIdentificationNumber() *string {
+	if b == nil {
+		return nil
+	}
+	return b.SecondaryBankIdentificationNumber
+}
+
+func (b *BankAccount) GetDebitMandateReferenceID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.DebitMandateReferenceID
+}
+
+func (b *BankAccount) GetReferenceID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ReferenceID
+}
+
+func (b *BankAccount) GetLocationID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationID
+}
+
+func (b *BankAccount) GetStatus() BankAccountStatus {
+	if b == nil {
+		return ""
+	}
+	return b.Status
+}
+
+func (b *BankAccount) GetCreditable() bool {
+	if b == nil {
+		return false
+	}
+	return b.Creditable
+}
+
+func (b *BankAccount) GetDebitable() bool {
+	if b == nil {
+		return false
+	}
+	return b.Debitable
+}
+
+func (b *BankAccount) GetFingerprint() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Fingerprint
+}
+
+func (b *BankAccount) GetVersion() *int {
+	if b == nil {
+		return nil
+	}
+	return b.Version
+}
+
+func (b *BankAccount) GetBankName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BankName
+}
+
+func (b *BankAccount) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccount) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccount
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccount(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccount) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Indicates the current verification status of a `BankAccount` object.
+type BankAccountStatus string
+
+const (
+	BankAccountStatusVerificationInProgress BankAccountStatus = "VERIFICATION_IN_PROGRESS"
+	BankAccountStatusVerified               BankAccountStatus = "VERIFIED"
+	BankAccountStatusDisabled               BankAccountStatus = "DISABLED"
+)
+
+func NewBankAccountStatusFromString(s string) (BankAccountStatus, error) {
+	switch s {
+	case "VERIFICATION_IN_PROGRESS":
+		return BankAccountStatusVerificationInProgress, nil
+	case "VERIFIED":
+		return BankAccountStatusVerified, nil
+	case "DISABLED":
+		return BankAccountStatusDisabled, nil
+	}
+	var t BankAccountStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BankAccountStatus) Ptr() *BankAccountStatus {
+	return &b
+}
+
+// Indicates the financial purpose of the bank account.
+type BankAccountType string
+
+const (
+	BankAccountTypeUnknown          BankAccountType = "UNKNOWN"
+	BankAccountTypeChecking         BankAccountType = "CHECKING"
+	BankAccountTypeSavings          BankAccountType = "SAVINGS"
+	BankAccountTypeInvestment       BankAccountType = "INVESTMENT"
+	BankAccountTypeOther            BankAccountType = "OTHER"
+	BankAccountTypeBusinessChecking BankAccountType = "BUSINESS_CHECKING"
+)
+
+func NewBankAccountTypeFromString(s string) (BankAccountType, error) {
+	switch s {
+	case "UNKNOWN":
+		return BankAccountTypeUnknown, nil
+	case "CHECKING":
+		return BankAccountTypeChecking, nil
+	case "SAVINGS":
+		return BankAccountTypeSavings, nil
+	case "INVESTMENT":
+		return BankAccountTypeInvestment, nil
+	case "OTHER":
+		return BankAccountTypeOther, nil
+	case "BUSINESS_CHECKING":
+		return BankAccountTypeBusinessChecking, nil
+	}
+	var t BankAccountType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BankAccountType) Ptr() *BankAccountType {
+	return &b
+}
+
+// Response object returned by GetBankAccountByV1Id.
+type GetBankAccountByV1IDResponse struct {
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested `BankAccount` object.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetBankAccountByV1IDResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetBankAccountByV1IDResponse) GetBankAccount() *BankAccount {
+	if g == nil {
+		return nil
+	}
+	return g.BankAccount
+}
+
+func (g *GetBankAccountByV1IDResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetBankAccountByV1IDResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetBankAccountByV1IDResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetBankAccountByV1IDResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetBankAccountByV1IDResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Response object returned by `GetBankAccount`.
+type GetBankAccountResponse struct {
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested `BankAccount` object.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetBankAccountResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetBankAccountResponse) GetBankAccount() *BankAccount {
+	if g == nil {
+		return nil
+	}
+	return g.BankAccount
+}
+
+func (g *GetBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetBankAccountResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetBankAccountResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetBankAccountResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetBankAccountResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Response object returned by ListBankAccounts.
+type ListBankAccountsResponse struct {
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// List of BankAccounts associated with this account.
+	BankAccounts []*BankAccount `json:"bank_accounts,omitempty" url:"bank_accounts,omitempty"`
+	// When a response is truncated, it includes a cursor that you can
+	// use in a subsequent request to fetch next set of bank accounts.
+	// If empty, this is the final response.
+	//
+	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListBankAccountsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBankAccountsResponse) GetBankAccounts() []*BankAccount {
+	if l == nil {
+		return nil
+	}
+	return l.BankAccounts
+}
+
+func (l *ListBankAccountsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBankAccountsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBankAccountsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBankAccountsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBankAccountsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBankAccountsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
