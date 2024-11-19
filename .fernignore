@@ -1,5 +1,12 @@
 # Specify files that shouldn't be modified by Fern
 
 README.md
-webhooks/client/verify_signature.go
+
+# Hand-written integration tests.
+.github/workflows/integration.yml
+integration_tests
+
+# Custom webhook helper methods.
 verify_signature.go
+webhooks/client/verify_signature.go
+webhooks/client/verify_signature_test.go

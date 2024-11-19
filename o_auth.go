@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type OAuthAuthorizeRequest struct {
 	// The Square-issued ID for your application, which is available on
 	// the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
@@ -102,4 +108,658 @@ type RevokeTokenRequest struct {
 	// terminate the entire authorization.
 	// Default: `false`
 	RevokeOnlyAccessToken *bool `json:"revoke_only_access_token,omitempty" url:"-"`
+}
+
+type AuthorizeResponse struct {
+	// A valid authorization code. Authorization codes are exchanged
+	// for OAuth access tokens with the `ObtainToken` endpoint.
+	Code *string `json:"code,omitempty" url:"code,omitempty"`
+	// The same value specified in the request.
+	State *string `json:"state,omitempty" url:"state,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AuthorizeResponse) GetCode() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Code
+}
+
+func (a *AuthorizeResponse) GetState() *string {
+	if a == nil {
+		return nil
+	}
+	return a.State
+}
+
+func (a *AuthorizeResponse) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AuthorizeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler AuthorizeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AuthorizeResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AuthorizeResponse) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// When you direct your user to the permissions form, you specify the
+// scope of the permissions your application will have. Personal access tokens
+// have all available permissions (at the time the application was created) by default.
+//
+// **Important:** Never request more than the minimum permissions required for your application
+// to function properly.
+type OAuthPermission string
+
+const (
+	OAuthPermissionBankAccountsRead                  OAuthPermission = "BANK_ACCOUNTS_READ"
+	OAuthPermissionCashDrawerRead                    OAuthPermission = "CASH_DRAWER_READ"
+	OAuthPermissionCustomersRead                     OAuthPermission = "CUSTOMERS_READ"
+	OAuthPermissionCustomersWrite                    OAuthPermission = "CUSTOMERS_WRITE"
+	OAuthPermissionDeviceCredentialManagement        OAuthPermission = "DEVICE_CREDENTIAL_MANAGEMENT"
+	OAuthPermissionEmployeesRead                     OAuthPermission = "EMPLOYEES_READ"
+	OAuthPermissionEmployeesWrite                    OAuthPermission = "EMPLOYEES_WRITE"
+	OAuthPermissionInventoryRead                     OAuthPermission = "INVENTORY_READ"
+	OAuthPermissionInventoryWrite                    OAuthPermission = "INVENTORY_WRITE"
+	OAuthPermissionItemsRead                         OAuthPermission = "ITEMS_READ"
+	OAuthPermissionItemsWrite                        OAuthPermission = "ITEMS_WRITE"
+	OAuthPermissionLoyaltyRead                       OAuthPermission = "LOYALTY_READ"
+	OAuthPermissionLoyaltyWrite                      OAuthPermission = "LOYALTY_WRITE"
+	OAuthPermissionMerchantProfileRead               OAuthPermission = "MERCHANT_PROFILE_READ"
+	OAuthPermissionOrdersRead                        OAuthPermission = "ORDERS_READ"
+	OAuthPermissionOrdersWrite                       OAuthPermission = "ORDERS_WRITE"
+	OAuthPermissionPaymentsRead                      OAuthPermission = "PAYMENTS_READ"
+	OAuthPermissionPaymentsWrite                     OAuthPermission = "PAYMENTS_WRITE"
+	OAuthPermissionPaymentsWriteAdditionalRecipients OAuthPermission = "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS"
+	OAuthPermissionPaymentsWriteInPerson             OAuthPermission = "PAYMENTS_WRITE_IN_PERSON"
+	OAuthPermissionSettlementsRead                   OAuthPermission = "SETTLEMENTS_READ"
+	OAuthPermissionTimecardsRead                     OAuthPermission = "TIMECARDS_READ"
+	OAuthPermissionTimecardsWrite                    OAuthPermission = "TIMECARDS_WRITE"
+	OAuthPermissionTimecardsSettingsRead             OAuthPermission = "TIMECARDS_SETTINGS_READ"
+	OAuthPermissionTimecardsSettingsWrite            OAuthPermission = "TIMECARDS_SETTINGS_WRITE"
+	OAuthPermissionAppointmentsRead                  OAuthPermission = "APPOINTMENTS_READ"
+	OAuthPermissionAppointmentsWrite                 OAuthPermission = "APPOINTMENTS_WRITE"
+	OAuthPermissionAppointmentsBusinessSettingsRead  OAuthPermission = "APPOINTMENTS_BUSINESS_SETTINGS_READ"
+	OAuthPermissionInvoicesRead                      OAuthPermission = "INVOICES_READ"
+	OAuthPermissionInvoicesWrite                     OAuthPermission = "INVOICES_WRITE"
+	OAuthPermissionSubscriptionsRead                 OAuthPermission = "SUBSCRIPTIONS_READ"
+	OAuthPermissionSubscriptionsWrite                OAuthPermission = "SUBSCRIPTIONS_WRITE"
+	OAuthPermissionDisputesRead                      OAuthPermission = "DISPUTES_READ"
+	OAuthPermissionDisputesWrite                     OAuthPermission = "DISPUTES_WRITE"
+	OAuthPermissionGiftcardsRead                     OAuthPermission = "GIFTCARDS_READ"
+	OAuthPermissionGiftcardsWrite                    OAuthPermission = "GIFTCARDS_WRITE"
+	OAuthPermissionOnlineStoreSnippetsWrite          OAuthPermission = "ONLINE_STORE_SNIPPETS_WRITE"
+	OAuthPermissionOnlineStoreSnippetsRead           OAuthPermission = "ONLINE_STORE_SNIPPETS_READ"
+	OAuthPermissionOnlineStoreSiteRead               OAuthPermission = "ONLINE_STORE_SITE_READ"
+	OAuthPermissionPaymentsWriteSharedOnfile         OAuthPermission = "PAYMENTS_WRITE_SHARED_ONFILE"
+	OAuthPermissionAppointmentsAllRead               OAuthPermission = "APPOINTMENTS_ALL_READ"
+	OAuthPermissionAppointmentsAllWrite              OAuthPermission = "APPOINTMENTS_ALL_WRITE"
+	OAuthPermissionMerchantProfileWrite              OAuthPermission = "MERCHANT_PROFILE_WRITE"
+	OAuthPermissionVendorRead                        OAuthPermission = "VENDOR_READ"
+	OAuthPermissionVendorWrite                       OAuthPermission = "VENDOR_WRITE"
+	OAuthPermissionPayoutsRead                       OAuthPermission = "PAYOUTS_READ"
+	OAuthPermissionReservationsRead                  OAuthPermission = "RESERVATIONS_READ"
+	OAuthPermissionReservationsWrite                 OAuthPermission = "RESERVATIONS_WRITE"
+	OAuthPermissionRestaurantChecksRead              OAuthPermission = "RESTAURANT_CHECKS_READ"
+	OAuthPermissionDevicesRead                       OAuthPermission = "DEVICES_READ"
+	OAuthPermissionChannelsRead                      OAuthPermission = "CHANNELS_READ"
+	OAuthPermissionChannelsCreate                    OAuthPermission = "CHANNELS_CREATE"
+	OAuthPermissionChannelsUpdate                    OAuthPermission = "CHANNELS_UPDATE"
+	OAuthPermissionAddonConfigurationsRead           OAuthPermission = "ADDON_CONFIGURATIONS_READ"
+	OAuthPermissionAddonConfigurationsWrite          OAuthPermission = "ADDON_CONFIGURATIONS_WRITE"
+	OAuthPermissionPermissionSetsRead                OAuthPermission = "PERMISSION_SETS_READ"
+	OAuthPermissionPermissionSetsWrite               OAuthPermission = "PERMISSION_SETS_WRITE"
+)
+
+func NewOAuthPermissionFromString(s string) (OAuthPermission, error) {
+	switch s {
+	case "BANK_ACCOUNTS_READ":
+		return OAuthPermissionBankAccountsRead, nil
+	case "CASH_DRAWER_READ":
+		return OAuthPermissionCashDrawerRead, nil
+	case "CUSTOMERS_READ":
+		return OAuthPermissionCustomersRead, nil
+	case "CUSTOMERS_WRITE":
+		return OAuthPermissionCustomersWrite, nil
+	case "DEVICE_CREDENTIAL_MANAGEMENT":
+		return OAuthPermissionDeviceCredentialManagement, nil
+	case "EMPLOYEES_READ":
+		return OAuthPermissionEmployeesRead, nil
+	case "EMPLOYEES_WRITE":
+		return OAuthPermissionEmployeesWrite, nil
+	case "INVENTORY_READ":
+		return OAuthPermissionInventoryRead, nil
+	case "INVENTORY_WRITE":
+		return OAuthPermissionInventoryWrite, nil
+	case "ITEMS_READ":
+		return OAuthPermissionItemsRead, nil
+	case "ITEMS_WRITE":
+		return OAuthPermissionItemsWrite, nil
+	case "LOYALTY_READ":
+		return OAuthPermissionLoyaltyRead, nil
+	case "LOYALTY_WRITE":
+		return OAuthPermissionLoyaltyWrite, nil
+	case "MERCHANT_PROFILE_READ":
+		return OAuthPermissionMerchantProfileRead, nil
+	case "ORDERS_READ":
+		return OAuthPermissionOrdersRead, nil
+	case "ORDERS_WRITE":
+		return OAuthPermissionOrdersWrite, nil
+	case "PAYMENTS_READ":
+		return OAuthPermissionPaymentsRead, nil
+	case "PAYMENTS_WRITE":
+		return OAuthPermissionPaymentsWrite, nil
+	case "PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS":
+		return OAuthPermissionPaymentsWriteAdditionalRecipients, nil
+	case "PAYMENTS_WRITE_IN_PERSON":
+		return OAuthPermissionPaymentsWriteInPerson, nil
+	case "SETTLEMENTS_READ":
+		return OAuthPermissionSettlementsRead, nil
+	case "TIMECARDS_READ":
+		return OAuthPermissionTimecardsRead, nil
+	case "TIMECARDS_WRITE":
+		return OAuthPermissionTimecardsWrite, nil
+	case "TIMECARDS_SETTINGS_READ":
+		return OAuthPermissionTimecardsSettingsRead, nil
+	case "TIMECARDS_SETTINGS_WRITE":
+		return OAuthPermissionTimecardsSettingsWrite, nil
+	case "APPOINTMENTS_READ":
+		return OAuthPermissionAppointmentsRead, nil
+	case "APPOINTMENTS_WRITE":
+		return OAuthPermissionAppointmentsWrite, nil
+	case "APPOINTMENTS_BUSINESS_SETTINGS_READ":
+		return OAuthPermissionAppointmentsBusinessSettingsRead, nil
+	case "INVOICES_READ":
+		return OAuthPermissionInvoicesRead, nil
+	case "INVOICES_WRITE":
+		return OAuthPermissionInvoicesWrite, nil
+	case "SUBSCRIPTIONS_READ":
+		return OAuthPermissionSubscriptionsRead, nil
+	case "SUBSCRIPTIONS_WRITE":
+		return OAuthPermissionSubscriptionsWrite, nil
+	case "DISPUTES_READ":
+		return OAuthPermissionDisputesRead, nil
+	case "DISPUTES_WRITE":
+		return OAuthPermissionDisputesWrite, nil
+	case "GIFTCARDS_READ":
+		return OAuthPermissionGiftcardsRead, nil
+	case "GIFTCARDS_WRITE":
+		return OAuthPermissionGiftcardsWrite, nil
+	case "ONLINE_STORE_SNIPPETS_WRITE":
+		return OAuthPermissionOnlineStoreSnippetsWrite, nil
+	case "ONLINE_STORE_SNIPPETS_READ":
+		return OAuthPermissionOnlineStoreSnippetsRead, nil
+	case "ONLINE_STORE_SITE_READ":
+		return OAuthPermissionOnlineStoreSiteRead, nil
+	case "PAYMENTS_WRITE_SHARED_ONFILE":
+		return OAuthPermissionPaymentsWriteSharedOnfile, nil
+	case "APPOINTMENTS_ALL_READ":
+		return OAuthPermissionAppointmentsAllRead, nil
+	case "APPOINTMENTS_ALL_WRITE":
+		return OAuthPermissionAppointmentsAllWrite, nil
+	case "MERCHANT_PROFILE_WRITE":
+		return OAuthPermissionMerchantProfileWrite, nil
+	case "VENDOR_READ":
+		return OAuthPermissionVendorRead, nil
+	case "VENDOR_WRITE":
+		return OAuthPermissionVendorWrite, nil
+	case "PAYOUTS_READ":
+		return OAuthPermissionPayoutsRead, nil
+	case "RESERVATIONS_READ":
+		return OAuthPermissionReservationsRead, nil
+	case "RESERVATIONS_WRITE":
+		return OAuthPermissionReservationsWrite, nil
+	case "RESTAURANT_CHECKS_READ":
+		return OAuthPermissionRestaurantChecksRead, nil
+	case "DEVICES_READ":
+		return OAuthPermissionDevicesRead, nil
+	case "CHANNELS_READ":
+		return OAuthPermissionChannelsRead, nil
+	case "CHANNELS_CREATE":
+		return OAuthPermissionChannelsCreate, nil
+	case "CHANNELS_UPDATE":
+		return OAuthPermissionChannelsUpdate, nil
+	case "ADDON_CONFIGURATIONS_READ":
+		return OAuthPermissionAddonConfigurationsRead, nil
+	case "ADDON_CONFIGURATIONS_WRITE":
+		return OAuthPermissionAddonConfigurationsWrite, nil
+	case "PERMISSION_SETS_READ":
+		return OAuthPermissionPermissionSetsRead, nil
+	case "PERMISSION_SETS_WRITE":
+		return OAuthPermissionPermissionSetsWrite, nil
+	}
+	var t OAuthPermission
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OAuthPermission) Ptr() *OAuthPermission {
+	return &o
+}
+
+type ObtainTokenResponse struct {
+	// A valid OAuth access token.
+	// Provide the access token in a header with every request to Connect API
+	// endpoints. For more information, see [OAuth API: Walkthrough](https://developer.squareup.com/docs/oauth-api/walkthrough).
+	AccessToken *string `json:"access_token,omitempty" url:"access_token,omitempty"`
+	// This value is always _bearer_.
+	TokenType *string `json:"token_type,omitempty" url:"token_type,omitempty"`
+	// The date when the `access_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	// The ID of the authorizing merchant's business.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// **LEGACY FIELD**. The ID of a subscription plan the merchant signed up
+	// for. The ID is only present if the merchant signed up for a subscription plan during authorization.
+	SubscriptionID *string `json:"subscription_id,omitempty" url:"subscription_id,omitempty"`
+	// **LEGACY FIELD**. The ID of the subscription plan the merchant signed
+	// up for. The ID is only present if the merchant signed up for a subscription plan during
+	// authorization.
+	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
+	// The OpenID token belonging to this person. This token is only present if the
+	// OPENID scope is included in the authorization request.
+	IDToken *string `json:"id_token,omitempty" url:"id_token,omitempty"`
+	// A refresh token.
+	// For more information, see [Refresh, Revoke, and Limit the Scope of OAuth Tokens](https://developer.squareup.com/docs/oauth-api/refresh-revoke-limit-scope).
+	RefreshToken *string `json:"refresh_token,omitempty" url:"refresh_token,omitempty"`
+	// A Boolean indicating that the access token is a short-lived access token.
+	// The short-lived access token returned in the response expires in 24 hours.
+	ShortLived *bool `json:"short_lived,omitempty" url:"short_lived,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The date when the `refresh_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	RefreshTokenExpiresAt *string `json:"refresh_token_expires_at,omitempty" url:"refresh_token_expires_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *ObtainTokenResponse) GetAccessToken() *string {
+	if o == nil {
+		return nil
+	}
+	return o.AccessToken
+}
+
+func (o *ObtainTokenResponse) GetTokenType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.TokenType
+}
+
+func (o *ObtainTokenResponse) GetExpiresAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ExpiresAt
+}
+
+func (o *ObtainTokenResponse) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *ObtainTokenResponse) GetSubscriptionID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.SubscriptionID
+}
+
+func (o *ObtainTokenResponse) GetPlanID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.PlanID
+}
+
+func (o *ObtainTokenResponse) GetIDToken() *string {
+	if o == nil {
+		return nil
+	}
+	return o.IDToken
+}
+
+func (o *ObtainTokenResponse) GetRefreshToken() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RefreshToken
+}
+
+func (o *ObtainTokenResponse) GetShortLived() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.ShortLived
+}
+
+func (o *ObtainTokenResponse) GetErrors() []*Error {
+	if o == nil {
+		return nil
+	}
+	return o.Errors
+}
+
+func (o *ObtainTokenResponse) GetRefreshTokenExpiresAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RefreshTokenExpiresAt
+}
+
+func (o *ObtainTokenResponse) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *ObtainTokenResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ObtainTokenResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = ObtainTokenResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *ObtainTokenResponse) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type RenewTokenResponse struct {
+	// The renewed access token.
+	// This value might be different from the `access_token` you provided in your request.
+	// You provide this token in a header with every request to Connect API endpoints.
+	// See [Request and response headers](https://developer.squareup.com/docs/api/connect/v2/#requestandresponseheaders) for the format of this header.
+	AccessToken *string `json:"access_token,omitempty" url:"access_token,omitempty"`
+	// This value is always _bearer_.
+	TokenType *string `json:"token_type,omitempty" url:"token_type,omitempty"`
+	// The date when the `access_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	// The ID of the authorizing merchant's business.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// **LEGACY FIELD**. The ID of the merchant subscription associated with
+	// the authorization. The ID is only present if the merchant signed up for a subscription
+	// during authorization.
+	SubscriptionID *string `json:"subscription_id,omitempty" url:"subscription_id,omitempty"`
+	// **LEGACY FIELD**. The ID of the subscription plan the merchant signed
+	// up for. The ID is only present if the merchant signed up for a subscription plan during
+	// authorization.
+	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RenewTokenResponse) GetAccessToken() *string {
+	if r == nil {
+		return nil
+	}
+	return r.AccessToken
+}
+
+func (r *RenewTokenResponse) GetTokenType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.TokenType
+}
+
+func (r *RenewTokenResponse) GetExpiresAt() *string {
+	if r == nil {
+		return nil
+	}
+	return r.ExpiresAt
+}
+
+func (r *RenewTokenResponse) GetMerchantID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.MerchantID
+}
+
+func (r *RenewTokenResponse) GetSubscriptionID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.SubscriptionID
+}
+
+func (r *RenewTokenResponse) GetPlanID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.PlanID
+}
+
+func (r *RenewTokenResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RenewTokenResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RenewTokenResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RenewTokenResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RenewTokenResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RenewTokenResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the `RetrieveTokenStatus` endpoint.
+type RetrieveTokenStatusResponse struct {
+	// The list of scopes associated with an access token.
+	Scopes []string `json:"scopes,omitempty" url:"scopes,omitempty"`
+	// The date and time when the `access_token` expires, in RFC 3339 format. Empty if the token never expires.
+	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
+	// The Square-issued application ID associated with the access token. This is the same application ID used to obtain the token.
+	ClientID *string `json:"client_id,omitempty" url:"client_id,omitempty"`
+	// The ID of the authorizing merchant's business.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveTokenStatusResponse) GetScopes() []string {
+	if r == nil {
+		return nil
+	}
+	return r.Scopes
+}
+
+func (r *RetrieveTokenStatusResponse) GetExpiresAt() *string {
+	if r == nil {
+		return nil
+	}
+	return r.ExpiresAt
+}
+
+func (r *RetrieveTokenStatusResponse) GetClientID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.ClientID
+}
+
+func (r *RetrieveTokenStatusResponse) GetMerchantID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.MerchantID
+}
+
+func (r *RetrieveTokenStatusResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveTokenStatusResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveTokenStatusResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveTokenStatusResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveTokenStatusResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveTokenStatusResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RevokeTokenResponse struct {
+	// If the request is successful, this is `true`.
+	Success *bool `json:"success,omitempty" url:"success,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RevokeTokenResponse) GetSuccess() *bool {
+	if r == nil {
+		return nil
+	}
+	return r.Success
+}
+
+func (r *RevokeTokenResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RevokeTokenResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RevokeTokenResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RevokeTokenResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RevokeTokenResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RevokeTokenResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }

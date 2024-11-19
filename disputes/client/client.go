@@ -3,22 +3,20 @@
 package client
 
 import (
-	bytes "bytes"
 	context "context"
 	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	evidence "github.com/square/square-go-sdk/disputes/evidence"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
-	io "io"
-	multipart "mime/multipart"
 	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 
 	Evidence *evidence.Client
@@ -34,8 +32,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -62,14 +60,14 @@ func (c *Client) List(
 	}
 	endpointURL := baseURL + "/v2/disputes"
 
-	queryParams, err := core.QueryValues(request)
+	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	prepareCall := func(pageRequest *core.PageRequest[*string]) *core.CallParams {
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
 		}
@@ -77,7 +75,7 @@ func (c *Client) List(
 		if len(queryParams) > 0 {
 			nextURL += "?" + queryParams.Encode()
 		}
-		return &core.CallParams{
+		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -88,15 +86,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListDisputesResponse) *core.PageResponse[*string, *squaregosdk.Dispute] {
+	readPageResponse := func(response *squaregosdk.ListDisputesResponse) *internal.PageResponse[*string, *squaregosdk.Dispute] {
 		next := response.Cursor
 		results := response.Disputes
-		return &core.PageResponse[*string, *squaregosdk.Dispute]{
+		return &internal.PageResponse[*string, *squaregosdk.Dispute]{
 			Next:    next,
 			Results: results,
 		}
 	}
-	pager := core.NewCursorPager(
+	pager := internal.NewCursorPager(
 		c.caller,
 		prepareCall,
 		readPageResponse,
@@ -120,14 +118,14 @@ func (c *Client) Get(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/disputes/%v", disputeID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v", disputeID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.GetDisputeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
 			MaxAttempts:     options.MaxAttempts,
@@ -163,14 +161,14 @@ func (c *Client) Accept(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/disputes/%v/accept", disputeID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/accept", disputeID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.AcceptDisputeResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -192,7 +190,6 @@ func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
 	// The ID of the dispute for which you want to upload evidence.
 	disputeID string,
-	imageFile io.Reader,
 	request *squaregosdk.DisputesCreateEvidenceFileRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateDisputeEvidenceFileResponse, error) {
@@ -205,39 +202,30 @@ func (c *Client) CreateEvidenceFile(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/disputes/%v/evidence-files", disputeID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/evidence-files", disputeID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response *squaregosdk.CreateDisputeEvidenceFileResponse
-	requestBuffer := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(requestBuffer)
-	if imageFile != nil {
-		imageFileFilename := "imageFile_filename"
-		if named, ok := imageFile.(interface{ Name() string }); ok {
-			imageFileFilename = named.Name()
-		}
-		imageFilePart, err := writer.CreateFormFile("image_file", imageFileFilename)
-		if err != nil {
-			return nil, err
-		}
-		if _, err := io.Copy(imageFilePart, imageFile); err != nil {
+	writer := internal.NewMultipartWriter()
+	if request.ImageFile != nil {
+		if err := writer.WriteFile("image_file", request.ImageFile, internal.WithDefaultContentType("image/jpeg")); err != nil {
 			return nil, err
 		}
 	}
 	if request.Request != nil {
-		if err := core.WriteMultipartJSON(writer, "request", request.Request); err != nil {
+		if err := writer.WriteJSON("request", request.Request, internal.WithDefaultContentType("application/json; charset=utf-8")); err != nil {
 			return nil, err
 		}
 	}
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
-	headers.Set("Content-Type", writer.FormDataContentType())
+	headers.Set("Content-Type", writer.ContentType())
 
+	var response *squaregosdk.CreateDisputeEvidenceFileResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -245,7 +233,7 @@ func (c *Client) CreateEvidenceFile(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         requestBuffer,
+			Request:         writer.Buffer(),
 			Response:        &response,
 		},
 	); err != nil {
@@ -271,14 +259,15 @@ func (c *Client) CreateEvidenceText(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/disputes/%v/evidence-text", disputeID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/evidence-text", disputeID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateDisputeEvidenceTextResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -317,14 +306,14 @@ func (c *Client) SubmitEvidence(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/disputes/%v/submit-evidence", disputeID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/submit-evidence", disputeID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *squaregosdk.SubmitEvidenceResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,

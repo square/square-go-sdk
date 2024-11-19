@@ -20,6 +20,7 @@ import (
 	employees "github.com/square/square-go-sdk/employees"
 	events "github.com/square/square-go-sdk/events"
 	giftcardsclient "github.com/square/square-go-sdk/giftcards/client"
+	internal "github.com/square/square-go-sdk/internal"
 	inventory "github.com/square/square-go-sdk/inventory"
 	invoices "github.com/square/square-go-sdk/invoices"
 	laborclient "github.com/square/square-go-sdk/labor/client"
@@ -43,7 +44,6 @@ import (
 	teammembers "github.com/square/square-go-sdk/teammembers"
 	terminalclient "github.com/square/square-go-sdk/terminal/client"
 	v1client "github.com/square/square-go-sdk/v1/client"
-	v1locations "github.com/square/square-go-sdk/v1locations"
 	vendors "github.com/square/square-go-sdk/vendors"
 	webhooksclient "github.com/square/square-go-sdk/webhooks/client"
 	http "net/http"
@@ -52,12 +52,11 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 
 	Mobile                       *mobile.Client
 	OAuth                        *oauth.Client
-	V1Locations                  *v1locations.Client
 	ApplePay                     *applepay.Client
 	BankAccounts                 *bankaccounts.Client
 	Bookings                     *bookingsclient.Client
@@ -108,8 +107,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -117,7 +116,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 		header:                       options.ToHeader(),
 		Mobile:                       mobile.NewClient(opts...),
 		OAuth:                        oauth.NewClient(opts...),
-		V1Locations:                  v1locations.NewClient(opts...),
 		ApplePay:                     applepay.NewClient(opts...),
 		BankAccounts:                 bankaccounts.NewClient(opts...),
 		Bookings:                     bookingsclient.NewClient(opts...),

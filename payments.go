@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type CompletePaymentRequest struct {
 	// Used for optimistic concurrency. This opaque token identifies the current `Payment`
 	// version that the caller expects. If the server has a different version of the Payment,
@@ -205,6 +211,2261 @@ type PaymentsListRequest struct {
 	//
 	// Default: The current time.
 	OfflineEndTime *string `json:"-" url:"offline_end_time,omitempty"`
+}
+
+// ACH-specific details about `BANK_ACCOUNT` type payments with the `transfer_type` of `ACH`.
+type AchDetails struct {
+	// The routing number for the bank account.
+	RoutingNumber *string `json:"routing_number,omitempty" url:"routing_number,omitempty"`
+	// The last few digits of the bank account number.
+	AccountNumberSuffix *string `json:"account_number_suffix,omitempty" url:"account_number_suffix,omitempty"`
+	// The type of the bank account performing the transfer. The account type can be `CHECKING`,
+	// `SAVINGS`, or `UNKNOWN`.
+	AccountType *string `json:"account_type,omitempty" url:"account_type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AchDetails) GetRoutingNumber() *string {
+	if a == nil {
+		return nil
+	}
+	return a.RoutingNumber
+}
+
+func (a *AchDetails) GetAccountNumberSuffix() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AccountNumberSuffix
+}
+
+func (a *AchDetails) GetAccountType() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AccountType
+}
+
+func (a *AchDetails) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AchDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler AchDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AchDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AchDetails) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// Additional details about Afterpay payments.
+type AfterpayDetails struct {
+	// Email address on the buyer's Afterpay account.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AfterpayDetails) GetEmailAddress() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EmailAddress
+}
+
+func (a *AfterpayDetails) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AfterpayDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler AfterpayDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AfterpayDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AfterpayDetails) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// Details about the application that took the payment.
+type ApplicationDetails struct {
+	// The Square product, such as Square Point of Sale (POS),
+	// Square Invoices, or Square Virtual Terminal.
+	// See [ExternalSquareProduct](#type-externalsquareproduct) for possible values
+	SquareProduct *ApplicationDetailsExternalSquareProduct `json:"square_product,omitempty" url:"square_product,omitempty"`
+	// The Square ID assigned to the application used to take the payment.
+	// Application developers can use this information to identify payments that
+	// their application processed.
+	// For example, if a developer uses a custom application to process payments,
+	// this field contains the application ID from the Developer Dashboard.
+	// If a seller uses a [Square App Marketplace](https://developer.squareup.com/docs/app-marketplace)
+	// application to process payments, the field contains the corresponding application ID.
+	ApplicationID *string `json:"application_id,omitempty" url:"application_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ApplicationDetails) GetSquareProduct() *ApplicationDetailsExternalSquareProduct {
+	if a == nil {
+		return nil
+	}
+	return a.SquareProduct
+}
+
+func (a *ApplicationDetails) GetApplicationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ApplicationID
+}
+
+func (a *ApplicationDetails) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *ApplicationDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler ApplicationDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ApplicationDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ApplicationDetails) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// A list of products to return to external callers.
+type ApplicationDetailsExternalSquareProduct string
+
+const (
+	ApplicationDetailsExternalSquareProductAppointments    ApplicationDetailsExternalSquareProduct = "APPOINTMENTS"
+	ApplicationDetailsExternalSquareProductEcommerceAPI    ApplicationDetailsExternalSquareProduct = "ECOMMERCE_API"
+	ApplicationDetailsExternalSquareProductInvoices        ApplicationDetailsExternalSquareProduct = "INVOICES"
+	ApplicationDetailsExternalSquareProductOnlineStore     ApplicationDetailsExternalSquareProduct = "ONLINE_STORE"
+	ApplicationDetailsExternalSquareProductOther           ApplicationDetailsExternalSquareProduct = "OTHER"
+	ApplicationDetailsExternalSquareProductRestaurants     ApplicationDetailsExternalSquareProduct = "RESTAURANTS"
+	ApplicationDetailsExternalSquareProductRetail          ApplicationDetailsExternalSquareProduct = "RETAIL"
+	ApplicationDetailsExternalSquareProductSquarePos       ApplicationDetailsExternalSquareProduct = "SQUARE_POS"
+	ApplicationDetailsExternalSquareProductTerminalAPI     ApplicationDetailsExternalSquareProduct = "TERMINAL_API"
+	ApplicationDetailsExternalSquareProductVirtualTerminal ApplicationDetailsExternalSquareProduct = "VIRTUAL_TERMINAL"
+)
+
+func NewApplicationDetailsExternalSquareProductFromString(s string) (ApplicationDetailsExternalSquareProduct, error) {
+	switch s {
+	case "APPOINTMENTS":
+		return ApplicationDetailsExternalSquareProductAppointments, nil
+	case "ECOMMERCE_API":
+		return ApplicationDetailsExternalSquareProductEcommerceAPI, nil
+	case "INVOICES":
+		return ApplicationDetailsExternalSquareProductInvoices, nil
+	case "ONLINE_STORE":
+		return ApplicationDetailsExternalSquareProductOnlineStore, nil
+	case "OTHER":
+		return ApplicationDetailsExternalSquareProductOther, nil
+	case "RESTAURANTS":
+		return ApplicationDetailsExternalSquareProductRestaurants, nil
+	case "RETAIL":
+		return ApplicationDetailsExternalSquareProductRetail, nil
+	case "SQUARE_POS":
+		return ApplicationDetailsExternalSquareProductSquarePos, nil
+	case "TERMINAL_API":
+		return ApplicationDetailsExternalSquareProductTerminalAPI, nil
+	case "VIRTUAL_TERMINAL":
+		return ApplicationDetailsExternalSquareProductVirtualTerminal, nil
+	}
+	var t ApplicationDetailsExternalSquareProduct
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a ApplicationDetailsExternalSquareProduct) Ptr() *ApplicationDetailsExternalSquareProduct {
+	return &a
+}
+
+// Additional details about BANK_ACCOUNT type payments.
+type BankAccountPaymentDetails struct {
+	// The name of the bank associated with the bank account.
+	BankName *string `json:"bank_name,omitempty" url:"bank_name,omitempty"`
+	// The type of the bank transfer. The type can be `ACH` or `UNKNOWN`.
+	TransferType *string `json:"transfer_type,omitempty" url:"transfer_type,omitempty"`
+	// The ownership type of the bank account performing the transfer.
+	// The type can be `INDIVIDUAL`, `COMPANY`, or `ACCOUNT_TYPE_UNKNOWN`.
+	AccountOwnershipType *string `json:"account_ownership_type,omitempty" url:"account_ownership_type,omitempty"`
+	// Uniquely identifies the bank account for this seller and can be used
+	// to determine if payments are from the same bank account.
+	Fingerprint *string `json:"fingerprint,omitempty" url:"fingerprint,omitempty"`
+	// The two-letter ISO code representing the country the bank account is located in.
+	Country *string `json:"country,omitempty" url:"country,omitempty"`
+	// The statement description as sent to the bank.
+	StatementDescription *string `json:"statement_description,omitempty" url:"statement_description,omitempty"`
+	// ACH-specific information about the transfer. The information is only populated
+	// if the `transfer_type` is `ACH`.
+	AchDetails *AchDetails `json:"ach_details,omitempty" url:"ach_details,omitempty"`
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BankAccountPaymentDetails) GetBankName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BankName
+}
+
+func (b *BankAccountPaymentDetails) GetTransferType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.TransferType
+}
+
+func (b *BankAccountPaymentDetails) GetAccountOwnershipType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.AccountOwnershipType
+}
+
+func (b *BankAccountPaymentDetails) GetFingerprint() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Fingerprint
+}
+
+func (b *BankAccountPaymentDetails) GetCountry() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Country
+}
+
+func (b *BankAccountPaymentDetails) GetStatementDescription() *string {
+	if b == nil {
+		return nil
+	}
+	return b.StatementDescription
+}
+
+func (b *BankAccountPaymentDetails) GetAchDetails() *AchDetails {
+	if b == nil {
+		return nil
+	}
+	return b.AchDetails
+}
+
+func (b *BankAccountPaymentDetails) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BankAccountPaymentDetails) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountPaymentDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountPaymentDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountPaymentDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountPaymentDetails) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Additional details about a Buy Now Pay Later payment type.
+type BuyNowPayLaterDetails struct {
+	// The brand used for the Buy Now Pay Later payment.
+	// The brand can be `AFTERPAY`, `CLEARPAY` or `UNKNOWN`.
+	Brand *string `json:"brand,omitempty" url:"brand,omitempty"`
+	// Details about an Afterpay payment. These details are only populated if the `brand` is
+	// `AFTERPAY`.
+	AfterpayDetails *AfterpayDetails `json:"afterpay_details,omitempty" url:"afterpay_details,omitempty"`
+	// Details about a Clearpay payment. These details are only populated if the `brand` is
+	// `CLEARPAY`.
+	ClearpayDetails *ClearpayDetails `json:"clearpay_details,omitempty" url:"clearpay_details,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BuyNowPayLaterDetails) GetBrand() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Brand
+}
+
+func (b *BuyNowPayLaterDetails) GetAfterpayDetails() *AfterpayDetails {
+	if b == nil {
+		return nil
+	}
+	return b.AfterpayDetails
+}
+
+func (b *BuyNowPayLaterDetails) GetClearpayDetails() *ClearpayDetails {
+	if b == nil {
+		return nil
+	}
+	return b.ClearpayDetails
+}
+
+func (b *BuyNowPayLaterDetails) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BuyNowPayLaterDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler BuyNowPayLaterDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BuyNowPayLaterDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BuyNowPayLaterDetails) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the response returned by [CancelPayment](api-endpoint:Payments-CancelPayment).
+type CancelPaymentResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully canceled `Payment` object.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CancelPaymentResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CancelPaymentResponse) GetPayment() *Payment {
+	if c == nil {
+		return nil
+	}
+	return c.Payment
+}
+
+func (c *CancelPaymentResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CancelPaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelPaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CancelPaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CancelPaymentResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Reflects the current status of a card payment. Contains only non-confidential information.
+type CardPaymentDetails struct {
+	// The card payment's current state. The state can be AUTHORIZED, CAPTURED, VOIDED, or
+	// FAILED.
+	Status *string `json:"status,omitempty" url:"status,omitempty"`
+	// The credit card's non-confidential details.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+	// The method used to enter the card's details for the payment. The method can be
+	// `KEYED`, `SWIPED`, `EMV`, `ON_FILE`, or `CONTACTLESS`.
+	EntryMethod *string `json:"entry_method,omitempty" url:"entry_method,omitempty"`
+	// The status code returned from the Card Verification Value (CVV) check. The code can be
+	// `CVV_ACCEPTED`, `CVV_REJECTED`, or `CVV_NOT_CHECKED`.
+	CvvStatus *string `json:"cvv_status,omitempty" url:"cvv_status,omitempty"`
+	// The status code returned from the Address Verification System (AVS) check. The code can be
+	// `AVS_ACCEPTED`, `AVS_REJECTED`, or `AVS_NOT_CHECKED`.
+	AvsStatus *string `json:"avs_status,omitempty" url:"avs_status,omitempty"`
+	// The status code returned by the card issuer that describes the payment's
+	// authorization status.
+	AuthResultCode *string `json:"auth_result_code,omitempty" url:"auth_result_code,omitempty"`
+	// For EMV payments, the application ID identifies the EMV application used for the payment.
+	ApplicationIdentifier *string `json:"application_identifier,omitempty" url:"application_identifier,omitempty"`
+	// For EMV payments, the human-readable name of the EMV application used for the payment.
+	ApplicationName *string `json:"application_name,omitempty" url:"application_name,omitempty"`
+	// For EMV payments, the cryptogram generated for the payment.
+	ApplicationCryptogram *string `json:"application_cryptogram,omitempty" url:"application_cryptogram,omitempty"`
+	// For EMV payments, the method used to verify the cardholder's identity. The method can be
+	// `PIN`, `SIGNATURE`, `PIN_AND_SIGNATURE`, `ON_DEVICE`, or `NONE`.
+	VerificationMethod *string `json:"verification_method,omitempty" url:"verification_method,omitempty"`
+	// For EMV payments, the results of the cardholder verification. The result can be
+	// `SUCCESS`, `FAILURE`, or `UNKNOWN`.
+	VerificationResults *string `json:"verification_results,omitempty" url:"verification_results,omitempty"`
+	// The statement description sent to the card networks.
+	//
+	// Note: The actual statement description varies and is likely to be truncated and appended with
+	// additional information on a per issuer basis.
+	StatementDescription *string `json:"statement_description,omitempty" url:"statement_description,omitempty"`
+	// **Deprecated**: Use `Payment.device_details` instead.
+	//
+	// Details about the device that took the payment.
+	DeviceDetails *DeviceDetails `json:"device_details,omitempty" url:"device_details,omitempty"`
+	// The timeline for card payments.
+	CardPaymentTimeline *CardPaymentTimeline `json:"card_payment_timeline,omitempty" url:"card_payment_timeline,omitempty"`
+	// Whether the card must be physically present for the payment to
+	// be refunded. If set to `true`, the card must be present.
+	RefundRequiresCardPresence *bool `json:"refund_requires_card_presence,omitempty" url:"refund_requires_card_presence,omitempty"`
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardPaymentDetails) GetStatus() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Status
+}
+
+func (c *CardPaymentDetails) GetCard() *Card {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardPaymentDetails) GetEntryMethod() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EntryMethod
+}
+
+func (c *CardPaymentDetails) GetCvvStatus() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CvvStatus
+}
+
+func (c *CardPaymentDetails) GetAvsStatus() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AvsStatus
+}
+
+func (c *CardPaymentDetails) GetAuthResultCode() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AuthResultCode
+}
+
+func (c *CardPaymentDetails) GetApplicationIdentifier() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ApplicationIdentifier
+}
+
+func (c *CardPaymentDetails) GetApplicationName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ApplicationName
+}
+
+func (c *CardPaymentDetails) GetApplicationCryptogram() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ApplicationCryptogram
+}
+
+func (c *CardPaymentDetails) GetVerificationMethod() *string {
+	if c == nil {
+		return nil
+	}
+	return c.VerificationMethod
+}
+
+func (c *CardPaymentDetails) GetVerificationResults() *string {
+	if c == nil {
+		return nil
+	}
+	return c.VerificationResults
+}
+
+func (c *CardPaymentDetails) GetStatementDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.StatementDescription
+}
+
+func (c *CardPaymentDetails) GetDeviceDetails() *DeviceDetails {
+	if c == nil {
+		return nil
+	}
+	return c.DeviceDetails
+}
+
+func (c *CardPaymentDetails) GetCardPaymentTimeline() *CardPaymentTimeline {
+	if c == nil {
+		return nil
+	}
+	return c.CardPaymentTimeline
+}
+
+func (c *CardPaymentDetails) GetRefundRequiresCardPresence() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.RefundRequiresCardPresence
+}
+
+func (c *CardPaymentDetails) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CardPaymentDetails) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardPaymentDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardPaymentDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardPaymentDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardPaymentDetails) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The timeline for card payments.
+type CardPaymentTimeline struct {
+	// The timestamp when the payment was authorized, in RFC 3339 format.
+	AuthorizedAt *string `json:"authorized_at,omitempty" url:"authorized_at,omitempty"`
+	// The timestamp when the payment was captured, in RFC 3339 format.
+	CapturedAt *string `json:"captured_at,omitempty" url:"captured_at,omitempty"`
+	// The timestamp when the payment was voided, in RFC 3339 format.
+	VoidedAt *string `json:"voided_at,omitempty" url:"voided_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CardPaymentTimeline) GetAuthorizedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AuthorizedAt
+}
+
+func (c *CardPaymentTimeline) GetCapturedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CapturedAt
+}
+
+func (c *CardPaymentTimeline) GetVoidedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.VoidedAt
+}
+
+func (c *CardPaymentTimeline) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardPaymentTimeline) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardPaymentTimeline
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardPaymentTimeline(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardPaymentTimeline) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Additional details about `WALLET` type payments with the `brand` of `CASH_APP`.
+type CashAppDetails struct {
+	// The name of the Cash App account holder.
+	BuyerFullName *string `json:"buyer_full_name,omitempty" url:"buyer_full_name,omitempty"`
+	// The country of the Cash App account holder, in ISO 3166-1-alpha-2 format.
+	//
+	// For possible values, see [Country](entity:Country).
+	BuyerCountryCode *string `json:"buyer_country_code,omitempty" url:"buyer_country_code,omitempty"`
+	// $Cashtag of the Cash App account holder.
+	BuyerCashtag *string `json:"buyer_cashtag,omitempty" url:"buyer_cashtag,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CashAppDetails) GetBuyerFullName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BuyerFullName
+}
+
+func (c *CashAppDetails) GetBuyerCountryCode() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BuyerCountryCode
+}
+
+func (c *CashAppDetails) GetBuyerCashtag() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BuyerCashtag
+}
+
+func (c *CashAppDetails) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CashAppDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler CashAppDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CashAppDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CashAppDetails) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Stores details about a cash payment. Contains only non-confidential information. For more information, see
+// [Take Cash Payments](https://developer.squareup.com/docs/payments-api/take-payments/cash-payments).
+type CashPaymentDetails struct {
+	// The amount and currency of the money supplied by the buyer.
+	BuyerSuppliedMoney *Money `json:"buyer_supplied_money,omitempty" url:"buyer_supplied_money,omitempty"`
+	// The amount of change due back to the buyer.
+	// This read-only field is calculated
+	// from the `amount_money` and `buyer_supplied_money` fields.
+	ChangeBackMoney *Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CashPaymentDetails) GetBuyerSuppliedMoney() *Money {
+	if c == nil {
+		return nil
+	}
+	return c.BuyerSuppliedMoney
+}
+
+func (c *CashPaymentDetails) GetChangeBackMoney() *Money {
+	if c == nil {
+		return nil
+	}
+	return c.ChangeBackMoney
+}
+
+func (c *CashPaymentDetails) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CashPaymentDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler CashPaymentDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CashPaymentDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CashPaymentDetails) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Additional details about Clearpay payments.
+type ClearpayDetails struct {
+	// Email address on the buyer's Clearpay account.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ClearpayDetails) GetEmailAddress() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EmailAddress
+}
+
+func (c *ClearpayDetails) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ClearpayDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler ClearpayDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ClearpayDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ClearpayDetails) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Defines the response returned by[CompletePayment](api-endpoint:Payments-CompletePayment).
+type CompletePaymentResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully completed payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CompletePaymentResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CompletePaymentResponse) GetPayment() *Payment {
+	if c == nil {
+		return nil
+	}
+	return c.Payment
+}
+
+func (c *CompletePaymentResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CompletePaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CompletePaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CompletePaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CompletePaymentResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Defines the response returned by [CreatePayment](api-endpoint:Payments-CreatePayment).
+//
+// If there are errors processing the request, the `payment` field might not be
+// present, or it might be present with a status of `FAILED`.
+type CreatePaymentResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The newly created payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreatePaymentResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreatePaymentResponse) GetPayment() *Payment {
+	if c == nil {
+		return nil
+	}
+	return c.Payment
+}
+
+func (c *CreatePaymentResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreatePaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreatePaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreatePaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreatePaymentResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Details about the customer making the payment.
+type CustomerDetails struct {
+	// Indicates whether the customer initiated the payment.
+	CustomerInitiated *bool `json:"customer_initiated,omitempty" url:"customer_initiated,omitempty"`
+	// Indicates that the seller keyed in payment details on behalf of the customer.
+	// This is used to flag a payment as Mail Order / Telephone Order (MOTO).
+	SellerKeyedIn *bool `json:"seller_keyed_in,omitempty" url:"seller_keyed_in,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerDetails) GetCustomerInitiated() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.CustomerInitiated
+}
+
+func (c *CustomerDetails) GetSellerKeyedIn() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.SellerKeyedIn
+}
+
+func (c *CustomerDetails) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDetails) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Details about the device that took the payment.
+type DeviceDetails struct {
+	// The Square-issued ID of the device.
+	DeviceID *string `json:"device_id,omitempty" url:"device_id,omitempty"`
+	// The Square-issued installation ID for the device.
+	DeviceInstallationID *string `json:"device_installation_id,omitempty" url:"device_installation_id,omitempty"`
+	// The name of the device set by the seller.
+	DeviceName *string `json:"device_name,omitempty" url:"device_name,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeviceDetails) GetDeviceID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DeviceID
+}
+
+func (d *DeviceDetails) GetDeviceInstallationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DeviceInstallationID
+}
+
+func (d *DeviceDetails) GetDeviceName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DeviceName
+}
+
+func (d *DeviceDetails) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceDetails) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Additional details about `WALLET` type payments. Contains only non-confidential information.
+type DigitalWalletDetails struct {
+	// The status of the `WALLET` payment. The status can be `AUTHORIZED`, `CAPTURED`, `VOIDED`, or
+	// `FAILED`.
+	Status *string `json:"status,omitempty" url:"status,omitempty"`
+	// The brand used for the `WALLET` payment. The brand can be `CASH_APP`, `PAYPAY`, `ALIPAY`,
+	// `RAKUTEN_PAY`, `AU_PAY`, `D_BARAI`, `MERPAY`, `WECHAT_PAY` or `UNKNOWN`.
+	Brand *string `json:"brand,omitempty" url:"brand,omitempty"`
+	// Brand-specific details for payments with the `brand` of `CASH_APP`.
+	CashAppDetails *CashAppDetails `json:"cash_app_details,omitempty" url:"cash_app_details,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DigitalWalletDetails) GetStatus() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Status
+}
+
+func (d *DigitalWalletDetails) GetBrand() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Brand
+}
+
+func (d *DigitalWalletDetails) GetCashAppDetails() *CashAppDetails {
+	if d == nil {
+		return nil
+	}
+	return d.CashAppDetails
+}
+
+func (d *DigitalWalletDetails) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DigitalWalletDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler DigitalWalletDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DigitalWalletDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DigitalWalletDetails) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Stores details about an external payment. Contains only non-confidential information.
+// For more information, see
+// [Take External Payments](https://developer.squareup.com/docs/payments-api/take-payments/external-payments).
+type ExternalPaymentDetails struct {
+	// The type of external payment the seller received. It can be one of the following:
+	//
+	// - CHECK - Paid using a physical check.
+	// - BANK_TRANSFER - Paid using external bank transfer.
+	// - OTHER_GIFT_CARD - Paid using a non-Square gift card.
+	// - CRYPTO - Paid using a crypto currency.
+	// - SQUARE_CASH - Paid using Square Cash App.
+	// - SOCIAL - Paid using peer-to-peer payment applications.
+	// - EXTERNAL - A third-party application gathered this payment outside of Square.
+	// - EMONEY - Paid using an E-money provider.
+	// - CARD - A credit or debit card that Square does not support.
+	// - STORED_BALANCE - Use for house accounts, store credit, and so forth.
+	// - FOOD_VOUCHER - Restaurant voucher provided by employers to employees to pay for meals
+	// - OTHER - A type not listed here.
+	Type string `json:"type" url:"type"`
+	// A description of the external payment source. For example,
+	// "Food Delivery Service".
+	Source string `json:"source" url:"source"`
+	// An ID to associate the payment to its originating source.
+	SourceID *string `json:"source_id,omitempty" url:"source_id,omitempty"`
+	// The fees paid to the source. The `amount_money` minus this field is
+	// the net amount seller receives.
+	SourceFeeMoney *Money `json:"source_fee_money,omitempty" url:"source_fee_money,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalPaymentDetails) GetType() string {
+	if e == nil {
+		return ""
+	}
+	return e.Type
+}
+
+func (e *ExternalPaymentDetails) GetSource() string {
+	if e == nil {
+		return ""
+	}
+	return e.Source
+}
+
+func (e *ExternalPaymentDetails) GetSourceID() *string {
+	if e == nil {
+		return nil
+	}
+	return e.SourceID
+}
+
+func (e *ExternalPaymentDetails) GetSourceFeeMoney() *Money {
+	if e == nil {
+		return nil
+	}
+	return e.SourceFeeMoney
+}
+
+func (e *ExternalPaymentDetails) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExternalPaymentDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExternalPaymentDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExternalPaymentDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExternalPaymentDetails) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// Defines the response returned by [GetPayment](api-endpoint:Payments-GetPayment).
+type GetPaymentResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested `Payment`.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetPaymentResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetPaymentResponse) GetPayment() *Payment {
+	if g == nil {
+		return nil
+	}
+	return g.Payment
+}
+
+func (g *GetPaymentResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetPaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetPaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetPaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetPaymentResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Defines the response returned by [ListPayments](api-endpoint:Payments-ListPayments).
+type ListPaymentsResponse struct {
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested list of payments.
+	Payments []*Payment `json:"payments,omitempty" url:"payments,omitempty"`
+	// The pagination cursor to be used in a subsequent request. If empty,
+	// this is the final response.
+	//
+	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListPaymentsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListPaymentsResponse) GetPayments() []*Payment {
+	if l == nil {
+		return nil
+	}
+	return l.Payments
+}
+
+func (l *ListPaymentsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListPaymentsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListPaymentsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListPaymentsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListPaymentsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListPaymentsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Details specific to offline payments.
+type OfflinePaymentDetails struct {
+	// The client-side timestamp of when the offline payment was created, in RFC 3339 format.
+	ClientCreatedAt *string `json:"client_created_at,omitempty" url:"client_created_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OfflinePaymentDetails) GetClientCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ClientCreatedAt
+}
+
+func (o *OfflinePaymentDetails) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OfflinePaymentDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler OfflinePaymentDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OfflinePaymentDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OfflinePaymentDetails) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Represents a payment processed by the Square API.
+type Payment struct {
+	// A unique ID for the payment.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The timestamp of when the payment was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp of when the payment was last updated, in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// The amount processed for this payment, not including `tip_money`.
+	//
+	// The amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
+	// The amount designated as a tip.
+	//
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	TipMoney *Money `json:"tip_money,omitempty" url:"tip_money,omitempty"`
+	// The total amount for the payment, including `amount_money` and `tip_money`.
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	TotalMoney *Money `json:"total_money,omitempty" url:"total_money,omitempty"`
+	// The amount the developer is taking as a fee for facilitating the payment on behalf
+	// of the seller. This amount is specified in the smallest denomination of the applicable currency
+	// (for example, US dollar amounts are specified in cents). For more information,
+	// see [Take Payments and Collect Fees](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees).
+	//
+	// The amount cannot be more than 90% of the `total_money` value.
+	//
+	// To set this field, `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required.
+	// For more information, see [Permissions](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees#permissions).
+	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"app_fee_money,omitempty"`
+	// The amount of money approved for this payment. This value may change if Square chooses to
+	// obtain reauthorization as part of a call to [UpdatePayment](api-endpoint:Payments-UpdatePayment).
+	ApprovedMoney *Money `json:"approved_money,omitempty" url:"approved_money,omitempty"`
+	// The processing fees and fee adjustments assessed by Square for this payment.
+	ProcessingFee []*ProcessingFee `json:"processing_fee,omitempty" url:"processing_fee,omitempty"`
+	// The total amount of the payment refunded to date.
+	//
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents).
+	RefundedMoney *Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
+	// Indicates whether the payment is APPROVED, PENDING, COMPLETED, CANCELED, or FAILED.
+	Status *string `json:"status,omitempty" url:"status,omitempty"`
+	// The duration of time after the payment's creation when Square automatically applies the
+	// `delay_action` to the payment. This automatic `delay_action` applies only to payments that
+	// do not reach a terminal state (COMPLETED, CANCELED, or FAILED) before the `delay_duration`
+	// time period.
+	//
+	// This field is specified as a time duration, in RFC 3339 format.
+	//
+	// Notes:
+	// This feature is only supported for card payments.
+	//
+	// Default:
+	//
+	// - Card-present payments: "PT36H" (36 hours) from the creation time.
+	// - Card-not-present payments: "P7D" (7 days) from the creation time.
+	DelayDuration *string `json:"delay_duration,omitempty" url:"delay_duration,omitempty"`
+	// The action to be applied to the payment when the `delay_duration` has elapsed.
+	//
+	// Current values include `CANCEL` and `COMPLETE`.
+	DelayAction *string `json:"delay_action,omitempty" url:"delay_action,omitempty"`
+	// The read-only timestamp of when the `delay_action` is automatically applied,
+	// in RFC 3339 format.
+	//
+	// Note that this field is calculated by summing the payment's `delay_duration` and `created_at`
+	// fields. The `created_at` field is generated by Square and might not exactly match the
+	// time on your local machine.
+	DelayedUntil *string `json:"delayed_until,omitempty" url:"delayed_until,omitempty"`
+	// The source type for this payment.
+	//
+	// Current values include `CARD`, `BANK_ACCOUNT`, `WALLET`, `BUY_NOW_PAY_LATER`, `SQUARE_ACCOUNT`,
+	// `CASH` and `EXTERNAL`. For information about these payment source types,
+	// see [Take Payments](https://developer.squareup.com/docs/payments-api/take-payments).
+	SourceType *string `json:"source_type,omitempty" url:"source_type,omitempty"`
+	// Details about a card payment. These details are only populated if the source_type is `CARD`.
+	CardDetails *CardPaymentDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
+	// Details about a cash payment. These details are only populated if the source_type is `CASH`.
+	CashDetails *CashPaymentDetails `json:"cash_details,omitempty" url:"cash_details,omitempty"`
+	// Details about a bank account payment. These details are only populated if the source_type is `BANK_ACCOUNT`.
+	BankAccountDetails *BankAccountPaymentDetails `json:"bank_account_details,omitempty" url:"bank_account_details,omitempty"`
+	// Details about an external payment. The details are only populated
+	// if the `source_type` is `EXTERNAL`.
+	ExternalDetails *ExternalPaymentDetails `json:"external_details,omitempty" url:"external_details,omitempty"`
+	// Details about an wallet payment. The details are only populated
+	// if the `source_type` is `WALLET`.
+	WalletDetails *DigitalWalletDetails `json:"wallet_details,omitempty" url:"wallet_details,omitempty"`
+	// Details about a Buy Now Pay Later payment. The details are only populated
+	// if the `source_type` is `BUY_NOW_PAY_LATER`. For more information, see
+	// [Afterpay Payments](https://developer.squareup.com/docs/payments-api/take-payments/afterpay-payments).
+	BuyNowPayLaterDetails *BuyNowPayLaterDetails `json:"buy_now_pay_later_details,omitempty" url:"buy_now_pay_later_details,omitempty"`
+	// Details about a Square Account payment. The details are only populated
+	// if the `source_type` is `SQUARE_ACCOUNT`.
+	SquareAccountDetails *SquareAccountDetails `json:"square_account_details,omitempty" url:"square_account_details,omitempty"`
+	// The ID of the location associated with the payment.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The ID of the order associated with the payment.
+	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
+	// An optional ID that associates the payment with an entity in
+	// another system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// The ID of the customer associated with the payment. If the ID is
+	// not provided in the `CreatePayment` request that was used to create the `Payment`,
+	// Square may use information in the request
+	// (such as the billing and shipping address, email address, and payment source)
+	// to identify a matching customer profile in the Customer Directory.
+	// If found, the profile ID is used. If a profile is not found, the
+	// API attempts to create an
+	// [instant profile](https://developer.squareup.com/docs/customers-api/what-it-does#instant-profiles).
+	// If the API cannot create an
+	// instant profile (either because the seller has disabled it or the
+	// seller's region prevents creating it), this field remains unset. Note that
+	// this process is asynchronous and it may take some time before a
+	// customer ID is added to the payment.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+	// **Deprecated**: Use `Payment.team_member_id` instead.
+	//
+	// An optional ID of the employee associated with taking the payment.
+	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
+	// An optional ID of the [TeamMember](entity:TeamMember) associated with taking the payment.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+	// A list of `refund_id`s identifying refunds for the payment.
+	RefundIDs []string `json:"refund_ids,omitempty" url:"refund_ids,omitempty"`
+	// Provides information about the risk associated with the payment, as determined by Square.
+	// This field is present for payments to sellers that have opted in to receive risk
+	// evaluations.
+	RiskEvaluation *RiskEvaluation `json:"risk_evaluation,omitempty" url:"risk_evaluation,omitempty"`
+	// An optional ID for a Terminal checkout that is associated with the payment.
+	TerminalCheckoutID *string `json:"terminal_checkout_id,omitempty" url:"terminal_checkout_id,omitempty"`
+	// The buyer's email address.
+	BuyerEmailAddress *string `json:"buyer_email_address,omitempty" url:"buyer_email_address,omitempty"`
+	// The buyer's billing address.
+	BillingAddress *Address `json:"billing_address,omitempty" url:"billing_address,omitempty"`
+	// The buyer's shipping address.
+	ShippingAddress *Address `json:"shipping_address,omitempty" url:"shipping_address,omitempty"`
+	// An optional note to include when creating a payment.
+	Note *string `json:"note,omitempty" url:"note,omitempty"`
+	// Additional payment information that gets added to the customer's card statement
+	// as part of the statement description.
+	//
+	// Note that the `statement_description_identifier` might get truncated on the statement description
+	// to fit the required information including the Square identifier (SQ \*) and the name of the
+	// seller taking the payment.
+	StatementDescriptionIdentifier *string `json:"statement_description_identifier,omitempty" url:"statement_description_identifier,omitempty"`
+	// Actions that can be performed on this payment:
+	//
+	// - `EDIT_AMOUNT_UP` - The payment amount can be edited up.
+	// - `EDIT_AMOUNT_DOWN` - The payment amount can be edited down.
+	// - `EDIT_TIP_AMOUNT_UP` - The tip amount can be edited up.
+	// - `EDIT_TIP_AMOUNT_DOWN` - The tip amount can be edited down.
+	// - `EDIT_DELAY_ACTION` - The delay_action can be edited.
+	Capabilities []string `json:"capabilities,omitempty" url:"capabilities,omitempty"`
+	// The payment's receipt number.
+	// The field is missing if a payment is canceled.
+	ReceiptNumber *string `json:"receipt_number,omitempty" url:"receipt_number,omitempty"`
+	// The URL for the payment's receipt.
+	// The field is only populated for COMPLETED payments.
+	ReceiptURL *string `json:"receipt_url,omitempty" url:"receipt_url,omitempty"`
+	// Details about the device that took the payment.
+	DeviceDetails *DeviceDetails `json:"device_details,omitempty" url:"device_details,omitempty"`
+	// Details about the application that took the payment.
+	ApplicationDetails *ApplicationDetails `json:"application_details,omitempty" url:"application_details,omitempty"`
+	// Whether or not this payment was taken offline.
+	IsOfflinePayment *bool `json:"is_offline_payment,omitempty" url:"is_offline_payment,omitempty"`
+	// Additional information about the payment if it was taken offline.
+	OfflinePaymentDetails *OfflinePaymentDetails `json:"offline_payment_details,omitempty" url:"offline_payment_details,omitempty"`
+	// Used for optimistic concurrency. This opaque token identifies a specific version of the
+	// `Payment` object.
+	VersionToken *string `json:"version_token,omitempty" url:"version_token,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *Payment) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *Payment) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *Payment) GetUpdatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UpdatedAt
+}
+
+func (p *Payment) GetAmountMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.AmountMoney
+}
+
+func (p *Payment) GetTipMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.TipMoney
+}
+
+func (p *Payment) GetTotalMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.TotalMoney
+}
+
+func (p *Payment) GetAppFeeMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.AppFeeMoney
+}
+
+func (p *Payment) GetApprovedMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.ApprovedMoney
+}
+
+func (p *Payment) GetProcessingFee() []*ProcessingFee {
+	if p == nil {
+		return nil
+	}
+	return p.ProcessingFee
+}
+
+func (p *Payment) GetRefundedMoney() *Money {
+	if p == nil {
+		return nil
+	}
+	return p.RefundedMoney
+}
+
+func (p *Payment) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *Payment) GetDelayDuration() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DelayDuration
+}
+
+func (p *Payment) GetDelayAction() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DelayAction
+}
+
+func (p *Payment) GetDelayedUntil() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DelayedUntil
+}
+
+func (p *Payment) GetSourceType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.SourceType
+}
+
+func (p *Payment) GetCardDetails() *CardPaymentDetails {
+	if p == nil {
+		return nil
+	}
+	return p.CardDetails
+}
+
+func (p *Payment) GetCashDetails() *CashPaymentDetails {
+	if p == nil {
+		return nil
+	}
+	return p.CashDetails
+}
+
+func (p *Payment) GetBankAccountDetails() *BankAccountPaymentDetails {
+	if p == nil {
+		return nil
+	}
+	return p.BankAccountDetails
+}
+
+func (p *Payment) GetExternalDetails() *ExternalPaymentDetails {
+	if p == nil {
+		return nil
+	}
+	return p.ExternalDetails
+}
+
+func (p *Payment) GetWalletDetails() *DigitalWalletDetails {
+	if p == nil {
+		return nil
+	}
+	return p.WalletDetails
+}
+
+func (p *Payment) GetBuyNowPayLaterDetails() *BuyNowPayLaterDetails {
+	if p == nil {
+		return nil
+	}
+	return p.BuyNowPayLaterDetails
+}
+
+func (p *Payment) GetSquareAccountDetails() *SquareAccountDetails {
+	if p == nil {
+		return nil
+	}
+	return p.SquareAccountDetails
+}
+
+func (p *Payment) GetLocationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LocationID
+}
+
+func (p *Payment) GetOrderID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OrderID
+}
+
+func (p *Payment) GetReferenceID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ReferenceID
+}
+
+func (p *Payment) GetCustomerID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CustomerID
+}
+
+func (p *Payment) GetEmployeeID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EmployeeID
+}
+
+func (p *Payment) GetTeamMemberID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TeamMemberID
+}
+
+func (p *Payment) GetRefundIDs() []string {
+	if p == nil {
+		return nil
+	}
+	return p.RefundIDs
+}
+
+func (p *Payment) GetRiskEvaluation() *RiskEvaluation {
+	if p == nil {
+		return nil
+	}
+	return p.RiskEvaluation
+}
+
+func (p *Payment) GetTerminalCheckoutID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TerminalCheckoutID
+}
+
+func (p *Payment) GetBuyerEmailAddress() *string {
+	if p == nil {
+		return nil
+	}
+	return p.BuyerEmailAddress
+}
+
+func (p *Payment) GetBillingAddress() *Address {
+	if p == nil {
+		return nil
+	}
+	return p.BillingAddress
+}
+
+func (p *Payment) GetShippingAddress() *Address {
+	if p == nil {
+		return nil
+	}
+	return p.ShippingAddress
+}
+
+func (p *Payment) GetNote() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Note
+}
+
+func (p *Payment) GetStatementDescriptionIdentifier() *string {
+	if p == nil {
+		return nil
+	}
+	return p.StatementDescriptionIdentifier
+}
+
+func (p *Payment) GetCapabilities() []string {
+	if p == nil {
+		return nil
+	}
+	return p.Capabilities
+}
+
+func (p *Payment) GetReceiptNumber() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ReceiptNumber
+}
+
+func (p *Payment) GetReceiptURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ReceiptURL
+}
+
+func (p *Payment) GetDeviceDetails() *DeviceDetails {
+	if p == nil {
+		return nil
+	}
+	return p.DeviceDetails
+}
+
+func (p *Payment) GetApplicationDetails() *ApplicationDetails {
+	if p == nil {
+		return nil
+	}
+	return p.ApplicationDetails
+}
+
+func (p *Payment) GetIsOfflinePayment() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.IsOfflinePayment
+}
+
+func (p *Payment) GetOfflinePaymentDetails() *OfflinePaymentDetails {
+	if p == nil {
+		return nil
+	}
+	return p.OfflinePaymentDetails
+}
+
+func (p *Payment) GetVersionToken() *string {
+	if p == nil {
+		return nil
+	}
+	return p.VersionToken
+}
+
+func (p *Payment) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *Payment) UnmarshalJSON(data []byte) error {
+	type unmarshaler Payment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = Payment(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *Payment) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Represents fraud risk information for the associated payment.
+//
+// When you take a payment through Square's Payments API (using the `CreatePayment`
+// endpoint), Square evaluates it and assigns a risk level to the payment. Sellers
+// can use this information to determine the course of action (for example,
+// provide the goods/services or refund the payment).
+type RiskEvaluation struct {
+	// The timestamp when payment risk was evaluated, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The risk level associated with the payment
+	// See [RiskEvaluationRiskLevel](#type-riskevaluationrisklevel) for possible values
+	RiskLevel *RiskEvaluationRiskLevel `json:"risk_level,omitempty" url:"risk_level,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RiskEvaluation) GetCreatedAt() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CreatedAt
+}
+
+func (r *RiskEvaluation) GetRiskLevel() *RiskEvaluationRiskLevel {
+	if r == nil {
+		return nil
+	}
+	return r.RiskLevel
+}
+
+func (r *RiskEvaluation) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RiskEvaluation) UnmarshalJSON(data []byte) error {
+	type unmarshaler RiskEvaluation
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RiskEvaluation(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RiskEvaluation) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RiskEvaluationRiskLevel string
+
+const (
+	RiskEvaluationRiskLevelDoNotUse RiskEvaluationRiskLevel = "DO_NOT_USE"
+	RiskEvaluationRiskLevelPending  RiskEvaluationRiskLevel = "PENDING"
+	RiskEvaluationRiskLevelNormal   RiskEvaluationRiskLevel = "NORMAL"
+	RiskEvaluationRiskLevelModerate RiskEvaluationRiskLevel = "MODERATE"
+	RiskEvaluationRiskLevelHigh     RiskEvaluationRiskLevel = "HIGH"
+)
+
+func NewRiskEvaluationRiskLevelFromString(s string) (RiskEvaluationRiskLevel, error) {
+	switch s {
+	case "DO_NOT_USE":
+		return RiskEvaluationRiskLevelDoNotUse, nil
+	case "PENDING":
+		return RiskEvaluationRiskLevelPending, nil
+	case "NORMAL":
+		return RiskEvaluationRiskLevelNormal, nil
+	case "MODERATE":
+		return RiskEvaluationRiskLevelModerate, nil
+	case "HIGH":
+		return RiskEvaluationRiskLevelHigh, nil
+	}
+	var t RiskEvaluationRiskLevel
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (r RiskEvaluationRiskLevel) Ptr() *RiskEvaluationRiskLevel {
+	return &r
+}
+
+// Additional details about Square Account payments.
+type SquareAccountDetails struct {
+	// Unique identifier for the payment source used for this payment.
+	PaymentSourceToken *string `json:"payment_source_token,omitempty" url:"payment_source_token,omitempty"`
+	// Information about errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SquareAccountDetails) GetPaymentSourceToken() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PaymentSourceToken
+}
+
+func (s *SquareAccountDetails) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SquareAccountDetails) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SquareAccountDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler SquareAccountDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SquareAccountDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SquareAccountDetails) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Defines the response returned by
+// [UpdatePayment](api-endpoint:Payments-UpdatePayment).
+type UpdatePaymentResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The updated payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdatePaymentResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdatePaymentResponse) GetPayment() *Payment {
+	if u == nil {
+		return nil
+	}
+	return u.Payment
+}
+
+func (u *UpdatePaymentResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdatePaymentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdatePaymentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdatePaymentResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdatePaymentResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }
 
 type UpdatePaymentRequest struct {

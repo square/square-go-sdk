@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type LinkCustomerToGiftCardRequest struct {
 	// The ID of the customer to link to the gift card.
 	CustomerID string `json:"customer_id" url:"-"`
@@ -69,4 +75,649 @@ type GiftCardsListRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 	// If a customer ID is provided, the endpoint returns only the gift cards linked to the specified customer.
 	CustomerID *string `json:"-" url:"customer_id,omitempty"`
+}
+
+// A response that contains a `GiftCard`. The response might contain a set of `Error` objects if the request
+// resulted in errors.
+type CreateGiftCardResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The new gift card.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateGiftCardResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateGiftCardResponse) GetGiftCard() *GiftCard {
+	if c == nil {
+		return nil
+	}
+	return c.GiftCard
+}
+
+func (c *CreateGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateGiftCardResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateGiftCardResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateGiftCardResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateGiftCardResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A response that contains a `GiftCard`. This response might contain a set of `Error` objects
+// if the request resulted in errors.
+type GetGiftCardFromGanResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// A gift card that was fetched, if present. It returns empty if an error occurred.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetGiftCardFromGanResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetGiftCardFromGanResponse) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GetGiftCardFromGanResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetGiftCardFromGanResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetGiftCardFromGanResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetGiftCardFromGanResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetGiftCardFromGanResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// A response that contains a `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
+type GetGiftCardFromNonceResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The retrieved gift card.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetGiftCardFromNonceResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetGiftCardFromNonceResponse) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GetGiftCardFromNonceResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetGiftCardFromNonceResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetGiftCardFromNonceResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetGiftCardFromNonceResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetGiftCardFromNonceResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// A response that contains a `GiftCard`. The response might contain a set of `Error` objects
+// if the request resulted in errors.
+type GetGiftCardResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The gift card retrieved.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetGiftCardResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetGiftCardResponse) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GetGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetGiftCardResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetGiftCardResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetGiftCardResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetGiftCardResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents a Square gift card.
+type GiftCard struct {
+	// The Square-assigned ID of the gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The gift card type.
+	// See [Type](#type-type) for possible values
+	Type GiftCardType `json:"type" url:"type"`
+	// The source that generated the gift card account number (GAN). The default value is `SQUARE`.
+	// See [GANSource](#type-gansource) for possible values
+	GanSource *GiftCardGanSource `json:"gan_source,omitempty" url:"gan_source,omitempty"`
+	// The current gift card state.
+	// See [Status](#type-status) for possible values
+	State *GiftCardStatus `json:"state,omitempty" url:"state,omitempty"`
+	// The current gift card balance. This balance is always greater than or equal to zero.
+	BalanceMoney *Money `json:"balance_money,omitempty" url:"balance_money,omitempty"`
+	// The gift card account number (GAN). Buyers can use the GAN to make purchases or check
+	// the gift card balance.
+	Gan *string `json:"gan,omitempty" url:"gan,omitempty"`
+	// The timestamp when the gift card was created, in RFC 3339 format.
+	// In the case of a digital gift card, it is the time when you create a card
+	// (using the Square Point of Sale application, Seller Dashboard, or Gift Cards API).
+	// In the case of a plastic gift card, it is the time when Square associates the card with the
+	// seller at the time of activation.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The IDs of the [customer profiles](entity:Customer) to whom this gift card is linked.
+	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GiftCard) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCard) GetType() GiftCardType {
+	if g == nil {
+		return ""
+	}
+	return g.Type
+}
+
+func (g *GiftCard) GetGanSource() *GiftCardGanSource {
+	if g == nil {
+		return nil
+	}
+	return g.GanSource
+}
+
+func (g *GiftCard) GetState() *GiftCardStatus {
+	if g == nil {
+		return nil
+	}
+	return g.State
+}
+
+func (g *GiftCard) GetBalanceMoney() *Money {
+	if g == nil {
+		return nil
+	}
+	return g.BalanceMoney
+}
+
+func (g *GiftCard) GetGan() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Gan
+}
+
+func (g *GiftCard) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCard) GetCustomerIDs() []string {
+	if g == nil {
+		return nil
+	}
+	return g.CustomerIDs
+}
+
+func (g *GiftCard) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCard) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCard
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCard(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCard) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Indicates the source that generated the gift card
+// account number (GAN).
+type GiftCardGanSource string
+
+const (
+	GiftCardGanSourceGanSourceDoNotUse GiftCardGanSource = "GAN_SOURCE_DO_NOT_USE"
+	GiftCardGanSourceSquare            GiftCardGanSource = "SQUARE"
+	GiftCardGanSourceOther             GiftCardGanSource = "OTHER"
+)
+
+func NewGiftCardGanSourceFromString(s string) (GiftCardGanSource, error) {
+	switch s {
+	case "GAN_SOURCE_DO_NOT_USE":
+		return GiftCardGanSourceGanSourceDoNotUse, nil
+	case "SQUARE":
+		return GiftCardGanSourceSquare, nil
+	case "OTHER":
+		return GiftCardGanSourceOther, nil
+	}
+	var t GiftCardGanSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (g GiftCardGanSource) Ptr() *GiftCardGanSource {
+	return &g
+}
+
+// Indicates the gift card state.
+type GiftCardStatus string
+
+const (
+	GiftCardStatusStatusDoNotUse GiftCardStatus = "STATUS_DO_NOT_USE"
+	GiftCardStatusNotActive      GiftCardStatus = "NOT_ACTIVE"
+	GiftCardStatusActive         GiftCardStatus = "ACTIVE"
+	GiftCardStatusDeactivated    GiftCardStatus = "DEACTIVATED"
+	GiftCardStatusBlocked        GiftCardStatus = "BLOCKED"
+	GiftCardStatusPending        GiftCardStatus = "PENDING"
+	GiftCardStatusUnregistered   GiftCardStatus = "UNREGISTERED"
+)
+
+func NewGiftCardStatusFromString(s string) (GiftCardStatus, error) {
+	switch s {
+	case "STATUS_DO_NOT_USE":
+		return GiftCardStatusStatusDoNotUse, nil
+	case "NOT_ACTIVE":
+		return GiftCardStatusNotActive, nil
+	case "ACTIVE":
+		return GiftCardStatusActive, nil
+	case "DEACTIVATED":
+		return GiftCardStatusDeactivated, nil
+	case "BLOCKED":
+		return GiftCardStatusBlocked, nil
+	case "PENDING":
+		return GiftCardStatusPending, nil
+	case "UNREGISTERED":
+		return GiftCardStatusUnregistered, nil
+	}
+	var t GiftCardStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (g GiftCardStatus) Ptr() *GiftCardStatus {
+	return &g
+}
+
+// Indicates the gift card type.
+type GiftCardType string
+
+const (
+	GiftCardTypeTypeDoNotUse GiftCardType = "TYPE_DO_NOT_USE"
+	GiftCardTypePhysical     GiftCardType = "PHYSICAL"
+	GiftCardTypeDigital      GiftCardType = "DIGITAL"
+)
+
+func NewGiftCardTypeFromString(s string) (GiftCardType, error) {
+	switch s {
+	case "TYPE_DO_NOT_USE":
+		return GiftCardTypeTypeDoNotUse, nil
+	case "PHYSICAL":
+		return GiftCardTypePhysical, nil
+	case "DIGITAL":
+		return GiftCardTypeDigital, nil
+	}
+	var t GiftCardType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (g GiftCardType) Ptr() *GiftCardType {
+	return &g
+}
+
+// A response that contains the linked `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
+type LinkCustomerToGiftCardResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The gift card with the ID of the linked customer listed in the `customer_ids` field.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LinkCustomerToGiftCardResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *LinkCustomerToGiftCardResponse) GetGiftCard() *GiftCard {
+	if l == nil {
+		return nil
+	}
+	return l.GiftCard
+}
+
+func (l *LinkCustomerToGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LinkCustomerToGiftCardResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler LinkCustomerToGiftCardResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LinkCustomerToGiftCardResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LinkCustomerToGiftCardResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// A response that contains a list of `GiftCard` objects. If the request resulted in errors,
+// the response contains a set of `Error` objects.
+type ListGiftCardsResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested gift cards or an empty object if none are found.
+	GiftCards []*GiftCard `json:"gift_cards,omitempty" url:"gift_cards,omitempty"`
+	// When a response is truncated, it includes a cursor that you can use in a
+	// subsequent request to retrieve the next set of gift cards. If a cursor is not present, this is
+	// the final response.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListGiftCardsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListGiftCardsResponse) GetGiftCards() []*GiftCard {
+	if l == nil {
+		return nil
+	}
+	return l.GiftCards
+}
+
+func (l *ListGiftCardsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListGiftCardsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListGiftCardsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListGiftCardsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListGiftCardsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListGiftCardsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// A response that contains the unlinked `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
+type UnlinkCustomerFromGiftCardResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The gift card with the ID of the unlinked customer removed from the `customer_ids` field.
+	// If no other customers are linked, the `customer_ids` field is also removed.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) GetGiftCard() *GiftCard {
+	if u == nil {
+		return nil
+	}
+	return u.GiftCard
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UnlinkCustomerFromGiftCardResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UnlinkCustomerFromGiftCardResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

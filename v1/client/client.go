@@ -4,8 +4,11 @@ package client
 
 import (
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	batch "github.com/square/square-go-sdk/v1/batch"
+	locations "github.com/square/square-go-sdk/v1/locations"
+	merchants "github.com/square/square-go-sdk/v1/merchants"
 	transactionsclient "github.com/square/square-go-sdk/v1/transactions/client"
 	webhooks "github.com/square/square-go-sdk/v1/webhooks"
 	http "net/http"
@@ -14,10 +17,12 @@ import (
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 
 	Batch        *batch.Client
+	Merchants    *merchants.Client
+	Locations    *locations.Client
 	Webhooks     *webhooks.Client
 	Transactions *transactionsclient.Client
 }
@@ -32,14 +37,16 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
 		header:       options.ToHeader(),
 		Batch:        batch.NewClient(opts...),
+		Merchants:    merchants.NewClient(opts...),
+		Locations:    locations.NewClient(opts...),
 		Webhooks:     webhooks.NewClient(opts...),
 		Transactions: transactionsclient.NewClient(opts...),
 	}

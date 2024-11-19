@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BulkRetrieveBookingsRequest struct {
 	// A non-empty list of [Booking](entity:Booking) IDs specifying bookings to retrieve.
 	BookingIDs []string `json:"booking_ids,omitempty" url:"-"`
@@ -53,6 +59,1891 @@ type BookingsListRequest struct {
 	StartAtMin *string `json:"-" url:"start_at_min,omitempty"`
 	// The RFC 3339 timestamp specifying the latest of the start time. If this is not set, the time of 31 days after `start_at_min` is used.
 	StartAtMax *string `json:"-" url:"start_at_max,omitempty"`
+}
+
+// Defines an appointment segment of a booking.
+type AppointmentSegment struct {
+	// The time span in minutes of an appointment segment.
+	DurationMinutes *int `json:"duration_minutes,omitempty" url:"duration_minutes,omitempty"`
+	// The ID of the [CatalogItemVariation](entity:CatalogItemVariation) object representing the service booked in this segment.
+	ServiceVariationID *string `json:"service_variation_id,omitempty" url:"service_variation_id,omitempty"`
+	// The ID of the [TeamMember](entity:TeamMember) object representing the team member booked in this segment.
+	TeamMemberID string `json:"team_member_id" url:"team_member_id"`
+	// The current version of the item variation representing the service booked in this segment.
+	ServiceVariationVersion *int64 `json:"service_variation_version,omitempty" url:"service_variation_version,omitempty"`
+	// Time between the end of this segment and the beginning of the subsequent segment.
+	IntermissionMinutes *int `json:"intermission_minutes,omitempty" url:"intermission_minutes,omitempty"`
+	// Whether the customer accepts any team member, instead of a specific one, to serve this segment.
+	AnyTeamMember *bool `json:"any_team_member,omitempty" url:"any_team_member,omitempty"`
+	// The IDs of the seller-accessible resources used for this appointment segment.
+	ResourceIDs []string `json:"resource_ids,omitempty" url:"resource_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AppointmentSegment) GetDurationMinutes() *int {
+	if a == nil {
+		return nil
+	}
+	return a.DurationMinutes
+}
+
+func (a *AppointmentSegment) GetServiceVariationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceVariationID
+}
+
+func (a *AppointmentSegment) GetTeamMemberID() string {
+	if a == nil {
+		return ""
+	}
+	return a.TeamMemberID
+}
+
+func (a *AppointmentSegment) GetServiceVariationVersion() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceVariationVersion
+}
+
+func (a *AppointmentSegment) GetIntermissionMinutes() *int {
+	if a == nil {
+		return nil
+	}
+	return a.IntermissionMinutes
+}
+
+func (a *AppointmentSegment) GetAnyTeamMember() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AnyTeamMember
+}
+
+func (a *AppointmentSegment) GetResourceIDs() []string {
+	if a == nil {
+		return nil
+	}
+	return a.ResourceIDs
+}
+
+func (a *AppointmentSegment) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AppointmentSegment) UnmarshalJSON(data []byte) error {
+	type unmarshaler AppointmentSegment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AppointmentSegment(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AppointmentSegment) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
+type Availability struct {
+	// The RFC 3339 timestamp specifying the beginning time of the slot available for booking.
+	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
+	// The ID of the location available for booking.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The list of appointment segments available for booking
+	AppointmentSegments []*AppointmentSegment `json:"appointment_segments,omitempty" url:"appointment_segments,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *Availability) GetStartAt() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StartAt
+}
+
+func (a *Availability) GetLocationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.LocationID
+}
+
+func (a *Availability) GetAppointmentSegments() []*AppointmentSegment {
+	if a == nil {
+		return nil
+	}
+	return a.AppointmentSegments
+}
+
+func (a *Availability) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *Availability) UnmarshalJSON(data []byte) error {
+	type unmarshaler Availability
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = Availability(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *Availability) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// Represents a booking as a time-bound service contract for a seller's staff member to provide a specified service
+// at a given location to a requesting customer in one or more appointment segments.
+type Booking struct {
+	// A unique ID of this object representing a booking.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The revision number for the booking used for optimistic concurrency.
+	Version *int `json:"version,omitempty" url:"version,omitempty"`
+	// The status of the booking, describing where the booking stands with respect to the booking state machine.
+	// See [BookingStatus](#type-bookingstatus) for possible values
+	Status *BookingStatus `json:"status,omitempty" url:"status,omitempty"`
+	// The RFC 3339 timestamp specifying the creation time of this booking.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The RFC 3339 timestamp specifying the most recent update time of this booking.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// The RFC 3339 timestamp specifying the starting time of this booking.
+	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
+	// The ID of the [Location](entity:Location) object representing the location where the booked service is provided. Once set when the booking is created, its value cannot be changed.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The ID of the [Customer](entity:Customer) object representing the customer receiving the booked service.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+	// The free-text field for the customer to supply notes about the booking. For example, the note can be preferences that cannot be expressed by supported attributes of a relevant [CatalogObject](entity:CatalogObject) instance.
+	CustomerNote *string `json:"customer_note,omitempty" url:"customer_note,omitempty"`
+	// The free-text field for the seller to supply notes about the booking. For example, the note can be preferences that cannot be expressed by supported attributes of a specific [CatalogObject](entity:CatalogObject) instance.
+	// This field should not be visible to customers.
+	SellerNote *string `json:"seller_note,omitempty" url:"seller_note,omitempty"`
+	// A list of appointment segments for this booking.
+	AppointmentSegments []*AppointmentSegment `json:"appointment_segments,omitempty" url:"appointment_segments,omitempty"`
+	// Additional time at the end of a booking.
+	// Applications should not make this field visible to customers of a seller.
+	TransitionTimeMinutes *int `json:"transition_time_minutes,omitempty" url:"transition_time_minutes,omitempty"`
+	// Whether the booking is of a full business day.
+	AllDay *bool `json:"all_day,omitempty" url:"all_day,omitempty"`
+	// The type of location where the booking is held.
+	// See [BusinessAppointmentSettingsBookingLocationType](#type-businessappointmentsettingsbookinglocationtype) for possible values
+	LocationType *BusinessAppointmentSettingsBookingLocationType `json:"location_type,omitempty" url:"location_type,omitempty"`
+	// Information about the booking creator.
+	CreatorDetails *BookingCreatorDetails `json:"creator_details,omitempty" url:"creator_details,omitempty"`
+	// The source of the booking.
+	// Access to this field requires seller-level permissions.
+	// See [BookingBookingSource](#type-bookingbookingsource) for possible values
+	Source *BookingBookingSource `json:"source,omitempty" url:"source,omitempty"`
+	// Stores a customer address if the location type is `CUSTOMER_LOCATION`.
+	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *Booking) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *Booking) GetVersion() *int {
+	if b == nil {
+		return nil
+	}
+	return b.Version
+}
+
+func (b *Booking) GetStatus() *BookingStatus {
+	if b == nil {
+		return nil
+	}
+	return b.Status
+}
+
+func (b *Booking) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *Booking) GetUpdatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.UpdatedAt
+}
+
+func (b *Booking) GetStartAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.StartAt
+}
+
+func (b *Booking) GetLocationID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationID
+}
+
+func (b *Booking) GetCustomerID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerID
+}
+
+func (b *Booking) GetCustomerNote() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerNote
+}
+
+func (b *Booking) GetSellerNote() *string {
+	if b == nil {
+		return nil
+	}
+	return b.SellerNote
+}
+
+func (b *Booking) GetAppointmentSegments() []*AppointmentSegment {
+	if b == nil {
+		return nil
+	}
+	return b.AppointmentSegments
+}
+
+func (b *Booking) GetTransitionTimeMinutes() *int {
+	if b == nil {
+		return nil
+	}
+	return b.TransitionTimeMinutes
+}
+
+func (b *Booking) GetAllDay() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.AllDay
+}
+
+func (b *Booking) GetLocationType() *BusinessAppointmentSettingsBookingLocationType {
+	if b == nil {
+		return nil
+	}
+	return b.LocationType
+}
+
+func (b *Booking) GetCreatorDetails() *BookingCreatorDetails {
+	if b == nil {
+		return nil
+	}
+	return b.CreatorDetails
+}
+
+func (b *Booking) GetSource() *BookingBookingSource {
+	if b == nil {
+		return nil
+	}
+	return b.Source
+}
+
+func (b *Booking) GetAddress() *Address {
+	if b == nil {
+		return nil
+	}
+	return b.Address
+}
+
+func (b *Booking) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *Booking) UnmarshalJSON(data []byte) error {
+	type unmarshaler Booking
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = Booking(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *Booking) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Supported sources a booking was created from.
+type BookingBookingSource string
+
+const (
+	BookingBookingSourceFirstPartyMerchant BookingBookingSource = "FIRST_PARTY_MERCHANT"
+	BookingBookingSourceFirstPartyBuyer    BookingBookingSource = "FIRST_PARTY_BUYER"
+	BookingBookingSourceThirdPartyBuyer    BookingBookingSource = "THIRD_PARTY_BUYER"
+	BookingBookingSourceAPI                BookingBookingSource = "API"
+)
+
+func NewBookingBookingSourceFromString(s string) (BookingBookingSource, error) {
+	switch s {
+	case "FIRST_PARTY_MERCHANT":
+		return BookingBookingSourceFirstPartyMerchant, nil
+	case "FIRST_PARTY_BUYER":
+		return BookingBookingSourceFirstPartyBuyer, nil
+	case "THIRD_PARTY_BUYER":
+		return BookingBookingSourceThirdPartyBuyer, nil
+	case "API":
+		return BookingBookingSourceAPI, nil
+	}
+	var t BookingBookingSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BookingBookingSource) Ptr() *BookingBookingSource {
+	return &b
+}
+
+// Information about a booking creator.
+type BookingCreatorDetails struct {
+	// The seller-accessible type of the creator of the booking.
+	// See [BookingCreatorDetailsCreatorType](#type-bookingcreatordetailscreatortype) for possible values
+	CreatorType *BookingCreatorDetailsCreatorType `json:"creator_type,omitempty" url:"creator_type,omitempty"`
+	// The ID of the team member who created the booking, when the booking creator is of the `TEAM_MEMBER` type.
+	// Access to this field requires seller-level permissions.
+	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+	// The ID of the customer who created the booking, when the booking creator is of the `CUSTOMER` type.
+	// Access to this field requires seller-level permissions.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BookingCreatorDetails) GetCreatorType() *BookingCreatorDetailsCreatorType {
+	if b == nil {
+		return nil
+	}
+	return b.CreatorType
+}
+
+func (b *BookingCreatorDetails) GetTeamMemberID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.TeamMemberID
+}
+
+func (b *BookingCreatorDetails) GetCustomerID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerID
+}
+
+func (b *BookingCreatorDetails) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatorDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatorDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatorDetails(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatorDetails) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Supported types of a booking creator.
+type BookingCreatorDetailsCreatorType string
+
+const (
+	BookingCreatorDetailsCreatorTypeTeamMember BookingCreatorDetailsCreatorType = "TEAM_MEMBER"
+	BookingCreatorDetailsCreatorTypeCustomer   BookingCreatorDetailsCreatorType = "CUSTOMER"
+)
+
+func NewBookingCreatorDetailsCreatorTypeFromString(s string) (BookingCreatorDetailsCreatorType, error) {
+	switch s {
+	case "TEAM_MEMBER":
+		return BookingCreatorDetailsCreatorTypeTeamMember, nil
+	case "CUSTOMER":
+		return BookingCreatorDetailsCreatorTypeCustomer, nil
+	}
+	var t BookingCreatorDetailsCreatorType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BookingCreatorDetailsCreatorType) Ptr() *BookingCreatorDetailsCreatorType {
+	return &b
+}
+
+// Supported booking statuses.
+type BookingStatus string
+
+const (
+	BookingStatusPending             BookingStatus = "PENDING"
+	BookingStatusCancelledByCustomer BookingStatus = "CANCELLED_BY_CUSTOMER"
+	BookingStatusCancelledBySeller   BookingStatus = "CANCELLED_BY_SELLER"
+	BookingStatusDeclined            BookingStatus = "DECLINED"
+	BookingStatusAccepted            BookingStatus = "ACCEPTED"
+	BookingStatusNoShow              BookingStatus = "NO_SHOW"
+)
+
+func NewBookingStatusFromString(s string) (BookingStatus, error) {
+	switch s {
+	case "PENDING":
+		return BookingStatusPending, nil
+	case "CANCELLED_BY_CUSTOMER":
+		return BookingStatusCancelledByCustomer, nil
+	case "CANCELLED_BY_SELLER":
+		return BookingStatusCancelledBySeller, nil
+	case "DECLINED":
+		return BookingStatusDeclined, nil
+	case "ACCEPTED":
+		return BookingStatusAccepted, nil
+	case "NO_SHOW":
+		return BookingStatusNoShow, nil
+	}
+	var t BookingStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BookingStatus) Ptr() *BookingStatus {
+	return &b
+}
+
+// Response payload for bulk retrieval of bookings.
+type BulkRetrieveBookingsResponse struct {
+	// Requested bookings returned as a map containing `booking_id` as the key and `RetrieveBookingResponse` as the value.
+	Bookings map[string]*GetBookingResponse `json:"bookings,omitempty" url:"bookings,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkRetrieveBookingsResponse) GetBookings() map[string]*GetBookingResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Bookings
+}
+
+func (b *BulkRetrieveBookingsResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkRetrieveBookingsResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkRetrieveBookingsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveBookingsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkRetrieveBookingsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkRetrieveBookingsResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
+type BulkRetrieveTeamMemberBookingProfilesResponse struct {
+	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
+	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetTeamMemberBookingProfiles() map[string]*GetTeamMemberBookingProfileResponse {
+	if b == nil {
+		return nil
+	}
+	return b.TeamMemberBookingProfiles
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveTeamMemberBookingProfilesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkRetrieveTeamMemberBookingProfilesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// The service appointment settings, including where and how the service is provided.
+type BusinessAppointmentSettings struct {
+	// Types of the location allowed for bookings.
+	// See [BusinessAppointmentSettingsBookingLocationType](#type-businessappointmentsettingsbookinglocationtype) for possible values
+	LocationTypes []BusinessAppointmentSettingsBookingLocationType `json:"location_types,omitempty" url:"location_types,omitempty"`
+	// The time unit of the service duration for bookings.
+	// See [BusinessAppointmentSettingsAlignmentTime](#type-businessappointmentsettingsalignmenttime) for possible values
+	AlignmentTime *BusinessAppointmentSettingsAlignmentTime `json:"alignment_time,omitempty" url:"alignment_time,omitempty"`
+	// The minimum lead time in seconds before a service can be booked. A booking must be created at least this amount of time before its starting time.
+	MinBookingLeadTimeSeconds *int `json:"min_booking_lead_time_seconds,omitempty" url:"min_booking_lead_time_seconds,omitempty"`
+	// The maximum lead time in seconds before a service can be booked. A booking must be created at most this amount of time before its starting time.
+	MaxBookingLeadTimeSeconds *int `json:"max_booking_lead_time_seconds,omitempty" url:"max_booking_lead_time_seconds,omitempty"`
+	// Indicates whether a customer can choose from all available time slots and have a staff member assigned
+	// automatically (`true`) or not (`false`).
+	AnyTeamMemberBookingEnabled *bool `json:"any_team_member_booking_enabled,omitempty" url:"any_team_member_booking_enabled,omitempty"`
+	// Indicates whether a customer can book multiple services in a single online booking.
+	MultipleServiceBookingEnabled *bool `json:"multiple_service_booking_enabled,omitempty" url:"multiple_service_booking_enabled,omitempty"`
+	// Indicates whether the daily appointment limit applies to team members or to
+	// business locations.
+	// See [BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType](#type-businessappointmentsettingsmaxappointmentsperdaylimittype) for possible values
+	MaxAppointmentsPerDayLimitType *BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType `json:"max_appointments_per_day_limit_type,omitempty" url:"max_appointments_per_day_limit_type,omitempty"`
+	// The maximum number of daily appointments per team member or per location.
+	MaxAppointmentsPerDayLimit *int `json:"max_appointments_per_day_limit,omitempty" url:"max_appointments_per_day_limit,omitempty"`
+	// The cut-off time in seconds for allowing clients to cancel or reschedule an appointment.
+	CancellationWindowSeconds *int `json:"cancellation_window_seconds,omitempty" url:"cancellation_window_seconds,omitempty"`
+	// The flat-fee amount charged for a no-show booking.
+	CancellationFeeMoney *Money `json:"cancellation_fee_money,omitempty" url:"cancellation_fee_money,omitempty"`
+	// The cancellation policy adopted by the seller.
+	// See [BusinessAppointmentSettingsCancellationPolicy](#type-businessappointmentsettingscancellationpolicy) for possible values
+	CancellationPolicy *BusinessAppointmentSettingsCancellationPolicy `json:"cancellation_policy,omitempty" url:"cancellation_policy,omitempty"`
+	// The free-form text of the seller's cancellation policy.
+	CancellationPolicyText *string `json:"cancellation_policy_text,omitempty" url:"cancellation_policy_text,omitempty"`
+	// Indicates whether customers has an assigned staff member (`true`) or can select s staff member of their choice (`false`).
+	SkipBookingFlowStaffSelection *bool `json:"skip_booking_flow_staff_selection,omitempty" url:"skip_booking_flow_staff_selection,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BusinessAppointmentSettings) GetLocationTypes() []BusinessAppointmentSettingsBookingLocationType {
+	if b == nil {
+		return nil
+	}
+	return b.LocationTypes
+}
+
+func (b *BusinessAppointmentSettings) GetAlignmentTime() *BusinessAppointmentSettingsAlignmentTime {
+	if b == nil {
+		return nil
+	}
+	return b.AlignmentTime
+}
+
+func (b *BusinessAppointmentSettings) GetMinBookingLeadTimeSeconds() *int {
+	if b == nil {
+		return nil
+	}
+	return b.MinBookingLeadTimeSeconds
+}
+
+func (b *BusinessAppointmentSettings) GetMaxBookingLeadTimeSeconds() *int {
+	if b == nil {
+		return nil
+	}
+	return b.MaxBookingLeadTimeSeconds
+}
+
+func (b *BusinessAppointmentSettings) GetAnyTeamMemberBookingEnabled() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.AnyTeamMemberBookingEnabled
+}
+
+func (b *BusinessAppointmentSettings) GetMultipleServiceBookingEnabled() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.MultipleServiceBookingEnabled
+}
+
+func (b *BusinessAppointmentSettings) GetMaxAppointmentsPerDayLimitType() *BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType {
+	if b == nil {
+		return nil
+	}
+	return b.MaxAppointmentsPerDayLimitType
+}
+
+func (b *BusinessAppointmentSettings) GetMaxAppointmentsPerDayLimit() *int {
+	if b == nil {
+		return nil
+	}
+	return b.MaxAppointmentsPerDayLimit
+}
+
+func (b *BusinessAppointmentSettings) GetCancellationWindowSeconds() *int {
+	if b == nil {
+		return nil
+	}
+	return b.CancellationWindowSeconds
+}
+
+func (b *BusinessAppointmentSettings) GetCancellationFeeMoney() *Money {
+	if b == nil {
+		return nil
+	}
+	return b.CancellationFeeMoney
+}
+
+func (b *BusinessAppointmentSettings) GetCancellationPolicy() *BusinessAppointmentSettingsCancellationPolicy {
+	if b == nil {
+		return nil
+	}
+	return b.CancellationPolicy
+}
+
+func (b *BusinessAppointmentSettings) GetCancellationPolicyText() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CancellationPolicyText
+}
+
+func (b *BusinessAppointmentSettings) GetSkipBookingFlowStaffSelection() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.SkipBookingFlowStaffSelection
+}
+
+func (b *BusinessAppointmentSettings) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BusinessAppointmentSettings) UnmarshalJSON(data []byte) error {
+	type unmarshaler BusinessAppointmentSettings
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BusinessAppointmentSettings(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BusinessAppointmentSettings) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Time units of a service duration for bookings.
+type BusinessAppointmentSettingsAlignmentTime string
+
+const (
+	BusinessAppointmentSettingsAlignmentTimeServiceDuration BusinessAppointmentSettingsAlignmentTime = "SERVICE_DURATION"
+	BusinessAppointmentSettingsAlignmentTimeQuarterHourly   BusinessAppointmentSettingsAlignmentTime = "QUARTER_HOURLY"
+	BusinessAppointmentSettingsAlignmentTimeHalfHourly      BusinessAppointmentSettingsAlignmentTime = "HALF_HOURLY"
+	BusinessAppointmentSettingsAlignmentTimeHourly          BusinessAppointmentSettingsAlignmentTime = "HOURLY"
+)
+
+func NewBusinessAppointmentSettingsAlignmentTimeFromString(s string) (BusinessAppointmentSettingsAlignmentTime, error) {
+	switch s {
+	case "SERVICE_DURATION":
+		return BusinessAppointmentSettingsAlignmentTimeServiceDuration, nil
+	case "QUARTER_HOURLY":
+		return BusinessAppointmentSettingsAlignmentTimeQuarterHourly, nil
+	case "HALF_HOURLY":
+		return BusinessAppointmentSettingsAlignmentTimeHalfHourly, nil
+	case "HOURLY":
+		return BusinessAppointmentSettingsAlignmentTimeHourly, nil
+	}
+	var t BusinessAppointmentSettingsAlignmentTime
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessAppointmentSettingsAlignmentTime) Ptr() *BusinessAppointmentSettingsAlignmentTime {
+	return &b
+}
+
+// Supported types of location where service is provided.
+type BusinessAppointmentSettingsBookingLocationType string
+
+const (
+	BusinessAppointmentSettingsBookingLocationTypeBusinessLocation BusinessAppointmentSettingsBookingLocationType = "BUSINESS_LOCATION"
+	BusinessAppointmentSettingsBookingLocationTypeCustomerLocation BusinessAppointmentSettingsBookingLocationType = "CUSTOMER_LOCATION"
+	BusinessAppointmentSettingsBookingLocationTypePhone            BusinessAppointmentSettingsBookingLocationType = "PHONE"
+)
+
+func NewBusinessAppointmentSettingsBookingLocationTypeFromString(s string) (BusinessAppointmentSettingsBookingLocationType, error) {
+	switch s {
+	case "BUSINESS_LOCATION":
+		return BusinessAppointmentSettingsBookingLocationTypeBusinessLocation, nil
+	case "CUSTOMER_LOCATION":
+		return BusinessAppointmentSettingsBookingLocationTypeCustomerLocation, nil
+	case "PHONE":
+		return BusinessAppointmentSettingsBookingLocationTypePhone, nil
+	}
+	var t BusinessAppointmentSettingsBookingLocationType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessAppointmentSettingsBookingLocationType) Ptr() *BusinessAppointmentSettingsBookingLocationType {
+	return &b
+}
+
+// The category of the seller’s cancellation policy.
+type BusinessAppointmentSettingsCancellationPolicy string
+
+const (
+	BusinessAppointmentSettingsCancellationPolicyCancellationTreatedAsNoShow BusinessAppointmentSettingsCancellationPolicy = "CANCELLATION_TREATED_AS_NO_SHOW"
+	BusinessAppointmentSettingsCancellationPolicyCustomPolicy                BusinessAppointmentSettingsCancellationPolicy = "CUSTOM_POLICY"
+)
+
+func NewBusinessAppointmentSettingsCancellationPolicyFromString(s string) (BusinessAppointmentSettingsCancellationPolicy, error) {
+	switch s {
+	case "CANCELLATION_TREATED_AS_NO_SHOW":
+		return BusinessAppointmentSettingsCancellationPolicyCancellationTreatedAsNoShow, nil
+	case "CUSTOM_POLICY":
+		return BusinessAppointmentSettingsCancellationPolicyCustomPolicy, nil
+	}
+	var t BusinessAppointmentSettingsCancellationPolicy
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessAppointmentSettingsCancellationPolicy) Ptr() *BusinessAppointmentSettingsCancellationPolicy {
+	return &b
+}
+
+// Types of daily appointment limits.
+type BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType string
+
+const (
+	BusinessAppointmentSettingsMaxAppointmentsPerDayLimitTypePerTeamMember BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType = "PER_TEAM_MEMBER"
+	BusinessAppointmentSettingsMaxAppointmentsPerDayLimitTypePerLocation   BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType = "PER_LOCATION"
+)
+
+func NewBusinessAppointmentSettingsMaxAppointmentsPerDayLimitTypeFromString(s string) (BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType, error) {
+	switch s {
+	case "PER_TEAM_MEMBER":
+		return BusinessAppointmentSettingsMaxAppointmentsPerDayLimitTypePerTeamMember, nil
+	case "PER_LOCATION":
+		return BusinessAppointmentSettingsMaxAppointmentsPerDayLimitTypePerLocation, nil
+	}
+	var t BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType) Ptr() *BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType {
+	return &b
+}
+
+// A seller's business booking profile, including booking policy, appointment settings, etc.
+type BusinessBookingProfile struct {
+	// The ID of the seller, obtainable using the Merchants API.
+	SellerID *string `json:"seller_id,omitempty" url:"seller_id,omitempty"`
+	// The RFC 3339 timestamp specifying the booking's creation time.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Indicates whether the seller is open for booking.
+	BookingEnabled *bool `json:"booking_enabled,omitempty" url:"booking_enabled,omitempty"`
+	// The choice of customer's time zone information of a booking.
+	// The Square online booking site and all notifications to customers uses either the seller location’s time zone
+	// or the time zone the customer chooses at booking.
+	// See [BusinessBookingProfileCustomerTimezoneChoice](#type-businessbookingprofilecustomertimezonechoice) for possible values
+	CustomerTimezoneChoice *BusinessBookingProfileCustomerTimezoneChoice `json:"customer_timezone_choice,omitempty" url:"customer_timezone_choice,omitempty"`
+	// The policy for the seller to automatically accept booking requests (`ACCEPT_ALL`) or not (`REQUIRES_ACCEPTANCE`).
+	// See [BusinessBookingProfileBookingPolicy](#type-businessbookingprofilebookingpolicy) for possible values
+	BookingPolicy *BusinessBookingProfileBookingPolicy `json:"booking_policy,omitempty" url:"booking_policy,omitempty"`
+	// Indicates whether customers can cancel or reschedule their own bookings (`true`) or not (`false`).
+	AllowUserCancel *bool `json:"allow_user_cancel,omitempty" url:"allow_user_cancel,omitempty"`
+	// Settings for appointment-type bookings.
+	BusinessAppointmentSettings *BusinessAppointmentSettings `json:"business_appointment_settings,omitempty" url:"business_appointment_settings,omitempty"`
+	// Indicates whether the seller's subscription to Square Appointments supports creating, updating or canceling an appointment through the API (`true`) or not (`false`) using seller permission.
+	SupportSellerLevelWrites *bool `json:"support_seller_level_writes,omitempty" url:"support_seller_level_writes,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BusinessBookingProfile) GetSellerID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.SellerID
+}
+
+func (b *BusinessBookingProfile) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BusinessBookingProfile) GetBookingEnabled() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.BookingEnabled
+}
+
+func (b *BusinessBookingProfile) GetCustomerTimezoneChoice() *BusinessBookingProfileCustomerTimezoneChoice {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerTimezoneChoice
+}
+
+func (b *BusinessBookingProfile) GetBookingPolicy() *BusinessBookingProfileBookingPolicy {
+	if b == nil {
+		return nil
+	}
+	return b.BookingPolicy
+}
+
+func (b *BusinessBookingProfile) GetAllowUserCancel() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.AllowUserCancel
+}
+
+func (b *BusinessBookingProfile) GetBusinessAppointmentSettings() *BusinessAppointmentSettings {
+	if b == nil {
+		return nil
+	}
+	return b.BusinessAppointmentSettings
+}
+
+func (b *BusinessBookingProfile) GetSupportSellerLevelWrites() *bool {
+	if b == nil {
+		return nil
+	}
+	return b.SupportSellerLevelWrites
+}
+
+func (b *BusinessBookingProfile) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BusinessBookingProfile) UnmarshalJSON(data []byte) error {
+	type unmarshaler BusinessBookingProfile
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BusinessBookingProfile(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BusinessBookingProfile) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Policies for accepting bookings.
+type BusinessBookingProfileBookingPolicy string
+
+const (
+	BusinessBookingProfileBookingPolicyAcceptAll          BusinessBookingProfileBookingPolicy = "ACCEPT_ALL"
+	BusinessBookingProfileBookingPolicyRequiresAcceptance BusinessBookingProfileBookingPolicy = "REQUIRES_ACCEPTANCE"
+)
+
+func NewBusinessBookingProfileBookingPolicyFromString(s string) (BusinessBookingProfileBookingPolicy, error) {
+	switch s {
+	case "ACCEPT_ALL":
+		return BusinessBookingProfileBookingPolicyAcceptAll, nil
+	case "REQUIRES_ACCEPTANCE":
+		return BusinessBookingProfileBookingPolicyRequiresAcceptance, nil
+	}
+	var t BusinessBookingProfileBookingPolicy
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessBookingProfileBookingPolicy) Ptr() *BusinessBookingProfileBookingPolicy {
+	return &b
+}
+
+// Choices of customer-facing time zone used for bookings.
+type BusinessBookingProfileCustomerTimezoneChoice string
+
+const (
+	BusinessBookingProfileCustomerTimezoneChoiceBusinessLocationTimezone BusinessBookingProfileCustomerTimezoneChoice = "BUSINESS_LOCATION_TIMEZONE"
+	BusinessBookingProfileCustomerTimezoneChoiceCustomerChoice           BusinessBookingProfileCustomerTimezoneChoice = "CUSTOMER_CHOICE"
+)
+
+func NewBusinessBookingProfileCustomerTimezoneChoiceFromString(s string) (BusinessBookingProfileCustomerTimezoneChoice, error) {
+	switch s {
+	case "BUSINESS_LOCATION_TIMEZONE":
+		return BusinessBookingProfileCustomerTimezoneChoiceBusinessLocationTimezone, nil
+	case "CUSTOMER_CHOICE":
+		return BusinessBookingProfileCustomerTimezoneChoiceCustomerChoice, nil
+	}
+	var t BusinessBookingProfileCustomerTimezoneChoice
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BusinessBookingProfileCustomerTimezoneChoice) Ptr() *BusinessBookingProfileCustomerTimezoneChoice {
+	return &b
+}
+
+type CancelBookingResponse struct {
+	// The booking that was cancelled.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CancelBookingResponse) GetBooking() *Booking {
+	if c == nil {
+		return nil
+	}
+	return c.Booking
+}
+
+func (c *CancelBookingResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CancelBookingResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CancelBookingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelBookingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CancelBookingResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CancelBookingResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CreateBookingResponse struct {
+	// The booking that was created.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateBookingResponse) GetBooking() *Booking {
+	if c == nil {
+		return nil
+	}
+	return c.Booking
+}
+
+func (c *CreateBookingResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateBookingResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateBookingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBookingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBookingResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBookingResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type GetBookingResponse struct {
+	// The booking that was requested.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetBookingResponse) GetBooking() *Booking {
+	if g == nil {
+		return nil
+	}
+	return g.Booking
+}
+
+func (g *GetBookingResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetBookingResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetBookingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetBookingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetBookingResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetBookingResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GetBusinessBookingProfileResponse struct {
+	// The seller's booking profile.
+	BusinessBookingProfile *BusinessBookingProfile `json:"business_booking_profile,omitempty" url:"business_booking_profile,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetBusinessBookingProfileResponse) GetBusinessBookingProfile() *BusinessBookingProfile {
+	if g == nil {
+		return nil
+	}
+	return g.BusinessBookingProfile
+}
+
+func (g *GetBusinessBookingProfileResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetBusinessBookingProfileResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetBusinessBookingProfileResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetBusinessBookingProfileResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetBusinessBookingProfileResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetBusinessBookingProfileResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type ListBookingsResponse struct {
+	// The list of targeted bookings.
+	Bookings []*Booking `json:"bookings,omitempty" url:"bookings,omitempty"`
+	// The pagination cursor to be used in the subsequent request to get the next page of the results. Stop retrieving the next page of the results when the cursor is not set.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListBookingsResponse) GetBookings() []*Booking {
+	if l == nil {
+		return nil
+	}
+	return l.Bookings
+}
+
+func (l *ListBookingsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBookingsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBookingsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBookingsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBookingsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBookingsResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBookingsResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type ListLocationBookingProfilesResponse struct {
+	// The list of a seller's location booking profiles.
+	LocationBookingProfiles []*LocationBookingProfile `json:"location_booking_profiles,omitempty" url:"location_booking_profiles,omitempty"`
+	// The pagination cursor to be used in the subsequent request to get the next page of the results. Stop retrieving the next page of the results when the cursor is not set.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListLocationBookingProfilesResponse) GetLocationBookingProfiles() []*LocationBookingProfile {
+	if l == nil {
+		return nil
+	}
+	return l.LocationBookingProfiles
+}
+
+func (l *ListLocationBookingProfilesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListLocationBookingProfilesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListLocationBookingProfilesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListLocationBookingProfilesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListLocationBookingProfilesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListLocationBookingProfilesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListLocationBookingProfilesResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The booking profile of a seller's location, including the location's ID and whether the location is enabled for online booking.
+type LocationBookingProfile struct {
+	// The ID of the [location](entity:Location).
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// Url for the online booking site for this location.
+	BookingSiteURL *string `json:"booking_site_url,omitempty" url:"booking_site_url,omitempty"`
+	// Indicates whether the location is enabled for online booking.
+	OnlineBookingEnabled *bool `json:"online_booking_enabled,omitempty" url:"online_booking_enabled,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LocationBookingProfile) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LocationBookingProfile) GetBookingSiteURL() *string {
+	if l == nil {
+		return nil
+	}
+	return l.BookingSiteURL
+}
+
+func (l *LocationBookingProfile) GetOnlineBookingEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.OnlineBookingEnabled
+}
+
+func (l *LocationBookingProfile) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationBookingProfile) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationBookingProfile
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationBookingProfile(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationBookingProfile) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type RetrieveLocationBookingProfileResponse struct {
+	// The requested location booking profile.
+	LocationBookingProfile *LocationBookingProfile `json:"location_booking_profile,omitempty" url:"location_booking_profile,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RetrieveLocationBookingProfileResponse) GetLocationBookingProfile() *LocationBookingProfile {
+	if r == nil {
+		return nil
+	}
+	return r.LocationBookingProfile
+}
+
+func (r *RetrieveLocationBookingProfileResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveLocationBookingProfileResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveLocationBookingProfileResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveLocationBookingProfileResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveLocationBookingProfileResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveLocationBookingProfileResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// A query filter to search for buyer-accessible availabilities by.
+type SearchAvailabilityFilter struct {
+	// The query expression to search for buy-accessible availabilities with their starting times falling within the specified time range.
+	// The time range must be at least 24 hours and at most 32 days long.
+	// For waitlist availabilities, the time range can be 0 or more up to 367 days long.
+	StartAtRange *TimeRange `json:"start_at_range,omitempty" url:"start_at_range,omitempty"`
+	// The query expression to search for buyer-accessible availabilities with their location IDs matching the specified location ID.
+	// This query expression cannot be set if `booking_id` is set.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The query expression to search for buyer-accessible availabilities matching the specified list of segment filters.
+	// If the size of the `segment_filters` list is `n`, the search returns availabilities with `n` segments per availability.
+	//
+	// This query expression cannot be set if `booking_id` is set.
+	SegmentFilters []*SegmentFilter `json:"segment_filters,omitempty" url:"segment_filters,omitempty"`
+	// The query expression to search for buyer-accessible availabilities for an existing booking by matching the specified `booking_id` value.
+	// This is commonly used to reschedule an appointment.
+	// If this expression is set, the `location_id` and `segment_filters` expressions cannot be set.
+	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchAvailabilityFilter) GetStartAtRange() *TimeRange {
+	if s == nil {
+		return nil
+	}
+	return s.StartAtRange
+}
+
+func (s *SearchAvailabilityFilter) GetLocationID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.LocationID
+}
+
+func (s *SearchAvailabilityFilter) GetSegmentFilters() []*SegmentFilter {
+	if s == nil {
+		return nil
+	}
+	return s.SegmentFilters
+}
+
+func (s *SearchAvailabilityFilter) GetBookingID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.BookingID
+}
+
+func (s *SearchAvailabilityFilter) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchAvailabilityFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchAvailabilityFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchAvailabilityFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchAvailabilityFilter) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// The query used to search for buyer-accessible availabilities of bookings.
+type SearchAvailabilityQuery struct {
+	// The query filter to search for buyer-accessible availabilities of existing bookings.
+	Filter *SearchAvailabilityFilter `json:"filter,omitempty" url:"filter,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchAvailabilityQuery) GetFilter() *SearchAvailabilityFilter {
+	if s == nil {
+		return nil
+	}
+	return s.Filter
+}
+
+func (s *SearchAvailabilityQuery) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchAvailabilityQuery) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchAvailabilityQuery
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchAvailabilityQuery(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchAvailabilityQuery) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchAvailabilityResponse struct {
+	// List of appointment slots available for booking.
+	Availabilities []*Availability `json:"availabilities,omitempty" url:"availabilities,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchAvailabilityResponse) GetAvailabilities() []*Availability {
+	if s == nil {
+		return nil
+	}
+	return s.Availabilities
+}
+
+func (s *SearchAvailabilityResponse) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SearchAvailabilityResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchAvailabilityResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchAvailabilityResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchAvailabilityResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchAvailabilityResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A query filter to search for buyer-accessible appointment segments by.
+type SegmentFilter struct {
+	// The ID of the [CatalogItemVariation](entity:CatalogItemVariation) object representing the service booked in this segment.
+	ServiceVariationID string `json:"service_variation_id" url:"service_variation_id"`
+	// A query filter to search for buyer-accessible appointment segments with service-providing team members matching the specified list of team member IDs. Supported query expressions are
+	//
+	// - `ANY`: return the appointment segments with team members whose IDs match any member in this list.
+	// - `NONE`: return the appointment segments with team members whose IDs are not in this list.
+	// - `ALL`: not supported.
+	//
+	// When no expression is specified, any service-providing team member is eligible to fulfill the Booking.
+	TeamMemberIDFilter *FilterValue `json:"team_member_id_filter,omitempty" url:"team_member_id_filter,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SegmentFilter) GetServiceVariationID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ServiceVariationID
+}
+
+func (s *SegmentFilter) GetTeamMemberIDFilter() *FilterValue {
+	if s == nil {
+		return nil
+	}
+	return s.TeamMemberIDFilter
+}
+
+func (s *SegmentFilter) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SegmentFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler SegmentFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SegmentFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SegmentFilter) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type UpdateBookingResponse struct {
+	// The booking that was updated.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateBookingResponse) GetBooking() *Booking {
+	if u == nil {
+		return nil
+	}
+	return u.Booking
+}
+
+func (u *UpdateBookingResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateBookingResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateBookingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBookingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateBookingResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateBookingResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }
 
 type UpdateBookingRequest struct {

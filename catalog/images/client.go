@@ -3,21 +3,19 @@
 package images
 
 import (
-	bytes "bytes"
 	context "context"
 	squaregosdk "github.com/square/square-go-sdk"
 	catalog "github.com/square/square-go-sdk/catalog"
 	core "github.com/square/square-go-sdk/core"
+	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
-	io "io"
-	multipart "mime/multipart"
 	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	baseURL string
-	caller  *core.Caller
+	caller  *internal.Caller
 	header  http.Header
 }
 
@@ -31,8 +29,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		baseURL: options.BaseURL,
-		caller: core.NewCaller(
-			&core.CallerParams{
+		caller: internal.NewCaller(
+			&internal.CallerParams{
 				Client:      options.HTTPClient,
 				MaxAttempts: options.MaxAttempts,
 			},
@@ -49,7 +47,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 func (c *Client) Create(
 	ctx context.Context,
-	imageFile io.Reader,
 	request *catalog.ImagesCreateRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateCatalogImageResponse, error) {
@@ -64,37 +61,28 @@ func (c *Client) Create(
 	}
 	endpointURL := baseURL + "/v2/catalog/images"
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response *squaregosdk.CreateCatalogImageResponse
-	requestBuffer := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(requestBuffer)
-	if imageFile != nil {
-		imageFileFilename := "imageFile_filename"
-		if named, ok := imageFile.(interface{ Name() string }); ok {
-			imageFileFilename = named.Name()
-		}
-		imageFilePart, err := writer.CreateFormFile("image_file", imageFileFilename)
-		if err != nil {
-			return nil, err
-		}
-		if _, err := io.Copy(imageFilePart, imageFile); err != nil {
+	writer := internal.NewMultipartWriter()
+	if request.ImageFile != nil {
+		if err := writer.WriteFile("image_file", request.ImageFile, internal.WithDefaultContentType("image/jpeg")); err != nil {
 			return nil, err
 		}
 	}
 	if request.Request != nil {
-		if err := core.WriteMultipartJSON(writer, "request", request.Request); err != nil {
+		if err := writer.WriteJSON("request", request.Request, internal.WithDefaultContentType("application/json; charset=utf-8")); err != nil {
 			return nil, err
 		}
 	}
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
-	headers.Set("Content-Type", writer.FormDataContentType())
+	headers.Set("Content-Type", writer.ContentType())
 
+	var response *squaregosdk.CreateCatalogImageResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
 			MaxAttempts:     options.MaxAttempts,
@@ -102,7 +90,7 @@ func (c *Client) Create(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         requestBuffer,
+			Request:         writer.Buffer(),
 			Response:        &response,
 		},
 	); err != nil {
@@ -119,7 +107,6 @@ func (c *Client) Update(
 	ctx context.Context,
 	// The ID of the `CatalogImage` object to update the encapsulated image file.
 	imageID string,
-	imageFile io.Reader,
 	request *catalog.ImagesUpdateRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateCatalogImageResponse, error) {
@@ -132,39 +119,30 @@ func (c *Client) Update(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v2/catalog/images/%v", imageID)
+	endpointURL := internal.EncodeURL(baseURL+"/v2/catalog/images/%v", imageID)
 
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response *squaregosdk.UpdateCatalogImageResponse
-	requestBuffer := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(requestBuffer)
-	if imageFile != nil {
-		imageFileFilename := "imageFile_filename"
-		if named, ok := imageFile.(interface{ Name() string }); ok {
-			imageFileFilename = named.Name()
-		}
-		imageFilePart, err := writer.CreateFormFile("image_file", imageFileFilename)
-		if err != nil {
-			return nil, err
-		}
-		if _, err := io.Copy(imageFilePart, imageFile); err != nil {
+	writer := internal.NewMultipartWriter()
+	if request.ImageFile != nil {
+		if err := writer.WriteFile("image_file", request.ImageFile, internal.WithDefaultContentType("image/jpeg")); err != nil {
 			return nil, err
 		}
 	}
 	if request.Request != nil {
-		if err := core.WriteMultipartJSON(writer, "request", request.Request); err != nil {
+		if err := writer.WriteJSON("request", request.Request, internal.WithDefaultContentType("application/json; charset=utf-8")); err != nil {
 			return nil, err
 		}
 	}
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
-	headers.Set("Content-Type", writer.FormDataContentType())
+	headers.Set("Content-Type", writer.ContentType())
 
+	var response *squaregosdk.UpdateCatalogImageResponse
 	if err := c.caller.Call(
 		ctx,
-		&core.CallParams{
+		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
 			MaxAttempts:     options.MaxAttempts,
@@ -172,7 +150,7 @@ func (c *Client) Update(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         requestBuffer,
+			Request:         writer.Buffer(),
 			Response:        &response,
 		},
 	); err != nil {

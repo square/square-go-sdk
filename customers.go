@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BulkCreateCustomersRequest struct {
 	// A map of 1 to 100 individual create requests, represented by `idempotency key: { customer data }`
 	// key-value pairs.
@@ -141,6 +147,2609 @@ type SearchCustomersRequest struct {
 	//
 	// The default value is `false`.
 	Count *bool `json:"count,omitempty" url:"-"`
+}
+
+// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
+// request. An individual request contains a customer ID, the custom attribute to create or update,
+// and an optional idempotency key.
+type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest struct {
+	// The ID of the target [customer profile](entity:Customer).
+	CustomerID string `json:"customer_id" url:"customer_id"`
+	// The custom attribute to create or update, with following fields:
+	//
+	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
+	//
+	//   - `value`. This value must conform to the `schema` specified by the definition.
+	//     For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
+	//
+	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	//     control for update operations, include this optional field in the request and set the
+	//     value to the current version of the custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// A unique identifier for this individual upsert request, used to ensure idempotency.
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) GetCustomerID() string {
+	if b == nil {
+		return ""
+	}
+	return b.CustomerID
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) GetCustomAttribute() *CustomAttribute {
+	if b == nil {
+		return nil
+	}
+	return b.CustomAttribute
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) GetIdempotencyKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) response,
+// which contains a map of responses that each corresponds to an individual upsert request.
+type BatchUpsertCustomerCustomAttributesResponse struct {
+	// A map of responses that correspond to individual upsert requests. Each response has the
+	// same ID as the corresponding request and contains either a `customer_id` and `custom_attribute` or an `errors` field.
+	Values map[string]*BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse `json:"values,omitempty" url:"values,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponse) GetValues() map[string]*BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Values
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpsertCustomerCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchUpsertCustomerCustomAttributesResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) operation.
+type BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse struct {
+	// The ID of the customer profile associated with the custom attribute.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+	// The new or updated custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// Any errors that occurred while processing the individual request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) GetCustomerID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerID
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) GetCustomAttribute() *CustomAttribute {
+	if b == nil {
+		return nil
+	}
+	return b.CustomAttribute
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the customer data provided in individual create requests for a
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
+type BulkCreateCustomerData struct {
+	// The given name (that is, the first name) associated with the customer profile.
+	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
+	// The family name (that is, the last name) associated with the customer profile.
+	FamilyName *string `json:"family_name,omitempty" url:"family_name,omitempty"`
+	// A business name associated with the customer profile.
+	CompanyName *string `json:"company_name,omitempty" url:"company_name,omitempty"`
+	// A nickname for the customer profile.
+	Nickname *string `json:"nickname,omitempty" url:"nickname,omitempty"`
+	// The email address associated with the customer profile.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+	// The physical address associated with the customer profile. For maximum length constraints,
+	// see [Customer addresses](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#address).
+	// The `first_name` and `last_name` fields are ignored if they are present in the request.
+	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+	// The phone number associated with the customer profile. The phone number must be valid
+	// and can contain 9–16 digits, with an optional `+` prefix and country code. For more information,
+	// see [Customer phone numbers](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#phone-number).
+	PhoneNumber *string `json:"phone_number,omitempty" url:"phone_number,omitempty"`
+	// An optional second ID used to associate the customer profile with an
+	// entity in another system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// A custom note associated with the customer profile.
+	Note *string `json:"note,omitempty" url:"note,omitempty"`
+	// The birthday associated with the customer profile, in `YYYY-MM-DD` or `MM-DD` format.
+	// For example, specify `1998-09-21` for September 21, 1998, or `09-21` for September 21.
+	// Birthdays are returned in `YYYY-MM-DD` format, where `YYYY` is the specified birth year or
+	// `0000` if a birth year is not specified.
+	Birthday *string `json:"birthday,omitempty" url:"birthday,omitempty"`
+	// The tax ID associated with the customer profile. This field is available only for
+	// customers of sellers in EU countries or the United Kingdom. For more information, see
+	// [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
+	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkCreateCustomerData) GetGivenName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.GivenName
+}
+
+func (b *BulkCreateCustomerData) GetFamilyName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.FamilyName
+}
+
+func (b *BulkCreateCustomerData) GetCompanyName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CompanyName
+}
+
+func (b *BulkCreateCustomerData) GetNickname() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Nickname
+}
+
+func (b *BulkCreateCustomerData) GetEmailAddress() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EmailAddress
+}
+
+func (b *BulkCreateCustomerData) GetAddress() *Address {
+	if b == nil {
+		return nil
+	}
+	return b.Address
+}
+
+func (b *BulkCreateCustomerData) GetPhoneNumber() *string {
+	if b == nil {
+		return nil
+	}
+	return b.PhoneNumber
+}
+
+func (b *BulkCreateCustomerData) GetReferenceID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ReferenceID
+}
+
+func (b *BulkCreateCustomerData) GetNote() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Note
+}
+
+func (b *BulkCreateCustomerData) GetBirthday() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Birthday
+}
+
+func (b *BulkCreateCustomerData) GetTaxIDs() *CustomerTaxIDs {
+	if b == nil {
+		return nil
+	}
+	return b.TaxIDs
+}
+
+func (b *BulkCreateCustomerData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkCreateCustomerData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkCreateCustomerData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkCreateCustomerData(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkCreateCustomerData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the fields included in the response body from the
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+type BulkCreateCustomersResponse struct {
+	// A map of responses that correspond to individual create requests, represented by
+	// key-value pairs.
+	//
+	// Each key is the idempotency key that was provided for a create request and each value
+	// is the corresponding response.
+	// If the request succeeds, the value is the new customer profile.
+	// If the request fails, the value contains any errors that occurred during the request.
+	Responses map[string]*CreateCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
+	// Any top-level errors that prevented the bulk operation from running.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkCreateCustomersResponse) GetResponses() map[string]*CreateCustomerResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Responses
+}
+
+func (b *BulkCreateCustomersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkCreateCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkCreateCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkCreateCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkCreateCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkCreateCustomersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the fields included in the response body from the
+// [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
+type BulkDeleteCustomersResponse struct {
+	// A map of responses that correspond to individual delete requests, represented by
+	// key-value pairs.
+	//
+	// Each key is the customer ID that was specified for a delete request and each value
+	// is the corresponding response.
+	// If the request succeeds, the value is an empty object (`{ }`).
+	// If the request fails, the value contains any errors that occurred during the request.
+	Responses map[string]*DeleteCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
+	// Any top-level errors that prevented the bulk operation from running.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkDeleteCustomersResponse) GetResponses() map[string]*DeleteCustomerResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Responses
+}
+
+func (b *BulkDeleteCustomersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkDeleteCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkDeleteCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkDeleteCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkDeleteCustomersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the fields included in the response body from the
+// [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
+type BulkRetrieveCustomersResponse struct {
+	// A map of responses that correspond to individual retrieve requests, represented by
+	// key-value pairs.
+	//
+	// Each key is the customer ID that was specified for a retrieve request and each value
+	// is the corresponding response.
+	// If the request succeeds, the value is the requested customer profile.
+	// If the request fails, the value contains any errors that occurred during the request.
+	Responses map[string]*GetCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
+	// Any top-level errors that prevented the bulk operation from running.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkRetrieveCustomersResponse) GetResponses() map[string]*GetCustomerResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Responses
+}
+
+func (b *BulkRetrieveCustomersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkRetrieveCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkRetrieveCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkRetrieveCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkRetrieveCustomersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the customer data provided in individual update requests for a
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
+type BulkUpdateCustomerData struct {
+	// The given name (that is, the first name) associated with the customer profile.
+	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
+	// The family name (that is, the last name) associated with the customer profile.
+	FamilyName *string `json:"family_name,omitempty" url:"family_name,omitempty"`
+	// A business name associated with the customer profile.
+	CompanyName *string `json:"company_name,omitempty" url:"company_name,omitempty"`
+	// A nickname for the customer profile.
+	Nickname *string `json:"nickname,omitempty" url:"nickname,omitempty"`
+	// The email address associated with the customer profile.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+	// The physical address associated with the customer profile. For maximum length constraints,
+	// see [Customer addresses](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#address).
+	// The `first_name` and `last_name` fields are ignored if they are present in the request.
+	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+	// The phone number associated with the customer profile. The phone number must be valid
+	// and can contain 9–16 digits, with an optional `+` prefix and country code. For more information,
+	// see [Customer phone numbers](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#phone-number).
+	PhoneNumber *string `json:"phone_number,omitempty" url:"phone_number,omitempty"`
+	// An optional second ID used to associate the customer profile with an
+	// entity in another system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// An custom note associates with the customer profile.
+	Note *string `json:"note,omitempty" url:"note,omitempty"`
+	// The birthday associated with the customer profile, in `YYYY-MM-DD` or `MM-DD` format.
+	// For example, specify `1998-09-21` for September 21, 1998, or `09-21` for September 21.
+	// Birthdays are returned in `YYYY-MM-DD` format, where `YYYY` is the specified birth year or
+	// `0000` if a birth year is not specified.
+	Birthday *string `json:"birthday,omitempty" url:"birthday,omitempty"`
+	// The tax ID associated with the customer profile. This field is available only for
+	// customers of sellers in EU countries or the United Kingdom. For more information, see
+	// [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
+	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+	// The current version of the customer profile.
+	//
+	// As a best practice, you should include this field to enable
+	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// control.
+	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkUpdateCustomerData) GetGivenName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.GivenName
+}
+
+func (b *BulkUpdateCustomerData) GetFamilyName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.FamilyName
+}
+
+func (b *BulkUpdateCustomerData) GetCompanyName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CompanyName
+}
+
+func (b *BulkUpdateCustomerData) GetNickname() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Nickname
+}
+
+func (b *BulkUpdateCustomerData) GetEmailAddress() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EmailAddress
+}
+
+func (b *BulkUpdateCustomerData) GetAddress() *Address {
+	if b == nil {
+		return nil
+	}
+	return b.Address
+}
+
+func (b *BulkUpdateCustomerData) GetPhoneNumber() *string {
+	if b == nil {
+		return nil
+	}
+	return b.PhoneNumber
+}
+
+func (b *BulkUpdateCustomerData) GetReferenceID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ReferenceID
+}
+
+func (b *BulkUpdateCustomerData) GetNote() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Note
+}
+
+func (b *BulkUpdateCustomerData) GetBirthday() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Birthday
+}
+
+func (b *BulkUpdateCustomerData) GetTaxIDs() *CustomerTaxIDs {
+	if b == nil {
+		return nil
+	}
+	return b.TaxIDs
+}
+
+func (b *BulkUpdateCustomerData) GetVersion() *int64 {
+	if b == nil {
+		return nil
+	}
+	return b.Version
+}
+
+func (b *BulkUpdateCustomerData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkUpdateCustomerData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpdateCustomerData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkUpdateCustomerData(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkUpdateCustomerData) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the fields included in the response body from the
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+type BulkUpdateCustomersResponse struct {
+	// A map of responses that correspond to individual update requests, represented by
+	// key-value pairs.
+	//
+	// Each key is the customer ID that was specified for an update request and each value
+	// is the corresponding response.
+	// If the request succeeds, the value is the updated customer profile.
+	// If the request fails, the value contains any errors that occurred during the request.
+	Responses map[string]*UpdateCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
+	// Any top-level errors that prevented the bulk operation from running.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BulkUpdateCustomersResponse) GetResponses() map[string]*UpdateCustomerResponse {
+	if b == nil {
+		return nil
+	}
+	return b.Responses
+}
+
+func (b *BulkUpdateCustomersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BulkUpdateCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BulkUpdateCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpdateCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkUpdateCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkUpdateCustomersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the [CreateCustomer](api-endpoint:Customers-CreateCustomer) or
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
+type CreateCustomerResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The created customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateCustomerResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateCustomerResponse) GetCustomer() *Customer {
+	if c == nil {
+		return nil
+	}
+	return c.Customer
+}
+
+func (c *CreateCustomerResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateCustomerResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCustomerResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateCustomerResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateCustomerResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a Square customer profile in the Customer Directory of a Square seller.
+type Customer struct {
+	// A unique Square-assigned ID for the customer profile.
+	//
+	// If you need this ID for an API request, use the ID returned when you created the customer profile or call the [SearchCustomers](api-endpoint:Customers-SearchCustomers)
+	// or [ListCustomers](api-endpoint:Customers-ListCustomers) endpoint.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The timestamp when the customer profile was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp when the customer profile was last updated, in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// Payment details of the credit, debit, and gift cards stored on file for the customer profile.
+	//
+	// DEPRECATED at version 2021-06-16 and will be RETIRED at version 2024-12-18. Replaced by calling [ListCards](api-endpoint:Cards-ListCards) (for credit and debit cards on file)
+	// or [ListGiftCards](api-endpoint:GiftCards-ListGiftCards) (for gift cards on file) and including the `customer_id` query parameter.
+	// For more information, see [Migration notes](https://developer.squareup.com/docs/customers-api/what-it-does#migrate-customer-cards).
+	Cards []*Card `json:"cards,omitempty" url:"cards,omitempty"`
+	// The given name (that is, the first name) associated with the customer profile.
+	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
+	// The family name (that is, the last name) associated with the customer profile.
+	FamilyName *string `json:"family_name,omitempty" url:"family_name,omitempty"`
+	// A nickname for the customer profile.
+	Nickname *string `json:"nickname,omitempty" url:"nickname,omitempty"`
+	// A business name associated with the customer profile.
+	CompanyName *string `json:"company_name,omitempty" url:"company_name,omitempty"`
+	// The email address associated with the customer profile.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+	// The physical address associated with the customer profile.
+	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+	// The phone number associated with the customer profile.
+	PhoneNumber *string `json:"phone_number,omitempty" url:"phone_number,omitempty"`
+	// The birthday associated with the customer profile, in `YYYY-MM-DD` format. For example, `1998-09-21`
+	// represents September 21, 1998, and `0000-09-21` represents September 21 (without a birth year).
+	Birthday *string `json:"birthday,omitempty" url:"birthday,omitempty"`
+	// An optional second ID used to associate the customer profile with an
+	// entity in another system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// A custom note associated with the customer profile.
+	Note *string `json:"note,omitempty" url:"note,omitempty"`
+	// Represents general customer preferences.
+	Preferences *CustomerPreferences `json:"preferences,omitempty" url:"preferences,omitempty"`
+	// The customer groups and segments the customer belongs to. This deprecated field has been replaced with the dedicated `group_ids` for customer groups and the dedicated `segment_ids` field for customer segments. You can retrieve information about a given customer group and segment respectively using the Customer Groups API and Customer Segments API.
+	Groups []*CustomerGroupInfo `json:"groups,omitempty" url:"groups,omitempty"`
+	// The method used to create the customer profile.
+	// See [CustomerCreationSource](#type-customercreationsource) for possible values
+	CreationSource *CustomerCreationSource `json:"creation_source,omitempty" url:"creation_source,omitempty"`
+	// The IDs of [customer groups](entity:CustomerGroup) the customer belongs to.
+	GroupIDs []string `json:"group_ids,omitempty" url:"group_ids,omitempty"`
+	// The IDs of [customer segments](entity:CustomerSegment) the customer belongs to.
+	SegmentIDs []string `json:"segment_ids,omitempty" url:"segment_ids,omitempty"`
+	// The Square-assigned version number of the customer profile. The version number is incremented each time an update is committed to the customer profile, except for changes to customer segment membership and cards on file.
+	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+	// The tax ID associated with the customer profile. This field is present only for customers of sellers in EU countries or the United Kingdom.
+	// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
+	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *Customer) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *Customer) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *Customer) GetUpdatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.UpdatedAt
+}
+
+func (c *Customer) GetCards() []*Card {
+	if c == nil {
+		return nil
+	}
+	return c.Cards
+}
+
+func (c *Customer) GetGivenName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.GivenName
+}
+
+func (c *Customer) GetFamilyName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.FamilyName
+}
+
+func (c *Customer) GetNickname() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Nickname
+}
+
+func (c *Customer) GetCompanyName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CompanyName
+}
+
+func (c *Customer) GetEmailAddress() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EmailAddress
+}
+
+func (c *Customer) GetAddress() *Address {
+	if c == nil {
+		return nil
+	}
+	return c.Address
+}
+
+func (c *Customer) GetPhoneNumber() *string {
+	if c == nil {
+		return nil
+	}
+	return c.PhoneNumber
+}
+
+func (c *Customer) GetBirthday() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Birthday
+}
+
+func (c *Customer) GetReferenceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ReferenceID
+}
+
+func (c *Customer) GetNote() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Note
+}
+
+func (c *Customer) GetPreferences() *CustomerPreferences {
+	if c == nil {
+		return nil
+	}
+	return c.Preferences
+}
+
+func (c *Customer) GetGroups() []*CustomerGroupInfo {
+	if c == nil {
+		return nil
+	}
+	return c.Groups
+}
+
+func (c *Customer) GetCreationSource() *CustomerCreationSource {
+	if c == nil {
+		return nil
+	}
+	return c.CreationSource
+}
+
+func (c *Customer) GetGroupIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.GroupIDs
+}
+
+func (c *Customer) GetSegmentIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.SegmentIDs
+}
+
+func (c *Customer) GetVersion() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.Version
+}
+
+func (c *Customer) GetTaxIDs() *CustomerTaxIDs {
+	if c == nil {
+		return nil
+	}
+	return c.TaxIDs
+}
+
+func (c *Customer) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *Customer) UnmarshalJSON(data []byte) error {
+	type unmarshaler Customer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = Customer(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *Customer) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
+// searching by an `Address`-type custom attribute.
+type CustomerAddressFilter struct {
+	// The postal code to search for. Only an `exact` match is supported.
+	PostalCode *CustomerTextFilter `json:"postal_code,omitempty" url:"postal_code,omitempty"`
+	// The country code to search for.
+	// See [Country](#type-country) for possible values
+	Country *Country `json:"country,omitempty" url:"country,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerAddressFilter) GetPostalCode() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.PostalCode
+}
+
+func (c *CustomerAddressFilter) GetCountry() *Country {
+	if c == nil {
+		return nil
+	}
+	return c.Country
+}
+
+func (c *CustomerAddressFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerAddressFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerAddressFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerAddressFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerAddressFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Indicates the method used to create the customer profile.
+type CustomerCreationSource string
+
+const (
+	CustomerCreationSourceOther            CustomerCreationSource = "OTHER"
+	CustomerCreationSourceAppointments     CustomerCreationSource = "APPOINTMENTS"
+	CustomerCreationSourceCoupon           CustomerCreationSource = "COUPON"
+	CustomerCreationSourceDeletionRecovery CustomerCreationSource = "DELETION_RECOVERY"
+	CustomerCreationSourceDirectory        CustomerCreationSource = "DIRECTORY"
+	CustomerCreationSourceEgifting         CustomerCreationSource = "EGIFTING"
+	CustomerCreationSourceEmailCollection  CustomerCreationSource = "EMAIL_COLLECTION"
+	CustomerCreationSourceFeedback         CustomerCreationSource = "FEEDBACK"
+	CustomerCreationSourceImport           CustomerCreationSource = "IMPORT"
+	CustomerCreationSourceInvoices         CustomerCreationSource = "INVOICES"
+	CustomerCreationSourceLoyalty          CustomerCreationSource = "LOYALTY"
+	CustomerCreationSourceMarketing        CustomerCreationSource = "MARKETING"
+	CustomerCreationSourceMerge            CustomerCreationSource = "MERGE"
+	CustomerCreationSourceOnlineStore      CustomerCreationSource = "ONLINE_STORE"
+	CustomerCreationSourceInstantProfile   CustomerCreationSource = "INSTANT_PROFILE"
+	CustomerCreationSourceTerminal         CustomerCreationSource = "TERMINAL"
+	CustomerCreationSourceThirdParty       CustomerCreationSource = "THIRD_PARTY"
+	CustomerCreationSourceThirdPartyImport CustomerCreationSource = "THIRD_PARTY_IMPORT"
+	CustomerCreationSourceUnmergeRecovery  CustomerCreationSource = "UNMERGE_RECOVERY"
+)
+
+func NewCustomerCreationSourceFromString(s string) (CustomerCreationSource, error) {
+	switch s {
+	case "OTHER":
+		return CustomerCreationSourceOther, nil
+	case "APPOINTMENTS":
+		return CustomerCreationSourceAppointments, nil
+	case "COUPON":
+		return CustomerCreationSourceCoupon, nil
+	case "DELETION_RECOVERY":
+		return CustomerCreationSourceDeletionRecovery, nil
+	case "DIRECTORY":
+		return CustomerCreationSourceDirectory, nil
+	case "EGIFTING":
+		return CustomerCreationSourceEgifting, nil
+	case "EMAIL_COLLECTION":
+		return CustomerCreationSourceEmailCollection, nil
+	case "FEEDBACK":
+		return CustomerCreationSourceFeedback, nil
+	case "IMPORT":
+		return CustomerCreationSourceImport, nil
+	case "INVOICES":
+		return CustomerCreationSourceInvoices, nil
+	case "LOYALTY":
+		return CustomerCreationSourceLoyalty, nil
+	case "MARKETING":
+		return CustomerCreationSourceMarketing, nil
+	case "MERGE":
+		return CustomerCreationSourceMerge, nil
+	case "ONLINE_STORE":
+		return CustomerCreationSourceOnlineStore, nil
+	case "INSTANT_PROFILE":
+		return CustomerCreationSourceInstantProfile, nil
+	case "TERMINAL":
+		return CustomerCreationSourceTerminal, nil
+	case "THIRD_PARTY":
+		return CustomerCreationSourceThirdParty, nil
+	case "THIRD_PARTY_IMPORT":
+		return CustomerCreationSourceThirdPartyImport, nil
+	case "UNMERGE_RECOVERY":
+		return CustomerCreationSourceUnmergeRecovery, nil
+	}
+	var t CustomerCreationSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CustomerCreationSource) Ptr() *CustomerCreationSource {
+	return &c
+}
+
+// The creation source filter.
+//
+// If one or more creation sources are set, customer profiles are included in,
+// or excluded from, the result if they match at least one of the filter criteria.
+type CustomerCreationSourceFilter struct {
+	// The list of creation sources used as filtering criteria.
+	// See [CustomerCreationSource](#type-customercreationsource) for possible values
+	Values []CustomerCreationSource `json:"values,omitempty" url:"values,omitempty"`
+	// Indicates whether a customer profile matching the filter criteria
+	// should be included in the result or excluded from the result.
+	//
+	// Default: `INCLUDE`.
+	// See [CustomerInclusionExclusion](#type-customerinclusionexclusion) for possible values
+	Rule *CustomerInclusionExclusion `json:"rule,omitempty" url:"rule,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCreationSourceFilter) GetValues() []CustomerCreationSource {
+	if c == nil {
+		return nil
+	}
+	return c.Values
+}
+
+func (c *CustomerCreationSourceFilter) GetRule() *CustomerInclusionExclusion {
+	if c == nil {
+		return nil
+	}
+	return c.Rule
+}
+
+func (c *CustomerCreationSourceFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreationSourceFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreationSourceFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreationSourceFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreationSourceFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
+// based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
+type CustomerCustomAttributeFilter struct {
+	// The `key` of the [custom attribute](entity:CustomAttribute) to filter by. The key is the identifier of the custom attribute
+	// (and the corresponding custom attribute definition) and can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
+	Key string `json:"key" url:"key"`
+	// A filter that corresponds to the data type of the target custom attribute. For example, provide the `phone` filter to
+	// search based on the value of a `PhoneNumber`-type custom attribute. The data type is specified by the schema field of the custom attribute definition,
+	// which can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
+	//
+	// You must provide this `filter` field, the `updated_at` field, or both.
+	Filter *CustomerCustomAttributeFilterValue `json:"filter,omitempty" url:"filter,omitempty"`
+	// The date range for when the custom attribute was last updated. The date range can include `start_at`, `end_at`, or
+	// both. Range boundaries are inclusive. Dates are specified as RFC 3339 timestamps.
+	//
+	// You must provide this `updated_at` field, the `filter` field, or both.
+	UpdatedAt *TimeRange `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeFilter) GetKey() string {
+	if c == nil {
+		return ""
+	}
+	return c.Key
+}
+
+func (c *CustomerCustomAttributeFilter) GetFilter() *CustomerCustomAttributeFilterValue {
+	if c == nil {
+		return nil
+	}
+	return c.Filter
+}
+
+func (c *CustomerCustomAttributeFilter) GetUpdatedAt() *TimeRange {
+	if c == nil {
+		return nil
+	}
+	return c.UpdatedAt
+}
+
+func (c *CustomerCustomAttributeFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
+// of a customer-related [custom attribute](entity:CustomAttribute).
+type CustomerCustomAttributeFilterValue struct {
+	// A filter for a query based on the value of an `Email`-type custom attribute. This filter is case-insensitive and can
+	// include `exact` or `fuzzy`, but not both.
+	//
+	// For an `exact` match, provide the complete email address.
+	//
+	// For a `fuzzy` match, provide a query expression containing one or more query tokens to match against the email address. Square removes
+	// any punctuation (including periods (.), underscores (\_), and the @ symbol) and tokenizes the email addresses on spaces. A match is found
+	// if a tokenized email address contains all the tokens in the search query, irrespective of the token order. For example, `Steven gmail`
+	// matches steven.jones@gmail.com and mygmail@stevensbakery.com.
+	Email *CustomerTextFilter `json:"email,omitempty" url:"email,omitempty"`
+	// A filter for a query based on the value of a `PhoneNumber`-type custom attribute. This filter is case-insensitive and
+	// can include `exact` or `fuzzy`, but not both.
+	//
+	// For an `exact` match, provide the complete phone number. This is always an E.164-compliant phone number that starts
+	// with the + sign followed by the country code and subscriber number. For example, the format for a US phone number is +12061112222.
+	//
+	// For a `fuzzy` match, provide a query expression containing one or more query tokens to match against the phone number.
+	// Square removes any punctuation and tokenizes the expression on spaces. A match is found if a tokenized phone number contains
+	// all the tokens in the search query, irrespective of the token order. For example, `415 123 45` is tokenized to `415`, `123`, and `45`,
+	// which matches +14151234567 and +12345674158, but does not match +1234156780. Similarly, the expression `415` matches
+	// +14151234567, +12345674158, and +1234156780.
+	Phone *CustomerTextFilter `json:"phone,omitempty" url:"phone,omitempty"`
+	// A filter for a query based on the value of a `String`-type custom attribute. This filter is case-insensitive and
+	// can include `exact` or `fuzzy`, but not both.
+	//
+	// For an `exact` match, provide the complete string.
+	//
+	// For a `fuzzy` match, provide a query expression containing one or more query tokens in any order that contain complete words
+	// to match against the string. Square tokenizes the expression using a grammar-based tokenizer. For example, the expressions `quick brown`,
+	// `brown quick`, and `quick fox` match "The quick brown fox jumps over the lazy dog". However, `quick foxes` and `qui` do not match.
+	Text *CustomerTextFilter `json:"text,omitempty" url:"text,omitempty"`
+	// A filter for a query based on the display name for a `Selection`-type custom attribute value. This filter is case-sensitive
+	// and can contain `any`, `all`, or both. The `none` condition is not supported.
+	//
+	// Provide the display name of each item that you want to search for. To find the display names for the selection, use the
+	// [Customer Custom Attributes API](api:CustomerCustomAttributes) to retrieve the corresponding custom attribute definition
+	// and then check the `schema.items.names` field. For more information, see
+	// [Search based on selection](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#custom-attribute-value-filter-selection).
+	//
+	// Note that when a `Selection`-type custom attribute is assigned to a customer profile, the custom attribute value is a list of one
+	// or more UUIDs (sourced from the `schema.items.enum` field) that map to the item names. These UUIDs are unique per seller.
+	Selection *FilterValue `json:"selection,omitempty" url:"selection,omitempty"`
+	// A filter for a query based on the value of a `Date`-type custom attribute.
+	//
+	// Provide a date range for this filter using `start_at`, `end_at`, or both. Range boundaries are inclusive. Dates can be specified
+	// in `YYYY-MM-DD` format or as RFC 3339 timestamps.
+	Date *TimeRange `json:"date,omitempty" url:"date,omitempty"`
+	// A filter for a query based on the value of a `Number`-type custom attribute, which can be an integer or a decimal with up to
+	// 5 digits of precision.
+	//
+	// Provide a numerical range for this filter using `start_at`, `end_at`, or both. Range boundaries are inclusive. Numbers are specified
+	// as decimals or integers. The absolute value of range boundaries must not exceed `(2^63-1)/10^5`, or 92233720368547.
+	Number *FloatNumberRange `json:"number,omitempty" url:"number,omitempty"`
+	// A filter for a query based on the value of a `Boolean`-type custom attribute.
+	Boolean *bool `json:"boolean,omitempty" url:"boolean,omitempty"`
+	// A filter for a query based on the value of an `Address`-type custom attribute. The filter can include `postal_code`, `country`, or both.
+	Address *CustomerAddressFilter `json:"address,omitempty" url:"address,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetEmail() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Email
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetPhone() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Phone
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetText() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Text
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetSelection() *FilterValue {
+	if c == nil {
+		return nil
+	}
+	return c.Selection
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetDate() *TimeRange {
+	if c == nil {
+		return nil
+	}
+	return c.Date
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetNumber() *FloatNumberRange {
+	if c == nil {
+		return nil
+	}
+	return c.Number
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetBoolean() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Boolean
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetAddress() *CustomerAddressFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Address
+}
+
+func (c *CustomerCustomAttributeFilterValue) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeFilterValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeFilterValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeFilterValue(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeFilterValue) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
+// to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
+// [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
+type CustomerCustomAttributeFilters struct {
+	// The custom attribute filters. Each filter must specify `key` and include the `filter` field with a type-specific filter,
+	// the `updated_at` field, or both. The provided keys must be unique within the list of custom attribute filters.
+	Filters []*CustomerCustomAttributeFilter `json:"filters,omitempty" url:"filters,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerCustomAttributeFilters) GetFilters() []*CustomerCustomAttributeFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Filters
+}
+
+func (c *CustomerCustomAttributeFilters) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeFilters
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeFilters(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeFilters) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+type CustomerFilter struct {
+	// A filter to select customers based on their creation source.
+	CreationSource *CustomerCreationSourceFilter `json:"creation_source,omitempty" url:"creation_source,omitempty"`
+	// A filter to select customers based on when they were created.
+	CreatedAt *TimeRange `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// A filter to select customers based on when they were last updated.
+	UpdatedAt *TimeRange `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// A filter to [select customers by their email address](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-email-address)
+	// visible to the seller.
+	// This filter is case-insensitive.
+	//
+	// For [exact matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#exact-search-by-email-address), this
+	// filter causes the search to return customer profiles
+	// whose `email_address` field value are identical to the email address provided
+	// in the query.
+	//
+	// For [fuzzy matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#fuzzy-search-by-email-address),
+	// this filter causes the search to return customer profiles
+	// whose `email_address` field value has a token-wise partial match against the filtering
+	// expression in the query. For example, with `Steven gmail` provided in a search
+	// query, the search returns customers whose email address is `steven.johnson@gmail.com`
+	// or `mygmail@stevensbakery.com`. Square removes any punctuation (including periods (.),
+	// underscores (\_), and the @ symbol) and tokenizes the email addresses on spaces. A match is
+	// found if a tokenized email address contains all the tokens in the search query,
+	// irrespective of the token order.
+	EmailAddress *CustomerTextFilter `json:"email_address,omitempty" url:"email_address,omitempty"`
+	// A filter to [select customers by their phone numbers](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-phone-number)
+	// visible to the seller.
+	//
+	// For [exact matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#exact-search-by-phone-number),
+	// this filter returns customers whose phone number matches the specified query expression. The number in the query must be of an
+	// E.164-compliant form. In particular, it must include the leading `+` sign followed by a country code and then a subscriber number.
+	// For example, the standard E.164 form of a US phone number is `+12062223333` and an E.164-compliant variation is `+1 (206) 222-3333`.
+	// To match the query expression, stored customer phone numbers are converted to the standard E.164 form.
+	//
+	// For [fuzzy matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#fuzzy-search-by-phone-number),
+	// this filter returns customers whose phone number matches the token or tokens provided in the query expression. For example, with `415`
+	// provided in a search query, the search returns customers with the phone numbers `+1-415-212-1200`, `+1-212-415-1234`, and `+1 (551) 234-1567`.
+	// Similarly, a search query of `415 123` returns customers with the phone numbers `+1-212-415-1234` and `+1 (551) 234-1567` but not
+	// `+1-212-415-1200`. A match is found if a tokenized phone number contains all the tokens in the search query, irrespective of the token order.
+	PhoneNumber *CustomerTextFilter `json:"phone_number,omitempty" url:"phone_number,omitempty"`
+	// A filter to [select customers by their reference IDs](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-reference-id).
+	// This filter is case-insensitive.
+	//
+	// [Exact matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#exact-search-by-reference-id)
+	// of a customer's reference ID against a query's reference ID is evaluated as an
+	// exact match between two strings, character by character in the given order.
+	//
+	// [Fuzzy matching](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#fuzzy-search-by-reference-id)
+	// of stored reference IDs against queried reference IDs works
+	// exactly the same as fuzzy matching on email addresses. Non-alphanumeric characters
+	// are replaced by spaces to tokenize stored and queried reference IDs. A match is found
+	// if a tokenized stored reference ID contains all tokens specified in any order in the query. For example,
+	// a query of `NYC M` matches customer profiles with the `reference_id` value of `NYC_M_35_JOHNSON`
+	// and `NYC_27_MURRAY`.
+	ReferenceID *CustomerTextFilter `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// A filter to select customers based on the [groups](entity:CustomerGroup) they belong to.
+	// Group membership is controlled by sellers and developers.
+	//
+	// The `group_ids` filter has the following syntax:
+	//
+	// ```
+	// "group_ids": {
+	// "any":  ["{group_a_id}", "{group_b_id}", ...],
+	// "all":  ["{group_1_id}", "{group_2_id}", ...],
+	// "none": ["{group_i_id}", "{group_ii_id}", ...]
+	// }
+	// ```
+	//
+	// You can use any combination of the `any`, `all`, and `none` fields in the filter.
+	// With `any`, the search returns customers in groups `a` or `b` or any other group specified in the list.
+	// With `all`, the search returns customers in groups `1` and `2` and all other groups specified in the list.
+	// With `none`, the search returns customers not in groups `i` or `ii` or any other group specified in the list.
+	//
+	// If any of the search conditions are not met, including when an invalid or non-existent group ID is provided,
+	// the result is an empty object (`{}`).
+	GroupIDs *FilterValue `json:"group_ids,omitempty" url:"group_ids,omitempty"`
+	// A filter to select customers based on one or more custom attributes.
+	// This filter can contain up to 10 custom attribute filters. Each custom attribute filter specifies filtering criteria for a target custom
+	// attribute. If multiple custom attribute filters are provided, they are combined as an `AND` operation.
+	//
+	// To be valid for a search, the custom attributes must be visible to the requesting application. For more information, including example queries,
+	// see [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
+	//
+	// Square returns matching customer profiles, which do not contain custom attributes. To retrieve customer-related custom attributes,
+	// use the [Customer Custom Attributes API](api:CustomerCustomAttributes). For example, you can call
+	// [RetrieveCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttribute) using a customer ID from the result set.
+	CustomAttribute *CustomerCustomAttributeFilters `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+	// A filter to select customers based on the [segments](entity:CustomerSegment) they belong to.
+	// Segment membership is dynamic and adjusts automatically based on whether customers meet the segment criteria.
+	//
+	// You can provide up to three segment IDs in the filter, using any combination of the `all`, `any`, and `none` fields.
+	// For the following example, the results include customers who belong to both segment A and segment B but do not belong to segment C.
+	//
+	// ```
+	// "segment_ids": {
+	// "all":  ["{segment_A_id}", "{segment_B_id}"],
+	// "none":  ["{segment_C_id}"]
+	// }
+	// ```
+	//
+	// If an invalid or non-existent segment ID is provided in the filter, Square stops processing the request
+	// and returns a `400 BAD_REQUEST` error that includes the segment ID.
+	SegmentIDs *FilterValue `json:"segment_ids,omitempty" url:"segment_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerFilter) GetCreationSource() *CustomerCreationSourceFilter {
+	if c == nil {
+		return nil
+	}
+	return c.CreationSource
+}
+
+func (c *CustomerFilter) GetCreatedAt() *TimeRange {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerFilter) GetUpdatedAt() *TimeRange {
+	if c == nil {
+		return nil
+	}
+	return c.UpdatedAt
+}
+
+func (c *CustomerFilter) GetEmailAddress() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.EmailAddress
+}
+
+func (c *CustomerFilter) GetPhoneNumber() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.PhoneNumber
+}
+
+func (c *CustomerFilter) GetReferenceID() *CustomerTextFilter {
+	if c == nil {
+		return nil
+	}
+	return c.ReferenceID
+}
+
+func (c *CustomerFilter) GetGroupIDs() *FilterValue {
+	if c == nil {
+		return nil
+	}
+	return c.GroupIDs
+}
+
+func (c *CustomerFilter) GetCustomAttribute() *CustomerCustomAttributeFilters {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttribute
+}
+
+func (c *CustomerFilter) GetSegmentIDs() *FilterValue {
+	if c == nil {
+		return nil
+	}
+	return c.SegmentIDs
+}
+
+func (c *CustomerFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Contains some brief information about a Customer Group with its identifier included.
+type CustomerGroupInfo struct {
+	// The ID of the Customer Group.
+	ID string `json:"id" url:"id"`
+	// The name of the Customer Group.
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerGroupInfo) GetID() string {
+	if c == nil {
+		return ""
+	}
+	return c.ID
+}
+
+func (c *CustomerGroupInfo) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CustomerGroupInfo) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerGroupInfo) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerGroupInfo
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerGroupInfo(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerGroupInfo) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Indicates whether customers should be included in, or excluded from,
+// the result set when they match the filtering criteria.
+type CustomerInclusionExclusion string
+
+const (
+	CustomerInclusionExclusionInclude CustomerInclusionExclusion = "INCLUDE"
+	CustomerInclusionExclusionExclude CustomerInclusionExclusion = "EXCLUDE"
+)
+
+func NewCustomerInclusionExclusionFromString(s string) (CustomerInclusionExclusion, error) {
+	switch s {
+	case "INCLUDE":
+		return CustomerInclusionExclusionInclude, nil
+	case "EXCLUDE":
+		return CustomerInclusionExclusionExclude, nil
+	}
+	var t CustomerInclusionExclusion
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CustomerInclusionExclusion) Ptr() *CustomerInclusionExclusion {
+	return &c
+}
+
+// Represents communication preferences for the customer profile.
+type CustomerPreferences struct {
+	// Indicates whether the customer has unsubscribed from marketing campaign emails. A value of `true` means that the customer chose to opt out of email marketing from the current Square seller or from all Square sellers. This value is read-only from the Customers API.
+	EmailUnsubscribed *bool `json:"email_unsubscribed,omitempty" url:"email_unsubscribed,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerPreferences) GetEmailUnsubscribed() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.EmailUnsubscribed
+}
+
+func (c *CustomerPreferences) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerPreferences) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerPreferences
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerPreferences(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerPreferences) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
+type CustomerQuery struct {
+	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
+	// Multiple filters are combined as `AND` statements.
+	//
+	// **Note:** Combining multiple filters as `OR` statements is not supported. Instead, send multiple single-filter
+	// searches and join the result sets.
+	Filter *CustomerFilter `json:"filter,omitempty" url:"filter,omitempty"`
+	// Sorting criteria for query results. The default behavior is to sort
+	// customers alphabetically by `given_name` and `family_name`.
+	Sort *CustomerSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerQuery) GetFilter() *CustomerFilter {
+	if c == nil {
+		return nil
+	}
+	return c.Filter
+}
+
+func (c *CustomerQuery) GetSort() *CustomerSort {
+	if c == nil {
+		return nil
+	}
+	return c.Sort
+}
+
+func (c *CustomerQuery) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerQuery) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerQuery
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerQuery(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerQuery) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+type CustomerSort struct {
+	// Indicates the fields to use as the sort key, which is either the default set of fields or `created_at`.
+	//
+	// The default value is `DEFAULT`.
+	// See [CustomerSortField](#type-customersortfield) for possible values
+	Field *CustomerSortField `json:"field,omitempty" url:"field,omitempty"`
+	// Indicates the order in which results should be sorted based on the
+	// sort field value. Strings use standard alphabetic comparison
+	// to determine order. Strings representing numbers are sorted as strings.
+	//
+	// The default value is `ASC`.
+	// See [SortOrder](#type-sortorder) for possible values
+	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerSort) GetField() *CustomerSortField {
+	if c == nil {
+		return nil
+	}
+	return c.Field
+}
+
+func (c *CustomerSort) GetOrder() *SortOrder {
+	if c == nil {
+		return nil
+	}
+	return c.Order
+}
+
+func (c *CustomerSort) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerSort) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerSort
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerSort(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerSort) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Specifies customer attributes as the sort key to customer profiles returned from a search.
+type CustomerSortField string
+
+const (
+	CustomerSortFieldDefault   CustomerSortField = "DEFAULT"
+	CustomerSortFieldCreatedAt CustomerSortField = "CREATED_AT"
+)
+
+func NewCustomerSortFieldFromString(s string) (CustomerSortField, error) {
+	switch s {
+	case "DEFAULT":
+		return CustomerSortFieldDefault, nil
+	case "CREATED_AT":
+		return CustomerSortFieldCreatedAt, nil
+	}
+	var t CustomerSortField
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CustomerSortField) Ptr() *CustomerSortField {
+	return &c
+}
+
+// Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
+// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
+type CustomerTaxIDs struct {
+	// The EU VAT identification number for the customer. For example, `IE3426675K`. The ID can contain alphanumeric characters only.
+	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerTaxIDs) GetEuVat() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EuVat
+}
+
+func (c *CustomerTaxIDs) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerTaxIDs) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerTaxIDs
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerTaxIDs(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerTaxIDs) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A filter to select customers based on exact or fuzzy matching of
+// customer attributes against a specified query. Depending on the customer attributes,
+// the filter can be case-sensitive. This filter can be exact or fuzzy, but it cannot be both.
+type CustomerTextFilter struct {
+	// Use the exact filter to select customers whose attributes match exactly the specified query.
+	Exact *string `json:"exact,omitempty" url:"exact,omitempty"`
+	// Use the fuzzy filter to select customers whose attributes match the specified query
+	// in a fuzzy manner. When the fuzzy option is used, search queries are tokenized, and then
+	// each query token must be matched somewhere in the searched attribute. For single token queries,
+	// this is effectively the same behavior as a partial match operation.
+	Fuzzy *string `json:"fuzzy,omitempty" url:"fuzzy,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CustomerTextFilter) GetExact() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Exact
+}
+
+func (c *CustomerTextFilter) GetFuzzy() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Fuzzy
+}
+
+func (c *CustomerTextFilter) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerTextFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerTextFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerTextFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerTextFilter) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the `DeleteCustomer` endpoint.
+type DeleteCustomerResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeleteCustomerResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteCustomerResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteCustomerResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteCustomerResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteCustomerResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteCustomerResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Specifies a decimal number range.
+type FloatNumberRange struct {
+	// A decimal value indicating where the range starts.
+	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
+	// A decimal value indicating where the range ends.
+	EndAt *string `json:"end_at,omitempty" url:"end_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FloatNumberRange) GetStartAt() *string {
+	if f == nil {
+		return nil
+	}
+	return f.StartAt
+}
+
+func (f *FloatNumberRange) GetEndAt() *string {
+	if f == nil {
+		return nil
+	}
+	return f.EndAt
+}
+
+func (f *FloatNumberRange) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FloatNumberRange) UnmarshalJSON(data []byte) error {
+	type unmarshaler FloatNumberRange
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FloatNumberRange(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FloatNumberRange) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the `RetrieveCustomer` endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
+type GetCustomerResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The requested customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetCustomerResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetCustomerResponse) GetCustomer() *Customer {
+	if g == nil {
+		return nil
+	}
+	return g.Customer
+}
+
+func (g *GetCustomerResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetCustomerResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetCustomerResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetCustomerResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetCustomerResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the `ListCustomers` endpoint.
+//
+// Either `errors` or `customers` is present in a given response (never both).
+type ListCustomersResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The customer profiles associated with the Square account or an empty object (`{}`) if none are found.
+	// Only customer profiles with public information (`given_name`, `family_name`, `company_name`, `email_address`, or
+	// `phone_number`) are included in the response.
+	Customers []*Customer `json:"customers,omitempty" url:"customers,omitempty"`
+	// A pagination cursor to retrieve the next set of results for the
+	// original query. A cursor is only present if the request succeeded and additional results
+	// are available.
+	//
+	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The total count of customers associated with the Square account. Only customer profiles with public information
+	// (`given_name`, `family_name`, `company_name`, `email_address`, or `phone_number`) are counted. This field is present
+	// only if `count` is set to `true` in the request.
+	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *ListCustomersResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListCustomersResponse) GetCustomers() []*Customer {
+	if l == nil {
+		return nil
+	}
+	return l.Customers
+}
+
+func (l *ListCustomersResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListCustomersResponse) GetCount() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.Count
+}
+
+func (l *ListCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListCustomersResponse) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the `SearchCustomers` endpoint.
+//
+// Either `errors` or `customers` is present in a given response (never both).
+type SearchCustomersResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The customer profiles that match the search query. If any search condition is not met, the result is an empty object (`{}`).
+	// Only customer profiles with public information (`given_name`, `family_name`, `company_name`, `email_address`, or `phone_number`)
+	// are included in the response.
+	Customers []*Customer `json:"customers,omitempty" url:"customers,omitempty"`
+	// A pagination cursor that can be used during subsequent calls
+	// to `SearchCustomers` to retrieve the next set of results associated
+	// with the original query. Pagination cursors are only present when
+	// a request succeeds and additional results are available.
+	//
+	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The total count of customers associated with the Square account that match the search query. Only customer profiles with
+	// public information (`given_name`, `family_name`, `company_name`, `email_address`, or `phone_number`) are counted. This field is
+	// present only if `count` is set to `true` in the request.
+	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchCustomersResponse) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SearchCustomersResponse) GetCustomers() []*Customer {
+	if s == nil {
+		return nil
+	}
+	return s.Customers
+}
+
+func (s *SearchCustomersResponse) GetCursor() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Cursor
+}
+
+func (s *SearchCustomersResponse) GetCount() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.Count
+}
+
+func (s *SearchCustomersResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchCustomersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCustomersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchCustomersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchCustomersResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Defines the fields that are included in the response body of
+// a request to the [UpdateCustomer](api-endpoint:Customers-UpdateCustomer) or
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
+type UpdateCustomerResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The updated customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateCustomerResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateCustomerResponse) GetCustomer() *Customer {
+	if u == nil {
+		return nil
+	}
+	return u.Customer
+}
+
+func (u *UpdateCustomerResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateCustomerResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateCustomerResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateCustomerResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateCustomerResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }
 
 type UpdateCustomerRequest struct {

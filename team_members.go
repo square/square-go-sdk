@@ -2,6 +2,12 @@
 
 package square
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	internal "github.com/square/square-go-sdk/internal"
+)
+
 type BatchCreateTeamMembersRequest struct {
 	// The data used to create the `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`. The maximum number of create objects is 25.
 	TeamMembers map[string]*CreateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
@@ -20,4 +26,867 @@ type SearchTeamMembersRequest struct {
 	// The opaque cursor for fetching the next page. For more information, see
 	// [pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+}
+
+// Represents a response from a bulk create request containing the created `TeamMember` objects or error messages.
+type BatchCreateTeamMembersResponse struct {
+	// The successfully created `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`.
+	TeamMembers map[string]*CreateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchCreateTeamMembersResponse) GetTeamMembers() map[string]*CreateTeamMemberResponse {
+	if b == nil {
+		return nil
+	}
+	return b.TeamMembers
+}
+
+func (b *BatchCreateTeamMembersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchCreateTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchCreateTeamMembersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchCreateTeamMembersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchCreateTeamMembersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchCreateTeamMembersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a response from a bulk update request containing the updated `TeamMember` objects or error messages.
+type BatchUpdateTeamMembersResponse struct {
+	// The successfully updated `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`.
+	TeamMembers map[string]*UpdateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BatchUpdateTeamMembersResponse) GetTeamMembers() map[string]*UpdateTeamMemberResponse {
+	if b == nil {
+		return nil
+	}
+	return b.TeamMembers
+}
+
+func (b *BatchUpdateTeamMembersResponse) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
+}
+
+func (b *BatchUpdateTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BatchUpdateTeamMembersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpdateTeamMembersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchUpdateTeamMembersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchUpdateTeamMembersResponse) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Represents a create request for a `TeamMember` object.
+type CreateTeamMemberRequest struct {
+	// A unique string that identifies this `CreateTeamMember` request.
+	// Keys can be any valid string, but must be unique for every request.
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
+	//
+	// The minimum length is 1 and the maximum length is 45.
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
+	// **Required** The data used to create the `TeamMember` object.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateTeamMemberRequest) GetIdempotencyKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IdempotencyKey
+}
+
+func (c *CreateTeamMemberRequest) GetTeamMember() *TeamMember {
+	if c == nil {
+		return nil
+	}
+	return c.TeamMember
+}
+
+func (c *CreateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateTeamMemberRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTeamMemberRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateTeamMemberRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateTeamMemberRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a response from a create request containing the created `TeamMember` object or error messages.
+type CreateTeamMemberResponse struct {
+	// The successfully created `TeamMember` object.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateTeamMemberResponse) GetTeamMember() *TeamMember {
+	if c == nil {
+		return nil
+	}
+	return c.TeamMember
+}
+
+func (c *CreateTeamMemberResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateTeamMemberResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTeamMemberResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateTeamMemberResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateTeamMemberResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a response from a retrieve request containing a `TeamMember` object or error messages.
+type GetTeamMemberResponse struct {
+	// The successfully retrieved `TeamMember` object.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GetTeamMemberResponse) GetTeamMember() *TeamMember {
+	if g == nil {
+		return nil
+	}
+	return g.TeamMember
+}
+
+func (g *GetTeamMemberResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GetTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GetTeamMemberResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetTeamMemberResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GetTeamMemberResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GetTeamMemberResponse) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents a filter used in a search for `TeamMember` objects. `AND` logic is applied
+// between the individual fields, and `OR` logic is applied within list-based fields.
+// For example, setting this filter value:
+//
+// ```
+// filter = (locations_ids = ["A", "B"], status = ACTIVE)
+// ```
+//
+// returns only active team members assigned to either location "A" or "B".
+type SearchTeamMembersFilter struct {
+	// When present, filters by team members assigned to the specified locations.
+	// When empty, includes team members assigned to any location.
+	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
+	// When present, filters by team members who match the given status.
+	// When empty, includes team members of all statuses.
+	// See [TeamMemberStatus](#type-teammemberstatus) for possible values
+	Status *TeamMemberStatus `json:"status,omitempty" url:"status,omitempty"`
+	// When present and set to true, returns the team member who is the owner of the Square account.
+	IsOwner *bool `json:"is_owner,omitempty" url:"is_owner,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchTeamMembersFilter) GetLocationIDs() []string {
+	if s == nil {
+		return nil
+	}
+	return s.LocationIDs
+}
+
+func (s *SearchTeamMembersFilter) GetStatus() *TeamMemberStatus {
+	if s == nil {
+		return nil
+	}
+	return s.Status
+}
+
+func (s *SearchTeamMembersFilter) GetIsOwner() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.IsOwner
+}
+
+func (s *SearchTeamMembersFilter) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchTeamMembersFilter) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTeamMembersFilter
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchTeamMembersFilter(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchTeamMembersFilter) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Represents the parameters in a search for `TeamMember` objects.
+type SearchTeamMembersQuery struct {
+	// The options to filter by.
+	Filter *SearchTeamMembersFilter `json:"filter,omitempty" url:"filter,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchTeamMembersQuery) GetFilter() *SearchTeamMembersFilter {
+	if s == nil {
+		return nil
+	}
+	return s.Filter
+}
+
+func (s *SearchTeamMembersQuery) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchTeamMembersQuery) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTeamMembersQuery
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchTeamMembersQuery(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchTeamMembersQuery) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Represents a response from a search request containing a filtered list of `TeamMember` objects.
+type SearchTeamMembersResponse struct {
+	// The filtered list of `TeamMember` objects.
+	TeamMembers []*TeamMember `json:"team_members,omitempty" url:"team_members,omitempty"`
+	// The opaque cursor for fetching the next page. For more information, see
+	// [pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchTeamMembersResponse) GetTeamMembers() []*TeamMember {
+	if s == nil {
+		return nil
+	}
+	return s.TeamMembers
+}
+
+func (s *SearchTeamMembersResponse) GetCursor() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Cursor
+}
+
+func (s *SearchTeamMembersResponse) GetErrors() []*Error {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SearchTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchTeamMembersResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTeamMembersResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchTeamMembersResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchTeamMembersResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A record representing an individual team member for a business.
+type TeamMember struct {
+	// The unique ID for the team member.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// A second ID used to associate the team member with an entity in another system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// Whether the team member is the owner of the Square account.
+	IsOwner *bool `json:"is_owner,omitempty" url:"is_owner,omitempty"`
+	// Describes the status of the team member.
+	// See [TeamMemberStatus](#type-teammemberstatus) for possible values
+	Status *TeamMemberStatus `json:"status,omitempty" url:"status,omitempty"`
+	// The given name (that is, the first name) associated with the team member.
+	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
+	// The family name (that is, the last name) associated with the team member.
+	FamilyName *string `json:"family_name,omitempty" url:"family_name,omitempty"`
+	// The email address associated with the team member.
+	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+	// The team member's phone number, in E.164 format. For example:
+	// +14155552671 - the country code is 1 for US
+	// +551155256325 - the country code is 55 for BR
+	PhoneNumber *string `json:"phone_number,omitempty" url:"phone_number,omitempty"`
+	// The timestamp, in RFC 3339 format, describing when the team member was created.
+	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp, in RFC 3339 format, describing when the team member was last updated.
+	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// Describes the team member's assigned locations.
+	AssignedLocations *TeamMemberAssignedLocations `json:"assigned_locations,omitempty" url:"assigned_locations,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMember) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TeamMember) GetReferenceID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ReferenceID
+}
+
+func (t *TeamMember) GetIsOwner() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.IsOwner
+}
+
+func (t *TeamMember) GetStatus() *TeamMemberStatus {
+	if t == nil {
+		return nil
+	}
+	return t.Status
+}
+
+func (t *TeamMember) GetGivenName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.GivenName
+}
+
+func (t *TeamMember) GetFamilyName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.FamilyName
+}
+
+func (t *TeamMember) GetEmailAddress() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EmailAddress
+}
+
+func (t *TeamMember) GetPhoneNumber() *string {
+	if t == nil {
+		return nil
+	}
+	return t.PhoneNumber
+}
+
+func (t *TeamMember) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TeamMember) GetUpdatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.UpdatedAt
+}
+
+func (t *TeamMember) GetAssignedLocations() *TeamMemberAssignedLocations {
+	if t == nil {
+		return nil
+	}
+	return t.AssignedLocations
+}
+
+func (t *TeamMember) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMember) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMember
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMember(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMember) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// An object that represents a team member's assignment to locations.
+type TeamMemberAssignedLocations struct {
+	// The current assignment type of the team member.
+	// See [TeamMemberAssignedLocationsAssignmentType](#type-teammemberassignedlocationsassignmenttype) for possible values
+	AssignmentType *TeamMemberAssignedLocationsAssignmentType `json:"assignment_type,omitempty" url:"assignment_type,omitempty"`
+	// The explicit locations that the team member is assigned to.
+	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TeamMemberAssignedLocations) GetAssignmentType() *TeamMemberAssignedLocationsAssignmentType {
+	if t == nil {
+		return nil
+	}
+	return t.AssignmentType
+}
+
+func (t *TeamMemberAssignedLocations) GetLocationIDs() []string {
+	if t == nil {
+		return nil
+	}
+	return t.LocationIDs
+}
+
+func (t *TeamMemberAssignedLocations) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberAssignedLocations) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberAssignedLocations
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberAssignedLocations(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberAssignedLocations) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Enumerates the possible assignment types that the team member can have.
+type TeamMemberAssignedLocationsAssignmentType string
+
+const (
+	TeamMemberAssignedLocationsAssignmentTypeDoNotUse                     TeamMemberAssignedLocationsAssignmentType = "DO_NOT_USE"
+	TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations TeamMemberAssignedLocationsAssignmentType = "ALL_CURRENT_AND_FUTURE_LOCATIONS"
+	TeamMemberAssignedLocationsAssignmentTypeExplicitLocations            TeamMemberAssignedLocationsAssignmentType = "EXPLICIT_LOCATIONS"
+)
+
+func NewTeamMemberAssignedLocationsAssignmentTypeFromString(s string) (TeamMemberAssignedLocationsAssignmentType, error) {
+	switch s {
+	case "DO_NOT_USE":
+		return TeamMemberAssignedLocationsAssignmentTypeDoNotUse, nil
+	case "ALL_CURRENT_AND_FUTURE_LOCATIONS":
+		return TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations, nil
+	case "EXPLICIT_LOCATIONS":
+		return TeamMemberAssignedLocationsAssignmentTypeExplicitLocations, nil
+	}
+	var t TeamMemberAssignedLocationsAssignmentType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TeamMemberAssignedLocationsAssignmentType) Ptr() *TeamMemberAssignedLocationsAssignmentType {
+	return &t
+}
+
+// Enumerates the possible statuses the team member can have within a business.
+type TeamMemberStatus string
+
+const (
+	TeamMemberStatusStatusDoNotUse TeamMemberStatus = "STATUS_DO_NOT_USE"
+	TeamMemberStatusActive         TeamMemberStatus = "ACTIVE"
+	TeamMemberStatusInactive       TeamMemberStatus = "INACTIVE"
+)
+
+func NewTeamMemberStatusFromString(s string) (TeamMemberStatus, error) {
+	switch s {
+	case "STATUS_DO_NOT_USE":
+		return TeamMemberStatusStatusDoNotUse, nil
+	case "ACTIVE":
+		return TeamMemberStatusActive, nil
+	case "INACTIVE":
+		return TeamMemberStatusInactive, nil
+	}
+	var t TeamMemberStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TeamMemberStatus) Ptr() *TeamMemberStatus {
+	return &t
+}
+
+// Represents an update request for a `TeamMember` object.
+type UpdateTeamMemberRequest struct {
+	// The data used to update the `TeamMember` object.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateTeamMemberRequest) GetTeamMember() *TeamMember {
+	if u == nil {
+		return nil
+	}
+	return u.TeamMember
+}
+
+func (u *UpdateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateTeamMemberRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateTeamMemberRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateTeamMemberRequest(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateTeamMemberRequest) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Represents a response from an update request containing the updated `TeamMember` object or error messages.
+type UpdateTeamMemberResponse struct {
+	// The successfully updated `TeamMember` object.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+	// The errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateTeamMemberResponse) GetTeamMember() *TeamMember {
+	if u == nil {
+		return nil
+	}
+	return u.TeamMember
+}
+
+func (u *UpdateTeamMemberResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateTeamMemberResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateTeamMemberResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateTeamMemberResponse(value)
+
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateTeamMemberResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }
