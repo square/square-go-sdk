@@ -30,23 +30,24 @@ client := squareclient.NewClient(
     option.WithToken("<YOUR_API_KEY>"),
 )
 
-response, err := client.Cards.Create(
+response, err := client.Payments.Create(
     context.TODO(),
-    &square.CreateCardRequest{
+    &square.CreatePaymentRequest{
         IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
-        SourceID:       "cnon:uIbfJXhXETSP197M3GB",
-        Card: &square.Card{
-            CardholderName: square.String("Amelia Earhart"),
-            BillingAddress: &square.Address{
-                AddressLine1:                 square.String("500 Electric Ave"),
-                AddressLine2:                 square.String("Suite 600"),
-                Locality:                     square.String("New York"),
-                AdministrativeDistrictLevel1: square.String("NY"),
-                PostalCode:                   square.String("10003"),
-                Country:                      square.CountryUs.Ptr(),
+        SourceID:       "CASH",
+        AmountMoney: &square.Money{
+            Amount:   square.Int64(100),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+        TipMoney: &square.Money{
+            Amount:   square.Int64(50),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+        CashDetails: &square.CashPaymentDetails{
+            BuyerSuppliedMoney: &square.Money{
+                Amount:   square.Int64(200),
+                Currency: square.CurrencyUsd.Ptr(),
             },
-            CustomerID:  square.String("VDKXEEKPJN48QDG3BGGFAK05P8"),
-            ReferenceID: square.String("user-id-1"),
         },
     },
 )
@@ -58,14 +59,14 @@ This library models optional primitives and enum types as pointers. This is prim
 default zero values from explicit values (e.g. `false` for `bool` and `""` for `string`). A collection of
 helper functions are provided to easily map a primitive or enum to its pointer-equivalent (e.g. `square.String`).
 
-For example, consider the `client.Cards.List` endpoint usage below:
+For example, consider the `client.Payments.List` endpoint usage below:
 
 ```go
-response, err := client.Cards.List(
+response, err := client.Payments.List(
     context.TODO(),
-    &square.CardsListRequest{
-        IncludeDisabled: square.Bool(true),
-        SortOrder:       square.SortOrderAsc.Ptr(),
+    &square.PaymentsListRequest{
+        IsOfflinePayment: square.Bool(true),
+        Total:            square.Int64(100),
     },
 )
 ```
@@ -75,11 +76,11 @@ response, err := client.Cards.List(
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
 
 ```go
-page, err := client.Cards.List(
+page, err := client.Payments.List(
     context.TODO(),
-    &square.CardsListRequest{
-        IncludeDisabled: square.Bool(true),
-        SortOrder:       square.SortOrderAsc.Ptr(),
+    &square.PaymentsListRequest{
+        IsOfflinePayment: square.Bool(true),
+        Total:            square.Int64(100),
     },
 )
 if err != nil {
@@ -87,8 +88,8 @@ if err != nil {
 }
 iter := page.Iterator()
 for iter.Next() {
-    card := iter.Current()
-    fmt.Printf("Got card: %v\n", *card.ID)
+    payment := iter.Current()
+    fmt.Printf("Got payment: %v\n", *payment.ID)
 }
 if err := iter.Err(); err != nil {
     // Handle the error!
@@ -99,8 +100,8 @@ You can also iterate page-by-page:
 
 ```go
 for page != nil {
-    for _, card := range page.Results {
-        fmt.Printf("Got card: %v\n", *card.ID)
+    for _, payment := range page.Results {
+        fmt.Printf("Got payment: %v\n", *payment.ID)
     }
     page, err = page.GetNextPage()
     if errors.Is(err, core.ErrNoPages) {
@@ -122,11 +123,11 @@ like the following:
 ctx, cancel := context.WithTimeout(context.TODO(), time.Second)
 defer cancel()
 
-response, err := client.Cards.List(
+response, err := client.Payments.List(
     ctx,
-    &square.CardsListRequest{
-        IncludeDisabled: square.Bool(true),
-        SortOrder:       square.SortOrderAsc.Ptr(),
+    &square.PaymentsListRequest{
+        IsOfflinePayment: square.Bool(true),
+        Total:            square.Int64(100),
     },
 )
 ```
@@ -137,7 +138,7 @@ Structured error types are returned from API calls that return non-success statu
 you can check if the error was due to an unauthorized request (i.e. status code 401) with the following:
 
 ```go
-response, err := client.Cards.Create(...)
+response, err := client.Payments.Create(...)
 if err != nil {
     if apiError, ok := err.(*core.APIError); ok {
         switch (apiError.StatusCode) {
@@ -153,7 +154,7 @@ These errors are also compatible with the `errors.Is` and `errors.As` APIs, so y
 like so:
 
 ```go
-response, err := client.Cards.Create(...)
+response, err := client.Payments.Create(...)
 if err != nil {
     var apiError *core.APIError
     if errors.As(err, apiError) {
@@ -167,9 +168,9 @@ If you'd like to wrap the errors with additional information and still retain th
 to access the type with `errors.Is` and `errors.As`, you can use the `%w` directive:
 
 ```go
-response, err := client.Cards.Create(...)
+response, err := client.Payments.Create(...)
 if err != nil {
-    return fmt.Errorf("failed to create card: %w", err)
+    return fmt.Errorf("failed to create payment: %w", err)
 }
 ```
 
@@ -216,11 +217,11 @@ These request options can either be specified on the client so that they're appl
 request (shown above), or for an individual request like so:
 
 ```go
-response, err := client.Cards.List(
+response, err := client.Payments.List(
     ctx,
-    &square.CardsListRequest{
-        IncludeDisabled: square.Bool(true),
-        SortOrder:       square.SortOrderAsc.Ptr(),
+    &square.PaymentsListRequest{
+        IsOfflinePayment: square.Bool(true),
+        Total:            square.Int64(100),
     },
     option.WithToken("<YOUR_API_KEY>"),
 )
@@ -261,7 +262,7 @@ API features not present in the SDK yet.
 You can receive and interact with the extra properties like so:
 
 ```go
-response, err := client.Cards.Create(...)
+response, err := client.Payments.Create(...)
 if err != nil {
     return nil, err
 }
@@ -293,11 +294,11 @@ client := squareclient.NewClient(
 This can be done for an individual request, too:
 
 ```go
-response, err := client.Cards.List(
-    ctx,
-    &square.CardsListRequest{
-        IncludeDisabled: square.Bool(true),
-        SortOrder:       square.SortOrderAsc.Ptr(),
+response, err := client.Payments.List(
+    context.TODO(),
+    &square.PaymentsListRequest{
+        IsOfflinePayment: square.Bool(true),
+        Total:            square.Int64(100),
     },
     option.WithMaxAttempts(1),
 )
