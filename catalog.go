@@ -255,7 +255,7 @@ type BatchDeleteCatalogObjectsResponse struct {
 	DeletedAt *string `json:"deleted_at,omitempty" url:"deleted_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchDeleteCatalogObjectsResponse) GetErrors() []*Error {
@@ -290,20 +290,18 @@ func (b *BatchDeleteCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchDeleteCatalogObjectsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchDeleteCatalogObjectsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -322,7 +320,7 @@ type BatchGetCatalogObjectsResponse struct {
 	RelatedObjects []*CatalogObject `json:"related_objects,omitempty" url:"related_objects,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetCatalogObjectsResponse) GetErrors() []*Error {
@@ -357,20 +355,18 @@ func (b *BatchGetCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetCatalogObjectsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetCatalogObjectsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -391,7 +387,7 @@ type BatchUpsertCatalogObjectsResponse struct {
 	IDMappings []*CatalogIDMapping `json:"id_mappings,omitempty" url:"id_mappings,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpsertCatalogObjectsResponse) GetErrors() []*Error {
@@ -433,20 +429,18 @@ func (b *BatchUpsertCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchUpsertCatalogObjectsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpsertCatalogObjectsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -465,7 +459,7 @@ type CatalogInfoResponse struct {
 	StandardUnitDescriptionGroup *StandardUnitDescriptionGroup `json:"standard_unit_description_group,omitempty" url:"standard_unit_description_group,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogInfoResponse) GetErrors() []*Error {
@@ -500,20 +494,18 @@ func (c *CatalogInfoResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogInfoResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogInfoResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -559,7 +551,7 @@ type CatalogInfoResponseLimits struct {
 	UpdateItemModifierListsMaxModifierListsToDisable *int `json:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty" url:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogInfoResponseLimits) GetBatchUpsertMaxObjectsPerBatch() *int {
@@ -650,20 +642,18 @@ func (c *CatalogInfoResponseLimits) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogInfoResponseLimits(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogInfoResponseLimits) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -679,7 +669,7 @@ type CatalogObjectBatch struct {
 	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogObjectBatch) GetObjects() []*CatalogObject {
@@ -700,20 +690,18 @@ func (c *CatalogObjectBatch) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogObjectBatch(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogObjectBatch) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -783,7 +771,7 @@ type CatalogQuery struct {
 	ItemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues `json:"item_variations_for_item_option_values_query,omitempty" url:"item_variations_for_item_option_values_query,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQuery) GetSortedAttributeQuery() *CatalogQuerySortedAttribute {
@@ -867,20 +855,18 @@ func (c *CatalogQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQuery) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -899,7 +885,7 @@ type CatalogQueryExact struct {
 	AttributeValue string `json:"attribute_value" url:"attribute_value"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryExact) GetAttributeName() string {
@@ -927,20 +913,18 @@ func (c *CatalogQueryExact) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryExact(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryExact) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -958,7 +942,7 @@ type CatalogQueryItemVariationsForItemOptionValues struct {
 	ItemOptionValueIDs []string `json:"item_option_value_ids,omitempty" url:"item_option_value_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) GetItemOptionValueIDs() []string {
@@ -979,20 +963,18 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) UnmarshalJSON(data []byt
 		return err
 	}
 	*c = CatalogQueryItemVariationsForItemOptionValues(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1010,7 +992,7 @@ type CatalogQueryItemsForItemOptions struct {
 	ItemOptionIDs []string `json:"item_option_ids,omitempty" url:"item_option_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryItemsForItemOptions) GetItemOptionIDs() []string {
@@ -1031,20 +1013,18 @@ func (c *CatalogQueryItemsForItemOptions) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryItemsForItemOptions(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryItemsForItemOptions) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1060,7 +1040,7 @@ type CatalogQueryItemsForModifierList struct {
 	ModifierListIDs []string `json:"modifier_list_ids,omitempty" url:"modifier_list_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryItemsForModifierList) GetModifierListIDs() []string {
@@ -1081,20 +1061,18 @@ func (c *CatalogQueryItemsForModifierList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryItemsForModifierList(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryItemsForModifierList) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1110,7 +1088,7 @@ type CatalogQueryItemsForTax struct {
 	TaxIDs []string `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryItemsForTax) GetTaxIDs() []string {
@@ -1131,20 +1109,18 @@ func (c *CatalogQueryItemsForTax) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryItemsForTax(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryItemsForTax) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1162,7 +1138,7 @@ type CatalogQueryPrefix struct {
 	AttributePrefix string `json:"attribute_prefix" url:"attribute_prefix"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryPrefix) GetAttributeName() string {
@@ -1190,20 +1166,18 @@ func (c *CatalogQueryPrefix) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryPrefix(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryPrefix) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1223,7 +1197,7 @@ type CatalogQueryRange struct {
 	AttributeMaxValue *int64 `json:"attribute_max_value,omitempty" url:"attribute_max_value,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryRange) GetAttributeName() string {
@@ -1258,20 +1232,18 @@ func (c *CatalogQueryRange) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryRange(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryRange) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1291,7 +1263,7 @@ type CatalogQuerySet struct {
 	AttributeValues []string `json:"attribute_values,omitempty" url:"attribute_values,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQuerySet) GetAttributeName() string {
@@ -1319,20 +1291,18 @@ func (c *CatalogQuerySet) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQuerySet(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQuerySet) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1355,7 +1325,7 @@ type CatalogQuerySortedAttribute struct {
 	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQuerySortedAttribute) GetAttributeName() string {
@@ -1390,20 +1360,18 @@ func (c *CatalogQuerySortedAttribute) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQuerySortedAttribute(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQuerySortedAttribute) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1419,7 +1387,7 @@ type CatalogQueryText struct {
 	Keywords []string `json:"keywords,omitempty" url:"keywords,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CatalogQueryText) GetKeywords() []string {
@@ -1440,20 +1408,18 @@ func (c *CatalogQueryText) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CatalogQueryText(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CatalogQueryText) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1493,7 +1459,7 @@ type CustomAttributeFilter struct {
 	BoolFilter *bool `json:"bool_filter,omitempty" url:"bool_filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomAttributeFilter) GetCustomAttributeDefinitionID() *string {
@@ -1549,20 +1515,18 @@ func (c *CustomAttributeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomAttributeFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomAttributeFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1582,7 +1546,7 @@ type ListCatalogResponse struct {
 	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListCatalogResponse) GetErrors() []*Error {
@@ -1617,20 +1581,18 @@ func (l *ListCatalogResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListCatalogResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListCatalogResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1650,7 +1612,7 @@ type Range struct {
 	Max *string `json:"max,omitempty" url:"max,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *Range) GetMin() *string {
@@ -1678,20 +1640,18 @@ func (r *Range) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = Range(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *Range) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1739,7 +1699,7 @@ type SearchCatalogItemsResponse struct {
 	MatchedVariationIDs []string `json:"matched_variation_ids,omitempty" url:"matched_variation_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchCatalogItemsResponse) GetErrors() []*Error {
@@ -1781,20 +1741,18 @@ func (s *SearchCatalogItemsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchCatalogItemsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchCatalogItemsResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1819,7 +1777,7 @@ type SearchCatalogObjectsResponse struct {
 	LatestTime *string `json:"latest_time,omitempty" url:"latest_time,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchCatalogObjectsResponse) GetErrors() []*Error {
@@ -1868,20 +1826,18 @@ func (s *SearchCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchCatalogObjectsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchCatalogObjectsResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1901,7 +1857,7 @@ type StandardUnitDescription struct {
 	Abbreviation *string `json:"abbreviation,omitempty" url:"abbreviation,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *StandardUnitDescription) GetUnit() *MeasurementUnit {
@@ -1936,20 +1892,18 @@ func (s *StandardUnitDescription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StandardUnitDescription(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *StandardUnitDescription) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1967,7 +1921,7 @@ type StandardUnitDescriptionGroup struct {
 	LanguageCode *string `json:"language_code,omitempty" url:"language_code,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *StandardUnitDescriptionGroup) GetStandardUnitDescriptions() []*StandardUnitDescription {
@@ -1995,20 +1949,18 @@ func (s *StandardUnitDescriptionGroup) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StandardUnitDescriptionGroup(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *StandardUnitDescriptionGroup) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2025,7 +1977,7 @@ type UpdateItemModifierListsResponse struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateItemModifierListsResponse) GetErrors() []*Error {
@@ -2053,20 +2005,18 @@ func (u *UpdateItemModifierListsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateItemModifierListsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateItemModifierListsResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2083,7 +2033,7 @@ type UpdateItemTaxesResponse struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateItemTaxesResponse) GetErrors() []*Error {
@@ -2111,20 +2061,18 @@ func (u *UpdateItemTaxesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateItemTaxesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateItemTaxesResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}

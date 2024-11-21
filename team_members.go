@@ -18,6 +18,11 @@ type BatchUpdateTeamMembersRequest struct {
 	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
 }
 
+type TeamMembersGetRequest struct {
+	// The ID of the team member to retrieve.
+	TeamMemberID string `json:"-" url:"-"`
+}
+
 type SearchTeamMembersRequest struct {
 	// The query parameters.
 	Query *SearchTeamMembersQuery `json:"query,omitempty" url:"-"`
@@ -36,7 +41,7 @@ type BatchCreateTeamMembersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchCreateTeamMembersResponse) GetTeamMembers() map[string]*CreateTeamMemberResponse {
@@ -64,20 +69,18 @@ func (b *BatchCreateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchCreateTeamMembersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchCreateTeamMembersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -95,7 +98,7 @@ type BatchUpdateTeamMembersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpdateTeamMembersResponse) GetTeamMembers() map[string]*UpdateTeamMemberResponse {
@@ -123,20 +126,18 @@ func (b *BatchUpdateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchUpdateTeamMembersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpdateTeamMembersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -158,7 +159,7 @@ type CreateTeamMemberRequest struct {
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateTeamMemberRequest) GetIdempotencyKey() *string {
@@ -186,20 +187,18 @@ func (c *CreateTeamMemberRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateTeamMemberRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateTeamMemberRequest) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -217,7 +216,7 @@ type CreateTeamMemberResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateTeamMemberResponse) GetTeamMember() *TeamMember {
@@ -245,20 +244,18 @@ func (c *CreateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateTeamMemberResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateTeamMemberResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -276,7 +273,7 @@ type GetTeamMemberResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetTeamMemberResponse) GetTeamMember() *TeamMember {
@@ -304,20 +301,18 @@ func (g *GetTeamMemberResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetTeamMemberResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetTeamMemberResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -348,7 +343,7 @@ type SearchTeamMembersFilter struct {
 	IsOwner *bool `json:"is_owner,omitempty" url:"is_owner,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchTeamMembersFilter) GetLocationIDs() []string {
@@ -383,20 +378,18 @@ func (s *SearchTeamMembersFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchTeamMembersFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchTeamMembersFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -412,7 +405,7 @@ type SearchTeamMembersQuery struct {
 	Filter *SearchTeamMembersFilter `json:"filter,omitempty" url:"filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchTeamMembersQuery) GetFilter() *SearchTeamMembersFilter {
@@ -433,20 +426,18 @@ func (s *SearchTeamMembersQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchTeamMembersQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchTeamMembersQuery) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -467,7 +458,7 @@ type SearchTeamMembersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchTeamMembersResponse) GetTeamMembers() []*TeamMember {
@@ -502,20 +493,18 @@ func (s *SearchTeamMembersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchTeamMembersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchTeamMembersResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -556,7 +545,7 @@ type TeamMember struct {
 	AssignedLocations *TeamMemberAssignedLocations `json:"assigned_locations,omitempty" url:"assigned_locations,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (t *TeamMember) GetID() *string {
@@ -647,20 +636,18 @@ func (t *TeamMember) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TeamMember(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
 	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
+	t.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (t *TeamMember) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(t._rawJSON); err == nil {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -679,7 +666,7 @@ type TeamMemberAssignedLocations struct {
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (t *TeamMemberAssignedLocations) GetAssignmentType() *TeamMemberAssignedLocationsAssignmentType {
@@ -707,20 +694,18 @@ func (t *TeamMemberAssignedLocations) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TeamMemberAssignedLocations(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
 	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
+	t.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (t *TeamMemberAssignedLocations) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(t._rawJSON); err == nil {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -788,7 +773,7 @@ type UpdateTeamMemberRequest struct {
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateTeamMemberRequest) GetTeamMember() *TeamMember {
@@ -809,20 +794,18 @@ func (u *UpdateTeamMemberRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateTeamMemberRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateTeamMemberRequest) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -840,7 +823,7 @@ type UpdateTeamMemberResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateTeamMemberResponse) GetTeamMember() *TeamMember {
@@ -868,20 +851,18 @@ func (u *UpdateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateTeamMemberResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateTeamMemberResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -889,4 +870,23 @@ func (u *UpdateTeamMemberResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", u)
+}
+
+type TeamMembersUpdateRequest struct {
+	// The ID of the team member to update.
+	TeamMemberID string                   `json:"-" url:"-"`
+	Body         *UpdateTeamMemberRequest `json:"-" url:"-"`
+}
+
+func (t *TeamMembersUpdateRequest) UnmarshalJSON(data []byte) error {
+	body := new(UpdateTeamMemberRequest)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	t.Body = body
+	return nil
+}
+
+func (t *TeamMembersUpdateRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.Body)
 }

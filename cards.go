@@ -29,6 +29,13 @@ type CreateCardRequest struct {
 }
 
 type DisableCardRequest struct {
+	// Unique ID for the desired Card.
+	CardID string `json:"-" url:"-"`
+}
+
+type CardsGetRequest struct {
+	// Unique ID for the desired Card.
+	CardID string `json:"-" url:"-"`
 }
 
 type CardsListRequest struct {
@@ -62,7 +69,7 @@ type CreateCardResponse struct {
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateCardResponse) GetErrors() []*Error {
@@ -90,20 +97,18 @@ func (c *CreateCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateCardResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -125,7 +130,7 @@ type DisableCardResponse struct {
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DisableCardResponse) GetErrors() []*Error {
@@ -153,20 +158,18 @@ func (d *DisableCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DisableCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DisableCardResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -188,7 +191,7 @@ type GetCardResponse struct {
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetCardResponse) GetErrors() []*Error {
@@ -216,20 +219,18 @@ func (g *GetCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetCardResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -256,7 +257,7 @@ type ListCardsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListCardsResponse) GetErrors() []*Error {
@@ -291,20 +292,18 @@ func (l *ListCardsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListCardsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListCardsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}

@@ -7,6 +7,8 @@ import (
 )
 
 type CancelTerminalRefundRequest struct {
+	// The unique ID for the desired `TerminalRefund`.
+	TerminalRefundID string `json:"-" url:"-"`
 }
 
 type CreateTerminalRefundRequest struct {
@@ -17,6 +19,11 @@ type CreateTerminalRefundRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The refund to create.
 	Refund *squaregosdk.TerminalRefund `json:"refund,omitempty" url:"-"`
+}
+
+type RefundsGetRequest struct {
+	// The unique ID for the desired `TerminalRefund`.
+	TerminalRefundID string `json:"-" url:"-"`
 }
 
 type SearchTerminalRefundsRequest struct {

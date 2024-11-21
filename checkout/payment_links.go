@@ -35,6 +35,16 @@ type CreatePaymentLinkRequest struct {
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
 }
 
+type PaymentLinksDeleteRequest struct {
+	// The ID of the payment link to delete.
+	ID string `json:"-" url:"-"`
+}
+
+type PaymentLinksGetRequest struct {
+	// The ID of link to retrieve.
+	ID string `json:"-" url:"-"`
+}
+
 type PaymentLinksListRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
@@ -50,6 +60,8 @@ type PaymentLinksListRequest struct {
 }
 
 type UpdatePaymentLinkRequest struct {
+	// The ID of the payment link to update.
+	ID string `json:"-" url:"-"`
 	// The `payment_link` object describing the updates to apply.
 	// For more information, see [Update a payment link](https://developer.squareup.com/docs/checkout-api/manage-checkout#update-a-payment-link).
 	PaymentLink *squaregosdk.PaymentLink `json:"payment_link,omitempty" url:"-"`

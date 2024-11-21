@@ -33,6 +33,20 @@ type CreateMerchantCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
+type DeleteMerchantCustomAttributeRequest struct {
+	// The ID of the target [merchant](entity:Merchant).
+	MerchantID string `json:"-" url:"-"`
+	// The key of the custom attribute to delete. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
+}
+
+type DeleteMerchantCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to delete.
+	Key string `json:"-" url:"-"`
+}
+
 type ListMerchantCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
 	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
@@ -47,6 +61,8 @@ type ListMerchantCustomAttributeDefinitionsRequest struct {
 }
 
 type ListMerchantCustomAttributesRequest struct {
+	// The ID of the target [merchant](entity:Merchant).
+	MerchantID string `json:"-" url:"-"`
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
 	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
@@ -64,6 +80,12 @@ type ListMerchantCustomAttributesRequest struct {
 }
 
 type RetrieveMerchantCustomAttributeRequest struct {
+	// The ID of the target [merchant](entity:Merchant).
+	MerchantID string `json:"-" url:"-"`
+	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// Indicates whether to return the [custom attribute definition](entity:CustomAttributeDefinition) in the `definition` field of
 	// the custom attribute. Set this parameter to `true` to get the name and description of the custom
 	// attribute, information about the data type, or other definition details. The default value is `false`.
@@ -76,6 +98,9 @@ type RetrieveMerchantCustomAttributeRequest struct {
 }
 
 type RetrieveMerchantCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to retrieve. If the requesting application
+	// is not the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The current version of the custom attribute definition, which is used for strongly consistent
 	// reads to guarantee that you receive the most up-to-date data. When included in the request,
 	// Square returns the specified version or a higher version if one exists. If the specified version
@@ -84,6 +109,8 @@ type RetrieveMerchantCustomAttributeDefinitionRequest struct {
 }
 
 type UpdateMerchantCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to update.
+	Key string `json:"-" url:"-"`
 	// The custom attribute definition that contains the fields to update. This endpoint
 	// supports sparse updates, so only new or changed fields need to be included in the request.
 	// Only the following fields can be updated:
@@ -104,6 +131,12 @@ type UpdateMerchantCustomAttributeDefinitionRequest struct {
 }
 
 type UpsertMerchantCustomAttributeRequest struct {
+	// The ID of the target [merchant](entity:Merchant).
+	MerchantID string `json:"-" url:"-"`
+	// The key of the custom attribute to create or update. This key must match the `key` of a
+	// custom attribute definition in the Square seller account. If the requesting application is not
+	// the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The custom attribute to create or update, with the following fields:
 	// - `value`. This value must conform to the `schema` specified by the definition.
 	// For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
@@ -125,7 +158,7 @@ type BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteReque
 	Key *string `json:"key,omitempty" url:"key,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest) GetKey() *string {
@@ -146,20 +179,18 @@ func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteR
 		return err
 	}
 	*b = BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -179,7 +210,7 @@ type BulkDeleteMerchantCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteMerchantCustomAttributesResponse) GetValues() map[string]*BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse {
@@ -207,20 +238,18 @@ func (b *BulkDeleteMerchantCustomAttributesResponse) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BulkDeleteMerchantCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteMerchantCustomAttributesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -237,7 +266,7 @@ type BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResp
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse) GetErrors() []*Error {
@@ -258,20 +287,18 @@ func (b *BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDelete
 		return err
 	}
 	*b = BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -302,7 +329,7 @@ type BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertReque
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest) GetMerchantID() string {
@@ -337,20 +364,18 @@ func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertR
 		return err
 	}
 	*b = BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -370,7 +395,7 @@ type BulkUpsertMerchantCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertMerchantCustomAttributesResponse) GetValues() map[string]*BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse {
@@ -398,20 +423,18 @@ func (b *BulkUpsertMerchantCustomAttributesResponse) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BulkUpsertMerchantCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertMerchantCustomAttributesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -431,7 +454,7 @@ type BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResp
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse) GetMerchantID() *string {
@@ -466,20 +489,18 @@ func (b *BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsert
 		return err
 	}
 	*b = BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -498,7 +519,7 @@ type CreateMerchantCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateMerchantCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -526,20 +547,18 @@ func (c *CreateMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*c = CreateMerchantCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateMerchantCustomAttributeDefinitionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -555,7 +574,7 @@ type DeleteMerchantCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteMerchantCustomAttributeDefinitionResponse) GetErrors() []*Error {
@@ -576,20 +595,18 @@ func (d *DeleteMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*d = DeleteMerchantCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteMerchantCustomAttributeDefinitionResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -606,7 +623,7 @@ type DeleteMerchantCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteMerchantCustomAttributeResponse) GetErrors() []*Error {
@@ -627,20 +644,18 @@ func (d *DeleteMerchantCustomAttributeResponse) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*d = DeleteMerchantCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteMerchantCustomAttributeResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -665,7 +680,7 @@ type ListMerchantCustomAttributeDefinitionsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListMerchantCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
@@ -700,20 +715,18 @@ func (l *ListMerchantCustomAttributeDefinitionsResponse) UnmarshalJSON(data []by
 		return err
 	}
 	*l = ListMerchantCustomAttributeDefinitionsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListMerchantCustomAttributeDefinitionsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -739,7 +752,7 @@ type ListMerchantCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListMerchantCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
@@ -774,20 +787,18 @@ func (l *ListMerchantCustomAttributesResponse) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*l = ListMerchantCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListMerchantCustomAttributesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -806,7 +817,7 @@ type RetrieveMerchantCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveMerchantCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -834,20 +845,18 @@ func (r *RetrieveMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data [
 		return err
 	}
 	*r = RetrieveMerchantCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveMerchantCustomAttributeDefinitionResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -867,7 +876,7 @@ type RetrieveMerchantCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveMerchantCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
@@ -895,20 +904,18 @@ func (r *RetrieveMerchantCustomAttributeResponse) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*r = RetrieveMerchantCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveMerchantCustomAttributeResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -927,7 +934,7 @@ type UpdateMerchantCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateMerchantCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -955,20 +962,18 @@ func (u *UpdateMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*u = UpdateMerchantCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateMerchantCustomAttributeDefinitionResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -987,7 +992,7 @@ type UpsertMerchantCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpsertMerchantCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
@@ -1015,20 +1020,18 @@ func (u *UpsertMerchantCustomAttributeResponse) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*u = UpsertMerchantCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpsertMerchantCustomAttributeResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}

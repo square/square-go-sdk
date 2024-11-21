@@ -50,22 +50,20 @@ func (c *Client) List(
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Dispute], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/disputes"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -78,8 +76,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -105,22 +103,23 @@ func (c *Client) List(
 // Returns details about a specific dispute.
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the dispute you want more details about.
-	disputeID string,
+	request *squaregosdk.DisputesGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v", disputeID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v",
+		request.DisputeID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetDisputeResponse
 	if err := c.caller.Call(
@@ -128,8 +127,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -148,22 +147,23 @@ func (c *Client) Get(
 // does not have sufficient funds, Square debits the associated bank account.
 func (c *Client) Accept(
 	ctx context.Context,
-	// The ID of the dispute you want to accept.
-	disputeID string,
+	request *squaregosdk.DisputesAcceptRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.AcceptDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/accept", disputeID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v/accept",
+		request.DisputeID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.AcceptDisputeResponse
 	if err := c.caller.Call(
@@ -171,8 +171,8 @@ func (c *Client) Accept(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -188,24 +188,23 @@ func (c *Client) Accept(
 // multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats.
 func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
-	// The ID of the dispute for which you want to upload evidence.
-	disputeID string,
 	request *squaregosdk.DisputesCreateEvidenceFileRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateDisputeEvidenceFileResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/evidence-files", disputeID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v/evidence-files",
+		request.DisputeID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	writer := internal.NewMultipartWriter()
 	if request.ImageFile != nil {
 		if err := writer.WriteFile("image_file", request.ImageFile, internal.WithDefaultContentType("image/jpeg")); err != nil {
@@ -228,8 +227,8 @@ func (c *Client) CreateEvidenceFile(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -245,23 +244,23 @@ func (c *Client) CreateEvidenceFile(
 // Uploads text to use as evidence for a dispute challenge.
 func (c *Client) CreateEvidenceText(
 	ctx context.Context,
-	// The ID of the dispute for which you want to upload evidence.
-	disputeID string,
 	request *squaregosdk.CreateDisputeEvidenceTextRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateDisputeEvidenceTextResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/evidence-text", disputeID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v/evidence-text",
+		request.DisputeID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateDisputeEvidenceTextResponse
@@ -270,8 +269,8 @@ func (c *Client) CreateEvidenceText(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -293,22 +292,23 @@ func (c *Client) CreateEvidenceText(
 // a dispute after submission.
 func (c *Client) SubmitEvidence(
 	ctx context.Context,
-	// The ID of the dispute for which you want to submit evidence.
-	disputeID string,
+	request *squaregosdk.DisputesSubmitEvidenceRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.SubmitEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/submit-evidence", disputeID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v/submit-evidence",
+		request.DisputeID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.SubmitEvidenceResponse
 	if err := c.caller.Call(
@@ -316,8 +316,8 @@ func (c *Client) SubmitEvidence(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

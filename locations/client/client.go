@@ -49,17 +49,16 @@ func (c *Client) List(
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListLocationsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListLocationsResponse
 	if err := c.caller.Call(
@@ -67,8 +66,8 @@ func (c *Client) List(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -93,17 +92,16 @@ func (c *Client) Create(
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateLocationResponse
@@ -112,8 +110,8 @@ func (c *Client) Create(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -130,23 +128,23 @@ func (c *Client) Create(
 // as the location ID to retrieve details of the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the location to retrieve. Specify the string
-	// "main" to return the main location.
-	locationID string,
+	request *squaregosdk.LocationsGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v", locationID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v",
+		request.LocationID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetLocationResponse
 	if err := c.caller.Call(
@@ -154,8 +152,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -170,23 +168,23 @@ func (c *Client) Get(
 // Updates a [location](https://developer.squareup.com/docs/locations-api).
 func (c *Client) Update(
 	ctx context.Context,
-	// The ID of the location to update.
-	locationID string,
 	request *squaregosdk.UpdateLocationRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v", locationID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v",
+		request.LocationID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateLocationResponse
@@ -195,8 +193,8 @@ func (c *Client) Update(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -217,23 +215,23 @@ func (c *Client) Update(
 // For more information, see [Checkout API highlights](https://developer.squareup.com/docs/checkout-api#checkout-api-highlights).
 func (c *Client) Checkouts(
 	ctx context.Context,
-	// The ID of the business location to associate the checkout with.
-	locationID string,
 	request *squaregosdk.CreateCheckoutRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v/checkouts", locationID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v/checkouts",
+		request.LocationID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateCheckoutResponse
@@ -242,8 +240,8 @@ func (c *Client) Checkouts(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

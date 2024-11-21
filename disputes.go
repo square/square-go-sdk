@@ -10,11 +10,15 @@ import (
 )
 
 type DisputesCreateEvidenceFileRequest struct {
+	// The ID of the dispute for which you want to upload evidence.
+	DisputeID string                            `json:"-" url:"-"`
 	ImageFile io.Reader                         `json:"-" url:"-"`
 	Request   *CreateDisputeEvidenceFileRequest `json:"request,omitempty" url:"-"`
 }
 
 type CreateDisputeEvidenceTextRequest struct {
+	// The ID of the dispute for which you want to upload evidence.
+	DisputeID string `json:"-" url:"-"`
 	// A unique key identifying the request. For more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The type of evidence you are uploading.
@@ -22,6 +26,21 @@ type CreateDisputeEvidenceTextRequest struct {
 	EvidenceType *DisputeEvidenceType `json:"evidence_type,omitempty" url:"-"`
 	// The evidence string.
 	EvidenceText string `json:"evidence_text" url:"-"`
+}
+
+type DisputesSubmitEvidenceRequest struct {
+	// The ID of the dispute for which you want to submit evidence.
+	DisputeID string `json:"-" url:"-"`
+}
+
+type DisputesAcceptRequest struct {
+	// The ID of the dispute you want to accept.
+	DisputeID string `json:"-" url:"-"`
+}
+
+type DisputesGetRequest struct {
+	// The ID of the dispute you want more details about.
+	DisputeID string `json:"-" url:"-"`
 }
 
 type DisputesListRequest struct {
@@ -44,7 +63,7 @@ type AcceptDisputeResponse struct {
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *AcceptDisputeResponse) GetErrors() []*Error {
@@ -72,20 +91,18 @@ func (a *AcceptDisputeResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = AcceptDisputeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *AcceptDisputeResponse) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -107,7 +124,7 @@ type CreateDisputeEvidenceFileRequest struct {
 	ContentType *string `json:"content_type,omitempty" url:"content_type,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateDisputeEvidenceFileRequest) GetIdempotencyKey() string {
@@ -142,20 +159,18 @@ func (c *CreateDisputeEvidenceFileRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateDisputeEvidenceFileRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateDisputeEvidenceFileRequest) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -173,7 +188,7 @@ type CreateDisputeEvidenceFileResponse struct {
 	Evidence *DisputeEvidence `json:"evidence,omitempty" url:"evidence,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateDisputeEvidenceFileResponse) GetErrors() []*Error {
@@ -201,20 +216,18 @@ func (c *CreateDisputeEvidenceFileResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateDisputeEvidenceFileResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateDisputeEvidenceFileResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -232,7 +245,7 @@ type CreateDisputeEvidenceTextResponse struct {
 	Evidence *DisputeEvidence `json:"evidence,omitempty" url:"evidence,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateDisputeEvidenceTextResponse) GetErrors() []*Error {
@@ -260,20 +273,18 @@ func (c *CreateDisputeEvidenceTextResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateDisputeEvidenceTextResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateDisputeEvidenceTextResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -323,7 +334,7 @@ type Dispute struct {
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *Dispute) GetDisputeID() *string {
@@ -449,20 +460,18 @@ func (d *Dispute) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = Dispute(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *Dispute) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -594,7 +603,7 @@ type DisputedPayment struct {
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DisputedPayment) GetPaymentID() *string {
@@ -615,20 +624,18 @@ func (d *DisputedPayment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DisputedPayment(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DisputedPayment) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -646,7 +653,7 @@ type GetDisputeResponse struct {
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetDisputeResponse) GetErrors() []*Error {
@@ -674,20 +681,18 @@ func (g *GetDisputeResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetDisputeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetDisputeResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -708,7 +713,7 @@ type ListDisputesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListDisputesResponse) GetErrors() []*Error {
@@ -743,20 +748,18 @@ func (l *ListDisputesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListDisputesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListDisputesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -774,7 +777,7 @@ type SubmitEvidenceResponse struct {
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SubmitEvidenceResponse) GetErrors() []*Error {
@@ -802,20 +805,18 @@ func (s *SubmitEvidenceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubmitEvidenceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SubmitEvidenceResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}

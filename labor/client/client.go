@@ -62,22 +62,20 @@ func (c *Client) List(
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.BreakType], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/labor/break-types"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -90,8 +88,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -134,17 +132,16 @@ func (c *Client) Create(
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/labor/break-types"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateBreakTypeResponse
@@ -153,8 +150,8 @@ func (c *Client) Create(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

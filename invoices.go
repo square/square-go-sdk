@@ -10,11 +10,22 @@ import (
 )
 
 type CreateInvoiceAttachmentRequest struct {
+	// The ID of the [invoice](entity:Invoice) to attach the file to.
+	InvoiceID string      `json:"-" url:"-"`
 	ImageFile io.Reader   `json:"-" url:"-"`
 	Request   interface{} `json:"request,omitempty" url:"-"`
 }
 
+type DeleteInvoiceAttachmentRequest struct {
+	// The ID of the [invoice](entity:Invoice) to delete the attachment from.
+	InvoiceID string `json:"-" url:"-"`
+	// The ID of the [attachment](entity:InvoiceAttachment) to delete.
+	AttachmentID string `json:"-" url:"-"`
+}
+
 type CancelInvoiceRequest struct {
+	// The ID of the [invoice](entity:Invoice) to cancel.
+	InvoiceID string `json:"-" url:"-"`
 	// The version of the [invoice](entity:Invoice) to cancel.
 	// If you do not know the version, you can call
 	// [GetInvoice](api-endpoint:Invoices-GetInvoice) or [ListInvoices](api-endpoint:Invoices-ListInvoices).
@@ -33,10 +44,17 @@ type CreateInvoiceRequest struct {
 }
 
 type InvoicesDeleteRequest struct {
+	// The ID of the invoice to delete.
+	InvoiceID string `json:"-" url:"-"`
 	// The version of the [invoice](entity:Invoice) to delete.
 	// If you do not know the version, you can call [GetInvoice](api-endpoint:Invoices-GetInvoice) or
 	// [ListInvoices](api-endpoint:Invoices-ListInvoices).
 	Version *int `json:"-" url:"version,omitempty"`
+}
+
+type InvoicesGetRequest struct {
+	// The ID of the invoice to retrieve.
+	InvoiceID string `json:"-" url:"-"`
 }
 
 type InvoicesListRequest struct {
@@ -53,6 +71,8 @@ type InvoicesListRequest struct {
 }
 
 type PublishInvoiceRequest struct {
+	// The ID of the invoice to publish.
+	InvoiceID string `json:"-" url:"-"`
 	// The version of the [invoice](entity:Invoice) to publish.
 	// This must match the current version of the invoice; otherwise, the request is rejected.
 	Version int `json:"version" url:"-"`
@@ -85,7 +105,7 @@ type CancelInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CancelInvoiceResponse) GetInvoice() *Invoice {
@@ -113,20 +133,18 @@ func (c *CancelInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CancelInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CancelInvoiceResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -144,7 +162,7 @@ type CreateInvoiceAttachmentResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateInvoiceAttachmentResponse) GetAttachment() *InvoiceAttachment {
@@ -172,20 +190,18 @@ func (c *CreateInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateInvoiceAttachmentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateInvoiceAttachmentResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -203,7 +219,7 @@ type CreateInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateInvoiceResponse) GetInvoice() *Invoice {
@@ -231,20 +247,18 @@ func (c *CreateInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateInvoiceResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -260,7 +274,7 @@ type DeleteInvoiceAttachmentResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteInvoiceAttachmentResponse) GetErrors() []*Error {
@@ -281,20 +295,18 @@ func (d *DeleteInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeleteInvoiceAttachmentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteInvoiceAttachmentResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -310,7 +322,7 @@ type DeleteInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteInvoiceResponse) GetErrors() []*Error {
@@ -331,20 +343,18 @@ func (d *DeleteInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeleteInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteInvoiceResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -362,7 +372,7 @@ type GetInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInvoiceResponse) GetInvoice() *Invoice {
@@ -390,20 +400,18 @@ func (g *GetInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInvoiceResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -534,7 +542,7 @@ type Invoice struct {
 	Attachments []*InvoiceAttachment `json:"attachments,omitempty" url:"attachments,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *Invoice) GetID() *string {
@@ -716,20 +724,18 @@ func (i *Invoice) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = Invoice(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *Invoice) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -761,7 +767,7 @@ type InvoiceAcceptedPaymentMethods struct {
 	CashAppPay *bool `json:"cash_app_pay,omitempty" url:"cash_app_pay,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceAcceptedPaymentMethods) GetCard() *bool {
@@ -810,20 +816,18 @@ func (i *InvoiceAcceptedPaymentMethods) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceAcceptedPaymentMethods(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceAcceptedPaymentMethods) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -854,7 +858,7 @@ type InvoiceAttachment struct {
 	UploadedAt *string `json:"uploaded_at,omitempty" url:"uploaded_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceAttachment) GetID() *string {
@@ -917,20 +921,18 @@ func (i *InvoiceAttachment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceAttachment(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceAttachment) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -984,7 +986,7 @@ type InvoiceCustomField struct {
 	Placement *InvoiceCustomFieldPlacement `json:"placement,omitempty" url:"placement,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceCustomField) GetLabel() *string {
@@ -1019,20 +1021,18 @@ func (i *InvoiceCustomField) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceCustomField(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceCustomField) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1109,7 +1109,7 @@ type InvoiceFilter struct {
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceFilter) GetLocationIDs() []string {
@@ -1137,20 +1137,18 @@ func (i *InvoiceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceFilter) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1180,7 +1178,7 @@ type InvoicePaymentReminder struct {
 	SentAt *string `json:"sent_at,omitempty" url:"sent_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoicePaymentReminder) GetUID() *string {
@@ -1229,20 +1227,18 @@ func (i *InvoicePaymentReminder) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoicePaymentReminder(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoicePaymentReminder) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1358,7 +1354,7 @@ type InvoicePaymentRequest struct {
 	RoundingAdjustmentIncludedMoney *Money `json:"rounding_adjustment_included_money,omitempty" url:"rounding_adjustment_included_money,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoicePaymentRequest) GetUID() *string {
@@ -1463,20 +1459,18 @@ func (i *InvoicePaymentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoicePaymentRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoicePaymentRequest) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1495,7 +1489,7 @@ type InvoiceQuery struct {
 	Sort *InvoiceSort `json:"sort,omitempty" url:"sort,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceQuery) GetFilter() *InvoiceFilter {
@@ -1523,20 +1517,18 @@ func (i *InvoiceQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceQuery) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1573,7 +1565,7 @@ type InvoiceRecipient struct {
 	TaxIDs *InvoiceRecipientTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceRecipient) GetCustomerID() *string {
@@ -1643,20 +1635,18 @@ func (i *InvoiceRecipient) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceRecipient(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceRecipient) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1674,7 +1664,7 @@ type InvoiceRecipientTaxIDs struct {
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceRecipientTaxIDs) GetEuVat() *string {
@@ -1695,20 +1685,18 @@ func (i *InvoiceRecipientTaxIDs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceRecipientTaxIDs(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceRecipientTaxIDs) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1802,7 +1790,7 @@ type InvoiceSort struct {
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InvoiceSort) GetField() InvoiceSortField {
@@ -1830,20 +1818,18 @@ func (i *InvoiceSort) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InvoiceSort(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InvoiceSort) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1939,7 +1925,7 @@ type ListInvoicesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListInvoicesResponse) GetInvoices() []*Invoice {
@@ -1974,20 +1960,18 @@ func (l *ListInvoicesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListInvoicesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListInvoicesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2005,7 +1989,7 @@ type PublishInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *PublishInvoiceResponse) GetInvoice() *Invoice {
@@ -2033,20 +2017,18 @@ func (p *PublishInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PublishInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *PublishInvoiceResponse) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2069,7 +2051,7 @@ type SearchInvoicesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchInvoicesResponse) GetInvoices() []*Invoice {
@@ -2104,20 +2086,18 @@ func (s *SearchInvoicesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchInvoicesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchInvoicesResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2135,7 +2115,7 @@ type UpdateInvoiceResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateInvoiceResponse) GetInvoice() *Invoice {
@@ -2163,20 +2143,18 @@ func (u *UpdateInvoiceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateInvoiceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateInvoiceResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2187,6 +2165,8 @@ func (u *UpdateInvoiceResponse) String() string {
 }
 
 type UpdateInvoiceRequest struct {
+	// The ID of the invoice to update.
+	InvoiceID string `json:"-" url:"-"`
 	// The invoice fields to add, change, or clear. Fields can be cleared using
 	// null values or the `remove` field (for individual payment requests or reminders).
 	// The current invoice `version` is also required. For more information, including requirements,

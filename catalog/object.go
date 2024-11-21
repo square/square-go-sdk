@@ -6,7 +6,16 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
+type ObjectDeleteRequest struct {
+	// The ID of the catalog object to be deleted. When an object is deleted, other
+	// objects in the graph that depend on that object will be deleted as well (for example, deleting a
+	// catalog item will delete its catalog item variations).
+	ObjectID string `json:"-" url:"-"`
+}
+
 type ObjectGetRequest struct {
+	// The object ID of any type of catalog objects to be retrieved.
+	ObjectID string `json:"-" url:"-"`
 	// If `true`, the response will include additional objects that are related to the
 	// requested objects. Related objects are defined as any objects referenced by ID by the results in the `objects` field
 	// of the response. These objects are put in the `related_objects` field. Setting this to `true` is

@@ -25,12 +25,19 @@ type ListLocationBookingProfilesRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
+type RetrieveLocationBookingProfileRequest struct {
+	// The ID of the location to retrieve the booking profile.
+	LocationID string `json:"-" url:"-"`
+}
+
 type SearchAvailabilityRequest struct {
 	// Query conditions used to filter buyer-accessible booking availabilities.
 	Query *SearchAvailabilityQuery `json:"query,omitempty" url:"-"`
 }
 
 type CancelBookingRequest struct {
+	// The ID of the [Booking](entity:Booking) object representing the to-be-cancelled booking.
+	BookingID string `json:"-" url:"-"`
 	// A unique key to make this request an idempotent operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The revision number for the booking used for optimistic concurrency.
@@ -42,6 +49,11 @@ type CreateBookingRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The details of the booking to be created.
 	Booking *Booking `json:"booking,omitempty" url:"-"`
+}
+
+type BookingsGetRequest struct {
+	// The ID of the [Booking](entity:Booking) object representing the to-be-retrieved booking.
+	BookingID string `json:"-" url:"-"`
 }
 
 type BookingsListRequest struct {
@@ -79,7 +91,7 @@ type AppointmentSegment struct {
 	ResourceIDs []string `json:"resource_ids,omitempty" url:"resource_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *AppointmentSegment) GetDurationMinutes() *int {
@@ -142,20 +154,18 @@ func (a *AppointmentSegment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = AppointmentSegment(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *AppointmentSegment) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -175,7 +185,7 @@ type Availability struct {
 	AppointmentSegments []*AppointmentSegment `json:"appointment_segments,omitempty" url:"appointment_segments,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *Availability) GetStartAt() *string {
@@ -210,20 +220,18 @@ func (a *Availability) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = Availability(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *Availability) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -278,7 +286,7 @@ type Booking struct {
 	Address *Address `json:"address,omitempty" url:"address,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *Booking) GetID() *string {
@@ -411,20 +419,18 @@ func (b *Booking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = Booking(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *Booking) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -476,7 +482,7 @@ type BookingCreatorDetails struct {
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BookingCreatorDetails) GetCreatorType() *BookingCreatorDetailsCreatorType {
@@ -511,20 +517,18 @@ func (b *BookingCreatorDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BookingCreatorDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BookingCreatorDetails) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -600,7 +604,7 @@ type BulkRetrieveBookingsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkRetrieveBookingsResponse) GetBookings() map[string]*GetBookingResponse {
@@ -628,20 +632,18 @@ func (b *BulkRetrieveBookingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkRetrieveBookingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkRetrieveBookingsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -659,7 +661,7 @@ type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetTeamMemberBookingProfiles() map[string]*GetTeamMemberBookingProfileResponse {
@@ -687,20 +689,18 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) UnmarshalJSON(data []byt
 		return err
 	}
 	*b = BulkRetrieveTeamMemberBookingProfilesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -746,7 +746,7 @@ type BusinessAppointmentSettings struct {
 	SkipBookingFlowStaffSelection *bool `json:"skip_booking_flow_staff_selection,omitempty" url:"skip_booking_flow_staff_selection,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BusinessAppointmentSettings) GetLocationTypes() []BusinessAppointmentSettingsBookingLocationType {
@@ -851,20 +851,18 @@ func (b *BusinessAppointmentSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BusinessAppointmentSettings(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BusinessAppointmentSettings) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -999,7 +997,7 @@ type BusinessBookingProfile struct {
 	SupportSellerLevelWrites *bool `json:"support_seller_level_writes,omitempty" url:"support_seller_level_writes,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BusinessBookingProfile) GetSellerID() *string {
@@ -1069,20 +1067,18 @@ func (b *BusinessBookingProfile) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BusinessBookingProfile(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BusinessBookingProfile) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1145,7 +1141,7 @@ type CancelBookingResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CancelBookingResponse) GetBooking() *Booking {
@@ -1173,20 +1169,18 @@ func (c *CancelBookingResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CancelBookingResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CancelBookingResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1203,7 +1197,7 @@ type CreateBookingResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateBookingResponse) GetBooking() *Booking {
@@ -1231,20 +1225,18 @@ func (c *CreateBookingResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateBookingResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateBookingResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1261,7 +1253,7 @@ type GetBookingResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetBookingResponse) GetBooking() *Booking {
@@ -1289,20 +1281,18 @@ func (g *GetBookingResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetBookingResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetBookingResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1319,7 +1309,7 @@ type GetBusinessBookingProfileResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetBusinessBookingProfileResponse) GetBusinessBookingProfile() *BusinessBookingProfile {
@@ -1347,20 +1337,18 @@ func (g *GetBusinessBookingProfileResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetBusinessBookingProfileResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetBusinessBookingProfileResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1379,7 +1367,7 @@ type ListBookingsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListBookingsResponse) GetBookings() []*Booking {
@@ -1414,20 +1402,18 @@ func (l *ListBookingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListBookingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListBookingsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1446,7 +1432,7 @@ type ListLocationBookingProfilesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListLocationBookingProfilesResponse) GetLocationBookingProfiles() []*LocationBookingProfile {
@@ -1481,20 +1467,18 @@ func (l *ListLocationBookingProfilesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListLocationBookingProfilesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListLocationBookingProfilesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1514,7 +1498,7 @@ type LocationBookingProfile struct {
 	OnlineBookingEnabled *bool `json:"online_booking_enabled,omitempty" url:"online_booking_enabled,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LocationBookingProfile) GetLocationID() *string {
@@ -1549,20 +1533,18 @@ func (l *LocationBookingProfile) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LocationBookingProfile(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LocationBookingProfile) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1579,7 +1561,7 @@ type RetrieveLocationBookingProfileResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveLocationBookingProfileResponse) GetLocationBookingProfile() *LocationBookingProfile {
@@ -1607,20 +1589,18 @@ func (r *RetrieveLocationBookingProfileResponse) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*r = RetrieveLocationBookingProfileResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveLocationBookingProfileResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1650,7 +1630,7 @@ type SearchAvailabilityFilter struct {
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchAvailabilityFilter) GetStartAtRange() *TimeRange {
@@ -1692,20 +1672,18 @@ func (s *SearchAvailabilityFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchAvailabilityFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchAvailabilityFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1721,7 +1699,7 @@ type SearchAvailabilityQuery struct {
 	Filter *SearchAvailabilityFilter `json:"filter,omitempty" url:"filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchAvailabilityQuery) GetFilter() *SearchAvailabilityFilter {
@@ -1742,20 +1720,18 @@ func (s *SearchAvailabilityQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchAvailabilityQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchAvailabilityQuery) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1772,7 +1748,7 @@ type SearchAvailabilityResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchAvailabilityResponse) GetAvailabilities() []*Availability {
@@ -1800,20 +1776,18 @@ func (s *SearchAvailabilityResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchAvailabilityResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchAvailabilityResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1837,7 +1811,7 @@ type SegmentFilter struct {
 	TeamMemberIDFilter *FilterValue `json:"team_member_id_filter,omitempty" url:"team_member_id_filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SegmentFilter) GetServiceVariationID() string {
@@ -1865,20 +1839,18 @@ func (s *SegmentFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SegmentFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SegmentFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1895,7 +1867,7 @@ type UpdateBookingResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateBookingResponse) GetBooking() *Booking {
@@ -1923,20 +1895,18 @@ func (u *UpdateBookingResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateBookingResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateBookingResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1947,6 +1917,8 @@ func (u *UpdateBookingResponse) String() string {
 }
 
 type UpdateBookingRequest struct {
+	// The ID of the [Booking](entity:Booking) object representing the to-be-updated booking.
+	BookingID string `json:"-" url:"-"`
 	// A unique key to make this request an idempotent operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The booking to be updated. Individual attributes explicitly specified here override the corresponding values of the existing booking.

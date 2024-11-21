@@ -44,22 +44,23 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrievewagesetting).
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the team member for which to retrieve the wage setting.
-	teamMemberID string,
+	request *team.WageSettingGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/team-members/%v/wage-setting", teamMemberID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/team-members/%v/wage-setting",
+		request.TeamMemberID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetWageSettingResponse
 	if err := c.caller.Call(
@@ -67,8 +68,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -87,23 +88,23 @@ func (c *Client) Get(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#create-or-update-a-wage-setting).
 func (c *Client) Update(
 	ctx context.Context,
-	// The ID of the team member for which to update the `WageSetting` object.
-	teamMemberID string,
 	request *team.UpdateWageSettingRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/team-members/%v/wage-setting", teamMemberID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/team-members/%v/wage-setting",
+		request.TeamMemberID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateWageSettingResponse
@@ -112,8 +113,8 @@ func (c *Client) Update(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

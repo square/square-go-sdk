@@ -50,28 +50,27 @@ func NewClient(opts ...option.RequestOption) *Client {
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) List(
 	ctx context.Context,
-	// The ID of the target [customer profile](entity:Customer).
-	customerID string,
 	request *customers.CustomAttributesListRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttribute], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/customers/%v/custom-attributes", customerID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/customers/%v/custom-attributes",
+		request.CustomerID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -84,8 +83,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -118,30 +117,20 @@ func (c *Client) List(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the target [customer profile](entity:Customer).
-	customerID string,
-	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
 	request *customers.CustomAttributesGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v/custom-attributes/%v",
-		customerID,
-		key,
+		request.CustomerID,
+		request.Key,
 	)
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -149,8 +138,10 @@ func (c *Client) Get(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetCustomerCustomAttributeResponse
 	if err := c.caller.Call(
@@ -158,8 +149,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -182,31 +173,24 @@ func (c *Client) Get(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Upsert(
 	ctx context.Context,
-	// The ID of the target [customer profile](entity:Customer).
-	customerID string,
-	// The key of the custom attribute to create or update. This key must match the `key` of a
-	// custom attribute definition in the Square seller account. If the requesting application is not
-	// the definition owner, you must use the qualified key.
-	key string,
 	request *customers.UpsertCustomerCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpsertCustomerCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v/custom-attributes/%v",
-		customerID,
-		key,
+		request.CustomerID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertCustomerCustomAttributeResponse
@@ -215,8 +199,8 @@ func (c *Client) Upsert(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -236,30 +220,24 @@ func (c *Client) Upsert(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Delete(
 	ctx context.Context,
-	// The ID of the target [customer profile](entity:Customer).
-	customerID string,
-	// The key of the custom attribute to delete. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
+	request *customers.CustomAttributesDeleteRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v/custom-attributes/%v",
-		customerID,
-		key,
+		request.CustomerID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteCustomerCustomAttributeResponse
 	if err := c.caller.Call(
@@ -267,8 +245,8 @@ func (c *Client) Delete(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

@@ -47,22 +47,20 @@ func (c *Client) List(
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomerSegment], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/customers/segments"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -75,8 +73,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -102,22 +100,23 @@ func (c *Client) List(
 // Retrieves a specific customer segment as identified by the `segment_id` value.
 func (c *Client) Get(
 	ctx context.Context,
-	// The Square-issued ID of the customer segment.
-	segmentID string,
+	request *customer.SegmentsGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerSegmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/customers/segments/%v", segmentID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/customers/segments/%v",
+		request.SegmentID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetCustomerSegmentResponse
 	if err := c.caller.Call(
@@ -125,8 +124,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

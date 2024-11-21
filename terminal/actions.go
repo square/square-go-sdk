@@ -7,6 +7,8 @@ import (
 )
 
 type CancelTerminalActionRequest struct {
+	// Unique ID for the desired `TerminalAction`.
+	ActionID string `json:"-" url:"-"`
 }
 
 type CreateTerminalActionRequest struct {
@@ -18,6 +20,11 @@ type CreateTerminalActionRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
 	Action *squaregosdk.TerminalAction `json:"action,omitempty" url:"-"`
+}
+
+type ActionsGetRequest struct {
+	// Unique ID for the desired `TerminalAction`.
+	ActionID string `json:"-" url:"-"`
 }
 
 type SearchTerminalActionsRequest struct {

@@ -6,7 +6,19 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
+type PromotionsCancelRequest struct {
+	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to cancel. You can cancel a
+	// promotion that has an `ACTIVE` or `SCHEDULED` status.
+	PromotionID string `json:"-" url:"-"`
+	// The ID of the base [loyalty program](entity:LoyaltyProgram).
+	ProgramID string `json:"-" url:"-"`
+}
+
 type CreateLoyaltyPromotionRequest struct {
+	// The ID of the [loyalty program](entity:LoyaltyProgram) to associate with the promotion.
+	// To get the program ID, call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram)
+	// using the `main` keyword.
+	ProgramID string `json:"-" url:"-"`
 	// The loyalty promotion to create.
 	LoyaltyPromotion *squaregosdk.LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"-"`
 	// A unique identifier for this request, which is used to ensure idempotency. For more information,
@@ -14,7 +26,18 @@ type CreateLoyaltyPromotionRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 }
 
+type PromotionsGetRequest struct {
+	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
+	PromotionID string `json:"-" url:"-"`
+	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
+	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
+	ProgramID string `json:"-" url:"-"`
+}
+
 type PromotionsListRequest struct {
+	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
+	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
+	ProgramID string `json:"-" url:"-"`
 	// The status to filter the results by. If a status is provided, only loyalty promotions
 	// with the specified status are returned. Otherwise, all loyalty promotions associated with
 	// the loyalty program are returned.

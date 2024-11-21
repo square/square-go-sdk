@@ -33,6 +33,20 @@ type CreateLocationCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
+type DeleteLocationCustomAttributeRequest struct {
+	// The ID of the target [location](entity:Location).
+	LocationID string `json:"-" url:"-"`
+	// The key of the custom attribute to delete. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
+}
+
+type DeleteLocationCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to delete.
+	Key string `json:"-" url:"-"`
+}
+
 type ListLocationCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
 	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
@@ -47,6 +61,8 @@ type ListLocationCustomAttributeDefinitionsRequest struct {
 }
 
 type ListLocationCustomAttributesRequest struct {
+	// The ID of the target [location](entity:Location).
+	LocationID string `json:"-" url:"-"`
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
 	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
@@ -64,6 +80,12 @@ type ListLocationCustomAttributesRequest struct {
 }
 
 type RetrieveLocationCustomAttributeRequest struct {
+	// The ID of the target [location](entity:Location).
+	LocationID string `json:"-" url:"-"`
+	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// Indicates whether to return the [custom attribute definition](entity:CustomAttributeDefinition) in the `definition` field of
 	// the custom attribute. Set this parameter to `true` to get the name and description of the custom
 	// attribute, information about the data type, or other definition details. The default value is `false`.
@@ -76,6 +98,9 @@ type RetrieveLocationCustomAttributeRequest struct {
 }
 
 type RetrieveLocationCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to retrieve. If the requesting application
+	// is not the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The current version of the custom attribute definition, which is used for strongly consistent
 	// reads to guarantee that you receive the most up-to-date data. When included in the request,
 	// Square returns the specified version or a higher version if one exists. If the specified version
@@ -84,6 +109,8 @@ type RetrieveLocationCustomAttributeDefinitionRequest struct {
 }
 
 type UpdateLocationCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to update.
+	Key string `json:"-" url:"-"`
 	// The custom attribute definition that contains the fields to update. This endpoint
 	// supports sparse updates, so only new or changed fields need to be included in the request.
 	// Only the following fields can be updated:
@@ -105,6 +132,12 @@ type UpdateLocationCustomAttributeDefinitionRequest struct {
 }
 
 type UpsertLocationCustomAttributeRequest struct {
+	// The ID of the target [location](entity:Location).
+	LocationID string `json:"-" url:"-"`
+	// The key of the custom attribute to create or update. This key must match the `key` of a
+	// custom attribute definition in the Square seller account. If the requesting application is not
+	// the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The custom attribute to create or update, with the following fields:
 	// - `value`. This value must conform to the `schema` specified by the definition.
 	// For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
@@ -126,7 +159,7 @@ type BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteReque
 	Key *string `json:"key,omitempty" url:"key,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest) GetKey() *string {
@@ -147,20 +180,18 @@ func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteR
 		return err
 	}
 	*b = BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -180,7 +211,7 @@ type BulkDeleteLocationCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteLocationCustomAttributesResponse) GetValues() map[string]*BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse {
@@ -208,20 +239,18 @@ func (b *BulkDeleteLocationCustomAttributesResponse) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BulkDeleteLocationCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteLocationCustomAttributesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -240,7 +269,7 @@ type BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResp
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse) GetLocationID() *string {
@@ -268,20 +297,18 @@ func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDelete
 		return err
 	}
 	*b = BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -312,7 +339,7 @@ type BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertReque
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest) GetLocationID() string {
@@ -347,20 +374,18 @@ func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertR
 		return err
 	}
 	*b = BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -380,7 +405,7 @@ type BulkUpsertLocationCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertLocationCustomAttributesResponse) GetValues() map[string]*BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse {
@@ -408,20 +433,18 @@ func (b *BulkUpsertLocationCustomAttributesResponse) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BulkUpsertLocationCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertLocationCustomAttributesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -441,7 +464,7 @@ type BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResp
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse) GetLocationID() *string {
@@ -476,20 +499,18 @@ func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsert
 		return err
 	}
 	*b = BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -508,7 +529,7 @@ type CreateLocationCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateLocationCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -536,20 +557,18 @@ func (c *CreateLocationCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*c = CreateLocationCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateLocationCustomAttributeDefinitionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -565,7 +584,7 @@ type DeleteLocationCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteLocationCustomAttributeDefinitionResponse) GetErrors() []*Error {
@@ -586,20 +605,18 @@ func (d *DeleteLocationCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*d = DeleteLocationCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteLocationCustomAttributeDefinitionResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -616,7 +633,7 @@ type DeleteLocationCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteLocationCustomAttributeResponse) GetErrors() []*Error {
@@ -637,20 +654,18 @@ func (d *DeleteLocationCustomAttributeResponse) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*d = DeleteLocationCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteLocationCustomAttributeResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -675,7 +690,7 @@ type ListLocationCustomAttributeDefinitionsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListLocationCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
@@ -710,20 +725,18 @@ func (l *ListLocationCustomAttributeDefinitionsResponse) UnmarshalJSON(data []by
 		return err
 	}
 	*l = ListLocationCustomAttributeDefinitionsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListLocationCustomAttributeDefinitionsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -749,7 +762,7 @@ type ListLocationCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListLocationCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
@@ -784,20 +797,18 @@ func (l *ListLocationCustomAttributesResponse) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*l = ListLocationCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListLocationCustomAttributesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -816,7 +827,7 @@ type RetrieveLocationCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveLocationCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -844,20 +855,18 @@ func (r *RetrieveLocationCustomAttributeDefinitionResponse) UnmarshalJSON(data [
 		return err
 	}
 	*r = RetrieveLocationCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveLocationCustomAttributeDefinitionResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -877,7 +886,7 @@ type RetrieveLocationCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveLocationCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
@@ -905,20 +914,18 @@ func (r *RetrieveLocationCustomAttributeResponse) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*r = RetrieveLocationCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveLocationCustomAttributeResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -937,7 +944,7 @@ type UpdateLocationCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateLocationCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -965,20 +972,18 @@ func (u *UpdateLocationCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*u = UpdateLocationCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateLocationCustomAttributeDefinitionResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -997,7 +1002,7 @@ type UpsertLocationCustomAttributeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpsertLocationCustomAttributeResponse) GetCustomAttribute() *CustomAttribute {
@@ -1025,20 +1030,18 @@ func (u *UpsertLocationCustomAttributeResponse) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*u = UpsertLocationCustomAttributeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpsertLocationCustomAttributeResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}

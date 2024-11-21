@@ -7,6 +7,8 @@ import (
 )
 
 type CancelTerminalCheckoutRequest struct {
+	// The unique ID for the desired `TerminalCheckout`.
+	CheckoutID string `json:"-" url:"-"`
 }
 
 type CreateTerminalCheckoutRequest struct {
@@ -17,6 +19,11 @@ type CreateTerminalCheckoutRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The checkout to create.
 	Checkout *squaregosdk.TerminalCheckout `json:"checkout,omitempty" url:"-"`
+}
+
+type CheckoutsGetRequest struct {
+	// The unique ID for the desired `TerminalCheckout`.
+	CheckoutID string `json:"-" url:"-"`
 }
 
 type SearchTerminalCheckoutsRequest struct {

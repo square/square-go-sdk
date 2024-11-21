@@ -16,6 +16,11 @@ type CreateDeviceCodeRequest struct {
 	DeviceCode *squaregosdk.DeviceCode `json:"device_code,omitempty" url:"-"`
 }
 
+type CodesGetRequest struct {
+	// The unique identifier for the device code.
+	ID string `json:"-" url:"-"`
+}
+
 type CodesListRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.

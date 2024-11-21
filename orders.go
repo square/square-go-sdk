@@ -46,7 +46,14 @@ type CloneOrderRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
+type OrdersGetRequest struct {
+	// The ID of the order to retrieve.
+	OrderID string `json:"-" url:"-"`
+}
+
 type PayOrderRequest struct {
+	// The ID of the order being paid.
+	OrderID string `json:"-" url:"-"`
 	// A value you specify that uniquely identifies this request among requests you have sent. If
 	// you are unsure whether a particular payment request was completed successfully, you can reattempt
 	// it with the same idempotency key without worrying about duplicate payments.
@@ -95,7 +102,7 @@ type BatchGetOrdersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetOrdersResponse) GetOrders() []*Order {
@@ -123,20 +130,18 @@ func (b *BatchGetOrdersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetOrdersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetOrdersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -153,7 +158,7 @@ type CalculateOrderResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CalculateOrderResponse) GetOrder() *Order {
@@ -181,20 +186,18 @@ func (c *CalculateOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CalculateOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CalculateOrderResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -213,7 +216,7 @@ type CloneOrderResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CloneOrderResponse) GetOrder() *Order {
@@ -241,20 +244,18 @@ func (c *CloneOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CloneOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CloneOrderResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -275,7 +276,7 @@ type CreateOrderResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateOrderResponse) GetOrder() *Order {
@@ -303,20 +304,18 @@ func (c *CreateOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateOrderResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -333,7 +332,7 @@ type GetOrderResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetOrderResponse) GetOrder() *Order {
@@ -361,20 +360,18 @@ func (g *GetOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetOrderResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -399,7 +396,7 @@ type OrderEntry struct {
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (o *OrderEntry) GetOrderID() *string {
@@ -434,20 +431,18 @@ func (o *OrderEntry) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OrderEntry(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *o)
 	if err != nil {
 		return err
 	}
 	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
+	o.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (o *OrderEntry) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(o._rawJSON); err == nil {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -466,7 +461,7 @@ type PayOrderResponse struct {
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *PayOrderResponse) GetErrors() []*Error {
@@ -494,20 +489,18 @@ func (p *PayOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PayOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *PayOrderResponse) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -527,7 +520,7 @@ type SearchOrdersCustomerFilter struct {
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersCustomerFilter) GetCustomerIDs() []string {
@@ -548,20 +541,18 @@ func (s *SearchOrdersCustomerFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersCustomerFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersCustomerFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -600,7 +591,7 @@ type SearchOrdersDateTimeFilter struct {
 	ClosedAt *TimeRange `json:"closed_at,omitempty" url:"closed_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersDateTimeFilter) GetCreatedAt() *TimeRange {
@@ -635,20 +626,18 @@ func (s *SearchOrdersDateTimeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersDateTimeFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersDateTimeFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -677,7 +666,7 @@ type SearchOrdersFilter struct {
 	CustomerFilter *SearchOrdersCustomerFilter `json:"customer_filter,omitempty" url:"customer_filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersFilter) GetStateFilter() *SearchOrdersStateFilter {
@@ -726,20 +715,18 @@ func (s *SearchOrdersFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -763,7 +750,7 @@ type SearchOrdersFulfillmentFilter struct {
 	FulfillmentStates []FulfillmentState `json:"fulfillment_states,omitempty" url:"fulfillment_states,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersFulfillmentFilter) GetFulfillmentTypes() []FulfillmentType {
@@ -791,20 +778,18 @@ func (s *SearchOrdersFulfillmentFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersFulfillmentFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersFulfillmentFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -822,7 +807,7 @@ type SearchOrdersQuery struct {
 	Sort *SearchOrdersSort `json:"sort,omitempty" url:"sort,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersQuery) GetFilter() *SearchOrdersFilter {
@@ -850,20 +835,18 @@ func (s *SearchOrdersQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersQuery) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -891,7 +874,7 @@ type SearchOrdersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersResponse) GetOrderEntries() []*OrderEntry {
@@ -933,20 +916,18 @@ func (s *SearchOrdersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -976,7 +957,7 @@ type SearchOrdersSort struct {
 	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersSort) GetSortField() SearchOrdersSortField {
@@ -1004,20 +985,18 @@ func (s *SearchOrdersSort) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersSort(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersSort) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1074,7 +1053,7 @@ type SearchOrdersSourceFilter struct {
 	SourceNames []string `json:"source_names,omitempty" url:"source_names,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersSourceFilter) GetSourceNames() []string {
@@ -1095,20 +1074,18 @@ func (s *SearchOrdersSourceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersSourceFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersSourceFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1125,7 +1102,7 @@ type SearchOrdersStateFilter struct {
 	States []OrderState `json:"states,omitempty" url:"states,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchOrdersStateFilter) GetStates() []OrderState {
@@ -1146,20 +1123,18 @@ func (s *SearchOrdersStateFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchOrdersStateFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchOrdersStateFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1178,7 +1153,7 @@ type UpdateOrderResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateOrderResponse) GetOrder() *Order {
@@ -1206,20 +1181,18 @@ func (u *UpdateOrderResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateOrderResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateOrderResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1230,6 +1203,8 @@ func (u *UpdateOrderResponse) String() string {
 }
 
 type UpdateOrderRequest struct {
+	// The ID of the order to update.
+	OrderID string `json:"-" url:"-"`
 	// The [sparse order](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders#sparse-order-objects)
 	// containing only the fields to update and the version to which the update is
 	// being applied.

@@ -35,6 +35,11 @@ type CreateVendorRequest struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"-"`
 }
 
+type VendorsGetRequest struct {
+	// ID of the [Vendor](entity:Vendor) to retrieve.
+	VendorID string `json:"-" url:"-"`
+}
+
 type SearchVendorsRequest struct {
 	// Specifies a filter used to search for vendors.
 	Filter *SearchVendorsRequestFilter `json:"filter,omitempty" url:"-"`
@@ -58,7 +63,7 @@ type BatchCreateVendorsResponse struct {
 	Responses map[string]*CreateVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchCreateVendorsResponse) GetErrors() []*Error {
@@ -86,20 +91,18 @@ func (b *BatchCreateVendorsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchCreateVendorsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchCreateVendorsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -119,7 +122,7 @@ type BatchGetVendorsResponse struct {
 	Responses map[string]*GetVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetVendorsResponse) GetErrors() []*Error {
@@ -147,20 +150,18 @@ func (b *BatchGetVendorsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetVendorsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetVendorsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -180,7 +181,7 @@ type BatchUpdateVendorsResponse struct {
 	Responses map[string]*UpdateVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpdateVendorsResponse) GetErrors() []*Error {
@@ -208,20 +209,18 @@ func (b *BatchUpdateVendorsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchUpdateVendorsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpdateVendorsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -239,7 +238,7 @@ type CreateVendorResponse struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateVendorResponse) GetErrors() []*Error {
@@ -267,20 +266,18 @@ func (c *CreateVendorResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateVendorResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateVendorResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -298,7 +295,7 @@ type GetVendorResponse struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetVendorResponse) GetErrors() []*Error {
@@ -326,20 +323,18 @@ func (g *GetVendorResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetVendorResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetVendorResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -358,7 +353,7 @@ type SearchVendorsRequestFilter struct {
 	Status []VendorStatus `json:"status,omitempty" url:"status,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchVendorsRequestFilter) GetName() []string {
@@ -386,20 +381,18 @@ func (s *SearchVendorsRequestFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchVendorsRequestFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchVendorsRequestFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -419,7 +412,7 @@ type SearchVendorsRequestSort struct {
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchVendorsRequestSort) GetField() *SearchVendorsRequestSortField {
@@ -447,20 +440,18 @@ func (s *SearchVendorsRequestSort) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchVendorsRequestSort(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchVendorsRequestSort) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -506,7 +497,7 @@ type SearchVendorsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchVendorsResponse) GetErrors() []*Error {
@@ -541,20 +532,18 @@ func (s *SearchVendorsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchVendorsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchVendorsResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -577,7 +566,7 @@ type UpdateVendorRequest struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateVendorRequest) GetIdempotencyKey() *string {
@@ -605,20 +594,18 @@ func (u *UpdateVendorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateVendorRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateVendorRequest) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -636,7 +623,7 @@ type UpdateVendorResponse struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateVendorResponse) GetErrors() []*Error {
@@ -664,20 +651,18 @@ func (u *UpdateVendorResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateVendorResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateVendorResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -716,7 +701,7 @@ type Vendor struct {
 	Status *VendorStatus `json:"status,omitempty" url:"status,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (v *Vendor) GetID() *string {
@@ -800,20 +785,18 @@ func (v *Vendor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = Vendor(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *v)
 	if err != nil {
 		return err
 	}
 	v.extraProperties = extraProperties
-
-	v._rawJSON = json.RawMessage(data)
+	v.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (v *Vendor) String() string {
-	if len(v._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v._rawJSON); err == nil {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -841,7 +824,7 @@ type VendorContact struct {
 	Ordinal int `json:"ordinal" url:"ordinal"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (v *VendorContact) GetID() *string {
@@ -897,20 +880,18 @@ func (v *VendorContact) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VendorContact(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *v)
 	if err != nil {
 		return err
 	}
 	v.extraProperties = extraProperties
-
-	v._rawJSON = json.RawMessage(data)
+	v.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (v *VendorContact) String() string {
-	if len(v._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v._rawJSON); err == nil {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -945,4 +926,23 @@ func NewVendorStatusFromString(s string) (VendorStatus, error) {
 
 func (v VendorStatus) Ptr() *VendorStatus {
 	return &v
+}
+
+type VendorsUpdateRequest struct {
+	// ID of the [Vendor](entity:Vendor) to retrieve.
+	VendorID string               `json:"-" url:"-"`
+	Body     *UpdateVendorRequest `json:"-" url:"-"`
+}
+
+func (v *VendorsUpdateRequest) UnmarshalJSON(data []byte) error {
+	body := new(UpdateVendorRequest)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	v.Body = body
+	return nil
+}
+
+func (v *VendorsUpdateRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Body)
 }

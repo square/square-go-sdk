@@ -8,7 +8,14 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type PaymentsCancelRequest struct {
+	// The ID of the payment to cancel.
+	PaymentID string `json:"-" url:"-"`
+}
+
 type CompletePaymentRequest struct {
+	// The unique ID identifying the payment to be completed.
+	PaymentID string `json:"-" url:"-"`
 	// Used for optimistic concurrency. This opaque token identifies the current `Payment`
 	// version that the caller expects. If the server has a different version of the Payment,
 	// the update fails and a response with a VERSION_MISMATCH error is returned.
@@ -158,6 +165,11 @@ type CreatePaymentRequest struct {
 	OfflinePaymentDetails *OfflinePaymentDetails `json:"offline_payment_details,omitempty" url:"-"`
 }
 
+type PaymentsGetRequest struct {
+	// A unique ID for the desired payment.
+	PaymentID string `json:"-" url:"-"`
+}
+
 type PaymentsListRequest struct {
 	// Indicates the start of the time range to retrieve payments for, in RFC 3339 format.
 	// The range is determined using the `created_at` field for each Payment.
@@ -224,7 +236,7 @@ type AchDetails struct {
 	AccountType *string `json:"account_type,omitempty" url:"account_type,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *AchDetails) GetRoutingNumber() *string {
@@ -259,20 +271,18 @@ func (a *AchDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = AchDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *AchDetails) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -288,7 +298,7 @@ type AfterpayDetails struct {
 	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *AfterpayDetails) GetEmailAddress() *string {
@@ -309,20 +319,18 @@ func (a *AfterpayDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = AfterpayDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *AfterpayDetails) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -348,7 +356,7 @@ type ApplicationDetails struct {
 	ApplicationID *string `json:"application_id,omitempty" url:"application_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *ApplicationDetails) GetSquareProduct() *ApplicationDetailsExternalSquareProduct {
@@ -376,20 +384,18 @@ func (a *ApplicationDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ApplicationDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *ApplicationDetails) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -469,7 +475,7 @@ type BankAccountPaymentDetails struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BankAccountPaymentDetails) GetBankName() *string {
@@ -539,20 +545,18 @@ func (b *BankAccountPaymentDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BankAccountPaymentDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BankAccountPaymentDetails) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -575,7 +579,7 @@ type BuyNowPayLaterDetails struct {
 	ClearpayDetails *ClearpayDetails `json:"clearpay_details,omitempty" url:"clearpay_details,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BuyNowPayLaterDetails) GetBrand() *string {
@@ -610,20 +614,18 @@ func (b *BuyNowPayLaterDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BuyNowPayLaterDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BuyNowPayLaterDetails) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -641,7 +643,7 @@ type CancelPaymentResponse struct {
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CancelPaymentResponse) GetErrors() []*Error {
@@ -669,20 +671,18 @@ func (c *CancelPaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CancelPaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CancelPaymentResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -741,7 +741,7 @@ type CardPaymentDetails struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CardPaymentDetails) GetStatus() *string {
@@ -867,20 +867,18 @@ func (c *CardPaymentDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CardPaymentDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CardPaymentDetails) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -900,7 +898,7 @@ type CardPaymentTimeline struct {
 	VoidedAt *string `json:"voided_at,omitempty" url:"voided_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CardPaymentTimeline) GetAuthorizedAt() *string {
@@ -935,20 +933,18 @@ func (c *CardPaymentTimeline) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CardPaymentTimeline(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CardPaymentTimeline) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -970,7 +966,7 @@ type CashAppDetails struct {
 	BuyerCashtag *string `json:"buyer_cashtag,omitempty" url:"buyer_cashtag,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CashAppDetails) GetBuyerFullName() *string {
@@ -1005,20 +1001,18 @@ func (c *CashAppDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CashAppDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CashAppDetails) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1039,7 +1033,7 @@ type CashPaymentDetails struct {
 	ChangeBackMoney *Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CashPaymentDetails) GetBuyerSuppliedMoney() *Money {
@@ -1067,20 +1061,18 @@ func (c *CashPaymentDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CashPaymentDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CashPaymentDetails) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1096,7 +1088,7 @@ type ClearpayDetails struct {
 	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *ClearpayDetails) GetEmailAddress() *string {
@@ -1117,20 +1109,18 @@ func (c *ClearpayDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ClearpayDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *ClearpayDetails) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1148,7 +1138,7 @@ type CompletePaymentResponse struct {
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CompletePaymentResponse) GetErrors() []*Error {
@@ -1176,20 +1166,18 @@ func (c *CompletePaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CompletePaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CompletePaymentResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1210,7 +1198,7 @@ type CreatePaymentResponse struct {
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreatePaymentResponse) GetErrors() []*Error {
@@ -1238,20 +1226,18 @@ func (c *CreatePaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreatePaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreatePaymentResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1270,7 +1256,7 @@ type CustomerDetails struct {
 	SellerKeyedIn *bool `json:"seller_keyed_in,omitempty" url:"seller_keyed_in,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerDetails) GetCustomerInitiated() *bool {
@@ -1298,20 +1284,18 @@ func (c *CustomerDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerDetails) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1331,7 +1315,7 @@ type DeviceDetails struct {
 	DeviceName *string `json:"device_name,omitempty" url:"device_name,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceDetails) GetDeviceID() *string {
@@ -1366,20 +1350,18 @@ func (d *DeviceDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeviceDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1401,7 +1383,7 @@ type DigitalWalletDetails struct {
 	CashAppDetails *CashAppDetails `json:"cash_app_details,omitempty" url:"cash_app_details,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DigitalWalletDetails) GetStatus() *string {
@@ -1436,20 +1418,18 @@ func (d *DigitalWalletDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DigitalWalletDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DigitalWalletDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1488,7 +1468,7 @@ type ExternalPaymentDetails struct {
 	SourceFeeMoney *Money `json:"source_fee_money,omitempty" url:"source_fee_money,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (e *ExternalPaymentDetails) GetType() string {
@@ -1530,20 +1510,18 @@ func (e *ExternalPaymentDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExternalPaymentDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *e)
 	if err != nil {
 		return err
 	}
 	e.extraProperties = extraProperties
-
-	e._rawJSON = json.RawMessage(data)
+	e.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (e *ExternalPaymentDetails) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(e._rawJSON); err == nil {
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1561,7 +1539,7 @@ type GetPaymentResponse struct {
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetPaymentResponse) GetErrors() []*Error {
@@ -1589,20 +1567,18 @@ func (g *GetPaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetPaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetPaymentResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1625,7 +1601,7 @@ type ListPaymentsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListPaymentsResponse) GetErrors() []*Error {
@@ -1660,20 +1636,18 @@ func (l *ListPaymentsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListPaymentsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListPaymentsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1689,7 +1663,7 @@ type OfflinePaymentDetails struct {
 	ClientCreatedAt *string `json:"client_created_at,omitempty" url:"client_created_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (o *OfflinePaymentDetails) GetClientCreatedAt() *string {
@@ -1710,20 +1684,18 @@ func (o *OfflinePaymentDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OfflinePaymentDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *o)
 	if err != nil {
 		return err
 	}
 	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
+	o.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (o *OfflinePaymentDetails) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(o._rawJSON); err == nil {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1908,7 +1880,7 @@ type Payment struct {
 	VersionToken *string `json:"version_token,omitempty" url:"version_token,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *Payment) GetID() *string {
@@ -2230,20 +2202,18 @@ func (p *Payment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = Payment(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *Payment) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2267,7 +2237,7 @@ type RiskEvaluation struct {
 	RiskLevel *RiskEvaluationRiskLevel `json:"risk_level,omitempty" url:"risk_level,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RiskEvaluation) GetCreatedAt() *string {
@@ -2295,20 +2265,18 @@ func (r *RiskEvaluation) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RiskEvaluation(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RiskEvaluation) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2357,7 +2325,7 @@ type SquareAccountDetails struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SquareAccountDetails) GetPaymentSourceToken() *string {
@@ -2385,20 +2353,18 @@ func (s *SquareAccountDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SquareAccountDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SquareAccountDetails) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2417,7 +2383,7 @@ type UpdatePaymentResponse struct {
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdatePaymentResponse) GetErrors() []*Error {
@@ -2445,20 +2411,18 @@ func (u *UpdatePaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdatePaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdatePaymentResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2469,6 +2433,8 @@ func (u *UpdatePaymentResponse) String() string {
 }
 
 type UpdatePaymentRequest struct {
+	// The ID of the payment to update.
+	PaymentID string `json:"-" url:"-"`
 	// The updated `Payment` object.
 	Payment *Payment `json:"payment,omitempty" url:"-"`
 	// A unique string that identifies this `UpdatePayment` request. Keys can be any valid string

@@ -97,10 +97,17 @@ type CreateCustomerRequest struct {
 }
 
 type CustomersDeleteRequest struct {
+	// The ID of the customer to delete.
+	CustomerID string `json:"-" url:"-"`
 	// The current version of the customer profile.
 	//
 	// As a best practice, you should include this parameter to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control. For more information, see [Delete a customer profile](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#delete-customer-profile).
 	Version *int64 `json:"-" url:"version,omitempty"`
+}
+
+type CustomersGetRequest struct {
+	// The ID of the customer to retrieve.
+	CustomerID string `json:"-" url:"-"`
 }
 
 type CustomersListRequest struct {
@@ -172,7 +179,7 @@ type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequ
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) GetCustomerID() string {
@@ -207,20 +214,18 @@ func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsert
 		return err
 	}
 	*b = BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -240,7 +245,7 @@ type BatchUpsertCustomerCustomAttributesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpsertCustomerCustomAttributesResponse) GetValues() map[string]*BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse {
@@ -268,20 +273,18 @@ func (b *BatchUpsertCustomerCustomAttributesResponse) UnmarshalJSON(data []byte)
 		return err
 	}
 	*b = BatchUpsertCustomerCustomAttributesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpsertCustomerCustomAttributesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -301,7 +304,7 @@ type BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertRes
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) GetCustomerID() *string {
@@ -336,20 +339,18 @@ func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpser
 		return err
 	}
 	*b = BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -396,7 +397,7 @@ type BulkCreateCustomerData struct {
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkCreateCustomerData) GetGivenName() *string {
@@ -487,20 +488,18 @@ func (b *BulkCreateCustomerData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkCreateCustomerData(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkCreateCustomerData) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -525,7 +524,7 @@ type BulkCreateCustomersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkCreateCustomersResponse) GetResponses() map[string]*CreateCustomerResponse {
@@ -553,20 +552,18 @@ func (b *BulkCreateCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkCreateCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkCreateCustomersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -591,7 +588,7 @@ type BulkDeleteCustomersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkDeleteCustomersResponse) GetResponses() map[string]*DeleteCustomerResponse {
@@ -619,20 +616,18 @@ func (b *BulkDeleteCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkDeleteCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkDeleteCustomersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -657,7 +652,7 @@ type BulkRetrieveCustomersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkRetrieveCustomersResponse) GetResponses() map[string]*GetCustomerResponse {
@@ -685,20 +680,18 @@ func (b *BulkRetrieveCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkRetrieveCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkRetrieveCustomersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -751,7 +744,7 @@ type BulkUpdateCustomerData struct {
 	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpdateCustomerData) GetGivenName() *string {
@@ -849,20 +842,18 @@ func (b *BulkUpdateCustomerData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkUpdateCustomerData(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpdateCustomerData) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -887,7 +878,7 @@ type BulkUpdateCustomersResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkUpdateCustomersResponse) GetResponses() map[string]*UpdateCustomerResponse {
@@ -915,20 +906,18 @@ func (b *BulkUpdateCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkUpdateCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkUpdateCustomersResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -950,7 +939,7 @@ type CreateCustomerResponse struct {
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateCustomerResponse) GetErrors() []*Error {
@@ -978,20 +967,18 @@ func (c *CreateCustomerResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateCustomerResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateCustomerResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1058,7 +1045,7 @@ type Customer struct {
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *Customer) GetID() *string {
@@ -1219,20 +1206,18 @@ func (c *Customer) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = Customer(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *Customer) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1252,7 +1237,7 @@ type CustomerAddressFilter struct {
 	Country *Country `json:"country,omitempty" url:"country,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerAddressFilter) GetPostalCode() *CustomerTextFilter {
@@ -1280,20 +1265,18 @@ func (c *CustomerAddressFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerAddressFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerAddressFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1393,7 +1376,7 @@ type CustomerCreationSourceFilter struct {
 	Rule *CustomerInclusionExclusion `json:"rule,omitempty" url:"rule,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerCreationSourceFilter) GetValues() []CustomerCreationSource {
@@ -1421,20 +1404,18 @@ func (c *CustomerCreationSourceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerCreationSourceFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerCreationSourceFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1463,7 +1444,7 @@ type CustomerCustomAttributeFilter struct {
 	UpdatedAt *TimeRange `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerCustomAttributeFilter) GetKey() string {
@@ -1498,20 +1479,18 @@ func (c *CustomerCustomAttributeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerCustomAttributeFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerCustomAttributeFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1583,7 +1562,7 @@ type CustomerCustomAttributeFilterValue struct {
 	Address *CustomerAddressFilter `json:"address,omitempty" url:"address,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerCustomAttributeFilterValue) GetEmail() *CustomerTextFilter {
@@ -1653,20 +1632,18 @@ func (c *CustomerCustomAttributeFilterValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerCustomAttributeFilterValue(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerCustomAttributeFilterValue) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1685,7 +1662,7 @@ type CustomerCustomAttributeFilters struct {
 	Filters []*CustomerCustomAttributeFilter `json:"filters,omitempty" url:"filters,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerCustomAttributeFilters) GetFilters() []*CustomerCustomAttributeFilter {
@@ -1706,20 +1683,18 @@ func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerCustomAttributeFilters(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerCustomAttributeFilters) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1837,7 +1812,7 @@ type CustomerFilter struct {
 	SegmentIDs *FilterValue `json:"segment_ids,omitempty" url:"segment_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerFilter) GetCreationSource() *CustomerCreationSourceFilter {
@@ -1914,20 +1889,18 @@ func (c *CustomerFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1945,7 +1918,7 @@ type CustomerGroupInfo struct {
 	Name string `json:"name" url:"name"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerGroupInfo) GetID() string {
@@ -1973,20 +1946,18 @@ func (c *CustomerGroupInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerGroupInfo(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerGroupInfo) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2026,7 +1997,7 @@ type CustomerPreferences struct {
 	EmailUnsubscribed *bool `json:"email_unsubscribed,omitempty" url:"email_unsubscribed,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerPreferences) GetEmailUnsubscribed() *bool {
@@ -2047,20 +2018,18 @@ func (c *CustomerPreferences) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerPreferences(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerPreferences) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2083,7 +2052,7 @@ type CustomerQuery struct {
 	Sort *CustomerSort `json:"sort,omitempty" url:"sort,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerQuery) GetFilter() *CustomerFilter {
@@ -2111,20 +2080,18 @@ func (c *CustomerQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerQuery) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2151,7 +2118,7 @@ type CustomerSort struct {
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerSort) GetField() *CustomerSortField {
@@ -2179,20 +2146,18 @@ func (c *CustomerSort) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerSort(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerSort) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2232,7 +2197,7 @@ type CustomerTaxIDs struct {
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerTaxIDs) GetEuVat() *string {
@@ -2253,20 +2218,18 @@ func (c *CustomerTaxIDs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerTaxIDs(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerTaxIDs) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2289,7 +2252,7 @@ type CustomerTextFilter struct {
 	Fuzzy *string `json:"fuzzy,omitempty" url:"fuzzy,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CustomerTextFilter) GetExact() *string {
@@ -2317,20 +2280,18 @@ func (c *CustomerTextFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CustomerTextFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CustomerTextFilter) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2347,7 +2308,7 @@ type DeleteCustomerResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteCustomerResponse) GetErrors() []*Error {
@@ -2368,20 +2329,18 @@ func (d *DeleteCustomerResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeleteCustomerResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteCustomerResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2399,7 +2358,7 @@ type FloatNumberRange struct {
 	EndAt *string `json:"end_at,omitempty" url:"end_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (f *FloatNumberRange) GetStartAt() *string {
@@ -2427,20 +2386,18 @@ func (f *FloatNumberRange) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FloatNumberRange(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
 	f.extraProperties = extraProperties
-
-	f._rawJSON = json.RawMessage(data)
+	f.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (f *FloatNumberRange) String() string {
-	if len(f._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(f._rawJSON); err == nil {
+	if len(f.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(f.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2461,7 +2418,7 @@ type GetCustomerResponse struct {
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetCustomerResponse) GetErrors() []*Error {
@@ -2489,20 +2446,18 @@ func (g *GetCustomerResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetCustomerResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetCustomerResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2535,7 +2490,7 @@ type ListCustomersResponse struct {
 	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListCustomersResponse) GetErrors() []*Error {
@@ -2577,20 +2532,18 @@ func (l *ListCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListCustomersResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2624,7 +2577,7 @@ type SearchCustomersResponse struct {
 	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchCustomersResponse) GetErrors() []*Error {
@@ -2666,20 +2619,18 @@ func (s *SearchCustomersResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchCustomersResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchCustomersResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2701,7 +2652,7 @@ type UpdateCustomerResponse struct {
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateCustomerResponse) GetErrors() []*Error {
@@ -2729,20 +2680,18 @@ func (u *UpdateCustomerResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateCustomerResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateCustomerResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2753,6 +2702,8 @@ func (u *UpdateCustomerResponse) String() string {
 }
 
 type UpdateCustomerRequest struct {
+	// The ID of the customer to update.
+	CustomerID string `json:"-" url:"-"`
 	// The given name (that is, the first name) associated with the customer profile.
 	//
 	// The maximum length for this value is 300 characters.

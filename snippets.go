@@ -8,13 +8,23 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type SnippetsDeleteRequest struct {
+	// The ID of the site that contains the snippet.
+	SiteID string `json:"-" url:"-"`
+}
+
+type SnippetsGetRequest struct {
+	// The ID of the site that contains the snippet.
+	SiteID string `json:"-" url:"-"`
+}
+
 // Represents a `DeleteSnippet` response.
 type DeleteSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteSnippetResponse) GetErrors() []*Error {
@@ -35,20 +45,18 @@ func (d *DeleteSnippetResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeleteSnippetResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteSnippetResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -66,7 +74,7 @@ type GetSnippetResponse struct {
 	Snippet *Snippet `json:"snippet,omitempty" url:"snippet,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetSnippetResponse) GetErrors() []*Error {
@@ -94,20 +102,18 @@ func (g *GetSnippetResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetSnippetResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetSnippetResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -131,7 +137,7 @@ type Snippet struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *Snippet) GetID() *string {
@@ -180,20 +186,18 @@ func (s *Snippet) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = Snippet(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *Snippet) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -211,7 +215,7 @@ type UpsertSnippetResponse struct {
 	Snippet *Snippet `json:"snippet,omitempty" url:"snippet,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpsertSnippetResponse) GetErrors() []*Error {
@@ -239,20 +243,18 @@ func (u *UpsertSnippetResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpsertSnippetResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpsertSnippetResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -263,6 +265,8 @@ func (u *UpsertSnippetResponse) String() string {
 }
 
 type UpsertSnippetRequest struct {
+	// The ID of the site where you want to add or update the snippet.
+	SiteID string `json:"-" url:"-"`
 	// The snippet for the site.
 	Snippet *Snippet `json:"snippet,omitempty" url:"-"`
 }

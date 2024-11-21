@@ -9,11 +9,15 @@ import (
 )
 
 type LinkCustomerToGiftCardRequest struct {
+	// The ID of the gift card to be linked.
+	GiftCardID string `json:"-" url:"-"`
 	// The ID of the customer to link to the gift card.
 	CustomerID string `json:"customer_id" url:"-"`
 }
 
 type UnlinkCustomerFromGiftCardRequest struct {
+	// The ID of the gift card to be unlinked.
+	GiftCardID string `json:"-" url:"-"`
 	// The ID of the customer to unlink from the gift card.
 	CustomerID string `json:"customer_id" url:"-"`
 }
@@ -42,6 +46,11 @@ type CreateGiftCardRequest struct {
 	// To register an unused, physical gift card that the seller previously ordered from Square,
 	// include `gan` and provide the GAN that is printed on the gift card.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"-"`
+}
+
+type GiftCardsGetRequest struct {
+	// The ID of the gift card to retrieve.
+	ID string `json:"-" url:"-"`
 }
 
 type GetGiftCardFromGanRequest struct {
@@ -86,7 +95,7 @@ type CreateGiftCardResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateGiftCardResponse) GetErrors() []*Error {
@@ -114,20 +123,18 @@ func (c *CreateGiftCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateGiftCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateGiftCardResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -146,7 +153,7 @@ type GetGiftCardFromGanResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetGiftCardFromGanResponse) GetErrors() []*Error {
@@ -174,20 +181,18 @@ func (g *GetGiftCardFromGanResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetGiftCardFromGanResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetGiftCardFromGanResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -206,7 +211,7 @@ type GetGiftCardFromNonceResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetGiftCardFromNonceResponse) GetErrors() []*Error {
@@ -234,20 +239,18 @@ func (g *GetGiftCardFromNonceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetGiftCardFromNonceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetGiftCardFromNonceResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -266,7 +269,7 @@ type GetGiftCardResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetGiftCardResponse) GetErrors() []*Error {
@@ -294,20 +297,18 @@ func (g *GetGiftCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetGiftCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetGiftCardResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -345,7 +346,7 @@ type GiftCard struct {
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GiftCard) GetID() *string {
@@ -415,20 +416,18 @@ func (g *GiftCard) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GiftCard(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GiftCard) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -538,7 +537,7 @@ type LinkCustomerToGiftCardResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LinkCustomerToGiftCardResponse) GetErrors() []*Error {
@@ -566,20 +565,18 @@ func (l *LinkCustomerToGiftCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LinkCustomerToGiftCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LinkCustomerToGiftCardResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -603,7 +600,7 @@ type ListGiftCardsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListGiftCardsResponse) GetErrors() []*Error {
@@ -638,20 +635,18 @@ func (l *ListGiftCardsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListGiftCardsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListGiftCardsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -671,7 +666,7 @@ type UnlinkCustomerFromGiftCardResponse struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) GetErrors() []*Error {
@@ -699,20 +694,18 @@ func (u *UnlinkCustomerFromGiftCardResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UnlinkCustomerFromGiftCardResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}

@@ -2,6 +2,11 @@
 
 package labor
 
+type TeamMemberWagesGetRequest struct {
+	// The UUID for the `TeamMemberWage` being retrieved.
+	ID string `json:"-" url:"-"`
+}
+
 type TeamMemberWagesListRequest struct {
 	// Filter the returned wages to only those that are associated with the
 	// specified team member.

@@ -30,7 +30,7 @@ type LoyaltyEventDateTimeFilter struct {
 	CreatedAt *TimeRange `json:"created_at,omitempty" url:"created_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventDateTimeFilter) GetCreatedAt() *TimeRange {
@@ -51,20 +51,18 @@ func (l *LoyaltyEventDateTimeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventDateTimeFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventDateTimeFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -91,7 +89,7 @@ type LoyaltyEventFilter struct {
 	OrderFilter *LoyaltyEventOrderFilter `json:"order_filter,omitempty" url:"order_filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventFilter) GetLoyaltyAccountFilter() *LoyaltyEventLoyaltyAccountFilter {
@@ -140,20 +138,18 @@ func (l *LoyaltyEventFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -171,7 +167,7 @@ type LoyaltyEventLocationFilter struct {
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventLocationFilter) GetLocationIDs() []string {
@@ -192,20 +188,18 @@ func (l *LoyaltyEventLocationFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventLocationFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventLocationFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -221,7 +215,7 @@ type LoyaltyEventLoyaltyAccountFilter struct {
 	LoyaltyAccountID string `json:"loyalty_account_id" url:"loyalty_account_id"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) GetLoyaltyAccountID() string {
@@ -242,20 +236,18 @@ func (l *LoyaltyEventLoyaltyAccountFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventLoyaltyAccountFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -271,7 +263,7 @@ type LoyaltyEventOrderFilter struct {
 	OrderID string `json:"order_id" url:"order_id"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventOrderFilter) GetOrderID() string {
@@ -292,20 +284,18 @@ func (l *LoyaltyEventOrderFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventOrderFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventOrderFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -321,7 +311,7 @@ type LoyaltyEventQuery struct {
 	Filter *LoyaltyEventFilter `json:"filter,omitempty" url:"filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventQuery) GetFilter() *LoyaltyEventFilter {
@@ -342,20 +332,18 @@ func (l *LoyaltyEventQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventQuery) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -374,7 +362,7 @@ type LoyaltyEventTypeFilter struct {
 	Types []LoyaltyEventType `json:"types,omitempty" url:"types,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *LoyaltyEventTypeFilter) GetTypes() []LoyaltyEventType {
@@ -395,20 +383,18 @@ func (l *LoyaltyEventTypeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = LoyaltyEventTypeFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *LoyaltyEventTypeFilter) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -432,7 +418,7 @@ type SearchLoyaltyEventsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchLoyaltyEventsResponse) GetErrors() []*Error {
@@ -467,20 +453,18 @@ func (s *SearchLoyaltyEventsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchLoyaltyEventsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchLoyaltyEventsResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}

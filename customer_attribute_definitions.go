@@ -21,7 +21,15 @@ type CreateCustomerCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
+type CustomerAttributeDefinitionsDeleteRequest struct {
+	// The key of the custom attribute definition to delete.
+	Key string `json:"-" url:"-"`
+}
+
 type CustomerAttributeDefinitionsGetRequest struct {
+	// The key of the custom attribute definition to retrieve. If the requesting application
+	// is not the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The current version of the custom attribute definition, which is used for strongly consistent
 	// reads to guarantee that you receive the most up-to-date data. When included in the request,
 	// Square returns the specified version or a higher version if one exists. If the specified version
@@ -49,7 +57,7 @@ type CreateCustomerCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateCustomerCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -77,20 +85,18 @@ func (c *CreateCustomerCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*c = CreateCustomerCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateCustomerCustomAttributeDefinitionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -106,7 +112,7 @@ type DeleteCustomerCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteCustomerCustomAttributeDefinitionResponse) GetErrors() []*Error {
@@ -127,20 +133,18 @@ func (d *DeleteCustomerCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*d = DeleteCustomerCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteCustomerCustomAttributeDefinitionResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -159,7 +163,7 @@ type GetCustomerCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetCustomerCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -187,20 +191,18 @@ func (g *GetCustomerCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte
 		return err
 	}
 	*g = GetCustomerCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetCustomerCustomAttributeDefinitionResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -225,7 +227,7 @@ type ListCustomerCustomAttributeDefinitionsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListCustomerCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
@@ -260,20 +262,18 @@ func (l *ListCustomerCustomAttributeDefinitionsResponse) UnmarshalJSON(data []by
 		return err
 	}
 	*l = ListCustomerCustomAttributeDefinitionsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListCustomerCustomAttributeDefinitionsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -292,7 +292,7 @@ type UpdateCustomerCustomAttributeDefinitionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateCustomerCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
@@ -320,20 +320,18 @@ func (u *UpdateCustomerCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 		return err
 	}
 	*u = UpdateCustomerCustomAttributeDefinitionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateCustomerCustomAttributeDefinitionResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -344,6 +342,8 @@ func (u *UpdateCustomerCustomAttributeDefinitionResponse) String() string {
 }
 
 type UpdateCustomerCustomAttributeDefinitionRequest struct {
+	// The key of the custom attribute definition to update.
+	Key string `json:"-" url:"-"`
 	// The custom attribute definition that contains the fields to update. This endpoint
 	// supports sparse updates, so only new or changed fields need to be included in the request.
 	// Only the following fields can be updated:

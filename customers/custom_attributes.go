@@ -6,7 +6,22 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
+type CustomAttributesDeleteRequest struct {
+	// The ID of the target [customer profile](entity:Customer).
+	CustomerID string `json:"-" url:"-"`
+	// The key of the custom attribute to delete. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
+}
+
 type CustomAttributesGetRequest struct {
+	// The ID of the target [customer profile](entity:Customer).
+	CustomerID string `json:"-" url:"-"`
+	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
+	// attribute definition in the Square seller account. If the requesting application is not the
+	// definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// Indicates whether to return the [custom attribute definition](entity:CustomAttributeDefinition) in the `definition` field of
 	// the custom attribute. Set this parameter to `true` to get the name and description of the custom
 	// attribute, information about the data type, or other definition details. The default value is `false`.
@@ -19,6 +34,8 @@ type CustomAttributesGetRequest struct {
 }
 
 type CustomAttributesListRequest struct {
+	// The ID of the target [customer profile](entity:Customer).
+	CustomerID string `json:"-" url:"-"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -34,6 +51,12 @@ type CustomAttributesListRequest struct {
 }
 
 type UpsertCustomerCustomAttributeRequest struct {
+	// The ID of the target [customer profile](entity:Customer).
+	CustomerID string `json:"-" url:"-"`
+	// The key of the custom attribute to create or update. This key must match the `key` of a
+	// custom attribute definition in the Square seller account. If the requesting application is not
+	// the definition owner, you must use the qualified key.
+	Key string `json:"-" url:"-"`
 	// The custom attribute to create or update, with the following fields:
 	//
 	// - `value`. This value must conform to the `schema` specified by the definition.

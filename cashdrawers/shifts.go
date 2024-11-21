@@ -7,6 +7,8 @@ import (
 )
 
 type ShiftsGetRequest struct {
+	// The shift ID.
+	ShiftID string `json:"-" url:"-"`
 	// The ID of the location to retrieve cash drawer shifts from.
 	LocationID string `json:"-" url:"location_id"`
 }
@@ -29,6 +31,8 @@ type ShiftsListRequest struct {
 }
 
 type ShiftsListEventsRequest struct {
+	// The shift ID.
+	ShiftID string `json:"-" url:"-"`
 	// The ID of the location to list cash drawer shifts for.
 	LocationID string `json:"-" url:"location_id"`
 	// Number of resources to be returned in a page of results (200 by

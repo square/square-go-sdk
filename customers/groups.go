@@ -6,11 +6,28 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
+type GroupsAddRequest struct {
+	// The ID of the customer to add to a group.
+	CustomerID string `json:"-" url:"-"`
+	// The ID of the customer group to add the customer to.
+	GroupID string `json:"-" url:"-"`
+}
+
 type CreateCustomerGroupRequest struct {
 	// The idempotency key for the request. For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The customer group to create.
 	Group *squaregosdk.CustomerGroup `json:"group,omitempty" url:"-"`
+}
+
+type GroupsDeleteRequest struct {
+	// The ID of the customer group to delete.
+	GroupID string `json:"-" url:"-"`
+}
+
+type GroupsGetRequest struct {
+	// The ID of the customer group to retrieve.
+	GroupID string `json:"-" url:"-"`
 }
 
 type GroupsListRequest struct {
@@ -26,7 +43,16 @@ type GroupsListRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 }
 
+type GroupsRemoveRequest struct {
+	// The ID of the customer to remove from the group.
+	CustomerID string `json:"-" url:"-"`
+	// The ID of the customer group to remove the customer from.
+	GroupID string `json:"-" url:"-"`
+}
+
 type UpdateCustomerGroupRequest struct {
+	// The ID of the customer group to update.
+	GroupID string `json:"-" url:"-"`
 	// The `CustomerGroup` object including all the updates you want to make.
 	Group *squaregosdk.CustomerGroup `json:"group,omitempty" url:"-"`
 }

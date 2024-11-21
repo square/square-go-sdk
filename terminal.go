@@ -8,6 +8,21 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type DismissTerminalActionRequest struct {
+	// Unique ID for the `TerminalAction` associated with the action to be dismissed.
+	ActionID string `json:"-" url:"-"`
+}
+
+type DismissTerminalCheckoutRequest struct {
+	// Unique ID for the `TerminalCheckout` associated with the checkout to be dismissed.
+	CheckoutID string `json:"-" url:"-"`
+}
+
+type DismissTerminalRefundRequest struct {
+	// Unique ID for the `TerminalRefund` associated with the refund to be dismissed.
+	TerminalRefundID string `json:"-" url:"-"`
+}
+
 type DismissTerminalActionResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -15,7 +30,7 @@ type DismissTerminalActionResponse struct {
 	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DismissTerminalActionResponse) GetErrors() []*Error {
@@ -43,20 +58,18 @@ func (d *DismissTerminalActionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DismissTerminalActionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DismissTerminalActionResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -73,7 +86,7 @@ type DismissTerminalCheckoutResponse struct {
 	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DismissTerminalCheckoutResponse) GetErrors() []*Error {
@@ -101,20 +114,18 @@ func (d *DismissTerminalCheckoutResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DismissTerminalCheckoutResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DismissTerminalCheckoutResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -131,7 +142,7 @@ type DismissTerminalRefundResponse struct {
 	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DismissTerminalRefundResponse) GetErrors() []*Error {
@@ -159,20 +170,18 @@ func (d *DismissTerminalRefundResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DismissTerminalRefundResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DismissTerminalRefundResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}

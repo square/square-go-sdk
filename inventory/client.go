@@ -42,22 +42,23 @@ func NewClient(opts ...option.RequestOption) *Client {
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetAdjustment(
 	ctx context.Context,
-	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
-	adjustmentID string,
+	request *squaregosdk.InventoryDeprecatedGetAdjustmentRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/adjustment/%v", adjustmentID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/adjustment/%v",
+		request.AdjustmentID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryAdjustmentResponse
 	if err := c.caller.Call(
@@ -65,8 +66,8 @@ func (c *Client) DeprecatedGetAdjustment(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -82,22 +83,23 @@ func (c *Client) DeprecatedGetAdjustment(
 // with the provided `adjustment_id`.
 func (c *Client) GetAdjustment(
 	ctx context.Context,
-	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
-	adjustmentID string,
+	request *squaregosdk.InventoryGetAdjustmentRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/adjustments/%v", adjustmentID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/adjustments/%v",
+		request.AdjustmentID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryAdjustmentResponse
 	if err := c.caller.Call(
@@ -105,8 +107,8 @@ func (c *Client) GetAdjustment(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -126,17 +128,16 @@ func (c *Client) DeprecatedBatchChange(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchChangeInventoryResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/batch-change"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchChangeInventoryResponse
@@ -145,8 +146,8 @@ func (c *Client) DeprecatedBatchChange(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -167,17 +168,16 @@ func (c *Client) DeprecatedBatchGetChanges(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchGetInventoryChangesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-changes"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchGetInventoryChangesResponse
@@ -186,8 +186,8 @@ func (c *Client) DeprecatedBatchGetChanges(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -208,17 +208,16 @@ func (c *Client) DeprecatedBatchGetCounts(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchGetInventoryCountsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-counts"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchGetInventoryCountsResponse
@@ -227,8 +226,8 @@ func (c *Client) DeprecatedBatchGetCounts(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -252,17 +251,16 @@ func (c *Client) BatchCreateChanges(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchChangeInventoryResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-create"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchChangeInventoryResponse
@@ -271,8 +269,8 @@ func (c *Client) BatchCreateChanges(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -299,17 +297,16 @@ func (c *Client) BatchGetChanges(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchGetInventoryChangesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-retrieve"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchGetInventoryChangesResponse
@@ -318,8 +315,8 @@ func (c *Client) BatchGetChanges(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -349,17 +346,16 @@ func (c *Client) BatchGetCounts(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BatchGetInventoryCountsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/inventory/counts/batch-retrieve"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BatchGetInventoryCountsResponse
@@ -368,8 +364,8 @@ func (c *Client) BatchGetCounts(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -386,23 +382,23 @@ func (c *Client) BatchGetCounts(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetPhysicalCount(
 	ctx context.Context,
-	// ID of the
-	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
-	physicalCountID string,
+	request *squaregosdk.InventoryDeprecatedGetPhysicalCountRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/physical-count/%v", physicalCountID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/physical-count/%v",
+		request.PhysicalCountID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryPhysicalCountResponse
 	if err := c.caller.Call(
@@ -410,8 +406,8 @@ func (c *Client) DeprecatedGetPhysicalCount(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -427,23 +423,23 @@ func (c *Client) DeprecatedGetPhysicalCount(
 // object with the provided `physical_count_id`.
 func (c *Client) GetPhysicalCount(
 	ctx context.Context,
-	// ID of the
-	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
-	physicalCountID string,
+	request *squaregosdk.InventoryGetPhysicalCountRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/physical-counts/%v", physicalCountID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/physical-counts/%v",
+		request.PhysicalCountID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryPhysicalCountResponse
 	if err := c.caller.Call(
@@ -451,8 +447,8 @@ func (c *Client) GetPhysicalCount(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -468,22 +464,23 @@ func (c *Client) GetPhysicalCount(
 // with the provided `transfer_id`.
 func (c *Client) GetTransfer(
 	ctx context.Context,
-	// ID of the [InventoryTransfer](entity:InventoryTransfer) to retrieve.
-	transferID string,
+	request *squaregosdk.InventoryGetTransferRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryTransferResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/transfers/%v", transferID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/transfers/%v",
+		request.TransferID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryTransferResponse
 	if err := c.caller.Call(
@@ -491,8 +488,8 @@ func (c *Client) GetTransfer(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -510,22 +507,19 @@ func (c *Client) GetTransfer(
 // For more sophisticated queries, use a batch endpoint.
 func (c *Client) Get(
 	ctx context.Context,
-	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
-	catalogObjectID string,
 	request *squaregosdk.InventoryGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/%v", catalogObjectID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/%v",
+		request.CatalogObjectID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -533,8 +527,10 @@ func (c *Client) Get(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryCountResponse
 	if err := c.caller.Call(
@@ -542,8 +538,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -570,22 +566,19 @@ func (c *Client) Get(
 // sophisticated queries, use a batch endpoint.
 func (c *Client) Changes(
 	ctx context.Context,
-	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
-	catalogObjectID string,
 	request *squaregosdk.InventoryChangesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryChangesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/inventory/%v/changes", catalogObjectID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/inventory/%v/changes",
+		request.CatalogObjectID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -593,8 +586,10 @@ func (c *Client) Changes(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetInventoryChangesResponse
 	if err := c.caller.Call(
@@ -602,8 +597,8 @@ func (c *Client) Changes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
