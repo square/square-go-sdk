@@ -8,6 +8,11 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type DevicesGetRequest struct {
+	// The unique ID for the desired `Device`.
+	DeviceID string `json:"-" url:"-"`
+}
+
 type DevicesListRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
@@ -88,7 +93,7 @@ type Component struct {
 	EthernetDetails *DeviceComponentDetailsEthernetDetails `json:"ethernet_details,omitempty" url:"ethernet_details,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *Component) GetType() ComponentComponentType {
@@ -144,20 +149,18 @@ func (c *Component) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = Component(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *Component) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -247,7 +250,7 @@ type Device struct {
 	Status *DeviceStatus `json:"status,omitempty" url:"status,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *Device) GetID() *string {
@@ -289,20 +292,18 @@ func (d *Device) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = Device(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *Device) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -334,7 +335,7 @@ type DeviceAttributes struct {
 	MerchantToken *string `json:"merchant_token,omitempty" url:"merchant_token,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceAttributes) GetType() DeviceAttributesDeviceType {
@@ -404,20 +405,18 @@ func (d *DeviceAttributes) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeviceAttributes(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceAttributes) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -495,7 +494,7 @@ type DeviceComponentDetailsApplicationDetails struct {
 	DeviceCodeID *string `json:"device_code_id,omitempty" url:"device_code_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) GetApplicationType() *ApplicationType {
@@ -537,20 +536,18 @@ func (d *DeviceComponentDetailsApplicationDetails) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*d = DeviceComponentDetailsApplicationDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -568,7 +565,7 @@ type DeviceComponentDetailsBatteryDetails struct {
 	ExternalPower *DeviceComponentDetailsExternalPower `json:"external_power,omitempty" url:"external_power,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsBatteryDetails) GetVisiblePercent() *int {
@@ -596,20 +593,18 @@ func (d *DeviceComponentDetailsBatteryDetails) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*d = DeviceComponentDetailsBatteryDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsBatteryDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -624,7 +619,7 @@ type DeviceComponentDetailsCardReaderDetails struct {
 	Version *string `json:"version,omitempty" url:"version,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) GetVersion() *string {
@@ -645,20 +640,18 @@ func (d *DeviceComponentDetailsCardReaderDetails) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*d = DeviceComponentDetailsCardReaderDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -675,7 +668,7 @@ type DeviceComponentDetailsEthernetDetails struct {
 	IPAddressV4 *string `json:"ip_address_v4,omitempty" url:"ip_address_v4,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) GetActive() *bool {
@@ -703,20 +696,18 @@ func (d *DeviceComponentDetailsEthernetDetails) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*d = DeviceComponentDetailsEthernetDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -763,7 +754,7 @@ type DeviceComponentDetailsMeasurement struct {
 	Value *int `json:"value,omitempty" url:"value,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsMeasurement) GetValue() *int {
@@ -784,20 +775,18 @@ func (d *DeviceComponentDetailsMeasurement) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeviceComponentDetailsMeasurement(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsMeasurement) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -821,7 +810,7 @@ type DeviceComponentDetailsWiFiDetails struct {
 	SignalStrength *DeviceComponentDetailsMeasurement `json:"signal_strength,omitempty" url:"signal_strength,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) GetActive() *bool {
@@ -870,20 +859,18 @@ func (d *DeviceComponentDetailsWiFiDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeviceComponentDetailsWiFiDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -898,7 +885,7 @@ type DeviceStatus struct {
 	Category *DeviceStatusCategory `json:"category,omitempty" url:"category,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeviceStatus) GetCategory() *DeviceStatusCategory {
@@ -919,20 +906,18 @@ func (d *DeviceStatus) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeviceStatus(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeviceStatus) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -980,7 +965,7 @@ type GetDeviceResponse struct {
 	Device *Device `json:"device,omitempty" url:"device,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetDeviceResponse) GetErrors() []*Error {
@@ -1008,20 +993,18 @@ func (g *GetDeviceResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetDeviceResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetDeviceResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1042,7 +1025,7 @@ type ListDevicesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListDevicesResponse) GetErrors() []*Error {
@@ -1077,20 +1060,18 @@ func (l *ListDevicesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListDevicesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListDevicesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}

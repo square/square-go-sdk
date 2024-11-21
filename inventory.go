@@ -8,7 +8,14 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type InventoryDeprecatedGetAdjustmentRequest struct {
+	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
+	AdjustmentID string `json:"-" url:"-"`
+}
+
 type InventoryChangesRequest struct {
+	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
+	CatalogObjectID string `json:"-" url:"-"`
 	// The [Location](entity:Location) IDs to look up as a comma-separated
 	// list. An empty list queries all locations.
 	LocationIDs *string `json:"-" url:"location_ids,omitempty"`
@@ -19,7 +26,15 @@ type InventoryChangesRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
+type InventoryDeprecatedGetPhysicalCountRequest struct {
+	// ID of the
+	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
+	PhysicalCountID string `json:"-" url:"-"`
+}
+
 type InventoryGetRequest struct {
+	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
+	CatalogObjectID string `json:"-" url:"-"`
 	// The [Location](entity:Location) IDs to look up as a comma-separated
 	// list. An empty list queries all locations.
 	LocationIDs *string `json:"-" url:"location_ids,omitempty"`
@@ -28,6 +43,22 @@ type InventoryGetRequest struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+}
+
+type InventoryGetAdjustmentRequest struct {
+	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
+	AdjustmentID string `json:"-" url:"-"`
+}
+
+type InventoryGetPhysicalCountRequest struct {
+	// ID of the
+	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
+	PhysicalCountID string `json:"-" url:"-"`
+}
+
+type InventoryGetTransferRequest struct {
+	// ID of the [InventoryTransfer](entity:InventoryTransfer) to retrieve.
+	TransferID string `json:"-" url:"-"`
 }
 
 type BatchChangeInventoryRequest struct {
@@ -47,7 +78,7 @@ type BatchChangeInventoryRequest struct {
 	IgnoreUnchangedCounts *bool `json:"ignore_unchanged_counts,omitempty" url:"ignore_unchanged_counts,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchChangeInventoryRequest) GetIdempotencyKey() string {
@@ -82,20 +113,18 @@ func (b *BatchChangeInventoryRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchChangeInventoryRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchChangeInventoryRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -114,7 +143,7 @@ type BatchChangeInventoryResponse struct {
 	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchChangeInventoryResponse) GetErrors() []*Error {
@@ -149,20 +178,18 @@ func (b *BatchChangeInventoryResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchChangeInventoryResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchChangeInventoryResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -184,7 +211,7 @@ type BatchGetInventoryChangesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetInventoryChangesResponse) GetErrors() []*Error {
@@ -219,20 +246,18 @@ func (b *BatchGetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetInventoryChangesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetInventoryChangesResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -266,7 +291,7 @@ type BatchGetInventoryCountsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetInventoryCountsRequest) GetCatalogObjectIDs() []string {
@@ -322,20 +347,18 @@ func (b *BatchGetInventoryCountsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetInventoryCountsRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetInventoryCountsRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -358,7 +381,7 @@ type BatchGetInventoryCountsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchGetInventoryCountsResponse) GetErrors() []*Error {
@@ -393,20 +416,18 @@ func (b *BatchGetInventoryCountsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BatchGetInventoryCountsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchGetInventoryCountsResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -450,7 +471,7 @@ type BatchRetrieveInventoryChangesRequest struct {
 	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) GetCatalogObjectIDs() []string {
@@ -527,20 +548,18 @@ func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*b = BatchRetrieveInventoryChangesRequest(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -557,7 +576,7 @@ type GetInventoryAdjustmentResponse struct {
 	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInventoryAdjustmentResponse) GetErrors() []*Error {
@@ -585,20 +604,18 @@ func (g *GetInventoryAdjustmentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInventoryAdjustmentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInventoryAdjustmentResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -620,7 +637,7 @@ type GetInventoryChangesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInventoryChangesResponse) GetErrors() []*Error {
@@ -655,20 +672,18 @@ func (g *GetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInventoryChangesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInventoryChangesResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -691,7 +706,7 @@ type GetInventoryCountResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInventoryCountResponse) GetErrors() []*Error {
@@ -726,20 +741,18 @@ func (g *GetInventoryCountResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInventoryCountResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInventoryCountResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -756,7 +769,7 @@ type GetInventoryPhysicalCountResponse struct {
 	Count *InventoryPhysicalCount `json:"count,omitempty" url:"count,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInventoryPhysicalCountResponse) GetErrors() []*Error {
@@ -784,20 +797,18 @@ func (g *GetInventoryPhysicalCountResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInventoryPhysicalCountResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInventoryPhysicalCountResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -814,7 +825,7 @@ type GetInventoryTransferResponse struct {
 	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetInventoryTransferResponse) GetErrors() []*Error {
@@ -842,20 +853,18 @@ func (g *GetInventoryTransferResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetInventoryTransferResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetInventoryTransferResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -953,7 +962,7 @@ type InventoryAdjustment struct {
 	AdjustmentGroup *InventoryAdjustmentGroup `json:"adjustment_group,omitempty" url:"adjustment_group,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryAdjustment) GetID() *string {
@@ -1128,20 +1137,18 @@ func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryAdjustment(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryAdjustment) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1169,7 +1176,7 @@ type InventoryAdjustmentGroup struct {
 	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryAdjustmentGroup) GetID() *string {
@@ -1211,20 +1218,18 @@ func (i *InventoryAdjustmentGroup) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryAdjustmentGroup(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryAdjustmentGroup) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1260,7 +1265,7 @@ type InventoryChange struct {
 	MeasurementUnitID *string `json:"measurement_unit_id,omitempty" url:"measurement_unit_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryChange) GetType() *InventoryChangeType {
@@ -1316,20 +1321,18 @@ func (i *InventoryChange) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryChange(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryChange) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1408,7 +1411,7 @@ type InventoryCount struct {
 	IsEstimated *bool `json:"is_estimated,omitempty" url:"is_estimated,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryCount) GetCatalogObjectID() *string {
@@ -1478,20 +1481,18 @@ func (i *InventoryCount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryCount(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryCount) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1553,7 +1554,7 @@ type InventoryPhysicalCount struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryPhysicalCount) GetID() *string {
@@ -1658,20 +1659,18 @@ func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryPhysicalCount(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryPhysicalCount) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1798,7 +1797,7 @@ type InventoryTransfer struct {
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (i *InventoryTransfer) GetID() *string {
@@ -1903,20 +1902,18 @@ func (i *InventoryTransfer) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InventoryTransfer(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *i)
 	if err != nil {
 		return err
 	}
 	i.extraProperties = extraProperties
-
-	i._rawJSON = json.RawMessage(data)
+	i.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (i *InventoryTransfer) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i._rawJSON); err == nil {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
 		}
 	}

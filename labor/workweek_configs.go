@@ -7,6 +7,8 @@ import (
 )
 
 type UpdateWorkweekConfigRequest struct {
+	// The UUID for the `WorkweekConfig` object being updated.
+	ID string `json:"-" url:"-"`
 	// The updated `WorkweekConfig` object.
 	WorkweekConfig *squaregosdk.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
 }

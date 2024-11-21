@@ -48,16 +48,12 @@ func (c *Client) ListMerchantCustomAttributeDefinitions(
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListMerchantCustomAttributeDefinitionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -65,8 +61,10 @@ func (c *Client) ListMerchantCustomAttributeDefinitions(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListMerchantCustomAttributeDefinitionsResponse
 	if err := c.caller.Call(
@@ -74,8 +72,8 @@ func (c *Client) ListMerchantCustomAttributeDefinitions(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -100,17 +98,16 @@ func (c *Client) CreateMerchantCustomAttributeDefinition(
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateMerchantCustomAttributeDefinitionResponse
@@ -119,8 +116,8 @@ func (c *Client) CreateMerchantCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -138,23 +135,19 @@ func (c *Client) CreateMerchantCustomAttributeDefinition(
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to retrieve. If the requesting application
-	// is not the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/merchants/custom-attribute-definitions/%v", key)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
+		request.Key,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -162,8 +155,10 @@ func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -171,8 +166,8 @@ func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -190,23 +185,23 @@ func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 // Only the definition owner can update a custom attribute definition.
 func (c *Client) UpdateMerchantCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to update.
-	key string,
 	request *squaregosdk.UpdateMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/merchants/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse
@@ -215,8 +210,8 @@ func (c *Client) UpdateMerchantCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -235,22 +230,23 @@ func (c *Client) UpdateMerchantCustomAttributeDefinition(
 // Only the definition owner can delete a custom attribute definition.
 func (c *Client) DeleteMerchantCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to delete.
-	key string,
+	request *squaregosdk.DeleteMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/merchants/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -258,8 +254,8 @@ func (c *Client) DeleteMerchantCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -280,17 +276,16 @@ func (c *Client) BulkDeleteMerchantCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkDeleteMerchantCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-delete"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkDeleteMerchantCustomAttributesResponse
@@ -299,8 +294,8 @@ func (c *Client) BulkDeleteMerchantCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -329,17 +324,16 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkUpsertMerchantCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-upsert"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpsertMerchantCustomAttributesResponse
@@ -348,8 +342,8 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -370,22 +364,19 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) ListMerchantCustomAttributes(
 	ctx context.Context,
-	// The ID of the target [merchant](entity:Merchant).
-	merchantID string,
 	request *squaregosdk.ListMerchantCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListMerchantCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/merchants/%v/custom-attributes", merchantID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/%v/custom-attributes",
+		request.MerchantID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -393,8 +384,10 @@ func (c *Client) ListMerchantCustomAttributes(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListMerchantCustomAttributesResponse
 	if err := c.caller.Call(
@@ -402,8 +395,8 @@ func (c *Client) ListMerchantCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -422,30 +415,20 @@ func (c *Client) ListMerchantCustomAttributes(
 // `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) RetrieveMerchantCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [merchant](entity:Merchant).
-	merchantID string,
-	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveMerchantCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveMerchantCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",
-		merchantID,
-		key,
+		request.MerchantID,
+		request.Key,
 	)
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -453,8 +436,10 @@ func (c *Client) RetrieveMerchantCustomAttribute(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveMerchantCustomAttributeResponse
 	if err := c.caller.Call(
@@ -462,8 +447,8 @@ func (c *Client) RetrieveMerchantCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -483,31 +468,24 @@ func (c *Client) RetrieveMerchantCustomAttribute(
 // must be `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) UpsertMerchantCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [merchant](entity:Merchant).
-	merchantID string,
-	// The key of the custom attribute to create or update. This key must match the `key` of a
-	// custom attribute definition in the Square seller account. If the requesting application is not
-	// the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.UpsertMerchantCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpsertMerchantCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",
-		merchantID,
-		key,
+		request.MerchantID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertMerchantCustomAttributeResponse
@@ -516,8 +494,8 @@ func (c *Client) UpsertMerchantCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -535,30 +513,24 @@ func (c *Client) UpsertMerchantCustomAttribute(
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) DeleteMerchantCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [merchant](entity:Merchant).
-	merchantID string,
-	// The key of the custom attribute to delete. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
+	request *squaregosdk.DeleteMerchantCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteMerchantCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",
-		merchantID,
-		key,
+		request.MerchantID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteMerchantCustomAttributeResponse
 	if err := c.caller.Call(
@@ -566,8 +538,8 @@ func (c *Client) DeleteMerchantCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

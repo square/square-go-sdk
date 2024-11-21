@@ -22,6 +22,8 @@ type BulkSwapPlanRequest struct {
 }
 
 type ChangeBillingAnchorDateRequest struct {
+	// The ID of the subscription to update the billing anchor date.
+	SubscriptionID string `json:"-" url:"-"`
 	// The anchor day for the billing cycle.
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"-"`
 	// The `YYYY-MM-DD`-formatted date when the scheduled `BILLING_ANCHOR_CHANGE` action takes
@@ -32,7 +34,16 @@ type ChangeBillingAnchorDateRequest struct {
 	EffectiveDate *string `json:"effective_date,omitempty" url:"-"`
 }
 
+type SubscriptionsDeleteActionRequest struct {
+	// The ID of the subscription the targeted action is to act upon.
+	SubscriptionID string `json:"-" url:"-"`
+	// The ID of the targeted action to be deleted.
+	ActionID string `json:"-" url:"-"`
+}
+
 type SwapPlanRequest struct {
+	// The ID of the subscription to swap the subscription plan for.
+	SubscriptionID string `json:"-" url:"-"`
 	// The ID of the new subscription plan.
 	//
 	// Retired in favour of `new_plan_variation_id`.
@@ -43,6 +54,11 @@ type SwapPlanRequest struct {
 	NewPlanVariationID *string `json:"new_plan_variation_id,omitempty" url:"-"`
 	// A list of PhaseInputs, to pass phase-specific information used in the swap.
 	Phases []*PhaseInput `json:"phases,omitempty" url:"-"`
+}
+
+type SubscriptionsCancelRequest struct {
+	// The ID of the subscription to cancel.
+	SubscriptionID string `json:"-" url:"-"`
 }
 
 type CreateSubscriptionRequest struct {
@@ -105,6 +121,8 @@ type CreateSubscriptionRequest struct {
 }
 
 type SubscriptionsGetRequest struct {
+	// The ID of the subscription to retrieve.
+	SubscriptionID string `json:"-" url:"-"`
 	// A query parameter to specify related information to be included in the response.
 	//
 	// The supported query parameter values are:
@@ -114,6 +132,8 @@ type SubscriptionsGetRequest struct {
 }
 
 type SubscriptionsListEventsRequest struct {
+	// The ID of the subscription to retrieve the events for.
+	SubscriptionID string `json:"-" url:"-"`
 	// When the total number of resulting subscription events exceeds the limit of a paged response,
 	// specify the cursor returned from a preceding response here to fetch the next set of results.
 	// If the cursor is unset, the response contains the last page of the results.
@@ -126,6 +146,8 @@ type SubscriptionsListEventsRequest struct {
 }
 
 type PauseSubscriptionRequest struct {
+	// The ID of the subscription to pause.
+	SubscriptionID string `json:"-" url:"-"`
 	// The `YYYY-MM-DD`-formatted date when the scheduled `PAUSE` action takes place on the subscription.
 	//
 	// When this date is unspecified or falls within the current billing cycle, the subscription is paused
@@ -149,6 +171,8 @@ type PauseSubscriptionRequest struct {
 }
 
 type ResumeSubscriptionRequest struct {
+	// The ID of the subscription to resume.
+	SubscriptionID string `json:"-" url:"-"`
 	// The `YYYY-MM-DD`-formatted date when the subscription reactivated.
 	ResumeEffectiveDate *string `json:"resume_effective_date,omitempty" url:"-"`
 	// The timing to resume a subscription, relative to the specified
@@ -188,7 +212,7 @@ type BulkSwapPlanResponse struct {
 	AffectedSubscriptions *int `json:"affected_subscriptions,omitempty" url:"affected_subscriptions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BulkSwapPlanResponse) GetErrors() []*Error {
@@ -216,20 +240,18 @@ func (b *BulkSwapPlanResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BulkSwapPlanResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BulkSwapPlanResponse) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -250,7 +272,7 @@ type CancelSubscriptionResponse struct {
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CancelSubscriptionResponse) GetErrors() []*Error {
@@ -285,20 +307,18 @@ func (c *CancelSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CancelSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CancelSubscriptionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -319,7 +339,7 @@ type ChangeBillingAnchorDateResponse struct {
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *ChangeBillingAnchorDateResponse) GetErrors() []*Error {
@@ -354,20 +374,18 @@ func (c *ChangeBillingAnchorDateResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChangeBillingAnchorDateResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *ChangeBillingAnchorDateResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -415,7 +433,7 @@ type CreateSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateSubscriptionResponse) GetErrors() []*Error {
@@ -443,20 +461,18 @@ func (c *CreateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateSubscriptionResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -475,7 +491,7 @@ type DeleteSubscriptionActionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DeleteSubscriptionActionResponse) GetErrors() []*Error {
@@ -503,20 +519,18 @@ func (d *DeleteSubscriptionActionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeleteSubscriptionActionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DeleteSubscriptionActionResponse) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -535,7 +549,7 @@ type GetSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetSubscriptionResponse) GetErrors() []*Error {
@@ -563,20 +577,18 @@ func (g *GetSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetSubscriptionResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -601,7 +613,7 @@ type ListSubscriptionEventsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListSubscriptionEventsResponse) GetErrors() []*Error {
@@ -636,20 +648,18 @@ func (l *ListSubscriptionEventsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListSubscriptionEventsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListSubscriptionEventsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -670,7 +680,7 @@ type PauseSubscriptionResponse struct {
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *PauseSubscriptionResponse) GetErrors() []*Error {
@@ -705,20 +715,18 @@ func (p *PauseSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PauseSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *PauseSubscriptionResponse) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -740,7 +748,7 @@ type Phase struct {
 	PlanPhaseUID *string `json:"plan_phase_uid,omitempty" url:"plan_phase_uid,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *Phase) GetUID() *string {
@@ -782,20 +790,18 @@ func (p *Phase) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = Phase(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *Phase) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -813,7 +819,7 @@ type PhaseInput struct {
 	OrderTemplateID *string `json:"order_template_id,omitempty" url:"order_template_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *PhaseInput) GetOrdinal() int64 {
@@ -841,20 +847,18 @@ func (p *PhaseInput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PhaseInput(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *PhaseInput) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -875,7 +879,7 @@ type ResumeSubscriptionResponse struct {
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *ResumeSubscriptionResponse) GetErrors() []*Error {
@@ -910,20 +914,18 @@ func (r *ResumeSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ResumeSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *ResumeSubscriptionResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -944,7 +946,7 @@ type SearchSubscriptionsFilter struct {
 	SourceNames []string `json:"source_names,omitempty" url:"source_names,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchSubscriptionsFilter) GetCustomerIDs() []string {
@@ -979,20 +981,18 @@ func (s *SearchSubscriptionsFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchSubscriptionsFilter(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchSubscriptionsFilter) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1008,7 +1008,7 @@ type SearchSubscriptionsQuery struct {
 	Filter *SearchSubscriptionsFilter `json:"filter,omitempty" url:"filter,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchSubscriptionsQuery) GetFilter() *SearchSubscriptionsFilter {
@@ -1029,20 +1029,18 @@ func (s *SearchSubscriptionsQuery) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchSubscriptionsQuery(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchSubscriptionsQuery) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1067,7 +1065,7 @@ type SearchSubscriptionsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SearchSubscriptionsResponse) GetErrors() []*Error {
@@ -1102,20 +1100,18 @@ func (s *SearchSubscriptionsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchSubscriptionsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SearchSubscriptionsResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1212,7 +1208,7 @@ type Subscription struct {
 	Phases []*Phase `json:"phases,omitempty" url:"phases,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *Subscription) GetID() *string {
@@ -1373,20 +1369,18 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = Subscription(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *Subscription) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1415,7 +1409,7 @@ type SubscriptionAction struct {
 	NewPlanVariationID *string `json:"new_plan_variation_id,omitempty" url:"new_plan_variation_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SubscriptionAction) GetID() *string {
@@ -1478,20 +1472,18 @@ func (s *SubscriptionAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubscriptionAction(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SubscriptionAction) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1557,7 +1549,7 @@ type SubscriptionEvent struct {
 	PlanVariationID string `json:"plan_variation_id" url:"plan_variation_id"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SubscriptionEvent) GetID() string {
@@ -1627,20 +1619,18 @@ func (s *SubscriptionEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubscriptionEvent(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SubscriptionEvent) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1659,7 +1649,7 @@ type SubscriptionEventInfo struct {
 	Code *SubscriptionEventInfoCode `json:"code,omitempty" url:"code,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SubscriptionEventInfo) GetDetail() *string {
@@ -1687,20 +1677,18 @@ func (s *SubscriptionEventInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubscriptionEventInfo(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SubscriptionEventInfo) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1797,7 +1785,7 @@ type SubscriptionSource struct {
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SubscriptionSource) GetName() *string {
@@ -1818,20 +1806,18 @@ func (s *SubscriptionSource) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubscriptionSource(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SubscriptionSource) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1887,7 +1873,7 @@ type SwapPlanResponse struct {
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (s *SwapPlanResponse) GetErrors() []*Error {
@@ -1922,20 +1908,18 @@ func (s *SwapPlanResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SwapPlanResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
 	s.extraProperties = extraProperties
-
-	s._rawJSON = json.RawMessage(data)
+	s.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (s *SwapPlanResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(s._rawJSON); err == nil {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1954,7 +1938,7 @@ type UpdateSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateSubscriptionResponse) GetErrors() []*Error {
@@ -1982,20 +1966,18 @@ func (u *UpdateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateSubscriptionResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateSubscriptionResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -2006,6 +1988,8 @@ func (u *UpdateSubscriptionResponse) String() string {
 }
 
 type UpdateSubscriptionRequest struct {
+	// The ID of the subscription to update.
+	SubscriptionID string `json:"-" url:"-"`
 	// The subscription object containing the current version, and fields to update.
 	// Unset fields will be left at their current server values, and JSON `null` values will
 	// be treated as a request to clear the relevant data.

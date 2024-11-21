@@ -8,7 +8,14 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type RetrieveLocationSettingsRequest struct {
+	// The ID of the location for which to retrieve settings.
+	LocationID string `json:"-" url:"-"`
+}
+
 type UpdateLocationSettingsRequest struct {
+	// The ID of the location for which to retrieve settings.
+	LocationID string `json:"-" url:"-"`
 	// Describe your updates using the `location_settings` object. Make sure it contains only the fields that have changed.
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"-"`
 }
@@ -39,7 +46,7 @@ type CheckoutLocationSettings struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutLocationSettings) GetLocationID() *string {
@@ -102,20 +109,18 @@ func (c *CheckoutLocationSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutLocationSettings(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutLocationSettings) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -136,7 +141,7 @@ type CheckoutLocationSettingsBranding struct {
 	ButtonShape *CheckoutLocationSettingsBrandingButtonShape `json:"button_shape,omitempty" url:"button_shape,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutLocationSettingsBranding) GetHeaderType() *CheckoutLocationSettingsBrandingHeaderType {
@@ -171,20 +176,18 @@ func (c *CheckoutLocationSettingsBranding) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutLocationSettingsBranding(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutLocationSettingsBranding) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -255,7 +258,7 @@ type CheckoutLocationSettingsCoupons struct {
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutLocationSettingsCoupons) GetEnabled() *bool {
@@ -276,20 +279,18 @@ func (c *CheckoutLocationSettingsCoupons) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutLocationSettingsCoupons(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutLocationSettingsCoupons) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -308,7 +309,7 @@ type CheckoutLocationSettingsPolicy struct {
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutLocationSettingsPolicy) GetUID() *string {
@@ -343,20 +344,18 @@ func (c *CheckoutLocationSettingsPolicy) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutLocationSettingsPolicy(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutLocationSettingsPolicy) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -382,7 +381,7 @@ type CheckoutLocationSettingsTipping struct {
 	DefaultSmartTip *Money `json:"default_smart_tip,omitempty" url:"default_smart_tip,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutLocationSettingsTipping) GetPercentages() []int {
@@ -431,20 +430,18 @@ func (c *CheckoutLocationSettingsTipping) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutLocationSettingsTipping(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutLocationSettingsTipping) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -464,7 +461,7 @@ type CheckoutMerchantSettings struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutMerchantSettings) GetPaymentMethods() *CheckoutMerchantSettingsPaymentMethods {
@@ -492,20 +489,18 @@ func (c *CheckoutMerchantSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CheckoutMerchantSettings(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutMerchantSettings) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -522,7 +517,7 @@ type CheckoutMerchantSettingsPaymentMethods struct {
 	AfterpayClearpay *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay `json:"afterpay_clearpay,omitempty" url:"afterpay_clearpay,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethods) GetApplePay() *CheckoutMerchantSettingsPaymentMethodsPaymentMethod {
@@ -564,20 +559,18 @@ func (c *CheckoutMerchantSettingsPaymentMethods) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*c = CheckoutMerchantSettingsPaymentMethods(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethods) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -597,7 +590,7 @@ type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay struct {
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) GetOrderEligibilityRange() *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange {
@@ -632,20 +625,18 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) UnmarshalJSON(d
 		return err
 	}
 	*c = CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -661,7 +652,7 @@ type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange stru
 	Max *Money `json:"max,omitempty" url:"max,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) GetMin() *Money {
@@ -689,20 +680,18 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 		return err
 	}
 	*c = CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -718,7 +707,7 @@ type CheckoutMerchantSettingsPaymentMethodsPaymentMethod struct {
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetEnabled() *bool {
@@ -739,20 +728,18 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) UnmarshalJSON(data
 		return err
 	}
 	*c = CheckoutMerchantSettingsPaymentMethodsPaymentMethod(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -769,7 +756,7 @@ type RetrieveLocationSettingsResponse struct {
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveLocationSettingsResponse) GetErrors() []*Error {
@@ -797,20 +784,18 @@ func (r *RetrieveLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RetrieveLocationSettingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveLocationSettingsResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -827,7 +812,7 @@ type RetrieveMerchantSettingsResponse struct {
 	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveMerchantSettingsResponse) GetErrors() []*Error {
@@ -855,20 +840,18 @@ func (r *RetrieveMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RetrieveMerchantSettingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveMerchantSettingsResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -885,7 +868,7 @@ type UpdateLocationSettingsResponse struct {
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateLocationSettingsResponse) GetErrors() []*Error {
@@ -913,20 +896,18 @@ func (u *UpdateLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateLocationSettingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateLocationSettingsResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -943,7 +924,7 @@ type UpdateMerchantSettingsResponse struct {
 	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateMerchantSettingsResponse) GetErrors() []*Error {
@@ -971,20 +952,18 @@ func (u *UpdateMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateMerchantSettingsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateMerchantSettingsResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}

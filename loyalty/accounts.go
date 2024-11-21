@@ -7,6 +7,8 @@ import (
 )
 
 type AccumulateLoyaltyPointsRequest struct {
+	// The ID of the target [loyalty account](entity:LoyaltyAccount).
+	AccountID string `json:"-" url:"-"`
 	// The points to add to the account.
 	// If you are using the Orders API to manage orders, specify the order ID.
 	// Otherwise, specify the points to add.
@@ -19,6 +21,8 @@ type AccumulateLoyaltyPointsRequest struct {
 }
 
 type AdjustLoyaltyPointsRequest struct {
+	// The ID of the target [loyalty account](entity:LoyaltyAccount).
+	AccountID string `json:"-" url:"-"`
 	// A unique string that identifies this `AdjustLoyaltyPoints` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -37,6 +41,11 @@ type CreateLoyaltyAccountRequest struct {
 	// A unique string that identifies this `CreateLoyaltyAccount` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+}
+
+type AccountsGetRequest struct {
+	// The ID of the [loyalty account](entity:LoyaltyAccount) to retrieve.
+	AccountID string `json:"-" url:"-"`
 }
 
 type SearchLoyaltyAccountsRequest struct {

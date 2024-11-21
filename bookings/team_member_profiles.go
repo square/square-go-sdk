@@ -2,6 +2,11 @@
 
 package bookings
 
+type TeamMemberProfilesGetRequest struct {
+	// The ID of the team member to retrieve.
+	TeamMemberID string `json:"-" url:"-"`
+}
+
 type TeamMemberProfilesListRequest struct {
 	// Indicates whether to include only bookable team members in the returned result (`true`) or not (`false`).
 	BookableOnly *bool `json:"-" url:"bookable_only,omitempty"`

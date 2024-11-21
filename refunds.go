@@ -76,6 +76,11 @@ type RefundPaymentRequest struct {
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"-"`
 }
 
+type RefundsGetRequest struct {
+	// The unique ID for the desired `PaymentRefund`.
+	RefundID string `json:"-" url:"-"`
+}
+
 type RefundsListRequest struct {
 	// Indicates the start of the time range to retrieve each `PaymentRefund` for, in RFC 3339
 	// format. The range is determined using the `created_at` field for each `PaymentRefund`.
@@ -128,7 +133,7 @@ type DestinationDetails struct {
 	CardDetails *DestinationDetailsCardRefundDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DestinationDetails) GetCardDetails() *DestinationDetailsCardRefundDetails {
@@ -149,20 +154,18 @@ func (d *DestinationDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DestinationDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DestinationDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -182,7 +185,7 @@ type DestinationDetailsCardRefundDetails struct {
 	AuthResultCode *string `json:"auth_result_code,omitempty" url:"auth_result_code,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (d *DestinationDetailsCardRefundDetails) GetCard() *Card {
@@ -217,20 +220,18 @@ func (d *DestinationDetailsCardRefundDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DestinationDetailsCardRefundDetails(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *d)
 	if err != nil {
 		return err
 	}
 	d.extraProperties = extraProperties
-
-	d._rawJSON = json.RawMessage(data)
+	d.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (d *DestinationDetailsCardRefundDetails) String() string {
-	if len(d._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(d._rawJSON); err == nil {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -251,7 +252,7 @@ type GetPaymentRefundResponse struct {
 	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetPaymentRefundResponse) GetErrors() []*Error {
@@ -279,20 +280,18 @@ func (g *GetPaymentRefundResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetPaymentRefundResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetPaymentRefundResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -317,7 +316,7 @@ type ListPaymentRefundsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListPaymentRefundsResponse) GetErrors() []*Error {
@@ -352,20 +351,18 @@ func (l *ListPaymentRefundsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListPaymentRefundsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListPaymentRefundsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -423,7 +420,7 @@ type PaymentRefund struct {
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (p *PaymentRefund) GetID() string {
@@ -542,20 +539,18 @@ func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaymentRefund(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *p)
 	if err != nil {
 		return err
 	}
 	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
+	p.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *PaymentRefund) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p._rawJSON); err == nil {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -577,7 +572,7 @@ type RefundPaymentResponse struct {
 	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RefundPaymentResponse) GetErrors() []*Error {
@@ -605,20 +600,18 @@ func (r *RefundPaymentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RefundPaymentResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RefundPaymentResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}

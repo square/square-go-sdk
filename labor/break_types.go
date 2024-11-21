@@ -6,7 +6,19 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
+type BreakTypesDeleteRequest struct {
+	// The UUID for the `BreakType` being deleted.
+	ID string `json:"-" url:"-"`
+}
+
+type BreakTypesGetRequest struct {
+	// The UUID for the `BreakType` being retrieved.
+	ID string `json:"-" url:"-"`
+}
+
 type UpdateBreakTypeRequest struct {
+	// The UUID for the `BreakType` being updated.
+	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
 	BreakType *squaregosdk.BreakType `json:"break_type,omitempty" url:"-"`
 }

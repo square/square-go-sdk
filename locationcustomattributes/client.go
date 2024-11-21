@@ -48,16 +48,12 @@ func (c *Client) ListLocationCustomAttributeDefinitions(
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListLocationCustomAttributeDefinitionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -65,8 +61,10 @@ func (c *Client) ListLocationCustomAttributeDefinitions(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListLocationCustomAttributeDefinitionsResponse
 	if err := c.caller.Call(
@@ -74,8 +72,8 @@ func (c *Client) ListLocationCustomAttributeDefinitions(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -100,17 +98,16 @@ func (c *Client) CreateLocationCustomAttributeDefinition(
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateLocationCustomAttributeDefinitionResponse
@@ -119,8 +116,8 @@ func (c *Client) CreateLocationCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -138,23 +135,19 @@ func (c *Client) CreateLocationCustomAttributeDefinition(
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) RetrieveLocationCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to retrieve. If the requesting application
-	// is not the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/custom-attribute-definitions/%v",
+		request.Key,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -162,8 +155,10 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -171,8 +166,8 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -190,23 +185,23 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 // Only the definition owner can update a custom attribute definition.
 func (c *Client) UpdateLocationCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to update.
-	key string,
 	request *squaregosdk.UpdateLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateLocationCustomAttributeDefinitionResponse
@@ -215,8 +210,8 @@ func (c *Client) UpdateLocationCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -235,22 +230,23 @@ func (c *Client) UpdateLocationCustomAttributeDefinition(
 // Only the definition owner can delete a custom attribute definition.
 func (c *Client) DeleteLocationCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to delete.
-	key string,
+	request *squaregosdk.DeleteLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -258,8 +254,8 @@ func (c *Client) DeleteLocationCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -280,17 +276,16 @@ func (c *Client) BulkDeleteLocationCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkDeleteLocationCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-delete"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkDeleteLocationCustomAttributesResponse
@@ -299,8 +294,8 @@ func (c *Client) BulkDeleteLocationCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -329,17 +324,16 @@ func (c *Client) BulkUpsertLocationCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkUpsertLocationCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-upsert"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpsertLocationCustomAttributesResponse
@@ -348,8 +342,8 @@ func (c *Client) BulkUpsertLocationCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -370,22 +364,19 @@ func (c *Client) BulkUpsertLocationCustomAttributes(
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) ListLocationCustomAttributes(
 	ctx context.Context,
-	// The ID of the target [location](entity:Location).
-	locationID string,
 	request *squaregosdk.ListLocationCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListLocationCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v/custom-attributes", locationID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v/custom-attributes",
+		request.LocationID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -393,8 +384,10 @@ func (c *Client) ListLocationCustomAttributes(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListLocationCustomAttributesResponse
 	if err := c.caller.Call(
@@ -402,8 +395,8 @@ func (c *Client) ListLocationCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -422,30 +415,20 @@ func (c *Client) ListLocationCustomAttributes(
 // `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) RetrieveLocationCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [location](entity:Location).
-	locationID string,
-	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveLocationCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
-		locationID,
-		key,
+		request.LocationID,
+		request.Key,
 	)
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -453,8 +436,10 @@ func (c *Client) RetrieveLocationCustomAttribute(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveLocationCustomAttributeResponse
 	if err := c.caller.Call(
@@ -462,8 +447,8 @@ func (c *Client) RetrieveLocationCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -483,31 +468,24 @@ func (c *Client) RetrieveLocationCustomAttribute(
 // must be `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) UpsertLocationCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [location](entity:Location).
-	locationID string,
-	// The key of the custom attribute to create or update. This key must match the `key` of a
-	// custom attribute definition in the Square seller account. If the requesting application is not
-	// the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.UpsertLocationCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpsertLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
-		locationID,
-		key,
+		request.LocationID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertLocationCustomAttributeResponse
@@ -516,8 +494,8 @@ func (c *Client) UpsertLocationCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -535,30 +513,24 @@ func (c *Client) UpsertLocationCustomAttribute(
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) DeleteLocationCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [location](entity:Location).
-	locationID string,
-	// The key of the custom attribute to delete. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
+	request *squaregosdk.DeleteLocationCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
-		locationID,
-		key,
+		request.LocationID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteLocationCustomAttributeResponse
 	if err := c.caller.Call(
@@ -566,8 +538,8 @@ func (c *Client) DeleteLocationCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

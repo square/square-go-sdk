@@ -7,6 +7,8 @@ import (
 )
 
 type CalculateLoyaltyPointsRequest struct {
+	// The ID of the [loyalty program](entity:LoyaltyProgram), which defines the rules for accruing points.
+	ProgramID string `json:"-" url:"-"`
 	// The [order](entity:Order) ID for which to calculate the points.
 	// Specify this field if your application uses the Orders API to process orders.
 	// Otherwise, specify the `transaction_amount_money`.
@@ -24,4 +26,9 @@ type CalculateLoyaltyPointsRequest struct {
 	// If not specified, the `promotion_points` field shows the number of points the purchase qualifies
 	// for regardless of the trigger limit.
 	LoyaltyAccountID *string `json:"loyalty_account_id,omitempty" url:"-"`
+}
+
+type ProgramsGetRequest struct {
+	// The ID of the loyalty program or the keyword `main`. Either value can be used to retrieve the single loyalty program that belongs to the seller.
+	ProgramID string `json:"-" url:"-"`
 }

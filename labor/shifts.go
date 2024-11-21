@@ -13,6 +13,16 @@ type CreateShiftRequest struct {
 	Shift *squaregosdk.Shift `json:"shift,omitempty" url:"-"`
 }
 
+type ShiftsDeleteRequest struct {
+	// The UUID for the `Shift` being deleted.
+	ID string `json:"-" url:"-"`
+}
+
+type ShiftsGetRequest struct {
+	// The UUID for the `Shift` being retrieved.
+	ID string `json:"-" url:"-"`
+}
+
 type SearchShiftsRequest struct {
 	// Query filters.
 	Query *squaregosdk.ShiftQuery `json:"query,omitempty" url:"-"`
@@ -23,6 +33,8 @@ type SearchShiftsRequest struct {
 }
 
 type UpdateShiftRequest struct {
+	// The ID of the object being updated.
+	ID string `json:"-" url:"-"`
 	// The updated `Shift` object.
 	Shift *squaregosdk.Shift `json:"shift,omitempty" url:"-"`
 }

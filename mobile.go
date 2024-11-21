@@ -29,7 +29,7 @@ type CreateMobileAuthorizationCodeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateMobileAuthorizationCodeResponse) GetAuthorizationCode() *string {
@@ -71,20 +71,18 @@ func (c *CreateMobileAuthorizationCodeResponse) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*c = CreateMobileAuthorizationCodeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateMobileAuthorizationCodeResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}

@@ -7,6 +7,8 @@ import (
 )
 
 type V1CreateRefundRequest struct {
+	// The ID of the original payment's associated location.
+	LocationID string `json:"-" url:"-"`
 	// The ID of the payment to refund. If you are creating a `PARTIAL`
 	// refund for a split tender payment, instead provide the id of the
 	// particular tender you want to refund.
@@ -23,6 +25,8 @@ type V1CreateRefundRequest struct {
 }
 
 type RefundsListRequest struct {
+	// The ID of the location to list refunds for.
+	LocationID string `json:"-" url:"-"`
 	// The order in which payments are listed in the response.
 	Order *squaregosdk.SortOrder `json:"-" url:"order,omitempty"`
 	// The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.

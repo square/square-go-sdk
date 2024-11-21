@@ -48,16 +48,12 @@ func (c *Client) ListBookingCustomAttributeDefinitions(
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListBookingCustomAttributeDefinitionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -65,8 +61,10 @@ func (c *Client) ListBookingCustomAttributeDefinitions(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListBookingCustomAttributeDefinitionsResponse
 	if err := c.caller.Call(
@@ -74,8 +72,8 @@ func (c *Client) ListBookingCustomAttributeDefinitions(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -100,17 +98,16 @@ func (c *Client) CreateBookingCustomAttributeDefinition(
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateBookingCustomAttributeDefinitionResponse
@@ -119,8 +116,8 @@ func (c *Client) CreateBookingCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -139,23 +136,19 @@ func (c *Client) CreateBookingCustomAttributeDefinition(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) RetrieveBookingCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to retrieve. If the requesting application
-	// is not the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/bookings/custom-attribute-definitions/%v", key)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
+		request.Key,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -163,8 +156,10 @@ func (c *Client) RetrieveBookingCustomAttributeDefinition(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -172,8 +167,8 @@ func (c *Client) RetrieveBookingCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -194,23 +189,23 @@ func (c *Client) RetrieveBookingCustomAttributeDefinition(
 // or _Appointments Premium_.
 func (c *Client) UpdateBookingCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to update.
-	key string,
 	request *squaregosdk.UpdateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/bookings/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpdateBookingCustomAttributeDefinitionResponse
@@ -219,8 +214,8 @@ func (c *Client) UpdateBookingCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -242,22 +237,23 @@ func (c *Client) UpdateBookingCustomAttributeDefinition(
 // or _Appointments Premium_.
 func (c *Client) DeleteBookingCustomAttributeDefinition(
 	ctx context.Context,
-	// The key of the custom attribute definition to delete.
-	key string,
+	request *squaregosdk.DeleteBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/bookings/custom-attribute-definitions/%v", key)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
@@ -265,8 +261,8 @@ func (c *Client) DeleteBookingCustomAttributeDefinition(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -291,17 +287,16 @@ func (c *Client) BulkDeleteBookingCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkDeleteBookingCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-delete"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkDeleteBookingCustomAttributesResponse
@@ -310,8 +305,8 @@ func (c *Client) BulkDeleteBookingCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -337,17 +332,16 @@ func (c *Client) BulkUpsertBookingCustomAttributes(
 	opts ...option.RequestOption,
 ) (*squaregosdk.BulkUpsertBookingCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-upsert"
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpsertBookingCustomAttributesResponse
@@ -356,8 +350,8 @@ func (c *Client) BulkUpsertBookingCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -376,22 +370,19 @@ func (c *Client) BulkUpsertBookingCustomAttributes(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) ListBookingCustomAttributes(
 	ctx context.Context,
-	// The ID of the target [booking](entity:Booking).
-	bookingID string,
 	request *squaregosdk.ListBookingCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListBookingCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/bookings/%v/custom-attributes", bookingID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/bookings/%v/custom-attributes",
+		request.BookingID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -399,8 +390,10 @@ func (c *Client) ListBookingCustomAttributes(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListBookingCustomAttributesResponse
 	if err := c.caller.Call(
@@ -408,8 +401,8 @@ func (c *Client) ListBookingCustomAttributes(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -427,30 +420,20 @@ func (c *Client) ListBookingCustomAttributes(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) RetrieveBookingCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [booking](entity:Booking).
-	bookingID string,
-	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.RetrieveBookingCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveBookingCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",
-		bookingID,
-		key,
+		request.BookingID,
+		request.Key,
 	)
-
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -458,8 +441,10 @@ func (c *Client) RetrieveBookingCustomAttribute(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.RetrieveBookingCustomAttributeResponse
 	if err := c.caller.Call(
@@ -467,8 +452,8 @@ func (c *Client) RetrieveBookingCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -489,31 +474,24 @@ func (c *Client) RetrieveBookingCustomAttribute(
 // or _Appointments Premium_.
 func (c *Client) UpsertBookingCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [booking](entity:Booking).
-	bookingID string,
-	// The key of the custom attribute to create or update. This key must match the `key` of a
-	// custom attribute definition in the Square seller account. If the requesting application is not
-	// the definition owner, you must use the qualified key.
-	key string,
 	request *squaregosdk.UpsertBookingCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpsertBookingCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",
-		bookingID,
-		key,
+		request.BookingID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.UpsertBookingCustomAttributeResponse
@@ -522,8 +500,8 @@ func (c *Client) UpsertBookingCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -545,30 +523,24 @@ func (c *Client) UpsertBookingCustomAttribute(
 // or _Appointments Premium_.
 func (c *Client) DeleteBookingCustomAttribute(
 	ctx context.Context,
-	// The ID of the target [booking](entity:Booking).
-	bookingID string,
-	// The key of the custom attribute to delete. This key must match the `key` of a custom
-	// attribute definition in the Square seller account. If the requesting application is not the
-	// definition owner, you must use the qualified key.
-	key string,
+	request *squaregosdk.DeleteBookingCustomAttributeRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteBookingCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",
-		bookingID,
-		key,
+		request.BookingID,
+		request.Key,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteBookingCustomAttributeResponse
 	if err := c.caller.Call(
@@ -576,8 +548,8 @@ func (c *Client) DeleteBookingCustomAttribute(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

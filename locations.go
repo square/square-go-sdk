@@ -9,6 +9,8 @@ import (
 )
 
 type CreateCheckoutRequest struct {
+	// The ID of the business location to associate the checkout with.
+	LocationID string `json:"-" url:"-"`
 	// A unique string that identifies this checkout among others you have created. It can be
 	// any valid string but must be unique for every order sent to Square Checkout for a given location ID.
 	//
@@ -84,13 +86,19 @@ type CreateLocationRequest struct {
 	Location *Location `json:"location,omitempty" url:"-"`
 }
 
+type LocationsGetRequest struct {
+	// The ID of the location to retrieve. Specify the string
+	// "main" to return the main location.
+	LocationID string `json:"-" url:"-"`
+}
+
 // The hours of operation for a location.
 type BusinessHours struct {
 	// The list of time periods during which the business is open. There can be at most 10 periods per day.
 	Periods []*BusinessHoursPeriod `json:"periods,omitempty" url:"periods,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BusinessHours) GetPeriods() []*BusinessHoursPeriod {
@@ -111,20 +119,18 @@ func (b *BusinessHours) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BusinessHours(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BusinessHours) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -149,7 +155,7 @@ type BusinessHoursPeriod struct {
 	EndLocalTime *string `json:"end_local_time,omitempty" url:"end_local_time,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BusinessHoursPeriod) GetDayOfWeek() *DayOfWeek {
@@ -184,20 +190,18 @@ func (b *BusinessHoursPeriod) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BusinessHoursPeriod(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BusinessHoursPeriod) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -218,7 +222,7 @@ type ChargeRequestAdditionalRecipient struct {
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *ChargeRequestAdditionalRecipient) GetLocationID() string {
@@ -253,20 +257,18 @@ func (c *ChargeRequestAdditionalRecipient) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChargeRequestAdditionalRecipient(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *ChargeRequestAdditionalRecipient) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -330,7 +332,7 @@ type Checkout struct {
 	AdditionalRecipients []*AdditionalRecipient `json:"additional_recipients,omitempty" url:"additional_recipients,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *Checkout) GetID() *string {
@@ -414,20 +416,18 @@ func (c *Checkout) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = Checkout(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *Checkout) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -445,7 +445,7 @@ type Coordinates struct {
 	Longitude *float64 `json:"longitude,omitempty" url:"longitude,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *Coordinates) GetLatitude() *float64 {
@@ -473,20 +473,18 @@ func (c *Coordinates) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = Coordinates(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *Coordinates) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -505,7 +503,7 @@ type CreateCheckoutResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateCheckoutResponse) GetCheckout() *Checkout {
@@ -533,20 +531,18 @@ func (c *CreateCheckoutResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateCheckoutResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateCheckoutResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -564,7 +560,7 @@ type CreateLocationResponse struct {
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (c *CreateLocationResponse) GetErrors() []*Error {
@@ -592,20 +588,18 @@ func (c *CreateLocationResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateLocationResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
 	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
+	c.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (c *CreateLocationResponse) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c._rawJSON); err == nil {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -662,7 +656,7 @@ type GetLocationResponse struct {
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetLocationResponse) GetErrors() []*Error {
@@ -690,20 +684,18 @@ func (g *GetLocationResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetLocationResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetLocationResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -724,7 +716,7 @@ type ListLocationsResponse struct {
 	Locations []*Location `json:"locations,omitempty" url:"locations,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListLocationsResponse) GetErrors() []*Error {
@@ -752,20 +744,18 @@ func (l *ListLocationsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListLocationsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListLocationsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -855,7 +845,7 @@ type Location struct {
 	TaxIDs *TaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *Location) GetID() *string {
@@ -1058,20 +1048,18 @@ func (l *Location) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = Location(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *Location) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1174,7 +1162,7 @@ type TaxIDs struct {
 	JpQii *string `json:"jp_qii,omitempty" url:"jp_qii,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (t *TaxIDs) GetEuVat() *string {
@@ -1223,20 +1211,18 @@ func (t *TaxIDs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TaxIDs(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
 	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
+	t.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (t *TaxIDs) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(t._rawJSON); err == nil {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1254,7 +1240,7 @@ type UpdateLocationResponse struct {
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (u *UpdateLocationResponse) GetErrors() []*Error {
@@ -1282,20 +1268,18 @@ func (u *UpdateLocationResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpdateLocationResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
 	}
 	u.extraProperties = extraProperties
-
-	u._rawJSON = json.RawMessage(data)
+	u.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (u *UpdateLocationResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u._rawJSON); err == nil {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -1306,6 +1290,8 @@ func (u *UpdateLocationResponse) String() string {
 }
 
 type UpdateLocationRequest struct {
+	// The ID of the location to update.
+	LocationID string `json:"-" url:"-"`
 	// The `Location` object with only the fields to update.
 	Location *Location `json:"location,omitempty" url:"-"`
 }

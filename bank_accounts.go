@@ -8,6 +8,17 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type BankAccountsGetByV1IDRequest struct {
+	// Connect V1 ID of the desired `BankAccount`. For more information, see
+	// [Retrieve a bank account by using an ID issued by V1 Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api#retrieve-a-bank-account-by-using-an-id-issued-by-v1-bank-accounts-api).
+	V1BankAccountID string `json:"-" url:"-"`
+}
+
+type BankAccountsGetRequest struct {
+	// Square-issued ID of the desired `BankAccount`.
+	BankAccountID string `json:"-" url:"-"`
+}
+
 type BankAccountsListRequest struct {
 	// The pagination cursor returned by a previous call to this endpoint.
 	// Use it in the next `ListBankAccounts` request to retrieve the next set
@@ -79,7 +90,7 @@ type BankAccount struct {
 	BankName *string `json:"bank_name,omitempty" url:"bank_name,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (b *BankAccount) GetID() string {
@@ -212,20 +223,18 @@ func (b *BankAccount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*b = BankAccount(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *b)
 	if err != nil {
 		return err
 	}
 	b.extraProperties = extraProperties
-
-	b._rawJSON = json.RawMessage(data)
+	b.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (b *BankAccount) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b._rawJSON); err == nil {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -304,7 +313,7 @@ type GetBankAccountByV1IDResponse struct {
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetBankAccountByV1IDResponse) GetErrors() []*Error {
@@ -332,20 +341,18 @@ func (g *GetBankAccountByV1IDResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetBankAccountByV1IDResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetBankAccountByV1IDResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -363,7 +370,7 @@ type GetBankAccountResponse struct {
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetBankAccountResponse) GetErrors() []*Error {
@@ -391,20 +398,18 @@ func (g *GetBankAccountResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetBankAccountResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetBankAccountResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -428,7 +433,7 @@ type ListBankAccountsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListBankAccountsResponse) GetErrors() []*Error {
@@ -463,20 +468,18 @@ func (l *ListBankAccountsResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListBankAccountsResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListBankAccountsResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}

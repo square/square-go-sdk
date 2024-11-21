@@ -27,7 +27,7 @@ type RegisterDomainResponse struct {
 	Status *RegisterDomainResponseStatus `json:"status,omitempty" url:"status,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RegisterDomainResponse) GetErrors() []*Error {
@@ -55,20 +55,18 @@ func (r *RegisterDomainResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RegisterDomainResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RegisterDomainResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}

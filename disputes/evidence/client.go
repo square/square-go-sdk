@@ -43,28 +43,27 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of evidence associated with a dispute.
 func (c *Client) List(
 	ctx context.Context,
-	// The ID of the dispute.
-	disputeID string,
 	request *disputes.EvidenceListRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.DisputeEvidence], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/disputes/%v/evidence", disputeID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/disputes/%v/evidence",
+		request.DisputeID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -77,8 +76,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -106,28 +105,24 @@ func (c *Client) List(
 // You must maintain a copy of any evidence uploaded if you want to reference it later. Evidence cannot be downloaded after you upload it.
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the dispute from which you want to retrieve evidence metadata.
-	disputeID string,
-	// The ID of the evidence to retrieve.
-	evidenceID string,
+	request *disputes.EvidenceGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/disputes/%v/evidence/%v",
-		disputeID,
-		evidenceID,
+		request.DisputeID,
+		request.EvidenceID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetDisputeEvidenceResponse
 	if err := c.caller.Call(
@@ -135,8 +130,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -152,28 +147,24 @@ func (c *Client) Get(
 // Square does not send the bank any evidence that is removed.
 func (c *Client) Delete(
 	ctx context.Context,
-	// The ID of the dispute from which you want to remove evidence.
-	disputeID string,
-	// The ID of the evidence you want to remove.
-	evidenceID string,
+	request *disputes.EvidenceDeleteRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/disputes/%v/evidence/%v",
-		disputeID,
-		evidenceID,
+		request.DisputeID,
+		request.EvidenceID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DeleteDisputeEvidenceResponse
 	if err := c.caller.Call(
@@ -181,8 +172,8 @@ func (c *Client) Delete(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodDelete,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

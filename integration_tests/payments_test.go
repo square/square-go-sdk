@@ -29,7 +29,9 @@ func TestPaymentsAPI(t *testing.T) {
 		// Fetch the payment to verify it was created.
 		getPaymentResp, err := squareClient.Payments.Get(
 			context.Background(),
-			*createPaymentResp.Payment.ID,
+			&square.PaymentsGetRequest{
+				PaymentID: *createPaymentResp.Payment.ID,
+			},
 		)
 
 		require.NoError(t, err)
@@ -84,7 +86,9 @@ func TestPaymentsAPI(t *testing.T) {
 		// Retrieve the payment
 		getPaymentResp, err := squareClient.Payments.Get(
 			context.Background(),
-			*createPaymentResp.Payment.ID,
+			&square.PaymentsGetRequest{
+				PaymentID: *createPaymentResp.Payment.ID,
+			},
 		)
 
 		require.NoError(t, err)
@@ -108,7 +112,9 @@ func TestPaymentsAPI(t *testing.T) {
 		// Retrieve the payment and verify the refund
 		getPaymentResp, err = squareClient.Payments.Get(
 			context.Background(),
-			*createPaymentResp.Payment.ID,
+			&square.PaymentsGetRequest{
+				PaymentID: *createPaymentResp.Payment.ID,
+			},
 		)
 		require.NoError(t, err)
 		assert.NotNil(t, getPaymentResp.Payment)

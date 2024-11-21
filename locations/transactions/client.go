@@ -47,22 +47,19 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Max results per [page](https://developer.squareup.com/docs/working-with-apis/pagination): 50
 func (c *Client) List(
 	ctx context.Context,
-	// The ID of the location to list transactions for.
-	locationID string,
 	request *locations.TransactionsListRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListTransactionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/locations/%v/transactions", locationID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v/transactions",
+		request.LocationID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
@@ -70,8 +67,10 @@ func (c *Client) List(
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.ListTransactionsResponse
 	if err := c.caller.Call(
@@ -79,8 +78,8 @@ func (c *Client) List(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -95,28 +94,24 @@ func (c *Client) List(
 // Retrieves details for a single transaction.
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the transaction's associated location.
-	locationID string,
-	// The ID of the transaction to retrieve.
-	transactionID string,
+	request *locations.TransactionsGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v",
-		locationID,
-		transactionID,
+		request.LocationID,
+		request.TransactionID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetTransactionResponse
 	if err := c.caller.Call(
@@ -124,8 +119,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -144,26 +139,24 @@ func (c *Client) Get(
 // for more information.
 func (c *Client) Capture(
 	ctx context.Context,
-	locationID string,
-	transactionID string,
+	request *locations.TransactionsCaptureRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CaptureTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v/capture",
-		locationID,
-		transactionID,
+		request.LocationID,
+		request.TransactionID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.CaptureTransactionResponse
 	if err := c.caller.Call(
@@ -171,8 +164,8 @@ func (c *Client) Capture(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -191,26 +184,24 @@ func (c *Client) Capture(
 // for more information.
 func (c *Client) Void(
 	ctx context.Context,
-	locationID string,
-	transactionID string,
+	request *locations.TransactionsVoidRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.VoidTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/transactions/%v/void",
-		locationID,
-		transactionID,
+		request.LocationID,
+		request.TransactionID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.VoidTransactionResponse
 	if err := c.caller.Call(
@@ -218,8 +209,8 @@ func (c *Client) Void(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

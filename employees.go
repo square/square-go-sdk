@@ -8,6 +8,11 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
+type EmployeesGetRequest struct {
+	// UUID for the employee that was requested.
+	ID string `json:"-" url:"-"`
+}
+
 type EmployeesListRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
 	// Specifies the EmployeeStatus to filter the employee by.
@@ -47,7 +52,7 @@ type Employee struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (e *Employee) GetID() *string {
@@ -131,20 +136,18 @@ func (e *Employee) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = Employee(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *e)
 	if err != nil {
 		return err
 	}
 	e.extraProperties = extraProperties
-
-	e._rawJSON = json.RawMessage(data)
+	e.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (e *Employee) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(e._rawJSON); err == nil {
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -188,7 +191,7 @@ type GetEmployeeResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (g *GetEmployeeResponse) GetEmployee() *Employee {
@@ -216,20 +219,18 @@ func (g *GetEmployeeResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GetEmployeeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *g)
 	if err != nil {
 		return err
 	}
 	g.extraProperties = extraProperties
-
-	g._rawJSON = json.RawMessage(data)
+	g.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (g *GetEmployeeResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g._rawJSON); err == nil {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -247,7 +248,7 @@ type ListEmployeesResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (l *ListEmployeesResponse) GetEmployees() []*Employee {
@@ -282,20 +283,18 @@ func (l *ListEmployeesResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*l = ListEmployeesResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
 	l.extraProperties = extraProperties
-
-	l._rawJSON = json.RawMessage(data)
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (l *ListEmployeesResponse) String() string {
-	if len(l._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l._rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}

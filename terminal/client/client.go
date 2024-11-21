@@ -53,22 +53,23 @@ func NewClient(opts ...option.RequestOption) *Client {
 // See [Link and Dismiss Actions](https://developer.squareup.com/docs/terminal-api/advanced-features/custom-workflows/link-and-dismiss-actions) for more details.
 func (c *Client) DismissTerminalAction(
 	ctx context.Context,
-	// Unique ID for the `TerminalAction` associated with the action to be dismissed.
-	actionID string,
+	request *squaregosdk.DismissTerminalActionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DismissTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/terminals/actions/%v/dismiss", actionID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/terminals/actions/%v/dismiss",
+		request.ActionID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DismissTerminalActionResponse
 	if err := c.caller.Call(
@@ -76,8 +77,8 @@ func (c *Client) DismissTerminalAction(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,22 +93,23 @@ func (c *Client) DismissTerminalAction(
 // Dismisses a Terminal checkout request if the status and type of the request permits it.
 func (c *Client) DismissTerminalCheckout(
 	ctx context.Context,
-	// Unique ID for the `TerminalCheckout` associated with the checkout to be dismissed.
-	checkoutID string,
+	request *squaregosdk.DismissTerminalCheckoutRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DismissTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/terminals/checkouts/%v/dismiss", checkoutID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/terminals/checkouts/%v/dismiss",
+		request.CheckoutID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DismissTerminalCheckoutResponse
 	if err := c.caller.Call(
@@ -115,8 +117,8 @@ func (c *Client) DismissTerminalCheckout(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -131,22 +133,23 @@ func (c *Client) DismissTerminalCheckout(
 // Dismisses a Terminal refund request if the status and type of the request permits it.
 func (c *Client) DismissTerminalRefund(
 	ctx context.Context,
-	// Unique ID for the `TerminalRefund` associated with the refund to be dismissed.
-	terminalRefundID string,
+	request *squaregosdk.DismissTerminalRefundRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DismissTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/terminals/refunds/%v/dismiss", terminalRefundID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/terminals/refunds/%v/dismiss",
+		request.TerminalRefundID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.DismissTerminalRefundResponse
 	if err := c.caller.Call(
@@ -154,8 +157,8 @@ func (c *Client) DismissTerminalRefund(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

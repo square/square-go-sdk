@@ -7,7 +7,9 @@ package square
 // RequestOption to override the client's default environment,
 // if any.
 var Environments = struct {
-	Sandbox string
+	Sandbox    string
+	Production string
 }{
-	Sandbox: "https://connect.squareupsandbox.com",
+	Sandbox:    "https://connect.squareupsandbox.com",
+	Production: "https://connect.squareup.com",
 }

@@ -14,7 +14,19 @@ type CreateLoyaltyRewardRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 }
 
+type RewardsDeleteRequest struct {
+	// The ID of the [loyalty reward](entity:LoyaltyReward) to delete.
+	RewardID string `json:"-" url:"-"`
+}
+
+type RewardsGetRequest struct {
+	// The ID of the [loyalty reward](entity:LoyaltyReward) to retrieve.
+	RewardID string `json:"-" url:"-"`
+}
+
 type RedeemLoyaltyRewardRequest struct {
+	// The ID of the [loyalty reward](entity:LoyaltyReward) to redeem.
+	RewardID string `json:"-" url:"-"`
 	// A unique string that identifies this `RedeemLoyaltyReward` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`

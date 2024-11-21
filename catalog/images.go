@@ -13,6 +13,8 @@ type ImagesCreateRequest struct {
 }
 
 type ImagesUpdateRequest struct {
+	// The ID of the `CatalogImage` object to update the encapsulated image file.
+	ImageID   string                                 `json:"-" url:"-"`
 	ImageFile io.Reader                              `json:"-" url:"-"`
 	Request   *squaregosdk.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }

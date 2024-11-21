@@ -44,29 +44,27 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Results are sorted by the `created_at` date in descending order (newest to oldest).
 func (c *Client) List(
 	ctx context.Context,
-	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
-	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
-	programID string,
 	request *programs.PromotionsListRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.LoyaltyPromotion], error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/loyalty/programs/%v/promotions", programID)
-
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/loyalty/programs/%v/promotions",
+		request.ProgramID,
+	)
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
 	}
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
@@ -79,8 +77,8 @@ func (c *Client) List(
 		return &internal.CallParams{
 			URL:             nextURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -111,25 +109,23 @@ func (c *Client) List(
 // `ACTIVE` or `SCHEDULED` status.
 func (c *Client) Create(
 	ctx context.Context,
-	// The ID of the [loyalty program](entity:LoyaltyProgram) to associate with the promotion.
-	// To get the program ID, call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram)
-	// using the `main` keyword.
-	programID string,
 	request *programs.CreateLoyaltyPromotionRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v2/loyalty/programs/%v/promotions", programID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/loyalty/programs/%v/promotions",
+		request.ProgramID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CreateLoyaltyPromotionResponse
@@ -138,8 +134,8 @@ func (c *Client) Create(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -155,29 +151,24 @@ func (c *Client) Create(
 // Retrieves a loyalty promotion.
 func (c *Client) Get(
 	ctx context.Context,
-	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
-	promotionID string,
-	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
-	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
-	programID string,
+	request *programs.PromotionsGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/loyalty/programs/%v/promotions/%v",
-		programID,
-		promotionID,
+		request.PromotionID,
+		request.ProgramID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.GetLoyaltyPromotionResponse
 	if err := c.caller.Call(
@@ -185,8 +176,8 @@ func (c *Client) Get(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -206,29 +197,24 @@ func (c *Client) Get(
 // This endpoint sets the loyalty promotion to the `CANCELED` state
 func (c *Client) Cancel(
 	ctx context.Context,
-	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to cancel. You can cancel a
-	// promotion that has an `ACTIVE` or `SCHEDULED` status.
-	promotionID string,
-	// The ID of the base [loyalty program](entity:LoyaltyProgram).
-	programID string,
+	request *programs.PromotionsCancelRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/loyalty/programs/%v/promotions/%v/cancel",
-		programID,
-		promotionID,
+		request.PromotionID,
+		request.ProgramID,
 	)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response *squaregosdk.CancelLoyaltyPromotionResponse
 	if err := c.caller.Call(
@@ -236,8 +222,8 @@ func (c *Client) Cancel(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPost,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

@@ -90,6 +90,8 @@ type ObtainTokenRequest struct {
 }
 
 type RenewTokenRequest struct {
+	// Your application ID, which is available on the **OAuth** page in the [Developer Dashboard](https://developer.squareup.com/apps).
+	ClientID string `json:"-" url:"-"`
 	// The token you want to renew.
 	AccessToken *string `json:"access_token,omitempty" url:"-"`
 }
@@ -118,7 +120,7 @@ type AuthorizeResponse struct {
 	State *string `json:"state,omitempty" url:"state,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (a *AuthorizeResponse) GetCode() *string {
@@ -146,20 +148,18 @@ func (a *AuthorizeResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = AuthorizeResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *a)
 	if err != nil {
 		return err
 	}
 	a.extraProperties = extraProperties
-
-	a._rawJSON = json.RawMessage(data)
+	a.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (a *AuthorizeResponse) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(a._rawJSON); err == nil {
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -395,7 +395,7 @@ type ObtainTokenResponse struct {
 	RefreshTokenExpiresAt *string `json:"refresh_token_expires_at,omitempty" url:"refresh_token_expires_at,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (o *ObtainTokenResponse) GetAccessToken() *string {
@@ -486,20 +486,18 @@ func (o *ObtainTokenResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = ObtainTokenResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *o)
 	if err != nil {
 		return err
 	}
 	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
+	o.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (o *ObtainTokenResponse) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(o._rawJSON); err == nil {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -533,7 +531,7 @@ type RenewTokenResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RenewTokenResponse) GetAccessToken() *string {
@@ -596,20 +594,18 @@ func (r *RenewTokenResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RenewTokenResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RenewTokenResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -634,7 +630,7 @@ type RetrieveTokenStatusResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RetrieveTokenStatusResponse) GetScopes() []string {
@@ -683,20 +679,18 @@ func (r *RetrieveTokenStatusResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RetrieveTokenStatusResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RetrieveTokenStatusResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}
@@ -713,7 +707,7 @@ type RevokeTokenResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
+	rawJSON         json.RawMessage
 }
 
 func (r *RevokeTokenResponse) GetSuccess() *bool {
@@ -741,20 +735,18 @@ func (r *RevokeTokenResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RevokeTokenResponse(value)
-
 	extraProperties, err := internal.ExtractExtraProperties(data, *r)
 	if err != nil {
 		return err
 	}
 	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
+	r.rawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (r *RevokeTokenResponse) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(r._rawJSON); err == nil {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
 		}
 	}

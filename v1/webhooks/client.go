@@ -8,6 +8,7 @@ import (
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
+	v1 "github.com/square/square-go-sdk/v1"
 	http "net/http"
 	os "os"
 )
@@ -41,22 +42,23 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Deprecated. Lists which types of events trigger webhook notifications for a particular location.
 func (c *Client) List(
 	ctx context.Context,
-	// The ID of the location to list webhook notification types for.
-	locationID string,
+	request *v1.WebhooksListRequest,
 	opts ...option.RequestOption,
 ) ([]squaregosdk.V1WebhooksEvents, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v1/%v/webhooks", locationID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v1/%v/webhooks",
+		request.LocationID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response []squaregosdk.V1WebhooksEvents
 	if err := c.caller.Call(
@@ -64,8 +66,8 @@ func (c *Client) List(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -80,22 +82,23 @@ func (c *Client) List(
 // Deprecated. Changes the webhook event subscriptions for a location.
 func (c *Client) Update(
 	ctx context.Context,
-	// The ID of the location to list webhook notification types for.
-	locationID string,
+	request *v1.WebhooksUpdateRequest,
 	opts ...option.RequestOption,
 ) ([]squaregosdk.V1WebhooksEvents, error) {
 	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://connect.squareupsandbox.com"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := internal.EncodeURL(baseURL+"/v1/%v/webhooks", locationID)
-
-	headers := internal.MergeHeaders(c.header.Clone(), options.ToHeader())
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v1/%v/webhooks",
+		request.LocationID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
 
 	var response []squaregosdk.V1WebhooksEvents
 	if err := c.caller.Call(
@@ -103,8 +106,8 @@ func (c *Client) Update(
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodPut,
-			MaxAttempts:     options.MaxAttempts,
 			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,

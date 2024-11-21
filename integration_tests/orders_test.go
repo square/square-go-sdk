@@ -56,7 +56,9 @@ func TestOrdersAPI(t *testing.T) {
 		// Retrieve the order and verify it's `COMPLETED`.
 		getOrderResp, err := squareClient.Orders.Get(
 			context.Background(),
-			*createOrderResp.Order.ID,
+			&square.OrdersGetRequest{
+				OrderID: *createOrderResp.Order.ID,
+			},
 		)
 		require.NoError(t, err)
 		assert.Equal(t, *getOrderResp.Order.State, square.OrderStateCompleted)
@@ -103,9 +105,9 @@ func TestOrdersAPI(t *testing.T) {
 		// 2. For the given order, upsert a valid value for the custom attribute.
 		upsertOrderResp, err := squareClient.OrderCustomAttributes.UpsertOrderCustomAttribute(
 			context.Background(),
-			*createOrderResp.Order.ID,
-			attrKey,
 			&square.UpsertOrderCustomAttributeRequest{
+				OrderID:            *createOrderResp.Order.ID,
+				CustomAttributeKey: attrKey,
 				CustomAttribute: &square.CustomAttribute{
 					Value: square.String("foo@example.com"),
 				},
@@ -117,9 +119,9 @@ func TestOrdersAPI(t *testing.T) {
 		// 3. For the given order, upsert an invalid value for the custom attribute.
 		_, err = squareClient.OrderCustomAttributes.UpsertOrderCustomAttribute(
 			context.Background(),
-			*createOrderResp.Order.ID,
-			attrKey,
 			&square.UpsertOrderCustomAttributeRequest{
+				OrderID:            *createOrderResp.Order.ID,
+				CustomAttributeKey: attrKey,
 				CustomAttribute: &square.CustomAttribute{
 					Value: square.String("invalid-email"),
 				},

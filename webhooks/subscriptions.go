@@ -13,6 +13,16 @@ type CreateWebhookSubscriptionRequest struct {
 	Subscription *squaregosdk.WebhookSubscription `json:"subscription,omitempty" url:"-"`
 }
 
+type SubscriptionsDeleteRequest struct {
+	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to delete.
+	SubscriptionID string `json:"-" url:"-"`
+}
+
+type SubscriptionsGetRequest struct {
+	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to retrieve.
+	SubscriptionID string `json:"-" url:"-"`
+}
+
 type SubscriptionsListRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
@@ -34,17 +44,23 @@ type SubscriptionsListRequest struct {
 }
 
 type TestWebhookSubscriptionRequest struct {
+	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to test.
+	SubscriptionID string `json:"-" url:"-"`
 	// The event type that will be used to test the [Subscription](entity:WebhookSubscription). The event type must be
 	// contained in the list of event types in the [Subscription](entity:WebhookSubscription).
 	EventType *string `json:"event_type,omitempty" url:"-"`
 }
 
 type UpdateWebhookSubscriptionRequest struct {
+	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to update.
+	SubscriptionID string `json:"-" url:"-"`
 	// The [Subscription](entity:WebhookSubscription) to update.
 	Subscription *squaregosdk.WebhookSubscription `json:"subscription,omitempty" url:"-"`
 }
 
 type UpdateWebhookSubscriptionSignatureKeyRequest struct {
+	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to update.
+	SubscriptionID string `json:"-" url:"-"`
 	// A unique string that identifies the [UpdateWebhookSubscriptionSignatureKey](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscriptionSignatureKey) request.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
