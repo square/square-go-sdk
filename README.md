@@ -1,7 +1,7 @@
 # Square Go Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://github.com/fern-api/fern)
-[![go shield](https://img.shields.io/badge/go-docs-blue)](https://pkg.go.dev/github.com/fern-demo/square-go-sdk)
+[![go shield](https://img.shields.io/badge/go-docs-blue)](https://pkg.go.dev/github.com/square/square-go-sdk)
 
 The Square Go library provides convenient access to the Square API from Go.
 
@@ -14,16 +14,16 @@ This module requires Go version >= 1.18.
 Run the following command to use the Square Go library in your module:
 
 ```sh
-go get github.com/fern-demo/square-go-sdk
+go get github.com/square/square-go-sdk
 ```
 
 ## Usage
 
 ```go
 import (
-    "github.com/fern-demo/square-go-sdk"
-    squareclient "github.com/fern-demo/square-go-sdk/client"
-    "github.com/fern-demo/square-go-sdk/option"
+    "github.com/square/square-go-sdk"
+    squareclient "github.com/square/square-go-sdk/client"
+    "github.com/square/square-go-sdk/option"
 )
 
 client := squareclient.NewClient(
