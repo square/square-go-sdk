@@ -65,7 +65,7 @@ For example, consider the `client.Payments.List` endpoint usage below:
 response, err := client.Payments.List(
     context.TODO(),
     &square.PaymentsListRequest{
-        Total:            square.Int64(100),
+        Total: square.Int64(100),
     },
 )
 ```
@@ -78,7 +78,7 @@ List endpoints are paginated. The SDK provides an iterator so that you can simpl
 page, err := client.Payments.List(
     context.TODO(),
     &square.PaymentsListRequest{
-        Total:            square.Int64(100),
+        Total: square.Int64(100),
     },
 )
 if err != nil {
@@ -124,7 +124,7 @@ defer cancel()
 response, err := client.Payments.List(
     ctx,
     &square.PaymentsListRequest{
-        Total:            square.Int64(100),
+        Total: square.Int64(100),
     },
 )
 ```
@@ -217,7 +217,7 @@ request (shown above), or for an individual request like so:
 response, err := client.Payments.List(
     ctx,
     &square.PaymentsListRequest{
-        Total:            square.Int64(100),
+        Total: square.Int64(100),
     },
     option.WithToken("<YOUR_API_KEY>"),
 )
@@ -293,7 +293,7 @@ This can be done for an individual request, too:
 response, err := client.Payments.List(
     context.TODO(),
     &square.PaymentsListRequest{
-        Total:            square.Int64(100),
+        Total: square.Int64(100),
     },
     option.WithMaxAttempts(1),
 )
