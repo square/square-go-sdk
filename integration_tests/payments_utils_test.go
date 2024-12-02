@@ -27,7 +27,6 @@ func newTestPaymentRequest(
 	}
 
 	return &square.CreatePaymentRequest{
-		LocationID:     square.String(LocationID),
 		IdempotencyKey: *request.IdempotencyKey,
 		SourceID:       SourceID,
 		AmountMoney:    newTestMoney(*request.Amount),

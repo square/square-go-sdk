@@ -17,19 +17,22 @@ func TestTeamsAPI(t *testing.T) {
 	t.Run("bulk update team members with mix of successes and failures", func(t *testing.T) {
 		squareClient := newTestSquareClient(t)
 
+		locationId, err := getDefaultLocationID(squareClient)
+		require.NoError(t, err)
+
 		// SETUP: Create 3 team members (should always be successful).
 		createMembersResp, err := squareClient.TeamMembers.BatchCreate(
 			context.Background(),
 			&square.BatchCreateTeamMembersRequest{
 				TeamMembers: map[string]*square.CreateTeamMemberRequest{
 					newTestUUID(): {
-						TeamMember: newTestTeamMember([]string{LocationID}),
+						TeamMember: newTestTeamMember([]string{locationId}),
 					},
 					newTestUUID(): {
-						TeamMember: newTestTeamMember([]string{LocationID}),
+						TeamMember: newTestTeamMember([]string{locationId}),
 					},
 					newTestUUID(): {
-						TeamMember: newTestTeamMember([]string{LocationID}),
+						TeamMember: newTestTeamMember([]string{locationId}),
 					},
 				},
 			},
@@ -52,10 +55,10 @@ func TestTeamsAPI(t *testing.T) {
 			&square.BatchUpdateTeamMembersRequest{
 				TeamMembers: map[string]*square.UpdateTeamMemberRequest{
 					createdMemberIds[0]: {
-						TeamMember: newTestTeamMember([]string{LocationID}),
+						TeamMember: newTestTeamMember([]string{locationId}),
 					},
 					createdMemberIds[1]: {
-						TeamMember: newTestTeamMember([]string{LocationID}),
+						TeamMember: newTestTeamMember([]string{locationId}),
 					},
 					createdMemberIds[2]: {
 						TeamMember: newTestTeamMember([]string{"INVALID_LocationID"}),
