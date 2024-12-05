@@ -4,6 +4,7 @@ package client
 
 import (
 	context "context"
+	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
@@ -122,6 +123,66 @@ func (c *Client) Create(
 		return nil, err
 	}
 	return response, nil
+}
+
+// Lists the location-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// When all response pages are retrieved, the results include all custom attribute definitions
+// that are visible to the requesting application, including those that are created by other
+// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) GetCustomAttributeDefinitions(
+	ctx context.Context,
+	request *squaregosdk.LocationsGetCustomAttributeDefinitionsRequest,
+	opts ...option.RequestOption,
+) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareupsandbox.com",
+	)
+	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        pageRequest.Response,
+		}
+	}
+	readPageResponse := func(response *squaregosdk.ListLocationCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+		next := response.Cursor
+		results := response.CustomAttributeDefinitions
+		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
 }
 
 // Retrieves details of a single location. Specify "main"

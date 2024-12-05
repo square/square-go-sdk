@@ -38,53 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Get all bookings custom attribute definitions.
-//
-// To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
-// To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
-func (c *Client) ListBookingCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.ListBookingCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListBookingCustomAttributeDefinitionsResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListBookingCustomAttributeDefinitionsResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Creates a bookings custom attribute definition.
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
@@ -356,56 +309,6 @@ func (c *Client) BulkUpsertBookingCustomAttributes(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-// Lists a booking's custom attributes.
-//
-// To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
-// To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
-func (c *Client) ListBookingCustomAttributes(
-	ctx context.Context,
-	request *squaregosdk.ListBookingCustomAttributesRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListBookingCustomAttributesResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/bookings/%v/custom-attributes",
-		request.BookingID,
-	)
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListBookingCustomAttributesResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
 			Response:        &response,
 		},
 	); err != nil {

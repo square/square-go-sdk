@@ -38,53 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the location-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
-// When all response pages are retrieved, the results include all custom attribute definitions
-// that are visible to the requesting application, including those that are created by other
-// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) ListLocationCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.ListLocationCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListLocationCustomAttributeDefinitionsResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListLocationCustomAttributeDefinitionsResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Creates a location-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to define a custom attribute that can be associated with locations.
 // A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties

@@ -28,12 +28,12 @@ import (
 	locationsclient "github.com/square/square-go-sdk/locations/client"
 	loyaltyclient "github.com/square/square-go-sdk/loyalty/client"
 	merchantcustomattributes "github.com/square/square-go-sdk/merchantcustomattributes"
-	merchants "github.com/square/square-go-sdk/merchants"
+	merchantsclient "github.com/square/square-go-sdk/merchants/client"
 	mobile "github.com/square/square-go-sdk/mobile"
 	oauth "github.com/square/square-go-sdk/oauth"
 	option "github.com/square/square-go-sdk/option"
 	ordercustomattributes "github.com/square/square-go-sdk/ordercustomattributes"
-	orders "github.com/square/square-go-sdk/orders"
+	ordersclient "github.com/square/square-go-sdk/orders/client"
 	payments "github.com/square/square-go-sdk/payments"
 	payouts "github.com/square/square-go-sdk/payouts"
 	refunds "github.com/square/square-go-sdk/refunds"
@@ -76,10 +76,10 @@ type Client struct {
 	Locations                    *locationsclient.Client
 	LocationCustomAttributes     *locationcustomattributes.Client
 	Loyalty                      *loyaltyclient.Client
-	Merchants                    *merchants.Client
+	Merchants                    *merchantsclient.Client
 	MerchantCustomAttributes     *merchantcustomattributes.Client
 	Checkout                     *checkoutclient.Client
-	Orders                       *orders.Client
+	Orders                       *ordersclient.Client
 	OrderCustomAttributes        *ordercustomattributes.Client
 	Payments                     *payments.Client
 	Payouts                      *payouts.Client
@@ -135,10 +135,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Locations:                    locationsclient.NewClient(opts...),
 		LocationCustomAttributes:     locationcustomattributes.NewClient(opts...),
 		Loyalty:                      loyaltyclient.NewClient(opts...),
-		Merchants:                    merchants.NewClient(opts...),
+		Merchants:                    merchantsclient.NewClient(opts...),
 		MerchantCustomAttributes:     merchantcustomattributes.NewClient(opts...),
 		Checkout:                     checkoutclient.NewClient(opts...),
-		Orders:                       orders.NewClient(opts...),
+		Orders:                       ordersclient.NewClient(opts...),
 		OrderCustomAttributes:        ordercustomattributes.NewClient(opts...),
 		Payments:                     payments.NewClient(opts...),
 		Payouts:                      payouts.NewClient(opts...),

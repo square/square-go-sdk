@@ -18,13 +18,6 @@ type BulkRetrieveTeamMemberBookingProfilesRequest struct {
 	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"-"`
 }
 
-type ListLocationBookingProfilesRequest struct {
-	// The maximum number of results to return in a paged response.
-	Limit *int `json:"-" url:"limit,omitempty"`
-	// The pagination cursor from the preceding response to return the next page of the results. Do not set this when retrieving the first page of the results.
-	Cursor *string `json:"-" url:"cursor,omitempty"`
-}
-
 type RetrieveLocationBookingProfileRequest struct {
 	// The ID of the location to retrieve the booking profile.
 	LocationID string `json:"-" url:"-"`
@@ -54,6 +47,17 @@ type CreateBookingRequest struct {
 type BookingsGetRequest struct {
 	// The ID of the [Booking](entity:Booking) object representing the to-be-retrieved booking.
 	BookingID string `json:"-" url:"-"`
+}
+
+type BookingsGetCustomAttributeDefinitionsRequest struct {
+	// The maximum number of results to return in a single paged response. This limit is advisory.
+	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
+	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The cursor returned in the paged response from the previous call to this endpoint.
+	// Provide this cursor to retrieve the next page of results for your original request.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
 type BookingsListRequest struct {
@@ -1358,6 +1362,77 @@ func (g *GetBusinessBookingProfileResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
+// Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
+// If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
+type ListBookingCustomAttributeDefinitionsResponse struct {
+	// The retrieved custom attribute definitions. If no custom attribute definitions are found,
+	// Square returns an empty object (`{}`).
+	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
+	// The cursor to provide in your next call to this endpoint to retrieve the next page of
+	// results for your original request. This field is present only if the request succeeded and
+	// additional results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributeDefinitions
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBookingCustomAttributeDefinitionsResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBookingCustomAttributeDefinitionsResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBookingCustomAttributeDefinitionsResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 type ListBookingsResponse struct {
 	// The list of targeted bookings.
 	Bookings []*Booking `json:"bookings,omitempty" url:"bookings,omitempty"`
@@ -1412,137 +1487,6 @@ func (l *ListBookingsResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (l *ListBookingsResponse) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
-}
-
-type ListLocationBookingProfilesResponse struct {
-	// The list of a seller's location booking profiles.
-	LocationBookingProfiles []*LocationBookingProfile `json:"location_booking_profiles,omitempty" url:"location_booking_profiles,omitempty"`
-	// The pagination cursor to be used in the subsequent request to get the next page of the results. Stop retrieving the next page of the results when the cursor is not set.
-	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
-	// Errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *ListLocationBookingProfilesResponse) GetLocationBookingProfiles() []*LocationBookingProfile {
-	if l == nil {
-		return nil
-	}
-	return l.LocationBookingProfiles
-}
-
-func (l *ListLocationBookingProfilesResponse) GetCursor() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Cursor
-}
-
-func (l *ListLocationBookingProfilesResponse) GetErrors() []*Error {
-	if l == nil {
-		return nil
-	}
-	return l.Errors
-}
-
-func (l *ListLocationBookingProfilesResponse) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *ListLocationBookingProfilesResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListLocationBookingProfilesResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListLocationBookingProfilesResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *ListLocationBookingProfilesResponse) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
-}
-
-// The booking profile of a seller's location, including the location's ID and whether the location is enabled for online booking.
-type LocationBookingProfile struct {
-	// The ID of the [location](entity:Location).
-	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
-	// Url for the online booking site for this location.
-	BookingSiteURL *string `json:"booking_site_url,omitempty" url:"booking_site_url,omitempty"`
-	// Indicates whether the location is enabled for online booking.
-	OnlineBookingEnabled *bool `json:"online_booking_enabled,omitempty" url:"online_booking_enabled,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *LocationBookingProfile) GetLocationID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.LocationID
-}
-
-func (l *LocationBookingProfile) GetBookingSiteURL() *string {
-	if l == nil {
-		return nil
-	}
-	return l.BookingSiteURL
-}
-
-func (l *LocationBookingProfile) GetOnlineBookingEnabled() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.OnlineBookingEnabled
-}
-
-func (l *LocationBookingProfile) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *LocationBookingProfile) UnmarshalJSON(data []byte) error {
-	type unmarshaler LocationBookingProfile
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = LocationBookingProfile(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *LocationBookingProfile) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
