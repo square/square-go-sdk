@@ -192,7 +192,7 @@ func (c *Client) ListEvents(
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftEventsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent] {
 		next := response.Cursor
-		results := response.Events
+		results := response.CashDrawerShiftEvents
 		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent]{
 			Next:    next,
 			Results: results,

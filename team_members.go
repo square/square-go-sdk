@@ -719,15 +719,12 @@ func (t *TeamMemberAssignedLocations) String() string {
 type TeamMemberAssignedLocationsAssignmentType string
 
 const (
-	TeamMemberAssignedLocationsAssignmentTypeDoNotUse                     TeamMemberAssignedLocationsAssignmentType = "DO_NOT_USE"
 	TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations TeamMemberAssignedLocationsAssignmentType = "ALL_CURRENT_AND_FUTURE_LOCATIONS"
 	TeamMemberAssignedLocationsAssignmentTypeExplicitLocations            TeamMemberAssignedLocationsAssignmentType = "EXPLICIT_LOCATIONS"
 )
 
 func NewTeamMemberAssignedLocationsAssignmentTypeFromString(s string) (TeamMemberAssignedLocationsAssignmentType, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return TeamMemberAssignedLocationsAssignmentTypeDoNotUse, nil
 	case "ALL_CURRENT_AND_FUTURE_LOCATIONS":
 		return TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations, nil
 	case "EXPLICIT_LOCATIONS":
@@ -745,15 +742,12 @@ func (t TeamMemberAssignedLocationsAssignmentType) Ptr() *TeamMemberAssignedLoca
 type TeamMemberStatus string
 
 const (
-	TeamMemberStatusStatusDoNotUse TeamMemberStatus = "STATUS_DO_NOT_USE"
-	TeamMemberStatusActive         TeamMemberStatus = "ACTIVE"
-	TeamMemberStatusInactive       TeamMemberStatus = "INACTIVE"
+	TeamMemberStatusActive   TeamMemberStatus = "ACTIVE"
+	TeamMemberStatusInactive TeamMemberStatus = "INACTIVE"
 )
 
 func NewTeamMemberStatusFromString(s string) (TeamMemberStatus, error) {
 	switch s {
-	case "STATUS_DO_NOT_USE":
-		return TeamMemberStatusStatusDoNotUse, nil
 	case "ACTIVE":
 		return TeamMemberStatusActive, nil
 	case "INACTIVE":

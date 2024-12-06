@@ -28,7 +28,7 @@ type CreateCardRequest struct {
 	Card *Card `json:"card,omitempty" url:"-"`
 }
 
-type DisableCardRequest struct {
+type CardsDisableRequest struct {
 	// Unique ID for the desired Card.
 	CardID string `json:"-" url:"-"`
 }

@@ -442,15 +442,12 @@ func (g *GiftCard) String() string {
 type GiftCardGanSource string
 
 const (
-	GiftCardGanSourceGanSourceDoNotUse GiftCardGanSource = "GAN_SOURCE_DO_NOT_USE"
-	GiftCardGanSourceSquare            GiftCardGanSource = "SQUARE"
-	GiftCardGanSourceOther             GiftCardGanSource = "OTHER"
+	GiftCardGanSourceSquare GiftCardGanSource = "SQUARE"
+	GiftCardGanSourceOther  GiftCardGanSource = "OTHER"
 )
 
 func NewGiftCardGanSourceFromString(s string) (GiftCardGanSource, error) {
 	switch s {
-	case "GAN_SOURCE_DO_NOT_USE":
-		return GiftCardGanSourceGanSourceDoNotUse, nil
 	case "SQUARE":
 		return GiftCardGanSourceSquare, nil
 	case "OTHER":
@@ -468,21 +465,14 @@ func (g GiftCardGanSource) Ptr() *GiftCardGanSource {
 type GiftCardStatus string
 
 const (
-	GiftCardStatusStatusDoNotUse GiftCardStatus = "STATUS_DO_NOT_USE"
-	GiftCardStatusNotActive      GiftCardStatus = "NOT_ACTIVE"
-	GiftCardStatusActive         GiftCardStatus = "ACTIVE"
-	GiftCardStatusDeactivated    GiftCardStatus = "DEACTIVATED"
-	GiftCardStatusBlocked        GiftCardStatus = "BLOCKED"
-	GiftCardStatusPending        GiftCardStatus = "PENDING"
-	GiftCardStatusUnregistered   GiftCardStatus = "UNREGISTERED"
+	GiftCardStatusActive      GiftCardStatus = "ACTIVE"
+	GiftCardStatusDeactivated GiftCardStatus = "DEACTIVATED"
+	GiftCardStatusBlocked     GiftCardStatus = "BLOCKED"
+	GiftCardStatusPending     GiftCardStatus = "PENDING"
 )
 
 func NewGiftCardStatusFromString(s string) (GiftCardStatus, error) {
 	switch s {
-	case "STATUS_DO_NOT_USE":
-		return GiftCardStatusStatusDoNotUse, nil
-	case "NOT_ACTIVE":
-		return GiftCardStatusNotActive, nil
 	case "ACTIVE":
 		return GiftCardStatusActive, nil
 	case "DEACTIVATED":
@@ -491,8 +481,6 @@ func NewGiftCardStatusFromString(s string) (GiftCardStatus, error) {
 		return GiftCardStatusBlocked, nil
 	case "PENDING":
 		return GiftCardStatusPending, nil
-	case "UNREGISTERED":
-		return GiftCardStatusUnregistered, nil
 	}
 	var t GiftCardStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -506,15 +494,12 @@ func (g GiftCardStatus) Ptr() *GiftCardStatus {
 type GiftCardType string
 
 const (
-	GiftCardTypeTypeDoNotUse GiftCardType = "TYPE_DO_NOT_USE"
-	GiftCardTypePhysical     GiftCardType = "PHYSICAL"
-	GiftCardTypeDigital      GiftCardType = "DIGITAL"
+	GiftCardTypePhysical GiftCardType = "PHYSICAL"
+	GiftCardTypeDigital  GiftCardType = "DIGITAL"
 )
 
 func NewGiftCardTypeFromString(s string) (GiftCardType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return GiftCardTypeTypeDoNotUse, nil
 	case "PHYSICAL":
 		return GiftCardTypePhysical, nil
 	case "DIGITAL":

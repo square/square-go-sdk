@@ -163,15 +163,12 @@ func (e *Employee) String() string {
 type EmployeeStatus string
 
 const (
-	EmployeeStatusDoNotUse EmployeeStatus = "DO_NOT_USE"
 	EmployeeStatusActive   EmployeeStatus = "ACTIVE"
 	EmployeeStatusInactive EmployeeStatus = "INACTIVE"
 )
 
 func NewEmployeeStatusFromString(s string) (EmployeeStatus, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return EmployeeStatusDoNotUse, nil
 	case "ACTIVE":
 		return EmployeeStatusActive, nil
 	case "INACTIVE":

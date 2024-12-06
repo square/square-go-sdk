@@ -274,7 +274,6 @@ func (b BankAccountStatus) Ptr() *BankAccountStatus {
 type BankAccountType string
 
 const (
-	BankAccountTypeUnknown          BankAccountType = "UNKNOWN"
 	BankAccountTypeChecking         BankAccountType = "CHECKING"
 	BankAccountTypeSavings          BankAccountType = "SAVINGS"
 	BankAccountTypeInvestment       BankAccountType = "INVESTMENT"
@@ -284,8 +283,6 @@ const (
 
 func NewBankAccountTypeFromString(s string) (BankAccountType, error) {
 	switch s {
-	case "UNKNOWN":
-		return BankAccountTypeUnknown, nil
 	case "CHECKING":
 		return BankAccountTypeChecking, nil
 	case "SAVINGS":
