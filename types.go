@@ -21444,6 +21444,79 @@ func (j JobAssignmentPayType) Ptr() *JobAssignmentPayType {
 	return &j
 }
 
+// Represents a [ListBookingCustomAttributes](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributes) response.
+// Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
+// results are available, the `cursor` field is also present along with `custom_attributes`.
+type ListBookingCustomAttributesResponse struct {
+	// The retrieved custom attributes. If `with_definitions` was set to `true` in the request,
+	// the custom attribute definition is returned in the `definition` field of each custom attribute.
+	//
+	// If no custom attributes are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to use in your next call to this endpoint to retrieve the next page of results
+	// for your original request. This field is present only if the request succeeded and additional
+	// results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListBookingCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListBookingCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBookingCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBookingCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBookingCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBookingCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBookingCustomAttributesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBookingCustomAttributesResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 type ListCashDrawerShiftEventsResponse struct {
 	// All of the events (payments, refunds, etc.) for a cash drawer during
 	// the shift.
@@ -22090,6 +22163,71 @@ func (l *ListGiftCardActivitiesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+type ListLocationBookingProfilesResponse struct {
+	// The list of a seller's location booking profiles.
+	LocationBookingProfiles []*LocationBookingProfile `json:"location_booking_profiles,omitempty" url:"location_booking_profiles,omitempty"`
+	// The pagination cursor to be used in the subsequent request to get the next page of the results. Stop retrieving the next page of the results when the cursor is not set.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListLocationBookingProfilesResponse) GetLocationBookingProfiles() []*LocationBookingProfile {
+	if l == nil {
+		return nil
+	}
+	return l.LocationBookingProfiles
+}
+
+func (l *ListLocationBookingProfilesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListLocationBookingProfilesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListLocationBookingProfilesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListLocationBookingProfilesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListLocationBookingProfilesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListLocationBookingProfilesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListLocationBookingProfilesResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // A response that contains all loyalty programs.
 type ListLoyaltyProgramsResponse struct {
 	// Any errors that occurred during the request.
@@ -22206,6 +22344,146 @@ func (l *ListLoyaltyPromotionsResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (l *ListLoyaltyPromotionsResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a [ListMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-ListMerchantCustomAttributes) response.
+// Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
+// results are available, the `cursor` field is also present along with `custom_attributes`.
+type ListMerchantCustomAttributesResponse struct {
+	// The retrieved custom attributes. If `with_definitions` was set to `true` in the request,
+	// the custom attribute definition is returned in the `definition` field of each custom attribute.
+	// If no custom attributes are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to use in your next call to this endpoint to retrieve the next page of results
+	// for your original request. This field is present only if the request succeeded and additional
+	// results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListMerchantCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListMerchantCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListMerchantCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListMerchantCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListMerchantCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListMerchantCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListMerchantCustomAttributesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListMerchantCustomAttributesResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a response from listing order custom attributes.
+type ListOrderCustomAttributesResponse struct {
+	// The retrieved custom attributes. If no custom attribute are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to provide in your next call to this endpoint to retrieve the next page of results for your original request.
+	// This field is present only if the request succeeded and additional results are available.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListOrderCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListOrderCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListOrderCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListOrderCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListOrderCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListOrderCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListOrderCustomAttributesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListOrderCustomAttributesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -22693,6 +22971,72 @@ func (l *ListWorkweekConfigsResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (l *ListWorkweekConfigsResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The booking profile of a seller's location, including the location's ID and whether the location is enabled for online booking.
+type LocationBookingProfile struct {
+	// The ID of the [location](entity:Location).
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// Url for the online booking site for this location.
+	BookingSiteURL *string `json:"booking_site_url,omitempty" url:"booking_site_url,omitempty"`
+	// Indicates whether the location is enabled for online booking.
+	OnlineBookingEnabled *bool `json:"online_booking_enabled,omitempty" url:"online_booking_enabled,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationBookingProfile) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LocationBookingProfile) GetBookingSiteURL() *string {
+	if l == nil {
+		return nil
+	}
+	return l.BookingSiteURL
+}
+
+func (l *LocationBookingProfile) GetOnlineBookingEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.OnlineBookingEnabled
+}
+
+func (l *LocationBookingProfile) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationBookingProfile) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationBookingProfile
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationBookingProfile(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationBookingProfile) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value

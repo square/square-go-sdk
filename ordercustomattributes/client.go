@@ -38,55 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the order-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
-//
-// When all response pages are retrieved, the results include all custom attribute definitions
-// that are visible to the requesting application, including those that are created by other
-// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that
-// seller-defined custom attributes (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) ListOrderCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.ListOrderCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListOrderCustomAttributeDefinitionsResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/orders/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListOrderCustomAttributeDefinitionsResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Creates an order-related custom attribute definition. Use this endpoint to
 // define a custom attribute that can be associated with orders.
 //
@@ -363,60 +314,6 @@ func (c *Client) BulkUpsertOrderCustomAttributes(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-// Lists the [custom attributes](entity:CustomAttribute) associated with an order.
-//
-// You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
-// in the same call.
-//
-// When all response pages are retrieved, the results include all custom attributes that are
-// visible to the requesting application, including those that are owned by other applications
-// and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) ListOrderCustomAttributes(
-	ctx context.Context,
-	request *squaregosdk.ListOrderCustomAttributesRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListOrderCustomAttributesResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/orders/%v/custom-attributes",
-		request.OrderID,
-	)
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListOrderCustomAttributesResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
 			Response:        &response,
 		},
 	); err != nil {

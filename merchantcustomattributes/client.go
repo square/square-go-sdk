@@ -38,53 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the merchant-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
-// When all response pages are retrieved, the results include all custom attribute definitions
-// that are visible to the requesting application, including those that are created by other
-// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) ListMerchantCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.ListMerchantCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListMerchantCustomAttributeDefinitionsResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListMerchantCustomAttributeDefinitionsResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Creates a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to define a custom attribute that can be associated with a merchant connecting to your application.
 // A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
@@ -348,58 +301,6 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-// Lists the [custom attributes](entity:CustomAttribute) associated with a merchant.
-// You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
-// in the same call.
-// When all response pages are retrieved, the results include all custom attributes that are
-// visible to the requesting application, including those that are owned by other applications
-// and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) ListMerchantCustomAttributes(
-	ctx context.Context,
-	request *squaregosdk.ListMerchantCustomAttributesRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.ListMerchantCustomAttributesResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/merchants/%v/custom-attributes",
-		request.MerchantID,
-	)
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.ListMerchantCustomAttributesResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
 			Response:        &response,
 		},
 	); err != nil {

@@ -6,6 +6,8 @@ import (
 	context "context"
 	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
+	customattributes "github.com/square/square-go-sdk/bookings/customattributes"
+	locationprofiles "github.com/square/square-go-sdk/bookings/locationprofiles"
 	teammemberprofiles "github.com/square/square-go-sdk/bookings/teammemberprofiles"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
@@ -19,7 +21,9 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
+	LocationProfiles   *locationprofiles.Client
 	TeamMemberProfiles *teammemberprofiles.Client
+	CustomAttributes   *customattributes.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -39,7 +43,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:             options.ToHeader(),
+		LocationProfiles:   locationprofiles.NewClient(opts...),
 		TeamMemberProfiles: teammemberprofiles.NewClient(opts...),
+		CustomAttributes:   customattributes.NewClient(opts...),
 	}
 }
 
@@ -276,48 +282,64 @@ func (c *Client) GetBusinessProfile(
 	return response, nil
 }
 
-// Lists location booking profiles of a seller.
-func (c *Client) ListLocationBookingProfiles(
+// Get all bookings custom attribute definitions.
+//
+// To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
+// To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+func (c *Client) GetCustomAttributeDefinitions(
 	ctx context.Context,
-	request *squaregosdk.ListLocationBookingProfilesRequest,
+	request *squaregosdk.BookingsGetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListLocationBookingProfilesResponse, error) {
+) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
 		"https://connect.squareupsandbox.com",
 	)
-	endpointURL := baseURL + "/v2/bookings/location-booking-profiles"
+	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
 	queryParams, err := internal.QueryValues(request)
 	if err != nil {
 		return nil, err
-	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListLocationBookingProfilesResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
+			Response:        pageRequest.Response,
+		}
 	}
-	return response, nil
+	readPageResponse := func(response *squaregosdk.ListBookingCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+		next := response.Cursor
+		results := response.CustomAttributeDefinitions
+		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
 }
 
 // Retrieves a seller's location booking profile.

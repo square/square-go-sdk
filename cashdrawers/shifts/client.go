@@ -84,7 +84,7 @@ func (c *Client) List(
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary] {
 		next := response.Cursor
-		results := response.Items
+		results := response.CashDrawerShifts
 		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary]{
 			Next:    next,
 			Results: results,

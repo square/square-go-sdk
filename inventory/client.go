@@ -4,6 +4,7 @@ package inventory
 
 import (
 	context "context"
+	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
@@ -509,7 +510,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *squaregosdk.InventoryGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryCountResponse, error) {
+) (*core.Page[*squaregosdk.InventoryCount], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -524,31 +525,44 @@ func (c *Client) Get(
 	if err != nil {
 		return nil, err
 	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
 	headers := internal.MergeHeaders(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryCountResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
+			Response:        pageRequest.Response,
+		}
 	}
-	return response, nil
+	readPageResponse := func(response *squaregosdk.GetInventoryCountResponse) *internal.PageResponse[*string, *squaregosdk.InventoryCount] {
+		next := response.Cursor
+		results := response.Counts
+		return &internal.PageResponse[*string, *squaregosdk.InventoryCount]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
 }
 
 // Returns a set of physical counts and inventory adjustments for the
@@ -568,7 +582,7 @@ func (c *Client) Changes(
 	ctx context.Context,
 	request *squaregosdk.InventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryChangesResponse, error) {
+) (*core.Page[*squaregosdk.InventoryChange], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -583,29 +597,42 @@ func (c *Client) Changes(
 	if err != nil {
 		return nil, err
 	}
-	if len(queryParams) > 0 {
-		endpointURL += "?" + queryParams.Encode()
-	}
 	headers := internal.MergeHeaders(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryChangesResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
+			Response:        pageRequest.Response,
+		}
 	}
-	return response, nil
+	readPageResponse := func(response *squaregosdk.GetInventoryChangesResponse) *internal.PageResponse[*string, *squaregosdk.InventoryChange] {
+		next := response.Cursor
+		results := response.Changes
+		return &internal.PageResponse[*string, *squaregosdk.InventoryChange]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
 }
