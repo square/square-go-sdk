@@ -14,7 +14,7 @@ type RegisterDomainRequest struct {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
+// a request to the [RegisterDomain]($e/ApplePay/RegisterDomain) endpoint.
 //
 // Either `errors` or `status` are present in a given response (never both).
 type RegisterDomainResponse struct {
@@ -82,7 +82,6 @@ type RegisterDomainResponseStatus string
 const (
 	RegisterDomainResponseStatusPending  RegisterDomainResponseStatus = "PENDING"
 	RegisterDomainResponseStatusVerified RegisterDomainResponseStatus = "VERIFIED"
-	RegisterDomainResponseStatusDoNotUse RegisterDomainResponseStatus = "DO_NOT_USE"
 )
 
 func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponseStatus, error) {
@@ -91,8 +90,6 @@ func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponse
 		return RegisterDomainResponseStatusPending, nil
 	case "VERIFIED":
 		return RegisterDomainResponseStatusVerified, nil
-	case "DO_NOT_USE":
-		return RegisterDomainResponseStatusDoNotUse, nil
 	}
 	var t RegisterDomainResponseStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

@@ -22,9 +22,6 @@ type CreateMobileAuthorizationCodeResponse struct {
 	// The timestamp when `authorization_code` expires, in
 	// [RFC 3339](https://tools.ietf.org/html/rfc3339) format (for example, "2016-09-04T23:59:33.123Z").
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
-	// An error object that provides details about how creation of the authorization
-	// code failed.
-	Error *Error `json:"error,omitempty" url:"error,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
@@ -44,13 +41,6 @@ func (c *CreateMobileAuthorizationCodeResponse) GetExpiresAt() *string {
 		return nil
 	}
 	return c.ExpiresAt
-}
-
-func (c *CreateMobileAuthorizationCodeResponse) GetError() *Error {
-	if c == nil {
-		return nil
-	}
-	return c.Error
 }
 
 func (c *CreateMobileAuthorizationCodeResponse) GetErrors() []*Error {

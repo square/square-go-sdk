@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type CancelTerminalActionRequest struct {
+type ActionsCancelRequest struct {
 	// Unique ID for the desired `TerminalAction`.
 	ActionID string `json:"-" url:"-"`
 }

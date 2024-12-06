@@ -33,7 +33,7 @@ type ObjectGetRequest struct {
 	IncludeRelatedObjects *bool `json:"-" url:"include_related_objects,omitempty"`
 	// Requests objects as of a specific version of the catalog. This allows you to retrieve historical
 	// versions of objects. The value to retrieve a specific version of an object can be found
-	// in the version field of [CatalogObject](entity:CatalogObject)s. If not included, results will
+	// in the version field of [CatalogObject]($m/CatalogObject)s. If not included, results will
 	// be from the current version of the catalog.
 	CatalogVersion *int64 `json:"-" url:"catalog_version,omitempty"`
 	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists

@@ -46,11 +46,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Deletes a set of [CatalogItem](entity:CatalogItem)s based on the
+// Deletes a set of [CatalogItem]($m/CatalogItem)s based on the
 // provided list of target IDs and returns a set of successfully deleted IDs in
 // the response. Deletion is a cascading event such that all children of the
 // targeted object are also deleted. For example, deleting a CatalogItem will
-// also delete all of its [CatalogItemVariation](entity:CatalogItemVariation)
+// also delete all of its [CatalogItemVariation]($m/CatalogItemVariation)
 // children.
 //
 // `BatchDeleteCatalogObjects` succeeds even if only a portion of the targeted
@@ -99,11 +99,11 @@ func (c *Client) BatchDelete(
 }
 
 // Returns a set of objects based on the provided ID.
-// Each [CatalogItem](entity:CatalogItem) returned in the set includes all of its
+// Each [CatalogItem]($m/CatalogItem) returned in the set includes all of its
 // child information including: all of its
-// [CatalogItemVariation](entity:CatalogItemVariation) objects, references to
-// its [CatalogModifierList](entity:CatalogModifierList) objects, and the ids of
-// any [CatalogTax](entity:CatalogTax) objects that apply to it.
+// [CatalogItemVariation]($m/CatalogItemVariation) objects, references to
+// its [CatalogModifierList]($m/CatalogModifierList) objects, and the ids of
+// any [CatalogTax]($m/CatalogTax) objects that apply to it.
 func (c *Client) BatchGet(
 	ctx context.Context,
 	request *squaregosdk.BatchGetCatalogObjectsRequest,
@@ -230,13 +230,13 @@ func (c *Client) Info(
 	return response, nil
 }
 
-// Returns a list of all [CatalogObject](entity:CatalogObject)s of the specified types in the catalog.
+// Returns a list of all [CatalogObject]($m/CatalogObject)s of the specified types in the catalog.
 //
-// The `types` parameter is specified as a comma-separated list of the [CatalogObjectType](entity:CatalogObjectType) values,
+// The `types` parameter is specified as a comma-separated list of the [CatalogObjectType]($m/CatalogObjectType) values,
 // for example, "`ITEM`, `ITEM_VARIATION`, `MODIFIER`, `MODIFIER_LIST`, `CATEGORY`, `DISCOUNT`, `TAX`, `IMAGE`".
 //
 // **Important:** ListCatalog does not return deleted catalog items. To retrieve
-// deleted catalog items, use [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects)
+// deleted catalog items, use [SearchCatalogObjects]($e/Catalog/SearchCatalogObjects)
 // and set the `include_deleted_objects` attribute value to `true`.
 func (c *Client) List(
 	ctx context.Context,
@@ -294,10 +294,10 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Searches for [CatalogObject](entity:CatalogObject) of any type by matching supported search attribute values,
+// Searches for [CatalogObject]($m/CatalogObject) of any type by matching supported search attribute values,
 // excluding custom attribute values on items or item variations, against one or more of the specified query filters.
 //
-// This (`SearchCatalogObjects`) endpoint differs from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// This (`SearchCatalogObjects`) endpoint differs from the [SearchCatalogItems]($e/Catalog/SearchCatalogItems)
 // endpoint in the following aspects:
 //
 // - `SearchCatalogItems` can only search for items or item variations, whereas `SearchCatalogObjects` can search for any type of catalog objects.
@@ -345,7 +345,7 @@ func (c *Client) Search(
 // Searches for catalog items or item variations by matching supported search attribute values, including
 // custom attribute values, against one or more of the specified query filters.
 //
-// This (`SearchCatalogItems`) endpoint differs from the [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects)
+// This (`SearchCatalogItems`) endpoint differs from the [SearchCatalogObjects]($e/Catalog/SearchCatalogObjects)
 // endpoint in the following aspects:
 //
 // - `SearchCatalogItems` can only search for items or item variations, whereas `SearchCatalogObjects` can search for any type of catalog objects.
@@ -390,8 +390,8 @@ func (c *Client) SearchItems(
 	return response, nil
 }
 
-// Updates the [CatalogModifierList](entity:CatalogModifierList) objects
-// that apply to the targeted [CatalogItem](entity:CatalogItem) without having
+// Updates the [CatalogModifierList]($m/CatalogModifierList) objects
+// that apply to the targeted [CatalogItem]($m/CatalogItem) without having
 // to perform an upsert on the entire item.
 func (c *Client) UpdateItemModifierLists(
 	ctx context.Context,
@@ -431,8 +431,8 @@ func (c *Client) UpdateItemModifierLists(
 	return response, nil
 }
 
-// Updates the [CatalogTax](entity:CatalogTax) objects that apply to the
-// targeted [CatalogItem](entity:CatalogItem) without having to perform an
+// Updates the [CatalogTax]($m/CatalogTax) objects that apply to the
+// targeted [CatalogItem]($m/CatalogItem) without having to perform an
 // upsert on the entire item.
 func (c *Client) UpdateItemTaxes(
 	ctx context.Context,

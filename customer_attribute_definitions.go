@@ -48,7 +48,7 @@ type CustomerAttributeDefinitionsListRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
-// Represents a [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) response.
+// Represents a [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateCustomerCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -154,7 +154,7 @@ func (d *DeleteCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [RetrieveCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttributeDefinition) response.
+// Represents a [RetrieveCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type GetCustomerCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -212,7 +212,7 @@ func (g *GetCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [ListCustomerCustomAttributeDefinitions](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributeDefinitions) response.
+// Represents a [ListCustomerCustomAttributeDefinitions]($e/CustomerCustomAttributes/ListCustomerCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListCustomerCustomAttributeDefinitionsResponse struct {
@@ -283,7 +283,7 @@ func (l *ListCustomerCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents an [UpdateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-UpdateCustomerCustomAttributeDefinition) response.
+// Represents an [UpdateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/UpdateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateCustomerCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.

@@ -43,7 +43,7 @@ import (
 	teamclient "github.com/square/square-go-sdk/team/client"
 	teammembers "github.com/square/square-go-sdk/teammembers"
 	terminalclient "github.com/square/square-go-sdk/terminal/client"
-	v1client "github.com/square/square-go-sdk/v1/client"
+	v1transactions "github.com/square/square-go-sdk/v1transactions"
 	vendors "github.com/square/square-go-sdk/vendors"
 	webhooksclient "github.com/square/square-go-sdk/webhooks/client"
 	http "net/http"
@@ -57,6 +57,7 @@ type Client struct {
 
 	Mobile                       *mobile.Client
 	OAuth                        *oauth.Client
+	V1Transactions               *v1transactions.Client
 	ApplePay                     *applepay.Client
 	BankAccounts                 *bankaccounts.Client
 	Bookings                     *bookingsclient.Client
@@ -93,7 +94,6 @@ type Client struct {
 	CashDrawers                  *cashdrawersclient.Client
 	Customer                     *customerclient.Client
 	Team                         *teamclient.Client
-	V1                           *v1client.Client
 	Webhooks                     *webhooksclient.Client
 }
 
@@ -116,6 +116,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		header:                       options.ToHeader(),
 		Mobile:                       mobile.NewClient(opts...),
 		OAuth:                        oauth.NewClient(opts...),
+		V1Transactions:               v1transactions.NewClient(opts...),
 		ApplePay:                     applepay.NewClient(opts...),
 		BankAccounts:                 bankaccounts.NewClient(opts...),
 		Bookings:                     bookingsclient.NewClient(opts...),
@@ -152,7 +153,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 		CashDrawers:                  cashdrawersclient.NewClient(opts...),
 		Customer:                     customerclient.NewClient(opts...),
 		Team:                         teamclient.NewClient(opts...),
-		V1:                           v1client.NewClient(opts...),
 		Webhooks:                     webhooksclient.NewClient(opts...),
 	}
 }

@@ -180,7 +180,7 @@ func (c *Client) Get(
 // Disabling an already disabled card is allowed but has no effect.
 func (c *Client) Disable(
 	ctx context.Context,
-	request *squaregosdk.DisableCardRequest,
+	request *squaregosdk.CardsDisableRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DisableCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -197,7 +197,6 @@ func (c *Client) Disable(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
-	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.DisableCardResponse
 	if err := c.caller.Call(
@@ -210,7 +209,6 @@ func (c *Client) Disable(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

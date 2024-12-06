@@ -222,7 +222,7 @@ func (c *CalculateOrderResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CloneOrder](api-endpoint:Orders-CloneOrder) endpoint.
+// a request to the [CloneOrder]($e/Orders/CloneOrder) endpoint.
 type CloneOrderResponse struct {
 	// The cloned order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -463,8 +463,8 @@ func (l *ListOrderCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// A lightweight description of an [order](entity:Order) that is returned when
-// `returned_entries` is `true` on a [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
+// A lightweight description of an [order]($m/Order) that is returned when
+// `returned_entries` is `true` on a [SearchOrdersRequest]($e/Orders/SearchOrders).
 type OrderEntry struct {
 	// The ID of the order.
 	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
@@ -535,7 +535,7 @@ func (o *OrderEntry) String() string {
 }
 
 // Defines the fields that are included in the response body of a request to the
-// [PayOrder](api-endpoint:Orders-PayOrder) endpoint.
+// [PayOrder]($e/Orders/PayOrder) endpoint.
 type PayOrderResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -594,7 +594,7 @@ func (p *PayOrderResponse) String() string {
 
 // A filter based on the order `customer_id` and any tender `customer_id`
 // associated with the order. It does not filter based on the
-// [FulfillmentRecipient](entity:FulfillmentRecipient) `customer_id`.
+// [FulfillmentRecipient]($m/FulfillmentRecipient) `customer_id`.
 type SearchOrdersCustomerFilter struct {
 	// A list of customer IDs to filter by.
 	//
@@ -653,7 +653,7 @@ func (s *SearchOrdersCustomerFilter) String() string {
 // is absent, it defaults to the time of the first request for the cursor.
 //
 // **Important:** If you use the `DateTimeFilter` in a `SearchOrders` query,
-// you must set the `sort_field` in [OrdersSort](entity:SearchOrdersSort)
+// you must set the `sort_field` in [OrdersSort]($m/SearchOrdersSort)
 // to the same field you filter for. For example, if you set the `CLOSED_AT` field
 // in `DateTimeFilter`, you must set the `sort_field` in `SearchOrdersSort` to
 // `CLOSED_AT`. Otherwise, `SearchOrders` throws an error.
@@ -818,7 +818,7 @@ func (s *SearchOrdersFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Filter based on [order fulfillment](entity:Fulfillment) information.
+// Filter based on [order fulfillment]($m/Fulfillment) information.
 type SearchOrdersFulfillmentFilter struct {
 	// A list of [fulfillment types](entity:FulfillmentType) to filter
 	// for. The list returns orders if any of its fulfillments match any of the fulfillment types
@@ -939,7 +939,7 @@ func (s *SearchOrdersQuery) String() string {
 }
 
 // Either the `order_entries` or `orders` field is set, depending on whether
-// `return_entries` is set on the [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
+// `return_entries` is set on the [SearchOrdersRequest]($e/Orders/SearchOrders).
 type SearchOrdersResponse struct {
 	// A list of [OrderEntries](entity:OrderEntry) that fit the query
 	// conditions. The list is populated only if `return_entries` is set to `true` in the request.
@@ -1092,31 +1092,19 @@ func (s *SearchOrdersSort) String() string {
 type SearchOrdersSortField string
 
 const (
-	SearchOrdersSortFieldDoNotUse  SearchOrdersSortField = "DO_NOT_USE"
 	SearchOrdersSortFieldCreatedAt SearchOrdersSortField = "CREATED_AT"
 	SearchOrdersSortFieldUpdatedAt SearchOrdersSortField = "UPDATED_AT"
 	SearchOrdersSortFieldClosedAt  SearchOrdersSortField = "CLOSED_AT"
-	SearchOrdersSortFieldPaidAt    SearchOrdersSortField = "PAID_AT"
-	SearchOrdersSortFieldScore     SearchOrdersSortField = "SCORE"
-	SearchOrdersSortFieldDueAt     SearchOrdersSortField = "DUE_AT"
 )
 
 func NewSearchOrdersSortFieldFromString(s string) (SearchOrdersSortField, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return SearchOrdersSortFieldDoNotUse, nil
 	case "CREATED_AT":
 		return SearchOrdersSortFieldCreatedAt, nil
 	case "UPDATED_AT":
 		return SearchOrdersSortFieldUpdatedAt, nil
 	case "CLOSED_AT":
 		return SearchOrdersSortFieldClosedAt, nil
-	case "PAID_AT":
-		return SearchOrdersSortFieldPaidAt, nil
-	case "SCORE":
-		return SearchOrdersSortFieldScore, nil
-	case "DUE_AT":
-		return SearchOrdersSortFieldDueAt, nil
 	}
 	var t SearchOrdersSortField
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1227,7 +1215,7 @@ func (s *SearchOrdersStateFilter) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
+// a request to the [UpdateOrder]($e/Orders/UpdateOrder) endpoint.
 type UpdateOrderResponse struct {
 	// The updated order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`

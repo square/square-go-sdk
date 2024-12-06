@@ -51,7 +51,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // to get your own merchant information or specify an OAuth token to get the
 // information for the merchant that granted your application access.
 //
-// If you know the merchant ID, you can also use the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant)
+// If you know the merchant ID, you can also use the [RetrieveMerchant]($e/Merchants/RetrieveMerchant)
 // endpoint to retrieve the merchant information.
 func (c *Client) List(
 	ctx context.Context,
@@ -109,7 +109,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Lists the merchant-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the merchant-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.

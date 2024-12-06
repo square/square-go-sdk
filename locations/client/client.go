@@ -125,7 +125,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Lists the location-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the location-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.

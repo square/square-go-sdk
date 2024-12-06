@@ -40,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the [custom attributes](entity:CustomAttribute) associated with an order.
+// Lists the [custom attributes]($m/CustomAttribute) associated with an order.
 //
 // You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
 // in the same call.

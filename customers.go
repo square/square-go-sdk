@@ -156,7 +156,7 @@ type SearchCustomersRequest struct {
 	Count *bool `json:"count,omitempty" url:"-"`
 }
 
-// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes)
 // request. An individual request contains a customer ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest struct {
@@ -235,7 +235,7 @@ func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) response,
+// Represents a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BatchUpsertCustomerCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -294,7 +294,7 @@ func (b *BatchUpsertCustomerCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) operation.
 type BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse struct {
 	// The ID of the customer profile associated with the custom attribute.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
@@ -361,7 +361,7 @@ func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpser
 }
 
 // Defines the customer data provided in individual create requests for a
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
+// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) operation.
 type BulkCreateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -510,7 +510,7 @@ func (b *BulkCreateCustomerData) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) endpoint.
 type BulkCreateCustomersResponse struct {
 	// A map of responses that correspond to individual create requests, represented by
 	// key-value pairs.
@@ -574,7 +574,7 @@ func (b *BulkCreateCustomersResponse) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
+// [BulkDeleteCustomers]($e/Customers/BulkDeleteCustomers) endpoint.
 type BulkDeleteCustomersResponse struct {
 	// A map of responses that correspond to individual delete requests, represented by
 	// key-value pairs.
@@ -638,7 +638,7 @@ func (b *BulkDeleteCustomersResponse) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
+// [BulkRetrieveCustomers]($e/Customers/BulkRetrieveCustomers) endpoint.
 type BulkRetrieveCustomersResponse struct {
 	// A map of responses that correspond to individual retrieve requests, represented by
 	// key-value pairs.
@@ -702,7 +702,7 @@ func (b *BulkRetrieveCustomersResponse) String() string {
 }
 
 // Defines the customer data provided in individual update requests for a
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
+// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) operation.
 type BulkUpdateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -864,7 +864,7 @@ func (b *BulkUpdateCustomerData) String() string {
 }
 
 // Defines the fields included in the response body from the
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) endpoint.
 type BulkUpdateCustomersResponse struct {
 	// A map of responses that correspond to individual update requests, represented by
 	// key-value pairs.
@@ -928,8 +928,8 @@ func (b *BulkUpdateCustomersResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCustomer](api-endpoint:Customers-CreateCustomer) or
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+// a request to the [CreateCustomer]($e/Customers/CreateCustomer) or
+// [BulkCreateCustomers]($e/Customers/BulkCreateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
 type CreateCustomerResponse struct {
@@ -1029,8 +1029,6 @@ type Customer struct {
 	Note *string `json:"note,omitempty" url:"note,omitempty"`
 	// Represents general customer preferences.
 	Preferences *CustomerPreferences `json:"preferences,omitempty" url:"preferences,omitempty"`
-	// The customer groups and segments the customer belongs to. This deprecated field has been replaced with the dedicated `group_ids` for customer groups and the dedicated `segment_ids` field for customer segments. You can retrieve information about a given customer group and segment respectively using the Customer Groups API and Customer Segments API.
-	Groups []*CustomerGroupInfo `json:"groups,omitempty" url:"groups,omitempty"`
 	// The method used to create the customer profile.
 	// See [CustomerCreationSource](#type-customercreationsource) for possible values
 	CreationSource *CustomerCreationSource `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -1153,13 +1151,6 @@ func (c *Customer) GetPreferences() *CustomerPreferences {
 	return c.Preferences
 }
 
-func (c *Customer) GetGroups() []*CustomerGroupInfo {
-	if c == nil {
-		return nil
-	}
-	return c.Groups
-}
-
 func (c *Customer) GetCreationSource() *CustomerCreationSource {
 	if c == nil {
 		return nil
@@ -1227,7 +1218,7 @@ func (c *Customer) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
+// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue]($m/CustomerCustomAttributeFilterValue) filter when
 // searching by an `Address`-type custom attribute.
 type CustomerAddressFilter struct {
 	// The postal code to search for. Only an `exact` match is supported.
@@ -1425,8 +1416,8 @@ func (c *CustomerCreationSourceFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
-// based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
+// The custom attribute filter. Use this filter in a set of [custom attribute filters]($m/CustomerCustomAttributeFilters) to search
+// based on the value or last updated date of a customer-related [custom attribute]($m/CustomAttribute).
 type CustomerCustomAttributeFilter struct {
 	// The `key` of the [custom attribute](entity:CustomAttribute) to filter by. The key is the identifier of the custom attribute
 	// (and the corresponding custom attribute definition) and can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
@@ -1500,8 +1491,8 @@ func (c *CustomerCustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
-// of a customer-related [custom attribute](entity:CustomAttribute).
+// A type-specific filter used in a [custom attribute filter]($m/CustomerCustomAttributeFilter) to search based on the value
+// of a customer-related [custom attribute]($m/CustomAttribute).
 type CustomerCustomAttributeFilterValue struct {
 	// A filter for a query based on the value of an `Email`-type custom attribute. This filter is case-insensitive and can
 	// include `exact` or `fuzzy`, but not both.
@@ -1653,8 +1644,8 @@ func (c *CustomerCustomAttributeFilterValue) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
-// to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
+// The custom attribute filters in a set of [customer filters]($m/CustomerFilter) used in a search query. Use this filter
+// to search based on [custom attributes]($m/CustomAttribute) that are assigned to customer profiles. For more information, see
 // [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
 type CustomerCustomAttributeFilters struct {
 	// The custom attribute filters. Each filter must specify `key` and include the `filter` field with a type-specific filter,
@@ -1704,8 +1695,8 @@ func (c *CustomerCustomAttributeFilters) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
-// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+// Represents the filtering criteria in a [search query]($m/CustomerQuery) that defines how to filter
+// customer profiles returned in [SearchCustomers]($e/Customers/SearchCustomers) results.
 type CustomerFilter struct {
 	// A filter to select customers based on their creation source.
 	CreationSource *CustomerCreationSourceFilter `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -1910,63 +1901,6 @@ func (c *CustomerFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Contains some brief information about a Customer Group with its identifier included.
-type CustomerGroupInfo struct {
-	// The ID of the Customer Group.
-	ID string `json:"id" url:"id"`
-	// The name of the Customer Group.
-	Name string `json:"name" url:"name"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CustomerGroupInfo) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CustomerGroupInfo) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CustomerGroupInfo) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CustomerGroupInfo) UnmarshalJSON(data []byte) error {
-	type unmarshaler CustomerGroupInfo
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CustomerGroupInfo(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CustomerGroupInfo) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 // Indicates whether customers should be included in, or excluded from,
 // the result set when they match the filtering criteria.
 type CustomerInclusionExclusion string
@@ -2039,7 +1973,7 @@ func (c *CustomerPreferences) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
+// Represents filtering and sorting criteria for a [SearchCustomers]($e/Customers/SearchCustomers) request.
 type CustomerQuery struct {
 	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
 	// Multiple filters are combined as `AND` statements.
@@ -2101,8 +2035,8 @@ func (c *CustomerQuery) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
-// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+// Represents the sorting criteria in a [search query]($m/CustomerQuery) that defines how to sort
+// customer profiles returned in [SearchCustomers]($e/Customers/SearchCustomers) results.
 type CustomerSort struct {
 	// Indicates the fields to use as the sort key, which is either the default set of fields or `created_at`.
 	//
@@ -2190,7 +2124,7 @@ func (c CustomerSortField) Ptr() *CustomerSortField {
 	return &c
 }
 
-// Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
+// Represents the tax ID associated with a [customer profile]($m/Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
 // For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 type CustomerTaxIDs struct {
 	// The EU VAT identification number for the customer. For example, `IE3426675K`. The ID can contain alphanumeric characters only.
@@ -2641,8 +2575,8 @@ func (s *SearchCustomersResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateCustomer](api-endpoint:Customers-UpdateCustomer) or
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+// a request to the [UpdateCustomer]($e/Customers/UpdateCustomer) or
+// [BulkUpdateCustomers]($e/Customers/BulkUpdateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
 type UpdateCustomerResponse struct {

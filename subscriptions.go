@@ -44,10 +44,6 @@ type SubscriptionsDeleteActionRequest struct {
 type SwapPlanRequest struct {
 	// The ID of the subscription to swap the subscription plan for.
 	SubscriptionID string `json:"-" url:"-"`
-	// The ID of the new subscription plan.
-	//
-	// Retired in favour of `new_plan_variation_id`.
-	NewPlanID *string `json:"new_plan_id,omitempty" url:"-"`
 	// The ID of the new subscription plan variation.
 	//
 	// This field is required.
@@ -70,14 +66,6 @@ type CreateSubscriptionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The ID of the location the subscription is associated with.
 	LocationID string `json:"location_id" url:"-"`
-	// The ID of the [subscription plan](https://developer.squareup.com/docs/subscriptions-api/plans-and-variations) created using the Catalog API.
-	//
-	// Retired in favour of `plan_variation_id`.
-	//
-	// For more information, see
-	// [Set Up and Manage a Subscription Plan](https://developer.squareup.com/docs/subscriptions-api/setup-plan) and
-	// [Subscriptions Walkthrough](https://developer.squareup.com/docs/subscriptions-api/walkthrough).
-	PlanID *string `json:"plan_id,omitempty" url:"-"`
 	// The ID of the [subscription plan variation](https://developer.squareup.com/docs/subscriptions-api/plans-and-variations#plan-variations) created using the Catalog API.
 	PlanVariationID *string `json:"plan_variation_id,omitempty" url:"-"`
 	// The ID of the [customer](entity:Customer) subscribing to the subscription plan variation.
@@ -204,7 +192,7 @@ type SearchSubscriptionsRequest struct {
 }
 
 // Defines output parameters in a response of the
-// [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
+// [BulkSwapPlan]($e/Subscriptions/BulkSwapPlan) endpoint.
 type BulkSwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -262,7 +250,7 @@ func (b *BulkSwapPlanResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
+// [CancelSubscription]($e/Subscriptions/CancelSubscription) endpoint.
 type CancelSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -329,7 +317,7 @@ func (c *CancelSubscriptionResponse) String() string {
 }
 
 // Defines output parameters in a request to the
-// [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
+// [ChangeBillingAnchorDate]($e/Subscriptions/ChangeBillingAnchorDate) endpoint.
 type ChangeBillingAnchorDateResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -399,15 +387,12 @@ func (c *ChangeBillingAnchorDateResponse) String() string {
 type ChangeTiming string
 
 const (
-	ChangeTimingDefaultChangeTimingTypeDoNotUse ChangeTiming = "DEFAULT_CHANGE_TIMING_TYPE_DO_NOT_USE"
-	ChangeTimingImmediate                       ChangeTiming = "IMMEDIATE"
-	ChangeTimingEndOfBillingCycle               ChangeTiming = "END_OF_BILLING_CYCLE"
+	ChangeTimingImmediate         ChangeTiming = "IMMEDIATE"
+	ChangeTimingEndOfBillingCycle ChangeTiming = "END_OF_BILLING_CYCLE"
 )
 
 func NewChangeTimingFromString(s string) (ChangeTiming, error) {
 	switch s {
-	case "DEFAULT_CHANGE_TIMING_TYPE_DO_NOT_USE":
-		return ChangeTimingDefaultChangeTimingTypeDoNotUse, nil
 	case "IMMEDIATE":
 		return ChangeTimingImmediate, nil
 	case "END_OF_BILLING_CYCLE":
@@ -422,7 +407,7 @@ func (c ChangeTiming) Ptr() *ChangeTiming {
 }
 
 // Defines output parameters in a response from the
-// [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
+// [CreateSubscription]($e/Subscriptions/CreateSubscription) endpoint.
 type CreateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -482,7 +467,7 @@ func (c *CreateSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
+// Defines output parameters in a response of the [DeleteSubscriptionAction]($e/Subscriptions/DeleteSubscriptionAction)
 // endpoint.
 type DeleteSubscriptionActionResponse struct {
 	// Errors encountered during the request.
@@ -541,7 +526,7 @@ func (d *DeleteSubscriptionActionResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
+// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) endpoint.
 type GetSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -599,7 +584,7 @@ func (g *GetSubscriptionResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
+// [ListSubscriptionEvents]($e/Subscriptions/ListSubscriptionEvents).
 type ListSubscriptionEventsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -670,7 +655,7 @@ func (l *ListSubscriptionEventsResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
+// [PauseSubscription]($e/Subscriptions/PauseSubscription) endpoint.
 type PauseSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -869,7 +854,7 @@ func (p *PhaseInput) String() string {
 }
 
 // Defines output parameters in a response from the
-// [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
+// [ResumeSubscription]($e/Subscriptions/ResumeSubscription) endpoint.
 type ResumeSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -936,7 +921,7 @@ func (r *ResumeSubscriptionResponse) String() string {
 }
 
 // Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
-// the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+// the [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
 type SearchSubscriptionsFilter struct {
 	// A filter to select subscriptions based on the subscribing customer IDs.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
@@ -1051,7 +1036,7 @@ func (s *SearchSubscriptionsQuery) String() string {
 }
 
 // Defines output parameters in a response from the
-// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
 type SearchSubscriptionsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1130,8 +1115,6 @@ type Subscription struct {
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// The ID of the location associated with the subscription.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
-	// The ID of the subscribed-to [subscription plan](entity:CatalogSubscriptionPlan).
-	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
 	// The ID of the subscribed-to [subscription plan variation](entity:CatalogSubscriptionPlanVariation).
 	PlanVariationID *string `json:"plan_variation_id,omitempty" url:"plan_variation_id,omitempty"`
 	// The ID of the subscribing [customer](entity:Customer) profile.
@@ -1180,16 +1163,6 @@ type Subscription struct {
 	// The ID of the [subscriber's](entity:Customer) [card](entity:Card)
 	// used to charge for the subscription.
 	CardID *string `json:"card_id,omitempty" url:"card_id,omitempty"`
-	// The `YYYY-MM-DD`-formatted date (for example, 2013-01-15) up to when the subscriber is invoiced for the
-	// subscription.
-	//
-	// After the invoice is sent for a given billing period,
-	// this date will be the last day of the billing period.
-	// For example,
-	// suppose for the month of May a subscriber gets an invoice
-	// (or charged the card) on May 1. For the monthly billing scenario,
-	// this date is then set to May 31.
-	PaidUntilDate *string `json:"paid_until_date,omitempty" url:"paid_until_date,omitempty"`
 	// Timezone that will be used in date calculations for the subscription.
 	// Defaults to the timezone of the location based on `location_id`.
 	// Format: the IANA Timezone Database identifier for the location timezone (for example, `America/Los_Angeles`).
@@ -1197,9 +1170,9 @@ type Subscription struct {
 	// The origination details of the subscription.
 	Source *SubscriptionSource `json:"source,omitempty" url:"source,omitempty"`
 	// The list of scheduled actions on this subscription. It is set only in the response from
-	// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) with the query parameter
+	// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) with the query parameter
 	// of `include=actions` or from
-	// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) with the input parameter
+	// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) with the input parameter
 	// of `include:["actions"]`.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 	// The day of the month on which the subscription will issue invoices and publish orders.
@@ -1223,13 +1196,6 @@ func (s *Subscription) GetLocationID() *string {
 		return nil
 	}
 	return s.LocationID
-}
-
-func (s *Subscription) GetPlanID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PlanID
 }
 
 func (s *Subscription) GetPlanVariationID() *string {
@@ -1316,13 +1282,6 @@ func (s *Subscription) GetCardID() *string {
 	return s.CardID
 }
 
-func (s *Subscription) GetPaidUntilDate() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PaidUntilDate
-}
-
 func (s *Subscription) GetTimezone() *string {
 	if s == nil {
 		return nil
@@ -1399,8 +1358,6 @@ type SubscriptionAction struct {
 	Type *SubscriptionActionType `json:"type,omitempty" url:"type,omitempty"`
 	// The `YYYY-MM-DD`-formatted date when the action occurs on the subscription.
 	EffectiveDate *string `json:"effective_date,omitempty" url:"effective_date,omitempty"`
-	// The target subscription plan a subscription switches to, for a `SWAP_PLAN` action.
-	NewPlanID *string `json:"new_plan_id,omitempty" url:"new_plan_id,omitempty"`
 	// The new billing anchor day value, for a `CHANGE_BILLING_ANCHOR_DATE` action.
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
 	// A list of Phases, to pass phase-specific information used in the swap.
@@ -1431,13 +1388,6 @@ func (s *SubscriptionAction) GetEffectiveDate() *string {
 		return nil
 	}
 	return s.EffectiveDate
-}
-
-func (s *SubscriptionAction) GetNewPlanID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.NewPlanID
 }
 
 func (s *SubscriptionAction) GetMonthlyBillingAnchorDate() *int {
@@ -1497,18 +1447,15 @@ func (s *SubscriptionAction) String() string {
 type SubscriptionActionType string
 
 const (
-	SubscriptionActionTypeDefaultSubscriptionActionTypeDoNotUse SubscriptionActionType = "DEFAULT_SUBSCRIPTION_ACTION_TYPE_DO_NOT_USE"
-	SubscriptionActionTypeCancel                                SubscriptionActionType = "CANCEL"
-	SubscriptionActionTypePause                                 SubscriptionActionType = "PAUSE"
-	SubscriptionActionTypeResume                                SubscriptionActionType = "RESUME"
-	SubscriptionActionTypeSwapPlan                              SubscriptionActionType = "SWAP_PLAN"
-	SubscriptionActionTypeChangeBillingAnchorDate               SubscriptionActionType = "CHANGE_BILLING_ANCHOR_DATE"
+	SubscriptionActionTypeCancel                  SubscriptionActionType = "CANCEL"
+	SubscriptionActionTypePause                   SubscriptionActionType = "PAUSE"
+	SubscriptionActionTypeResume                  SubscriptionActionType = "RESUME"
+	SubscriptionActionTypeSwapPlan                SubscriptionActionType = "SWAP_PLAN"
+	SubscriptionActionTypeChangeBillingAnchorDate SubscriptionActionType = "CHANGE_BILLING_ANCHOR_DATE"
 )
 
 func NewSubscriptionActionTypeFromString(s string) (SubscriptionActionType, error) {
 	switch s {
-	case "DEFAULT_SUBSCRIPTION_ACTION_TYPE_DO_NOT_USE":
-		return SubscriptionActionTypeDefaultSubscriptionActionTypeDoNotUse, nil
 	case "CANCEL":
 		return SubscriptionActionTypeCancel, nil
 	case "PAUSE":
@@ -1537,8 +1484,6 @@ type SubscriptionEvent struct {
 	SubscriptionEventType SubscriptionEventSubscriptionEventType `json:"subscription_event_type" url:"subscription_event_type"`
 	// The `YYYY-MM-DD`-formatted date (for example, 2013-01-15) when the subscription event occurred.
 	EffectiveDate string `json:"effective_date" url:"effective_date"`
-	// The ID of the subscription plan associated with the subscription.
-	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
 	// The day-of-the-month the billing anchor date was changed to, if applicable.
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
 	// Additional information about the subscription event.
@@ -1571,13 +1516,6 @@ func (s *SubscriptionEvent) GetEffectiveDate() string {
 		return ""
 	}
 	return s.EffectiveDate
-}
-
-func (s *SubscriptionEvent) GetPlanID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PlanID
 }
 
 func (s *SubscriptionEvent) GetMonthlyBillingAnchorDate() *int {
@@ -1708,7 +1646,6 @@ const (
 	SubscriptionEventInfoCodeCustomerNoEmail             SubscriptionEventInfoCode = "CUSTOMER_NO_EMAIL"
 	SubscriptionEventInfoCodeCustomerNoName              SubscriptionEventInfoCode = "CUSTOMER_NO_NAME"
 	SubscriptionEventInfoCodeUserProvided                SubscriptionEventInfoCode = "USER_PROVIDED"
-	SubscriptionEventInfoCodeInvoiceInvalid              SubscriptionEventInfoCode = "INVOICE_INVALID"
 )
 
 func NewSubscriptionEventInfoCodeFromString(s string) (SubscriptionEventInfoCode, error) {
@@ -1725,8 +1662,6 @@ func NewSubscriptionEventInfoCodeFromString(s string) (SubscriptionEventInfoCode
 		return SubscriptionEventInfoCodeCustomerNoName, nil
 	case "USER_PROVIDED":
 		return SubscriptionEventInfoCodeUserProvided, nil
-	case "INVOICE_INVALID":
-		return SubscriptionEventInfoCodeInvoiceInvalid, nil
 	}
 	var t SubscriptionEventInfoCode
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1740,20 +1675,17 @@ func (s SubscriptionEventInfoCode) Ptr() *SubscriptionEventInfoCode {
 type SubscriptionEventSubscriptionEventType string
 
 const (
-	SubscriptionEventSubscriptionEventTypeDefaultSubscriptionEventTypeDoNotUse SubscriptionEventSubscriptionEventType = "DEFAULT_SUBSCRIPTION_EVENT_TYPE_DO_NOT_USE"
-	SubscriptionEventSubscriptionEventTypeStartSubscription                    SubscriptionEventSubscriptionEventType = "START_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypePlanChange                           SubscriptionEventSubscriptionEventType = "PLAN_CHANGE"
-	SubscriptionEventSubscriptionEventTypeStopSubscription                     SubscriptionEventSubscriptionEventType = "STOP_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeDeactivateSubscription               SubscriptionEventSubscriptionEventType = "DEACTIVATE_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeResumeSubscription                   SubscriptionEventSubscriptionEventType = "RESUME_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypePauseSubscription                    SubscriptionEventSubscriptionEventType = "PAUSE_SUBSCRIPTION"
-	SubscriptionEventSubscriptionEventTypeBillingAnchorDateChanged             SubscriptionEventSubscriptionEventType = "BILLING_ANCHOR_DATE_CHANGED"
+	SubscriptionEventSubscriptionEventTypeStartSubscription        SubscriptionEventSubscriptionEventType = "START_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypePlanChange               SubscriptionEventSubscriptionEventType = "PLAN_CHANGE"
+	SubscriptionEventSubscriptionEventTypeStopSubscription         SubscriptionEventSubscriptionEventType = "STOP_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeDeactivateSubscription   SubscriptionEventSubscriptionEventType = "DEACTIVATE_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeResumeSubscription       SubscriptionEventSubscriptionEventType = "RESUME_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypePauseSubscription        SubscriptionEventSubscriptionEventType = "PAUSE_SUBSCRIPTION"
+	SubscriptionEventSubscriptionEventTypeBillingAnchorDateChanged SubscriptionEventSubscriptionEventType = "BILLING_ANCHOR_DATE_CHANGED"
 )
 
 func NewSubscriptionEventSubscriptionEventTypeFromString(s string) (SubscriptionEventSubscriptionEventType, error) {
 	switch s {
-	case "DEFAULT_SUBSCRIPTION_EVENT_TYPE_DO_NOT_USE":
-		return SubscriptionEventSubscriptionEventTypeDefaultSubscriptionEventTypeDoNotUse, nil
 	case "START_SUBSCRIPTION":
 		return SubscriptionEventSubscriptionEventTypeStartSubscription, nil
 	case "PLAN_CHANGE":
@@ -1831,18 +1763,15 @@ func (s *SubscriptionSource) String() string {
 type SubscriptionStatus string
 
 const (
-	SubscriptionStatusDefaultSubscriptionStatusDoNotUse SubscriptionStatus = "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE"
-	SubscriptionStatusPending                           SubscriptionStatus = "PENDING"
-	SubscriptionStatusActive                            SubscriptionStatus = "ACTIVE"
-	SubscriptionStatusCanceled                          SubscriptionStatus = "CANCELED"
-	SubscriptionStatusDeactivated                       SubscriptionStatus = "DEACTIVATED"
-	SubscriptionStatusPaused                            SubscriptionStatus = "PAUSED"
+	SubscriptionStatusPending     SubscriptionStatus = "PENDING"
+	SubscriptionStatusActive      SubscriptionStatus = "ACTIVE"
+	SubscriptionStatusCanceled    SubscriptionStatus = "CANCELED"
+	SubscriptionStatusDeactivated SubscriptionStatus = "DEACTIVATED"
+	SubscriptionStatusPaused      SubscriptionStatus = "PAUSED"
 )
 
 func NewSubscriptionStatusFromString(s string) (SubscriptionStatus, error) {
 	switch s {
-	case "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE":
-		return SubscriptionStatusDefaultSubscriptionStatusDoNotUse, nil
 	case "PENDING":
 		return SubscriptionStatusPending, nil
 	case "ACTIVE":
@@ -1863,7 +1792,7 @@ func (s SubscriptionStatus) Ptr() *SubscriptionStatus {
 }
 
 // Defines output parameters in a response of the
-// [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
+// [SwapPlan]($e/Subscriptions/SwapPlan) endpoint.
 type SwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1930,7 +1859,7 @@ func (s *SwapPlanResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
+// [UpdateSubscription]($e/Subscriptions/UpdateSubscription) endpoint.
 type UpdateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

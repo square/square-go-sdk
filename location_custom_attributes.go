@@ -137,7 +137,7 @@ type UpsertLocationCustomAttributeRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest struct {
@@ -188,7 +188,7 @@ func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes) response,
+// Represents a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -247,7 +247,7 @@ func (b *BulkDeleteLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
 // request.
 type BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse struct {
 	// The ID of the location associated with the custom attribute.
@@ -305,7 +305,7 @@ func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDelete
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes)
 // request. An individual request contains a location ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest struct {
@@ -382,7 +382,7 @@ func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) response,
+// Represents a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -441,7 +441,7 @@ func (b *BulkUpsertLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) operation.
 type BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse struct {
 	// The ID of the location associated with the custom attribute.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
@@ -507,7 +507,7 @@ func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CreateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-CreateLocationCustomAttributeDefinition) response.
+// Represents a [CreateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/CreateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateLocationCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -613,7 +613,7 @@ func (d *DeleteLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteLocationCustomAttribute](api-endpoint:LocationCustomAttributes-DeleteLocationCustomAttribute) response.
+// Represents a [DeleteLocationCustomAttribute]($e/LocationCustomAttributes/DeleteLocationCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteLocationCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -662,7 +662,7 @@ func (d *DeleteLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [ListLocationCustomAttributes](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributes) response.
+// Represents a [ListLocationCustomAttributes]($e/LocationCustomAttributes/ListLocationCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListLocationCustomAttributesResponse struct {
@@ -734,7 +734,7 @@ func (l *ListLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [RetrieveLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttributeDefinition) response.
+// Represents a [RetrieveLocationCustomAttributeDefinition]($e/LocationCustomAttributes/RetrieveLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -792,7 +792,7 @@ func (r *RetrieveLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveLocationCustomAttribute](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttribute) response.
+// Represents a [RetrieveLocationCustomAttribute]($e/LocationCustomAttributes/RetrieveLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -851,7 +851,7 @@ func (r *RetrieveLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an [UpdateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-UpdateLocationCustomAttributeDefinition) response.
+// Represents an [UpdateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/UpdateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateLocationCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -909,7 +909,7 @@ func (u *UpdateLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertLocationCustomAttribute](api-endpoint:LocationCustomAttributes-UpsertLocationCustomAttribute) response.
+// Represents an [UpsertLocationCustomAttribute]($e/LocationCustomAttributes/UpsertLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertLocationCustomAttributeResponse struct {
 	// The new or updated custom attribute.

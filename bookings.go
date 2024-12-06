@@ -657,7 +657,7 @@ func (b *BulkRetrieveBookingsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
+// Response payload for the [BulkRetrieveTeamMemberBookingProfiles]($e/Bookings/BulkRetrieveTeamMemberBookingProfiles) endpoint.
 type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
 	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`
@@ -1362,7 +1362,7 @@ func (g *GetBusinessBookingProfileResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
+// Represents a [ListBookingCustomAttributeDefinitions]($e/BookingCustomAttributes/ListBookingCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListBookingCustomAttributeDefinitionsResponse struct {

@@ -154,7 +154,7 @@ func (c *CancelInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
+// Represents a [CreateInvoiceAttachment]($e/Invoices/CreateInvoiceAttachment) response.
 type CreateInvoiceAttachmentResponse struct {
 	// Metadata about the attachment that was added to the invoice.
 	Attachment *InvoiceAttachment `json:"attachment,omitempty" url:"attachment,omitempty"`
@@ -268,7 +268,7 @@ func (c *CreateInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
+// Represents a [DeleteInvoiceAttachment]($e/Invoices/DeleteInvoiceAttachment) response.
 type DeleteInvoiceAttachmentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -745,7 +745,7 @@ func (i *Invoice) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
+// The payment methods that customers can use to pay an [invoice]($m/Invoice) on the Square-hosted invoice payment page.
 type InvoiceAcceptedPaymentMethods struct {
 	// Indicates whether credit card or debit card payments are accepted. The default value is `false`.
 	Card *bool `json:"card,omitempty" url:"card,omitempty"`
@@ -837,7 +837,7 @@ func (i *InvoiceAcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents a file attached to an [invoice](entity:Invoice).
+// Represents a file attached to an [invoice]($m/Invoice).
 type InvoiceAttachment struct {
 	// The Square-assigned ID of the attachment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -942,20 +942,17 @@ func (i *InvoiceAttachment) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Indicates the automatic payment method for an [invoice payment request](entity:InvoicePaymentRequest).
+// Indicates the automatic payment method for an [invoice payment request]($m/InvoicePaymentRequest).
 type InvoiceAutomaticPaymentSource string
 
 const (
-	InvoiceAutomaticPaymentSourceInvoiceAutomaticPaymentSourceDoNotUse InvoiceAutomaticPaymentSource = "INVOICE_AUTOMATIC_PAYMENT_SOURCE_DO_NOT_USE"
-	InvoiceAutomaticPaymentSourceNone                                  InvoiceAutomaticPaymentSource = "NONE"
-	InvoiceAutomaticPaymentSourceCardOnFile                            InvoiceAutomaticPaymentSource = "CARD_ON_FILE"
-	InvoiceAutomaticPaymentSourceBankOnFile                            InvoiceAutomaticPaymentSource = "BANK_ON_FILE"
+	InvoiceAutomaticPaymentSourceNone       InvoiceAutomaticPaymentSource = "NONE"
+	InvoiceAutomaticPaymentSourceCardOnFile InvoiceAutomaticPaymentSource = "CARD_ON_FILE"
+	InvoiceAutomaticPaymentSourceBankOnFile InvoiceAutomaticPaymentSource = "BANK_ON_FILE"
 )
 
 func NewInvoiceAutomaticPaymentSourceFromString(s string) (InvoiceAutomaticPaymentSource, error) {
 	switch s {
-	case "INVOICE_AUTOMATIC_PAYMENT_SOURCE_DO_NOT_USE":
-		return InvoiceAutomaticPaymentSourceInvoiceAutomaticPaymentSourceDoNotUse, nil
 	case "NONE":
 		return InvoiceAutomaticPaymentSourceNone, nil
 	case "CARD_ON_FILE":
@@ -1047,15 +1044,12 @@ func (i *InvoiceCustomField) String() string {
 type InvoiceCustomFieldPlacement string
 
 const (
-	InvoiceCustomFieldPlacementUnknownPlacementDoNotUse InvoiceCustomFieldPlacement = "UNKNOWN_PLACEMENT_DO_NOT_USE"
-	InvoiceCustomFieldPlacementAboveLineItems           InvoiceCustomFieldPlacement = "ABOVE_LINE_ITEMS"
-	InvoiceCustomFieldPlacementBelowLineItems           InvoiceCustomFieldPlacement = "BELOW_LINE_ITEMS"
+	InvoiceCustomFieldPlacementAboveLineItems InvoiceCustomFieldPlacement = "ABOVE_LINE_ITEMS"
+	InvoiceCustomFieldPlacementBelowLineItems InvoiceCustomFieldPlacement = "BELOW_LINE_ITEMS"
 )
 
 func NewInvoiceCustomFieldPlacementFromString(s string) (InvoiceCustomFieldPlacement, error) {
 	switch s {
-	case "UNKNOWN_PLACEMENT_DO_NOT_USE":
-		return InvoiceCustomFieldPlacementUnknownPlacementDoNotUse, nil
 	case "ABOVE_LINE_ITEMS":
 		return InvoiceCustomFieldPlacementAboveLineItems, nil
 	case "BELOW_LINE_ITEMS":
@@ -1069,20 +1063,17 @@ func (i InvoiceCustomFieldPlacement) Ptr() *InvoiceCustomFieldPlacement {
 	return &i
 }
 
-// Indicates how Square delivers the [invoice](entity:Invoice) to the customer.
+// Indicates how Square delivers the [invoice]($m/Invoice) to the customer.
 type InvoiceDeliveryMethod string
 
 const (
-	InvoiceDeliveryMethodInvoiceDeliveryMethodDoNotUse InvoiceDeliveryMethod = "INVOICE_DELIVERY_METHOD_DO_NOT_USE"
-	InvoiceDeliveryMethodEmail                         InvoiceDeliveryMethod = "EMAIL"
-	InvoiceDeliveryMethodShareManually                 InvoiceDeliveryMethod = "SHARE_MANUALLY"
-	InvoiceDeliveryMethodSms                           InvoiceDeliveryMethod = "SMS"
+	InvoiceDeliveryMethodEmail         InvoiceDeliveryMethod = "EMAIL"
+	InvoiceDeliveryMethodShareManually InvoiceDeliveryMethod = "SHARE_MANUALLY"
+	InvoiceDeliveryMethodSms           InvoiceDeliveryMethod = "SMS"
 )
 
 func NewInvoiceDeliveryMethodFromString(s string) (InvoiceDeliveryMethod, error) {
 	switch s {
-	case "INVOICE_DELIVERY_METHOD_DO_NOT_USE":
-		return InvoiceDeliveryMethodInvoiceDeliveryMethodDoNotUse, nil
 	case "EMAIL":
 		return InvoiceDeliveryMethodEmail, nil
 	case "SHARE_MANUALLY":
@@ -1252,16 +1243,13 @@ func (i *InvoicePaymentReminder) String() string {
 type InvoicePaymentReminderStatus string
 
 const (
-	InvoicePaymentReminderStatusInvoicePaymentReminderStatusDoNotUse InvoicePaymentReminderStatus = "INVOICE_PAYMENT_REMINDER_STATUS_DO_NOT_USE"
-	InvoicePaymentReminderStatusPending                              InvoicePaymentReminderStatus = "PENDING"
-	InvoicePaymentReminderStatusNotApplicable                        InvoicePaymentReminderStatus = "NOT_APPLICABLE"
-	InvoicePaymentReminderStatusSent                                 InvoicePaymentReminderStatus = "SENT"
+	InvoicePaymentReminderStatusPending       InvoicePaymentReminderStatus = "PENDING"
+	InvoicePaymentReminderStatusNotApplicable InvoicePaymentReminderStatus = "NOT_APPLICABLE"
+	InvoicePaymentReminderStatusSent          InvoicePaymentReminderStatus = "SENT"
 )
 
 func NewInvoicePaymentReminderStatusFromString(s string) (InvoicePaymentReminderStatus, error) {
 	switch s {
-	case "INVOICE_PAYMENT_REMINDER_STATUS_DO_NOT_USE":
-		return InvoicePaymentReminderStatusInvoicePaymentReminderStatusDoNotUse, nil
 	case "PENDING":
 		return InvoicePaymentReminderStatusPending, nil
 	case "NOT_APPLICABLE":
@@ -1277,7 +1265,7 @@ func (i InvoicePaymentReminderStatus) Ptr() *InvoicePaymentReminderStatus {
 	return &i
 }
 
-// Represents a payment request for an [invoice](entity:Invoice). Invoices can specify a maximum
+// Represents a payment request for an [invoice]($m/Invoice). Invoices can specify a maximum
 // of 13 payment requests, with up to 12 `INSTALLMENT` request types. For more information,
 // see [Configuring payment requests](https://developer.squareup.com/docs/invoices-api/create-publish-invoices#payment-requests).
 //
@@ -1713,20 +1701,17 @@ func (i *InvoiceRecipientTaxIDs) String() string {
 type InvoiceRequestMethod string
 
 const (
-	InvoiceRequestMethodInvoiceRequestMethodDoNotUse InvoiceRequestMethod = "INVOICE_REQUEST_METHOD_DO_NOT_USE"
-	InvoiceRequestMethodEmail                        InvoiceRequestMethod = "EMAIL"
-	InvoiceRequestMethodChargeCardOnFile             InvoiceRequestMethod = "CHARGE_CARD_ON_FILE"
-	InvoiceRequestMethodShareManually                InvoiceRequestMethod = "SHARE_MANUALLY"
-	InvoiceRequestMethodChargeBankOnFile             InvoiceRequestMethod = "CHARGE_BANK_ON_FILE"
-	InvoiceRequestMethodSms                          InvoiceRequestMethod = "SMS"
-	InvoiceRequestMethodSmsChargeCardOnFile          InvoiceRequestMethod = "SMS_CHARGE_CARD_ON_FILE"
-	InvoiceRequestMethodSmsChargeBankOnFile          InvoiceRequestMethod = "SMS_CHARGE_BANK_ON_FILE"
+	InvoiceRequestMethodEmail               InvoiceRequestMethod = "EMAIL"
+	InvoiceRequestMethodChargeCardOnFile    InvoiceRequestMethod = "CHARGE_CARD_ON_FILE"
+	InvoiceRequestMethodShareManually       InvoiceRequestMethod = "SHARE_MANUALLY"
+	InvoiceRequestMethodChargeBankOnFile    InvoiceRequestMethod = "CHARGE_BANK_ON_FILE"
+	InvoiceRequestMethodSms                 InvoiceRequestMethod = "SMS"
+	InvoiceRequestMethodSmsChargeCardOnFile InvoiceRequestMethod = "SMS_CHARGE_CARD_ON_FILE"
+	InvoiceRequestMethodSmsChargeBankOnFile InvoiceRequestMethod = "SMS_CHARGE_BANK_ON_FILE"
 )
 
 func NewInvoiceRequestMethodFromString(s string) (InvoiceRequestMethod, error) {
 	switch s {
-	case "INVOICE_REQUEST_METHOD_DO_NOT_USE":
-		return InvoiceRequestMethodInvoiceRequestMethodDoNotUse, nil
 	case "EMAIL":
 		return InvoiceRequestMethodEmail, nil
 	case "CHARGE_CARD_ON_FILE":
@@ -1755,16 +1740,13 @@ func (i InvoiceRequestMethod) Ptr() *InvoiceRequestMethod {
 type InvoiceRequestType string
 
 const (
-	InvoiceRequestTypeInvoiceRequestTypeDoNotUse InvoiceRequestType = "INVOICE_REQUEST_TYPE_DO_NOT_USE"
-	InvoiceRequestTypeBalance                    InvoiceRequestType = "BALANCE"
-	InvoiceRequestTypeDeposit                    InvoiceRequestType = "DEPOSIT"
-	InvoiceRequestTypeInstallment                InvoiceRequestType = "INSTALLMENT"
+	InvoiceRequestTypeBalance     InvoiceRequestType = "BALANCE"
+	InvoiceRequestTypeDeposit     InvoiceRequestType = "DEPOSIT"
+	InvoiceRequestTypeInstallment InvoiceRequestType = "INSTALLMENT"
 )
 
 func NewInvoiceRequestTypeFromString(s string) (InvoiceRequestType, error) {
 	switch s {
-	case "INVOICE_REQUEST_TYPE_DO_NOT_USE":
-		return InvoiceRequestTypeInvoiceRequestTypeDoNotUse, nil
 	case "BALANCE":
 		return InvoiceRequestTypeBalance, nil
 	case "DEPOSIT":
@@ -1784,20 +1766,13 @@ func (i InvoiceRequestType) Ptr() *InvoiceRequestType {
 type InvoiceSort struct {
 	// The field to use for sorting.
 	// See [InvoiceSortField](#type-invoicesortfield) for possible values
-	Field InvoiceSortField `json:"field" url:"field"`
+	Field InvoiceSortField `json:"field,omitempty" url:"field,omitempty"`
 	// The order to use for sorting the results.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (i *InvoiceSort) GetField() InvoiceSortField {
-	if i == nil {
-		return ""
-	}
-	return i.Field
 }
 
 func (i *InvoiceSort) GetOrder() *SortOrder {
@@ -1840,49 +1815,26 @@ func (i *InvoiceSort) String() string {
 }
 
 // The field to use for sorting.
-type InvoiceSortField string
-
-const (
-	InvoiceSortFieldInvoiceSortFieldDoNotUse InvoiceSortField = "INVOICE_SORT_FIELD_DO_NOT_USE"
-	InvoiceSortFieldInvoiceSortDate          InvoiceSortField = "INVOICE_SORT_DATE"
-)
-
-func NewInvoiceSortFieldFromString(s string) (InvoiceSortField, error) {
-	switch s {
-	case "INVOICE_SORT_FIELD_DO_NOT_USE":
-		return InvoiceSortFieldInvoiceSortFieldDoNotUse, nil
-	case "INVOICE_SORT_DATE":
-		return InvoiceSortFieldInvoiceSortDate, nil
-	}
-	var t InvoiceSortField
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (i InvoiceSortField) Ptr() *InvoiceSortField {
-	return &i
-}
+type InvoiceSortField = string
 
 // Indicates the status of an invoice.
 type InvoiceStatus string
 
 const (
-	InvoiceStatusInvoiceStatusDoNotUse InvoiceStatus = "INVOICE_STATUS_DO_NOT_USE"
-	InvoiceStatusDraft                 InvoiceStatus = "DRAFT"
-	InvoiceStatusUnpaid                InvoiceStatus = "UNPAID"
-	InvoiceStatusScheduled             InvoiceStatus = "SCHEDULED"
-	InvoiceStatusPartiallyPaid         InvoiceStatus = "PARTIALLY_PAID"
-	InvoiceStatusPaid                  InvoiceStatus = "PAID"
-	InvoiceStatusPartiallyRefunded     InvoiceStatus = "PARTIALLY_REFUNDED"
-	InvoiceStatusRefunded              InvoiceStatus = "REFUNDED"
-	InvoiceStatusCanceled              InvoiceStatus = "CANCELED"
-	InvoiceStatusFailed                InvoiceStatus = "FAILED"
-	InvoiceStatusPaymentPending        InvoiceStatus = "PAYMENT_PENDING"
+	InvoiceStatusDraft             InvoiceStatus = "DRAFT"
+	InvoiceStatusUnpaid            InvoiceStatus = "UNPAID"
+	InvoiceStatusScheduled         InvoiceStatus = "SCHEDULED"
+	InvoiceStatusPartiallyPaid     InvoiceStatus = "PARTIALLY_PAID"
+	InvoiceStatusPaid              InvoiceStatus = "PAID"
+	InvoiceStatusPartiallyRefunded InvoiceStatus = "PARTIALLY_REFUNDED"
+	InvoiceStatusRefunded          InvoiceStatus = "REFUNDED"
+	InvoiceStatusCanceled          InvoiceStatus = "CANCELED"
+	InvoiceStatusFailed            InvoiceStatus = "FAILED"
+	InvoiceStatusPaymentPending    InvoiceStatus = "PAYMENT_PENDING"
 )
 
 func NewInvoiceStatusFromString(s string) (InvoiceStatus, error) {
 	switch s {
-	case "INVOICE_STATUS_DO_NOT_USE":
-		return InvoiceStatusInvoiceStatusDoNotUse, nil
 	case "DRAFT":
 		return InvoiceStatusDraft, nil
 	case "UNPAID":

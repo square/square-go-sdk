@@ -87,7 +87,7 @@ type BatchGetCatalogObjectsRequest struct {
 	IncludeRelatedObjects *bool `json:"include_related_objects,omitempty" url:"-"`
 	// The specific version of the catalog objects to be included in the response.
 	// This allows you to retrieve historical versions of objects. The specified version value is matched against
-	// the [CatalogObject](entity:CatalogObject)s' `version` attribute. If not included, results will
+	// the [CatalogObject]($m/CatalogObject)s' `version` attribute. If not included, results will
 	// be from the current version of the catalog.
 	CatalogVersion *int64 `json:"catalog_version,omitempty" url:"-"`
 	// Indicates whether to include (`true`) or not (`false`) in the response deleted objects, namely, those with the `is_deleted` attribute set to `true`.
@@ -156,7 +156,7 @@ type CatalogListRequest struct {
 	Types *string `json:"-" url:"types,omitempty"`
 	// The specific version of the catalog objects to be included in the response.
 	// This allows you to retrieve historical versions of objects. The specified version value is matched against
-	// the [CatalogObject](entity:CatalogObject)s' `version` attribute. If not included, results will be from the
+	// the [CatalogObject]($m/CatalogObject)s' `version` attribute. If not included, results will be from the
 	// current version of the catalog.
 	CatalogVersion *int64 `json:"-" url:"catalog_version,omitempty"`
 }
@@ -216,12 +216,11 @@ type SearchCatalogObjectsRequest struct {
 }
 
 // Defines the values for the `archived_state` query expression
-// used in [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// used in [SearchCatalogItems]($e/Catalog/SearchCatalogItems)
 // to return the archived, not archived or either type of catalog items.
 type ArchivedState string
 
 const (
-	ArchivedStateArchivedStateDoNotUse    ArchivedState = "ARCHIVED_STATE_DO_NOT_USE"
 	ArchivedStateArchivedStateNotArchived ArchivedState = "ARCHIVED_STATE_NOT_ARCHIVED"
 	ArchivedStateArchivedStateArchived    ArchivedState = "ARCHIVED_STATE_ARCHIVED"
 	ArchivedStateArchivedStateAll         ArchivedState = "ARCHIVED_STATE_ALL"
@@ -229,8 +228,6 @@ const (
 
 func NewArchivedStateFromString(s string) (ArchivedState, error) {
 	switch s {
-	case "ARCHIVED_STATE_DO_NOT_USE":
-		return ArchivedStateArchivedStateDoNotUse, nil
 	case "ARCHIVED_STATE_NOT_ARCHIVED":
 		return ArchivedStateArchivedStateNotArchived, nil
 	case "ARCHIVED_STATE_ARCHIVED":
@@ -713,14 +710,14 @@ func (c *CatalogObjectBatch) String() string {
 
 // A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
 //
-// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects).
+// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects]($e/Catalog/SearchCatalogObjects).
 // Any combination of the following types may be used together:
 //
-// - [exact_query](entity:CatalogQueryExact)
-// - [prefix_query](entity:CatalogQueryPrefix)
-// - [range_query](entity:CatalogQueryRange)
-// - [sorted_attribute_query](entity:CatalogQuerySortedAttribute)
-// - [text_query](entity:CatalogQueryText)
+// - [exact_query]($m/CatalogQueryExact)
+// - [prefix_query]($m/CatalogQueryPrefix)
+// - [range_query]($m/CatalogQueryRange)
+// - [sorted_attribute_query]($m/CatalogQuerySortedAttribute)
+// - [text_query]($m/CatalogQueryText)
 //
 // All other query types cannot be combined with any others.
 //
@@ -737,7 +734,7 @@ func (c *CatalogObjectBatch) String() string {
 // - `caption`: `CatalogImage`
 // - `display_name`: `CatalogItemOption`
 //
-// For example, to search for [CatalogItem](entity:CatalogItem) objects by searchable attributes, you can use
+// For example, to search for [CatalogItem]($m/CatalogItem) objects by searchable attributes, you can use
 // the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
 type CatalogQuery struct {
 	// A query expression to sort returned query result by the given attribute.
@@ -1430,7 +1427,7 @@ func (c *CatalogQueryText) String() string {
 }
 
 // Supported custom attribute query expressions for calling the
-// [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// [SearchCatalogItems]($e/Catalog/SearchCatalogItems)
 // endpoint to search for items or item variations.
 type CustomAttributeFilter struct {
 	// A query expression to filter items or item variations by matching their custom attributes'
@@ -1665,15 +1662,12 @@ func (r *Range) String() string {
 type SearchCatalogItemsRequestStockLevel string
 
 const (
-	SearchCatalogItemsRequestStockLevelStockLevelDoNotUse SearchCatalogItemsRequestStockLevel = "STOCK_LEVEL_DO_NOT_USE"
-	SearchCatalogItemsRequestStockLevelOut                SearchCatalogItemsRequestStockLevel = "OUT"
-	SearchCatalogItemsRequestStockLevelLow                SearchCatalogItemsRequestStockLevel = "LOW"
+	SearchCatalogItemsRequestStockLevelOut SearchCatalogItemsRequestStockLevel = "OUT"
+	SearchCatalogItemsRequestStockLevelLow SearchCatalogItemsRequestStockLevel = "LOW"
 )
 
 func NewSearchCatalogItemsRequestStockLevelFromString(s string) (SearchCatalogItemsRequestStockLevel, error) {
 	switch s {
-	case "STOCK_LEVEL_DO_NOT_USE":
-		return SearchCatalogItemsRequestStockLevelStockLevelDoNotUse, nil
 	case "OUT":
 		return SearchCatalogItemsRequestStockLevelOut, nil
 	case "LOW":
@@ -1687,7 +1681,7 @@ func (s SearchCatalogItemsRequestStockLevel) Ptr() *SearchCatalogItemsRequestSto
 	return &s
 }
 
-// Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
+// Defines the response body returned from the [SearchCatalogItems]($e/Catalog/SearchCatalogItems) endpoint.
 type SearchCatalogItemsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

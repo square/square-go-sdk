@@ -52,7 +52,7 @@ type SearchVendorsRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"-"`
 }
 
-// Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
+// Represents an output from a call to [BulkCreateVendors]($e/Vendors/BulkCreateVendors).
 type BatchCreateVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -112,7 +112,7 @@ func (b *BatchCreateVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkRetrieveVendors](api-endpoint:Vendors-BulkRetrieveVendors).
+// Represents an output from a call to [BulkRetrieveVendors]($e/Vendors/BulkRetrieveVendors).
 type BatchGetVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -171,7 +171,7 @@ func (b *BatchGetVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkUpdateVendors](api-endpoint:Vendors-BulkUpdateVendors).
+// Represents an output from a call to [BulkUpdateVendors]($e/Vendors/BulkUpdateVendors).
 type BatchUpdateVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -230,7 +230,7 @@ func (b *BatchUpdateVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [CreateVendor](api-endpoint:Vendors-CreateVendor).
+// Represents an output from a call to [CreateVendor]($e/Vendors/CreateVendor).
 type CreateVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -287,7 +287,7 @@ func (c *CreateVendorResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents an output from a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
+// Represents an output from a call to [RetrieveVendor]($e/Vendors/RetrieveVendor).
 type GetVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -402,7 +402,7 @@ func (s *SearchVendorsRequestFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines a sorter used to sort results from [SearchVendors](api-endpoint:Vendors-SearchVendors).
+// Defines a sorter used to sort results from [SearchVendors]($e/Vendors/SearchVendors).
 type SearchVendorsRequestSort struct {
 	// Specifies the sort key to sort the returned vendors.
 	// See [Field](#type-field) for possible values
@@ -461,7 +461,7 @@ func (s *SearchVendorsRequestSort) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// The field to sort the returned [Vendor](entity:Vendor) objects by.
+// The field to sort the returned [Vendor]($m/Vendor) objects by.
 type SearchVendorsRequestSortField string
 
 const (
@@ -484,7 +484,7 @@ func (s SearchVendorsRequestSortField) Ptr() *SearchVendorsRequestSortField {
 	return &s
 }
 
-// Represents an output from a call to [SearchVendors](api-endpoint:Vendors-SearchVendors).
+// Represents an output from a call to [SearchVendors]($e/Vendors/SearchVendors).
 type SearchVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -553,7 +553,7 @@ func (s *SearchVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents an input to a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
+// Represents an input to a call to [UpdateVendor]($e/Vendors/UpdateVendor).
 type UpdateVendorRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
 	// request.
@@ -615,7 +615,7 @@ func (u *UpdateVendorRequest) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an output from a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
+// Represents an output from a call to [UpdateVendor]($e/Vendors/UpdateVendor).
 type UpdateVendorResponse struct {
 	// Errors occurred when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -806,7 +806,7 @@ func (v *Vendor) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// Represents a contact of a [Vendor](entity:Vendor).
+// Represents a contact of a [Vendor]($m/Vendor).
 type VendorContact struct {
 	// A unique Square-generated ID for the [VendorContact](entity:VendorContact).
 	// This field is required when attempting to update a [VendorContact](entity:VendorContact).
@@ -901,20 +901,17 @@ func (v *VendorContact) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// The status of the [Vendor](entity:Vendor),
-// whether a [Vendor](entity:Vendor) is active or inactive.
+// The status of the [Vendor]($m/Vendor),
+// whether a [Vendor]($m/Vendor) is active or inactive.
 type VendorStatus string
 
 const (
-	VendorStatusDoNotUse VendorStatus = "DO_NOT_USE"
 	VendorStatusActive   VendorStatus = "ACTIVE"
 	VendorStatusInactive VendorStatus = "INACTIVE"
 )
 
 func NewVendorStatusFromString(s string) (VendorStatus, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return VendorStatusDoNotUse, nil
 	case "ACTIVE":
 		return VendorStatusActive, nil
 	case "INACTIVE":

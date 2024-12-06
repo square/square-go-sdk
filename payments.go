@@ -635,7 +635,7 @@ func (b *BuyNowPayLaterDetails) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the response returned by [CancelPayment](api-endpoint:Payments-CancelPayment).
+// Defines the response returned by [CancelPayment]($e/Payments/CancelPayment).
 type CancelPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1130,7 +1130,7 @@ func (c *ClearpayDetails) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by[CompletePayment](api-endpoint:Payments-CompletePayment).
+// Defines the response returned by[CompletePayment]($e/Payments/CompletePayment).
 type CompletePaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1187,7 +1187,7 @@ func (c *CompletePaymentResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by [CreatePayment](api-endpoint:Payments-CreatePayment).
+// Defines the response returned by [CreatePayment]($e/Payments/CreatePayment).
 //
 // If there are errors processing the request, the `payment` field might not be
 // present, or it might be present with a status of `FAILED`.
@@ -1531,7 +1531,7 @@ func (e *ExternalPaymentDetails) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Defines the response returned by [GetPayment](api-endpoint:Payments-GetPayment).
+// Defines the response returned by [GetPayment]($e/Payments/GetPayment).
 type GetPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1588,7 +1588,7 @@ func (g *GetPaymentResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the response returned by [ListPayments](api-endpoint:Payments-ListPayments).
+// Defines the response returned by [ListPayments]($e/Payments/ListPayments).
 type ListPaymentsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2289,7 +2289,6 @@ func (r *RiskEvaluation) String() string {
 type RiskEvaluationRiskLevel string
 
 const (
-	RiskEvaluationRiskLevelDoNotUse RiskEvaluationRiskLevel = "DO_NOT_USE"
 	RiskEvaluationRiskLevelPending  RiskEvaluationRiskLevel = "PENDING"
 	RiskEvaluationRiskLevelNormal   RiskEvaluationRiskLevel = "NORMAL"
 	RiskEvaluationRiskLevelModerate RiskEvaluationRiskLevel = "MODERATE"
@@ -2298,8 +2297,6 @@ const (
 
 func NewRiskEvaluationRiskLevelFromString(s string) (RiskEvaluationRiskLevel, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return RiskEvaluationRiskLevelDoNotUse, nil
 	case "PENDING":
 		return RiskEvaluationRiskLevelPending, nil
 	case "NORMAL":
@@ -2375,7 +2372,7 @@ func (s *SquareAccountDetails) String() string {
 }
 
 // Defines the response returned by
-// [UpdatePayment](api-endpoint:Payments-UpdatePayment).
+// [UpdatePayment]($e/Payments/UpdatePayment).
 type UpdatePaymentResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

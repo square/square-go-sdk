@@ -80,7 +80,7 @@ func (c *Client) DeprecatedGetAdjustment(
 	return response, nil
 }
 
-// Returns the [InventoryAdjustment](entity:InventoryAdjustment) object
+// Returns the [InventoryAdjustment]($m/InventoryAdjustment) object
 // with the provided `adjustment_id`.
 func (c *Client) GetAdjustment(
 	ctx context.Context,
@@ -331,8 +331,8 @@ func (c *Client) BatchGetChanges(
 }
 
 // Returns current counts for the provided
-// [CatalogObject](entity:CatalogObject)s at the requested
-// [Location](entity:Location)s.
+// [CatalogObject]($m/CatalogObject)s at the requested
+// [Location]($m/Location)s.
 //
 // Results are paginated and sorted in descending order according to their
 // `calculated_at` timestamp (newest first).
@@ -420,7 +420,7 @@ func (c *Client) DeprecatedGetPhysicalCount(
 	return response, nil
 }
 
-// Returns the [InventoryPhysicalCount](entity:InventoryPhysicalCount)
+// Returns the [InventoryPhysicalCount]($m/InventoryPhysicalCount)
 // object with the provided `physical_count_id`.
 func (c *Client) GetPhysicalCount(
 	ctx context.Context,
@@ -461,7 +461,7 @@ func (c *Client) GetPhysicalCount(
 	return response, nil
 }
 
-// Returns the [InventoryTransfer](entity:InventoryTransfer) object
+// Returns the [InventoryTransfer]($m/InventoryTransfer) object
 // with the provided `transfer_id`.
 func (c *Client) GetTransfer(
 	ctx context.Context,
@@ -503,8 +503,8 @@ func (c *Client) GetTransfer(
 }
 
 // Retrieves the current calculated stock count for a given
-// [CatalogObject](entity:CatalogObject) at a given set of
-// [Location](entity:Location)s. Responses are paginated and unsorted.
+// [CatalogObject]($m/CatalogObject) at a given set of
+// [Location]($m/Location)s. Responses are paginated and unsorted.
 // For more sophisticated queries, use a batch endpoint.
 func (c *Client) Get(
 	ctx context.Context,

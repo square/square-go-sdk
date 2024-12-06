@@ -29,51 +29,7 @@ type DevicesListRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
 }
 
-type ApplicationType string
-
-const (
-	ApplicationTypeApplicationInvalidType ApplicationType = "APPLICATION_INVALID_TYPE"
-	ApplicationTypeSquarePos              ApplicationType = "SQUARE_POS"
-	ApplicationTypeRetail                 ApplicationType = "RETAIL"
-	ApplicationTypeRestaurant             ApplicationType = "RESTAURANT"
-	ApplicationTypeInvoices               ApplicationType = "INVOICES"
-	ApplicationTypeAppointments           ApplicationType = "APPOINTMENTS"
-	ApplicationTypeKds                    ApplicationType = "KDS"
-	ApplicationTypeTerminalAPI            ApplicationType = "TERMINAL_API"
-	ApplicationTypeReaderSdk              ApplicationType = "READER_SDK"
-	ApplicationTypeFnbKiosk               ApplicationType = "FNB_KIOSK"
-)
-
-func NewApplicationTypeFromString(s string) (ApplicationType, error) {
-	switch s {
-	case "APPLICATION_INVALID_TYPE":
-		return ApplicationTypeApplicationInvalidType, nil
-	case "SQUARE_POS":
-		return ApplicationTypeSquarePos, nil
-	case "RETAIL":
-		return ApplicationTypeRetail, nil
-	case "RESTAURANT":
-		return ApplicationTypeRestaurant, nil
-	case "INVOICES":
-		return ApplicationTypeInvoices, nil
-	case "APPOINTMENTS":
-		return ApplicationTypeAppointments, nil
-	case "KDS":
-		return ApplicationTypeKds, nil
-	case "TERMINAL_API":
-		return ApplicationTypeTerminalAPI, nil
-	case "READER_SDK":
-		return ApplicationTypeReaderSdk, nil
-	case "FNB_KIOSK":
-		return ApplicationTypeFnbKiosk, nil
-	}
-	var t ApplicationType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (a ApplicationType) Ptr() *ApplicationType {
-	return &a
-}
+type ApplicationType = string
 
 // The wrapper object for the component entries of a given component type.
 type Component struct {
@@ -174,29 +130,16 @@ func (c *Component) String() string {
 type ComponentComponentType string
 
 const (
-	ComponentComponentTypeComponentInvalidType ComponentComponentType = "COMPONENT_INVALID_TYPE"
-	ComponentComponentTypeApplication          ComponentComponentType = "APPLICATION"
-	ComponentComponentTypeCardReader           ComponentComponentType = "CARD_READER"
-	ComponentComponentTypeBattery              ComponentComponentType = "BATTERY"
-	ComponentComponentTypeWifi                 ComponentComponentType = "WIFI"
-	ComponentComponentTypeEthernet             ComponentComponentType = "ETHERNET"
-	ComponentComponentTypePrinter              ComponentComponentType = "PRINTER"
-	ComponentComponentTypeScale                ComponentComponentType = "SCALE"
-	ComponentComponentTypeBarcodeScanner       ComponentComponentType = "BARCODE_SCANNER"
-	ComponentComponentTypeUsbInterface         ComponentComponentType = "USB_INTERFACE"
-	ComponentComponentTypeBluetoothInterface   ComponentComponentType = "BLUETOOTH_INTERFACE"
-	ComponentComponentTypeNetworkInterface     ComponentComponentType = "NETWORK_INTERFACE"
-	ComponentComponentTypeAirprintInterface    ComponentComponentType = "AIRPRINT_INTERFACE"
-	ComponentComponentTypeAudioInterface       ComponentComponentType = "AUDIO_INTERFACE"
-	ComponentComponentTypeCellularData         ComponentComponentType = "CELLULAR_DATA"
-	ComponentComponentTypeStand                ComponentComponentType = "STAND"
-	ComponentComponentTypeScannerScale         ComponentComponentType = "SCANNER_SCALE"
+	ComponentComponentTypeApplication ComponentComponentType = "APPLICATION"
+	ComponentComponentTypeCardReader  ComponentComponentType = "CARD_READER"
+	ComponentComponentTypeBattery     ComponentComponentType = "BATTERY"
+	ComponentComponentTypeWifi        ComponentComponentType = "WIFI"
+	ComponentComponentTypeEthernet    ComponentComponentType = "ETHERNET"
+	ComponentComponentTypePrinter     ComponentComponentType = "PRINTER"
 )
 
 func NewComponentComponentTypeFromString(s string) (ComponentComponentType, error) {
 	switch s {
-	case "COMPONENT_INVALID_TYPE":
-		return ComponentComponentTypeComponentInvalidType, nil
 	case "APPLICATION":
 		return ComponentComponentTypeApplication, nil
 	case "CARD_READER":
@@ -209,26 +152,6 @@ func NewComponentComponentTypeFromString(s string) (ComponentComponentType, erro
 		return ComponentComponentTypeEthernet, nil
 	case "PRINTER":
 		return ComponentComponentTypePrinter, nil
-	case "SCALE":
-		return ComponentComponentTypeScale, nil
-	case "BARCODE_SCANNER":
-		return ComponentComponentTypeBarcodeScanner, nil
-	case "USB_INTERFACE":
-		return ComponentComponentTypeUsbInterface, nil
-	case "BLUETOOTH_INTERFACE":
-		return ComponentComponentTypeBluetoothInterface, nil
-	case "NETWORK_INTERFACE":
-		return ComponentComponentTypeNetworkInterface, nil
-	case "AIRPRINT_INTERFACE":
-		return ComponentComponentTypeAirprintInterface, nil
-	case "AUDIO_INTERFACE":
-		return ComponentComponentTypeAudioInterface, nil
-	case "CELLULAR_DATA":
-		return ComponentComponentTypeCellularData, nil
-	case "STAND":
-		return ComponentComponentTypeStand, nil
-	case "SCANNER_SCALE":
-		return ComponentComponentTypeScannerScale, nil
 	}
 	var t ComponentComponentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -316,7 +239,7 @@ func (d *Device) String() string {
 type DeviceAttributes struct {
 	// The device type.
 	// See [DeviceType](#type-devicetype) for possible values
-	Type DeviceAttributesDeviceType `json:"type" url:"type"`
+	Type DeviceAttributesDeviceType `json:"type,omitempty" url:"type,omitempty"`
 	// The maker of the device.
 	Manufacturer string `json:"manufacturer" url:"manufacturer"`
 	// The specific model of the device.
@@ -336,13 +259,6 @@ type DeviceAttributes struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (d *DeviceAttributes) GetType() DeviceAttributesDeviceType {
-	if d == nil {
-		return ""
-	}
-	return d.Type
 }
 
 func (d *DeviceAttributes) GetManufacturer() string {
@@ -427,60 +343,7 @@ func (d *DeviceAttributes) String() string {
 }
 
 // An enum identifier of the device type.
-type DeviceAttributesDeviceType string
-
-const (
-	DeviceAttributesDeviceTypeDeviceTypeInvalidType DeviceAttributesDeviceType = "DEVICE_TYPE_INVALID_TYPE"
-	DeviceAttributesDeviceTypeTerminal              DeviceAttributesDeviceType = "TERMINAL"
-	DeviceAttributesDeviceTypeRegister              DeviceAttributesDeviceType = "REGISTER"
-	DeviceAttributesDeviceTypeIos                   DeviceAttributesDeviceType = "IOS"
-	DeviceAttributesDeviceTypeAndroid               DeviceAttributesDeviceType = "ANDROID"
-	DeviceAttributesDeviceTypeCashDrawer            DeviceAttributesDeviceType = "CASH_DRAWER"
-	DeviceAttributesDeviceTypePrinter               DeviceAttributesDeviceType = "PRINTER"
-	DeviceAttributesDeviceTypeReader                DeviceAttributesDeviceType = "READER"
-	DeviceAttributesDeviceTypeScale                 DeviceAttributesDeviceType = "SCALE"
-	DeviceAttributesDeviceTypeBarcodeScanner        DeviceAttributesDeviceType = "BARCODE_SCANNER"
-	DeviceAttributesDeviceTypeStand                 DeviceAttributesDeviceType = "STAND"
-	DeviceAttributesDeviceTypeInternalPrinter       DeviceAttributesDeviceType = "INTERNAL_PRINTER"
-	DeviceAttributesDeviceTypeScannerScale          DeviceAttributesDeviceType = "SCANNER_SCALE"
-)
-
-func NewDeviceAttributesDeviceTypeFromString(s string) (DeviceAttributesDeviceType, error) {
-	switch s {
-	case "DEVICE_TYPE_INVALID_TYPE":
-		return DeviceAttributesDeviceTypeDeviceTypeInvalidType, nil
-	case "TERMINAL":
-		return DeviceAttributesDeviceTypeTerminal, nil
-	case "REGISTER":
-		return DeviceAttributesDeviceTypeRegister, nil
-	case "IOS":
-		return DeviceAttributesDeviceTypeIos, nil
-	case "ANDROID":
-		return DeviceAttributesDeviceTypeAndroid, nil
-	case "CASH_DRAWER":
-		return DeviceAttributesDeviceTypeCashDrawer, nil
-	case "PRINTER":
-		return DeviceAttributesDeviceTypePrinter, nil
-	case "READER":
-		return DeviceAttributesDeviceTypeReader, nil
-	case "SCALE":
-		return DeviceAttributesDeviceTypeScale, nil
-	case "BARCODE_SCANNER":
-		return DeviceAttributesDeviceTypeBarcodeScanner, nil
-	case "STAND":
-		return DeviceAttributesDeviceTypeStand, nil
-	case "INTERNAL_PRINTER":
-		return DeviceAttributesDeviceTypeInternalPrinter, nil
-	case "SCANNER_SCALE":
-		return DeviceAttributesDeviceTypeScannerScale, nil
-	}
-	var t DeviceAttributesDeviceType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (d DeviceAttributesDeviceType) Ptr() *DeviceAttributesDeviceType {
-	return &d
-}
+type DeviceAttributesDeviceType = string
 
 type DeviceComponentDetailsApplicationDetails struct {
 	// The type of application.
@@ -495,13 +358,6 @@ type DeviceComponentDetailsApplicationDetails struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (d *DeviceComponentDetailsApplicationDetails) GetApplicationType() *ApplicationType {
-	if d == nil {
-		return nil
-	}
-	return d.ApplicationType
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) GetVersion() *string {
@@ -721,17 +577,14 @@ func (d *DeviceComponentDetailsEthernetDetails) String() string {
 type DeviceComponentDetailsExternalPower string
 
 const (
-	DeviceComponentDetailsExternalPowerExternalPowerInvalidType DeviceComponentDetailsExternalPower = "EXTERNAL_POWER_INVALID_TYPE"
-	DeviceComponentDetailsExternalPowerAvailableCharging        DeviceComponentDetailsExternalPower = "AVAILABLE_CHARGING"
-	DeviceComponentDetailsExternalPowerAvailableNotInUse        DeviceComponentDetailsExternalPower = "AVAILABLE_NOT_IN_USE"
-	DeviceComponentDetailsExternalPowerUnavailable              DeviceComponentDetailsExternalPower = "UNAVAILABLE"
-	DeviceComponentDetailsExternalPowerAvailableInsufficient    DeviceComponentDetailsExternalPower = "AVAILABLE_INSUFFICIENT"
+	DeviceComponentDetailsExternalPowerAvailableCharging     DeviceComponentDetailsExternalPower = "AVAILABLE_CHARGING"
+	DeviceComponentDetailsExternalPowerAvailableNotInUse     DeviceComponentDetailsExternalPower = "AVAILABLE_NOT_IN_USE"
+	DeviceComponentDetailsExternalPowerUnavailable           DeviceComponentDetailsExternalPower = "UNAVAILABLE"
+	DeviceComponentDetailsExternalPowerAvailableInsufficient DeviceComponentDetailsExternalPower = "AVAILABLE_INSUFFICIENT"
 )
 
 func NewDeviceComponentDetailsExternalPowerFromString(s string) (DeviceComponentDetailsExternalPower, error) {
 	switch s {
-	case "EXTERNAL_POWER_INVALID_TYPE":
-		return DeviceComponentDetailsExternalPowerExternalPowerInvalidType, nil
 	case "AVAILABLE_CHARGING":
 		return DeviceComponentDetailsExternalPowerAvailableCharging, nil
 	case "AVAILABLE_NOT_IN_USE":
@@ -930,23 +783,17 @@ func (d *DeviceStatus) String() string {
 type DeviceStatusCategory string
 
 const (
-	DeviceStatusCategoryDeviceStatusInvalidType DeviceStatusCategory = "DEVICE_STATUS_INVALID_TYPE"
-	DeviceStatusCategoryAvailable               DeviceStatusCategory = "AVAILABLE"
-	DeviceStatusCategoryNeedsAttention          DeviceStatusCategory = "NEEDS_ATTENTION"
-	DeviceStatusCategoryCritical                DeviceStatusCategory = "CRITICAL"
-	DeviceStatusCategoryOffline                 DeviceStatusCategory = "OFFLINE"
+	DeviceStatusCategoryAvailable      DeviceStatusCategory = "AVAILABLE"
+	DeviceStatusCategoryNeedsAttention DeviceStatusCategory = "NEEDS_ATTENTION"
+	DeviceStatusCategoryOffline        DeviceStatusCategory = "OFFLINE"
 )
 
 func NewDeviceStatusCategoryFromString(s string) (DeviceStatusCategory, error) {
 	switch s {
-	case "DEVICE_STATUS_INVALID_TYPE":
-		return DeviceStatusCategoryDeviceStatusInvalidType, nil
 	case "AVAILABLE":
 		return DeviceStatusCategoryAvailable, nil
 	case "NEEDS_ATTENTION":
 		return DeviceStatusCategoryNeedsAttention, nil
-	case "CRITICAL":
-		return DeviceStatusCategoryCritical, nil
 	case "OFFLINE":
 		return DeviceStatusCategoryOffline, nil
 	}

@@ -117,7 +117,7 @@ type UpsertMerchantCustomAttributeRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest struct {
@@ -168,7 +168,7 @@ func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes) response,
+// Represents a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -227,7 +227,7 @@ func (b *BulkDeleteMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
 // request.
 type BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse struct {
 	// Errors that occurred while processing the individual MerchantCustomAttributeDeleteRequest request
@@ -276,7 +276,7 @@ func (b *BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDelete
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes)
 // request. An individual request contains a merchant ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest struct {
@@ -353,7 +353,7 @@ func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) response,
+// Represents a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -412,7 +412,7 @@ func (b *BulkUpsertMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) operation.
 type BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse struct {
 	// The ID of the merchant associated with the custom attribute.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
@@ -478,7 +478,7 @@ func (b *BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) response.
+// Represents a [CreateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/CreateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateMerchantCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -584,7 +584,7 @@ func (d *DeleteMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttribute) response.
+// Represents a [DeleteMerchantCustomAttribute]($e/MerchantCustomAttributes/DeleteMerchantCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteMerchantCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -633,7 +633,7 @@ func (d *DeleteMerchantCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [RetrieveMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttributeDefinition) response.
+// Represents a [RetrieveMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -691,7 +691,7 @@ func (r *RetrieveMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttribute) response.
+// Represents a [RetrieveMerchantCustomAttribute]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -750,7 +750,7 @@ func (r *RetrieveMerchantCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an [UpdateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-UpdateMerchantCustomAttributeDefinition) response.
+// Represents an [UpdateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/UpdateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateMerchantCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -808,7 +808,7 @@ func (u *UpdateMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) response.
+// Represents an [UpsertMerchantCustomAttribute]($e/MerchantCustomAttributes/UpsertMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertMerchantCustomAttributeResponse struct {
 	// The new or updated custom attribute.

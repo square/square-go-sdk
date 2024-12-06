@@ -39,7 +39,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square account.
+// Returns a list of [BankAccount]($m/BankAccount) objects linked to a Square account.
 func (c *Client) List(
 	ctx context.Context,
 	request *squaregosdk.BankAccountsListRequest,
@@ -96,7 +96,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
+// Returns details of a [BankAccount]($m/BankAccount) identified by V1 bank account ID.
 func (c *Client) GetByV1ID(
 	ctx context.Context,
 	request *squaregosdk.BankAccountsGetByV1IDRequest,
@@ -136,7 +136,7 @@ func (c *Client) GetByV1ID(
 	return response, nil
 }
 
-// Returns details of a [BankAccount](entity:BankAccount)
+// Returns details of a [BankAccount]($m/BankAccount)
 // linked to a Square account.
 func (c *Client) Get(
 	ctx context.Context,

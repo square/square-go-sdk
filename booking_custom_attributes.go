@@ -129,7 +129,7 @@ type UpsertBookingCustomAttributeRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to delete, and an optional idempotency key.
 type BookingCustomAttributeDeleteRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -189,7 +189,7 @@ func (b *BookingCustomAttributeDeleteRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) operation.
 type BookingCustomAttributeDeleteResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -246,7 +246,7 @@ func (b *BookingCustomAttributeDeleteResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BookingCustomAttributeUpsertRequest struct {
@@ -325,7 +325,7 @@ func (b *BookingCustomAttributeUpsertRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) operation.
 type BookingCustomAttributeUpsertResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -391,7 +391,7 @@ func (b *BookingCustomAttributeUpsertResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) response,
+// Represents a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -450,7 +450,7 @@ func (b *BulkDeleteBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) response,
+// Represents a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -509,7 +509,7 @@ func (b *BulkUpsertBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CreateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-CreateBookingCustomAttributeDefinition) response.
+// Represents a [CreateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/CreateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateBookingCustomAttributeDefinitionResponse struct {
 	// The newly created custom attribute definition.
@@ -567,7 +567,7 @@ func (c *CreateBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [DeleteBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttributeDefinition) response
+// Represents a [DeleteBookingCustomAttributeDefinition]($e/BookingCustomAttributes/DeleteBookingCustomAttributeDefinition) response
 // containing error messages when errors occurred during the request. The successful response does not contain any payload.
 type DeleteBookingCustomAttributeDefinitionResponse struct {
 	// Any errors that occurred during the request.
@@ -616,7 +616,7 @@ func (d *DeleteBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttribute](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttribute) response.
+// Represents a [DeleteBookingCustomAttribute]($e/BookingCustomAttributes/DeleteBookingCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteBookingCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -665,7 +665,7 @@ func (d *DeleteBookingCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [RetrieveBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttributeDefinition) response.
+// Represents a [RetrieveBookingCustomAttributeDefinition]($e/BookingCustomAttributes/RetrieveBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -723,7 +723,7 @@ func (r *RetrieveBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveBookingCustomAttribute](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttribute) response.
+// Represents a [RetrieveBookingCustomAttribute]($e/BookingCustomAttributes/RetrieveBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -782,7 +782,7 @@ func (r *RetrieveBookingCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an [UpdateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-UpdateBookingCustomAttributeDefinition) response.
+// Represents an [UpdateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/UpdateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateBookingCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -840,7 +840,7 @@ func (u *UpdateBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertBookingCustomAttribute](api-endpoint:BookingCustomAttributes-UpsertBookingCustomAttribute) response.
+// Represents an [UpsertBookingCustomAttribute]($e/BookingCustomAttributes/UpsertBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertBookingCustomAttributeResponse struct {
 	// The new or updated custom attribute.
