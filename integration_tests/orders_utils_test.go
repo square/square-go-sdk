@@ -14,7 +14,7 @@ type TestOrderItem struct {
 }
 
 // Create a test order with the given order items.
-func newTestOrder(orderItems []TestOrderItem) *square.Order {
+func newTestOrder(orderItems []TestOrderItem, locationId string) *square.Order {
 	squareItems := make([]*square.OrderLineItem, 0, len(orderItems))
 
 	for _, item := range orderItems {
@@ -26,7 +26,7 @@ func newTestOrder(orderItems []TestOrderItem) *square.Order {
 	}
 
 	return &square.Order{
-		LocationID: LocationID,
+		LocationID: locationId,
 		LineItems:  squareItems,
 	}
 }

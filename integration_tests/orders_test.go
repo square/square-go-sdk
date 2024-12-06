@@ -18,13 +18,16 @@ func TestOrdersAPI(t *testing.T) {
 	t.Run("create order and attach payment", func(t *testing.T) {
 		squareClient := newTestSquareClient(t)
 
+		locationId, err := getDefaultLocationID(squareClient)
+		require.NoError(t, err)
+
 		testOrder := newTestOrder([]TestOrderItem{
 			{
 				Name:     "New York Strip Steak",
 				Quantity: "1",
 				Price:    1599,
 			},
-		})
+		}, locationId)
 
 		// 1. Create an order and verify that it's `OPEN`.
 		createOrderResp, err := squareClient.Orders.Create(
@@ -42,7 +45,7 @@ func TestOrdersAPI(t *testing.T) {
 		createPaymentResp, err := squareClient.Payments.Create(
 			context.Background(),
 			&square.CreatePaymentRequest{
-				LocationID:     square.String(LocationID),
+				LocationID:     square.String(locationId),
 				IdempotencyKey: newTestUUID(),
 				OrderID:        createOrderResp.Order.ID,
 				SourceID:       SourceID,
@@ -67,6 +70,9 @@ func TestOrdersAPI(t *testing.T) {
 	t.Run("create and use a custom attribute for an order", func(t *testing.T) {
 		squareClient := newTestSquareClient(t)
 
+		locationId, err := getDefaultLocationID(squareClient)
+		require.NoError(t, err)
+
 		// Setup: Create an order with the custom attribute.
 		testOrder := newTestOrder([]TestOrderItem{
 			{
@@ -74,7 +80,7 @@ func TestOrdersAPI(t *testing.T) {
 				Quantity: "1",
 				Price:    1599,
 			},
-		})
+		}, locationId)
 		createOrderResp, err := squareClient.Orders.Create(
 			context.Background(),
 			&square.CreateOrderRequest{

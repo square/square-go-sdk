@@ -15,4 +15,4 @@ jobs:
         uses: actions/setup-go@v4
 
       - name: Test
-        run: go test ./... # TODO: Add the following flag when TEST_SQUARE_TOKEN is configured -- -tags=integration
+        run: go test ./... -tags=integration

@@ -3,6 +3,7 @@
 package integration
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -14,9 +15,6 @@ import (
 	client "github.com/square/square-go-sdk/client"
 	option "github.com/square/square-go-sdk/option"
 )
-
-// LocationID represents the test location ID for the sandbox environment.
-const LocationID string = "LSBBNEKMKQ72P"
 
 // SourceID represents the payment source ID for the sandbox environment.
 const SourceID string = "cnon:card-nonce-ok"
@@ -53,4 +51,12 @@ func newTestMoney(amount int64) *square.Money {
 		Amount:   square.Int64(amount),
 		Currency: square.CurrencyUsd.Ptr(),
 	}
+}
+
+func getDefaultLocationID(c *client.Client) (string, error) {
+	locationsResp, err := c.Locations.List(context.Background())
+	if err != nil {
+		return "", err
+	}
+	return *locationsResp.Locations[0].GetID(), nil
 }
