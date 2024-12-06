@@ -906,15 +906,12 @@ func (v *VendorContact) String() string {
 type VendorStatus string
 
 const (
-	VendorStatusDoNotUse VendorStatus = "DO_NOT_USE"
 	VendorStatusActive   VendorStatus = "ACTIVE"
 	VendorStatusInactive VendorStatus = "INACTIVE"
 )
 
 func NewVendorStatusFromString(s string) (VendorStatus, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return VendorStatusDoNotUse, nil
 	case "ACTIVE":
 		return VendorStatusActive, nil
 	case "INACTIVE":

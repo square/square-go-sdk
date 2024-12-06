@@ -1029,8 +1029,6 @@ type Customer struct {
 	Note *string `json:"note,omitempty" url:"note,omitempty"`
 	// Represents general customer preferences.
 	Preferences *CustomerPreferences `json:"preferences,omitempty" url:"preferences,omitempty"`
-	// The customer groups and segments the customer belongs to. This deprecated field has been replaced with the dedicated `group_ids` for customer groups and the dedicated `segment_ids` field for customer segments. You can retrieve information about a given customer group and segment respectively using the Customer Groups API and Customer Segments API.
-	Groups []*CustomerGroupInfo `json:"groups,omitempty" url:"groups,omitempty"`
 	// The method used to create the customer profile.
 	// See [CustomerCreationSource](#type-customercreationsource) for possible values
 	CreationSource *CustomerCreationSource `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -1151,13 +1149,6 @@ func (c *Customer) GetPreferences() *CustomerPreferences {
 		return nil
 	}
 	return c.Preferences
-}
-
-func (c *Customer) GetGroups() []*CustomerGroupInfo {
-	if c == nil {
-		return nil
-	}
-	return c.Groups
 }
 
 func (c *Customer) GetCreationSource() *CustomerCreationSource {
@@ -1899,63 +1890,6 @@ func (c *CustomerFilter) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CustomerFilter) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// Contains some brief information about a Customer Group with its identifier included.
-type CustomerGroupInfo struct {
-	// The ID of the Customer Group.
-	ID string `json:"id" url:"id"`
-	// The name of the Customer Group.
-	Name string `json:"name" url:"name"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CustomerGroupInfo) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CustomerGroupInfo) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CustomerGroupInfo) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CustomerGroupInfo) UnmarshalJSON(data []byte) error {
-	type unmarshaler CustomerGroupInfo
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CustomerGroupInfo(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CustomerGroupInfo) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value

@@ -161,7 +161,7 @@ func (c *Client) Get(
 // Cancels a Terminal checkout request if the status of the request permits it.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *terminal.CancelTerminalCheckoutRequest,
+	request *terminal.CheckoutsCancelRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -178,7 +178,6 @@ func (c *Client) Cancel(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
-	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CancelTerminalCheckoutResponse
 	if err := c.caller.Call(
@@ -191,7 +190,6 @@ func (c *Client) Cancel(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

@@ -486,41 +486,25 @@ func (d *Dispute) String() string {
 type DisputeReason string
 
 const (
-	DisputeReasonUnknownReason          DisputeReason = "UNKNOWN_REASON"
 	DisputeReasonAmountDiffers          DisputeReason = "AMOUNT_DIFFERS"
 	DisputeReasonCancelled              DisputeReason = "CANCELLED"
-	DisputeReasonCompliance             DisputeReason = "COMPLIANCE"
-	DisputeReasonDissatisfied           DisputeReason = "DISSATISFIED"
 	DisputeReasonDuplicate              DisputeReason = "DUPLICATE"
-	DisputeReasonFraud                  DisputeReason = "FRAUD"
 	DisputeReasonNoKnowledge            DisputeReason = "NO_KNOWLEDGE"
 	DisputeReasonNotAsDescribed         DisputeReason = "NOT_AS_DESCRIBED"
 	DisputeReasonNotReceived            DisputeReason = "NOT_RECEIVED"
 	DisputeReasonPaidByOtherMeans       DisputeReason = "PAID_BY_OTHER_MEANS"
 	DisputeReasonCustomerRequestsCredit DisputeReason = "CUSTOMER_REQUESTS_CREDIT"
-	DisputeReasonUnauthorized           DisputeReason = "UNAUTHORIZED"
-	DisputeReasonReturned               DisputeReason = "RETURNED"
-	DisputeReasonInsufficientResponse   DisputeReason = "INSUFFICIENT_RESPONSE"
-	DisputeReasonRequestDocumentation   DisputeReason = "REQUEST_DOCUMENTATION"
 	DisputeReasonEmvLiabilityShift      DisputeReason = "EMV_LIABILITY_SHIFT"
 )
 
 func NewDisputeReasonFromString(s string) (DisputeReason, error) {
 	switch s {
-	case "UNKNOWN_REASON":
-		return DisputeReasonUnknownReason, nil
 	case "AMOUNT_DIFFERS":
 		return DisputeReasonAmountDiffers, nil
 	case "CANCELLED":
 		return DisputeReasonCancelled, nil
-	case "COMPLIANCE":
-		return DisputeReasonCompliance, nil
-	case "DISSATISFIED":
-		return DisputeReasonDissatisfied, nil
 	case "DUPLICATE":
 		return DisputeReasonDuplicate, nil
-	case "FRAUD":
-		return DisputeReasonFraud, nil
 	case "NO_KNOWLEDGE":
 		return DisputeReasonNoKnowledge, nil
 	case "NOT_AS_DESCRIBED":
@@ -531,14 +515,6 @@ func NewDisputeReasonFromString(s string) (DisputeReason, error) {
 		return DisputeReasonPaidByOtherMeans, nil
 	case "CUSTOMER_REQUESTS_CREDIT":
 		return DisputeReasonCustomerRequestsCredit, nil
-	case "UNAUTHORIZED":
-		return DisputeReasonUnauthorized, nil
-	case "RETURNED":
-		return DisputeReasonReturned, nil
-	case "INSUFFICIENT_RESPONSE":
-		return DisputeReasonInsufficientResponse, nil
-	case "REQUEST_DOCUMENTATION":
-		return DisputeReasonRequestDocumentation, nil
 	case "EMV_LIABILITY_SHIFT":
 		return DisputeReasonEmvLiabilityShift, nil
 	}
@@ -554,7 +530,6 @@ func (d DisputeReason) Ptr() *DisputeReason {
 type DisputeState string
 
 const (
-	DisputeStateUnknownState            DisputeState = "UNKNOWN_STATE"
 	DisputeStateInquiryEvidenceRequired DisputeState = "INQUIRY_EVIDENCE_REQUIRED"
 	DisputeStateInquiryProcessing       DisputeState = "INQUIRY_PROCESSING"
 	DisputeStateInquiryClosed           DisputeState = "INQUIRY_CLOSED"
@@ -563,13 +538,10 @@ const (
 	DisputeStateWon                     DisputeState = "WON"
 	DisputeStateLost                    DisputeState = "LOST"
 	DisputeStateAccepted                DisputeState = "ACCEPTED"
-	DisputeStateWaitingThirdParty       DisputeState = "WAITING_THIRD_PARTY"
 )
 
 func NewDisputeStateFromString(s string) (DisputeState, error) {
 	switch s {
-	case "UNKNOWN_STATE":
-		return DisputeStateUnknownState, nil
 	case "INQUIRY_EVIDENCE_REQUIRED":
 		return DisputeStateInquiryEvidenceRequired, nil
 	case "INQUIRY_PROCESSING":
@@ -586,8 +558,6 @@ func NewDisputeStateFromString(s string) (DisputeState, error) {
 		return DisputeStateLost, nil
 	case "ACCEPTED":
 		return DisputeStateAccepted, nil
-	case "WAITING_THIRD_PARTY":
-		return DisputeStateWaitingThirdParty, nil
 	}
 	var t DisputeState
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

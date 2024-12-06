@@ -160,7 +160,7 @@ func (c *Client) Get(
 // Cancels a Terminal action request if the status of the request permits it.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *terminal.CancelTerminalActionRequest,
+	request *terminal.ActionsCancelRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -177,7 +177,6 @@ func (c *Client) Cancel(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
-	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.CancelTerminalActionResponse
 	if err := c.caller.Call(
@@ -190,7 +189,6 @@ func (c *Client) Cancel(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {

@@ -447,9 +447,6 @@ type BatchRetrieveInventoryChangesRequest struct {
 	// The filter to return results by `InventoryChangeType` values other than `TRANSFER`.
 	// The default value is `[PHYSICAL_COUNT, ADJUSTMENT]`.
 	Types []InventoryChangeType `json:"types,omitempty" url:"types,omitempty"`
-	// The filter to return results by `InventoryState` values.
-	// Use the `states` filter as its replacement.
-	Statuses []InventoryState `json:"statuses,omitempty" url:"statuses,omitempty"`
 	// The filter to return `ADJUSTMENT` query results by
 	// `InventoryState`. This filter is only applied when set.
 	// The default value is null.
@@ -493,13 +490,6 @@ func (b *BatchRetrieveInventoryChangesRequest) GetTypes() []InventoryChangeType 
 		return nil
 	}
 	return b.Types
-}
-
-func (b *BatchRetrieveInventoryChangesRequest) GetStatuses() []InventoryState {
-	if b == nil {
-		return nil
-	}
-	return b.Statuses
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) GetStates() []InventoryState {
@@ -885,14 +875,6 @@ type InventoryAdjustment struct {
 	// system.
 	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
 	// The [inventory state](entity:InventoryState) of the related quantity
-	// of items before the adjustment. Replaced by the `from_state` field.
-	// See [InventoryState](#type-inventorystate) for possible values
-	FromStatus *InventoryState `json:"from_status,omitempty" url:"from_status,omitempty"`
-	// The [inventory state](entity:InventoryState) of the related quantity
-	// of items after the adjustment. Replaced by the `to_state` field.
-	// See [InventoryState](#type-inventorystate) for possible values
-	ToStatus *InventoryState `json:"to_status,omitempty" url:"to_status,omitempty"`
-	// The [inventory state](entity:InventoryState) of the related quantity
 	// of items before the adjustment.
 	// See [InventoryState](#type-inventorystate) for possible values
 	FromState *InventoryState `json:"from_state,omitempty" url:"from_state,omitempty"`
@@ -900,14 +882,6 @@ type InventoryAdjustment struct {
 	// of items after the adjustment.
 	// See [InventoryState](#type-inventorystate) for possible values
 	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
-	// The Square-generated ID of the [Location](entity:Location) where the related
-	// quantity of items is being tracked before the adjustment. Replaced by
-	// `from_location_id` of [InventoryTransfer](entity:InventoryTransfer).
-	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
-	// The Square-generated ID of the [Location](entity:Location) where the related
-	// quantity of items is being tracked after the adjustment. Replaced by
-	// `to_location_id` of [InventoryTransfer](entity:InventoryTransfer).
-	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
 	// The Square-generated ID of the [Location](entity:Location) where the related
 	// quantity of items is being tracked.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
@@ -979,20 +953,6 @@ func (i *InventoryAdjustment) GetReferenceID() *string {
 	return i.ReferenceID
 }
 
-func (i *InventoryAdjustment) GetFromStatus() *InventoryState {
-	if i == nil {
-		return nil
-	}
-	return i.FromStatus
-}
-
-func (i *InventoryAdjustment) GetToStatus() *InventoryState {
-	if i == nil {
-		return nil
-	}
-	return i.ToStatus
-}
-
 func (i *InventoryAdjustment) GetFromState() *InventoryState {
 	if i == nil {
 		return nil
@@ -1005,20 +965,6 @@ func (i *InventoryAdjustment) GetToState() *InventoryState {
 		return nil
 	}
 	return i.ToState
-}
-
-func (i *InventoryAdjustment) GetFromLocationID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.FromLocationID
-}
-
-func (i *InventoryAdjustment) GetToLocationID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.ToLocationID
 }
 
 func (i *InventoryAdjustment) GetLocationID() *string {
@@ -1346,25 +1292,19 @@ func (i *InventoryChange) String() string {
 type InventoryChangeType string
 
 const (
-	InventoryChangeTypeInventoryChangeTypeDoNotUse InventoryChangeType = "INVENTORY_CHANGE_TYPE_DO_NOT_USE"
-	InventoryChangeTypePhysicalCount               InventoryChangeType = "PHYSICAL_COUNT"
-	InventoryChangeTypeAdjustment                  InventoryChangeType = "ADJUSTMENT"
-	InventoryChangeTypeTransfer                    InventoryChangeType = "TRANSFER"
-	InventoryChangeTypeAvailability                InventoryChangeType = "AVAILABILITY"
+	InventoryChangeTypePhysicalCount InventoryChangeType = "PHYSICAL_COUNT"
+	InventoryChangeTypeAdjustment    InventoryChangeType = "ADJUSTMENT"
+	InventoryChangeTypeTransfer      InventoryChangeType = "TRANSFER"
 )
 
 func NewInventoryChangeTypeFromString(s string) (InventoryChangeType, error) {
 	switch s {
-	case "INVENTORY_CHANGE_TYPE_DO_NOT_USE":
-		return InventoryChangeTypeInventoryChangeTypeDoNotUse, nil
 	case "PHYSICAL_COUNT":
 		return InventoryChangeTypePhysicalCount, nil
 	case "ADJUSTMENT":
 		return InventoryChangeTypeAdjustment, nil
 	case "TRANSFER":
 		return InventoryChangeTypeTransfer, nil
-	case "AVAILABILITY":
-		return InventoryChangeTypeAvailability, nil
 	}
 	var t InventoryChangeType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1386,10 +1326,6 @@ type InventoryCount struct {
 	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
 	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
 	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
-	// The current [inventory state](entity:InventoryState) for the related
-	// quantity of items. Replaced by the `state` field.
-	// See [InventoryState](#type-inventorystate) for possible values
-	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
 	// The current [inventory state](entity:InventoryState) for the related
 	// quantity of items.
 	// See [InventoryState](#type-inventorystate) for possible values
@@ -1426,13 +1362,6 @@ func (i *InventoryCount) GetCatalogObjectType() *string {
 		return nil
 	}
 	return i.CatalogObjectType
-}
-
-func (i *InventoryCount) GetStatus() *InventoryState {
-	if i == nil {
-		return nil
-	}
-	return i.Status
 }
 
 func (i *InventoryCount) GetState() *InventoryState {
@@ -1523,10 +1452,6 @@ type InventoryPhysicalCount struct {
 	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
 	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
 	// The current [inventory state](entity:InventoryState) for the related
-	// quantity of items. It is replaced by the `state` field.
-	// See [InventoryState](#type-inventorystate) for possible values
-	Status *InventoryState `json:"status,omitempty" url:"status,omitempty"`
-	// The current [inventory state](entity:InventoryState) for the related
 	// quantity of items.
 	// See [InventoryState](#type-inventorystate) for possible values
 	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
@@ -1583,13 +1508,6 @@ func (i *InventoryPhysicalCount) GetCatalogObjectType() *string {
 		return nil
 	}
 	return i.CatalogObjectType
-}
-
-func (i *InventoryPhysicalCount) GetStatus() *InventoryState {
-	if i == nil {
-		return nil
-	}
-	return i.Status
 }
 
 func (i *InventoryPhysicalCount) GetState() *InventoryState {
@@ -1684,7 +1602,6 @@ func (i *InventoryPhysicalCount) String() string {
 type InventoryState string
 
 const (
-	InventoryStateInventoryStateDoNotUse  InventoryState = "INVENTORY_STATE_DO_NOT_USE"
 	InventoryStateCustom                  InventoryState = "CUSTOM"
 	InventoryStateInStock                 InventoryState = "IN_STOCK"
 	InventoryStateSold                    InventoryState = "SOLD"
@@ -1705,8 +1622,6 @@ const (
 
 func NewInventoryStateFromString(s string) (InventoryState, error) {
 	switch s {
-	case "INVENTORY_STATE_DO_NOT_USE":
-		return InventoryStateInventoryStateDoNotUse, nil
 	case "CUSTOM":
 		return InventoryStateCustom, nil
 	case "IN_STOCK":

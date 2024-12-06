@@ -1092,31 +1092,19 @@ func (s *SearchOrdersSort) String() string {
 type SearchOrdersSortField string
 
 const (
-	SearchOrdersSortFieldDoNotUse  SearchOrdersSortField = "DO_NOT_USE"
 	SearchOrdersSortFieldCreatedAt SearchOrdersSortField = "CREATED_AT"
 	SearchOrdersSortFieldUpdatedAt SearchOrdersSortField = "UPDATED_AT"
 	SearchOrdersSortFieldClosedAt  SearchOrdersSortField = "CLOSED_AT"
-	SearchOrdersSortFieldPaidAt    SearchOrdersSortField = "PAID_AT"
-	SearchOrdersSortFieldScore     SearchOrdersSortField = "SCORE"
-	SearchOrdersSortFieldDueAt     SearchOrdersSortField = "DUE_AT"
 )
 
 func NewSearchOrdersSortFieldFromString(s string) (SearchOrdersSortField, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return SearchOrdersSortFieldDoNotUse, nil
 	case "CREATED_AT":
 		return SearchOrdersSortFieldCreatedAt, nil
 	case "UPDATED_AT":
 		return SearchOrdersSortFieldUpdatedAt, nil
 	case "CLOSED_AT":
 		return SearchOrdersSortFieldClosedAt, nil
-	case "PAID_AT":
-		return SearchOrdersSortFieldPaidAt, nil
-	case "SCORE":
-		return SearchOrdersSortFieldScore, nil
-	case "DUE_AT":
-		return SearchOrdersSortFieldDueAt, nil
 	}
 	var t SearchOrdersSortField
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

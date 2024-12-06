@@ -82,7 +82,6 @@ type RegisterDomainResponseStatus string
 const (
 	RegisterDomainResponseStatusPending  RegisterDomainResponseStatus = "PENDING"
 	RegisterDomainResponseStatusVerified RegisterDomainResponseStatus = "VERIFIED"
-	RegisterDomainResponseStatusDoNotUse RegisterDomainResponseStatus = "DO_NOT_USE"
 )
 
 func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponseStatus, error) {
@@ -91,8 +90,6 @@ func NewRegisterDomainResponseStatusFromString(s string) (RegisterDomainResponse
 		return RegisterDomainResponseStatusPending, nil
 	case "VERIFIED":
 		return RegisterDomainResponseStatusVerified, nil
-	case "DO_NOT_USE":
-		return RegisterDomainResponseStatusDoNotUse, nil
 	}
 	var t RegisterDomainResponseStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

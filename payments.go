@@ -2289,7 +2289,6 @@ func (r *RiskEvaluation) String() string {
 type RiskEvaluationRiskLevel string
 
 const (
-	RiskEvaluationRiskLevelDoNotUse RiskEvaluationRiskLevel = "DO_NOT_USE"
 	RiskEvaluationRiskLevelPending  RiskEvaluationRiskLevel = "PENDING"
 	RiskEvaluationRiskLevelNormal   RiskEvaluationRiskLevel = "NORMAL"
 	RiskEvaluationRiskLevelModerate RiskEvaluationRiskLevel = "MODERATE"
@@ -2298,8 +2297,6 @@ const (
 
 func NewRiskEvaluationRiskLevelFromString(s string) (RiskEvaluationRiskLevel, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return RiskEvaluationRiskLevelDoNotUse, nil
 	case "PENDING":
 		return RiskEvaluationRiskLevelPending, nil
 	case "NORMAL":

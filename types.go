@@ -153,34 +153,19 @@ func (a *AccumulateLoyaltyPointsResponse) String() string {
 type ActionCancelReason string
 
 const (
-	ActionCancelReasonActionCancelReasonDoNotUse ActionCancelReason = "ACTION_CANCEL_REASON_DO_NOT_USE"
-	ActionCancelReasonBuyerCanceled              ActionCancelReason = "BUYER_CANCELED"
-	ActionCancelReasonSellerCanceled             ActionCancelReason = "SELLER_CANCELED"
-	ActionCancelReasonTimedOut                   ActionCancelReason = "TIMED_OUT"
-	ActionCancelReasonUnsupported                ActionCancelReason = "UNSUPPORTED"
-	ActionCancelReasonSellerDismissed            ActionCancelReason = "SELLER_DISMISSED"
-	ActionCancelReasonTerminalTimedOut           ActionCancelReason = "TERMINAL_TIMED_OUT"
-	ActionCancelReasonTerminalError              ActionCancelReason = "TERMINAL_ERROR"
+	ActionCancelReasonBuyerCanceled  ActionCancelReason = "BUYER_CANCELED"
+	ActionCancelReasonSellerCanceled ActionCancelReason = "SELLER_CANCELED"
+	ActionCancelReasonTimedOut       ActionCancelReason = "TIMED_OUT"
 )
 
 func NewActionCancelReasonFromString(s string) (ActionCancelReason, error) {
 	switch s {
-	case "ACTION_CANCEL_REASON_DO_NOT_USE":
-		return ActionCancelReasonActionCancelReasonDoNotUse, nil
 	case "BUYER_CANCELED":
 		return ActionCancelReasonBuyerCanceled, nil
 	case "SELLER_CANCELED":
 		return ActionCancelReasonSellerCanceled, nil
 	case "TIMED_OUT":
 		return ActionCancelReasonTimedOut, nil
-	case "UNSUPPORTED":
-		return ActionCancelReasonUnsupported, nil
-	case "SELLER_DISMISSED":
-		return ActionCancelReasonSellerDismissed, nil
-	case "TERMINAL_TIMED_OUT":
-		return ActionCancelReasonTerminalTimedOut, nil
-	case "TERMINAL_ERROR":
-		return ActionCancelReasonTerminalError, nil
 	}
 	var t ActionCancelReason
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -544,201 +529,6 @@ func (a *AdjustLoyaltyPointsResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", a)
-}
-
-// Represents a batched request included in a call to the **SubmitBatch**
-// endpoint.
-type BatchRequest struct {
-	// HTTP method for the API call.
-	// See [BatchRequestHttpMethod](#type-batchrequesthttpmethod) for possible values
-	Method BatchRequestHTTPMethod `json:"method" url:"method"`
-	// Endpoint path for the API call.
-	RelativePath string `json:"relative_path" url:"relative_path"`
-	// [Square access token](https://developer.squareup.com/docs/build-basics/access-tokens) for the API
-	// call.
-	AccessToken string `json:"access_token" url:"access_token"`
-	// Request body for the API call. Only used for API calls using POST.
-	Body map[string]*string `json:"body,omitempty" url:"body,omitempty"`
-	// Client-provided value to identify the request.
-	RequestID *string `json:"request_id,omitempty" url:"request_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (b *BatchRequest) GetMethod() BatchRequestHTTPMethod {
-	if b == nil {
-		return ""
-	}
-	return b.Method
-}
-
-func (b *BatchRequest) GetRelativePath() string {
-	if b == nil {
-		return ""
-	}
-	return b.RelativePath
-}
-
-func (b *BatchRequest) GetAccessToken() string {
-	if b == nil {
-		return ""
-	}
-	return b.AccessToken
-}
-
-func (b *BatchRequest) GetBody() map[string]*string {
-	if b == nil {
-		return nil
-	}
-	return b.Body
-}
-
-func (b *BatchRequest) GetRequestID() *string {
-	if b == nil {
-		return nil
-	}
-	return b.RequestID
-}
-
-func (b *BatchRequest) GetExtraProperties() map[string]interface{} {
-	return b.extraProperties
-}
-
-func (b *BatchRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler BatchRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BatchRequest(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *b)
-	if err != nil {
-		return err
-	}
-	b.extraProperties = extraProperties
-	b.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BatchRequest) String() string {
-	if len(b.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
-// Indicates the applicable HTTP method.
-type BatchRequestHTTPMethod string
-
-const (
-	BatchRequestHTTPMethodGet    BatchRequestHTTPMethod = "GET"
-	BatchRequestHTTPMethodPost   BatchRequestHTTPMethod = "POST"
-	BatchRequestHTTPMethodPut    BatchRequestHTTPMethod = "PUT"
-	BatchRequestHTTPMethodDelete BatchRequestHTTPMethod = "DELETE"
-)
-
-func NewBatchRequestHTTPMethodFromString(s string) (BatchRequestHTTPMethod, error) {
-	switch s {
-	case "GET":
-		return BatchRequestHTTPMethodGet, nil
-	case "POST":
-		return BatchRequestHTTPMethodPost, nil
-	case "PUT":
-		return BatchRequestHTTPMethodPut, nil
-	case "DELETE":
-		return BatchRequestHTTPMethodDelete, nil
-	}
-	var t BatchRequestHTTPMethod
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (b BatchRequestHTTPMethod) Ptr() *BatchRequestHTTPMethod {
-	return &b
-}
-
-// Represents an individual response for a batched request to the
-// **SubmitBatch** endpoint.
-type BatchResponse struct {
-	// HTTP status code for the response
-	StatusCode *int `json:"status_code,omitempty" url:"status_code,omitempty"`
-	// The body of the response (if any).
-	Body map[string]string `json:"body,omitempty" url:"body,omitempty"`
-	// Contains any important headers for the response, indexed by header
-	// name. For example, if the response includes a pagination header, the header
-	// value is available from `headers["Link"]`.
-	Headers map[string]string `json:"headers,omitempty" url:"headers,omitempty"`
-	// The value provided in a request for `request_id` in the corresponding
-	// `BatchRequest` (if any).
-	RequestID *string `json:"request_id,omitempty" url:"request_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (b *BatchResponse) GetStatusCode() *int {
-	if b == nil {
-		return nil
-	}
-	return b.StatusCode
-}
-
-func (b *BatchResponse) GetBody() map[string]string {
-	if b == nil {
-		return nil
-	}
-	return b.Body
-}
-
-func (b *BatchResponse) GetHeaders() map[string]string {
-	if b == nil {
-		return nil
-	}
-	return b.Headers
-}
-
-func (b *BatchResponse) GetRequestID() *string {
-	if b == nil {
-		return nil
-	}
-	return b.RequestID
-}
-
-func (b *BatchResponse) GetExtraProperties() map[string]interface{} {
-	return b.extraProperties
-}
-
-func (b *BatchResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler BatchResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BatchResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *b)
-	if err != nil {
-		return err
-	}
-	b.extraProperties = extraProperties
-	b.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BatchResponse) String() string {
-	if len(b.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
 }
 
 // A record of an employee's break during a shift.
@@ -1822,16 +1612,6 @@ type CashDrawerShift struct {
 	EndedAt *string `json:"ended_at,omitempty" url:"ended_at,omitempty"`
 	// The time when the shift was closed, in ISO 8601 format.
 	ClosedAt *string `json:"closed_at,omitempty" url:"closed_at,omitempty"`
-	// The IDs of all employees that were logged into Square Point of Sale at any
-	// point while the cash drawer shift was open.
-	EmployeeIDs []string `json:"employee_ids,omitempty" url:"employee_ids,omitempty"`
-	// The ID of the employee that started the cash drawer shift.
-	OpeningEmployeeID *string `json:"opening_employee_id,omitempty" url:"opening_employee_id,omitempty"`
-	// The ID of the employee that ended the cash drawer shift.
-	EndingEmployeeID *string `json:"ending_employee_id,omitempty" url:"ending_employee_id,omitempty"`
-	// The ID of the employee that closed the cash drawer shift by auditing
-	// the cash drawer contents.
-	ClosingEmployeeID *string `json:"closing_employee_id,omitempty" url:"closing_employee_id,omitempty"`
 	// The free-form text description of a cash drawer by an employee.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// The amount of money in the cash drawer at the start of the shift.
@@ -1921,34 +1701,6 @@ func (c *CashDrawerShift) GetClosedAt() *string {
 		return nil
 	}
 	return c.ClosedAt
-}
-
-func (c *CashDrawerShift) GetEmployeeIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.EmployeeIDs
-}
-
-func (c *CashDrawerShift) GetOpeningEmployeeID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.OpeningEmployeeID
-}
-
-func (c *CashDrawerShift) GetEndingEmployeeID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.EndingEmployeeID
-}
-
-func (c *CashDrawerShift) GetClosingEmployeeID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClosingEmployeeID
 }
 
 func (c *CashDrawerShift) GetDescription() *string {
@@ -2098,8 +1850,6 @@ func (c *CashDrawerShift) String() string {
 type CashDrawerShiftEvent struct {
 	// The unique ID of the event.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The ID of the employee that created the event.
-	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
 	// The type of cash drawer shift event.
 	// See [CashDrawerEventType](#type-cashdrawereventtype) for possible values
 	EventType *CashDrawerEventType `json:"event_type,omitempty" url:"event_type,omitempty"`
@@ -2125,13 +1875,6 @@ func (c *CashDrawerShiftEvent) GetID() *string {
 		return nil
 	}
 	return c.ID
-}
-
-func (c *CashDrawerShiftEvent) GetEmployeeID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.EmployeeID
 }
 
 func (c *CashDrawerShiftEvent) GetEventType() *CashDrawerEventType {
@@ -2529,16 +2272,13 @@ func (c *CatalogCategory) String() string {
 type CatalogCategoryType string
 
 const (
-	CatalogCategoryTypeCatalogCategoryTypeDoNotUse CatalogCategoryType = "CATALOG_CATEGORY_TYPE_DO_NOT_USE"
-	CatalogCategoryTypeRegularCategory             CatalogCategoryType = "REGULAR_CATEGORY"
-	CatalogCategoryTypeMenuCategory                CatalogCategoryType = "MENU_CATEGORY"
-	CatalogCategoryTypeKitchenCategory             CatalogCategoryType = "KITCHEN_CATEGORY"
+	CatalogCategoryTypeRegularCategory CatalogCategoryType = "REGULAR_CATEGORY"
+	CatalogCategoryTypeMenuCategory    CatalogCategoryType = "MENU_CATEGORY"
+	CatalogCategoryTypeKitchenCategory CatalogCategoryType = "KITCHEN_CATEGORY"
 )
 
 func NewCatalogCategoryTypeFromString(s string) (CatalogCategoryType, error) {
 	switch s {
-	case "CATALOG_CATEGORY_TYPE_DO_NOT_USE":
-		return CatalogCategoryTypeCatalogCategoryTypeDoNotUse, nil
 	case "REGULAR_CATEGORY":
 		return CatalogCategoryTypeRegularCategory, nil
 	case "MENU_CATEGORY":
@@ -2728,7 +2468,6 @@ func (c *CatalogCustomAttributeDefinition) String() string {
 type CatalogCustomAttributeDefinitionAppVisibility string
 
 const (
-	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityDoNotUse        CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_DO_NOT_USE"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityHidden          CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_HIDDEN"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityReadOnly        CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_READ_ONLY"
 	CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityReadWriteValues CatalogCustomAttributeDefinitionAppVisibility = "APP_VISIBILITY_READ_WRITE_VALUES"
@@ -2736,8 +2475,6 @@ const (
 
 func NewCatalogCustomAttributeDefinitionAppVisibilityFromString(s string) (CatalogCustomAttributeDefinitionAppVisibility, error) {
 	switch s {
-	case "APP_VISIBILITY_DO_NOT_USE":
-		return CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityDoNotUse, nil
 	case "APP_VISIBILITY_HIDDEN":
 		return CatalogCustomAttributeDefinitionAppVisibilityAppVisibilityHidden, nil
 	case "APP_VISIBILITY_READ_ONLY":
@@ -2932,15 +2669,12 @@ func (c *CatalogCustomAttributeDefinitionSelectionConfigCustomAttributeSelection
 type CatalogCustomAttributeDefinitionSellerVisibility string
 
 const (
-	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityDoNotUse        CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_DO_NOT_USE"
 	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityHidden          CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_HIDDEN"
 	CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityReadWriteValues CatalogCustomAttributeDefinitionSellerVisibility = "SELLER_VISIBILITY_READ_WRITE_VALUES"
 )
 
 func NewCatalogCustomAttributeDefinitionSellerVisibilityFromString(s string) (CatalogCustomAttributeDefinitionSellerVisibility, error) {
 	switch s {
-	case "SELLER_VISIBILITY_DO_NOT_USE":
-		return CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityDoNotUse, nil
 	case "SELLER_VISIBILITY_HIDDEN":
 		return CatalogCustomAttributeDefinitionSellerVisibilitySellerVisibilityHidden, nil
 	case "SELLER_VISIBILITY_READ_WRITE_VALUES":
@@ -3010,34 +2744,22 @@ func (c *CatalogCustomAttributeDefinitionStringConfig) String() string {
 type CatalogCustomAttributeDefinitionType string
 
 const (
-	CatalogCustomAttributeDefinitionTypeAttributeTypeDoNotUse CatalogCustomAttributeDefinitionType = "ATTRIBUTE_TYPE_DO_NOT_USE"
-	CatalogCustomAttributeDefinitionTypeString                CatalogCustomAttributeDefinitionType = "STRING"
-	CatalogCustomAttributeDefinitionTypeInteger               CatalogCustomAttributeDefinitionType = "INTEGER"
-	CatalogCustomAttributeDefinitionTypeBoolean               CatalogCustomAttributeDefinitionType = "BOOLEAN"
-	CatalogCustomAttributeDefinitionTypeNumber                CatalogCustomAttributeDefinitionType = "NUMBER"
-	CatalogCustomAttributeDefinitionTypeSelection             CatalogCustomAttributeDefinitionType = "SELECTION"
-	CatalogCustomAttributeDefinitionTypeStringInt             CatalogCustomAttributeDefinitionType = "STRING_INT"
-	CatalogCustomAttributeDefinitionTypeTokenInt              CatalogCustomAttributeDefinitionType = "TOKEN_INT"
+	CatalogCustomAttributeDefinitionTypeString    CatalogCustomAttributeDefinitionType = "STRING"
+	CatalogCustomAttributeDefinitionTypeBoolean   CatalogCustomAttributeDefinitionType = "BOOLEAN"
+	CatalogCustomAttributeDefinitionTypeNumber    CatalogCustomAttributeDefinitionType = "NUMBER"
+	CatalogCustomAttributeDefinitionTypeSelection CatalogCustomAttributeDefinitionType = "SELECTION"
 )
 
 func NewCatalogCustomAttributeDefinitionTypeFromString(s string) (CatalogCustomAttributeDefinitionType, error) {
 	switch s {
-	case "ATTRIBUTE_TYPE_DO_NOT_USE":
-		return CatalogCustomAttributeDefinitionTypeAttributeTypeDoNotUse, nil
 	case "STRING":
 		return CatalogCustomAttributeDefinitionTypeString, nil
-	case "INTEGER":
-		return CatalogCustomAttributeDefinitionTypeInteger, nil
 	case "BOOLEAN":
 		return CatalogCustomAttributeDefinitionTypeBoolean, nil
 	case "NUMBER":
 		return CatalogCustomAttributeDefinitionTypeNumber, nil
 	case "SELECTION":
 		return CatalogCustomAttributeDefinitionTypeSelection, nil
-	case "STRING_INT":
-		return CatalogCustomAttributeDefinitionTypeStringInt, nil
-	case "TOKEN_INT":
-		return CatalogCustomAttributeDefinitionTypeTokenInt, nil
 	}
 	var t CatalogCustomAttributeDefinitionType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3602,9 +3324,6 @@ type CatalogItem struct {
 	// and max limits that are specific to this item. Modifier lists
 	// may also be added to or deleted from an item using `UpdateItemModifierLists`.
 	ModifierListInfo []*CatalogItemModifierListInfo `json:"modifier_list_info,omitempty" url:"modifier_list_info,omitempty"`
-	// **Retired**. The URL of an image representing this item. Retired
-	// in favor of `image_id` in [CatalogObject](entity:CatalogObject).
-	ImageURL *string `json:"image_url,omitempty" url:"image_url,omitempty"`
 	// A list of [CatalogItemVariation](entity:CatalogItemVariation) objects for this item. An item must have
 	// at least one variation.
 	Variations []*CatalogObject `json:"variations,omitempty" url:"variations,omitempty"`
@@ -3757,13 +3476,6 @@ func (c *CatalogItem) GetModifierListInfo() []*CatalogItemModifierListInfo {
 		return nil
 	}
 	return c.ModifierListInfo
-}
-
-func (c *CatalogItem) GetImageURL() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageURL
 }
 
 func (c *CatalogItem) GetVariations() []*CatalogObject {
@@ -4034,20 +3746,17 @@ func (c *CatalogItemFoodAndBeverageDetailsDietaryPreference) String() string {
 type CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference string
 
 const (
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceStandardDietaryPreferenceDoNotUse CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "STANDARD_DIETARY_PREFERENCE_DO_NOT_USE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree                         CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "DAIRY_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceGlutenFree                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "GLUTEN_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceHalal                             CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "HALAL"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceKosher                            CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "KOSHER"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceNutFree                           CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "NUT_FREE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegan                             CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGAN"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegetarian                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGETARIAN"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree  CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "DAIRY_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceGlutenFree CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "GLUTEN_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceHalal      CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "HALAL"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceKosher     CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "KOSHER"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceNutFree    CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "NUT_FREE"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegan      CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGAN"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceVegetarian CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference = "VEGETARIAN"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceFromString(s string) (CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreference, error) {
 	switch s {
-	case "STANDARD_DIETARY_PREFERENCE_DO_NOT_USE":
-		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceStandardDietaryPreferenceDoNotUse, nil
 	case "DAIRY_FREE":
 		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPreferenceDairyFree, nil
 	case "GLUTEN_FREE":
@@ -4075,15 +3784,12 @@ func (c CatalogItemFoodAndBeverageDetailsDietaryPreferenceStandardDietaryPrefere
 type CatalogItemFoodAndBeverageDetailsDietaryPreferenceType string
 
 const (
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeDietaryPreferenceTypeDoNotUse CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "DIETARY_PREFERENCE_TYPE_DO_NOT_USE"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard                      CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "STANDARD"
-	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeCustom                        CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "CUSTOM"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "STANDARD"
+	CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeCustom   CatalogItemFoodAndBeverageDetailsDietaryPreferenceType = "CUSTOM"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeFromString(s string) (CatalogItemFoodAndBeverageDetailsDietaryPreferenceType, error) {
 	switch s {
-	case "DIETARY_PREFERENCE_TYPE_DO_NOT_USE":
-		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeDietaryPreferenceTypeDoNotUse, nil
 	case "STANDARD":
 		return CatalogItemFoodAndBeverageDetailsDietaryPreferenceTypeStandard, nil
 	case "CUSTOM":
@@ -4169,27 +3875,24 @@ func (c *CatalogItemFoodAndBeverageDetailsIngredient) String() string {
 type CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient string
 
 const (
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientStandardIngredientDoNotUse CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "STANDARD_INGREDIENT_DO_NOT_USE"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CELERY"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCrustaceans                CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CRUSTACEANS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientEggs                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "EGGS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFish                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "FISH"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientGluten                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "GLUTEN"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientLupin                      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "LUPIN"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMilk                       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MILK"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMolluscs                   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MOLLUSCS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMustard                    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MUSTARD"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientPeanuts                    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "PEANUTS"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSesame                     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SESAME"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSoy                        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SOY"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSulphites                  CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SULPHITES"
-	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientTreeNuts                   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "TREE_NUTS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CELERY"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCrustaceans CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "CRUSTACEANS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientEggs        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "EGGS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFish        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "FISH"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientGluten      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "GLUTEN"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientLupin       CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "LUPIN"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMilk        CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MILK"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMolluscs    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MOLLUSCS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientMustard     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "MUSTARD"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientPeanuts     CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "PEANUTS"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSesame      CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SESAME"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSoy         CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SOY"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientSulphites   CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "SULPHITES"
+	CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientTreeNuts    CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient = "TREE_NUTS"
 )
 
 func NewCatalogItemFoodAndBeverageDetailsIngredientStandardIngredientFromString(s string) (CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient, error) {
 	switch s {
-	case "STANDARD_INGREDIENT_DO_NOT_USE":
-		return CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientStandardIngredientDoNotUse, nil
 	case "CELERY":
 		return CatalogItemFoodAndBeverageDetailsIngredientStandardIngredientCelery, nil
 	case "CRUSTACEANS":
@@ -4633,17 +4336,12 @@ const (
 	CatalogItemProductTypeRegular                      CatalogItemProductType = "REGULAR"
 	CatalogItemProductTypeGiftCard                     CatalogItemProductType = "GIFT_CARD"
 	CatalogItemProductTypeAppointmentsService          CatalogItemProductType = "APPOINTMENTS_SERVICE"
-	CatalogItemProductTypeClassTicket                  CatalogItemProductType = "CLASS_TICKET"
 	CatalogItemProductTypeFoodAndBev                   CatalogItemProductType = "FOOD_AND_BEV"
 	CatalogItemProductTypeEvent                        CatalogItemProductType = "EVENT"
 	CatalogItemProductTypeDigital                      CatalogItemProductType = "DIGITAL"
 	CatalogItemProductTypeDonation                     CatalogItemProductType = "DONATION"
-	CatalogItemProductTypeMembership                   CatalogItemProductType = "MEMBERSHIP"
-	CatalogItemProductTypeCreditPackage                CatalogItemProductType = "CREDIT_PACKAGE"
-	CatalogItemProductTypeCombo                        CatalogItemProductType = "COMBO"
 	CatalogItemProductTypeLegacySquareOnlineService    CatalogItemProductType = "LEGACY_SQUARE_ONLINE_SERVICE"
 	CatalogItemProductTypeLegacySquareOnlineMembership CatalogItemProductType = "LEGACY_SQUARE_ONLINE_MEMBERSHIP"
-	CatalogItemProductTypeAppointmentsMembership       CatalogItemProductType = "APPOINTMENTS_MEMBERSHIP"
 )
 
 func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, error) {
@@ -4654,8 +4352,6 @@ func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, erro
 		return CatalogItemProductTypeGiftCard, nil
 	case "APPOINTMENTS_SERVICE":
 		return CatalogItemProductTypeAppointmentsService, nil
-	case "CLASS_TICKET":
-		return CatalogItemProductTypeClassTicket, nil
 	case "FOOD_AND_BEV":
 		return CatalogItemProductTypeFoodAndBev, nil
 	case "EVENT":
@@ -4664,18 +4360,10 @@ func NewCatalogItemProductTypeFromString(s string) (CatalogItemProductType, erro
 		return CatalogItemProductTypeDigital, nil
 	case "DONATION":
 		return CatalogItemProductTypeDonation, nil
-	case "MEMBERSHIP":
-		return CatalogItemProductTypeMembership, nil
-	case "CREDIT_PACKAGE":
-		return CatalogItemProductTypeCreditPackage, nil
-	case "COMBO":
-		return CatalogItemProductTypeCombo, nil
 	case "LEGACY_SQUARE_ONLINE_SERVICE":
 		return CatalogItemProductTypeLegacySquareOnlineService, nil
 	case "LEGACY_SQUARE_ONLINE_MEMBERSHIP":
 		return CatalogItemProductTypeLegacySquareOnlineMembership, nil
-	case "APPOINTMENTS_MEMBERSHIP":
-		return CatalogItemProductTypeAppointmentsMembership, nil
 	}
 	var t CatalogItemProductType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10464,32 +10152,14 @@ func (c *CatalogObjectTimePeriod) String() string {
 type CatalogObjectType string
 
 const (
-	CatalogObjectTypeCatalogObjectTypeDoNotUse CatalogObjectType = "CATALOG_OBJECT_TYPE_DO_NOT_USE"
 	CatalogObjectTypeItem                      CatalogObjectType = "ITEM"
 	CatalogObjectTypeImage                     CatalogObjectType = "IMAGE"
-	CatalogObjectTypePageTile                  CatalogObjectType = "PAGE_TILE"
 	CatalogObjectTypeCategory                  CatalogObjectType = "CATEGORY"
 	CatalogObjectTypeItemVariation             CatalogObjectType = "ITEM_VARIATION"
 	CatalogObjectTypeTax                       CatalogObjectType = "TAX"
-	CatalogObjectTypePlaceholder               CatalogObjectType = "PLACEHOLDER"
 	CatalogObjectTypeDiscount                  CatalogObjectType = "DISCOUNT"
 	CatalogObjectTypeModifierList              CatalogObjectType = "MODIFIER_LIST"
 	CatalogObjectTypeModifier                  CatalogObjectType = "MODIFIER"
-	CatalogObjectTypeDiningOption              CatalogObjectType = "DINING_OPTION"
-	CatalogObjectTypeTaxExemption              CatalogObjectType = "TAX_EXEMPTION"
-	CatalogObjectTypeConfiguration             CatalogObjectType = "CONFIGURATION"
-	CatalogObjectTypeTicketGroup               CatalogObjectType = "TICKET_GROUP"
-	CatalogObjectTypeTicketTemplate            CatalogObjectType = "TICKET_TEMPLATE"
-	CatalogObjectTypePage                      CatalogObjectType = "PAGE"
-	CatalogObjectTypeMenu                      CatalogObjectType = "MENU"
-	CatalogObjectTypeTag                       CatalogObjectType = "TAG"
-	CatalogObjectTypeFloorPlan                 CatalogObjectType = "FLOOR_PLAN"
-	CatalogObjectTypeFloorPlanTile             CatalogObjectType = "FLOOR_PLAN_TILE"
-	CatalogObjectTypeVoidReason                CatalogObjectType = "VOID_REASON"
-	CatalogObjectTypeFavoritesListPosition     CatalogObjectType = "FAVORITES_LIST_POSITION"
-	CatalogObjectTypeMenuGroup                 CatalogObjectType = "MENU_GROUP"
-	CatalogObjectTypeItemVariationVendorInfo   CatalogObjectType = "ITEM_VARIATION_VENDOR_INFO"
-	CatalogObjectTypeServiceCharge             CatalogObjectType = "SERVICE_CHARGE"
 	CatalogObjectTypePricingRule               CatalogObjectType = "PRICING_RULE"
 	CatalogObjectTypeProductSet                CatalogObjectType = "PRODUCT_SET"
 	CatalogObjectTypeTimePeriod                CatalogObjectType = "TIME_PERIOD"
@@ -10499,73 +10169,28 @@ const (
 	CatalogObjectTypeItemOptionVal             CatalogObjectType = "ITEM_OPTION_VAL"
 	CatalogObjectTypeCustomAttributeDefinition CatalogObjectType = "CUSTOM_ATTRIBUTE_DEFINITION"
 	CatalogObjectTypeQuickAmountsSettings      CatalogObjectType = "QUICK_AMOUNTS_SETTINGS"
-	CatalogObjectTypeComponent                 CatalogObjectType = "COMPONENT"
-	CatalogObjectTypeComposition               CatalogObjectType = "COMPOSITION"
-	CatalogObjectTypeResource                  CatalogObjectType = "RESOURCE"
-	CatalogObjectTypeCheckoutLink              CatalogObjectType = "CHECKOUT_LINK"
-	CatalogObjectTypeAddress                   CatalogObjectType = "ADDRESS"
 	CatalogObjectTypeSubscriptionPlan          CatalogObjectType = "SUBSCRIPTION_PLAN"
 	CatalogObjectTypeAvailabilityPeriod        CatalogObjectType = "AVAILABILITY_PERIOD"
-	CatalogObjectTypeCreditRedemptionPolicy    CatalogObjectType = "CREDIT_REDEMPTION_POLICY"
-	CatalogObjectTypeAgeRestriction            CatalogObjectType = "AGE_RESTRICTION"
-	CatalogObjectTypeSalePrice                 CatalogObjectType = "SALE_PRICE"
-	CatalogObjectTypeTaxCategory               CatalogObjectType = "TAX_CATEGORY"
 )
 
 func NewCatalogObjectTypeFromString(s string) (CatalogObjectType, error) {
 	switch s {
-	case "CATALOG_OBJECT_TYPE_DO_NOT_USE":
-		return CatalogObjectTypeCatalogObjectTypeDoNotUse, nil
 	case "ITEM":
 		return CatalogObjectTypeItem, nil
 	case "IMAGE":
 		return CatalogObjectTypeImage, nil
-	case "PAGE_TILE":
-		return CatalogObjectTypePageTile, nil
 	case "CATEGORY":
 		return CatalogObjectTypeCategory, nil
 	case "ITEM_VARIATION":
 		return CatalogObjectTypeItemVariation, nil
 	case "TAX":
 		return CatalogObjectTypeTax, nil
-	case "PLACEHOLDER":
-		return CatalogObjectTypePlaceholder, nil
 	case "DISCOUNT":
 		return CatalogObjectTypeDiscount, nil
 	case "MODIFIER_LIST":
 		return CatalogObjectTypeModifierList, nil
 	case "MODIFIER":
 		return CatalogObjectTypeModifier, nil
-	case "DINING_OPTION":
-		return CatalogObjectTypeDiningOption, nil
-	case "TAX_EXEMPTION":
-		return CatalogObjectTypeTaxExemption, nil
-	case "CONFIGURATION":
-		return CatalogObjectTypeConfiguration, nil
-	case "TICKET_GROUP":
-		return CatalogObjectTypeTicketGroup, nil
-	case "TICKET_TEMPLATE":
-		return CatalogObjectTypeTicketTemplate, nil
-	case "PAGE":
-		return CatalogObjectTypePage, nil
-	case "MENU":
-		return CatalogObjectTypeMenu, nil
-	case "TAG":
-		return CatalogObjectTypeTag, nil
-	case "FLOOR_PLAN":
-		return CatalogObjectTypeFloorPlan, nil
-	case "FLOOR_PLAN_TILE":
-		return CatalogObjectTypeFloorPlanTile, nil
-	case "VOID_REASON":
-		return CatalogObjectTypeVoidReason, nil
-	case "FAVORITES_LIST_POSITION":
-		return CatalogObjectTypeFavoritesListPosition, nil
-	case "MENU_GROUP":
-		return CatalogObjectTypeMenuGroup, nil
-	case "ITEM_VARIATION_VENDOR_INFO":
-		return CatalogObjectTypeItemVariationVendorInfo, nil
-	case "SERVICE_CHARGE":
-		return CatalogObjectTypeServiceCharge, nil
 	case "PRICING_RULE":
 		return CatalogObjectTypePricingRule, nil
 	case "PRODUCT_SET":
@@ -10584,28 +10209,10 @@ func NewCatalogObjectTypeFromString(s string) (CatalogObjectType, error) {
 		return CatalogObjectTypeCustomAttributeDefinition, nil
 	case "QUICK_AMOUNTS_SETTINGS":
 		return CatalogObjectTypeQuickAmountsSettings, nil
-	case "COMPONENT":
-		return CatalogObjectTypeComponent, nil
-	case "COMPOSITION":
-		return CatalogObjectTypeComposition, nil
-	case "RESOURCE":
-		return CatalogObjectTypeResource, nil
-	case "CHECKOUT_LINK":
-		return CatalogObjectTypeCheckoutLink, nil
-	case "ADDRESS":
-		return CatalogObjectTypeAddress, nil
 	case "SUBSCRIPTION_PLAN":
 		return CatalogObjectTypeSubscriptionPlan, nil
 	case "AVAILABILITY_PERIOD":
 		return CatalogObjectTypeAvailabilityPeriod, nil
-	case "CREDIT_REDEMPTION_POLICY":
-		return CatalogObjectTypeCreditRedemptionPolicy, nil
-	case "AGE_RESTRICTION":
-		return CatalogObjectTypeAgeRestriction, nil
-	case "SALE_PRICE":
-		return CatalogObjectTypeSalePrice, nil
-	case "TAX_CATEGORY":
-		return CatalogObjectTypeTaxCategory, nil
 	}
 	var t CatalogObjectType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -11032,15 +10639,12 @@ func (c *CatalogQuickAmount) String() string {
 type CatalogQuickAmountType string
 
 const (
-	CatalogQuickAmountTypeQuickAmountTypeDoNotUse CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_DO_NOT_USE"
-	CatalogQuickAmountTypeQuickAmountTypeManual   CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_MANUAL"
-	CatalogQuickAmountTypeQuickAmountTypeAuto     CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_AUTO"
+	CatalogQuickAmountTypeQuickAmountTypeManual CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_MANUAL"
+	CatalogQuickAmountTypeQuickAmountTypeAuto   CatalogQuickAmountType = "QUICK_AMOUNT_TYPE_AUTO"
 )
 
 func NewCatalogQuickAmountTypeFromString(s string) (CatalogQuickAmountType, error) {
 	switch s {
-	case "QUICK_AMOUNT_TYPE_DO_NOT_USE":
-		return CatalogQuickAmountTypeQuickAmountTypeDoNotUse, nil
 	case "QUICK_AMOUNT_TYPE_MANUAL":
 		return CatalogQuickAmountTypeQuickAmountTypeManual, nil
 	case "QUICK_AMOUNT_TYPE_AUTO":
@@ -11126,16 +10730,13 @@ func (c *CatalogQuickAmountsSettings) String() string {
 type CatalogQuickAmountsSettingsOption string
 
 const (
-	CatalogQuickAmountsSettingsOptionQuickAmountsSettingsOptionDoNotUse CatalogQuickAmountsSettingsOption = "QUICK_AMOUNTS_SETTINGS_OPTION_DO_NOT_USE"
-	CatalogQuickAmountsSettingsOptionDisabled                           CatalogQuickAmountsSettingsOption = "DISABLED"
-	CatalogQuickAmountsSettingsOptionManual                             CatalogQuickAmountsSettingsOption = "MANUAL"
-	CatalogQuickAmountsSettingsOptionAuto                               CatalogQuickAmountsSettingsOption = "AUTO"
+	CatalogQuickAmountsSettingsOptionDisabled CatalogQuickAmountsSettingsOption = "DISABLED"
+	CatalogQuickAmountsSettingsOptionManual   CatalogQuickAmountsSettingsOption = "MANUAL"
+	CatalogQuickAmountsSettingsOptionAuto     CatalogQuickAmountsSettingsOption = "AUTO"
 )
 
 func NewCatalogQuickAmountsSettingsOptionFromString(s string) (CatalogQuickAmountsSettingsOption, error) {
 	switch s {
-	case "QUICK_AMOUNTS_SETTINGS_OPTION_DO_NOT_USE":
-		return CatalogQuickAmountsSettingsOptionQuickAmountsSettingsOptionDoNotUse, nil
 	case "DISABLED":
 		return CatalogQuickAmountsSettingsOptionDisabled, nil
 	case "MANUAL":
@@ -11238,14 +10839,6 @@ type CatalogSubscriptionPlan struct {
 	// A list of SubscriptionPhase containing the [SubscriptionPhase](entity:SubscriptionPhase) for this plan.
 	// This field it required. Not including this field will throw a REQUIRED_FIELD_MISSING error
 	Phases []*SubscriptionPhase `json:"phases,omitempty" url:"phases,omitempty"`
-	// The day of the month the billing period starts.
-	//
-	// Retired in favour of the corresponding plan variation field.
-	MonthlyBillingAnchorDate *int64 `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
-	// Whether bills for this plan can be split for proration.
-	//
-	// Retired in favour of the corresponding plan variation field.
-	CanProrate *bool `json:"can_prorate,omitempty" url:"can_prorate,omitempty"`
 	// The list of subscription plan variations available for this product
 	SubscriptionPlanVariations []*CatalogObject `json:"subscription_plan_variations,omitempty" url:"subscription_plan_variations,omitempty"`
 	// The list of IDs of `CatalogItems` that are eligible for subscription by this SubscriptionPlan's variations.
@@ -11271,20 +10864,6 @@ func (c *CatalogSubscriptionPlan) GetPhases() []*SubscriptionPhase {
 		return nil
 	}
 	return c.Phases
-}
-
-func (c *CatalogSubscriptionPlan) GetMonthlyBillingAnchorDate() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.MonthlyBillingAnchorDate
-}
-
-func (c *CatalogSubscriptionPlan) GetCanProrate() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.CanProrate
 }
 
 func (c *CatalogSubscriptionPlan) GetSubscriptionPlanVariations() []*CatalogObject {
@@ -11778,7 +11357,6 @@ func (c *CheckoutOptions) String() string {
 type CheckoutOptionsPaymentType string
 
 const (
-	CheckoutOptionsPaymentTypePaymentTypeDoNotUse       CheckoutOptionsPaymentType = "PAYMENT_TYPE_DO_NOT_USE"
 	CheckoutOptionsPaymentTypeCardPresent               CheckoutOptionsPaymentType = "CARD_PRESENT"
 	CheckoutOptionsPaymentTypeManualCardEntry           CheckoutOptionsPaymentType = "MANUAL_CARD_ENTRY"
 	CheckoutOptionsPaymentTypeFelicaID                  CheckoutOptionsPaymentType = "FELICA_ID"
@@ -11786,13 +11364,10 @@ const (
 	CheckoutOptionsPaymentTypeFelicaTransportationGroup CheckoutOptionsPaymentType = "FELICA_TRANSPORTATION_GROUP"
 	CheckoutOptionsPaymentTypeFelicaAll                 CheckoutOptionsPaymentType = "FELICA_ALL"
 	CheckoutOptionsPaymentTypePaypay                    CheckoutOptionsPaymentType = "PAYPAY"
-	CheckoutOptionsPaymentTypeCashApp                   CheckoutOptionsPaymentType = "CASH_APP"
 )
 
 func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentType, error) {
 	switch s {
-	case "PAYMENT_TYPE_DO_NOT_USE":
-		return CheckoutOptionsPaymentTypePaymentTypeDoNotUse, nil
 	case "CARD_PRESENT":
 		return CheckoutOptionsPaymentTypeCardPresent, nil
 	case "MANUAL_CARD_ENTRY":
@@ -11807,8 +11382,6 @@ func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentTy
 		return CheckoutOptionsPaymentTypeFelicaAll, nil
 	case "PAYPAY":
 		return CheckoutOptionsPaymentTypePaypay, nil
-	case "CASH_APP":
-		return CheckoutOptionsPaymentTypeCashApp, nil
 	}
 	var t CheckoutOptionsPaymentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -13864,6 +13437,7 @@ const (
 	CurrencySgd             Currency = "SGD"
 	CurrencyShp             Currency = "SHP"
 	CurrencySll             Currency = "SLL"
+	CurrencySle             Currency = "SLE"
 	CurrencySos             Currency = "SOS"
 	CurrencySrd             Currency = "SRD"
 	CurrencySsp             Currency = "SSP"
@@ -14183,6 +13757,8 @@ func NewCurrencyFromString(s string) (Currency, error) {
 		return CurrencyShp, nil
 	case "SLL":
 		return CurrencySll, nil
+	case "SLE":
+		return CurrencySle, nil
 	case "SOS":
 		return CurrencySos, nil
 	case "SRD":
@@ -14560,7 +14136,6 @@ func (c *CustomAttributeDefinition) String() string {
 type CustomAttributeDefinitionVisibility string
 
 const (
-	CustomAttributeDefinitionVisibilityVisibilityDoNotUse        CustomAttributeDefinitionVisibility = "VISIBILITY_DO_NOT_USE"
 	CustomAttributeDefinitionVisibilityVisibilityHidden          CustomAttributeDefinitionVisibility = "VISIBILITY_HIDDEN"
 	CustomAttributeDefinitionVisibilityVisibilityReadOnly        CustomAttributeDefinitionVisibility = "VISIBILITY_READ_ONLY"
 	CustomAttributeDefinitionVisibilityVisibilityReadWriteValues CustomAttributeDefinitionVisibility = "VISIBILITY_READ_WRITE_VALUES"
@@ -14568,8 +14143,6 @@ const (
 
 func NewCustomAttributeDefinitionVisibilityFromString(s string) (CustomAttributeDefinitionVisibility, error) {
 	switch s {
-	case "VISIBILITY_DO_NOT_USE":
-		return CustomAttributeDefinitionVisibilityVisibilityDoNotUse, nil
 	case "VISIBILITY_HIDDEN":
 		return CustomAttributeDefinitionVisibilityVisibilityHidden, nil
 	case "VISIBILITY_READ_ONLY":
@@ -14871,15 +14444,12 @@ func (d *DataCollectionOptions) String() string {
 type DataCollectionOptionsInputType string
 
 const (
-	DataCollectionOptionsInputTypeInvalidType DataCollectionOptionsInputType = "INVALID_TYPE"
 	DataCollectionOptionsInputTypeEmail       DataCollectionOptionsInputType = "EMAIL"
 	DataCollectionOptionsInputTypePhoneNumber DataCollectionOptionsInputType = "PHONE_NUMBER"
 )
 
 func NewDataCollectionOptionsInputTypeFromString(s string) (DataCollectionOptionsInputType, error) {
 	switch s {
-	case "INVALID_TYPE":
-		return DataCollectionOptionsInputTypeInvalidType, nil
 	case "EMAIL":
 		return DataCollectionOptionsInputTypeEmail, nil
 	case "PHONE_NUMBER":
@@ -15575,7 +15145,7 @@ type DeviceCode struct {
 	// The unique id of the device that used this code. Populated when the device is paired up.
 	DeviceID *string `json:"device_id,omitempty" url:"device_id,omitempty"`
 	// The targeting product type of the device code.
-	ProductType ProductType `json:"product_type" url:"product_type"`
+	ProductType ProductType `json:"product_type,omitempty" url:"product_type,omitempty"`
 	// The location assigned to this code.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
 	// The pairing status of the device code.
@@ -15620,13 +15190,6 @@ func (d *DeviceCode) GetDeviceID() *string {
 		return nil
 	}
 	return d.DeviceID
-}
-
-func (d *DeviceCode) GetProductType() ProductType {
-	if d == nil {
-		return ""
-	}
-	return d.ProductType
 }
 
 func (d *DeviceCode) GetLocationID() *string {
@@ -16045,7 +15608,6 @@ func (d *DisputeEvidenceFile) String() string {
 type DisputeEvidenceType string
 
 const (
-	DisputeEvidenceTypeUnknownType                       DisputeEvidenceType = "UNKNOWN_TYPE"
 	DisputeEvidenceTypeGenericEvidence                   DisputeEvidenceType = "GENERIC_EVIDENCE"
 	DisputeEvidenceTypeOnlineOrAppAccessLog              DisputeEvidenceType = "ONLINE_OR_APP_ACCESS_LOG"
 	DisputeEvidenceTypeAuthorizationDocumentation        DisputeEvidenceType = "AUTHORIZATION_DOCUMENTATION"
@@ -16065,8 +15627,6 @@ const (
 
 func NewDisputeEvidenceTypeFromString(s string) (DisputeEvidenceType, error) {
 	switch s {
-	case "UNKNOWN_TYPE":
-		return DisputeEvidenceTypeUnknownType, nil
 	case "GENERIC_EVIDENCE":
 		return DisputeEvidenceTypeGenericEvidence, nil
 	case "ONLINE_OR_APP_ACCESS_LOG":
@@ -16309,192 +15869,156 @@ func (e ErrorCategory) Ptr() *ErrorCategory {
 type ErrorCode string
 
 const (
-	ErrorCodeInternalServerError                                        ErrorCode = "INTERNAL_SERVER_ERROR"
-	ErrorCodeUnauthorized                                               ErrorCode = "UNAUTHORIZED"
-	ErrorCodeAccessTokenExpired                                         ErrorCode = "ACCESS_TOKEN_EXPIRED"
-	ErrorCodeAccessTokenRevoked                                         ErrorCode = "ACCESS_TOKEN_REVOKED"
-	ErrorCodeClientDisabled                                             ErrorCode = "CLIENT_DISABLED"
-	ErrorCodeForbidden                                                  ErrorCode = "FORBIDDEN"
-	ErrorCodeInsufficientScopes                                         ErrorCode = "INSUFFICIENT_SCOPES"
-	ErrorCodeApplicationDisabled                                        ErrorCode = "APPLICATION_DISABLED"
-	ErrorCodeV1Application                                              ErrorCode = "V1_APPLICATION"
-	ErrorCodeV1AccessToken                                              ErrorCode = "V1_ACCESS_TOKEN"
-	ErrorCodeCardProcessingNotEnabled                                   ErrorCode = "CARD_PROCESSING_NOT_ENABLED"
-	ErrorCodeMerchantSubscriptionNotFound                               ErrorCode = "MERCHANT_SUBSCRIPTION_NOT_FOUND"
-	ErrorCodeBadRequest                                                 ErrorCode = "BAD_REQUEST"
-	ErrorCodeMissingRequiredParameter                                   ErrorCode = "MISSING_REQUIRED_PARAMETER"
-	ErrorCodeIncorrectType                                              ErrorCode = "INCORRECT_TYPE"
-	ErrorCodeInvalidTime                                                ErrorCode = "INVALID_TIME"
-	ErrorCodeInvalidTimeRange                                           ErrorCode = "INVALID_TIME_RANGE"
-	ErrorCodeInvalidValue                                               ErrorCode = "INVALID_VALUE"
-	ErrorCodeInvalidCursor                                              ErrorCode = "INVALID_CURSOR"
-	ErrorCodeUnknownQueryParameter                                      ErrorCode = "UNKNOWN_QUERY_PARAMETER"
-	ErrorCodeConflictingParameters                                      ErrorCode = "CONFLICTING_PARAMETERS"
-	ErrorCodeExpectedJSONBody                                           ErrorCode = "EXPECTED_JSON_BODY"
-	ErrorCodeInvalidSortOrder                                           ErrorCode = "INVALID_SORT_ORDER"
-	ErrorCodeValueRegexMismatch                                         ErrorCode = "VALUE_REGEX_MISMATCH"
-	ErrorCodeValueTooShort                                              ErrorCode = "VALUE_TOO_SHORT"
-	ErrorCodeValueTooLong                                               ErrorCode = "VALUE_TOO_LONG"
-	ErrorCodeValueTooLow                                                ErrorCode = "VALUE_TOO_LOW"
-	ErrorCodeValueTooHigh                                               ErrorCode = "VALUE_TOO_HIGH"
-	ErrorCodeValueEmpty                                                 ErrorCode = "VALUE_EMPTY"
-	ErrorCodeArrayLengthTooLong                                         ErrorCode = "ARRAY_LENGTH_TOO_LONG"
-	ErrorCodeArrayLengthTooShort                                        ErrorCode = "ARRAY_LENGTH_TOO_SHORT"
-	ErrorCodeArrayEmpty                                                 ErrorCode = "ARRAY_EMPTY"
-	ErrorCodeExpectedBoolean                                            ErrorCode = "EXPECTED_BOOLEAN"
-	ErrorCodeExpectedInteger                                            ErrorCode = "EXPECTED_INTEGER"
-	ErrorCodeExpectedFloat                                              ErrorCode = "EXPECTED_FLOAT"
-	ErrorCodeExpectedString                                             ErrorCode = "EXPECTED_STRING"
-	ErrorCodeExpectedObject                                             ErrorCode = "EXPECTED_OBJECT"
-	ErrorCodeExpectedArray                                              ErrorCode = "EXPECTED_ARRAY"
-	ErrorCodeExpectedMap                                                ErrorCode = "EXPECTED_MAP"
-	ErrorCodeExpectedBase64EncodedByteArray                             ErrorCode = "EXPECTED_BASE64_ENCODED_BYTE_ARRAY"
-	ErrorCodeInvalidArrayValue                                          ErrorCode = "INVALID_ARRAY_VALUE"
-	ErrorCodeInvalidEnumValue                                           ErrorCode = "INVALID_ENUM_VALUE"
-	ErrorCodeInvalidContentType                                         ErrorCode = "INVALID_CONTENT_TYPE"
-	ErrorCodeInvalidFormValue                                           ErrorCode = "INVALID_FORM_VALUE"
-	ErrorCodeCustomerNotFound                                           ErrorCode = "CUSTOMER_NOT_FOUND"
-	ErrorCodeBuyerNotFound                                              ErrorCode = "BUYER_NOT_FOUND"
-	ErrorCodeOneInstrumentExpected                                      ErrorCode = "ONE_INSTRUMENT_EXPECTED"
-	ErrorCodeNoFieldsSet                                                ErrorCode = "NO_FIELDS_SET"
-	ErrorCodeDeprecatedFieldSet                                         ErrorCode = "DEPRECATED_FIELD_SET"
-	ErrorCodeRetiredFieldSet                                            ErrorCode = "RETIRED_FIELD_SET"
-	ErrorCodeTooManyMapEntries                                          ErrorCode = "TOO_MANY_MAP_ENTRIES"
-	ErrorCodeMapKeyLengthTooShort                                       ErrorCode = "MAP_KEY_LENGTH_TOO_SHORT"
-	ErrorCodeMapKeyLengthTooLong                                        ErrorCode = "MAP_KEY_LENGTH_TOO_LONG"
-	ErrorCodeCustomerMissingName                                        ErrorCode = "CUSTOMER_MISSING_NAME"
-	ErrorCodeCustomerMissingEmail                                       ErrorCode = "CUSTOMER_MISSING_EMAIL"
-	ErrorCodeInvalidPauseLength                                         ErrorCode = "INVALID_PAUSE_LENGTH"
-	ErrorCodeInvalidDate                                                ErrorCode = "INVALID_DATE"
-	ErrorCodeJobTemplateNameTaken                                       ErrorCode = "JOB_TEMPLATE_NAME_TAKEN"
-	ErrorCodeClientNotSupported                                         ErrorCode = "CLIENT_NOT_SUPPORTED"
-	ErrorCodeUnsupportedCountry                                         ErrorCode = "UNSUPPORTED_COUNTRY"
-	ErrorCodeUnsupportedCurrency                                        ErrorCode = "UNSUPPORTED_CURRENCY"
-	ErrorCodeAppleTtpPinToken                                           ErrorCode = "APPLE_TTP_PIN_TOKEN"
-	ErrorCodeCardExpired                                                ErrorCode = "CARD_EXPIRED"
-	ErrorCodeInvalidExpiration                                          ErrorCode = "INVALID_EXPIRATION"
-	ErrorCodeInvalidExpirationYear                                      ErrorCode = "INVALID_EXPIRATION_YEAR"
-	ErrorCodeInvalidExpirationDate                                      ErrorCode = "INVALID_EXPIRATION_DATE"
-	ErrorCodeUnsupportedCardBrand                                       ErrorCode = "UNSUPPORTED_CARD_BRAND"
-	ErrorCodeUnsupportedEntryMethod                                     ErrorCode = "UNSUPPORTED_ENTRY_METHOD"
-	ErrorCodeInvalidEncryptedCard                                       ErrorCode = "INVALID_ENCRYPTED_CARD"
-	ErrorCodeInvalidCard                                                ErrorCode = "INVALID_CARD"
-	ErrorCodePaymentAmountMismatch                                      ErrorCode = "PAYMENT_AMOUNT_MISMATCH"
-	ErrorCodeGenericDecline                                             ErrorCode = "GENERIC_DECLINE"
-	ErrorCodeCvvFailure                                                 ErrorCode = "CVV_FAILURE"
-	ErrorCodeAddressVerificationFailure                                 ErrorCode = "ADDRESS_VERIFICATION_FAILURE"
-	ErrorCodeInvalidAccount                                             ErrorCode = "INVALID_ACCOUNT"
-	ErrorCodeCurrencyMismatch                                           ErrorCode = "CURRENCY_MISMATCH"
-	ErrorCodeInsufficientFunds                                          ErrorCode = "INSUFFICIENT_FUNDS"
-	ErrorCodeInsufficientPermissions                                    ErrorCode = "INSUFFICIENT_PERMISSIONS"
-	ErrorCodeCardholderInsufficientPermissions                          ErrorCode = "CARDHOLDER_INSUFFICIENT_PERMISSIONS"
-	ErrorCodeInvalidLocation                                            ErrorCode = "INVALID_LOCATION"
-	ErrorCodeTransactionLimit                                           ErrorCode = "TRANSACTION_LIMIT"
-	ErrorCodeVoiceFailure                                               ErrorCode = "VOICE_FAILURE"
-	ErrorCodePanFailure                                                 ErrorCode = "PAN_FAILURE"
-	ErrorCodeExpirationFailure                                          ErrorCode = "EXPIRATION_FAILURE"
-	ErrorCodeCardNotSupported                                           ErrorCode = "CARD_NOT_SUPPORTED"
-	ErrorCodeIssuerInstallmentError                                     ErrorCode = "ISSUER_INSTALLMENT_ERROR"
-	ErrorCodeInvalidPin                                                 ErrorCode = "INVALID_PIN"
-	ErrorCodeMissingPin                                                 ErrorCode = "MISSING_PIN"
-	ErrorCodeMissingAccountType                                         ErrorCode = "MISSING_ACCOUNT_TYPE"
-	ErrorCodeInvalidPostalCode                                          ErrorCode = "INVALID_POSTAL_CODE"
-	ErrorCodeInvalidFees                                                ErrorCode = "INVALID_FEES"
-	ErrorCodeManuallyEnteredPaymentNotSupported                         ErrorCode = "MANUALLY_ENTERED_PAYMENT_NOT_SUPPORTED"
-	ErrorCodePaymentLimitExceeded                                       ErrorCode = "PAYMENT_LIMIT_EXCEEDED"
-	ErrorCodeGiftCardAvailableAmount                                    ErrorCode = "GIFT_CARD_AVAILABLE_AMOUNT"
-	ErrorCodeGiftCardBuyerDailyLimitReached                             ErrorCode = "GIFT_CARD_BUYER_DAILY_LIMIT_REACHED"
-	ErrorCodeGiftCardInvalidAmount                                      ErrorCode = "GIFT_CARD_INVALID_AMOUNT"
-	ErrorCodeGiftCardMaxValueReached                                    ErrorCode = "GIFT_CARD_MAX_VALUE_REACHED"
-	ErrorCodeGiftCardMerchantMaxOutstandingBalanceReached               ErrorCode = "GIFT_CARD_MERCHANT_MAX_OUTSTANDING_BALANCE_REACHED"
-	ErrorCodeGiftCardValueAdditionLimitReached                          ErrorCode = "GIFT_CARD_VALUE_ADDITION_LIMIT_REACHED"
-	ErrorCodeAccountUnusable                                            ErrorCode = "ACCOUNT_UNUSABLE"
-	ErrorCodeBuyerRefusedPayment                                        ErrorCode = "BUYER_REFUSED_PAYMENT"
-	ErrorCodeDelayedTransactionExpired                                  ErrorCode = "DELAYED_TRANSACTION_EXPIRED"
-	ErrorCodeDelayedTransactionCanceled                                 ErrorCode = "DELAYED_TRANSACTION_CANCELED"
-	ErrorCodeDelayedTransactionCaptured                                 ErrorCode = "DELAYED_TRANSACTION_CAPTURED"
-	ErrorCodeDelayedTransactionFailed                                   ErrorCode = "DELAYED_TRANSACTION_FAILED"
-	ErrorCodeCardTokenExpired                                           ErrorCode = "CARD_TOKEN_EXPIRED"
-	ErrorCodeCardTokenUsed                                              ErrorCode = "CARD_TOKEN_USED"
-	ErrorCodeAmountTooHigh                                              ErrorCode = "AMOUNT_TOO_HIGH"
-	ErrorCodeUnsupportedInstrumentType                                  ErrorCode = "UNSUPPORTED_INSTRUMENT_TYPE"
-	ErrorCodeRefundAmountInvalid                                        ErrorCode = "REFUND_AMOUNT_INVALID"
-	ErrorCodeRefundAlreadyPending                                       ErrorCode = "REFUND_ALREADY_PENDING"
-	ErrorCodePaymentNotRefundable                                       ErrorCode = "PAYMENT_NOT_REFUNDABLE"
-	ErrorCodeRefundDeclined                                             ErrorCode = "REFUND_DECLINED"
-	ErrorCodeInsufficientPermissionsForRefund                           ErrorCode = "INSUFFICIENT_PERMISSIONS_FOR_REFUND"
-	ErrorCodeInvalidCardData                                            ErrorCode = "INVALID_CARD_DATA"
-	ErrorCodeSourceUsed                                                 ErrorCode = "SOURCE_USED"
-	ErrorCodeSourceExpired                                              ErrorCode = "SOURCE_EXPIRED"
-	ErrorCodeUnsupportedLoyaltyRewardTier                               ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
-	ErrorCodeLocationMismatch                                           ErrorCode = "LOCATION_MISMATCH"
-	ErrorCodeOrderExpired                                               ErrorCode = "ORDER_EXPIRED"
-	ErrorCodeOrderAlreadyUsed                                           ErrorCode = "ORDER_ALREADY_USED"
-	ErrorCodeOrderTooManyCatalogObjects                                 ErrorCode = "ORDER_TOO_MANY_CATALOG_OBJECTS"
-	ErrorCodeInsufficientInventory                                      ErrorCode = "INSUFFICIENT_INVENTORY"
-	ErrorCodePriceMismatch                                              ErrorCode = "PRICE_MISMATCH"
-	ErrorCodeVersionMismatch                                            ErrorCode = "VERSION_MISMATCH"
-	ErrorCodeIdempotencyKeyReused                                       ErrorCode = "IDEMPOTENCY_KEY_REUSED"
-	ErrorCodeUnexpectedValue                                            ErrorCode = "UNEXPECTED_VALUE"
-	ErrorCodeSandboxNotSupported                                        ErrorCode = "SANDBOX_NOT_SUPPORTED"
-	ErrorCodeInvalidEmailAddress                                        ErrorCode = "INVALID_EMAIL_ADDRESS"
-	ErrorCodeInvalidPhoneNumber                                         ErrorCode = "INVALID_PHONE_NUMBER"
-	ErrorCodeCheckoutExpired                                            ErrorCode = "CHECKOUT_EXPIRED"
-	ErrorCodeBadCertificate                                             ErrorCode = "BAD_CERTIFICATE"
-	ErrorCodeInvalidSquareVersionFormat                                 ErrorCode = "INVALID_SQUARE_VERSION_FORMAT"
-	ErrorCodeAPIVersionIncompatible                                     ErrorCode = "API_VERSION_INCOMPATIBLE"
-	ErrorCodeInvalidURL                                                 ErrorCode = "INVALID_URL"
-	ErrorCodeHTTPSOnly                                                  ErrorCode = "HTTPS_ONLY"
-	ErrorCodeUnreachableURL                                             ErrorCode = "UNREACHABLE_URL"
-	ErrorCodeSessionExpired                                             ErrorCode = "SESSION_EXPIRED"
-	ErrorCodeInvalidVerificationCode                                    ErrorCode = "INVALID_VERIFICATION_CODE"
-	ErrorCodeCardPresenceRequired                                       ErrorCode = "CARD_PRESENCE_REQUIRED"
-	ErrorCodeUnsupportedSourceType                                      ErrorCode = "UNSUPPORTED_SOURCE_TYPE"
-	ErrorCodeCardMismatch                                               ErrorCode = "CARD_MISMATCH"
-	ErrorCodePlaidError                                                 ErrorCode = "PLAID_ERROR"
-	ErrorCodePlaidErrorItemLoginRequired                                ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
-	ErrorCodePlaidErrorRateLimit                                        ErrorCode = "PLAID_ERROR_RATE_LIMIT"
-	ErrorCodeCalculateFulfillmentRatesNoProfilesConfigured              ErrorCode = "CALCULATE_FULFILLMENT_RATES_NO_PROFILES_CONFIGURED"
-	ErrorCodeCalculateFulfillmentRatesShipmentDestinationNotConfigured  ErrorCode = "CALCULATE_FULFILLMENT_RATES_SHIPMENT_DESTINATION_NOT_CONFIGURED"
-	ErrorCodeCalculateFulfillmentRatesInvalidRecipientAddress           ErrorCode = "CALCULATE_FULFILLMENT_RATES_INVALID_RECIPIENT_ADDRESS"
-	ErrorCodeCalculateFulfillmentRatesFulfillmentTypeNotSupported       ErrorCode = "CALCULATE_FULFILLMENT_RATES_FULFILLMENT_TYPE_NOT_SUPPORTED"
-	ErrorCodeFulfillmentRateProfileDuplicateItem                        ErrorCode = "FULFILLMENT_RATE_PROFILE_DUPLICATE_ITEM"
-	ErrorCodeFulfillmentRateProfileInvalidItem                          ErrorCode = "FULFILLMENT_RATE_PROFILE_INVALID_ITEM"
-	ErrorCodeCardDeclined                                               ErrorCode = "CARD_DECLINED"
-	ErrorCodeVerifyCvvFailure                                           ErrorCode = "VERIFY_CVV_FAILURE"
-	ErrorCodeVerifyAvsFailure                                           ErrorCode = "VERIFY_AVS_FAILURE"
-	ErrorCodeCardDeclinedCallIssuer                                     ErrorCode = "CARD_DECLINED_CALL_ISSUER"
-	ErrorCodeCardDeclinedVerificationRequired                           ErrorCode = "CARD_DECLINED_VERIFICATION_REQUIRED"
-	ErrorCodeBadExpiration                                              ErrorCode = "BAD_EXPIRATION"
-	ErrorCodeChipInsertionRequired                                      ErrorCode = "CHIP_INSERTION_REQUIRED"
-	ErrorCodeAllowablePinTriesExceeded                                  ErrorCode = "ALLOWABLE_PIN_TRIES_EXCEEDED"
-	ErrorCodeReservationDeclined                                        ErrorCode = "RESERVATION_DECLINED"
-	ErrorCodeBlockedByBlocklist                                         ErrorCode = "BLOCKED_BY_BLOCKLIST"
-	ErrorCodeFulfillmentPreferencesRestrictedDateNotUnique              ErrorCode = "FULFILLMENT_PREFERENCES_RESTRICTED_DATE_NOT_UNIQUE"
-	ErrorCodeFulfillmentPreferencesInvalidSchedulingDatetime            ErrorCode = "FULFILLMENT_PREFERENCES_INVALID_SCHEDULING_DATETIME"
-	ErrorCodeFulfillmentPreferencesInvalidFulfillmentAvailabilityWindow ErrorCode = "FULFILLMENT_PREFERENCES_INVALID_FULFILLMENT_AVAILABILITY_WINDOW"
-	ErrorCodeFulfillmentPreferencesFulfillmentScheduleNotAllowed        ErrorCode = "FULFILLMENT_PREFERENCES_FULFILLMENT_SCHEDULE_NOT_ALLOWED"
-	ErrorCodeFulfillmentPreferencesAssignmentIsImmutable                ErrorCode = "FULFILLMENT_PREFERENCES_ASSIGNMENT_IS_IMMUTABLE"
-	ErrorCodeInvalidTimezone                                            ErrorCode = "INVALID_TIMEZONE"
-	ErrorCodeUnknownBodyParameter                                       ErrorCode = "UNKNOWN_BODY_PARAMETER"
-	ErrorCodeFulfillmentPreferencesConflictingAssignmentType            ErrorCode = "FULFILLMENT_PREFERENCES_CONFLICTING_ASSIGNMENT_TYPE"
-	ErrorCodeNotFound                                                   ErrorCode = "NOT_FOUND"
-	ErrorCodeApplePaymentProcessingCertificateHashNotFound              ErrorCode = "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND"
-	ErrorCodeMethodNotAllowed                                           ErrorCode = "METHOD_NOT_ALLOWED"
-	ErrorCodeNotAcceptable                                              ErrorCode = "NOT_ACCEPTABLE"
-	ErrorCodeRequestTimeout                                             ErrorCode = "REQUEST_TIMEOUT"
-	ErrorCodeConflict                                                   ErrorCode = "CONFLICT"
-	ErrorCodeGone                                                       ErrorCode = "GONE"
-	ErrorCodeRequestEntityTooLarge                                      ErrorCode = "REQUEST_ENTITY_TOO_LARGE"
-	ErrorCodeUnsupportedMediaType                                       ErrorCode = "UNSUPPORTED_MEDIA_TYPE"
-	ErrorCodeUnprocessableEntity                                        ErrorCode = "UNPROCESSABLE_ENTITY"
-	ErrorCodeRateLimited                                                ErrorCode = "RATE_LIMITED"
-	ErrorCodeClientClosedRequest                                        ErrorCode = "CLIENT_CLOSED_REQUEST"
-	ErrorCodeNotImplemented                                             ErrorCode = "NOT_IMPLEMENTED"
-	ErrorCodeBadGateway                                                 ErrorCode = "BAD_GATEWAY"
-	ErrorCodeServiceUnavailable                                         ErrorCode = "SERVICE_UNAVAILABLE"
-	ErrorCodeTemporaryError                                             ErrorCode = "TEMPORARY_ERROR"
-	ErrorCodeGatewayTimeout                                             ErrorCode = "GATEWAY_TIMEOUT"
+	ErrorCodeInternalServerError                           ErrorCode = "INTERNAL_SERVER_ERROR"
+	ErrorCodeUnauthorized                                  ErrorCode = "UNAUTHORIZED"
+	ErrorCodeAccessTokenExpired                            ErrorCode = "ACCESS_TOKEN_EXPIRED"
+	ErrorCodeAccessTokenRevoked                            ErrorCode = "ACCESS_TOKEN_REVOKED"
+	ErrorCodeClientDisabled                                ErrorCode = "CLIENT_DISABLED"
+	ErrorCodeForbidden                                     ErrorCode = "FORBIDDEN"
+	ErrorCodeInsufficientScopes                            ErrorCode = "INSUFFICIENT_SCOPES"
+	ErrorCodeApplicationDisabled                           ErrorCode = "APPLICATION_DISABLED"
+	ErrorCodeV1Application                                 ErrorCode = "V1_APPLICATION"
+	ErrorCodeV1AccessToken                                 ErrorCode = "V1_ACCESS_TOKEN"
+	ErrorCodeCardProcessingNotEnabled                      ErrorCode = "CARD_PROCESSING_NOT_ENABLED"
+	ErrorCodeMerchantSubscriptionNotFound                  ErrorCode = "MERCHANT_SUBSCRIPTION_NOT_FOUND"
+	ErrorCodeBadRequest                                    ErrorCode = "BAD_REQUEST"
+	ErrorCodeMissingRequiredParameter                      ErrorCode = "MISSING_REQUIRED_PARAMETER"
+	ErrorCodeIncorrectType                                 ErrorCode = "INCORRECT_TYPE"
+	ErrorCodeInvalidTime                                   ErrorCode = "INVALID_TIME"
+	ErrorCodeInvalidTimeRange                              ErrorCode = "INVALID_TIME_RANGE"
+	ErrorCodeInvalidValue                                  ErrorCode = "INVALID_VALUE"
+	ErrorCodeInvalidCursor                                 ErrorCode = "INVALID_CURSOR"
+	ErrorCodeUnknownQueryParameter                         ErrorCode = "UNKNOWN_QUERY_PARAMETER"
+	ErrorCodeConflictingParameters                         ErrorCode = "CONFLICTING_PARAMETERS"
+	ErrorCodeExpectedJSONBody                              ErrorCode = "EXPECTED_JSON_BODY"
+	ErrorCodeInvalidSortOrder                              ErrorCode = "INVALID_SORT_ORDER"
+	ErrorCodeValueRegexMismatch                            ErrorCode = "VALUE_REGEX_MISMATCH"
+	ErrorCodeValueTooShort                                 ErrorCode = "VALUE_TOO_SHORT"
+	ErrorCodeValueTooLong                                  ErrorCode = "VALUE_TOO_LONG"
+	ErrorCodeValueTooLow                                   ErrorCode = "VALUE_TOO_LOW"
+	ErrorCodeValueTooHigh                                  ErrorCode = "VALUE_TOO_HIGH"
+	ErrorCodeValueEmpty                                    ErrorCode = "VALUE_EMPTY"
+	ErrorCodeArrayLengthTooLong                            ErrorCode = "ARRAY_LENGTH_TOO_LONG"
+	ErrorCodeArrayLengthTooShort                           ErrorCode = "ARRAY_LENGTH_TOO_SHORT"
+	ErrorCodeArrayEmpty                                    ErrorCode = "ARRAY_EMPTY"
+	ErrorCodeExpectedBoolean                               ErrorCode = "EXPECTED_BOOLEAN"
+	ErrorCodeExpectedInteger                               ErrorCode = "EXPECTED_INTEGER"
+	ErrorCodeExpectedFloat                                 ErrorCode = "EXPECTED_FLOAT"
+	ErrorCodeExpectedString                                ErrorCode = "EXPECTED_STRING"
+	ErrorCodeExpectedObject                                ErrorCode = "EXPECTED_OBJECT"
+	ErrorCodeExpectedArray                                 ErrorCode = "EXPECTED_ARRAY"
+	ErrorCodeExpectedMap                                   ErrorCode = "EXPECTED_MAP"
+	ErrorCodeExpectedBase64EncodedByteArray                ErrorCode = "EXPECTED_BASE64_ENCODED_BYTE_ARRAY"
+	ErrorCodeInvalidArrayValue                             ErrorCode = "INVALID_ARRAY_VALUE"
+	ErrorCodeInvalidEnumValue                              ErrorCode = "INVALID_ENUM_VALUE"
+	ErrorCodeInvalidContentType                            ErrorCode = "INVALID_CONTENT_TYPE"
+	ErrorCodeInvalidFormValue                              ErrorCode = "INVALID_FORM_VALUE"
+	ErrorCodeCustomerNotFound                              ErrorCode = "CUSTOMER_NOT_FOUND"
+	ErrorCodeOneInstrumentExpected                         ErrorCode = "ONE_INSTRUMENT_EXPECTED"
+	ErrorCodeNoFieldsSet                                   ErrorCode = "NO_FIELDS_SET"
+	ErrorCodeTooManyMapEntries                             ErrorCode = "TOO_MANY_MAP_ENTRIES"
+	ErrorCodeMapKeyLengthTooShort                          ErrorCode = "MAP_KEY_LENGTH_TOO_SHORT"
+	ErrorCodeMapKeyLengthTooLong                           ErrorCode = "MAP_KEY_LENGTH_TOO_LONG"
+	ErrorCodeCustomerMissingName                           ErrorCode = "CUSTOMER_MISSING_NAME"
+	ErrorCodeCustomerMissingEmail                          ErrorCode = "CUSTOMER_MISSING_EMAIL"
+	ErrorCodeInvalidPauseLength                            ErrorCode = "INVALID_PAUSE_LENGTH"
+	ErrorCodeInvalidDate                                   ErrorCode = "INVALID_DATE"
+	ErrorCodeUnsupportedCountry                            ErrorCode = "UNSUPPORTED_COUNTRY"
+	ErrorCodeUnsupportedCurrency                           ErrorCode = "UNSUPPORTED_CURRENCY"
+	ErrorCodeAppleTtpPinToken                              ErrorCode = "APPLE_TTP_PIN_TOKEN"
+	ErrorCodeCardExpired                                   ErrorCode = "CARD_EXPIRED"
+	ErrorCodeInvalidExpiration                             ErrorCode = "INVALID_EXPIRATION"
+	ErrorCodeInvalidExpirationYear                         ErrorCode = "INVALID_EXPIRATION_YEAR"
+	ErrorCodeInvalidExpirationDate                         ErrorCode = "INVALID_EXPIRATION_DATE"
+	ErrorCodeUnsupportedCardBrand                          ErrorCode = "UNSUPPORTED_CARD_BRAND"
+	ErrorCodeUnsupportedEntryMethod                        ErrorCode = "UNSUPPORTED_ENTRY_METHOD"
+	ErrorCodeInvalidEncryptedCard                          ErrorCode = "INVALID_ENCRYPTED_CARD"
+	ErrorCodeInvalidCard                                   ErrorCode = "INVALID_CARD"
+	ErrorCodePaymentAmountMismatch                         ErrorCode = "PAYMENT_AMOUNT_MISMATCH"
+	ErrorCodeGenericDecline                                ErrorCode = "GENERIC_DECLINE"
+	ErrorCodeCvvFailure                                    ErrorCode = "CVV_FAILURE"
+	ErrorCodeAddressVerificationFailure                    ErrorCode = "ADDRESS_VERIFICATION_FAILURE"
+	ErrorCodeInvalidAccount                                ErrorCode = "INVALID_ACCOUNT"
+	ErrorCodeCurrencyMismatch                              ErrorCode = "CURRENCY_MISMATCH"
+	ErrorCodeInsufficientFunds                             ErrorCode = "INSUFFICIENT_FUNDS"
+	ErrorCodeInsufficientPermissions                       ErrorCode = "INSUFFICIENT_PERMISSIONS"
+	ErrorCodeCardholderInsufficientPermissions             ErrorCode = "CARDHOLDER_INSUFFICIENT_PERMISSIONS"
+	ErrorCodeInvalidLocation                               ErrorCode = "INVALID_LOCATION"
+	ErrorCodeTransactionLimit                              ErrorCode = "TRANSACTION_LIMIT"
+	ErrorCodeVoiceFailure                                  ErrorCode = "VOICE_FAILURE"
+	ErrorCodePanFailure                                    ErrorCode = "PAN_FAILURE"
+	ErrorCodeExpirationFailure                             ErrorCode = "EXPIRATION_FAILURE"
+	ErrorCodeCardNotSupported                              ErrorCode = "CARD_NOT_SUPPORTED"
+	ErrorCodeInvalidPin                                    ErrorCode = "INVALID_PIN"
+	ErrorCodeMissingPin                                    ErrorCode = "MISSING_PIN"
+	ErrorCodeMissingAccountType                            ErrorCode = "MISSING_ACCOUNT_TYPE"
+	ErrorCodeInvalidPostalCode                             ErrorCode = "INVALID_POSTAL_CODE"
+	ErrorCodeInvalidFees                                   ErrorCode = "INVALID_FEES"
+	ErrorCodeManuallyEnteredPaymentNotSupported            ErrorCode = "MANUALLY_ENTERED_PAYMENT_NOT_SUPPORTED"
+	ErrorCodePaymentLimitExceeded                          ErrorCode = "PAYMENT_LIMIT_EXCEEDED"
+	ErrorCodeGiftCardAvailableAmount                       ErrorCode = "GIFT_CARD_AVAILABLE_AMOUNT"
+	ErrorCodeAccountUnusable                               ErrorCode = "ACCOUNT_UNUSABLE"
+	ErrorCodeBuyerRefusedPayment                           ErrorCode = "BUYER_REFUSED_PAYMENT"
+	ErrorCodeDelayedTransactionExpired                     ErrorCode = "DELAYED_TRANSACTION_EXPIRED"
+	ErrorCodeDelayedTransactionCanceled                    ErrorCode = "DELAYED_TRANSACTION_CANCELED"
+	ErrorCodeDelayedTransactionCaptured                    ErrorCode = "DELAYED_TRANSACTION_CAPTURED"
+	ErrorCodeDelayedTransactionFailed                      ErrorCode = "DELAYED_TRANSACTION_FAILED"
+	ErrorCodeCardTokenExpired                              ErrorCode = "CARD_TOKEN_EXPIRED"
+	ErrorCodeCardTokenUsed                                 ErrorCode = "CARD_TOKEN_USED"
+	ErrorCodeAmountTooHigh                                 ErrorCode = "AMOUNT_TOO_HIGH"
+	ErrorCodeUnsupportedInstrumentType                     ErrorCode = "UNSUPPORTED_INSTRUMENT_TYPE"
+	ErrorCodeRefundAmountInvalid                           ErrorCode = "REFUND_AMOUNT_INVALID"
+	ErrorCodeRefundAlreadyPending                          ErrorCode = "REFUND_ALREADY_PENDING"
+	ErrorCodePaymentNotRefundable                          ErrorCode = "PAYMENT_NOT_REFUNDABLE"
+	ErrorCodePaymentNotRefundableDueToDispute              ErrorCode = "PAYMENT_NOT_REFUNDABLE_DUE_TO_DISPUTE"
+	ErrorCodeRefundDeclined                                ErrorCode = "REFUND_DECLINED"
+	ErrorCodeInsufficientPermissionsForRefund              ErrorCode = "INSUFFICIENT_PERMISSIONS_FOR_REFUND"
+	ErrorCodeInvalidCardData                               ErrorCode = "INVALID_CARD_DATA"
+	ErrorCodeSourceUsed                                    ErrorCode = "SOURCE_USED"
+	ErrorCodeSourceExpired                                 ErrorCode = "SOURCE_EXPIRED"
+	ErrorCodeUnsupportedLoyaltyRewardTier                  ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
+	ErrorCodeLocationMismatch                              ErrorCode = "LOCATION_MISMATCH"
+	ErrorCodeIdempotencyKeyReused                          ErrorCode = "IDEMPOTENCY_KEY_REUSED"
+	ErrorCodeUnexpectedValue                               ErrorCode = "UNEXPECTED_VALUE"
+	ErrorCodeSandboxNotSupported                           ErrorCode = "SANDBOX_NOT_SUPPORTED"
+	ErrorCodeInvalidEmailAddress                           ErrorCode = "INVALID_EMAIL_ADDRESS"
+	ErrorCodeInvalidPhoneNumber                            ErrorCode = "INVALID_PHONE_NUMBER"
+	ErrorCodeCheckoutExpired                               ErrorCode = "CHECKOUT_EXPIRED"
+	ErrorCodeBadCertificate                                ErrorCode = "BAD_CERTIFICATE"
+	ErrorCodeInvalidSquareVersionFormat                    ErrorCode = "INVALID_SQUARE_VERSION_FORMAT"
+	ErrorCodeAPIVersionIncompatible                        ErrorCode = "API_VERSION_INCOMPATIBLE"
+	ErrorCodeCardPresenceRequired                          ErrorCode = "CARD_PRESENCE_REQUIRED"
+	ErrorCodeUnsupportedSourceType                         ErrorCode = "UNSUPPORTED_SOURCE_TYPE"
+	ErrorCodeCardMismatch                                  ErrorCode = "CARD_MISMATCH"
+	ErrorCodePlaidError                                    ErrorCode = "PLAID_ERROR"
+	ErrorCodePlaidErrorItemLoginRequired                   ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
+	ErrorCodePlaidErrorRateLimit                           ErrorCode = "PLAID_ERROR_RATE_LIMIT"
+	ErrorCodeCardDeclined                                  ErrorCode = "CARD_DECLINED"
+	ErrorCodeVerifyCvvFailure                              ErrorCode = "VERIFY_CVV_FAILURE"
+	ErrorCodeVerifyAvsFailure                              ErrorCode = "VERIFY_AVS_FAILURE"
+	ErrorCodeCardDeclinedCallIssuer                        ErrorCode = "CARD_DECLINED_CALL_ISSUER"
+	ErrorCodeCardDeclinedVerificationRequired              ErrorCode = "CARD_DECLINED_VERIFICATION_REQUIRED"
+	ErrorCodeBadExpiration                                 ErrorCode = "BAD_EXPIRATION"
+	ErrorCodeChipInsertionRequired                         ErrorCode = "CHIP_INSERTION_REQUIRED"
+	ErrorCodeAllowablePinTriesExceeded                     ErrorCode = "ALLOWABLE_PIN_TRIES_EXCEEDED"
+	ErrorCodeReservationDeclined                           ErrorCode = "RESERVATION_DECLINED"
+	ErrorCodeUnknownBodyParameter                          ErrorCode = "UNKNOWN_BODY_PARAMETER"
+	ErrorCodeNotFound                                      ErrorCode = "NOT_FOUND"
+	ErrorCodeApplePaymentProcessingCertificateHashNotFound ErrorCode = "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND"
+	ErrorCodeMethodNotAllowed                              ErrorCode = "METHOD_NOT_ALLOWED"
+	ErrorCodeNotAcceptable                                 ErrorCode = "NOT_ACCEPTABLE"
+	ErrorCodeRequestTimeout                                ErrorCode = "REQUEST_TIMEOUT"
+	ErrorCodeConflict                                      ErrorCode = "CONFLICT"
+	ErrorCodeGone                                          ErrorCode = "GONE"
+	ErrorCodeRequestEntityTooLarge                         ErrorCode = "REQUEST_ENTITY_TOO_LARGE"
+	ErrorCodeUnsupportedMediaType                          ErrorCode = "UNSUPPORTED_MEDIA_TYPE"
+	ErrorCodeUnprocessableEntity                           ErrorCode = "UNPROCESSABLE_ENTITY"
+	ErrorCodeRateLimited                                   ErrorCode = "RATE_LIMITED"
+	ErrorCodeNotImplemented                                ErrorCode = "NOT_IMPLEMENTED"
+	ErrorCodeBadGateway                                    ErrorCode = "BAD_GATEWAY"
+	ErrorCodeServiceUnavailable                            ErrorCode = "SERVICE_UNAVAILABLE"
+	ErrorCodeTemporaryError                                ErrorCode = "TEMPORARY_ERROR"
+	ErrorCodeGatewayTimeout                                ErrorCode = "GATEWAY_TIMEOUT"
 )
 
 func NewErrorCodeFromString(s string) (ErrorCode, error) {
@@ -16589,16 +16113,10 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidFormValue, nil
 	case "CUSTOMER_NOT_FOUND":
 		return ErrorCodeCustomerNotFound, nil
-	case "BUYER_NOT_FOUND":
-		return ErrorCodeBuyerNotFound, nil
 	case "ONE_INSTRUMENT_EXPECTED":
 		return ErrorCodeOneInstrumentExpected, nil
 	case "NO_FIELDS_SET":
 		return ErrorCodeNoFieldsSet, nil
-	case "DEPRECATED_FIELD_SET":
-		return ErrorCodeDeprecatedFieldSet, nil
-	case "RETIRED_FIELD_SET":
-		return ErrorCodeRetiredFieldSet, nil
 	case "TOO_MANY_MAP_ENTRIES":
 		return ErrorCodeTooManyMapEntries, nil
 	case "MAP_KEY_LENGTH_TOO_SHORT":
@@ -16613,10 +16131,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidPauseLength, nil
 	case "INVALID_DATE":
 		return ErrorCodeInvalidDate, nil
-	case "JOB_TEMPLATE_NAME_TAKEN":
-		return ErrorCodeJobTemplateNameTaken, nil
-	case "CLIENT_NOT_SUPPORTED":
-		return ErrorCodeClientNotSupported, nil
 	case "UNSUPPORTED_COUNTRY":
 		return ErrorCodeUnsupportedCountry, nil
 	case "UNSUPPORTED_CURRENCY":
@@ -16669,8 +16183,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeExpirationFailure, nil
 	case "CARD_NOT_SUPPORTED":
 		return ErrorCodeCardNotSupported, nil
-	case "ISSUER_INSTALLMENT_ERROR":
-		return ErrorCodeIssuerInstallmentError, nil
 	case "INVALID_PIN":
 		return ErrorCodeInvalidPin, nil
 	case "MISSING_PIN":
@@ -16687,16 +16199,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePaymentLimitExceeded, nil
 	case "GIFT_CARD_AVAILABLE_AMOUNT":
 		return ErrorCodeGiftCardAvailableAmount, nil
-	case "GIFT_CARD_BUYER_DAILY_LIMIT_REACHED":
-		return ErrorCodeGiftCardBuyerDailyLimitReached, nil
-	case "GIFT_CARD_INVALID_AMOUNT":
-		return ErrorCodeGiftCardInvalidAmount, nil
-	case "GIFT_CARD_MAX_VALUE_REACHED":
-		return ErrorCodeGiftCardMaxValueReached, nil
-	case "GIFT_CARD_MERCHANT_MAX_OUTSTANDING_BALANCE_REACHED":
-		return ErrorCodeGiftCardMerchantMaxOutstandingBalanceReached, nil
-	case "GIFT_CARD_VALUE_ADDITION_LIMIT_REACHED":
-		return ErrorCodeGiftCardValueAdditionLimitReached, nil
 	case "ACCOUNT_UNUSABLE":
 		return ErrorCodeAccountUnusable, nil
 	case "BUYER_REFUSED_PAYMENT":
@@ -16723,6 +16225,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeRefundAlreadyPending, nil
 	case "PAYMENT_NOT_REFUNDABLE":
 		return ErrorCodePaymentNotRefundable, nil
+	case "PAYMENT_NOT_REFUNDABLE_DUE_TO_DISPUTE":
+		return ErrorCodePaymentNotRefundableDueToDispute, nil
 	case "REFUND_DECLINED":
 		return ErrorCodeRefundDeclined, nil
 	case "INSUFFICIENT_PERMISSIONS_FOR_REFUND":
@@ -16737,18 +16241,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeUnsupportedLoyaltyRewardTier, nil
 	case "LOCATION_MISMATCH":
 		return ErrorCodeLocationMismatch, nil
-	case "ORDER_EXPIRED":
-		return ErrorCodeOrderExpired, nil
-	case "ORDER_ALREADY_USED":
-		return ErrorCodeOrderAlreadyUsed, nil
-	case "ORDER_TOO_MANY_CATALOG_OBJECTS":
-		return ErrorCodeOrderTooManyCatalogObjects, nil
-	case "INSUFFICIENT_INVENTORY":
-		return ErrorCodeInsufficientInventory, nil
-	case "PRICE_MISMATCH":
-		return ErrorCodePriceMismatch, nil
-	case "VERSION_MISMATCH":
-		return ErrorCodeVersionMismatch, nil
 	case "IDEMPOTENCY_KEY_REUSED":
 		return ErrorCodeIdempotencyKeyReused, nil
 	case "UNEXPECTED_VALUE":
@@ -16767,16 +16259,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeInvalidSquareVersionFormat, nil
 	case "API_VERSION_INCOMPATIBLE":
 		return ErrorCodeAPIVersionIncompatible, nil
-	case "INVALID_URL":
-		return ErrorCodeInvalidURL, nil
-	case "HTTPS_ONLY":
-		return ErrorCodeHTTPSOnly, nil
-	case "UNREACHABLE_URL":
-		return ErrorCodeUnreachableURL, nil
-	case "SESSION_EXPIRED":
-		return ErrorCodeSessionExpired, nil
-	case "INVALID_VERIFICATION_CODE":
-		return ErrorCodeInvalidVerificationCode, nil
 	case "CARD_PRESENCE_REQUIRED":
 		return ErrorCodeCardPresenceRequired, nil
 	case "UNSUPPORTED_SOURCE_TYPE":
@@ -16789,18 +16271,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePlaidErrorItemLoginRequired, nil
 	case "PLAID_ERROR_RATE_LIMIT":
 		return ErrorCodePlaidErrorRateLimit, nil
-	case "CALCULATE_FULFILLMENT_RATES_NO_PROFILES_CONFIGURED":
-		return ErrorCodeCalculateFulfillmentRatesNoProfilesConfigured, nil
-	case "CALCULATE_FULFILLMENT_RATES_SHIPMENT_DESTINATION_NOT_CONFIGURED":
-		return ErrorCodeCalculateFulfillmentRatesShipmentDestinationNotConfigured, nil
-	case "CALCULATE_FULFILLMENT_RATES_INVALID_RECIPIENT_ADDRESS":
-		return ErrorCodeCalculateFulfillmentRatesInvalidRecipientAddress, nil
-	case "CALCULATE_FULFILLMENT_RATES_FULFILLMENT_TYPE_NOT_SUPPORTED":
-		return ErrorCodeCalculateFulfillmentRatesFulfillmentTypeNotSupported, nil
-	case "FULFILLMENT_RATE_PROFILE_DUPLICATE_ITEM":
-		return ErrorCodeFulfillmentRateProfileDuplicateItem, nil
-	case "FULFILLMENT_RATE_PROFILE_INVALID_ITEM":
-		return ErrorCodeFulfillmentRateProfileInvalidItem, nil
 	case "CARD_DECLINED":
 		return ErrorCodeCardDeclined, nil
 	case "VERIFY_CVV_FAILURE":
@@ -16819,24 +16289,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeAllowablePinTriesExceeded, nil
 	case "RESERVATION_DECLINED":
 		return ErrorCodeReservationDeclined, nil
-	case "BLOCKED_BY_BLOCKLIST":
-		return ErrorCodeBlockedByBlocklist, nil
-	case "FULFILLMENT_PREFERENCES_RESTRICTED_DATE_NOT_UNIQUE":
-		return ErrorCodeFulfillmentPreferencesRestrictedDateNotUnique, nil
-	case "FULFILLMENT_PREFERENCES_INVALID_SCHEDULING_DATETIME":
-		return ErrorCodeFulfillmentPreferencesInvalidSchedulingDatetime, nil
-	case "FULFILLMENT_PREFERENCES_INVALID_FULFILLMENT_AVAILABILITY_WINDOW":
-		return ErrorCodeFulfillmentPreferencesInvalidFulfillmentAvailabilityWindow, nil
-	case "FULFILLMENT_PREFERENCES_FULFILLMENT_SCHEDULE_NOT_ALLOWED":
-		return ErrorCodeFulfillmentPreferencesFulfillmentScheduleNotAllowed, nil
-	case "FULFILLMENT_PREFERENCES_ASSIGNMENT_IS_IMMUTABLE":
-		return ErrorCodeFulfillmentPreferencesAssignmentIsImmutable, nil
-	case "INVALID_TIMEZONE":
-		return ErrorCodeInvalidTimezone, nil
 	case "UNKNOWN_BODY_PARAMETER":
 		return ErrorCodeUnknownBodyParameter, nil
-	case "FULFILLMENT_PREFERENCES_CONFLICTING_ASSIGNMENT_TYPE":
-		return ErrorCodeFulfillmentPreferencesConflictingAssignmentType, nil
 	case "NOT_FOUND":
 		return ErrorCodeNotFound, nil
 	case "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND":
@@ -16859,8 +16313,6 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeUnprocessableEntity, nil
 	case "RATE_LIMITED":
 		return ErrorCodeRateLimited, nil
-	case "CLIENT_CLOSED_REQUEST":
-		return ErrorCodeClientClosedRequest, nil
 	case "NOT_IMPLEMENTED":
 		return ErrorCodeNotImplemented, nil
 	case "BAD_GATEWAY":
@@ -16951,15 +16403,12 @@ func (e *EventTypeMetadata) String() string {
 type ExcludeStrategy string
 
 const (
-	ExcludeStrategyExcludeStrategyDoNotUse ExcludeStrategy = "EXCLUDE_STRATEGY_DO_NOT_USE"
-	ExcludeStrategyLeastExpensive          ExcludeStrategy = "LEAST_EXPENSIVE"
-	ExcludeStrategyMostExpensive           ExcludeStrategy = "MOST_EXPENSIVE"
+	ExcludeStrategyLeastExpensive ExcludeStrategy = "LEAST_EXPENSIVE"
+	ExcludeStrategyMostExpensive  ExcludeStrategy = "MOST_EXPENSIVE"
 )
 
 func NewExcludeStrategyFromString(s string) (ExcludeStrategy, error) {
 	switch s {
-	case "EXCLUDE_STRATEGY_DO_NOT_USE":
-		return ExcludeStrategyExcludeStrategyDoNotUse, nil
 	case "LEAST_EXPENSIVE":
 		return ExcludeStrategyLeastExpensive, nil
 	case "MOST_EXPENSIVE":
@@ -17502,15 +16951,12 @@ func (f *FulfillmentDeliveryDetails) String() string {
 type FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType string
 
 const (
-	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
-	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled                                      FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
-	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeAsap                                           FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
+	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
+	FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeAsap      FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
 )
 
 func NewFulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFromString(s string) (FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType, error) {
 	switch s {
-	case "FULFILLMENT_DELIVERY_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
-		return FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeFulfillmentDeliveryDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -17627,15 +17073,12 @@ func (f *FulfillmentFulfillmentEntry) String() string {
 type FulfillmentFulfillmentLineItemApplication string
 
 const (
-	FulfillmentFulfillmentLineItemApplicationUnknownApplication FulfillmentFulfillmentLineItemApplication = "UNKNOWN_APPLICATION"
-	FulfillmentFulfillmentLineItemApplicationAll                FulfillmentFulfillmentLineItemApplication = "ALL"
-	FulfillmentFulfillmentLineItemApplicationEntryList          FulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
+	FulfillmentFulfillmentLineItemApplicationAll       FulfillmentFulfillmentLineItemApplication = "ALL"
+	FulfillmentFulfillmentLineItemApplicationEntryList FulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
 )
 
 func NewFulfillmentFulfillmentLineItemApplicationFromString(s string) (FulfillmentFulfillmentLineItemApplication, error) {
 	switch s {
-	case "UNKNOWN_APPLICATION":
-		return FulfillmentFulfillmentLineItemApplicationUnknownApplication, nil
 	case "ALL":
 		return FulfillmentFulfillmentLineItemApplicationAll, nil
 	case "ENTRY_LIST":
@@ -17945,15 +17388,12 @@ func (f *FulfillmentPickupDetailsCurbsidePickupDetails) String() string {
 type FulfillmentPickupDetailsScheduleType string
 
 const (
-	FulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse FulfillmentPickupDetailsScheduleType = "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE"
-	FulfillmentPickupDetailsScheduleTypeScheduled                                    FulfillmentPickupDetailsScheduleType = "SCHEDULED"
-	FulfillmentPickupDetailsScheduleTypeAsap                                         FulfillmentPickupDetailsScheduleType = "ASAP"
+	FulfillmentPickupDetailsScheduleTypeScheduled FulfillmentPickupDetailsScheduleType = "SCHEDULED"
+	FulfillmentPickupDetailsScheduleTypeAsap      FulfillmentPickupDetailsScheduleType = "ASAP"
 )
 
 func NewFulfillmentPickupDetailsScheduleTypeFromString(s string) (FulfillmentPickupDetailsScheduleType, error) {
 	switch s {
-	case "FULFILLMENT_PICKUP_DETAILS_SCHEDULE_TYPE_DO_NOT_USE":
-		return FulfillmentPickupDetailsScheduleTypeFulfillmentPickupDetailsScheduleTypeDoNotUse, nil
 	case "SCHEDULED":
 		return FulfillmentPickupDetailsScheduleTypeScheduled, nil
 	case "ASAP":
@@ -18264,19 +17704,16 @@ func (f *FulfillmentShipmentDetails) String() string {
 type FulfillmentState string
 
 const (
-	FulfillmentStateFulfillmentStateDoNotUse FulfillmentState = "FULFILLMENT_STATE_DO_NOT_USE"
-	FulfillmentStateProposed                 FulfillmentState = "PROPOSED"
-	FulfillmentStateReserved                 FulfillmentState = "RESERVED"
-	FulfillmentStatePrepared                 FulfillmentState = "PREPARED"
-	FulfillmentStateCompleted                FulfillmentState = "COMPLETED"
-	FulfillmentStateCanceled                 FulfillmentState = "CANCELED"
-	FulfillmentStateFailed                   FulfillmentState = "FAILED"
+	FulfillmentStateProposed  FulfillmentState = "PROPOSED"
+	FulfillmentStateReserved  FulfillmentState = "RESERVED"
+	FulfillmentStatePrepared  FulfillmentState = "PREPARED"
+	FulfillmentStateCompleted FulfillmentState = "COMPLETED"
+	FulfillmentStateCanceled  FulfillmentState = "CANCELED"
+	FulfillmentStateFailed    FulfillmentState = "FAILED"
 )
 
 func NewFulfillmentStateFromString(s string) (FulfillmentState, error) {
 	switch s {
-	case "FULFILLMENT_STATE_DO_NOT_USE":
-		return FulfillmentStateFulfillmentStateDoNotUse, nil
 	case "PROPOSED":
 		return FulfillmentStateProposed, nil
 	case "RESERVED":
@@ -18302,40 +17739,19 @@ func (f FulfillmentState) Ptr() *FulfillmentState {
 type FulfillmentType string
 
 const (
-	FulfillmentTypeFulfillmentTypeDoNotUse FulfillmentType = "FULFILLMENT_TYPE_DO_NOT_USE"
-	FulfillmentTypeCustom                  FulfillmentType = "CUSTOM"
-	FulfillmentTypePickup                  FulfillmentType = "PICKUP"
-	FulfillmentTypeManagedDelivery         FulfillmentType = "MANAGED_DELIVERY"
-	FulfillmentTypeShipment                FulfillmentType = "SHIPMENT"
-	FulfillmentTypeDigital                 FulfillmentType = "DIGITAL"
-	FulfillmentTypeDelivery                FulfillmentType = "DELIVERY"
-	FulfillmentTypeSimple                  FulfillmentType = "SIMPLE"
-	FulfillmentTypeDineIn                  FulfillmentType = "DINE_IN"
-	FulfillmentTypeInStore                 FulfillmentType = "IN_STORE"
+	FulfillmentTypePickup   FulfillmentType = "PICKUP"
+	FulfillmentTypeShipment FulfillmentType = "SHIPMENT"
+	FulfillmentTypeDelivery FulfillmentType = "DELIVERY"
 )
 
 func NewFulfillmentTypeFromString(s string) (FulfillmentType, error) {
 	switch s {
-	case "FULFILLMENT_TYPE_DO_NOT_USE":
-		return FulfillmentTypeFulfillmentTypeDoNotUse, nil
-	case "CUSTOM":
-		return FulfillmentTypeCustom, nil
 	case "PICKUP":
 		return FulfillmentTypePickup, nil
-	case "MANAGED_DELIVERY":
-		return FulfillmentTypeManagedDelivery, nil
 	case "SHIPMENT":
 		return FulfillmentTypeShipment, nil
-	case "DIGITAL":
-		return FulfillmentTypeDigital, nil
 	case "DELIVERY":
 		return FulfillmentTypeDelivery, nil
-	case "SIMPLE":
-		return FulfillmentTypeSimple, nil
-	case "DINE_IN":
-		return FulfillmentTypeDineIn, nil
-	case "IN_STORE":
-		return FulfillmentTypeInStore, nil
 	}
 	var t FulfillmentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -20109,7 +19525,6 @@ func (g *GiftCardActivityAdjustDecrement) String() string {
 type GiftCardActivityAdjustDecrementReason string
 
 const (
-	GiftCardActivityAdjustDecrementReasonReasonDoNotUse               GiftCardActivityAdjustDecrementReason = "REASON_DO_NOT_USE"
 	GiftCardActivityAdjustDecrementReasonSuspiciousActivity           GiftCardActivityAdjustDecrementReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityAdjustDecrementReasonBalanceAccidentallyIncreased GiftCardActivityAdjustDecrementReason = "BALANCE_ACCIDENTALLY_INCREASED"
 	GiftCardActivityAdjustDecrementReasonSupportIssue                 GiftCardActivityAdjustDecrementReason = "SUPPORT_ISSUE"
@@ -20118,8 +19533,6 @@ const (
 
 func NewGiftCardActivityAdjustDecrementReasonFromString(s string) (GiftCardActivityAdjustDecrementReason, error) {
 	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityAdjustDecrementReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityAdjustDecrementReasonSuspiciousActivity, nil
 	case "BALANCE_ACCIDENTALLY_INCREASED":
@@ -20199,7 +19612,6 @@ func (g *GiftCardActivityAdjustIncrement) String() string {
 type GiftCardActivityAdjustIncrementReason string
 
 const (
-	GiftCardActivityAdjustIncrementReasonReasonDoNotUse    GiftCardActivityAdjustIncrementReason = "REASON_DO_NOT_USE"
 	GiftCardActivityAdjustIncrementReasonComplimentary     GiftCardActivityAdjustIncrementReason = "COMPLIMENTARY"
 	GiftCardActivityAdjustIncrementReasonSupportIssue      GiftCardActivityAdjustIncrementReason = "SUPPORT_ISSUE"
 	GiftCardActivityAdjustIncrementReasonTransactionVoided GiftCardActivityAdjustIncrementReason = "TRANSACTION_VOIDED"
@@ -20207,8 +19619,6 @@ const (
 
 func NewGiftCardActivityAdjustIncrementReasonFromString(s string) (GiftCardActivityAdjustIncrementReason, error) {
 	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityAdjustIncrementReasonReasonDoNotUse, nil
 	case "COMPLIMENTARY":
 		return GiftCardActivityAdjustIncrementReasonComplimentary, nil
 	case "SUPPORT_ISSUE":
@@ -20228,17 +19638,10 @@ func (g GiftCardActivityAdjustIncrementReason) Ptr() *GiftCardActivityAdjustIncr
 type GiftCardActivityBlock struct {
 	// The reason the gift card was blocked.
 	// See [Reason](#type-reason) for possible values
-	Reason GiftCardActivityBlockReason `json:"reason" url:"reason"`
+	Reason GiftCardActivityBlockReason `json:"reason,omitempty" url:"reason,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (g *GiftCardActivityBlock) GetReason() GiftCardActivityBlockReason {
-	if g == nil {
-		return ""
-	}
-	return g.Reason
 }
 
 func (g *GiftCardActivityBlock) GetExtraProperties() map[string]interface{} {
@@ -20274,27 +19677,7 @@ func (g *GiftCardActivityBlock) String() string {
 }
 
 // Indicates the reason for blocking a [gift card](entity:GiftCard).
-type GiftCardActivityBlockReason string
-
-const (
-	GiftCardActivityBlockReasonReasonDoNotUse  GiftCardActivityBlockReason = "REASON_DO_NOT_USE"
-	GiftCardActivityBlockReasonChargebackBlock GiftCardActivityBlockReason = "CHARGEBACK_BLOCK"
-)
-
-func NewGiftCardActivityBlockReasonFromString(s string) (GiftCardActivityBlockReason, error) {
-	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityBlockReasonReasonDoNotUse, nil
-	case "CHARGEBACK_BLOCK":
-		return GiftCardActivityBlockReasonChargebackBlock, nil
-	}
-	var t GiftCardActivityBlockReason
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GiftCardActivityBlockReason) Ptr() *GiftCardActivityBlockReason {
-	return &g
-}
+type GiftCardActivityBlockReason = string
 
 // Represents details about a `CLEAR_BALANCE` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityClearBalance struct {
@@ -20349,7 +19732,6 @@ func (g *GiftCardActivityClearBalance) String() string {
 type GiftCardActivityClearBalanceReason string
 
 const (
-	GiftCardActivityClearBalanceReasonReasonDoNotUse     GiftCardActivityClearBalanceReason = "REASON_DO_NOT_USE"
 	GiftCardActivityClearBalanceReasonSuspiciousActivity GiftCardActivityClearBalanceReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityClearBalanceReasonReuseGiftcard      GiftCardActivityClearBalanceReason = "REUSE_GIFTCARD"
 	GiftCardActivityClearBalanceReasonUnknownReason      GiftCardActivityClearBalanceReason = "UNKNOWN_REASON"
@@ -20357,8 +19739,6 @@ const (
 
 func NewGiftCardActivityClearBalanceReasonFromString(s string) (GiftCardActivityClearBalanceReason, error) {
 	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityClearBalanceReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityClearBalanceReasonSuspiciousActivity, nil
 	case "REUSE_GIFTCARD":
@@ -20427,7 +19807,6 @@ func (g *GiftCardActivityDeactivate) String() string {
 type GiftCardActivityDeactivateReason string
 
 const (
-	GiftCardActivityDeactivateReasonReasonDoNotUse       GiftCardActivityDeactivateReason = "REASON_DO_NOT_USE"
 	GiftCardActivityDeactivateReasonSuspiciousActivity   GiftCardActivityDeactivateReason = "SUSPICIOUS_ACTIVITY"
 	GiftCardActivityDeactivateReasonUnknownReason        GiftCardActivityDeactivateReason = "UNKNOWN_REASON"
 	GiftCardActivityDeactivateReasonChargebackDeactivate GiftCardActivityDeactivateReason = "CHARGEBACK_DEACTIVATE"
@@ -20435,8 +19814,6 @@ const (
 
 func NewGiftCardActivityDeactivateReasonFromString(s string) (GiftCardActivityDeactivateReason, error) {
 	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityDeactivateReasonReasonDoNotUse, nil
 	case "SUSPICIOUS_ACTIVITY":
 		return GiftCardActivityDeactivateReasonSuspiciousActivity, nil
 	case "UNKNOWN_REASON":
@@ -20749,16 +20126,13 @@ func (g *GiftCardActivityRedeem) String() string {
 type GiftCardActivityRedeemStatus string
 
 const (
-	GiftCardActivityRedeemStatusTypeDoNotUse GiftCardActivityRedeemStatus = "TYPE_DO_NOT_USE"
-	GiftCardActivityRedeemStatusPending      GiftCardActivityRedeemStatus = "PENDING"
-	GiftCardActivityRedeemStatusCompleted    GiftCardActivityRedeemStatus = "COMPLETED"
-	GiftCardActivityRedeemStatusCanceled     GiftCardActivityRedeemStatus = "CANCELED"
+	GiftCardActivityRedeemStatusPending   GiftCardActivityRedeemStatus = "PENDING"
+	GiftCardActivityRedeemStatusCompleted GiftCardActivityRedeemStatus = "COMPLETED"
+	GiftCardActivityRedeemStatusCanceled  GiftCardActivityRedeemStatus = "CANCELED"
 )
 
 func NewGiftCardActivityRedeemStatusFromString(s string) (GiftCardActivityRedeemStatus, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return GiftCardActivityRedeemStatusTypeDoNotUse, nil
 	case "PENDING":
 		return GiftCardActivityRedeemStatusPending, nil
 	case "COMPLETED":
@@ -20976,7 +20350,6 @@ func (g *GiftCardActivityTransferBalanceTo) String() string {
 type GiftCardActivityType string
 
 const (
-	GiftCardActivityTypeTypeDoNotUse           GiftCardActivityType = "TYPE_DO_NOT_USE"
 	GiftCardActivityTypeActivate               GiftCardActivityType = "ACTIVATE"
 	GiftCardActivityTypeLoad                   GiftCardActivityType = "LOAD"
 	GiftCardActivityTypeRedeem                 GiftCardActivityType = "REDEEM"
@@ -20987,7 +20360,6 @@ const (
 	GiftCardActivityTypeRefund                 GiftCardActivityType = "REFUND"
 	GiftCardActivityTypeUnlinkedActivityRefund GiftCardActivityType = "UNLINKED_ACTIVITY_REFUND"
 	GiftCardActivityTypeImport                 GiftCardActivityType = "IMPORT"
-	GiftCardActivityTypeOther                  GiftCardActivityType = "OTHER"
 	GiftCardActivityTypeBlock                  GiftCardActivityType = "BLOCK"
 	GiftCardActivityTypeUnblock                GiftCardActivityType = "UNBLOCK"
 	GiftCardActivityTypeImportReversal         GiftCardActivityType = "IMPORT_REVERSAL"
@@ -20997,8 +20369,6 @@ const (
 
 func NewGiftCardActivityTypeFromString(s string) (GiftCardActivityType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return GiftCardActivityTypeTypeDoNotUse, nil
 	case "ACTIVATE":
 		return GiftCardActivityTypeActivate, nil
 	case "LOAD":
@@ -21019,8 +20389,6 @@ func NewGiftCardActivityTypeFromString(s string) (GiftCardActivityType, error) {
 		return GiftCardActivityTypeUnlinkedActivityRefund, nil
 	case "IMPORT":
 		return GiftCardActivityTypeImport, nil
-	case "OTHER":
-		return GiftCardActivityTypeOther, nil
 	case "BLOCK":
 		return GiftCardActivityTypeBlock, nil
 	case "UNBLOCK":
@@ -21044,17 +20412,10 @@ func (g GiftCardActivityType) Ptr() *GiftCardActivityType {
 type GiftCardActivityUnblock struct {
 	// The reason the gift card was unblocked.
 	// See [Reason](#type-reason) for possible values
-	Reason GiftCardActivityUnblockReason `json:"reason" url:"reason"`
+	Reason GiftCardActivityUnblockReason `json:"reason,omitempty" url:"reason,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (g *GiftCardActivityUnblock) GetReason() GiftCardActivityUnblockReason {
-	if g == nil {
-		return ""
-	}
-	return g.Reason
 }
 
 func (g *GiftCardActivityUnblock) GetExtraProperties() map[string]interface{} {
@@ -21090,27 +20451,7 @@ func (g *GiftCardActivityUnblock) String() string {
 }
 
 // Indicates the reason for unblocking a [gift card](entity:GiftCard).
-type GiftCardActivityUnblockReason string
-
-const (
-	GiftCardActivityUnblockReasonReasonDoNotUse    GiftCardActivityUnblockReason = "REASON_DO_NOT_USE"
-	GiftCardActivityUnblockReasonChargebackUnblock GiftCardActivityUnblockReason = "CHARGEBACK_UNBLOCK"
-)
-
-func NewGiftCardActivityUnblockReasonFromString(s string) (GiftCardActivityUnblockReason, error) {
-	switch s {
-	case "REASON_DO_NOT_USE":
-		return GiftCardActivityUnblockReasonReasonDoNotUse, nil
-	case "CHARGEBACK_UNBLOCK":
-		return GiftCardActivityUnblockReasonChargebackUnblock, nil
-	}
-	var t GiftCardActivityUnblockReason
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (g GiftCardActivityUnblockReason) Ptr() *GiftCardActivityUnblockReason {
-	return &g
-}
+type GiftCardActivityUnblockReason = string
 
 // Represents details about an `UNLINKED_ACTIVITY_REFUND` [gift card activity type](entity:GiftCardActivityType).
 type GiftCardActivityUnlinkedActivityRefund struct {
@@ -21182,15 +20523,12 @@ func (g *GiftCardActivityUnlinkedActivityRefund) String() string {
 type InventoryAlertType string
 
 const (
-	InventoryAlertTypeInventoryAlertTypeDoNotUse InventoryAlertType = "INVENTORY_ALERT_TYPE_DO_NOT_USE"
-	InventoryAlertTypeNone                       InventoryAlertType = "NONE"
-	InventoryAlertTypeLowQuantity                InventoryAlertType = "LOW_QUANTITY"
+	InventoryAlertTypeNone        InventoryAlertType = "NONE"
+	InventoryAlertTypeLowQuantity InventoryAlertType = "LOW_QUANTITY"
 )
 
 func NewInventoryAlertTypeFromString(s string) (InventoryAlertType, error) {
 	switch s {
-	case "INVENTORY_ALERT_TYPE_DO_NOT_USE":
-		return InventoryAlertTypeInventoryAlertTypeDoNotUse, nil
 	case "NONE":
 		return InventoryAlertTypeNone, nil
 	case "LOW_QUANTITY":
@@ -21419,16 +20757,13 @@ func (j *JobAssignment) String() string {
 type JobAssignmentPayType string
 
 const (
-	JobAssignmentPayTypeStatusDoNotUse JobAssignmentPayType = "STATUS_DO_NOT_USE"
-	JobAssignmentPayTypeNone           JobAssignmentPayType = "NONE"
-	JobAssignmentPayTypeHourly         JobAssignmentPayType = "HOURLY"
-	JobAssignmentPayTypeSalary         JobAssignmentPayType = "SALARY"
+	JobAssignmentPayTypeNone   JobAssignmentPayType = "NONE"
+	JobAssignmentPayTypeHourly JobAssignmentPayType = "HOURLY"
+	JobAssignmentPayTypeSalary JobAssignmentPayType = "SALARY"
 )
 
 func NewJobAssignmentPayTypeFromString(s string) (JobAssignmentPayType, error) {
 	switch s {
-	case "STATUS_DO_NOT_USE":
-		return JobAssignmentPayTypeStatusDoNotUse, nil
 	case "NONE":
 		return JobAssignmentPayTypeNone, nil
 	case "HOURLY":
@@ -21518,9 +20853,6 @@ func (l *ListBookingCustomAttributesResponse) String() string {
 }
 
 type ListCashDrawerShiftEventsResponse struct {
-	// All of the events (payments, refunds, etc.) for a cash drawer during
-	// the shift.
-	Events []*CashDrawerShiftEvent `json:"events,omitempty" url:"events,omitempty"`
 	// Opaque cursor for fetching the next page. Cursor is not present in
 	// the last page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -21532,13 +20864,6 @@ type ListCashDrawerShiftEventsResponse struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (l *ListCashDrawerShiftEventsResponse) GetEvents() []*CashDrawerShiftEvent {
-	if l == nil {
-		return nil
-	}
-	return l.Events
 }
 
 func (l *ListCashDrawerShiftEventsResponse) GetCursor() *string {
@@ -21595,9 +20920,6 @@ func (l *ListCashDrawerShiftEventsResponse) String() string {
 }
 
 type ListCashDrawerShiftsResponse struct {
-	// A collection of CashDrawerShiftSummary objects for shifts that match
-	// the query.
-	Items []*CashDrawerShiftSummary `json:"items,omitempty" url:"items,omitempty"`
 	// Opaque cursor for fetching the next page of results. Cursor is not
 	// present in the last page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -21609,13 +20931,6 @@ type ListCashDrawerShiftsResponse struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
-}
-
-func (l *ListCashDrawerShiftsResponse) GetItems() []*CashDrawerShiftSummary {
-	if l == nil {
-		return nil
-	}
-	return l.Items
 }
 
 func (l *ListCashDrawerShiftsResponse) GetCursor() *string {
@@ -23053,11 +22368,6 @@ func (l *LocationBookingProfile) String() string {
 type LoyaltyAccount struct {
 	// The Square-assigned ID of the loyalty account.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The list of mappings that the account is associated with.
-	// Currently, a buyer can only be mapped to a loyalty account using
-	// a phone number. Therefore, the list can only have one mapping.
-	// RETIRED at version 2021-05-13. Replaced by the `mapping` field.
-	Mappings []*LoyaltyAccountMapping `json:"mappings,omitempty" url:"mappings,omitempty"`
 	// The Square-assigned ID of the [loyalty program](entity:LoyaltyProgram) to which the account belongs.
 	ProgramID string `json:"program_id" url:"program_id"`
 	// The available point balance in the loyalty account. If points are scheduled to expire, they are listed in the `expiring_point_deadlines` field.
@@ -23100,13 +22410,6 @@ func (l *LoyaltyAccount) GetID() *string {
 		return nil
 	}
 	return l.ID
-}
-
-func (l *LoyaltyAccount) GetMappings() []*LoyaltyAccountMapping {
-	if l == nil {
-		return nil
-	}
-	return l.Mappings
 }
 
 func (l *LoyaltyAccount) GetProgramID() string {
@@ -23268,14 +22571,6 @@ func (l *LoyaltyAccountExpiringPointDeadline) String() string {
 type LoyaltyAccountMapping struct {
 	// The Square-assigned ID of the mapping.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The mapping type, which is used with `value` to represent a phone number mapping.
-	// RETIRED at version 2021-05-13. When specifying a mapping, use the `phone_number` field instead.
-	// See [LoyaltyAccountMappingType](#type-loyaltyaccountmappingtype) for possible values
-	Type *LoyaltyAccountMappingType `json:"type,omitempty" url:"type,omitempty"`
-	// The mapping value, which is used with `type` to represent a phone number mapping.
-	// The value can be a phone number in E.164 format. For example, "+14155551111".
-	// RETIRED at version 2021-05-13. When specifying a mapping, use the `phone_number` field instead.
-	Value *string `json:"value,omitempty" url:"value,omitempty"`
 	// The timestamp when the mapping was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The phone number of the buyer, in E.164 format. For example, "+14155551111".
@@ -23290,20 +22585,6 @@ func (l *LoyaltyAccountMapping) GetID() *string {
 		return nil
 	}
 	return l.ID
-}
-
-func (l *LoyaltyAccountMapping) GetType() *LoyaltyAccountMappingType {
-	if l == nil {
-		return nil
-	}
-	return l.Type
-}
-
-func (l *LoyaltyAccountMapping) GetValue() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Value
 }
 
 func (l *LoyaltyAccountMapping) GetCreatedAt() *string {
@@ -23350,29 +22631,6 @@ func (l *LoyaltyAccountMapping) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", l)
-}
-
-// The type of mapping.
-type LoyaltyAccountMappingType string
-
-const (
-	LoyaltyAccountMappingTypeTypeDoNotUse LoyaltyAccountMappingType = "TYPE_DO_NOT_USE"
-	LoyaltyAccountMappingTypePhone        LoyaltyAccountMappingType = "PHONE"
-)
-
-func NewLoyaltyAccountMappingTypeFromString(s string) (LoyaltyAccountMappingType, error) {
-	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyAccountMappingTypeTypeDoNotUse, nil
-	case "PHONE":
-		return LoyaltyAccountMappingTypePhone, nil
-	}
-	var t LoyaltyAccountMappingType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (l LoyaltyAccountMappingType) Ptr() *LoyaltyAccountMappingType {
-	return &l
 }
 
 // Provides information about a loyalty event.
@@ -24072,15 +23330,12 @@ func (l *LoyaltyEventRedeemReward) String() string {
 type LoyaltyEventSource string
 
 const (
-	LoyaltyEventSourceSourceDoNotUse LoyaltyEventSource = "SOURCE_DO_NOT_USE"
-	LoyaltyEventSourceSquare         LoyaltyEventSource = "SQUARE"
-	LoyaltyEventSourceLoyaltyAPI     LoyaltyEventSource = "LOYALTY_API"
+	LoyaltyEventSourceSquare     LoyaltyEventSource = "SQUARE"
+	LoyaltyEventSourceLoyaltyAPI LoyaltyEventSource = "LOYALTY_API"
 )
 
 func NewLoyaltyEventSourceFromString(s string) (LoyaltyEventSource, error) {
 	switch s {
-	case "SOURCE_DO_NOT_USE":
-		return LoyaltyEventSourceSourceDoNotUse, nil
 	case "SQUARE":
 		return LoyaltyEventSourceSquare, nil
 	case "LOYALTY_API":
@@ -24098,8 +23353,6 @@ func (l LoyaltyEventSource) Ptr() *LoyaltyEventSource {
 type LoyaltyEventType string
 
 const (
-	LoyaltyEventTypeTypeDoNotUse              LoyaltyEventType = "TYPE_DO_NOT_USE"
-	LoyaltyEventTypeCreateAccount             LoyaltyEventType = "CREATE_ACCOUNT"
 	LoyaltyEventTypeAccumulatePoints          LoyaltyEventType = "ACCUMULATE_POINTS"
 	LoyaltyEventTypeCreateReward              LoyaltyEventType = "CREATE_REWARD"
 	LoyaltyEventTypeRedeemReward              LoyaltyEventType = "REDEEM_REWARD"
@@ -24108,15 +23361,10 @@ const (
 	LoyaltyEventTypeExpirePoints              LoyaltyEventType = "EXPIRE_POINTS"
 	LoyaltyEventTypeOther                     LoyaltyEventType = "OTHER"
 	LoyaltyEventTypeAccumulatePromotionPoints LoyaltyEventType = "ACCUMULATE_PROMOTION_POINTS"
-	LoyaltyEventTypeAccumulateTierPoints      LoyaltyEventType = "ACCUMULATE_TIER_POINTS"
 )
 
 func NewLoyaltyEventTypeFromString(s string) (LoyaltyEventType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyEventTypeTypeDoNotUse, nil
-	case "CREATE_ACCOUNT":
-		return LoyaltyEventTypeCreateAccount, nil
 	case "ACCUMULATE_POINTS":
 		return LoyaltyEventTypeAccumulatePoints, nil
 	case "CREATE_REWARD":
@@ -24133,8 +23381,6 @@ func NewLoyaltyEventTypeFromString(s string) (LoyaltyEventType, error) {
 		return LoyaltyEventTypeOther, nil
 	case "ACCUMULATE_PROMOTION_POINTS":
 		return LoyaltyEventTypeAccumulatePromotionPoints, nil
-	case "ACCUMULATE_TIER_POINTS":
-		return LoyaltyEventTypeAccumulateTierPoints, nil
 	}
 	var t LoyaltyEventType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -24278,34 +23524,6 @@ type LoyaltyProgramAccrualRule struct {
 	// The number of points that
 	// buyers earn based on the `accrual_type`.
 	Points *int `json:"points,omitempty" url:"points,omitempty"`
-	// When the accrual rule is visit-based (`accrual_type` is `VISIT`),
-	// this field indicates the minimum purchase required during the visit to
-	// quality for the reward.
-	VisitMinimumAmountMoney *Money `json:"visit_minimum_amount_money,omitempty" url:"visit_minimum_amount_money,omitempty"`
-	// When the accrual rule is spend-based (`accrual_type` is `SPEND`),
-	// this field indicates the amount that a buyer must spend
-	// to earn the points. For example,
-	// suppose the accrual rule is "earn 1 point for every $10 you spend".
-	// Then, buyer earns a point for every $10 they spend. If
-	// buyer spends $105, the buyer earns 10 points.
-	SpendAmountMoney *Money `json:"spend_amount_money,omitempty" url:"spend_amount_money,omitempty"`
-	// When the accrual rule is item-based or category-based, this field specifies the ID
-	// of the [catalog object](entity:CatalogObject) that buyers can purchase to earn points.
-	// If `accrual_type` is `ITEM_VARIATION`, the object is an item variation.
-	// If `accrual_type` is `CATEGORY`, the object is a category.
-	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
-	// When the accrual rule is spend-based (`accrual_type` is `SPEND`), this field
-	// lists the IDs of any `CATEGORY` catalog objects that are excluded from points accrual.
-	//
-	// You can use the [BatchRetrieveCatalogObjects](api-endpoint:Catalog-BatchRetrieveCatalogObjects)
-	// endpoint to retrieve information about the excluded categories.
-	ExcludedCategoryIDs []string `json:"excluded_category_ids,omitempty" url:"excluded_category_ids,omitempty"`
-	// When the accrual rule is spend-based (`accrual_type` is `SPEND`), this field
-	// lists the IDs of any `ITEM_VARIATION` catalog objects that are excluded from points accrual.
-	//
-	// You can use the [BatchRetrieveCatalogObjects](api-endpoint:Catalog-BatchRetrieveCatalogObjects)
-	// endpoint to retrieve information about the excluded item variations.
-	ExcludedItemVariationIDs []string `json:"excluded_item_variation_ids,omitempty" url:"excluded_item_variation_ids,omitempty"`
 	// Additional data for rules with the `VISIT` accrual type.
 	VisitData *LoyaltyProgramAccrualRuleVisitData `json:"visit_data,omitempty" url:"visit_data,omitempty"`
 	// Additional data for rules with the `SPEND` accrual type.
@@ -24331,41 +23549,6 @@ func (l *LoyaltyProgramAccrualRule) GetPoints() *int {
 		return nil
 	}
 	return l.Points
-}
-
-func (l *LoyaltyProgramAccrualRule) GetVisitMinimumAmountMoney() *Money {
-	if l == nil {
-		return nil
-	}
-	return l.VisitMinimumAmountMoney
-}
-
-func (l *LoyaltyProgramAccrualRule) GetSpendAmountMoney() *Money {
-	if l == nil {
-		return nil
-	}
-	return l.SpendAmountMoney
-}
-
-func (l *LoyaltyProgramAccrualRule) GetCatalogObjectID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.CatalogObjectID
-}
-
-func (l *LoyaltyProgramAccrualRule) GetExcludedCategoryIDs() []string {
-	if l == nil {
-		return nil
-	}
-	return l.ExcludedCategoryIDs
-}
-
-func (l *LoyaltyProgramAccrualRule) GetExcludedItemVariationIDs() []string {
-	if l == nil {
-		return nil
-	}
-	return l.ExcludedItemVariationIDs
 }
 
 func (l *LoyaltyProgramAccrualRule) GetVisitData() *LoyaltyProgramAccrualRuleVisitData {
@@ -24614,15 +23797,12 @@ func (l *LoyaltyProgramAccrualRuleSpendData) String() string {
 type LoyaltyProgramAccrualRuleTaxMode string
 
 const (
-	LoyaltyProgramAccrualRuleTaxModeTaxModeDoNotUse LoyaltyProgramAccrualRuleTaxMode = "TAX_MODE_DO_NOT_USE"
-	LoyaltyProgramAccrualRuleTaxModeBeforeTax       LoyaltyProgramAccrualRuleTaxMode = "BEFORE_TAX"
-	LoyaltyProgramAccrualRuleTaxModeAfterTax        LoyaltyProgramAccrualRuleTaxMode = "AFTER_TAX"
+	LoyaltyProgramAccrualRuleTaxModeBeforeTax LoyaltyProgramAccrualRuleTaxMode = "BEFORE_TAX"
+	LoyaltyProgramAccrualRuleTaxModeAfterTax  LoyaltyProgramAccrualRuleTaxMode = "AFTER_TAX"
 )
 
 func NewLoyaltyProgramAccrualRuleTaxModeFromString(s string) (LoyaltyProgramAccrualRuleTaxMode, error) {
 	switch s {
-	case "TAX_MODE_DO_NOT_USE":
-		return LoyaltyProgramAccrualRuleTaxModeTaxModeDoNotUse, nil
 	case "BEFORE_TAX":
 		return LoyaltyProgramAccrualRuleTaxModeBeforeTax, nil
 	case "AFTER_TAX":
@@ -24640,7 +23820,6 @@ func (l LoyaltyProgramAccrualRuleTaxMode) Ptr() *LoyaltyProgramAccrualRuleTaxMod
 type LoyaltyProgramAccrualRuleType string
 
 const (
-	LoyaltyProgramAccrualRuleTypeTypeDoNotUse  LoyaltyProgramAccrualRuleType = "TYPE_DO_NOT_USE"
 	LoyaltyProgramAccrualRuleTypeVisit         LoyaltyProgramAccrualRuleType = "VISIT"
 	LoyaltyProgramAccrualRuleTypeSpend         LoyaltyProgramAccrualRuleType = "SPEND"
 	LoyaltyProgramAccrualRuleTypeItemVariation LoyaltyProgramAccrualRuleType = "ITEM_VARIATION"
@@ -24649,8 +23828,6 @@ const (
 
 func NewLoyaltyProgramAccrualRuleTypeFromString(s string) (LoyaltyProgramAccrualRuleType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyProgramAccrualRuleTypeTypeDoNotUse, nil
 	case "VISIT":
 		return LoyaltyProgramAccrualRuleTypeVisit, nil
 	case "SPEND":
@@ -24891,7 +24068,6 @@ func (l *LoyaltyProgramRewardDefinition) String() string {
 type LoyaltyProgramRewardDefinitionScope string
 
 const (
-	LoyaltyProgramRewardDefinitionScopeScopeDoNotUse LoyaltyProgramRewardDefinitionScope = "SCOPE_DO_NOT_USE"
 	LoyaltyProgramRewardDefinitionScopeOrder         LoyaltyProgramRewardDefinitionScope = "ORDER"
 	LoyaltyProgramRewardDefinitionScopeItemVariation LoyaltyProgramRewardDefinitionScope = "ITEM_VARIATION"
 	LoyaltyProgramRewardDefinitionScopeCategory      LoyaltyProgramRewardDefinitionScope = "CATEGORY"
@@ -24899,8 +24075,6 @@ const (
 
 func NewLoyaltyProgramRewardDefinitionScopeFromString(s string) (LoyaltyProgramRewardDefinitionScope, error) {
 	switch s {
-	case "SCOPE_DO_NOT_USE":
-		return LoyaltyProgramRewardDefinitionScopeScopeDoNotUse, nil
 	case "ORDER":
 		return LoyaltyProgramRewardDefinitionScopeOrder, nil
 	case "ITEM_VARIATION":
@@ -24922,15 +24096,12 @@ func (l LoyaltyProgramRewardDefinitionScope) Ptr() *LoyaltyProgramRewardDefiniti
 type LoyaltyProgramRewardDefinitionType string
 
 const (
-	LoyaltyProgramRewardDefinitionTypeTypeDoNotUse    LoyaltyProgramRewardDefinitionType = "TYPE_DO_NOT_USE"
 	LoyaltyProgramRewardDefinitionTypeFixedAmount     LoyaltyProgramRewardDefinitionType = "FIXED_AMOUNT"
 	LoyaltyProgramRewardDefinitionTypeFixedPercentage LoyaltyProgramRewardDefinitionType = "FIXED_PERCENTAGE"
 )
 
 func NewLoyaltyProgramRewardDefinitionTypeFromString(s string) (LoyaltyProgramRewardDefinitionType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyProgramRewardDefinitionTypeTypeDoNotUse, nil
 	case "FIXED_AMOUNT":
 		return LoyaltyProgramRewardDefinitionTypeFixedAmount, nil
 	case "FIXED_PERCENTAGE":
@@ -25046,15 +24217,12 @@ func (l *LoyaltyProgramRewardTier) String() string {
 type LoyaltyProgramStatus string
 
 const (
-	LoyaltyProgramStatusStatusDoNotUse LoyaltyProgramStatus = "STATUS_DO_NOT_USE"
-	LoyaltyProgramStatusInactive       LoyaltyProgramStatus = "INACTIVE"
-	LoyaltyProgramStatusActive         LoyaltyProgramStatus = "ACTIVE"
+	LoyaltyProgramStatusInactive LoyaltyProgramStatus = "INACTIVE"
+	LoyaltyProgramStatusActive   LoyaltyProgramStatus = "ACTIVE"
 )
 
 func NewLoyaltyProgramStatusFromString(s string) (LoyaltyProgramStatus, error) {
 	switch s {
-	case "STATUS_DO_NOT_USE":
-		return LoyaltyProgramStatusStatusDoNotUse, nil
 	case "INACTIVE":
 		return LoyaltyProgramStatusInactive, nil
 	case "ACTIVE":
@@ -25583,15 +24751,12 @@ func (l *LoyaltyPromotionIncentivePointsMultiplierData) String() string {
 type LoyaltyPromotionIncentiveType string
 
 const (
-	LoyaltyPromotionIncentiveTypeTypeDoNotUse     LoyaltyPromotionIncentiveType = "TYPE_DO_NOT_USE"
 	LoyaltyPromotionIncentiveTypePointsMultiplier LoyaltyPromotionIncentiveType = "POINTS_MULTIPLIER"
 	LoyaltyPromotionIncentiveTypePointsAddition   LoyaltyPromotionIncentiveType = "POINTS_ADDITION"
 )
 
 func NewLoyaltyPromotionIncentiveTypeFromString(s string) (LoyaltyPromotionIncentiveType, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyPromotionIncentiveTypeTypeDoNotUse, nil
 	case "POINTS_MULTIPLIER":
 		return LoyaltyPromotionIncentiveTypePointsMultiplier, nil
 	case "POINTS_ADDITION":
@@ -25609,20 +24774,14 @@ func (l LoyaltyPromotionIncentiveType) Ptr() *LoyaltyPromotionIncentiveType {
 type LoyaltyPromotionStatus string
 
 const (
-	LoyaltyPromotionStatusTypeDoNotUse LoyaltyPromotionStatus = "TYPE_DO_NOT_USE"
-	LoyaltyPromotionStatusUpcoming     LoyaltyPromotionStatus = "UPCOMING"
-	LoyaltyPromotionStatusActive       LoyaltyPromotionStatus = "ACTIVE"
-	LoyaltyPromotionStatusEnded        LoyaltyPromotionStatus = "ENDED"
-	LoyaltyPromotionStatusCanceled     LoyaltyPromotionStatus = "CANCELED"
-	LoyaltyPromotionStatusScheduled    LoyaltyPromotionStatus = "SCHEDULED"
+	LoyaltyPromotionStatusActive    LoyaltyPromotionStatus = "ACTIVE"
+	LoyaltyPromotionStatusEnded     LoyaltyPromotionStatus = "ENDED"
+	LoyaltyPromotionStatusCanceled  LoyaltyPromotionStatus = "CANCELED"
+	LoyaltyPromotionStatusScheduled LoyaltyPromotionStatus = "SCHEDULED"
 )
 
 func NewLoyaltyPromotionStatusFromString(s string) (LoyaltyPromotionStatus, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyPromotionStatusTypeDoNotUse, nil
-	case "UPCOMING":
-		return LoyaltyPromotionStatusUpcoming, nil
 	case "ACTIVE":
 		return LoyaltyPromotionStatusActive, nil
 	case "ENDED":
@@ -25707,15 +24866,12 @@ func (l *LoyaltyPromotionTriggerLimit) String() string {
 type LoyaltyPromotionTriggerLimitInterval string
 
 const (
-	LoyaltyPromotionTriggerLimitIntervalTypeDoNotUse LoyaltyPromotionTriggerLimitInterval = "TYPE_DO_NOT_USE"
-	LoyaltyPromotionTriggerLimitIntervalAllTime      LoyaltyPromotionTriggerLimitInterval = "ALL_TIME"
-	LoyaltyPromotionTriggerLimitIntervalDay          LoyaltyPromotionTriggerLimitInterval = "DAY"
+	LoyaltyPromotionTriggerLimitIntervalAllTime LoyaltyPromotionTriggerLimitInterval = "ALL_TIME"
+	LoyaltyPromotionTriggerLimitIntervalDay     LoyaltyPromotionTriggerLimitInterval = "DAY"
 )
 
 func NewLoyaltyPromotionTriggerLimitIntervalFromString(s string) (LoyaltyPromotionTriggerLimitInterval, error) {
 	switch s {
-	case "TYPE_DO_NOT_USE":
-		return LoyaltyPromotionTriggerLimitIntervalTypeDoNotUse, nil
 	case "ALL_TIME":
 		return LoyaltyPromotionTriggerLimitIntervalAllTime, nil
 	case "DAY":
@@ -25855,16 +25011,13 @@ func (l *LoyaltyReward) String() string {
 type LoyaltyRewardStatus string
 
 const (
-	LoyaltyRewardStatusStatusDoNotUse LoyaltyRewardStatus = "STATUS_DO_NOT_USE"
-	LoyaltyRewardStatusIssued         LoyaltyRewardStatus = "ISSUED"
-	LoyaltyRewardStatusRedeemed       LoyaltyRewardStatus = "REDEEMED"
-	LoyaltyRewardStatusDeleted        LoyaltyRewardStatus = "DELETED"
+	LoyaltyRewardStatusIssued   LoyaltyRewardStatus = "ISSUED"
+	LoyaltyRewardStatusRedeemed LoyaltyRewardStatus = "REDEEMED"
+	LoyaltyRewardStatusDeleted  LoyaltyRewardStatus = "DELETED"
 )
 
 func NewLoyaltyRewardStatusFromString(s string) (LoyaltyRewardStatus, error) {
 	switch s {
-	case "STATUS_DO_NOT_USE":
-		return LoyaltyRewardStatusStatusDoNotUse, nil
 	case "ISSUED":
 		return LoyaltyRewardStatusIssued, nil
 	case "REDEEMED":
@@ -25948,13 +25101,6 @@ func (m *MeasurementUnit) GetWeightUnit() *MeasurementUnitWeight {
 	return m.WeightUnit
 }
 
-func (m *MeasurementUnit) GetGenericUnit() *MeasurementUnitGeneric {
-	if m == nil {
-		return nil
-	}
-	return m.GenericUnit
-}
-
 func (m *MeasurementUnit) GetTimeUnit() *MeasurementUnitTime {
 	if m == nil {
 		return nil
@@ -26005,7 +25151,6 @@ func (m *MeasurementUnit) String() string {
 type MeasurementUnitArea string
 
 const (
-	MeasurementUnitAreaInvalidArea            MeasurementUnitArea = "INVALID_AREA"
 	MeasurementUnitAreaImperialAcre           MeasurementUnitArea = "IMPERIAL_ACRE"
 	MeasurementUnitAreaImperialSquareInch     MeasurementUnitArea = "IMPERIAL_SQUARE_INCH"
 	MeasurementUnitAreaImperialSquareFoot     MeasurementUnitArea = "IMPERIAL_SQUARE_FOOT"
@@ -26018,8 +25163,6 @@ const (
 
 func NewMeasurementUnitAreaFromString(s string) (MeasurementUnitArea, error) {
 	switch s {
-	case "INVALID_AREA":
-		return MeasurementUnitAreaInvalidArea, nil
 	case "IMPERIAL_ACRE":
 		return MeasurementUnitAreaImperialAcre, nil
 	case "IMPERIAL_SQUARE_INCH":
@@ -26103,33 +25246,12 @@ func (m *MeasurementUnitCustom) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type MeasurementUnitGeneric string
-
-const (
-	MeasurementUnitGenericInvalidGenericUnit MeasurementUnitGeneric = "INVALID_GENERIC_UNIT"
-	MeasurementUnitGenericUnit               MeasurementUnitGeneric = "UNIT"
-)
-
-func NewMeasurementUnitGenericFromString(s string) (MeasurementUnitGeneric, error) {
-	switch s {
-	case "INVALID_GENERIC_UNIT":
-		return MeasurementUnitGenericInvalidGenericUnit, nil
-	case "UNIT":
-		return MeasurementUnitGenericUnit, nil
-	}
-	var t MeasurementUnitGeneric
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MeasurementUnitGeneric) Ptr() *MeasurementUnitGeneric {
-	return &m
-}
+type MeasurementUnitGeneric = string
 
 // The unit of length used to measure a quantity.
 type MeasurementUnitLength string
 
 const (
-	MeasurementUnitLengthInvalidLength    MeasurementUnitLength = "INVALID_LENGTH"
 	MeasurementUnitLengthImperialInch     MeasurementUnitLength = "IMPERIAL_INCH"
 	MeasurementUnitLengthImperialFoot     MeasurementUnitLength = "IMPERIAL_FOOT"
 	MeasurementUnitLengthImperialYard     MeasurementUnitLength = "IMPERIAL_YARD"
@@ -26142,8 +25264,6 @@ const (
 
 func NewMeasurementUnitLengthFromString(s string) (MeasurementUnitLength, error) {
 	switch s {
-	case "INVALID_LENGTH":
-		return MeasurementUnitLengthInvalidLength, nil
 	case "IMPERIAL_INCH":
 		return MeasurementUnitLengthImperialInch, nil
 	case "IMPERIAL_FOOT":
@@ -26173,7 +25293,6 @@ func (m MeasurementUnitLength) Ptr() *MeasurementUnitLength {
 type MeasurementUnitTime string
 
 const (
-	MeasurementUnitTimeInvalidTime        MeasurementUnitTime = "INVALID_TIME"
 	MeasurementUnitTimeGenericMillisecond MeasurementUnitTime = "GENERIC_MILLISECOND"
 	MeasurementUnitTimeGenericSecond      MeasurementUnitTime = "GENERIC_SECOND"
 	MeasurementUnitTimeGenericMinute      MeasurementUnitTime = "GENERIC_MINUTE"
@@ -26183,8 +25302,6 @@ const (
 
 func NewMeasurementUnitTimeFromString(s string) (MeasurementUnitTime, error) {
 	switch s {
-	case "INVALID_TIME":
-		return MeasurementUnitTimeInvalidTime, nil
 	case "GENERIC_MILLISECOND":
 		return MeasurementUnitTimeGenericMillisecond, nil
 	case "GENERIC_SECOND":
@@ -26208,20 +25325,16 @@ func (m MeasurementUnitTime) Ptr() *MeasurementUnitTime {
 type MeasurementUnitUnitType string
 
 const (
-	MeasurementUnitUnitTypeInvalidType MeasurementUnitUnitType = "INVALID_TYPE"
 	MeasurementUnitUnitTypeTypeCustom  MeasurementUnitUnitType = "TYPE_CUSTOM"
 	MeasurementUnitUnitTypeTypeArea    MeasurementUnitUnitType = "TYPE_AREA"
 	MeasurementUnitUnitTypeTypeLength  MeasurementUnitUnitType = "TYPE_LENGTH"
 	MeasurementUnitUnitTypeTypeVolume  MeasurementUnitUnitType = "TYPE_VOLUME"
 	MeasurementUnitUnitTypeTypeWeight  MeasurementUnitUnitType = "TYPE_WEIGHT"
-	MeasurementUnitUnitTypeTypeTime    MeasurementUnitUnitType = "TYPE_TIME"
 	MeasurementUnitUnitTypeTypeGeneric MeasurementUnitUnitType = "TYPE_GENERIC"
 )
 
 func NewMeasurementUnitUnitTypeFromString(s string) (MeasurementUnitUnitType, error) {
 	switch s {
-	case "INVALID_TYPE":
-		return MeasurementUnitUnitTypeInvalidType, nil
 	case "TYPE_CUSTOM":
 		return MeasurementUnitUnitTypeTypeCustom, nil
 	case "TYPE_AREA":
@@ -26232,8 +25345,6 @@ func NewMeasurementUnitUnitTypeFromString(s string) (MeasurementUnitUnitType, er
 		return MeasurementUnitUnitTypeTypeVolume, nil
 	case "TYPE_WEIGHT":
 		return MeasurementUnitUnitTypeTypeWeight, nil
-	case "TYPE_TIME":
-		return MeasurementUnitUnitTypeTypeTime, nil
 	case "TYPE_GENERIC":
 		return MeasurementUnitUnitTypeTypeGeneric, nil
 	}
@@ -26249,7 +25360,6 @@ func (m MeasurementUnitUnitType) Ptr() *MeasurementUnitUnitType {
 type MeasurementUnitVolume string
 
 const (
-	MeasurementUnitVolumeInvalidVolume     MeasurementUnitVolume = "INVALID_VOLUME"
 	MeasurementUnitVolumeGenericFluidOunce MeasurementUnitVolume = "GENERIC_FLUID_OUNCE"
 	MeasurementUnitVolumeGenericShot       MeasurementUnitVolume = "GENERIC_SHOT"
 	MeasurementUnitVolumeGenericCup        MeasurementUnitVolume = "GENERIC_CUP"
@@ -26265,8 +25375,6 @@ const (
 
 func NewMeasurementUnitVolumeFromString(s string) (MeasurementUnitVolume, error) {
 	switch s {
-	case "INVALID_VOLUME":
-		return MeasurementUnitVolumeInvalidVolume, nil
 	case "GENERIC_FLUID_OUNCE":
 		return MeasurementUnitVolumeGenericFluidOunce, nil
 	case "GENERIC_SHOT":
@@ -26302,7 +25410,6 @@ func (m MeasurementUnitVolume) Ptr() *MeasurementUnitVolume {
 type MeasurementUnitWeight string
 
 const (
-	MeasurementUnitWeightInvalidWeight       MeasurementUnitWeight = "INVALID_WEIGHT"
 	MeasurementUnitWeightImperialWeightOunce MeasurementUnitWeight = "IMPERIAL_WEIGHT_OUNCE"
 	MeasurementUnitWeightImperialPound       MeasurementUnitWeight = "IMPERIAL_POUND"
 	MeasurementUnitWeightImperialStone       MeasurementUnitWeight = "IMPERIAL_STONE"
@@ -26313,8 +25420,6 @@ const (
 
 func NewMeasurementUnitWeightFromString(s string) (MeasurementUnitWeight, error) {
 	switch s {
-	case "INVALID_WEIGHT":
-		return MeasurementUnitWeightInvalidWeight, nil
 	case "IMPERIAL_WEIGHT_OUNCE":
 		return MeasurementUnitWeightImperialWeightOunce, nil
 	case "IMPERIAL_POUND":
@@ -27632,25 +26737,19 @@ func (o OrderLineItemDiscountType) Ptr() *OrderLineItemDiscountType {
 type OrderLineItemItemType string
 
 const (
-	OrderLineItemItemTypeDoNotUse      OrderLineItemItemType = "DO_NOT_USE"
-	OrderLineItemItemTypeItem          OrderLineItemItemType = "ITEM"
-	OrderLineItemItemTypeCustomAmount  OrderLineItemItemType = "CUSTOM_AMOUNT"
-	OrderLineItemItemTypeGiftCard      OrderLineItemItemType = "GIFT_CARD"
-	OrderLineItemItemTypeCreditPackage OrderLineItemItemType = "CREDIT_PACKAGE"
+	OrderLineItemItemTypeItem         OrderLineItemItemType = "ITEM"
+	OrderLineItemItemTypeCustomAmount OrderLineItemItemType = "CUSTOM_AMOUNT"
+	OrderLineItemItemTypeGiftCard     OrderLineItemItemType = "GIFT_CARD"
 )
 
 func NewOrderLineItemItemTypeFromString(s string) (OrderLineItemItemType, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return OrderLineItemItemTypeDoNotUse, nil
 	case "ITEM":
 		return OrderLineItemItemTypeItem, nil
 	case "CUSTOM_AMOUNT":
 		return OrderLineItemItemTypeCustomAmount, nil
 	case "GIFT_CARD":
 		return OrderLineItemItemTypeGiftCard, nil
-	case "CREDIT_PACKAGE":
-		return OrderLineItemItemTypeCreditPackage, nil
 	}
 	var t OrderLineItemItemType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -29875,18 +28974,14 @@ func (o *OrderServiceCharge) String() string {
 type OrderServiceChargeCalculationPhase string
 
 const (
-	OrderServiceChargeCalculationPhaseServiceChargeCalculationPhaseDoNotUse OrderServiceChargeCalculationPhase = "SERVICE_CHARGE_CALCULATION_PHASE_DO_NOT_USE"
-	OrderServiceChargeCalculationPhaseSubtotalPhase                         OrderServiceChargeCalculationPhase = "SUBTOTAL_PHASE"
-	OrderServiceChargeCalculationPhaseTotalPhase                            OrderServiceChargeCalculationPhase = "TOTAL_PHASE"
-	OrderServiceChargeCalculationPhaseApportionedPercentagePhase            OrderServiceChargeCalculationPhase = "APPORTIONED_PERCENTAGE_PHASE"
-	OrderServiceChargeCalculationPhaseApportionedAmountPhase                OrderServiceChargeCalculationPhase = "APPORTIONED_AMOUNT_PHASE"
-	OrderServiceChargeCalculationPhaseCardSurchargePhase                    OrderServiceChargeCalculationPhase = "CARD_SURCHARGE_PHASE"
+	OrderServiceChargeCalculationPhaseSubtotalPhase              OrderServiceChargeCalculationPhase = "SUBTOTAL_PHASE"
+	OrderServiceChargeCalculationPhaseTotalPhase                 OrderServiceChargeCalculationPhase = "TOTAL_PHASE"
+	OrderServiceChargeCalculationPhaseApportionedPercentagePhase OrderServiceChargeCalculationPhase = "APPORTIONED_PERCENTAGE_PHASE"
+	OrderServiceChargeCalculationPhaseApportionedAmountPhase     OrderServiceChargeCalculationPhase = "APPORTIONED_AMOUNT_PHASE"
 )
 
 func NewOrderServiceChargeCalculationPhaseFromString(s string) (OrderServiceChargeCalculationPhase, error) {
 	switch s {
-	case "SERVICE_CHARGE_CALCULATION_PHASE_DO_NOT_USE":
-		return OrderServiceChargeCalculationPhaseServiceChargeCalculationPhaseDoNotUse, nil
 	case "SUBTOTAL_PHASE":
 		return OrderServiceChargeCalculationPhaseSubtotalPhase, nil
 	case "TOTAL_PHASE":
@@ -29895,8 +28990,6 @@ func NewOrderServiceChargeCalculationPhaseFromString(s string) (OrderServiceChar
 		return OrderServiceChargeCalculationPhaseApportionedPercentagePhase, nil
 	case "APPORTIONED_AMOUNT_PHASE":
 		return OrderServiceChargeCalculationPhaseApportionedAmountPhase, nil
-	case "CARD_SURCHARGE_PHASE":
-		return OrderServiceChargeCalculationPhaseCardSurchargePhase, nil
 	}
 	var t OrderServiceChargeCalculationPhase
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -29938,15 +29031,12 @@ func (o OrderServiceChargeScope) Ptr() *OrderServiceChargeScope {
 type OrderServiceChargeTreatmentType string
 
 const (
-	OrderServiceChargeTreatmentTypeServiceChargeTreatmentTypeDoNotUse OrderServiceChargeTreatmentType = "SERVICE_CHARGE_TREATMENT_TYPE_DO_NOT_USE"
-	OrderServiceChargeTreatmentTypeLineItemTreatment                  OrderServiceChargeTreatmentType = "LINE_ITEM_TREATMENT"
-	OrderServiceChargeTreatmentTypeApportionedTreatment               OrderServiceChargeTreatmentType = "APPORTIONED_TREATMENT"
+	OrderServiceChargeTreatmentTypeLineItemTreatment    OrderServiceChargeTreatmentType = "LINE_ITEM_TREATMENT"
+	OrderServiceChargeTreatmentTypeApportionedTreatment OrderServiceChargeTreatmentType = "APPORTIONED_TREATMENT"
 )
 
 func NewOrderServiceChargeTreatmentTypeFromString(s string) (OrderServiceChargeTreatmentType, error) {
 	switch s {
-	case "SERVICE_CHARGE_TREATMENT_TYPE_DO_NOT_USE":
-		return OrderServiceChargeTreatmentTypeServiceChargeTreatmentTypeDoNotUse, nil
 	case "LINE_ITEM_TREATMENT":
 		return OrderServiceChargeTreatmentTypeLineItemTreatment, nil
 	case "APPORTIONED_TREATMENT":
@@ -29963,22 +29053,16 @@ func (o OrderServiceChargeTreatmentType) Ptr() *OrderServiceChargeTreatmentType 
 type OrderServiceChargeType string
 
 const (
-	OrderServiceChargeTypeServiceChargeTypeDoNotUse OrderServiceChargeType = "SERVICE_CHARGE_TYPE_DO_NOT_USE"
-	OrderServiceChargeTypeAutoGratuity              OrderServiceChargeType = "AUTO_GRATUITY"
-	OrderServiceChargeTypeCustom                    OrderServiceChargeType = "CUSTOM"
-	OrderServiceChargeTypeCardSurcharge             OrderServiceChargeType = "CARD_SURCHARGE"
+	OrderServiceChargeTypeAutoGratuity OrderServiceChargeType = "AUTO_GRATUITY"
+	OrderServiceChargeTypeCustom       OrderServiceChargeType = "CUSTOM"
 )
 
 func NewOrderServiceChargeTypeFromString(s string) (OrderServiceChargeType, error) {
 	switch s {
-	case "SERVICE_CHARGE_TYPE_DO_NOT_USE":
-		return OrderServiceChargeTypeServiceChargeTypeDoNotUse, nil
 	case "AUTO_GRATUITY":
 		return OrderServiceChargeTypeAutoGratuity, nil
 	case "CUSTOM":
 		return OrderServiceChargeTypeCustom, nil
-	case "CARD_SURCHARGE":
-		return OrderServiceChargeTypeCardSurcharge, nil
 	}
 	var t OrderServiceChargeType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -30041,7 +29125,6 @@ func (o *OrderSource) String() string {
 type OrderState string
 
 const (
-	OrderStateDoNotUse  OrderState = "DO_NOT_USE"
 	OrderStateOpen      OrderState = "OPEN"
 	OrderStateCompleted OrderState = "COMPLETED"
 	OrderStateCanceled  OrderState = "CANCELED"
@@ -30050,8 +29133,6 @@ const (
 
 func NewOrderStateFromString(s string) (OrderState, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return OrderStateDoNotUse, nil
 	case "OPEN":
 		return OrderStateOpen, nil
 	case "COMPLETED":
@@ -30374,15 +29455,12 @@ func (p *PaymentOptions) String() string {
 type PaymentOptionsDelayAction string
 
 const (
-	PaymentOptionsDelayActionInvalidType PaymentOptionsDelayAction = "INVALID_TYPE"
-	PaymentOptionsDelayActionCancel      PaymentOptionsDelayAction = "CANCEL"
-	PaymentOptionsDelayActionComplete    PaymentOptionsDelayAction = "COMPLETE"
+	PaymentOptionsDelayActionCancel   PaymentOptionsDelayAction = "CANCEL"
+	PaymentOptionsDelayActionComplete PaymentOptionsDelayAction = "COMPLETE"
 )
 
 func NewPaymentOptionsDelayActionFromString(s string) (PaymentOptionsDelayAction, error) {
 	switch s {
-	case "INVALID_TYPE":
-		return PaymentOptionsDelayActionInvalidType, nil
 	case "CANCEL":
 		return PaymentOptionsDelayActionCancel, nil
 	case "COMPLETE":
@@ -30537,27 +29615,20 @@ func (p *ProcessingFee) String() string {
 type Product string
 
 const (
-	ProductProductDoNotUse    Product = "PRODUCT_DO_NOT_USE"
-	ProductSquarePos          Product = "SQUARE_POS"
-	ProductExternalAPI        Product = "EXTERNAL_API"
-	ProductBilling            Product = "BILLING"
-	ProductAppointments       Product = "APPOINTMENTS"
-	ProductInvoices           Product = "INVOICES"
-	ProductOnlineStore        Product = "ONLINE_STORE"
-	ProductPayroll            Product = "PAYROLL"
-	ProductDashboard          Product = "DASHBOARD"
-	ProductItemLibraryImport  Product = "ITEM_LIBRARY_IMPORT"
-	ProductRetail             Product = "RETAIL"
-	ProductRestaurant         Product = "RESTAURANT"
-	ProductCustomersDirectory Product = "CUSTOMERS_DIRECTORY"
-	ProductChannels           Product = "CHANNELS"
-	ProductOther              Product = "OTHER"
+	ProductSquarePos         Product = "SQUARE_POS"
+	ProductExternalAPI       Product = "EXTERNAL_API"
+	ProductBilling           Product = "BILLING"
+	ProductAppointments      Product = "APPOINTMENTS"
+	ProductInvoices          Product = "INVOICES"
+	ProductOnlineStore       Product = "ONLINE_STORE"
+	ProductPayroll           Product = "PAYROLL"
+	ProductDashboard         Product = "DASHBOARD"
+	ProductItemLibraryImport Product = "ITEM_LIBRARY_IMPORT"
+	ProductOther             Product = "OTHER"
 )
 
 func NewProductFromString(s string) (Product, error) {
 	switch s {
-	case "PRODUCT_DO_NOT_USE":
-		return ProductProductDoNotUse, nil
 	case "SQUARE_POS":
 		return ProductSquarePos, nil
 	case "EXTERNAL_API":
@@ -30576,14 +29647,6 @@ func NewProductFromString(s string) (Product, error) {
 		return ProductDashboard, nil
 	case "ITEM_LIBRARY_IMPORT":
 		return ProductItemLibraryImport, nil
-	case "RETAIL":
-		return ProductRetail, nil
-	case "RESTAURANT":
-		return ProductRestaurant, nil
-	case "CUSTOMERS_DIRECTORY":
-		return ProductCustomersDirectory, nil
-	case "CHANNELS":
-		return ProductChannels, nil
 	case "OTHER":
 		return ProductOther, nil
 	}
@@ -30595,51 +29658,7 @@ func (p Product) Ptr() *Product {
 	return &p
 }
 
-type ProductType string
-
-const (
-	ProductTypeUnknown          ProductType = "UNKNOWN"
-	ProductTypeRegister         ProductType = "REGISTER"
-	ProductTypeRestaurant       ProductType = "RESTAURANT"
-	ProductTypeRetail           ProductType = "RETAIL"
-	ProductTypePaySdk           ProductType = "PAY_SDK"
-	ProductTypeTerminalAPI      ProductType = "TERMINAL_API"
-	ProductTypeKds              ProductType = "KDS"
-	ProductTypeKdsExpo          ProductType = "KDS_EXPO"
-	ProductTypeRestaurantMobile ProductType = "RESTAURANT_MOBILE"
-	ProductTypeFnbkiosk         ProductType = "FNBKIOSK"
-)
-
-func NewProductTypeFromString(s string) (ProductType, error) {
-	switch s {
-	case "UNKNOWN":
-		return ProductTypeUnknown, nil
-	case "REGISTER":
-		return ProductTypeRegister, nil
-	case "RESTAURANT":
-		return ProductTypeRestaurant, nil
-	case "RETAIL":
-		return ProductTypeRetail, nil
-	case "PAY_SDK":
-		return ProductTypePaySdk, nil
-	case "TERMINAL_API":
-		return ProductTypeTerminalAPI, nil
-	case "KDS":
-		return ProductTypeKds, nil
-	case "KDS_EXPO":
-		return ProductTypeKdsExpo, nil
-	case "RESTAURANT_MOBILE":
-		return ProductTypeRestaurantMobile, nil
-	case "FNBKIOSK":
-		return ProductTypeFnbkiosk, nil
-	}
-	var t ProductType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p ProductType) Ptr() *ProductType {
-	return &p
-}
+type ProductType = string
 
 // Fields to describe the action that displays QR-Codes.
 type QrCodeOptions struct {
@@ -32131,15 +31150,12 @@ func (s *ShiftFilter) String() string {
 type ShiftFilterStatus string
 
 const (
-	ShiftFilterStatusDoNotUse ShiftFilterStatus = "DO_NOT_USE"
-	ShiftFilterStatusOpen     ShiftFilterStatus = "OPEN"
-	ShiftFilterStatusClosed   ShiftFilterStatus = "CLOSED"
+	ShiftFilterStatusOpen   ShiftFilterStatus = "OPEN"
+	ShiftFilterStatusClosed ShiftFilterStatus = "CLOSED"
 )
 
 func NewShiftFilterStatusFromString(s string) (ShiftFilterStatus, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return ShiftFilterStatusDoNotUse, nil
 	case "OPEN":
 		return ShiftFilterStatusOpen, nil
 	case "CLOSED":
@@ -32273,7 +31289,6 @@ func (s *ShiftSort) String() string {
 type ShiftSortField string
 
 const (
-	ShiftSortFieldDoNotUse  ShiftSortField = "DO_NOT_USE"
 	ShiftSortFieldStartAt   ShiftSortField = "START_AT"
 	ShiftSortFieldEndAt     ShiftSortField = "END_AT"
 	ShiftSortFieldCreatedAt ShiftSortField = "CREATED_AT"
@@ -32282,8 +31297,6 @@ const (
 
 func NewShiftSortFieldFromString(s string) (ShiftSortField, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return ShiftSortFieldDoNotUse, nil
 	case "START_AT":
 		return ShiftSortFieldStartAt, nil
 	case "END_AT":
@@ -32305,15 +31318,12 @@ func (s ShiftSortField) Ptr() *ShiftSortField {
 type ShiftStatus string
 
 const (
-	ShiftStatusUnknownStatus ShiftStatus = "UNKNOWN_STATUS"
-	ShiftStatusOpen          ShiftStatus = "OPEN"
-	ShiftStatusClosed        ShiftStatus = "CLOSED"
+	ShiftStatusOpen   ShiftStatus = "OPEN"
+	ShiftStatusClosed ShiftStatus = "CLOSED"
 )
 
 func NewShiftStatusFromString(s string) (ShiftStatus, error) {
 	switch s {
-	case "UNKNOWN_STATUS":
-		return ShiftStatusUnknownStatus, nil
 	case "OPEN":
 		return ShiftStatusOpen, nil
 	case "CLOSED":
@@ -32479,7 +31489,6 @@ func (s *ShiftWorkday) String() string {
 type ShiftWorkdayMatcher string
 
 const (
-	ShiftWorkdayMatcherDoNotUse     ShiftWorkdayMatcher = "DO_NOT_USE"
 	ShiftWorkdayMatcherStartAt      ShiftWorkdayMatcher = "START_AT"
 	ShiftWorkdayMatcherEndAt        ShiftWorkdayMatcher = "END_AT"
 	ShiftWorkdayMatcherIntersection ShiftWorkdayMatcher = "INTERSECTION"
@@ -32487,8 +31496,6 @@ const (
 
 func NewShiftWorkdayMatcherFromString(s string) (ShiftWorkdayMatcher, error) {
 	switch s {
-	case "DO_NOT_USE":
-		return ShiftWorkdayMatcherDoNotUse, nil
 	case "START_AT":
 		return ShiftWorkdayMatcherStartAt, nil
 	case "END_AT":
@@ -32778,26 +31785,23 @@ func (s *SourceApplication) String() string {
 type SubscriptionCadence string
 
 const (
-	SubscriptionCadenceSubscriptionCadenceDoNotUse SubscriptionCadence = "SUBSCRIPTION_CADENCE_DO_NOT_USE"
-	SubscriptionCadenceDaily                       SubscriptionCadence = "DAILY"
-	SubscriptionCadenceWeekly                      SubscriptionCadence = "WEEKLY"
-	SubscriptionCadenceEveryTwoWeeks               SubscriptionCadence = "EVERY_TWO_WEEKS"
-	SubscriptionCadenceThirtyDays                  SubscriptionCadence = "THIRTY_DAYS"
-	SubscriptionCadenceSixtyDays                   SubscriptionCadence = "SIXTY_DAYS"
-	SubscriptionCadenceNinetyDays                  SubscriptionCadence = "NINETY_DAYS"
-	SubscriptionCadenceMonthly                     SubscriptionCadence = "MONTHLY"
-	SubscriptionCadenceEveryTwoMonths              SubscriptionCadence = "EVERY_TWO_MONTHS"
-	SubscriptionCadenceQuarterly                   SubscriptionCadence = "QUARTERLY"
-	SubscriptionCadenceEveryFourMonths             SubscriptionCadence = "EVERY_FOUR_MONTHS"
-	SubscriptionCadenceEverySixMonths              SubscriptionCadence = "EVERY_SIX_MONTHS"
-	SubscriptionCadenceAnnual                      SubscriptionCadence = "ANNUAL"
-	SubscriptionCadenceEveryTwoYears               SubscriptionCadence = "EVERY_TWO_YEARS"
+	SubscriptionCadenceDaily           SubscriptionCadence = "DAILY"
+	SubscriptionCadenceWeekly          SubscriptionCadence = "WEEKLY"
+	SubscriptionCadenceEveryTwoWeeks   SubscriptionCadence = "EVERY_TWO_WEEKS"
+	SubscriptionCadenceThirtyDays      SubscriptionCadence = "THIRTY_DAYS"
+	SubscriptionCadenceSixtyDays       SubscriptionCadence = "SIXTY_DAYS"
+	SubscriptionCadenceNinetyDays      SubscriptionCadence = "NINETY_DAYS"
+	SubscriptionCadenceMonthly         SubscriptionCadence = "MONTHLY"
+	SubscriptionCadenceEveryTwoMonths  SubscriptionCadence = "EVERY_TWO_MONTHS"
+	SubscriptionCadenceQuarterly       SubscriptionCadence = "QUARTERLY"
+	SubscriptionCadenceEveryFourMonths SubscriptionCadence = "EVERY_FOUR_MONTHS"
+	SubscriptionCadenceEverySixMonths  SubscriptionCadence = "EVERY_SIX_MONTHS"
+	SubscriptionCadenceAnnual          SubscriptionCadence = "ANNUAL"
+	SubscriptionCadenceEveryTwoYears   SubscriptionCadence = "EVERY_TWO_YEARS"
 )
 
 func NewSubscriptionCadenceFromString(s string) (SubscriptionCadence, error) {
 	switch s {
-	case "SUBSCRIPTION_CADENCE_DO_NOT_USE":
-		return SubscriptionCadenceSubscriptionCadenceDoNotUse, nil
 	case "DAILY":
 		return SubscriptionCadenceDaily, nil
 	case "WEEKLY":
@@ -32998,15 +32002,12 @@ func (s *SubscriptionPricing) String() string {
 type SubscriptionPricingType string
 
 const (
-	SubscriptionPricingTypeSubscriptionPricingDoNotUse SubscriptionPricingType = "SUBSCRIPTION_PRICING_DO_NOT_USE"
-	SubscriptionPricingTypeStatic                      SubscriptionPricingType = "STATIC"
-	SubscriptionPricingTypeRelative                    SubscriptionPricingType = "RELATIVE"
+	SubscriptionPricingTypeStatic   SubscriptionPricingType = "STATIC"
+	SubscriptionPricingTypeRelative SubscriptionPricingType = "RELATIVE"
 )
 
 func NewSubscriptionPricingTypeFromString(s string) (SubscriptionPricingType, error) {
 	switch s {
-	case "SUBSCRIPTION_PRICING_DO_NOT_USE":
-		return SubscriptionPricingTypeSubscriptionPricingDoNotUse, nil
 	case "STATIC":
 		return SubscriptionPricingTypeStatic, nil
 	case "RELATIVE":
@@ -34006,20 +33007,16 @@ func (t TenderSquareAccountDetailsStatus) Ptr() *TenderSquareAccountDetailsStatu
 type TenderType string
 
 const (
-	TenderTypeCard             TenderType = "CARD"
-	TenderTypeCash             TenderType = "CASH"
-	TenderTypeThirdPartyCard   TenderType = "THIRD_PARTY_CARD"
-	TenderTypeSquareGiftCard   TenderType = "SQUARE_GIFT_CARD"
-	TenderTypeNoSale           TenderType = "NO_SALE"
-	TenderTypeCheck            TenderType = "CHECK"
-	TenderTypeMerchantGiftCard TenderType = "MERCHANT_GIFT_CARD"
-	TenderTypeThirdPartyEMoney TenderType = "THIRD_PARTY_E_MONEY"
-	TenderTypeBankAccount      TenderType = "BANK_ACCOUNT"
-	TenderTypeWallet           TenderType = "WALLET"
-	TenderTypeBuyNowPayLater   TenderType = "BUY_NOW_PAY_LATER"
-	TenderTypeSquareAccount    TenderType = "SQUARE_ACCOUNT"
-	TenderTypeBankTransfer     TenderType = "BANK_TRANSFER"
-	TenderTypeOther            TenderType = "OTHER"
+	TenderTypeCard           TenderType = "CARD"
+	TenderTypeCash           TenderType = "CASH"
+	TenderTypeThirdPartyCard TenderType = "THIRD_PARTY_CARD"
+	TenderTypeSquareGiftCard TenderType = "SQUARE_GIFT_CARD"
+	TenderTypeNoSale         TenderType = "NO_SALE"
+	TenderTypeBankAccount    TenderType = "BANK_ACCOUNT"
+	TenderTypeWallet         TenderType = "WALLET"
+	TenderTypeBuyNowPayLater TenderType = "BUY_NOW_PAY_LATER"
+	TenderTypeSquareAccount  TenderType = "SQUARE_ACCOUNT"
+	TenderTypeOther          TenderType = "OTHER"
 )
 
 func NewTenderTypeFromString(s string) (TenderType, error) {
@@ -34034,12 +33031,6 @@ func NewTenderTypeFromString(s string) (TenderType, error) {
 		return TenderTypeSquareGiftCard, nil
 	case "NO_SALE":
 		return TenderTypeNoSale, nil
-	case "CHECK":
-		return TenderTypeCheck, nil
-	case "MERCHANT_GIFT_CARD":
-		return TenderTypeMerchantGiftCard, nil
-	case "THIRD_PARTY_E_MONEY":
-		return TenderTypeThirdPartyEMoney, nil
 	case "BANK_ACCOUNT":
 		return TenderTypeBankAccount, nil
 	case "WALLET":
@@ -34048,8 +33039,6 @@ func NewTenderTypeFromString(s string) (TenderType, error) {
 		return TenderTypeBuyNowPayLater, nil
 	case "SQUARE_ACCOUNT":
 		return TenderTypeSquareAccount, nil
-	case "BANK_TRANSFER":
-		return TenderTypeBankTransfer, nil
 	case "OTHER":
 		return TenderTypeOther, nil
 	}
@@ -34305,33 +33294,18 @@ func (t *TerminalAction) String() string {
 type TerminalActionActionType string
 
 const (
-	TerminalActionActionTypeInvalidType           TerminalActionActionType = "INVALID_TYPE"
-	TerminalActionActionTypeUnsupportedActionType TerminalActionActionType = "UNSUPPORTED_ACTION_TYPE"
-	TerminalActionActionTypeCheckout              TerminalActionActionType = "CHECKOUT"
-	TerminalActionActionTypeRefund                TerminalActionActionType = "REFUND"
-	TerminalActionActionTypeQrCode                TerminalActionActionType = "QR_CODE"
-	TerminalActionActionTypePing                  TerminalActionActionType = "PING"
-	TerminalActionActionTypeSaveCard              TerminalActionActionType = "SAVE_CARD"
-	TerminalActionActionTypeSignature             TerminalActionActionType = "SIGNATURE"
-	TerminalActionActionTypeConfirmation          TerminalActionActionType = "CONFIRMATION"
-	TerminalActionActionTypeReceipt               TerminalActionActionType = "RECEIPT"
-	TerminalActionActionTypeDataCollection        TerminalActionActionType = "DATA_COLLECTION"
-	TerminalActionActionTypeSelect                TerminalActionActionType = "SELECT"
-	TerminalActionActionTypeStack                 TerminalActionActionType = "STACK"
-	TerminalActionActionTypeConfig                TerminalActionActionType = "CONFIG"
-	TerminalActionActionTypeInternalPing          TerminalActionActionType = "INTERNAL_PING"
+	TerminalActionActionTypeQrCode         TerminalActionActionType = "QR_CODE"
+	TerminalActionActionTypePing           TerminalActionActionType = "PING"
+	TerminalActionActionTypeSaveCard       TerminalActionActionType = "SAVE_CARD"
+	TerminalActionActionTypeSignature      TerminalActionActionType = "SIGNATURE"
+	TerminalActionActionTypeConfirmation   TerminalActionActionType = "CONFIRMATION"
+	TerminalActionActionTypeReceipt        TerminalActionActionType = "RECEIPT"
+	TerminalActionActionTypeDataCollection TerminalActionActionType = "DATA_COLLECTION"
+	TerminalActionActionTypeSelect         TerminalActionActionType = "SELECT"
 )
 
 func NewTerminalActionActionTypeFromString(s string) (TerminalActionActionType, error) {
 	switch s {
-	case "INVALID_TYPE":
-		return TerminalActionActionTypeInvalidType, nil
-	case "UNSUPPORTED_ACTION_TYPE":
-		return TerminalActionActionTypeUnsupportedActionType, nil
-	case "CHECKOUT":
-		return TerminalActionActionTypeCheckout, nil
-	case "REFUND":
-		return TerminalActionActionTypeRefund, nil
 	case "QR_CODE":
 		return TerminalActionActionTypeQrCode, nil
 	case "PING":
@@ -34348,12 +33322,6 @@ func NewTerminalActionActionTypeFromString(s string) (TerminalActionActionType, 
 		return TerminalActionActionTypeDataCollection, nil
 	case "SELECT":
 		return TerminalActionActionTypeSelect, nil
-	case "STACK":
-		return TerminalActionActionTypeStack, nil
-	case "CONFIG":
-		return TerminalActionActionTypeConfig, nil
-	case "INTERNAL_PING":
-		return TerminalActionActionTypeInternalPing, nil
 	}
 	var t TerminalActionActionType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -36440,2454 +35408,17 @@ func (u *UpsertCustomerCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-type V1CreateRefundRequestType string
-
-const (
-	V1CreateRefundRequestTypeFull    V1CreateRefundRequestType = "FULL"
-	V1CreateRefundRequestTypePartial V1CreateRefundRequestType = "PARTIAL"
-)
-
-func NewV1CreateRefundRequestTypeFromString(s string) (V1CreateRefundRequestType, error) {
-	switch s {
-	case "FULL":
-		return V1CreateRefundRequestTypeFull, nil
-	case "PARTIAL":
-		return V1CreateRefundRequestTypePartial, nil
-	}
-	var t V1CreateRefundRequestType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1CreateRefundRequestType) Ptr() *V1CreateRefundRequestType {
-	return &v
-}
-
-type V1Device struct {
-	// The device's Square-issued ID.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The device's merchant-specified name.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Device) GetID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ID
-}
-
-func (v *V1Device) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1Device) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Device) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Device
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Device(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Device) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1ListSettlementsRequestStatus string
-
-const (
-	V1ListSettlementsRequestStatusSent   V1ListSettlementsRequestStatus = "SENT"
-	V1ListSettlementsRequestStatusFailed V1ListSettlementsRequestStatus = "FAILED"
-)
-
-func NewV1ListSettlementsRequestStatusFromString(s string) (V1ListSettlementsRequestStatus, error) {
-	switch s {
-	case "SENT":
-		return V1ListSettlementsRequestStatusSent, nil
-	case "FAILED":
-		return V1ListSettlementsRequestStatusFailed, nil
-	}
-	var t V1ListSettlementsRequestStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1ListSettlementsRequestStatus) Ptr() *V1ListSettlementsRequestStatus {
-	return &v
-}
-
-// Defines the fields that are included in the response body of
-// a request to the **RetrieveBusiness** endpoint.
-type V1Merchant struct {
-	// The merchant account's unique identifier.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The name associated with the merchant account.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The email address associated with the merchant account.
-	Email *string `json:"email,omitempty" url:"email,omitempty"`
-	// Indicates whether the merchant account corresponds to a single-location account (LOCATION) or a business account (BUSINESS). This value is almost always LOCATION.
-	// See [V1MerchantAccountType](#type-v1merchantaccounttype) for possible values
-	AccountType *V1MerchantAccountType `json:"account_type,omitempty" url:"account_type,omitempty"`
-	// Capabilities that are enabled for the merchant's Square account. Capabilities that are not listed in this array are not enabled for the account.
-	AccountCapabilities []string `json:"account_capabilities,omitempty" url:"account_capabilities,omitempty"`
-	// The country associated with the merchant account, in ISO 3166-1-alpha-2 format.
-	CountryCode *string `json:"country_code,omitempty" url:"country_code,omitempty"`
-	// The language associated with the merchant account, in BCP 47 format.
-	LanguageCode *string `json:"language_code,omitempty" url:"language_code,omitempty"`
-	// The currency associated with the merchant account, in ISO 4217 format. For example, the currency code for US dollars is USD.
-	CurrencyCode *string `json:"currency_code,omitempty" url:"currency_code,omitempty"`
-	// The name of the merchant's business.
-	BusinessName *string `json:"business_name,omitempty" url:"business_name,omitempty"`
-	// The address of the merchant's business.
-	BusinessAddress *Address `json:"business_address,omitempty" url:"business_address,omitempty"`
-	// The phone number of the merchant's business.
-	BusinessPhone *V1PhoneNumber `json:"business_phone,omitempty" url:"business_phone,omitempty"`
-	// The type of business operated by the merchant.
-	// See [V1MerchantBusinessType](#type-v1merchantbusinesstype) for possible values
-	BusinessType *V1MerchantBusinessType `json:"business_type,omitempty" url:"business_type,omitempty"`
-	// The merchant's shipping address.
-	ShippingAddress *Address `json:"shipping_address,omitempty" url:"shipping_address,omitempty"`
-	// Additional information for a single-location account specified by its associated business account, if it has one.
-	LocationDetails *V1MerchantLocationDetails `json:"location_details,omitempty" url:"location_details,omitempty"`
-	// The URL of the merchant's online store.
-	MarketURL *string `json:"market_url,omitempty" url:"market_url,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Merchant) GetID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ID
-}
-
-func (v *V1Merchant) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1Merchant) GetEmail() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Email
-}
-
-func (v *V1Merchant) GetAccountType() *V1MerchantAccountType {
-	if v == nil {
-		return nil
-	}
-	return v.AccountType
-}
-
-func (v *V1Merchant) GetAccountCapabilities() []string {
-	if v == nil {
-		return nil
-	}
-	return v.AccountCapabilities
-}
-
-func (v *V1Merchant) GetCountryCode() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CountryCode
-}
-
-func (v *V1Merchant) GetLanguageCode() *string {
-	if v == nil {
-		return nil
-	}
-	return v.LanguageCode
-}
-
-func (v *V1Merchant) GetCurrencyCode() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CurrencyCode
-}
-
-func (v *V1Merchant) GetBusinessName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.BusinessName
-}
-
-func (v *V1Merchant) GetBusinessAddress() *Address {
-	if v == nil {
-		return nil
-	}
-	return v.BusinessAddress
-}
-
-func (v *V1Merchant) GetBusinessPhone() *V1PhoneNumber {
-	if v == nil {
-		return nil
-	}
-	return v.BusinessPhone
-}
-
-func (v *V1Merchant) GetBusinessType() *V1MerchantBusinessType {
-	if v == nil {
-		return nil
-	}
-	return v.BusinessType
-}
-
-func (v *V1Merchant) GetShippingAddress() *Address {
-	if v == nil {
-		return nil
-	}
-	return v.ShippingAddress
-}
-
-func (v *V1Merchant) GetLocationDetails() *V1MerchantLocationDetails {
-	if v == nil {
-		return nil
-	}
-	return v.LocationDetails
-}
-
-func (v *V1Merchant) GetMarketURL() *string {
-	if v == nil {
-		return nil
-	}
-	return v.MarketURL
-}
-
-func (v *V1Merchant) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Merchant) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Merchant
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Merchant(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Merchant) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1MerchantAccountType string
-
-const (
-	V1MerchantAccountTypeLocation V1MerchantAccountType = "LOCATION"
-	V1MerchantAccountTypeBusiness V1MerchantAccountType = "BUSINESS"
-)
-
-func NewV1MerchantAccountTypeFromString(s string) (V1MerchantAccountType, error) {
-	switch s {
-	case "LOCATION":
-		return V1MerchantAccountTypeLocation, nil
-	case "BUSINESS":
-		return V1MerchantAccountTypeBusiness, nil
-	}
-	var t V1MerchantAccountType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1MerchantAccountType) Ptr() *V1MerchantAccountType {
-	return &v
-}
-
-type V1MerchantBusinessType string
-
-const (
-	V1MerchantBusinessTypeAccounting                                         V1MerchantBusinessType = "ACCOUNTING"
-	V1MerchantBusinessTypeApparelAndAccessoryShops                           V1MerchantBusinessType = "APPAREL_AND_ACCESSORY_SHOPS"
-	V1MerchantBusinessTypeArtDealersGalleries                                V1MerchantBusinessType = "ART_DEALERS_GALLERIES"
-	V1MerchantBusinessTypeArtDesignAndPhotography                            V1MerchantBusinessType = "ART_DESIGN_AND_PHOTOGRAPHY"
-	V1MerchantBusinessTypeBarClubLounge                                      V1MerchantBusinessType = "BAR_CLUB_LOUNGE"
-	V1MerchantBusinessTypeBeautyAndBarberShops                               V1MerchantBusinessType = "BEAUTY_AND_BARBER_SHOPS"
-	V1MerchantBusinessTypeBookStores                                         V1MerchantBusinessType = "BOOK_STORES"
-	V1MerchantBusinessTypeBusinessServices                                   V1MerchantBusinessType = "BUSINESS_SERVICES"
-	V1MerchantBusinessTypeCatering                                           V1MerchantBusinessType = "CATERING"
-	V1MerchantBusinessTypeCharitableSocialServiceOrganizations               V1MerchantBusinessType = "CHARITABLE_SOCIAL_SERVICE_ORGANIZATIONS"
-	V1MerchantBusinessTypeCharitibleOrgs                                     V1MerchantBusinessType = "CHARITIBLE_ORGS"
-	V1MerchantBusinessTypeCleaningServices                                   V1MerchantBusinessType = "CLEANING_SERVICES"
-	V1MerchantBusinessTypeComputerEquipmentSoftwareMaintenanceRepairServices V1MerchantBusinessType = "COMPUTER_EQUIPMENT_SOFTWARE_MAINTENANCE_REPAIR_SERVICES"
-	V1MerchantBusinessTypeConsultant                                         V1MerchantBusinessType = "CONSULTANT"
-	V1MerchantBusinessTypeContractors                                        V1MerchantBusinessType = "CONTRACTORS"
-	V1MerchantBusinessTypeDeliveryServices                                   V1MerchantBusinessType = "DELIVERY_SERVICES"
-	V1MerchantBusinessTypeDentistry                                          V1MerchantBusinessType = "DENTISTRY"
-	V1MerchantBusinessTypeEducation                                          V1MerchantBusinessType = "EDUCATION"
-	V1MerchantBusinessTypeFoodStoresConvenienceStoresAndSpecialtyMarkets     V1MerchantBusinessType = "FOOD_STORES_CONVENIENCE_STORES_AND_SPECIALTY_MARKETS"
-	V1MerchantBusinessTypeFoodTruckCart                                      V1MerchantBusinessType = "FOOD_TRUCK_CART"
-	V1MerchantBusinessTypeFurnitureHomeAndOfficeEquipment                    V1MerchantBusinessType = "FURNITURE_HOME_AND_OFFICE_EQUIPMENT"
-	V1MerchantBusinessTypeFurnitureHomeGoods                                 V1MerchantBusinessType = "FURNITURE_HOME_GOODS"
-	V1MerchantBusinessTypeHotelsAndLodging                                   V1MerchantBusinessType = "HOTELS_AND_LODGING"
-	V1MerchantBusinessTypeIndividualUse                                      V1MerchantBusinessType = "INDIVIDUAL_USE"
-	V1MerchantBusinessTypeJewelryAndWatches                                  V1MerchantBusinessType = "JEWELRY_AND_WATCHES"
-	V1MerchantBusinessTypeLandscapingAndHorticulturalServices                V1MerchantBusinessType = "LANDSCAPING_AND_HORTICULTURAL_SERVICES"
-	V1MerchantBusinessTypeLanguageSchools                                    V1MerchantBusinessType = "LANGUAGE_SCHOOLS"
-	V1MerchantBusinessTypeLegalServices                                      V1MerchantBusinessType = "LEGAL_SERVICES"
-	V1MerchantBusinessTypeMedicalPractitioners                               V1MerchantBusinessType = "MEDICAL_PRACTITIONERS"
-	V1MerchantBusinessTypeMedicalServicesAndHealthPractitioners              V1MerchantBusinessType = "MEDICAL_SERVICES_AND_HEALTH_PRACTITIONERS"
-	V1MerchantBusinessTypeMembershipOrganizations                            V1MerchantBusinessType = "MEMBERSHIP_ORGANIZATIONS"
-	V1MerchantBusinessTypeMusicAndEntertainment                              V1MerchantBusinessType = "MUSIC_AND_ENTERTAINMENT"
-	V1MerchantBusinessTypeOther                                              V1MerchantBusinessType = "OTHER"
-	V1MerchantBusinessTypeOutdoorMarkets                                     V1MerchantBusinessType = "OUTDOOR_MARKETS"
-	V1MerchantBusinessTypePersonalServices                                   V1MerchantBusinessType = "PERSONAL_SERVICES"
-	V1MerchantBusinessTypePoliticalOrganizations                             V1MerchantBusinessType = "POLITICAL_ORGANIZATIONS"
-	V1MerchantBusinessTypeProfessionalServices                               V1MerchantBusinessType = "PROFESSIONAL_SERVICES"
-	V1MerchantBusinessTypeRealEstate                                         V1MerchantBusinessType = "REAL_ESTATE"
-	V1MerchantBusinessTypeRecreationServices                                 V1MerchantBusinessType = "RECREATION_SERVICES"
-	V1MerchantBusinessTypeRepairShopsAndRelatedServices                      V1MerchantBusinessType = "REPAIR_SHOPS_AND_RELATED_SERVICES"
-	V1MerchantBusinessTypeRestaurants                                        V1MerchantBusinessType = "RESTAURANTS"
-	V1MerchantBusinessTypeRetailShops                                        V1MerchantBusinessType = "RETAIL_SHOPS"
-	V1MerchantBusinessTypeSchoolsAndEducationalServices                      V1MerchantBusinessType = "SCHOOLS_AND_EDUCATIONAL_SERVICES"
-	V1MerchantBusinessTypeSportingGoods                                      V1MerchantBusinessType = "SPORTING_GOODS"
-	V1MerchantBusinessTypeTaxicabsAndLimousines                              V1MerchantBusinessType = "TAXICABS_AND_LIMOUSINES"
-	V1MerchantBusinessTypeTicketSales                                        V1MerchantBusinessType = "TICKET_SALES"
-	V1MerchantBusinessTypeTourism                                            V1MerchantBusinessType = "TOURISM"
-	V1MerchantBusinessTypeTravelTourism                                      V1MerchantBusinessType = "TRAVEL_TOURISM"
-	V1MerchantBusinessTypeVeterinaryServices                                 V1MerchantBusinessType = "VETERINARY_SERVICES"
-	V1MerchantBusinessTypeWebDevDesign                                       V1MerchantBusinessType = "WEB_DEV_DESIGN"
-)
-
-func NewV1MerchantBusinessTypeFromString(s string) (V1MerchantBusinessType, error) {
-	switch s {
-	case "ACCOUNTING":
-		return V1MerchantBusinessTypeAccounting, nil
-	case "APPAREL_AND_ACCESSORY_SHOPS":
-		return V1MerchantBusinessTypeApparelAndAccessoryShops, nil
-	case "ART_DEALERS_GALLERIES":
-		return V1MerchantBusinessTypeArtDealersGalleries, nil
-	case "ART_DESIGN_AND_PHOTOGRAPHY":
-		return V1MerchantBusinessTypeArtDesignAndPhotography, nil
-	case "BAR_CLUB_LOUNGE":
-		return V1MerchantBusinessTypeBarClubLounge, nil
-	case "BEAUTY_AND_BARBER_SHOPS":
-		return V1MerchantBusinessTypeBeautyAndBarberShops, nil
-	case "BOOK_STORES":
-		return V1MerchantBusinessTypeBookStores, nil
-	case "BUSINESS_SERVICES":
-		return V1MerchantBusinessTypeBusinessServices, nil
-	case "CATERING":
-		return V1MerchantBusinessTypeCatering, nil
-	case "CHARITABLE_SOCIAL_SERVICE_ORGANIZATIONS":
-		return V1MerchantBusinessTypeCharitableSocialServiceOrganizations, nil
-	case "CHARITIBLE_ORGS":
-		return V1MerchantBusinessTypeCharitibleOrgs, nil
-	case "CLEANING_SERVICES":
-		return V1MerchantBusinessTypeCleaningServices, nil
-	case "COMPUTER_EQUIPMENT_SOFTWARE_MAINTENANCE_REPAIR_SERVICES":
-		return V1MerchantBusinessTypeComputerEquipmentSoftwareMaintenanceRepairServices, nil
-	case "CONSULTANT":
-		return V1MerchantBusinessTypeConsultant, nil
-	case "CONTRACTORS":
-		return V1MerchantBusinessTypeContractors, nil
-	case "DELIVERY_SERVICES":
-		return V1MerchantBusinessTypeDeliveryServices, nil
-	case "DENTISTRY":
-		return V1MerchantBusinessTypeDentistry, nil
-	case "EDUCATION":
-		return V1MerchantBusinessTypeEducation, nil
-	case "FOOD_STORES_CONVENIENCE_STORES_AND_SPECIALTY_MARKETS":
-		return V1MerchantBusinessTypeFoodStoresConvenienceStoresAndSpecialtyMarkets, nil
-	case "FOOD_TRUCK_CART":
-		return V1MerchantBusinessTypeFoodTruckCart, nil
-	case "FURNITURE_HOME_AND_OFFICE_EQUIPMENT":
-		return V1MerchantBusinessTypeFurnitureHomeAndOfficeEquipment, nil
-	case "FURNITURE_HOME_GOODS":
-		return V1MerchantBusinessTypeFurnitureHomeGoods, nil
-	case "HOTELS_AND_LODGING":
-		return V1MerchantBusinessTypeHotelsAndLodging, nil
-	case "INDIVIDUAL_USE":
-		return V1MerchantBusinessTypeIndividualUse, nil
-	case "JEWELRY_AND_WATCHES":
-		return V1MerchantBusinessTypeJewelryAndWatches, nil
-	case "LANDSCAPING_AND_HORTICULTURAL_SERVICES":
-		return V1MerchantBusinessTypeLandscapingAndHorticulturalServices, nil
-	case "LANGUAGE_SCHOOLS":
-		return V1MerchantBusinessTypeLanguageSchools, nil
-	case "LEGAL_SERVICES":
-		return V1MerchantBusinessTypeLegalServices, nil
-	case "MEDICAL_PRACTITIONERS":
-		return V1MerchantBusinessTypeMedicalPractitioners, nil
-	case "MEDICAL_SERVICES_AND_HEALTH_PRACTITIONERS":
-		return V1MerchantBusinessTypeMedicalServicesAndHealthPractitioners, nil
-	case "MEMBERSHIP_ORGANIZATIONS":
-		return V1MerchantBusinessTypeMembershipOrganizations, nil
-	case "MUSIC_AND_ENTERTAINMENT":
-		return V1MerchantBusinessTypeMusicAndEntertainment, nil
-	case "OTHER":
-		return V1MerchantBusinessTypeOther, nil
-	case "OUTDOOR_MARKETS":
-		return V1MerchantBusinessTypeOutdoorMarkets, nil
-	case "PERSONAL_SERVICES":
-		return V1MerchantBusinessTypePersonalServices, nil
-	case "POLITICAL_ORGANIZATIONS":
-		return V1MerchantBusinessTypePoliticalOrganizations, nil
-	case "PROFESSIONAL_SERVICES":
-		return V1MerchantBusinessTypeProfessionalServices, nil
-	case "REAL_ESTATE":
-		return V1MerchantBusinessTypeRealEstate, nil
-	case "RECREATION_SERVICES":
-		return V1MerchantBusinessTypeRecreationServices, nil
-	case "REPAIR_SHOPS_AND_RELATED_SERVICES":
-		return V1MerchantBusinessTypeRepairShopsAndRelatedServices, nil
-	case "RESTAURANTS":
-		return V1MerchantBusinessTypeRestaurants, nil
-	case "RETAIL_SHOPS":
-		return V1MerchantBusinessTypeRetailShops, nil
-	case "SCHOOLS_AND_EDUCATIONAL_SERVICES":
-		return V1MerchantBusinessTypeSchoolsAndEducationalServices, nil
-	case "SPORTING_GOODS":
-		return V1MerchantBusinessTypeSportingGoods, nil
-	case "TAXICABS_AND_LIMOUSINES":
-		return V1MerchantBusinessTypeTaxicabsAndLimousines, nil
-	case "TICKET_SALES":
-		return V1MerchantBusinessTypeTicketSales, nil
-	case "TOURISM":
-		return V1MerchantBusinessTypeTourism, nil
-	case "TRAVEL_TOURISM":
-		return V1MerchantBusinessTypeTravelTourism, nil
-	case "VETERINARY_SERVICES":
-		return V1MerchantBusinessTypeVeterinaryServices, nil
-	case "WEB_DEV_DESIGN":
-		return V1MerchantBusinessTypeWebDevDesign, nil
-	}
-	var t V1MerchantBusinessType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1MerchantBusinessType) Ptr() *V1MerchantBusinessType {
-	return &v
-}
-
-// Additional information for a single-location account specified by its associated business account, if it has one.
-type V1MerchantLocationDetails struct {
-	// The nickname assigned to the single-location account by the parent business. This value appears in the parent business's multi-location dashboard.
-	Nickname *string `json:"nickname,omitempty" url:"nickname,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1MerchantLocationDetails) GetNickname() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Nickname
-}
-
-func (v *V1MerchantLocationDetails) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1MerchantLocationDetails) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1MerchantLocationDetails
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1MerchantLocationDetails(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1MerchantLocationDetails) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1Money struct {
-	// Amount in the lowest denominated value of this Currency. E.g. in USD
-	// these are cents, in JPY they are Yen (which do not have a 'cent' concept).
-	Amount *int `json:"amount,omitempty" url:"amount,omitempty"`
-	// See [Currency](#type-currency) for possible values
-	CurrencyCode *Currency `json:"currency_code,omitempty" url:"currency_code,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Money) GetAmount() *int {
-	if v == nil {
-		return nil
-	}
-	return v.Amount
-}
-
-func (v *V1Money) GetCurrencyCode() *Currency {
-	if v == nil {
-		return nil
-	}
-	return v.CurrencyCode
-}
-
-func (v *V1Money) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Money) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Money
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Money(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Money) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// A payment represents a paid transaction between a Square merchant and a
-// customer. Payment details are usually available from Connect API endpoints
-// within a few minutes after the transaction completes.
-//
-// Each Payment object includes several fields that end in `_money`. These fields
-// describe the various amounts of money that contribute to the payment total:
-//
-// <ul>
-// <li>
-// Monetary values are <b>positive</b> if they represent an
-// <em>increase</em> in the amount of money the merchant receives (e.g.,
-// <code>tax_money</code>, <code>tip_money</code>).
-// </li>
-// <li>
-// Monetary values are <b>negative</b> if they represent an
-// <em>decrease</em> in the amount of money the merchant receives (e.g.,
-// <code>discount_money</code>, <code>refunded_money</code>).
-// </li>
-// </ul>
-type V1Payment struct {
-	// The payment's unique identifier.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The unique identifier of the merchant that took the payment.
-	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
-	// The time when the payment was created, in ISO 8601 format. Reflects the time of the first payment if the object represents an incomplete partial payment, and the time of the last or complete payment otherwise.
-	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The unique identifier of the Square account that took the payment.
-	CreatorID *string `json:"creator_id,omitempty" url:"creator_id,omitempty"`
-	// The device that took the payment.
-	Device *V1Device `json:"device,omitempty" url:"device,omitempty"`
-	// The URL of the payment's detail page in the merchant dashboard. The merchant must be signed in to the merchant dashboard to view this page.
-	PaymentURL *string `json:"payment_url,omitempty" url:"payment_url,omitempty"`
-	// The URL of the receipt for the payment. Note that for split tender
-	// payments, this URL corresponds to the receipt for the first tender
-	// listed in the payment's tender field. Each Tender object has its own
-	// receipt_url field you can use to get the other receipts associated with
-	// a split tender payment.
-	ReceiptURL *string `json:"receipt_url,omitempty" url:"receipt_url,omitempty"`
-	// The sum of all inclusive taxes associated with the payment.
-	InclusiveTaxMoney *V1Money `json:"inclusive_tax_money,omitempty" url:"inclusive_tax_money,omitempty"`
-	// The sum of all additive taxes associated with the payment.
-	AdditiveTaxMoney *V1Money `json:"additive_tax_money,omitempty" url:"additive_tax_money,omitempty"`
-	// The total of all taxes applied to the payment. This is always the sum of inclusive_tax_money and additive_tax_money.
-	TaxMoney *V1Money `json:"tax_money,omitempty" url:"tax_money,omitempty"`
-	// The total of all tips applied to the payment.
-	TipMoney *V1Money `json:"tip_money,omitempty" url:"tip_money,omitempty"`
-	// The total of all discounts applied to the payment.
-	DiscountMoney *V1Money `json:"discount_money,omitempty" url:"discount_money,omitempty"`
-	// The total of all discounts applied to the payment.
-	TotalCollectedMoney *V1Money `json:"total_collected_money,omitempty" url:"total_collected_money,omitempty"`
-	// The total of all processing fees collected by Square for the payment.
-	ProcessingFeeMoney *V1Money `json:"processing_fee_money,omitempty" url:"processing_fee_money,omitempty"`
-	// The amount to be deposited into the merchant's bank account for the payment.
-	NetTotalMoney *V1Money `json:"net_total_money,omitempty" url:"net_total_money,omitempty"`
-	// The total of all refunds applied to the payment.
-	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
-	// The total of all sales, including any applicable taxes, rounded to the smallest legal unit of currency (e.g., the nearest penny in USD, the nearest nickel in CAD)
-	SwedishRoundingMoney *V1Money `json:"swedish_rounding_money,omitempty" url:"swedish_rounding_money,omitempty"`
-	// The total of all sales, including any applicable taxes.
-	GrossSalesMoney *V1Money `json:"gross_sales_money,omitempty" url:"gross_sales_money,omitempty"`
-	// The total of all sales, minus any applicable taxes.
-	NetSalesMoney *V1Money `json:"net_sales_money,omitempty" url:"net_sales_money,omitempty"`
-	// All of the inclusive taxes associated with the payment.
-	InclusiveTax []*V1PaymentTax `json:"inclusive_tax,omitempty" url:"inclusive_tax,omitempty"`
-	// All of the additive taxes associated with the payment.
-	AdditiveTax []*V1PaymentTax `json:"additive_tax,omitempty" url:"additive_tax,omitempty"`
-	// All of the tenders associated with the payment.
-	Tender []*V1Tender `json:"tender,omitempty" url:"tender,omitempty"`
-	// All of the refunds applied to the payment. Note that the value of all refunds on a payment can exceed the value of all tenders if a merchant chooses to refund money to a tender after previously accepting returned goods as part of an exchange.
-	Refunds []*V1Refund `json:"refunds,omitempty" url:"refunds,omitempty"`
-	// The items purchased in the payment.
-	Itemizations []*V1PaymentItemization `json:"itemizations,omitempty" url:"itemizations,omitempty"`
-	// The total of all surcharges applied to the payment.
-	SurchargeMoney *V1Money `json:"surcharge_money,omitempty" url:"surcharge_money,omitempty"`
-	// A list of all surcharges associated with the payment.
-	Surcharges []*V1PaymentSurcharge `json:"surcharges,omitempty" url:"surcharges,omitempty"`
-	// Indicates whether or not the payment is only partially paid for.
-	// If true, this payment will have the tenders collected so far, but the
-	// itemizations will be empty until the payment is completed.
-	IsPartial *bool `json:"is_partial,omitempty" url:"is_partial,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Payment) GetID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ID
-}
-
-func (v *V1Payment) GetMerchantID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.MerchantID
-}
-
-func (v *V1Payment) GetCreatedAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CreatedAt
-}
-
-func (v *V1Payment) GetCreatorID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CreatorID
-}
-
-func (v *V1Payment) GetDevice() *V1Device {
-	if v == nil {
-		return nil
-	}
-	return v.Device
-}
-
-func (v *V1Payment) GetPaymentURL() *string {
-	if v == nil {
-		return nil
-	}
-	return v.PaymentURL
-}
-
-func (v *V1Payment) GetReceiptURL() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ReceiptURL
-}
-
-func (v *V1Payment) GetInclusiveTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.InclusiveTaxMoney
-}
-
-func (v *V1Payment) GetAdditiveTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AdditiveTaxMoney
-}
-
-func (v *V1Payment) GetTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TaxMoney
-}
-
-func (v *V1Payment) GetTipMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TipMoney
-}
-
-func (v *V1Payment) GetDiscountMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.DiscountMoney
-}
-
-func (v *V1Payment) GetTotalCollectedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TotalCollectedMoney
-}
-
-func (v *V1Payment) GetProcessingFeeMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.ProcessingFeeMoney
-}
-
-func (v *V1Payment) GetNetTotalMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.NetTotalMoney
-}
-
-func (v *V1Payment) GetRefundedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedMoney
-}
-
-func (v *V1Payment) GetSwedishRoundingMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.SwedishRoundingMoney
-}
-
-func (v *V1Payment) GetGrossSalesMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.GrossSalesMoney
-}
-
-func (v *V1Payment) GetNetSalesMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.NetSalesMoney
-}
-
-func (v *V1Payment) GetInclusiveTax() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.InclusiveTax
-}
-
-func (v *V1Payment) GetAdditiveTax() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.AdditiveTax
-}
-
-func (v *V1Payment) GetTender() []*V1Tender {
-	if v == nil {
-		return nil
-	}
-	return v.Tender
-}
-
-func (v *V1Payment) GetRefunds() []*V1Refund {
-	if v == nil {
-		return nil
-	}
-	return v.Refunds
-}
-
-func (v *V1Payment) GetItemizations() []*V1PaymentItemization {
-	if v == nil {
-		return nil
-	}
-	return v.Itemizations
-}
-
-func (v *V1Payment) GetSurchargeMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.SurchargeMoney
-}
-
-func (v *V1Payment) GetSurcharges() []*V1PaymentSurcharge {
-	if v == nil {
-		return nil
-	}
-	return v.Surcharges
-}
-
-func (v *V1Payment) GetIsPartial() *bool {
-	if v == nil {
-		return nil
-	}
-	return v.IsPartial
-}
-
-func (v *V1Payment) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Payment) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Payment
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Payment(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Payment) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// V1PaymentDiscount
-type V1PaymentDiscount struct {
-	// The discount's name.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The amount of money that this discount adds to the payment (note that this value is always negative or zero).
-	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
-	// The ID of the applied discount, if available. Discounts applied in older versions of Square Register might not have an ID.
-	DiscountID *string `json:"discount_id,omitempty" url:"discount_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentDiscount) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1PaymentDiscount) GetAppliedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AppliedMoney
-}
-
-func (v *V1PaymentDiscount) GetDiscountID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.DiscountID
-}
-
-func (v *V1PaymentDiscount) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentDiscount) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentDiscount
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentDiscount(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentDiscount) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// V1PaymentItemDetail
-type V1PaymentItemDetail struct {
-	// The name of the item's merchant-defined category, if any.
-	CategoryName *string `json:"category_name,omitempty" url:"category_name,omitempty"`
-	// The item's merchant-defined SKU, if any.
-	Sku *string `json:"sku,omitempty" url:"sku,omitempty"`
-	// The unique ID of the item purchased, if any.
-	ItemID *string `json:"item_id,omitempty" url:"item_id,omitempty"`
-	// The unique ID of the item variation purchased, if any.
-	ItemVariationID *string `json:"item_variation_id,omitempty" url:"item_variation_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentItemDetail) GetCategoryName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CategoryName
-}
-
-func (v *V1PaymentItemDetail) GetSku() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Sku
-}
-
-func (v *V1PaymentItemDetail) GetItemID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ItemID
-}
-
-func (v *V1PaymentItemDetail) GetItemVariationID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ItemVariationID
-}
-
-func (v *V1PaymentItemDetail) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentItemDetail) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentItemDetail
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentItemDetail(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentItemDetail) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// Payment include an` itemizations` field that lists the items purchased,
-// along with associated fees, modifiers, and discounts. Each itemization has an
-// `itemization_type` field that indicates which of the following the itemization
-// represents:
-//
-// <ul>
-// <li>An item variation from the merchant's item library</li>
-// <li>A custom monetary amount</li>
-// <li>
-// An action performed on a Square gift card, such as activating or
-// reloading it.
-// </li>
-// </ul>
-//
-// \*Note**: itemization information included in a `Payment` object reflects
-// details collected **at the time of the payment\*\*. Details such as the name or
-// price of items might have changed since the payment was processed.
-type V1PaymentItemization struct {
-	// The item's name.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The quantity of the item purchased. This can be a decimal value.
-	Quantity *float64 `json:"quantity,omitempty" url:"quantity,omitempty"`
-	// The type of purchase that the itemization represents, such as an ITEM or CUSTOM_AMOUNT
-	// See [V1PaymentItemizationItemizationType](#type-v1paymentitemizationitemizationtype) for possible values
-	ItemizationType *V1PaymentItemizationItemizationType `json:"itemization_type,omitempty" url:"itemization_type,omitempty"`
-	// Details of the item, including its unique identifier and the identifier of the item variation purchased.
-	ItemDetail *V1PaymentItemDetail `json:"item_detail,omitempty" url:"item_detail,omitempty"`
-	// Notes entered by the merchant about the item at the time of payment, if any.
-	Notes *string `json:"notes,omitempty" url:"notes,omitempty"`
-	// The name of the item variation purchased, if any.
-	ItemVariationName *string `json:"item_variation_name,omitempty" url:"item_variation_name,omitempty"`
-	// The total cost of the item, including all taxes and discounts.
-	TotalMoney *V1Money `json:"total_money,omitempty" url:"total_money,omitempty"`
-	// The cost of a single unit of this item.
-	SingleQuantityMoney *V1Money `json:"single_quantity_money,omitempty" url:"single_quantity_money,omitempty"`
-	// The total cost of the itemization and its modifiers, not including taxes or discounts.
-	GrossSalesMoney *V1Money `json:"gross_sales_money,omitempty" url:"gross_sales_money,omitempty"`
-	// The total of all discounts applied to the itemization. This value is always negative or zero.
-	DiscountMoney *V1Money `json:"discount_money,omitempty" url:"discount_money,omitempty"`
-	// The sum of gross_sales_money and discount_money.
-	NetSalesMoney *V1Money `json:"net_sales_money,omitempty" url:"net_sales_money,omitempty"`
-	// All taxes applied to this itemization.
-	Taxes []*V1PaymentTax `json:"taxes,omitempty" url:"taxes,omitempty"`
-	// All discounts applied to this itemization.
-	Discounts []*V1PaymentDiscount `json:"discounts,omitempty" url:"discounts,omitempty"`
-	// All modifier options applied to this itemization.
-	Modifiers []*V1PaymentModifier `json:"modifiers,omitempty" url:"modifiers,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentItemization) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1PaymentItemization) GetQuantity() *float64 {
-	if v == nil {
-		return nil
-	}
-	return v.Quantity
-}
-
-func (v *V1PaymentItemization) GetItemizationType() *V1PaymentItemizationItemizationType {
-	if v == nil {
-		return nil
-	}
-	return v.ItemizationType
-}
-
-func (v *V1PaymentItemization) GetItemDetail() *V1PaymentItemDetail {
-	if v == nil {
-		return nil
-	}
-	return v.ItemDetail
-}
-
-func (v *V1PaymentItemization) GetNotes() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Notes
-}
-
-func (v *V1PaymentItemization) GetItemVariationName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ItemVariationName
-}
-
-func (v *V1PaymentItemization) GetTotalMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TotalMoney
-}
-
-func (v *V1PaymentItemization) GetSingleQuantityMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.SingleQuantityMoney
-}
-
-func (v *V1PaymentItemization) GetGrossSalesMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.GrossSalesMoney
-}
-
-func (v *V1PaymentItemization) GetDiscountMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.DiscountMoney
-}
-
-func (v *V1PaymentItemization) GetNetSalesMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.NetSalesMoney
-}
-
-func (v *V1PaymentItemization) GetTaxes() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.Taxes
-}
-
-func (v *V1PaymentItemization) GetDiscounts() []*V1PaymentDiscount {
-	if v == nil {
-		return nil
-	}
-	return v.Discounts
-}
-
-func (v *V1PaymentItemization) GetModifiers() []*V1PaymentModifier {
-	if v == nil {
-		return nil
-	}
-	return v.Modifiers
-}
-
-func (v *V1PaymentItemization) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentItemization) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentItemization
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentItemization(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentItemization) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1PaymentItemizationItemizationType string
-
-const (
-	V1PaymentItemizationItemizationTypeItem               V1PaymentItemizationItemizationType = "ITEM"
-	V1PaymentItemizationItemizationTypeCustomAmount       V1PaymentItemizationItemizationType = "CUSTOM_AMOUNT"
-	V1PaymentItemizationItemizationTypeGiftCardActivation V1PaymentItemizationItemizationType = "GIFT_CARD_ACTIVATION"
-	V1PaymentItemizationItemizationTypeGiftCardReload     V1PaymentItemizationItemizationType = "GIFT_CARD_RELOAD"
-	V1PaymentItemizationItemizationTypeGiftCardUnknown    V1PaymentItemizationItemizationType = "GIFT_CARD_UNKNOWN"
-	V1PaymentItemizationItemizationTypeOther              V1PaymentItemizationItemizationType = "OTHER"
-)
-
-func NewV1PaymentItemizationItemizationTypeFromString(s string) (V1PaymentItemizationItemizationType, error) {
-	switch s {
-	case "ITEM":
-		return V1PaymentItemizationItemizationTypeItem, nil
-	case "CUSTOM_AMOUNT":
-		return V1PaymentItemizationItemizationTypeCustomAmount, nil
-	case "GIFT_CARD_ACTIVATION":
-		return V1PaymentItemizationItemizationTypeGiftCardActivation, nil
-	case "GIFT_CARD_RELOAD":
-		return V1PaymentItemizationItemizationTypeGiftCardReload, nil
-	case "GIFT_CARD_UNKNOWN":
-		return V1PaymentItemizationItemizationTypeGiftCardUnknown, nil
-	case "OTHER":
-		return V1PaymentItemizationItemizationTypeOther, nil
-	}
-	var t V1PaymentItemizationItemizationType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1PaymentItemizationItemizationType) Ptr() *V1PaymentItemizationItemizationType {
-	return &v
-}
-
-// V1PaymentModifier
-type V1PaymentModifier struct {
-	// The modifier option's name.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The amount of money that this modifier option adds to the payment.
-	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
-	// The ID of the applied modifier option, if available. Modifier options applied in older versions of Square Register might not have an ID.
-	ModifierOptionID *string `json:"modifier_option_id,omitempty" url:"modifier_option_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentModifier) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1PaymentModifier) GetAppliedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AppliedMoney
-}
-
-func (v *V1PaymentModifier) GetModifierOptionID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ModifierOptionID
-}
-
-func (v *V1PaymentModifier) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentModifier) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentModifier
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentModifier(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentModifier) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// V1PaymentSurcharge
-type V1PaymentSurcharge struct {
-	// The name of the surcharge.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The amount of money applied to the order as a result of the surcharge.
-	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
-	// The amount of the surcharge as a percentage. The percentage is provided as a string representing the decimal equivalent of the percentage. For example, "0.7" corresponds to a 7% surcharge. Exactly one of rate or amount_money should be set.
-	Rate *string `json:"rate,omitempty" url:"rate,omitempty"`
-	// The amount of the surcharge as a Money object. Exactly one of rate or amount_money should be set.
-	AmountMoney *V1Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
-	// Indicates the source of the surcharge. For example, if it was applied as an automatic gratuity for a large group.
-	// See [V1PaymentSurchargeType](#type-v1paymentsurchargetype) for possible values
-	Type *V1PaymentSurchargeType `json:"type,omitempty" url:"type,omitempty"`
-	// Indicates whether the surcharge is taxable.
-	Taxable *bool `json:"taxable,omitempty" url:"taxable,omitempty"`
-	// The list of taxes that should be applied to the surcharge.
-	Taxes []*V1PaymentTax `json:"taxes,omitempty" url:"taxes,omitempty"`
-	// A Square-issued unique identifier associated with the surcharge.
-	SurchargeID *string `json:"surcharge_id,omitempty" url:"surcharge_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentSurcharge) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1PaymentSurcharge) GetAppliedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AppliedMoney
-}
-
-func (v *V1PaymentSurcharge) GetRate() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Rate
-}
-
-func (v *V1PaymentSurcharge) GetAmountMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AmountMoney
-}
-
-func (v *V1PaymentSurcharge) GetType() *V1PaymentSurchargeType {
-	if v == nil {
-		return nil
-	}
-	return v.Type
-}
-
-func (v *V1PaymentSurcharge) GetTaxable() *bool {
-	if v == nil {
-		return nil
-	}
-	return v.Taxable
-}
-
-func (v *V1PaymentSurcharge) GetTaxes() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.Taxes
-}
-
-func (v *V1PaymentSurcharge) GetSurchargeID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.SurchargeID
-}
-
-func (v *V1PaymentSurcharge) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentSurcharge) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentSurcharge
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentSurcharge(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentSurcharge) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1PaymentSurchargeType string
-
-const (
-	V1PaymentSurchargeTypeUnknown      V1PaymentSurchargeType = "UNKNOWN"
-	V1PaymentSurchargeTypeAutoGratuity V1PaymentSurchargeType = "AUTO_GRATUITY"
-	V1PaymentSurchargeTypeCustom       V1PaymentSurchargeType = "CUSTOM"
-)
-
-func NewV1PaymentSurchargeTypeFromString(s string) (V1PaymentSurchargeType, error) {
-	switch s {
-	case "UNKNOWN":
-		return V1PaymentSurchargeTypeUnknown, nil
-	case "AUTO_GRATUITY":
-		return V1PaymentSurchargeTypeAutoGratuity, nil
-	case "CUSTOM":
-		return V1PaymentSurchargeTypeCustom, nil
-	}
-	var t V1PaymentSurchargeType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1PaymentSurchargeType) Ptr() *V1PaymentSurchargeType {
-	return &v
-}
-
-// V1PaymentTax
-type V1PaymentTax struct {
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-	// The merchant-defined name of the tax.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The amount of money that this tax adds to the payment.
-	AppliedMoney *V1Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
-	// The rate of the tax, as a string representation of a decimal number. A value of 0.07 corresponds to a rate of 7%.
-	Rate *string `json:"rate,omitempty" url:"rate,omitempty"`
-	// Whether the tax is an ADDITIVE tax or an INCLUSIVE tax.
-	// See [V1PaymentTaxInclusionType](#type-v1paymenttaxinclusiontype) for possible values
-	InclusionType *V1PaymentTaxInclusionType `json:"inclusion_type,omitempty" url:"inclusion_type,omitempty"`
-	// The ID of the tax, if available. Taxes applied in older versions of Square Register might not have an ID.
-	FeeID *string `json:"fee_id,omitempty" url:"fee_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PaymentTax) GetErrors() []*Error {
-	if v == nil {
-		return nil
-	}
-	return v.Errors
-}
-
-func (v *V1PaymentTax) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1PaymentTax) GetAppliedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AppliedMoney
-}
-
-func (v *V1PaymentTax) GetRate() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Rate
-}
-
-func (v *V1PaymentTax) GetInclusionType() *V1PaymentTaxInclusionType {
-	if v == nil {
-		return nil
-	}
-	return v.InclusionType
-}
-
-func (v *V1PaymentTax) GetFeeID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.FeeID
-}
-
-func (v *V1PaymentTax) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PaymentTax) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PaymentTax
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PaymentTax(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PaymentTax) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1PaymentTaxInclusionType string
-
-const (
-	V1PaymentTaxInclusionTypeAdditive  V1PaymentTaxInclusionType = "ADDITIVE"
-	V1PaymentTaxInclusionTypeInclusive V1PaymentTaxInclusionType = "INCLUSIVE"
-)
-
-func NewV1PaymentTaxInclusionTypeFromString(s string) (V1PaymentTaxInclusionType, error) {
-	switch s {
-	case "ADDITIVE":
-		return V1PaymentTaxInclusionTypeAdditive, nil
-	case "INCLUSIVE":
-		return V1PaymentTaxInclusionTypeInclusive, nil
-	}
-	var t V1PaymentTaxInclusionType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1PaymentTaxInclusionType) Ptr() *V1PaymentTaxInclusionType {
-	return &v
-}
-
-// Represents a phone number.
-type V1PhoneNumber struct {
-	// The phone number's international calling code. For US phone numbers, this value is +1.
-	CallingCode string `json:"calling_code" url:"calling_code"`
-	// The phone number.
-	Number string `json:"number" url:"number"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1PhoneNumber) GetCallingCode() string {
-	if v == nil {
-		return ""
-	}
-	return v.CallingCode
-}
-
-func (v *V1PhoneNumber) GetNumber() string {
-	if v == nil {
-		return ""
-	}
-	return v.Number
-}
-
-func (v *V1PhoneNumber) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1PhoneNumber) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1PhoneNumber
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1PhoneNumber(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1PhoneNumber) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// V1Refund
-type V1Refund struct {
-	// The type of refund
-	// See [V1RefundType](#type-v1refundtype) for possible values
-	Type *V1RefundType `json:"type,omitempty" url:"type,omitempty"`
-	// The merchant-specified reason for the refund.
-	Reason *string `json:"reason,omitempty" url:"reason,omitempty"`
-	// The amount of money refunded. This amount is always negative.
-	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
-	// The amount of processing fee money refunded. This amount is always positive.
-	RefundedProcessingFeeMoney *V1Money `json:"refunded_processing_fee_money,omitempty" url:"refunded_processing_fee_money,omitempty"`
-	// The total amount of tax money refunded. This amount is always negative.
-	RefundedTaxMoney *V1Money `json:"refunded_tax_money,omitempty" url:"refunded_tax_money,omitempty"`
-	// The amount of additive tax money refunded. This amount is always negative.
-	RefundedAdditiveTaxMoney *V1Money `json:"refunded_additive_tax_money,omitempty" url:"refunded_additive_tax_money,omitempty"`
-	// All of the additive taxes associated with the refund.
-	RefundedAdditiveTax []*V1PaymentTax `json:"refunded_additive_tax,omitempty" url:"refunded_additive_tax,omitempty"`
-	// The amount of inclusive tax money refunded. This amount is always negative.
-	RefundedInclusiveTaxMoney *V1Money `json:"refunded_inclusive_tax_money,omitempty" url:"refunded_inclusive_tax_money,omitempty"`
-	// All of the inclusive taxes associated with the refund.
-	RefundedInclusiveTax []*V1PaymentTax `json:"refunded_inclusive_tax,omitempty" url:"refunded_inclusive_tax,omitempty"`
-	// The amount of tip money refunded. This amount is always negative.
-	RefundedTipMoney *V1Money `json:"refunded_tip_money,omitempty" url:"refunded_tip_money,omitempty"`
-	// The amount of discount money refunded. This amount is always positive.
-	RefundedDiscountMoney *V1Money `json:"refunded_discount_money,omitempty" url:"refunded_discount_money,omitempty"`
-	// The amount of surcharge money refunded. This amount is always negative.
-	RefundedSurchargeMoney *V1Money `json:"refunded_surcharge_money,omitempty" url:"refunded_surcharge_money,omitempty"`
-	// A list of all surcharges associated with the refund.
-	RefundedSurcharges []*V1PaymentSurcharge `json:"refunded_surcharges,omitempty" url:"refunded_surcharges,omitempty"`
-	// The time when the merchant initiated the refund for Square to process, in ISO 8601 format.
-	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The time when Square processed the refund on behalf of the merchant, in ISO 8601 format.
-	ProcessedAt *string `json:"processed_at,omitempty" url:"processed_at,omitempty"`
-	// A Square-issued ID associated with the refund. For single-tender refunds, payment_id is the ID of the original payment ID. For split-tender refunds, payment_id is the ID of the original tender. For exchange-based refunds (is_exchange == true), payment_id is the ID of the original payment ID even if the payment includes other tenders.
-	PaymentID  *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
-	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
-	// Indicates whether or not the refund is associated with an exchange. If is_exchange is true, the refund reflects the value of goods returned in the exchange not the total money refunded.
-	IsExchange *bool `json:"is_exchange,omitempty" url:"is_exchange,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Refund) GetType() *V1RefundType {
-	if v == nil {
-		return nil
-	}
-	return v.Type
-}
-
-func (v *V1Refund) GetReason() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Reason
-}
-
-func (v *V1Refund) GetRefundedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedMoney
-}
-
-func (v *V1Refund) GetRefundedProcessingFeeMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedProcessingFeeMoney
-}
-
-func (v *V1Refund) GetRefundedTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedTaxMoney
-}
-
-func (v *V1Refund) GetRefundedAdditiveTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedAdditiveTaxMoney
-}
-
-func (v *V1Refund) GetRefundedAdditiveTax() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedAdditiveTax
-}
-
-func (v *V1Refund) GetRefundedInclusiveTaxMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedInclusiveTaxMoney
-}
-
-func (v *V1Refund) GetRefundedInclusiveTax() []*V1PaymentTax {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedInclusiveTax
-}
-
-func (v *V1Refund) GetRefundedTipMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedTipMoney
-}
-
-func (v *V1Refund) GetRefundedDiscountMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedDiscountMoney
-}
-
-func (v *V1Refund) GetRefundedSurchargeMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedSurchargeMoney
-}
-
-func (v *V1Refund) GetRefundedSurcharges() []*V1PaymentSurcharge {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedSurcharges
-}
-
-func (v *V1Refund) GetCreatedAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.CreatedAt
-}
-
-func (v *V1Refund) GetProcessedAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ProcessedAt
-}
-
-func (v *V1Refund) GetPaymentID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.PaymentID
-}
-
-func (v *V1Refund) GetMerchantID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.MerchantID
-}
-
-func (v *V1Refund) GetIsExchange() *bool {
-	if v == nil {
-		return nil
-	}
-	return v.IsExchange
-}
-
-func (v *V1Refund) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Refund) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Refund
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Refund(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Refund) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1RefundType string
-
-const (
-	V1RefundTypeFull    V1RefundType = "FULL"
-	V1RefundTypePartial V1RefundType = "PARTIAL"
-)
-
-func NewV1RefundTypeFromString(s string) (V1RefundType, error) {
-	switch s {
-	case "FULL":
-		return V1RefundTypeFull, nil
-	case "PARTIAL":
-		return V1RefundTypePartial, nil
-	}
-	var t V1RefundType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1RefundType) Ptr() *V1RefundType {
-	return &v
-}
-
-// V1Settlement
-type V1Settlement struct {
-	// The settlement's unique identifier.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The settlement's current status.
-	// See [V1SettlementStatus](#type-v1settlementstatus) for possible values
-	Status *V1SettlementStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The amount of money involved in the settlement. A positive amount indicates a deposit, and a negative amount indicates a withdrawal. This amount is never zero.
-	TotalMoney *V1Money `json:"total_money,omitempty" url:"total_money,omitempty"`
-	// The time when the settlement was submitted for deposit or withdrawal, in ISO 8601 format.
-	InitiatedAt *string `json:"initiated_at,omitempty" url:"initiated_at,omitempty"`
-	// The Square-issued unique identifier for the bank account associated with the settlement.
-	BankAccountID *string `json:"bank_account_id,omitempty" url:"bank_account_id,omitempty"`
-	// The entries included in this settlement.
-	Entries []*V1SettlementEntry `json:"entries,omitempty" url:"entries,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Settlement) GetID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ID
-}
-
-func (v *V1Settlement) GetStatus() *V1SettlementStatus {
-	if v == nil {
-		return nil
-	}
-	return v.Status
-}
-
-func (v *V1Settlement) GetTotalMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TotalMoney
-}
-
-func (v *V1Settlement) GetInitiatedAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.InitiatedAt
-}
-
-func (v *V1Settlement) GetBankAccountID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.BankAccountID
-}
-
-func (v *V1Settlement) GetEntries() []*V1SettlementEntry {
-	if v == nil {
-		return nil
-	}
-	return v.Entries
-}
-
-func (v *V1Settlement) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Settlement) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Settlement
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Settlement(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Settlement) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// V1SettlementEntry
-type V1SettlementEntry struct {
-	// The settlement's unique identifier.
-	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
-	// The settlement's current status.
-	// See [V1SettlementEntryType](#type-v1settlemententrytype) for possible values
-	Type *V1SettlementEntryType `json:"type,omitempty" url:"type,omitempty"`
-	// The total amount of money this entry contributes to the total settlement amount.
-	AmountMoney *V1Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
-	// The amount of all Square fees associated with this settlement entry. This value is always negative or zero.
-	FeeMoney *V1Money `json:"fee_money,omitempty" url:"fee_money,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1SettlementEntry) GetPaymentID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.PaymentID
-}
-
-func (v *V1SettlementEntry) GetType() *V1SettlementEntryType {
-	if v == nil {
-		return nil
-	}
-	return v.Type
-}
-
-func (v *V1SettlementEntry) GetAmountMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.AmountMoney
-}
-
-func (v *V1SettlementEntry) GetFeeMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.FeeMoney
-}
-
-func (v *V1SettlementEntry) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1SettlementEntry) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1SettlementEntry
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1SettlementEntry(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1SettlementEntry) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-type V1SettlementEntryType string
-
-const (
-	V1SettlementEntryTypeAdjustment                   V1SettlementEntryType = "ADJUSTMENT"
-	V1SettlementEntryTypeBalanceCharge                V1SettlementEntryType = "BALANCE_CHARGE"
-	V1SettlementEntryTypeCharge                       V1SettlementEntryType = "CHARGE"
-	V1SettlementEntryTypeFreeProcessing               V1SettlementEntryType = "FREE_PROCESSING"
-	V1SettlementEntryTypeHoldAdjustment               V1SettlementEntryType = "HOLD_ADJUSTMENT"
-	V1SettlementEntryTypePaidServiceFee               V1SettlementEntryType = "PAID_SERVICE_FEE"
-	V1SettlementEntryTypePaidServiceFeeRefund         V1SettlementEntryType = "PAID_SERVICE_FEE_REFUND"
-	V1SettlementEntryTypeRedemptionCode               V1SettlementEntryType = "REDEMPTION_CODE"
-	V1SettlementEntryTypeRefund                       V1SettlementEntryType = "REFUND"
-	V1SettlementEntryTypeReturnedPayout               V1SettlementEntryType = "RETURNED_PAYOUT"
-	V1SettlementEntryTypeSquareCapitalAdvance         V1SettlementEntryType = "SQUARE_CAPITAL_ADVANCE"
-	V1SettlementEntryTypeSquareCapitalPayment         V1SettlementEntryType = "SQUARE_CAPITAL_PAYMENT"
-	V1SettlementEntryTypeSquareCapitalReversedPayment V1SettlementEntryType = "SQUARE_CAPITAL_REVERSED_PAYMENT"
-	V1SettlementEntryTypeSubscriptionFee              V1SettlementEntryType = "SUBSCRIPTION_FEE"
-	V1SettlementEntryTypeSubscriptionFeeRefund        V1SettlementEntryType = "SUBSCRIPTION_FEE_REFUND"
-	V1SettlementEntryTypeOther                        V1SettlementEntryType = "OTHER"
-	V1SettlementEntryTypeIncentedPayment              V1SettlementEntryType = "INCENTED_PAYMENT"
-	V1SettlementEntryTypeReturnedAchEntry             V1SettlementEntryType = "RETURNED_ACH_ENTRY"
-	V1SettlementEntryTypeReturnedSquare275            V1SettlementEntryType = "RETURNED_SQUARE_275"
-	V1SettlementEntryTypeSquare275                    V1SettlementEntryType = "SQUARE_275"
-	V1SettlementEntryTypeSquareCard                   V1SettlementEntryType = "SQUARE_CARD"
-)
-
-func NewV1SettlementEntryTypeFromString(s string) (V1SettlementEntryType, error) {
-	switch s {
-	case "ADJUSTMENT":
-		return V1SettlementEntryTypeAdjustment, nil
-	case "BALANCE_CHARGE":
-		return V1SettlementEntryTypeBalanceCharge, nil
-	case "CHARGE":
-		return V1SettlementEntryTypeCharge, nil
-	case "FREE_PROCESSING":
-		return V1SettlementEntryTypeFreeProcessing, nil
-	case "HOLD_ADJUSTMENT":
-		return V1SettlementEntryTypeHoldAdjustment, nil
-	case "PAID_SERVICE_FEE":
-		return V1SettlementEntryTypePaidServiceFee, nil
-	case "PAID_SERVICE_FEE_REFUND":
-		return V1SettlementEntryTypePaidServiceFeeRefund, nil
-	case "REDEMPTION_CODE":
-		return V1SettlementEntryTypeRedemptionCode, nil
-	case "REFUND":
-		return V1SettlementEntryTypeRefund, nil
-	case "RETURNED_PAYOUT":
-		return V1SettlementEntryTypeReturnedPayout, nil
-	case "SQUARE_CAPITAL_ADVANCE":
-		return V1SettlementEntryTypeSquareCapitalAdvance, nil
-	case "SQUARE_CAPITAL_PAYMENT":
-		return V1SettlementEntryTypeSquareCapitalPayment, nil
-	case "SQUARE_CAPITAL_REVERSED_PAYMENT":
-		return V1SettlementEntryTypeSquareCapitalReversedPayment, nil
-	case "SUBSCRIPTION_FEE":
-		return V1SettlementEntryTypeSubscriptionFee, nil
-	case "SUBSCRIPTION_FEE_REFUND":
-		return V1SettlementEntryTypeSubscriptionFeeRefund, nil
-	case "OTHER":
-		return V1SettlementEntryTypeOther, nil
-	case "INCENTED_PAYMENT":
-		return V1SettlementEntryTypeIncentedPayment, nil
-	case "RETURNED_ACH_ENTRY":
-		return V1SettlementEntryTypeReturnedAchEntry, nil
-	case "RETURNED_SQUARE_275":
-		return V1SettlementEntryTypeReturnedSquare275, nil
-	case "SQUARE_275":
-		return V1SettlementEntryTypeSquare275, nil
-	case "SQUARE_CARD":
-		return V1SettlementEntryTypeSquareCard, nil
-	}
-	var t V1SettlementEntryType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1SettlementEntryType) Ptr() *V1SettlementEntryType {
-	return &v
-}
-
-type V1SettlementStatus string
-
-const (
-	V1SettlementStatusFailed V1SettlementStatus = "FAILED"
-	V1SettlementStatusSent   V1SettlementStatus = "SENT"
-)
-
-func NewV1SettlementStatusFromString(s string) (V1SettlementStatus, error) {
-	switch s {
-	case "FAILED":
-		return V1SettlementStatusFailed, nil
-	case "SENT":
-		return V1SettlementStatusSent, nil
-	}
-	var t V1SettlementStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1SettlementStatus) Ptr() *V1SettlementStatus {
-	return &v
-}
-
-// A tender represents a discrete monetary exchange. Square represents this
-// exchange as a money object with a specific currency and amount, where the
-// amount is given in the smallest denomination of the given currency.
-//
-// Square POS can accept more than one form of tender for a single payment (such
-// as by splitting a bill between a credit card and a gift card). The `tender`
-// field of the Payment object lists all forms of tender used for the payment.
-//
-// Split tender payments behave slightly differently from single tender payments:
-//
-// The receipt_url for a split tender corresponds only to the first tender listed
-// in the tender field. To get the receipt URLs for the remaining tenders, use
-// the receipt_url fields of the corresponding Tender objects.
-//
-// \*A note on gift cards\*\*: when a customer purchases a Square gift card from a
-// merchant, the merchant receives the full amount of the gift card in the
-// associated payment.
-//
-// When that gift card is used as a tender, the balance of the gift card is
-// reduced and the merchant receives no funds. A `Tender` object with a type of
-// `SQUARE_GIFT_CARD` indicates a gift card was used for some or all of the
-// associated payment.
-type V1Tender struct {
-	// The tender's unique ID.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The type of tender.
-	// See [V1TenderType](#type-v1tendertype) for possible values
-	Type *V1TenderType `json:"type,omitempty" url:"type,omitempty"`
-	// A human-readable description of the tender.
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The ID of the employee that processed the tender.
-	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
-	// The URL of the receipt for the tender.
-	ReceiptURL *string `json:"receipt_url,omitempty" url:"receipt_url,omitempty"`
-	// The brand of credit card provided.
-	// See [V1TenderCardBrand](#type-v1tendercardbrand) for possible values
-	CardBrand *V1TenderCardBrand `json:"card_brand,omitempty" url:"card_brand,omitempty"`
-	// The last four digits of the provided credit card's account number.
-	PanSuffix *string `json:"pan_suffix,omitempty" url:"pan_suffix,omitempty"`
-	// The tender's unique ID.
-	// See [V1TenderEntryMethod](#type-v1tenderentrymethod) for possible values
-	EntryMethod *V1TenderEntryMethod `json:"entry_method,omitempty" url:"entry_method,omitempty"`
-	// Notes entered by the merchant about the tender at the time of payment, if any. Typically only present for tender with the type: OTHER.
-	PaymentNote *string `json:"payment_note,omitempty" url:"payment_note,omitempty"`
-	// The total amount of money provided in this form of tender.
-	TotalMoney *V1Money `json:"total_money,omitempty" url:"total_money,omitempty"`
-	// The amount of total_money applied to the payment.
-	TenderedMoney *V1Money `json:"tendered_money,omitempty" url:"tendered_money,omitempty"`
-	// The time when the tender was created, in ISO 8601 format.
-	TenderedAt *string `json:"tendered_at,omitempty" url:"tendered_at,omitempty"`
-	// The time when the tender was settled, in ISO 8601 format.
-	SettledAt *string `json:"settled_at,omitempty" url:"settled_at,omitempty"`
-	// The amount of total_money returned to the buyer as change.
-	ChangeBackMoney *V1Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
-	// The total of all refunds applied to this tender. This amount is always negative or zero.
-	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
-	// Indicates whether or not the tender is associated with an exchange. If is_exchange is true, the tender represents the value of goods returned in an exchange not the actual money paid. The exchange value reduces the tender amounts needed to pay for items purchased in the exchange.
-	IsExchange *bool `json:"is_exchange,omitempty" url:"is_exchange,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *V1Tender) GetID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ID
-}
-
-func (v *V1Tender) GetType() *V1TenderType {
-	if v == nil {
-		return nil
-	}
-	return v.Type
-}
-
-func (v *V1Tender) GetName() *string {
-	if v == nil {
-		return nil
-	}
-	return v.Name
-}
-
-func (v *V1Tender) GetEmployeeID() *string {
-	if v == nil {
-		return nil
-	}
-	return v.EmployeeID
-}
-
-func (v *V1Tender) GetReceiptURL() *string {
-	if v == nil {
-		return nil
-	}
-	return v.ReceiptURL
-}
-
-func (v *V1Tender) GetCardBrand() *V1TenderCardBrand {
-	if v == nil {
-		return nil
-	}
-	return v.CardBrand
-}
-
-func (v *V1Tender) GetPanSuffix() *string {
-	if v == nil {
-		return nil
-	}
-	return v.PanSuffix
-}
-
-func (v *V1Tender) GetEntryMethod() *V1TenderEntryMethod {
-	if v == nil {
-		return nil
-	}
-	return v.EntryMethod
-}
-
-func (v *V1Tender) GetPaymentNote() *string {
-	if v == nil {
-		return nil
-	}
-	return v.PaymentNote
-}
-
-func (v *V1Tender) GetTotalMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TotalMoney
-}
-
-func (v *V1Tender) GetTenderedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.TenderedMoney
-}
-
-func (v *V1Tender) GetTenderedAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.TenderedAt
-}
-
-func (v *V1Tender) GetSettledAt() *string {
-	if v == nil {
-		return nil
-	}
-	return v.SettledAt
-}
-
-func (v *V1Tender) GetChangeBackMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.ChangeBackMoney
-}
-
-func (v *V1Tender) GetRefundedMoney() *V1Money {
-	if v == nil {
-		return nil
-	}
-	return v.RefundedMoney
-}
-
-func (v *V1Tender) GetIsExchange() *bool {
-	if v == nil {
-		return nil
-	}
-	return v.IsExchange
-}
-
-func (v *V1Tender) GetExtraProperties() map[string]interface{} {
-	return v.extraProperties
-}
-
-func (v *V1Tender) UnmarshalJSON(data []byte) error {
-	type unmarshaler V1Tender
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = V1Tender(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *V1Tender) String() string {
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
-}
-
-// The brand of a credit card.
-type V1TenderCardBrand string
-
-const (
-	V1TenderCardBrandOtherBrand      V1TenderCardBrand = "OTHER_BRAND"
-	V1TenderCardBrandVisa            V1TenderCardBrand = "VISA"
-	V1TenderCardBrandMasterCard      V1TenderCardBrand = "MASTER_CARD"
-	V1TenderCardBrandAmericanExpress V1TenderCardBrand = "AMERICAN_EXPRESS"
-	V1TenderCardBrandDiscover        V1TenderCardBrand = "DISCOVER"
-	V1TenderCardBrandDiscoverDiners  V1TenderCardBrand = "DISCOVER_DINERS"
-	V1TenderCardBrandJcb             V1TenderCardBrand = "JCB"
-	V1TenderCardBrandChinaUnionpay   V1TenderCardBrand = "CHINA_UNIONPAY"
-	V1TenderCardBrandSquareGiftCard  V1TenderCardBrand = "SQUARE_GIFT_CARD"
-)
-
-func NewV1TenderCardBrandFromString(s string) (V1TenderCardBrand, error) {
-	switch s {
-	case "OTHER_BRAND":
-		return V1TenderCardBrandOtherBrand, nil
-	case "VISA":
-		return V1TenderCardBrandVisa, nil
-	case "MASTER_CARD":
-		return V1TenderCardBrandMasterCard, nil
-	case "AMERICAN_EXPRESS":
-		return V1TenderCardBrandAmericanExpress, nil
-	case "DISCOVER":
-		return V1TenderCardBrandDiscover, nil
-	case "DISCOVER_DINERS":
-		return V1TenderCardBrandDiscoverDiners, nil
-	case "JCB":
-		return V1TenderCardBrandJcb, nil
-	case "CHINA_UNIONPAY":
-		return V1TenderCardBrandChinaUnionpay, nil
-	case "SQUARE_GIFT_CARD":
-		return V1TenderCardBrandSquareGiftCard, nil
-	}
-	var t V1TenderCardBrand
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1TenderCardBrand) Ptr() *V1TenderCardBrand {
-	return &v
-}
-
-type V1TenderEntryMethod string
-
-const (
-	V1TenderEntryMethodManual       V1TenderEntryMethod = "MANUAL"
-	V1TenderEntryMethodScanned      V1TenderEntryMethod = "SCANNED"
-	V1TenderEntryMethodSquareCash   V1TenderEntryMethod = "SQUARE_CASH"
-	V1TenderEntryMethodSquareWallet V1TenderEntryMethod = "SQUARE_WALLET"
-	V1TenderEntryMethodSwiped       V1TenderEntryMethod = "SWIPED"
-	V1TenderEntryMethodWebForm      V1TenderEntryMethod = "WEB_FORM"
-	V1TenderEntryMethodOther        V1TenderEntryMethod = "OTHER"
-)
-
-func NewV1TenderEntryMethodFromString(s string) (V1TenderEntryMethod, error) {
-	switch s {
-	case "MANUAL":
-		return V1TenderEntryMethodManual, nil
-	case "SCANNED":
-		return V1TenderEntryMethodScanned, nil
-	case "SQUARE_CASH":
-		return V1TenderEntryMethodSquareCash, nil
-	case "SQUARE_WALLET":
-		return V1TenderEntryMethodSquareWallet, nil
-	case "SWIPED":
-		return V1TenderEntryMethodSwiped, nil
-	case "WEB_FORM":
-		return V1TenderEntryMethodWebForm, nil
-	case "OTHER":
-		return V1TenderEntryMethodOther, nil
-	}
-	var t V1TenderEntryMethod
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1TenderEntryMethod) Ptr() *V1TenderEntryMethod {
-	return &v
-}
-
-type V1TenderType string
-
-const (
-	V1TenderTypeCreditCard     V1TenderType = "CREDIT_CARD"
-	V1TenderTypeCash           V1TenderType = "CASH"
-	V1TenderTypeThirdPartyCard V1TenderType = "THIRD_PARTY_CARD"
-	V1TenderTypeNoSale         V1TenderType = "NO_SALE"
-	V1TenderTypeSquareWallet   V1TenderType = "SQUARE_WALLET"
-	V1TenderTypeSquareGiftCard V1TenderType = "SQUARE_GIFT_CARD"
-	V1TenderTypeUnknown        V1TenderType = "UNKNOWN"
-	V1TenderTypeOther          V1TenderType = "OTHER"
-)
-
-func NewV1TenderTypeFromString(s string) (V1TenderType, error) {
-	switch s {
-	case "CREDIT_CARD":
-		return V1TenderTypeCreditCard, nil
-	case "CASH":
-		return V1TenderTypeCash, nil
-	case "THIRD_PARTY_CARD":
-		return V1TenderTypeThirdPartyCard, nil
-	case "NO_SALE":
-		return V1TenderTypeNoSale, nil
-	case "SQUARE_WALLET":
-		return V1TenderTypeSquareWallet, nil
-	case "SQUARE_GIFT_CARD":
-		return V1TenderTypeSquareGiftCard, nil
-	case "UNKNOWN":
-		return V1TenderTypeUnknown, nil
-	case "OTHER":
-		return V1TenderTypeOther, nil
-	}
-	var t V1TenderType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v V1TenderType) Ptr() *V1TenderType {
-	return &v
-}
-
-// Deprecated. V1WebhooksEvents
-type V1WebhooksEvents = string
-
 // Enumeration of visibility-filter values used to set the ability to view custom attributes or custom attribute definitions.
 type VisibilityFilter string
 
 const (
-	VisibilityFilterVisibilityFilterDoNotUse VisibilityFilter = "VISIBILITY_FILTER_DO_NOT_USE"
-	VisibilityFilterAll                      VisibilityFilter = "ALL"
-	VisibilityFilterRead                     VisibilityFilter = "READ"
-	VisibilityFilterReadWrite                VisibilityFilter = "READ_WRITE"
+	VisibilityFilterAll       VisibilityFilter = "ALL"
+	VisibilityFilterRead      VisibilityFilter = "READ"
+	VisibilityFilterReadWrite VisibilityFilter = "READ_WRITE"
 )
 
 func NewVisibilityFilterFromString(s string) (VisibilityFilter, error) {
 	switch s {
-	case "VISIBILITY_FILTER_DO_NOT_USE":
-		return VisibilityFilterVisibilityFilterDoNotUse, nil
 	case "ALL":
 		return VisibilityFilterAll, nil
 	case "READ":
@@ -39181,20 +35712,17 @@ func (w *WebhookSubscription) String() string {
 type Weekday string
 
 const (
-	WeekdayUnknownWeekday Weekday = "UNKNOWN_WEEKDAY"
-	WeekdayMon            Weekday = "MON"
-	WeekdayTue            Weekday = "TUE"
-	WeekdayWed            Weekday = "WED"
-	WeekdayThu            Weekday = "THU"
-	WeekdayFri            Weekday = "FRI"
-	WeekdaySat            Weekday = "SAT"
-	WeekdaySun            Weekday = "SUN"
+	WeekdayMon Weekday = "MON"
+	WeekdayTue Weekday = "TUE"
+	WeekdayWed Weekday = "WED"
+	WeekdayThu Weekday = "THU"
+	WeekdayFri Weekday = "FRI"
+	WeekdaySat Weekday = "SAT"
+	WeekdaySun Weekday = "SUN"
 )
 
 func NewWeekdayFromString(s string) (Weekday, error) {
 	switch s {
-	case "UNKNOWN_WEEKDAY":
-		return WeekdayUnknownWeekday, nil
 	case "MON":
 		return WeekdayMon, nil
 	case "TUE":

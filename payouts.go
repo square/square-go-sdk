@@ -61,7 +61,6 @@ type PayoutsListRequest struct {
 type ActivityType string
 
 const (
-	ActivityTypeUnknownPayoutEntryTypeDoNotUse        ActivityType = "UNKNOWN_PAYOUT_ENTRY_TYPE_DO_NOT_USE"
 	ActivityTypeAdjustment                            ActivityType = "ADJUSTMENT"
 	ActivityTypeAppFeeRefund                          ActivityType = "APP_FEE_REFUND"
 	ActivityTypeAppFeeRevenue                         ActivityType = "APP_FEE_REVENUE"
@@ -69,6 +68,7 @@ const (
 	ActivityTypeAutomaticSavingsReversed              ActivityType = "AUTOMATIC_SAVINGS_REVERSED"
 	ActivityTypeCharge                                ActivityType = "CHARGE"
 	ActivityTypeDepositFee                            ActivityType = "DEPOSIT_FEE"
+	ActivityTypeDepositFeeReversed                    ActivityType = "DEPOSIT_FEE_REVERSED"
 	ActivityTypeDispute                               ActivityType = "DISPUTE"
 	ActivityTypeEscheatment                           ActivityType = "ESCHEATMENT"
 	ActivityTypeFee                                   ActivityType = "FEE"
@@ -101,14 +101,8 @@ const (
 	ActivityTypeAutomaticBitcoinConversionsReversed   ActivityType = "AUTOMATIC_BITCOIN_CONVERSIONS_REVERSED"
 	ActivityTypeCreditCardRepayment                   ActivityType = "CREDIT_CARD_REPAYMENT"
 	ActivityTypeCreditCardRepaymentReversed           ActivityType = "CREDIT_CARD_REPAYMENT_REVERSED"
-	ActivityTypeSquareCardPayout                      ActivityType = "SQUARE_CARD_PAYOUT"
-	ActivityTypeReturnedSquareCardPayout              ActivityType = "RETURNED_SQUARE_CARD_PAYOUT"
-	ActivityTypeManualPayout                          ActivityType = "MANUAL_PAYOUT"
-	ActivityTypeReturnedManualPayout                  ActivityType = "RETURNED_MANUAL_PAYOUT"
 	ActivityTypeLocalOffersCashback                   ActivityType = "LOCAL_OFFERS_CASHBACK"
 	ActivityTypeLocalOffersFee                        ActivityType = "LOCAL_OFFERS_FEE"
-	ActivityTypeGiftCardPool                          ActivityType = "GIFT_CARD_POOL"
-	ActivityTypeGiftCardPoolReversed                  ActivityType = "GIFT_CARD_POOL_REVERSED"
 	ActivityTypePercentageProcessingEnrollment        ActivityType = "PERCENTAGE_PROCESSING_ENROLLMENT"
 	ActivityTypePercentageProcessingDeactivation      ActivityType = "PERCENTAGE_PROCESSING_DEACTIVATION"
 	ActivityTypePercentageProcessingRepayment         ActivityType = "PERCENTAGE_PROCESSING_REPAYMENT"
@@ -120,18 +114,15 @@ const (
 	ActivityTypeGiftCardLoadFeeRefund                 ActivityType = "GIFT_CARD_LOAD_FEE_REFUND"
 	ActivityTypeUndoGiftCardLoadFeeRefund             ActivityType = "UNDO_GIFT_CARD_LOAD_FEE_REFUND"
 	ActivityTypeBalanceFoldersTransfer                ActivityType = "BALANCE_FOLDERS_TRANSFER"
-	ActivityTypeCashForBusinessFeeRefund              ActivityType = "CASH_FOR_BUSINESS_FEE_REFUND"
-	ActivityTypeCashForBusinessDisputeOffset          ActivityType = "CASH_FOR_BUSINESS_DISPUTE_OFFSET"
-	ActivityTypeCashForBusinessDisputeOffsetReversed  ActivityType = "CASH_FOR_BUSINESS_DISPUTE_OFFSET_REVERSED"
 	ActivityTypeBalanceFoldersTransferReversed        ActivityType = "BALANCE_FOLDERS_TRANSFER_REVERSED"
 	ActivityTypeGiftCardPoolTransfer                  ActivityType = "GIFT_CARD_POOL_TRANSFER"
 	ActivityTypeGiftCardPoolTransferReversed          ActivityType = "GIFT_CARD_POOL_TRANSFER_REVERSED"
+	ActivityTypeSquarePayrollTransfer                 ActivityType = "SQUARE_PAYROLL_TRANSFER"
+	ActivityTypeSquarePayrollTransferReversed         ActivityType = "SQUARE_PAYROLL_TRANSFER_REVERSED"
 )
 
 func NewActivityTypeFromString(s string) (ActivityType, error) {
 	switch s {
-	case "UNKNOWN_PAYOUT_ENTRY_TYPE_DO_NOT_USE":
-		return ActivityTypeUnknownPayoutEntryTypeDoNotUse, nil
 	case "ADJUSTMENT":
 		return ActivityTypeAdjustment, nil
 	case "APP_FEE_REFUND":
@@ -146,6 +137,8 @@ func NewActivityTypeFromString(s string) (ActivityType, error) {
 		return ActivityTypeCharge, nil
 	case "DEPOSIT_FEE":
 		return ActivityTypeDepositFee, nil
+	case "DEPOSIT_FEE_REVERSED":
+		return ActivityTypeDepositFeeReversed, nil
 	case "DISPUTE":
 		return ActivityTypeDispute, nil
 	case "ESCHEATMENT":
@@ -210,22 +203,10 @@ func NewActivityTypeFromString(s string) (ActivityType, error) {
 		return ActivityTypeCreditCardRepayment, nil
 	case "CREDIT_CARD_REPAYMENT_REVERSED":
 		return ActivityTypeCreditCardRepaymentReversed, nil
-	case "SQUARE_CARD_PAYOUT":
-		return ActivityTypeSquareCardPayout, nil
-	case "RETURNED_SQUARE_CARD_PAYOUT":
-		return ActivityTypeReturnedSquareCardPayout, nil
-	case "MANUAL_PAYOUT":
-		return ActivityTypeManualPayout, nil
-	case "RETURNED_MANUAL_PAYOUT":
-		return ActivityTypeReturnedManualPayout, nil
 	case "LOCAL_OFFERS_CASHBACK":
 		return ActivityTypeLocalOffersCashback, nil
 	case "LOCAL_OFFERS_FEE":
 		return ActivityTypeLocalOffersFee, nil
-	case "GIFT_CARD_POOL":
-		return ActivityTypeGiftCardPool, nil
-	case "GIFT_CARD_POOL_REVERSED":
-		return ActivityTypeGiftCardPoolReversed, nil
 	case "PERCENTAGE_PROCESSING_ENROLLMENT":
 		return ActivityTypePercentageProcessingEnrollment, nil
 	case "PERCENTAGE_PROCESSING_DEACTIVATION":
@@ -248,18 +229,16 @@ func NewActivityTypeFromString(s string) (ActivityType, error) {
 		return ActivityTypeUndoGiftCardLoadFeeRefund, nil
 	case "BALANCE_FOLDERS_TRANSFER":
 		return ActivityTypeBalanceFoldersTransfer, nil
-	case "CASH_FOR_BUSINESS_FEE_REFUND":
-		return ActivityTypeCashForBusinessFeeRefund, nil
-	case "CASH_FOR_BUSINESS_DISPUTE_OFFSET":
-		return ActivityTypeCashForBusinessDisputeOffset, nil
-	case "CASH_FOR_BUSINESS_DISPUTE_OFFSET_REVERSED":
-		return ActivityTypeCashForBusinessDisputeOffsetReversed, nil
 	case "BALANCE_FOLDERS_TRANSFER_REVERSED":
 		return ActivityTypeBalanceFoldersTransferReversed, nil
 	case "GIFT_CARD_POOL_TRANSFER":
 		return ActivityTypeGiftCardPoolTransfer, nil
 	case "GIFT_CARD_POOL_TRANSFER_REVERSED":
 		return ActivityTypeGiftCardPoolTransferReversed, nil
+	case "SQUARE_PAYROLL_TRANSFER":
+		return ActivityTypeSquarePayrollTransfer, nil
+	case "SQUARE_PAYROLL_TRANSFER_REVERSED":
+		return ActivityTypeSquarePayrollTransferReversed, nil
 	}
 	var t ActivityType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -331,18 +310,14 @@ func (d *Destination) String() string {
 type DestinationType string
 
 const (
-	DestinationTypeUnknownDestinationTypeDoNotUse DestinationType = "UNKNOWN_DESTINATION_TYPE_DO_NOT_USE"
-	DestinationTypeBankAccount                    DestinationType = "BANK_ACCOUNT"
-	DestinationTypeCard                           DestinationType = "CARD"
-	DestinationTypeSquareBalance                  DestinationType = "SQUARE_BALANCE"
-	DestinationTypeSquareStoredBalance            DestinationType = "SQUARE_STORED_BALANCE"
-	DestinationTypeDestinationTypePending         DestinationType = "DESTINATION_TYPE_PENDING"
+	DestinationTypeBankAccount         DestinationType = "BANK_ACCOUNT"
+	DestinationTypeCard                DestinationType = "CARD"
+	DestinationTypeSquareBalance       DestinationType = "SQUARE_BALANCE"
+	DestinationTypeSquareStoredBalance DestinationType = "SQUARE_STORED_BALANCE"
 )
 
 func NewDestinationTypeFromString(s string) (DestinationType, error) {
 	switch s {
-	case "UNKNOWN_DESTINATION_TYPE_DO_NOT_USE":
-		return DestinationTypeUnknownDestinationTypeDoNotUse, nil
 	case "BANK_ACCOUNT":
 		return DestinationTypeBankAccount, nil
 	case "CARD":
@@ -351,8 +326,6 @@ func NewDestinationTypeFromString(s string) (DestinationType, error) {
 		return DestinationTypeSquareBalance, nil
 	case "SQUARE_STORED_BALANCE":
 		return DestinationTypeSquareStoredBalance, nil
-	case "DESTINATION_TYPE_PENDING":
-		return DestinationTypeDestinationTypePending, nil
 	}
 	var t DestinationType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -868,6 +841,53 @@ func (p *PaymentBalanceActivityDepositFeeDetail) UnmarshalJSON(data []byte) erro
 }
 
 func (p *PaymentBalanceActivityDepositFeeDetail) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentBalanceActivityDepositFeeReversedDetail struct {
+	// The ID of the payout that triggered this deposit fee activity.
+	PayoutID *string `json:"payout_id,omitempty" url:"payout_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentBalanceActivityDepositFeeReversedDetail) GetPayoutID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.PayoutID
+}
+
+func (p *PaymentBalanceActivityDepositFeeReversedDetail) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentBalanceActivityDepositFeeReversedDetail) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentBalanceActivityDepositFeeReversedDetail
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentBalanceActivityDepositFeeReversedDetail(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentBalanceActivityDepositFeeReversedDetail) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1520,6 +1540,100 @@ func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) String() stri
 	return fmt.Sprintf("%#v", p)
 }
 
+type PaymentBalanceActivitySquarePayrollTransferDetail struct {
+	// The ID of the payment associated with this activity.
+	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferDetail) GetPaymentID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.PaymentID
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferDetail) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferDetail) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentBalanceActivitySquarePayrollTransferDetail
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentBalanceActivitySquarePayrollTransferDetail(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferDetail) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentBalanceActivitySquarePayrollTransferReversedDetail struct {
+	// The ID of the payment associated with this activity.
+	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) GetPaymentID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.PaymentID
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentBalanceActivitySquarePayrollTransferReversedDetail
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentBalanceActivitySquarePayrollTransferReversedDetail(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaymentBalanceActivityTaxOnFeeDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -1861,6 +1975,8 @@ type PayoutEntry struct {
 	TypeChargeDetails *PaymentBalanceActivityChargeDetail `json:"type_charge_details,omitempty" url:"type_charge_details,omitempty"`
 	// Details of any fees involved with deposits such as for instant deposits.
 	TypeDepositFeeDetails *PaymentBalanceActivityDepositFeeDetail `json:"type_deposit_fee_details,omitempty" url:"type_deposit_fee_details,omitempty"`
+	// Details of any reversal or refund of fees involved with deposits such as for instant deposits.
+	TypeDepositFeeReversedDetails *PaymentBalanceActivityDepositFeeReversedDetail `json:"type_deposit_fee_reversed_details,omitempty" url:"type_deposit_fee_reversed_details,omitempty"`
 	// Details of any balance change due to a dispute event.
 	TypeDisputeDetails *PaymentBalanceActivityDisputeDetail `json:"type_dispute_details,omitempty" url:"type_dispute_details,omitempty"`
 	// Details of adjustments due to the Square processing fee.
@@ -1893,6 +2009,10 @@ type PayoutEntry struct {
 	TypeThirdPartyFeeDetails *PaymentBalanceActivityThirdPartyFeeDetail `json:"type_third_party_fee_details,omitempty" url:"type_third_party_fee_details,omitempty"`
 	// Details of refunded fees from a 3rd party platform.
 	TypeThirdPartyFeeRefundDetails *PaymentBalanceActivityThirdPartyFeeRefundDetail `json:"type_third_party_fee_refund_details,omitempty" url:"type_third_party_fee_refund_details,omitempty"`
+	// Details of a payroll payment that was transferred to a team member’s bank account.
+	TypeSquarePayrollTransferDetails *PaymentBalanceActivitySquarePayrollTransferDetail `json:"type_square_payroll_transfer_details,omitempty" url:"type_square_payroll_transfer_details,omitempty"`
+	// Details of a payroll payment to a team member’s bank account that was deposited back to the seller’s account by Square.
+	TypeSquarePayrollTransferReversedDetails *PaymentBalanceActivitySquarePayrollTransferReversedDetail `json:"type_square_payroll_transfer_reversed_details,omitempty" url:"type_square_payroll_transfer_reversed_details,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1987,6 +2107,13 @@ func (p *PayoutEntry) GetTypeDepositFeeDetails() *PaymentBalanceActivityDepositF
 		return nil
 	}
 	return p.TypeDepositFeeDetails
+}
+
+func (p *PayoutEntry) GetTypeDepositFeeReversedDetails() *PaymentBalanceActivityDepositFeeReversedDetail {
+	if p == nil {
+		return nil
+	}
+	return p.TypeDepositFeeReversedDetails
 }
 
 func (p *PayoutEntry) GetTypeDisputeDetails() *PaymentBalanceActivityDisputeDetail {
@@ -2101,6 +2228,20 @@ func (p *PayoutEntry) GetTypeThirdPartyFeeRefundDetails() *PaymentBalanceActivit
 	return p.TypeThirdPartyFeeRefundDetails
 }
 
+func (p *PayoutEntry) GetTypeSquarePayrollTransferDetails() *PaymentBalanceActivitySquarePayrollTransferDetail {
+	if p == nil {
+		return nil
+	}
+	return p.TypeSquarePayrollTransferDetails
+}
+
+func (p *PayoutEntry) GetTypeSquarePayrollTransferReversedDetails() *PaymentBalanceActivitySquarePayrollTransferReversedDetail {
+	if p == nil {
+		return nil
+	}
+	return p.TypeSquarePayrollTransferReversedDetails
+}
+
 func (p *PayoutEntry) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
@@ -2204,15 +2345,12 @@ func (p *PayoutFee) String() string {
 type PayoutFeeType string
 
 const (
-	PayoutFeeTypeUnknownPayoutFeeTypeDoNotUse PayoutFeeType = "UNKNOWN_PAYOUT_FEE_TYPE_DO_NOT_USE"
-	PayoutFeeTypeTransferFee                  PayoutFeeType = "TRANSFER_FEE"
-	PayoutFeeTypeTaxOnTransferFee             PayoutFeeType = "TAX_ON_TRANSFER_FEE"
+	PayoutFeeTypeTransferFee      PayoutFeeType = "TRANSFER_FEE"
+	PayoutFeeTypeTaxOnTransferFee PayoutFeeType = "TAX_ON_TRANSFER_FEE"
 )
 
 func NewPayoutFeeTypeFromString(s string) (PayoutFeeType, error) {
 	switch s {
-	case "UNKNOWN_PAYOUT_FEE_TYPE_DO_NOT_USE":
-		return PayoutFeeTypeUnknownPayoutFeeTypeDoNotUse, nil
 	case "TRANSFER_FEE":
 		return PayoutFeeTypeTransferFee, nil
 	case "TAX_ON_TRANSFER_FEE":
@@ -2230,25 +2368,19 @@ func (p PayoutFeeType) Ptr() *PayoutFeeType {
 type PayoutStatus string
 
 const (
-	PayoutStatusUnknownPayoutStatusDoNotUse PayoutStatus = "UNKNOWN_PAYOUT_STATUS_DO_NOT_USE"
-	PayoutStatusSent                        PayoutStatus = "SENT"
-	PayoutStatusFailed                      PayoutStatus = "FAILED"
-	PayoutStatusPaid                        PayoutStatus = "PAID"
-	PayoutStatusPending                     PayoutStatus = "PENDING"
+	PayoutStatusSent   PayoutStatus = "SENT"
+	PayoutStatusFailed PayoutStatus = "FAILED"
+	PayoutStatusPaid   PayoutStatus = "PAID"
 )
 
 func NewPayoutStatusFromString(s string) (PayoutStatus, error) {
 	switch s {
-	case "UNKNOWN_PAYOUT_STATUS_DO_NOT_USE":
-		return PayoutStatusUnknownPayoutStatusDoNotUse, nil
 	case "SENT":
 		return PayoutStatusSent, nil
 	case "FAILED":
 		return PayoutStatusFailed, nil
 	case "PAID":
 		return PayoutStatusPaid, nil
-	case "PENDING":
-		return PayoutStatusPending, nil
 	}
 	var t PayoutStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2265,15 +2397,12 @@ func (p PayoutStatus) Ptr() *PayoutStatus {
 type PayoutType string
 
 const (
-	PayoutTypeUnknownPayoutTypeDoNotUse PayoutType = "UNKNOWN_PAYOUT_TYPE_DO_NOT_USE"
-	PayoutTypeBatch                     PayoutType = "BATCH"
-	PayoutTypeSimple                    PayoutType = "SIMPLE"
+	PayoutTypeBatch  PayoutType = "BATCH"
+	PayoutTypeSimple PayoutType = "SIMPLE"
 )
 
 func NewPayoutTypeFromString(s string) (PayoutType, error) {
 	switch s {
-	case "UNKNOWN_PAYOUT_TYPE_DO_NOT_USE":
-		return PayoutTypeUnknownPayoutTypeDoNotUse, nil
 	case "BATCH":
 		return PayoutTypeBatch, nil
 	case "SIMPLE":

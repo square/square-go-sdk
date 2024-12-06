@@ -200,16 +200,13 @@ func (c *CheckoutLocationSettingsBranding) String() string {
 type CheckoutLocationSettingsBrandingButtonShape string
 
 const (
-	CheckoutLocationSettingsBrandingButtonShapeButtonShapeDoNotUse CheckoutLocationSettingsBrandingButtonShape = "BUTTON_SHAPE_DO_NOT_USE"
-	CheckoutLocationSettingsBrandingButtonShapeSquared             CheckoutLocationSettingsBrandingButtonShape = "SQUARED"
-	CheckoutLocationSettingsBrandingButtonShapeRounded             CheckoutLocationSettingsBrandingButtonShape = "ROUNDED"
-	CheckoutLocationSettingsBrandingButtonShapePill                CheckoutLocationSettingsBrandingButtonShape = "PILL"
+	CheckoutLocationSettingsBrandingButtonShapeSquared CheckoutLocationSettingsBrandingButtonShape = "SQUARED"
+	CheckoutLocationSettingsBrandingButtonShapeRounded CheckoutLocationSettingsBrandingButtonShape = "ROUNDED"
+	CheckoutLocationSettingsBrandingButtonShapePill    CheckoutLocationSettingsBrandingButtonShape = "PILL"
 )
 
 func NewCheckoutLocationSettingsBrandingButtonShapeFromString(s string) (CheckoutLocationSettingsBrandingButtonShape, error) {
 	switch s {
-	case "BUTTON_SHAPE_DO_NOT_USE":
-		return CheckoutLocationSettingsBrandingButtonShapeButtonShapeDoNotUse, nil
 	case "SQUARED":
 		return CheckoutLocationSettingsBrandingButtonShapeSquared, nil
 	case "ROUNDED":
@@ -228,16 +225,13 @@ func (c CheckoutLocationSettingsBrandingButtonShape) Ptr() *CheckoutLocationSett
 type CheckoutLocationSettingsBrandingHeaderType string
 
 const (
-	CheckoutLocationSettingsBrandingHeaderTypeHeaderTypeDoNotUse CheckoutLocationSettingsBrandingHeaderType = "HEADER_TYPE_DO_NOT_USE"
-	CheckoutLocationSettingsBrandingHeaderTypeBusinessName       CheckoutLocationSettingsBrandingHeaderType = "BUSINESS_NAME"
-	CheckoutLocationSettingsBrandingHeaderTypeFramedLogo         CheckoutLocationSettingsBrandingHeaderType = "FRAMED_LOGO"
-	CheckoutLocationSettingsBrandingHeaderTypeFullWidthLogo      CheckoutLocationSettingsBrandingHeaderType = "FULL_WIDTH_LOGO"
+	CheckoutLocationSettingsBrandingHeaderTypeBusinessName  CheckoutLocationSettingsBrandingHeaderType = "BUSINESS_NAME"
+	CheckoutLocationSettingsBrandingHeaderTypeFramedLogo    CheckoutLocationSettingsBrandingHeaderType = "FRAMED_LOGO"
+	CheckoutLocationSettingsBrandingHeaderTypeFullWidthLogo CheckoutLocationSettingsBrandingHeaderType = "FULL_WIDTH_LOGO"
 )
 
 func NewCheckoutLocationSettingsBrandingHeaderTypeFromString(s string) (CheckoutLocationSettingsBrandingHeaderType, error) {
 	switch s {
-	case "HEADER_TYPE_DO_NOT_USE":
-		return CheckoutLocationSettingsBrandingHeaderTypeHeaderTypeDoNotUse, nil
 	case "BUSINESS_NAME":
 		return CheckoutLocationSettingsBrandingHeaderTypeBusinessName, nil
 	case "FRAMED_LOGO":

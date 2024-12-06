@@ -221,7 +221,6 @@ type SearchCatalogObjectsRequest struct {
 type ArchivedState string
 
 const (
-	ArchivedStateArchivedStateDoNotUse    ArchivedState = "ARCHIVED_STATE_DO_NOT_USE"
 	ArchivedStateArchivedStateNotArchived ArchivedState = "ARCHIVED_STATE_NOT_ARCHIVED"
 	ArchivedStateArchivedStateArchived    ArchivedState = "ARCHIVED_STATE_ARCHIVED"
 	ArchivedStateArchivedStateAll         ArchivedState = "ARCHIVED_STATE_ALL"
@@ -229,8 +228,6 @@ const (
 
 func NewArchivedStateFromString(s string) (ArchivedState, error) {
 	switch s {
-	case "ARCHIVED_STATE_DO_NOT_USE":
-		return ArchivedStateArchivedStateDoNotUse, nil
 	case "ARCHIVED_STATE_NOT_ARCHIVED":
 		return ArchivedStateArchivedStateNotArchived, nil
 	case "ARCHIVED_STATE_ARCHIVED":
@@ -1665,15 +1662,12 @@ func (r *Range) String() string {
 type SearchCatalogItemsRequestStockLevel string
 
 const (
-	SearchCatalogItemsRequestStockLevelStockLevelDoNotUse SearchCatalogItemsRequestStockLevel = "STOCK_LEVEL_DO_NOT_USE"
-	SearchCatalogItemsRequestStockLevelOut                SearchCatalogItemsRequestStockLevel = "OUT"
-	SearchCatalogItemsRequestStockLevelLow                SearchCatalogItemsRequestStockLevel = "LOW"
+	SearchCatalogItemsRequestStockLevelOut SearchCatalogItemsRequestStockLevel = "OUT"
+	SearchCatalogItemsRequestStockLevelLow SearchCatalogItemsRequestStockLevel = "LOW"
 )
 
 func NewSearchCatalogItemsRequestStockLevelFromString(s string) (SearchCatalogItemsRequestStockLevel, error) {
 	switch s {
-	case "STOCK_LEVEL_DO_NOT_USE":
-		return SearchCatalogItemsRequestStockLevelStockLevelDoNotUse, nil
 	case "OUT":
 		return SearchCatalogItemsRequestStockLevelOut, nil
 	case "LOW":
