@@ -75,8 +75,9 @@ response, err := client.Payments.List(
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
 
 ```go
+ctx := context.TODO()
 page, err := client.Payments.List(
-    context.TODO(),
+    ctx,
     &square.PaymentsListRequest{
         Total: square.Int64(100),
     },
@@ -85,7 +86,7 @@ if err != nil {
     return nil, err
 }
 iter := page.Iterator()
-for iter.Next() {
+for iter.Next(ctx) {
     payment := iter.Current()
     fmt.Printf("Got payment: %v\n", *payment.ID)
 }
@@ -101,7 +102,7 @@ for page != nil {
     for _, payment := range page.Results {
         fmt.Printf("Got payment: %v\n", *payment.ID)
     }
-    page, err = page.GetNextPage()
+    page, err = page.GetNextPage(ctx)
     if errors.Is(err, core.ErrNoPages) {
         break
     }
