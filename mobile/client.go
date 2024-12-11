@@ -59,7 +59,7 @@ func (c *Client) AuthorizationCode(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/mobile/authorization-code"
 	headers := internal.MergeHeaders(

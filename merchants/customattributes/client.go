@@ -55,7 +55,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes",
@@ -103,4 +103,281 @@ func (c *Client) List(
 		readPageResponse,
 	)
 	return pager.GetPage(ctx, request.Cursor)
+}
+
+// Creates a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Use this endpoint to define a custom attribute that can be associated with a merchant connecting to your application.
+// A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
+// for a custom attribute. After the definition is created, you can call
+// [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) or
+// [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
+// to set the custom attribute for a merchant.
+func (c *Client) Create(
+	ctx context.Context,
+	request *merchants.CreateMerchantCustomAttributeDefinitionRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.CreateMerchantCustomAttributeDefinitionResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.CreateMerchantCustomAttributeDefinitionResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Deletes [custom attributes](entity:CustomAttribute) for a merchant as a bulk operation.
+// To delete a custom attribute owned by another application, the `visibility` setting must be
+// `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) BatchDelete(
+	ctx context.Context,
+	request *merchants.BulkDeleteMerchantCustomAttributesRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.BulkDeleteMerchantCustomAttributesResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-delete"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.BulkDeleteMerchantCustomAttributesResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Creates or updates [custom attributes](entity:CustomAttribute) for a merchant as a bulk operation.
+// Use this endpoint to set the value of one or more custom attributes for a merchant.
+// A custom attribute is based on a custom attribute definition in a Square seller account, which is
+// created using the [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) endpoint.
+// This `BulkUpsertMerchantCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
+// requests and returns a map of individual upsert responses. Each upsert request has a unique ID
+// and provides a merchant ID and custom attribute. Each upsert response is returned with the ID
+// of the corresponding request.
+// To create or update a custom attribute owned by another application, the `visibility` setting
+// must be `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) BatchUpsert(
+	ctx context.Context,
+	request *merchants.BulkUpsertMerchantCustomAttributesRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.BulkUpsertMerchantCustomAttributesResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-upsert"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.BulkUpsertMerchantCustomAttributesResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Retrieves a [custom attribute](entity:CustomAttribute) associated with a merchant.
+// You can use the `with_definition` query parameter to also retrieve the custom attribute definition
+// in the same call.
+// To retrieve a custom attribute owned by another application, the `visibility` setting must be
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) Get(
+	ctx context.Context,
+	request *merchants.CustomAttributesGetRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.RetrieveMerchantCustomAttributeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/%v/custom-attributes/%v",
+		request.MerchantID,
+		request.Key,
+	)
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.RetrieveMerchantCustomAttributeResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Creates or updates a [custom attribute](entity:CustomAttribute) for a merchant.
+// Use this endpoint to set the value of a custom attribute for a specified merchant.
+// A custom attribute is based on a custom attribute definition in a Square seller account, which
+// is created using the [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) endpoint.
+// To create or update a custom attribute owned by another application, the `visibility` setting
+// must be `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) Upsert(
+	ctx context.Context,
+	request *merchants.UpsertMerchantCustomAttributeRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.UpsertMerchantCustomAttributeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/%v/custom-attributes/%v",
+		request.MerchantID,
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.UpsertMerchantCustomAttributeResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Deletes a [custom attribute](entity:CustomAttribute) associated with a merchant.
+// To delete a custom attribute owned by another application, the `visibility` setting must be
+// `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) Delete(
+	ctx context.Context,
+	request *merchants.CustomAttributesDeleteRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.DeleteMerchantCustomAttributeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/merchants/%v/custom-attributes/%v",
+		request.MerchantID,
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.DeleteMerchantCustomAttributeResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodDelete,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }

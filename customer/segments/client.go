@@ -4,7 +4,6 @@ package segments
 
 import (
 	context "context"
-	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	customer "github.com/square/square-go-sdk/customer"
@@ -40,63 +39,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Retrieves the list of customer segments of a business.
-func (c *Client) List(
-	ctx context.Context,
-	request *customer.SegmentsListRequest,
-	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomerSegment], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/customers/segments"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
-		if pageRequest.Cursor != nil {
-			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
-		}
-		nextURL := endpointURL
-		if len(queryParams) > 0 {
-			nextURL += "?" + queryParams.Encode()
-		}
-		return &internal.CallParams{
-			URL:             nextURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        pageRequest.Response,
-		}
-	}
-	readPageResponse := func(response *squaregosdk.ListCustomerSegmentsResponse) *internal.PageResponse[*string, *squaregosdk.CustomerSegment] {
-		next := response.Cursor
-		results := response.Segments
-		return &internal.PageResponse[*string, *squaregosdk.CustomerSegment]{
-			Next:    next,
-			Results: results,
-		}
-	}
-	pager := internal.NewCursorPager(
-		c.caller,
-		prepareCall,
-		readPageResponse,
-	)
-	return pager.GetPage(ctx, request.Cursor)
-}
-
 // Retrieves a specific customer segment as identified by the `segment_id` value.
 func (c *Client) Get(
 	ctx context.Context,
@@ -107,7 +49,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/segments/%v",

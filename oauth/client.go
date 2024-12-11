@@ -61,7 +61,7 @@ func (c *Client) RevokeToken(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/oauth2/revoke"
 	headers := internal.MergeHeaders(
@@ -116,7 +116,7 @@ func (c *Client) ObtainToken(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/oauth2/token"
 	headers := internal.MergeHeaders(
@@ -167,7 +167,7 @@ func (c *Client) RetrieveTokenStatus(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/oauth2/token/status"
 	headers := internal.MergeHeaders(
@@ -202,7 +202,7 @@ func (c *Client) Authorize(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/oauth2/authorize"
 	headers := internal.MergeHeaders(

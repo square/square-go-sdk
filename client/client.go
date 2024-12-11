@@ -5,7 +5,6 @@ package client
 import (
 	applepay "github.com/square/square-go-sdk/applepay"
 	bankaccounts "github.com/square/square-go-sdk/bankaccounts"
-	bookingcustomattributes "github.com/square/square-go-sdk/bookingcustomattributes"
 	bookingsclient "github.com/square/square-go-sdk/bookings/client"
 	cards "github.com/square/square-go-sdk/cards"
 	cashdrawersclient "github.com/square/square-go-sdk/cashdrawers/client"
@@ -13,7 +12,6 @@ import (
 	checkoutclient "github.com/square/square-go-sdk/checkout/client"
 	core "github.com/square/square-go-sdk/core"
 	customerclient "github.com/square/square-go-sdk/customer/client"
-	customerattributedefinitions "github.com/square/square-go-sdk/customerattributedefinitions"
 	customersclient "github.com/square/square-go-sdk/customers/client"
 	devicesclient "github.com/square/square-go-sdk/devices/client"
 	disputesclient "github.com/square/square-go-sdk/disputes/client"
@@ -32,7 +30,6 @@ import (
 	mobile "github.com/square/square-go-sdk/mobile"
 	oauth "github.com/square/square-go-sdk/oauth"
 	option "github.com/square/square-go-sdk/option"
-	ordercustomattributes "github.com/square/square-go-sdk/ordercustomattributes"
 	ordersclient "github.com/square/square-go-sdk/orders/client"
 	payments "github.com/square/square-go-sdk/payments"
 	payouts "github.com/square/square-go-sdk/payouts"
@@ -40,8 +37,7 @@ import (
 	sites "github.com/square/square-go-sdk/sites"
 	snippets "github.com/square/square-go-sdk/snippets"
 	subscriptions "github.com/square/square-go-sdk/subscriptions"
-	teamclient "github.com/square/square-go-sdk/team/client"
-	teammembers "github.com/square/square-go-sdk/teammembers"
+	teammembersclient "github.com/square/square-go-sdk/teammembers/client"
 	terminalclient "github.com/square/square-go-sdk/terminal/client"
 	v1transactions "github.com/square/square-go-sdk/v1transactions"
 	vendors "github.com/square/square-go-sdk/vendors"
@@ -55,46 +51,42 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	Mobile                       *mobile.Client
-	OAuth                        *oauth.Client
-	V1Transactions               *v1transactions.Client
-	ApplePay                     *applepay.Client
-	BankAccounts                 *bankaccounts.Client
-	Bookings                     *bookingsclient.Client
-	BookingCustomAttributes      *bookingcustomattributes.Client
-	Cards                        *cards.Client
-	Catalog                      *catalogclient.Client
-	Customers                    *customersclient.Client
-	CustomerAttributeDefinitions *customerattributedefinitions.Client
-	Devices                      *devicesclient.Client
-	Disputes                     *disputesclient.Client
-	Employees                    *employees.Client
-	Events                       *events.Client
-	GiftCards                    *giftcardsclient.Client
-	Inventory                    *inventory.Client
-	Invoices                     *invoices.Client
-	Labor                        *laborclient.Client
-	Locations                    *locationsclient.Client
-	LocationCustomAttributes     *locationcustomattributes.Client
-	Loyalty                      *loyaltyclient.Client
-	Merchants                    *merchantsclient.Client
-	MerchantCustomAttributes     *merchantcustomattributes.Client
-	Checkout                     *checkoutclient.Client
-	Orders                       *ordersclient.Client
-	OrderCustomAttributes        *ordercustomattributes.Client
-	Payments                     *payments.Client
-	Payouts                      *payouts.Client
-	Refunds                      *refunds.Client
-	Sites                        *sites.Client
-	Snippets                     *snippets.Client
-	Subscriptions                *subscriptions.Client
-	TeamMembers                  *teammembers.Client
-	Terminal                     *terminalclient.Client
-	Vendors                      *vendors.Client
-	CashDrawers                  *cashdrawersclient.Client
-	Customer                     *customerclient.Client
-	Team                         *teamclient.Client
-	Webhooks                     *webhooksclient.Client
+	Mobile                   *mobile.Client
+	OAuth                    *oauth.Client
+	V1Transactions           *v1transactions.Client
+	ApplePay                 *applepay.Client
+	BankAccounts             *bankaccounts.Client
+	Bookings                 *bookingsclient.Client
+	Cards                    *cards.Client
+	Catalog                  *catalogclient.Client
+	Customers                *customersclient.Client
+	Devices                  *devicesclient.Client
+	Disputes                 *disputesclient.Client
+	Employees                *employees.Client
+	Events                   *events.Client
+	GiftCards                *giftcardsclient.Client
+	Inventory                *inventory.Client
+	Invoices                 *invoices.Client
+	Labor                    *laborclient.Client
+	Locations                *locationsclient.Client
+	LocationCustomAttributes *locationcustomattributes.Client
+	Loyalty                  *loyaltyclient.Client
+	Merchants                *merchantsclient.Client
+	MerchantCustomAttributes *merchantcustomattributes.Client
+	Checkout                 *checkoutclient.Client
+	Orders                   *ordersclient.Client
+	Payments                 *payments.Client
+	Payouts                  *payouts.Client
+	Refunds                  *refunds.Client
+	Sites                    *sites.Client
+	Snippets                 *snippets.Client
+	Subscriptions            *subscriptions.Client
+	TeamMembers              *teammembersclient.Client
+	Terminal                 *terminalclient.Client
+	Vendors                  *vendors.Client
+	CashDrawers              *cashdrawersclient.Client
+	Customer                 *customerclient.Client
+	Webhooks                 *webhooksclient.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -113,46 +105,42 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:                       options.ToHeader(),
-		Mobile:                       mobile.NewClient(opts...),
-		OAuth:                        oauth.NewClient(opts...),
-		V1Transactions:               v1transactions.NewClient(opts...),
-		ApplePay:                     applepay.NewClient(opts...),
-		BankAccounts:                 bankaccounts.NewClient(opts...),
-		Bookings:                     bookingsclient.NewClient(opts...),
-		BookingCustomAttributes:      bookingcustomattributes.NewClient(opts...),
-		Cards:                        cards.NewClient(opts...),
-		Catalog:                      catalogclient.NewClient(opts...),
-		Customers:                    customersclient.NewClient(opts...),
-		CustomerAttributeDefinitions: customerattributedefinitions.NewClient(opts...),
-		Devices:                      devicesclient.NewClient(opts...),
-		Disputes:                     disputesclient.NewClient(opts...),
-		Employees:                    employees.NewClient(opts...),
-		Events:                       events.NewClient(opts...),
-		GiftCards:                    giftcardsclient.NewClient(opts...),
-		Inventory:                    inventory.NewClient(opts...),
-		Invoices:                     invoices.NewClient(opts...),
-		Labor:                        laborclient.NewClient(opts...),
-		Locations:                    locationsclient.NewClient(opts...),
-		LocationCustomAttributes:     locationcustomattributes.NewClient(opts...),
-		Loyalty:                      loyaltyclient.NewClient(opts...),
-		Merchants:                    merchantsclient.NewClient(opts...),
-		MerchantCustomAttributes:     merchantcustomattributes.NewClient(opts...),
-		Checkout:                     checkoutclient.NewClient(opts...),
-		Orders:                       ordersclient.NewClient(opts...),
-		OrderCustomAttributes:        ordercustomattributes.NewClient(opts...),
-		Payments:                     payments.NewClient(opts...),
-		Payouts:                      payouts.NewClient(opts...),
-		Refunds:                      refunds.NewClient(opts...),
-		Sites:                        sites.NewClient(opts...),
-		Snippets:                     snippets.NewClient(opts...),
-		Subscriptions:                subscriptions.NewClient(opts...),
-		TeamMembers:                  teammembers.NewClient(opts...),
-		Terminal:                     terminalclient.NewClient(opts...),
-		Vendors:                      vendors.NewClient(opts...),
-		CashDrawers:                  cashdrawersclient.NewClient(opts...),
-		Customer:                     customerclient.NewClient(opts...),
-		Team:                         teamclient.NewClient(opts...),
-		Webhooks:                     webhooksclient.NewClient(opts...),
+		header:                   options.ToHeader(),
+		Mobile:                   mobile.NewClient(opts...),
+		OAuth:                    oauth.NewClient(opts...),
+		V1Transactions:           v1transactions.NewClient(opts...),
+		ApplePay:                 applepay.NewClient(opts...),
+		BankAccounts:             bankaccounts.NewClient(opts...),
+		Bookings:                 bookingsclient.NewClient(opts...),
+		Cards:                    cards.NewClient(opts...),
+		Catalog:                  catalogclient.NewClient(opts...),
+		Customers:                customersclient.NewClient(opts...),
+		Devices:                  devicesclient.NewClient(opts...),
+		Disputes:                 disputesclient.NewClient(opts...),
+		Employees:                employees.NewClient(opts...),
+		Events:                   events.NewClient(opts...),
+		GiftCards:                giftcardsclient.NewClient(opts...),
+		Inventory:                inventory.NewClient(opts...),
+		Invoices:                 invoices.NewClient(opts...),
+		Labor:                    laborclient.NewClient(opts...),
+		Locations:                locationsclient.NewClient(opts...),
+		LocationCustomAttributes: locationcustomattributes.NewClient(opts...),
+		Loyalty:                  loyaltyclient.NewClient(opts...),
+		Merchants:                merchantsclient.NewClient(opts...),
+		MerchantCustomAttributes: merchantcustomattributes.NewClient(opts...),
+		Checkout:                 checkoutclient.NewClient(opts...),
+		Orders:                   ordersclient.NewClient(opts...),
+		Payments:                 payments.NewClient(opts...),
+		Payouts:                  payouts.NewClient(opts...),
+		Refunds:                  refunds.NewClient(opts...),
+		Sites:                    sites.NewClient(opts...),
+		Snippets:                 snippets.NewClient(opts...),
+		Subscriptions:            subscriptions.NewClient(opts...),
+		TeamMembers:              teammembersclient.NewClient(opts...),
+		Terminal:                 terminalclient.NewClient(opts...),
+		Vendors:                  vendors.NewClient(opts...),
+		CashDrawers:              cashdrawersclient.NewClient(opts...),
+		Customer:                 customerclient.NewClient(opts...),
+		Webhooks:                 webhooksclient.NewClient(opts...),
 	}
 }

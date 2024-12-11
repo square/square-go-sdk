@@ -8,7 +8,7 @@ import (
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
-	team "github.com/square/square-go-sdk/team"
+	teammembers "github.com/square/square-go-sdk/teammembers"
 	http "net/http"
 	os "os"
 )
@@ -44,14 +44,14 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrievewagesetting).
 func (c *Client) Get(
 	ctx context.Context,
-	request *team.WageSettingGetRequest,
+	request *teammembers.WageSettingGetRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/team-members/%v/wage-setting",
@@ -88,14 +88,14 @@ func (c *Client) Get(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#create-or-update-a-wage-setting).
 func (c *Client) Update(
 	ctx context.Context,
-	request *team.UpdateWageSettingRequest,
+	request *teammembers.UpdateWageSettingRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/team-members/%v/wage-setting",

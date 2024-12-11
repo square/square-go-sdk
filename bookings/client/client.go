@@ -6,6 +6,7 @@ import (
 	context "context"
 	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
+	customattributedefinitions "github.com/square/square-go-sdk/bookings/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/bookings/customattributes"
 	locationprofiles "github.com/square/square-go-sdk/bookings/locationprofiles"
 	teammemberprofiles "github.com/square/square-go-sdk/bookings/teammemberprofiles"
@@ -21,9 +22,10 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	LocationProfiles   *locationprofiles.Client
-	TeamMemberProfiles *teammemberprofiles.Client
-	CustomAttributes   *customattributes.Client
+	CustomAttributeDefinitions *customattributedefinitions.Client
+	CustomAttributes           *customattributes.Client
+	LocationProfiles           *locationprofiles.Client
+	TeamMemberProfiles         *teammemberprofiles.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -42,10 +44,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:             options.ToHeader(),
-		LocationProfiles:   locationprofiles.NewClient(opts...),
-		TeamMemberProfiles: teammemberprofiles.NewClient(opts...),
-		CustomAttributes:   customattributes.NewClient(opts...),
+		header:                     options.ToHeader(),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
+		CustomAttributes:           customattributes.NewClient(opts...),
+		LocationProfiles:           locationprofiles.NewClient(opts...),
+		TeamMemberProfiles:         teammemberprofiles.NewClient(opts...),
 	}
 }
 
@@ -62,7 +65,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings"
 	queryParams, err := internal.QueryValues(request)
@@ -133,7 +136,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings"
 	headers := internal.MergeHeaders(
@@ -175,7 +178,7 @@ func (c *Client) SearchAvailability(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/availability/search"
 	headers := internal.MergeHeaders(
@@ -217,7 +220,7 @@ func (c *Client) BulkRetrieveBookings(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/bulk-retrieve"
 	headers := internal.MergeHeaders(
@@ -255,7 +258,7 @@ func (c *Client) GetBusinessProfile(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/business-booking-profile"
 	headers := internal.MergeHeaders(
@@ -282,66 +285,6 @@ func (c *Client) GetBusinessProfile(
 	return response, nil
 }
 
-// Get all bookings custom attribute definitions.
-//
-// To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
-// To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
-func (c *Client) GetCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.BookingsGetCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
-		if pageRequest.Cursor != nil {
-			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
-		}
-		nextURL := endpointURL
-		if len(queryParams) > 0 {
-			nextURL += "?" + queryParams.Encode()
-		}
-		return &internal.CallParams{
-			URL:             nextURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        pageRequest.Response,
-		}
-	}
-	readPageResponse := func(response *squaregosdk.ListBookingCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
-		next := response.Cursor
-		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
-			Next:    next,
-			Results: results,
-		}
-	}
-	pager := internal.NewCursorPager(
-		c.caller,
-		prepareCall,
-		readPageResponse,
-	)
-	return pager.GetPage(ctx, request.Cursor)
-}
-
 // Retrieves a seller's location booking profile.
 func (c *Client) RetrieveLocationBookingProfile(
 	ctx context.Context,
@@ -352,7 +295,7 @@ func (c *Client) RetrieveLocationBookingProfile(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/location-booking-profiles/%v",
@@ -392,7 +335,7 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/team-member-booking-profiles/bulk-retrieve"
 	headers := internal.MergeHeaders(
@@ -434,7 +377,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v",
@@ -480,7 +423,7 @@ func (c *Client) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v",
@@ -528,7 +471,7 @@ func (c *Client) Cancel(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/cancel",

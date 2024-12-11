@@ -52,7 +52,7 @@ func (c *Client) RetrieveLocationSettings(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/online-checkout/location-settings/%v",
@@ -92,7 +92,7 @@ func (c *Client) UpdateLocationSettings(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/online-checkout/location-settings/%v",
@@ -133,7 +133,7 @@ func (c *Client) RetrieveMerchantSettings(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/online-checkout/merchant-settings"
 	headers := internal.MergeHeaders(
@@ -170,7 +170,7 @@ func (c *Client) UpdateMerchantSettings(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/online-checkout/merchant-settings"
 	headers := internal.MergeHeaders(
