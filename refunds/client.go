@@ -54,7 +54,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/refunds"
 	queryParams, err := internal.QueryValues(request)
@@ -114,7 +114,7 @@ func (c *Client) RefundPayment(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/refunds"
 	headers := internal.MergeHeaders(
@@ -153,7 +153,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/refunds/%v",

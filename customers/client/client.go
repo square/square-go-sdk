@@ -63,7 +63,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers"
 	queryParams, err := internal.QueryValues(request)
@@ -129,7 +129,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers"
 	headers := internal.MergeHeaders(
@@ -178,7 +178,7 @@ func (c *Client) BulkCreateCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-create"
 	headers := internal.MergeHeaders(
@@ -219,7 +219,7 @@ func (c *Client) BulkDeleteCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -260,7 +260,7 @@ func (c *Client) BulkRetrieveCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-retrieve"
 	headers := internal.MergeHeaders(
@@ -303,7 +303,7 @@ func (c *Client) BulkUpdateCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-update"
 	headers := internal.MergeHeaders(
@@ -355,7 +355,7 @@ func (c *Client) BatchUpsertAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
@@ -402,7 +402,7 @@ func (c *Client) Search(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/search"
 	headers := internal.MergeHeaders(
@@ -441,7 +441,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",
@@ -486,7 +486,7 @@ func (c *Client) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",
@@ -530,7 +530,7 @@ func (c *Client) Delete(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",

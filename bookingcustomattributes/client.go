@@ -54,7 +54,7 @@ func (c *Client) CreateBookingCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
@@ -96,7 +96,7 @@ func (c *Client) RetrieveBookingCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
@@ -149,7 +149,7 @@ func (c *Client) UpdateBookingCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
@@ -197,7 +197,7 @@ func (c *Client) DeleteBookingCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/custom-attribute-definitions/%v",
@@ -243,7 +243,7 @@ func (c *Client) BulkDeleteBookingCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -288,7 +288,7 @@ func (c *Client) BulkUpsertBookingCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
@@ -330,7 +330,7 @@ func (c *Client) RetrieveBookingCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",
@@ -384,7 +384,7 @@ func (c *Client) UpsertBookingCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",
@@ -433,7 +433,7 @@ func (c *Client) DeleteBookingCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/bookings/%v/custom-attributes/%v",

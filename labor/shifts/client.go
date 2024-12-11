@@ -67,7 +67,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/labor/shifts"
 	headers := internal.MergeHeaders(
@@ -121,7 +121,7 @@ func (c *Client) Search(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/labor/shifts/search"
 	headers := internal.MergeHeaders(
@@ -160,7 +160,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/labor/shifts/%v",
@@ -206,7 +206,7 @@ func (c *Client) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/labor/shifts/%v",
@@ -248,7 +248,7 @@ func (c *Client) Delete(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/labor/shifts/%v",

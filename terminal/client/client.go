@@ -60,7 +60,7 @@ func (c *Client) DismissTerminalAction(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/terminals/actions/%v/dismiss",
@@ -100,7 +100,7 @@ func (c *Client) DismissTerminalCheckout(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/terminals/checkouts/%v/dismiss",
@@ -140,7 +140,7 @@ func (c *Client) DismissTerminalRefund(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/terminals/refunds/%v/dismiss",

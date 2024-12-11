@@ -53,7 +53,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/gift-cards/activities"
 	queryParams, err := internal.QueryValues(request)
@@ -111,7 +111,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/gift-cards/activities"
 	headers := internal.MergeHeaders(

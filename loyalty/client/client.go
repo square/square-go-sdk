@@ -65,7 +65,7 @@ func (c *Client) SearchEvents(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/loyalty/events/search"
 	headers := internal.MergeHeaders(
