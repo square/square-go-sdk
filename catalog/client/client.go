@@ -69,7 +69,7 @@ func (c *Client) BatchDelete(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-delete"
 	headers := internal.MergeHeaders(
@@ -113,7 +113,7 @@ func (c *Client) BatchGet(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-retrieve"
 	headers := internal.MergeHeaders(
@@ -164,7 +164,7 @@ func (c *Client) BatchUpsert(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-upsert"
 	headers := internal.MergeHeaders(
@@ -203,7 +203,7 @@ func (c *Client) Info(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/info"
 	headers := internal.MergeHeaders(
@@ -247,7 +247,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/list"
 	queryParams, err := internal.QueryValues(request)
@@ -313,7 +313,7 @@ func (c *Client) Search(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/search"
 	headers := internal.MergeHeaders(
@@ -361,7 +361,7 @@ func (c *Client) SearchItems(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/search-catalog-items"
 	headers := internal.MergeHeaders(
@@ -402,7 +402,7 @@ func (c *Client) UpdateItemModifierLists(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/update-item-modifier-lists"
 	headers := internal.MergeHeaders(
@@ -443,7 +443,7 @@ func (c *Client) UpdateItemTaxes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/catalog/update-item-taxes"
 	headers := internal.MergeHeaders(

@@ -54,7 +54,7 @@ func (c *Client) CreateMerchantCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
@@ -95,7 +95,7 @@ func (c *Client) RetrieveMerchantCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
@@ -145,7 +145,7 @@ func (c *Client) UpdateMerchantCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
@@ -190,7 +190,7 @@ func (c *Client) DeleteMerchantCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/custom-attribute-definitions/%v",
@@ -232,7 +232,7 @@ func (c *Client) BulkDeleteMerchantCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -280,7 +280,7 @@ func (c *Client) BulkUpsertMerchantCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
@@ -323,7 +323,7 @@ func (c *Client) RetrieveMerchantCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",
@@ -376,7 +376,7 @@ func (c *Client) UpsertMerchantCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",
@@ -421,7 +421,7 @@ func (c *Client) DeleteMerchantCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/merchants/%v/custom-attributes/%v",

@@ -54,7 +54,7 @@ func (c *Client) CreateLocationCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
@@ -95,7 +95,7 @@ func (c *Client) RetrieveLocationCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/custom-attribute-definitions/%v",
@@ -145,7 +145,7 @@ func (c *Client) UpdateLocationCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/custom-attribute-definitions/%v",
@@ -190,7 +190,7 @@ func (c *Client) DeleteLocationCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/custom-attribute-definitions/%v",
@@ -232,7 +232,7 @@ func (c *Client) BulkDeleteLocationCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -280,7 +280,7 @@ func (c *Client) BulkUpsertLocationCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
@@ -324,7 +324,7 @@ func (c *Client) ListLocationCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes",
@@ -375,7 +375,7 @@ func (c *Client) RetrieveLocationCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
@@ -428,7 +428,7 @@ func (c *Client) UpsertLocationCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",
@@ -473,7 +473,7 @@ func (c *Client) DeleteLocationCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/locations/%v/custom-attributes/%v",

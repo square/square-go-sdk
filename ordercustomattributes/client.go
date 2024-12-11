@@ -52,7 +52,7 @@ func (c *Client) CreateOrderCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
@@ -95,7 +95,7 @@ func (c *Client) RetrieveOrderCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/custom-attribute-definitions/%v",
@@ -144,7 +144,7 @@ func (c *Client) UpdateOrderCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/custom-attribute-definitions/%v",
@@ -188,7 +188,7 @@ func (c *Client) DeleteOrderCustomAttributeDefinition(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/custom-attribute-definitions/%v",
@@ -241,7 +241,7 @@ func (c *Client) BulkDeleteOrderCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -293,7 +293,7 @@ func (c *Client) BulkUpsertOrderCustomAttributes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
@@ -339,7 +339,7 @@ func (c *Client) RetrieveOrderCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",
@@ -395,7 +395,7 @@ func (c *Client) UpsertOrderCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",
@@ -442,7 +442,7 @@ func (c *Client) DeleteOrderCustomAttribute(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/custom-attributes/%v",

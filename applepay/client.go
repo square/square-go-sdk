@@ -61,7 +61,7 @@ func (c *Client) RegisterDomain(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/apple-pay/domains"
 	headers := internal.MergeHeaders(
