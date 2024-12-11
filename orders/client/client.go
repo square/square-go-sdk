@@ -4,11 +4,11 @@ package client
 
 import (
 	context "context"
-	fmt "fmt"
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
+	customattributedefinitions "github.com/square/square-go-sdk/orders/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/orders/customattributes"
 	http "net/http"
 	os "os"
@@ -19,7 +19,8 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	CustomAttributes *customattributes.Client
+	CustomAttributeDefinitions *customattributedefinitions.Client
+	CustomAttributes           *customattributes.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -38,8 +39,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:           options.ToHeader(),
-		CustomAttributes: customattributes.NewClient(opts...),
+		header:                     options.ToHeader(),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
+		CustomAttributes:           customattributes.NewClient(opts...),
 	}
 }
 
@@ -59,7 +61,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders"
 	headers := internal.MergeHeaders(
@@ -100,7 +102,7 @@ func (c *Client) BatchGet(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/batch-retrieve"
 	headers := internal.MergeHeaders(
@@ -139,7 +141,7 @@ func (c *Client) Calculate(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/calculate"
 	headers := internal.MergeHeaders(
@@ -179,7 +181,7 @@ func (c *Client) Clone(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/clone"
 	headers := internal.MergeHeaders(
@@ -208,68 +210,6 @@ func (c *Client) Clone(
 	return response, nil
 }
 
-// Lists the order-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
-//
-// When all response pages are retrieved, the results include all custom attribute definitions
-// that are visible to the requesting application, including those that are created by other
-// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that
-// seller-defined custom attributes (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) GetCustomAttributeDefinitions(
-	ctx context.Context,
-	request *squaregosdk.OrdersGetCustomAttributeDefinitionsRequest,
-	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/orders/custom-attribute-definitions"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
-		if pageRequest.Cursor != nil {
-			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
-		}
-		nextURL := endpointURL
-		if len(queryParams) > 0 {
-			nextURL += "?" + queryParams.Encode()
-		}
-		return &internal.CallParams{
-			URL:             nextURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        pageRequest.Response,
-		}
-	}
-	readPageResponse := func(response *squaregosdk.ListOrderCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
-		next := response.Cursor
-		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
-			Next:    next,
-			Results: results,
-		}
-	}
-	pager := internal.NewCursorPager(
-		c.caller,
-		prepareCall,
-		readPageResponse,
-	)
-	return pager.GetPage(ctx, request.Cursor)
-}
-
 // Search all orders for one or more locations. Orders include all sales,
 // returns, and exchanges regardless of how or when they entered the Square
 // ecosystem (such as Point of Sale, Invoices, and Connect APIs).
@@ -296,7 +236,7 @@ func (c *Client) Search(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/orders/search"
 	headers := internal.MergeHeaders(
@@ -335,7 +275,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v",
@@ -389,7 +329,7 @@ func (c *Client) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v",
@@ -444,7 +384,7 @@ func (c *Client) Pay(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/orders/%v/pay",

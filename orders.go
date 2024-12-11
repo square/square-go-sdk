@@ -51,20 +51,6 @@ type OrdersGetRequest struct {
 	OrderID string `json:"-" url:"-"`
 }
 
-type OrdersGetCustomAttributeDefinitionsRequest struct {
-	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
-	// The cursor returned in the paged response from the previous call to this endpoint.
-	// Provide this cursor to retrieve the next page of results for your original request.
-	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
-	Cursor *string `json:"-" url:"cursor,omitempty"`
-	// The maximum number of results to return in a single paged response. This limit is advisory.
-	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
-	// The default value is 20.
-	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
-	Limit *int `json:"-" url:"limit,omitempty"`
-}
-
 type PayOrderRequest struct {
 	// The ID of the order being paid.
 	OrderID string `json:"-" url:"-"`
@@ -393,74 +379,6 @@ func (g *GetOrderResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", g)
-}
-
-// Represents a response from listing order custom attribute definitions.
-type ListOrderCustomAttributeDefinitionsResponse struct {
-	// The retrieved custom attribute definitions. If no custom attribute definitions are found, Square returns an empty object (`{}`).
-	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
-	// The cursor to provide in your next call to this endpoint to retrieve the next page of results for your original request.
-	// This field is present only if the request succeeded and additional results are available.
-	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
-	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
-	if l == nil {
-		return nil
-	}
-	return l.CustomAttributeDefinitions
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) GetCursor() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Cursor
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) GetErrors() []*Error {
-	if l == nil {
-		return nil
-	}
-	return l.Errors
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListOrderCustomAttributeDefinitionsResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListOrderCustomAttributeDefinitionsResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *ListOrderCustomAttributeDefinitionsResponse) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
 }
 
 // A lightweight description of an [order](entity:Order) that is returned when

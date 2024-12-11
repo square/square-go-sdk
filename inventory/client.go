@@ -50,7 +50,7 @@ func (c *Client) DeprecatedGetAdjustment(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/adjustment/%v",
@@ -91,7 +91,7 @@ func (c *Client) GetAdjustment(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/adjustments/%v",
@@ -132,7 +132,7 @@ func (c *Client) DeprecatedBatchChange(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-change"
 	headers := internal.MergeHeaders(
@@ -172,7 +172,7 @@ func (c *Client) DeprecatedBatchGetChanges(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-changes"
 	headers := internal.MergeHeaders(
@@ -212,7 +212,7 @@ func (c *Client) DeprecatedBatchGetCounts(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-counts"
 	headers := internal.MergeHeaders(
@@ -255,7 +255,7 @@ func (c *Client) BatchCreateChanges(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-create"
 	headers := internal.MergeHeaders(
@@ -301,7 +301,7 @@ func (c *Client) BatchGetChanges(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-retrieve"
 	headers := internal.MergeHeaders(
@@ -350,7 +350,7 @@ func (c *Client) BatchGetCounts(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/inventory/counts/batch-retrieve"
 	headers := internal.MergeHeaders(
@@ -390,7 +390,7 @@ func (c *Client) DeprecatedGetPhysicalCount(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/physical-count/%v",
@@ -431,7 +431,7 @@ func (c *Client) GetPhysicalCount(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/physical-counts/%v",
@@ -472,7 +472,7 @@ func (c *Client) GetTransfer(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/transfers/%v",
@@ -515,7 +515,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/%v",
@@ -587,7 +587,7 @@ func (c *Client) Changes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/inventory/%v/changes",

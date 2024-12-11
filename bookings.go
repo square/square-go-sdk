@@ -49,17 +49,6 @@ type BookingsGetRequest struct {
 	BookingID string `json:"-" url:"-"`
 }
 
-type BookingsGetCustomAttributeDefinitionsRequest struct {
-	// The maximum number of results to return in a single paged response. This limit is advisory.
-	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
-	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Limit *int `json:"-" url:"limit,omitempty"`
-	// The cursor returned in the paged response from the previous call to this endpoint.
-	// Provide this cursor to retrieve the next page of results for your original request.
-	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Cursor *string `json:"-" url:"cursor,omitempty"`
-}
-
 type BookingsListRequest struct {
 	// The maximum number of results per page to return in a paged response.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -1360,77 +1349,6 @@ func (g *GetBusinessBookingProfileResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", g)
-}
-
-// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
-// Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
-// If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
-type ListBookingCustomAttributeDefinitionsResponse struct {
-	// The retrieved custom attribute definitions. If no custom attribute definitions are found,
-	// Square returns an empty object (`{}`).
-	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
-	// The cursor to provide in your next call to this endpoint to retrieve the next page of
-	// results for your original request. This field is present only if the request succeeded and
-	// additional results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
-	if l == nil {
-		return nil
-	}
-	return l.CustomAttributeDefinitions
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) GetCursor() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Cursor
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) GetErrors() []*Error {
-	if l == nil {
-		return nil
-	}
-	return l.Errors
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListBookingCustomAttributeDefinitionsResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListBookingCustomAttributeDefinitionsResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *ListBookingCustomAttributeDefinitionsResponse) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
 }
 
 type ListBookingsResponse struct {

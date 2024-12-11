@@ -8,8 +8,10 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	cards "github.com/square/square-go-sdk/customers/cards"
+	customattributedefinitions "github.com/square/square-go-sdk/customers/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/customers/customattributes"
 	groups "github.com/square/square-go-sdk/customers/groups"
+	segments "github.com/square/square-go-sdk/customers/segments"
 	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
@@ -21,9 +23,11 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	Groups           *groups.Client
-	Cards            *cards.Client
-	CustomAttributes *customattributes.Client
+	CustomAttributeDefinitions *customattributedefinitions.Client
+	Groups                     *groups.Client
+	Segments                   *segments.Client
+	Cards                      *cards.Client
+	CustomAttributes           *customattributes.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -42,10 +46,12 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:           options.ToHeader(),
-		Groups:           groups.NewClient(opts...),
-		Cards:            cards.NewClient(opts...),
-		CustomAttributes: customattributes.NewClient(opts...),
+		header:                     options.ToHeader(),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
+		Groups:                     groups.NewClient(opts...),
+		Segments:                   segments.NewClient(opts...),
+		Cards:                      cards.NewClient(opts...),
+		CustomAttributes:           customattributes.NewClient(opts...),
 	}
 }
 
@@ -63,7 +69,7 @@ func (c *Client) List(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers"
 	queryParams, err := internal.QueryValues(request)
@@ -129,7 +135,7 @@ func (c *Client) Create(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers"
 	headers := internal.MergeHeaders(
@@ -178,7 +184,7 @@ func (c *Client) BulkCreateCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-create"
 	headers := internal.MergeHeaders(
@@ -219,7 +225,7 @@ func (c *Client) BulkDeleteCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-delete"
 	headers := internal.MergeHeaders(
@@ -260,7 +266,7 @@ func (c *Client) BulkRetrieveCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-retrieve"
 	headers := internal.MergeHeaders(
@@ -303,7 +309,7 @@ func (c *Client) BulkUpdateCustomers(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/bulk-update"
 	headers := internal.MergeHeaders(
@@ -313,58 +319,6 @@ func (c *Client) BulkUpdateCustomers(
 	headers.Set("Content-Type", "application/json")
 
 	var response *squaregosdk.BulkUpdateCustomersResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPost,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-// Creates or updates [custom attributes](entity:CustomAttribute) for customer profiles as a bulk operation.
-//
-// Use this endpoint to set the value of one or more custom attributes for one or more customer profiles.
-// A custom attribute is based on a custom attribute definition in a Square seller account, which is
-// created using the [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) endpoint.
-//
-// This `BulkUpsertCustomerCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
-// requests and returns a map of individual upsert responses. Each upsert request has a unique ID
-// and provides a customer ID and custom attribute. Each upsert response is returned with the ID
-// of the corresponding request.
-//
-// To create or update a custom attribute owned by another application, the `visibility` setting
-// must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
-// (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) BatchUpsertAttributes(
-	ctx context.Context,
-	request *squaregosdk.BatchUpsertCustomerCustomAttributesRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.BatchUpsertCustomerCustomAttributesResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareupsandbox.com",
-	)
-	endpointURL := baseURL + "/v2/customers/custom-attributes/bulk-upsert"
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-	headers.Set("Content-Type", "application/json")
-
-	var response *squaregosdk.BatchUpsertCustomerCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -402,7 +356,7 @@ func (c *Client) Search(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/customers/search"
 	headers := internal.MergeHeaders(
@@ -441,7 +395,7 @@ func (c *Client) Get(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",
@@ -486,7 +440,7 @@ func (c *Client) Update(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",
@@ -530,7 +484,7 @@ func (c *Client) Delete(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := internal.EncodeURL(
 		baseURL+"/v2/customers/%v",

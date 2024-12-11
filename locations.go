@@ -92,19 +92,6 @@ type LocationsGetRequest struct {
 	LocationID string `json:"-" url:"-"`
 }
 
-type LocationsGetCustomAttributeDefinitionsRequest struct {
-	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
-	VisibilityFilter *VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
-	// The maximum number of results to return in a single paged response. This limit is advisory.
-	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
-	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Limit *int `json:"-" url:"limit,omitempty"`
-	// The cursor returned in the paged response from the previous call to this endpoint.
-	// Provide this cursor to retrieve the next page of results for your original request.
-	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Cursor *string `json:"-" url:"cursor,omitempty"`
-}
-
 // The hours of operation for a location.
 type BusinessHours struct {
 	// The list of time periods during which the business is open. There can be at most 10 periods per day.
@@ -716,77 +703,6 @@ func (g *GetLocationResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", g)
-}
-
-// Represents a [ListLocationCustomAttributeDefinitions](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributeDefinitions) response.
-// Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
-// If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
-type ListLocationCustomAttributeDefinitionsResponse struct {
-	// The retrieved custom attribute definitions. If no custom attribute definitions are found,
-	// Square returns an empty object (`{}`).
-	CustomAttributeDefinitions []*CustomAttributeDefinition `json:"custom_attribute_definitions,omitempty" url:"custom_attribute_definitions,omitempty"`
-	// The cursor to provide in your next call to this endpoint to retrieve the next page of
-	// results for your original request. This field is present only if the request succeeded and
-	// additional results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
-	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) GetCustomAttributeDefinitions() []*CustomAttributeDefinition {
-	if l == nil {
-		return nil
-	}
-	return l.CustomAttributeDefinitions
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) GetCursor() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Cursor
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) GetErrors() []*Error {
-	if l == nil {
-		return nil
-	}
-	return l.Errors
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ListLocationCustomAttributeDefinitionsResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = ListLocationCustomAttributeDefinitionsResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *ListLocationCustomAttributeDefinitionsResponse) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
 }
 
 // Defines the fields that are included in the response body of a request

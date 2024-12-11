@@ -48,7 +48,7 @@ func (c *Client) SearchEvents(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/events"
 	headers := internal.MergeHeaders(
@@ -88,7 +88,7 @@ func (c *Client) DisableEvents(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/events/disable"
 	headers := internal.MergeHeaders(
@@ -124,7 +124,7 @@ func (c *Client) EnableEvents(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/events/enable"
 	headers := internal.MergeHeaders(
@@ -161,7 +161,7 @@ func (c *Client) ListEventTypes(
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
-		"https://connect.squareupsandbox.com",
+		"https://connect.squareup.com",
 	)
 	endpointURL := baseURL + "/v2/events/types"
 	queryParams, err := internal.QueryValues(request)
