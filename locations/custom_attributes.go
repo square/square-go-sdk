@@ -46,6 +46,25 @@ type CustomAttributesGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
+type CustomAttributesListRequest struct {
+	// The ID of the target [location](entity:Location).
+	LocationID string `json:"-" url:"-"`
+	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
+	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	// The maximum number of results to return in a single paged response. This limit is advisory.
+	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
+	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The cursor returned in the paged response from the previous call to this endpoint.
+	// Provide this cursor to retrieve the next page of results for your original request. For more
+	// information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"-" url:"cursor,omitempty"`
+	// Indicates whether to return the [custom attribute definition](entity:CustomAttributeDefinition) in the `definition` field of each
+	// custom attribute. Set this parameter to `true` to get the name and description of each custom
+	// attribute, information about the data type, or other definition details. The default value is `false`.
+	WithDefinitions *bool `json:"-" url:"with_definitions,omitempty"`
+}
+
 type UpdateLocationCustomAttributeDefinitionRequest struct {
 	// The key of the custom attribute definition to update.
 	Key string `json:"-" url:"-"`
