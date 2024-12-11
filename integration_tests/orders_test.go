@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/square/square-go-sdk/orders"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -99,9 +101,9 @@ func TestOrdersAPI(t *testing.T) {
 				"$ref": square.String(emailSchemaUri),
 			},
 		}
-		createAttrResp, err := squareClient.OrderCustomAttributes.CreateOrderCustomAttributeDefinition(
+		createAttrResp, err := squareClient.Orders.CustomAttributeDefinitions.Create(
 			context.Background(),
-			&square.CreateOrderCustomAttributeDefinitionRequest{
+			&orders.CreateOrderCustomAttributeDefinitionRequest{
 				CustomAttributeDefinition: customAttrDefinition,
 			},
 		)
@@ -109,9 +111,9 @@ func TestOrdersAPI(t *testing.T) {
 		assert.NotNil(t, createAttrResp.CustomAttributeDefinition)
 
 		// 2. For the given order, upsert a valid value for the custom attribute.
-		upsertOrderResp, err := squareClient.OrderCustomAttributes.UpsertOrderCustomAttribute(
+		upsertOrderResp, err := squareClient.Orders.CustomAttributes.Upsert(
 			context.Background(),
-			&square.UpsertOrderCustomAttributeRequest{
+			&orders.UpsertOrderCustomAttributeRequest{
 				OrderID:            *createOrderResp.Order.ID,
 				CustomAttributeKey: attrKey,
 				CustomAttribute: &square.CustomAttribute{
@@ -123,9 +125,9 @@ func TestOrdersAPI(t *testing.T) {
 		assert.NotNil(t, upsertOrderResp.CustomAttribute)
 
 		// 3. For the given order, upsert an invalid value for the custom attribute.
-		_, err = squareClient.OrderCustomAttributes.UpsertOrderCustomAttribute(
+		_, err = squareClient.Orders.CustomAttributes.Upsert(
 			context.Background(),
-			&square.UpsertOrderCustomAttributeRequest{
+			&orders.UpsertOrderCustomAttributeRequest{
 				OrderID:            *createOrderResp.Order.ID,
 				CustomAttributeKey: attrKey,
 				CustomAttribute: &square.CustomAttribute{
