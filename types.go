@@ -16979,6 +16979,54 @@ func (d *DeleteLoyaltyRewardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Represents a response from a delete request containing error messages if there are any.
+type DeleteMerchantCustomAttributeDefinitionResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeleteMerchantCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteMerchantCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeleteMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteMerchantCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteMerchantCustomAttributeDefinitionResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteMerchantCustomAttributeDefinitionResponse) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 // Represents a [DeleteMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteMerchantCustomAttributeResponse struct {
@@ -24041,6 +24089,78 @@ func (l *ListLocationCustomAttributeDefinitionsResponse) UnmarshalJSON(data []by
 }
 
 func (l *ListLocationCustomAttributeDefinitionsResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents a [ListLocationCustomAttributes](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributes) response.
+// Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
+// results are available, the `cursor` field is also present along with `custom_attributes`.
+type ListLocationCustomAttributesResponse struct {
+	// The retrieved custom attributes. If `with_definitions` was set to `true` in the request,
+	// the custom attribute definition is returned in the `definition` field of each custom attribute.
+	// If no custom attributes are found, Square returns an empty object (`{}`).
+	CustomAttributes []*CustomAttribute `json:"custom_attributes,omitempty" url:"custom_attributes,omitempty"`
+	// The cursor to use in your next call to this endpoint to retrieve the next page of results
+	// for your original request. This field is present only if the request succeeded and additional
+	// results are available. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListLocationCustomAttributesResponse) GetCustomAttributes() []*CustomAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.CustomAttributes
+}
+
+func (l *ListLocationCustomAttributesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListLocationCustomAttributesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListLocationCustomAttributesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListLocationCustomAttributesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListLocationCustomAttributesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListLocationCustomAttributesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListLocationCustomAttributesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -33014,6 +33134,64 @@ func (r *RetrieveLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// Represents a [RetrieveMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttributeDefinition) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type RetrieveMerchantCustomAttributeDefinitionResponse struct {
+	// The retrieved custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RetrieveMerchantCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if r == nil {
+		return nil
+	}
+	return r.CustomAttributeDefinition
+}
+
+func (r *RetrieveMerchantCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveMerchantCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RetrieveMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveMerchantCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveMerchantCustomAttributeDefinitionResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveMerchantCustomAttributeDefinitionResponse) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Represents a [RetrieveMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeResponse struct {
@@ -38149,6 +38327,64 @@ func (u *UpdateLocationCustomAttributeDefinitionResponse) UnmarshalJSON(data []b
 }
 
 func (u *UpdateLocationCustomAttributeDefinitionResponse) String() string {
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// Represents an [UpdateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-UpdateMerchantCustomAttributeDefinition) response.
+// Either `custom_attribute_definition` or `errors` is present in the response.
+type UpdateMerchantCustomAttributeDefinitionResponse struct {
+	// The updated custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionResponse) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if u == nil {
+		return nil
+	}
+	return u.CustomAttributeDefinition
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateMerchantCustomAttributeDefinitionResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateMerchantCustomAttributeDefinitionResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

@@ -96,3 +96,43 @@ func (c *Client) List(
 	)
 	return pager.GetPage(ctx, request.Cursor)
 }
+
+// Retrieves a specific customer segment as identified by the `segment_id` value.
+func (c *Client) Get(
+	ctx context.Context,
+	request *customers.SegmentsGetRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.GetCustomerSegmentResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/customers/segments/%v",
+		request.SegmentID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.GetCustomerSegmentResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}

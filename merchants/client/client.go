@@ -8,6 +8,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
+	customattributedefinitions "github.com/square/square-go-sdk/merchants/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/merchants/customattributes"
 	option "github.com/square/square-go-sdk/option"
 	http "net/http"
@@ -19,7 +20,8 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	CustomAttributes *customattributes.Client
+	CustomAttributes           *customattributes.Client
+	CustomAttributeDefinitions *customattributedefinitions.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -38,8 +40,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:           options.ToHeader(),
-		CustomAttributes: customattributes.NewClient(opts...),
+		header:                     options.ToHeader(),
+		CustomAttributes:           customattributes.NewClient(opts...),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
 	}
 }
 
