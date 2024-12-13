@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // If an account has more than one OAuth access token for your application, this
 // endpoint revokes all of them, regardless of which token you specify.
 //
-// **Important:** The `Authorization` header for this endpoint must have the
+// __Important:__ The `Authorization` header for this endpoint must have the
 // following format:
 //
 // ```
@@ -105,7 +105,7 @@ func (c *Client) RevokeToken(
 // to the access token and refresh token. You can use the `short_lived` parameter
 // to create an access token that expires in 24 hours.
 //
-// **Note:** OAuth tokens should be encrypted and stored on a secure server.
+// __Note:__ OAuth tokens should be encrypted and stored on a secure server.
 // Application clients should never interact directly with OAuth tokens.
 func (c *Client) ObtainToken(
 	ctx context.Context,
@@ -149,7 +149,7 @@ func (c *Client) ObtainToken(
 //
 // Add the access token to the Authorization header of the request.
 //
-// **Important:** The `Authorization` header you provide to this endpoint must have the following format:
+// __Important:__ The `Authorization` header you provide to this endpoint must have the following format:
 //
 // ```
 // Authorization: Bearer ACCESS_TOKEN

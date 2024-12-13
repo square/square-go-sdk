@@ -19,7 +19,6 @@ type DevicesListRequest struct {
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 	// The order in which results are listed.
-	//
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *SortOrder `json:"-" url:"sort_order,omitempty"`

@@ -570,7 +570,7 @@ func (s *SearchOrdersCustomerFilter) String() string {
 // For each time range, the start time and end time are inclusive. If the end time
 // is absent, it defaults to the time of the first request for the cursor.
 //
-// **Important:** If you use the `DateTimeFilter` in a `SearchOrders` query,
+// __Important:__ If you use the `DateTimeFilter` in a `SearchOrders` query,
 // you must set the `sort_field` in [OrdersSort](entity:SearchOrdersSort)
 // to the same field you filter for. For example, if you set the `CLOSED_AT` field
 // in `DateTimeFilter`, you must set the `sort_field` in `SearchOrdersSort` to
@@ -654,7 +654,7 @@ type SearchOrdersFilter struct {
 	StateFilter *SearchOrdersStateFilter `json:"state_filter,omitempty" url:"state_filter,omitempty"`
 	// Filter for results within a time range.
 	//
-	// **Important:** If you filter for orders by time range, you must set `SearchOrdersSort`
+	// __Important:__ If you filter for orders by time range, you must set `SearchOrdersSort`
 	// to sort by the same field.
 	// [Learn more about filtering orders by time range.](https://developer.squareup.com/docs/orders-api/manage-orders/search-orders#important-note-about-filtering-orders-by-time-range)
 	DateTimeFilter *SearchOrdersDateTimeFilter `json:"date_time_filter,omitempty" url:"date_time_filter,omitempty"`
@@ -942,7 +942,7 @@ func (s *SearchOrdersResponse) String() string {
 type SearchOrdersSort struct {
 	// The field to sort by.
 	//
-	// **Important:** When using a [DateTimeFilter](entity:SearchOrdersFilter),
+	// __Important:__ When using a [DateTimeFilter](entity:SearchOrdersFilter),
 	// `sort_field` must match the timestamp field that the `DateTimeFilter` uses to
 	// filter. For example, if you set your `sort_field` to `CLOSED_AT` and you use a
 	// `DateTimeFilter`, your `DateTimeFilter` must filter for orders by their `CLOSED_AT` date.

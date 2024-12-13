@@ -218,9 +218,10 @@ func (c *Client) Clone(
 // [SearchOrdersQuery](entity:SearchOrdersQuery) object that controls
 // how to sort or filter the results. Your `SearchOrdersQuery` can:
 //
-// Set filter criteria.
-// Set the sort order.
-// Determine whether to return results as complete `Order` objects or as
+//	Set filter criteria.
+//	Set the sort order.
+//	Determine whether to return results as complete `Order` objects or as
+//
 // [OrderEntry](entity:OrderEntry) objects.
 //
 // Note that details for orders processed with Square Point of Sale while in
@@ -310,13 +311,13 @@ func (c *Client) Get(
 //
 // An `UpdateOrder` request requires the following:
 //
-//   - The `order_id` in the endpoint path, identifying the order to update.
-//   - The latest `version` of the order to update.
-//   - The [sparse order](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders#sparse-order-objects)
-//     containing only the fields to update and the version to which the update is
-//     being applied.
-//   - If deleting fields, the [dot notation paths](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders#identifying-fields-to-delete)
-//     identifying the fields to clear.
+// - The `order_id` in the endpoint path, identifying the order to update.
+// - The latest `version` of the order to update.
+// - The [sparse order](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders#sparse-order-objects)
+// containing only the fields to update and the version to which the update is
+// being applied.
+// - If deleting fields, the [dot notation paths](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders#identifying-fields-to-delete)
+// identifying the fields to clear.
 //
 // To pay for an order, see
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
@@ -370,11 +371,11 @@ func (c *Client) Update(
 //
 // To be used with `PayOrder`, a payment must:
 //
-//   - Reference the order by specifying the `order_id` when [creating the payment](api-endpoint:Payments-CreatePayment).
-//     Any approved payments that reference the same `order_id` not specified in the
-//     `payment_ids` is canceled.
-//   - Be approved with [delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture).
-//     Using a delayed capture payment with `PayOrder` completes the approved payment.
+// - Reference the order by specifying the `order_id` when [creating the payment](api-endpoint:Payments-CreatePayment).
+// Any approved payments that reference the same `order_id` not specified in the
+// `payment_ids` is canceled.
+// - Be approved with [delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture).
+// Using a delayed capture payment with `PayOrder` completes the approved payment.
 func (c *Client) Pay(
 	ctx context.Context,
 	request *squaregosdk.PayOrderRequest,

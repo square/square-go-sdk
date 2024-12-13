@@ -305,7 +305,7 @@ type Address struct {
 	// The first line of the address.
 	//
 	// Fields that start with `address_line` provide the address's most specific
-	// details, like street number, street name, and building name. They do _not_
+	// details, like street number, street name, and building name. They do *not*
 	// provide less specific details like city, state/province, or country (these
 	// details are provided in other fields).
 	AddressLine1 *string `json:"address_line_1,omitempty" url:"address_line_1,omitempty"`
@@ -539,15 +539,15 @@ type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequ
 	CustomerID string `json:"customer_id" url:"customer_id"`
 	// The custom attribute to create or update, with following fields:
 	//
-	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
-	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
+	// - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	// account. If the requesting application is not the definition owner, you must provide the qualified key.
 	//
-	//   - `value`. This value must conform to the `schema` specified by the definition.
-	//     For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
+	// - `value`. This value must conform to the `schema` specified by the definition.
+	// For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
 	//
-	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
-	//     control for update operations, include this optional field in the request and set the
-	//     value to the current version of the custom attribute.
+	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// control for update operations, include this optional field in the request and set the
+	// value to the current version of the custom attribute.
 	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
 	// A unique identifier for this individual upsert request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -860,15 +860,15 @@ type BookingCustomAttributeUpsertRequest struct {
 	BookingID string `json:"booking_id" url:"booking_id"`
 	// The custom attribute to create or update, with following fields:
 	//
-	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
-	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
+	// - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	// account. If the requesting application is not the definition owner, you must provide the qualified key.
 	//
-	//   - `value`. This value must conform to the `schema` specified by the definition.
-	//     For more information, see [Value data types](https://developer.squareup.com/docs/booking-custom-attributes-api/custom-attributes#value-data-types).
+	// - `value`. This value must conform to the `schema` specified by the definition.
+	// For more information, see [Value data types](https://developer.squareup.com/docs/booking-custom-attributes-api/custom-attributes#value-data-types).
 	//
-	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
-	//     control for update operations, include this optional field in the request and set the
-	//     value to the current version of the custom attribute.
+	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// control for update operations, include this optional field in the request and set the
+	// value to the current version of the custom attribute.
 	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
 	// A unique identifier for this individual upsert request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -1227,7 +1227,7 @@ func (b *BreakType) String() string {
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
-	// same ID as the corresponding request and contains `booking_id` and `errors` field.
+	// same ID as the corresponding request and contains `booking_id` and  `errors` field.
 	Values map[string]*BookingCustomAttributeDeleteResponse `json:"values,omitempty" url:"values,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1611,7 +1611,7 @@ func (b *BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDelete
 
 // Represents one delete within the bulk operation.
 type BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute struct {
-	// The key of the custom attribute to delete. This key must match the key
+	// The key of the custom attribute to delete.  This key must match the key
 	// of an existing custom attribute definition.
 	Key *string `json:"key,omitempty" url:"key,omitempty"`
 	// The ID of the target [order](entity:Order).
@@ -1671,7 +1671,8 @@ func (b *BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) String() s
 type BulkDeleteOrderCustomAttributesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-	// A map of responses that correspond to individual delete requests. Each response has the same ID
+	//	A map of responses that correspond to individual delete requests. Each response has the same ID
+	//
 	// as the corresponding request and contains either a `custom_attribute` or an `errors` field.
 	Values map[string]*DeleteOrderCustomAttributeResponse `json:"values,omitempty" url:"values,omitempty"`
 
@@ -1791,14 +1792,13 @@ type BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertReque
 	// The ID of the target [location](entity:Location).
 	LocationID string `json:"location_id" url:"location_id"`
 	// The custom attribute to create or update, with following fields:
-	//
-	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
-	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
-	//   - `value`. This value must conform to the `schema` specified by the definition.
-	//     For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types)..
-	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
-	//     control, specify the current version of the custom attribute.
-	//     If this is not important for your application, `version` can be set to -1.
+	// - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	// account. If the requesting application is not the definition owner, you must provide the qualified key.
+	// - `value`. This value must conform to the `schema` specified by the definition.
+	// For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types)..
+	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// control, specify the current version of the custom attribute.
+	// If this is not important for your application, `version` can be set to -1.
 	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
 	// A unique identifier for this individual upsert request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -1993,14 +1993,13 @@ type BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertReque
 	// The ID of the target [merchant](entity:Merchant).
 	MerchantID string `json:"merchant_id" url:"merchant_id"`
 	// The custom attribute to create or update, with following fields:
-	//
-	//   - `key`. This key must match the `key` of a custom attribute definition in the Square seller
-	//     account. If the requesting application is not the definition owner, you must provide the qualified key.
-	//   - `value`. This value must conform to the `schema` specified by the definition.
-	//     For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
-	//   - The version field must match the current version of the custom attribute definition to enable
-	//     [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
-	//     If this is not important for your application, version can be set to -1. For any other values, the request fails with a BAD_REQUEST error.
+	// - `key`. This key must match the `key` of a custom attribute definition in the Square seller
+	// account. If the requesting application is not the definition owner, you must provide the qualified key.
+	// - `value`. This value must conform to the `schema` specified by the definition.
+	// For more information, see [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
+	// - The version field must match the current version of the custom attribute definition to enable
+	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// If this is not important for your application, version can be set to -1. For any other values, the request fails with a BAD_REQUEST error.
 	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
 	// A unique identifier for this individual upsert request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -2192,11 +2191,11 @@ func (b *BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsert
 type BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute struct {
 	// The custom attribute to create or update, with the following fields:
 	//
-	//   - `value`. This value must conform to the `schema` specified by the definition.
-	//     For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
+	// - `value`. This value must conform to the `schema` specified by the definition.
+	// For more information, see [Value data types](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attributes#value-data-types).
 	//
-	//   - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
-	//     control, include this optional field and specify the current version of the custom attribute.
+	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
+	// control, include this optional field and specify the current version of the custom attribute.
 	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -3865,14 +3864,15 @@ type CatalogCustomAttributeDefinition struct {
 	// Required.
 	// See [CatalogCustomAttributeDefinitionType](#type-catalogcustomattributedefinitiontype) for possible values
 	Type CatalogCustomAttributeDefinitionType `json:"type" url:"type"`
-	// The name of this definition for API and seller-facing UI purposes.
+	//	The name of this definition for API and seller-facing UI purposes.
+	//
 	// The name must be unique within the (merchant, application) pair. Required.
 	// May not be empty and may not exceed 255 characters. Can be modified after creation.
 	Name string `json:"name" url:"name"`
 	// Seller-oriented description of the meaning of this Custom Attribute,
 	// any constraints that the seller should observe, etc. May be displayed as a tooltip in Square UIs.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	// **Read only.** Contains information about the application that
+	// __Read only.__ Contains information about the application that
 	// created this custom attribute definition.
 	SourceApplication *SourceApplication `json:"source_application,omitempty" url:"source_application,omitempty"`
 	// The set of `CatalogObject` types that this custom atttribute may be applied to.
@@ -3895,7 +3895,7 @@ type CatalogCustomAttributeDefinition struct {
 	SelectionConfig *CatalogCustomAttributeDefinitionSelectionConfig `json:"selection_config,omitempty" url:"selection_config,omitempty"`
 	// The number of custom attributes that reference this
 	// custom attribute definition. Set by the server in response to a ListCatalog
-	// request with `include_counts` set to `true`. If the actual count is greater
+	// request with `include_counts` set to `true`.  If the actual count is greater
 	// than 100, `custom_attribute_usage_count` will be set to `100`.
 	CustomAttributeUsageCount *int `json:"custom_attribute_usage_count,omitempty" url:"custom_attribute_usage_count,omitempty"`
 	// The name of the desired custom attribute key that can be used to access
@@ -4336,7 +4336,7 @@ func (c CatalogCustomAttributeDefinitionType) Ptr() *CatalogCustomAttributeDefin
 type CatalogCustomAttributeValue struct {
 	// The name of the custom attribute.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// The string value of the custom attribute. Populated if `type` = `STRING`.
+	// The string value of the custom attribute.  Populated if `type` = `STRING`.
 	StringValue *string `json:"string_value,omitempty" url:"string_value,omitempty"`
 	// The id of the [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition) this value belongs to.
 	CustomAttributeDefinitionID *string `json:"custom_attribute_definition_id,omitempty" url:"custom_attribute_definition_id,omitempty"`
@@ -4856,7 +4856,7 @@ type CatalogItem struct {
 	// The item's description. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
 	//
 	// Deprecated at 2022-07-20, this field is planned to retire in 6 months. You should migrate to use `description_html` to set the description
-	// of the [CatalogItem](entity:CatalogItem) instance. The `description` and `description_html` field values are kept in sync. If you try to
+	// of the [CatalogItem](entity:CatalogItem) instance.  The `description` and `description_html` field values are kept in sync. If you try to
 	// set the both fields, the `description_html` text value overwrites the `description` value. Updates in one field are also reflected in the other,
 	// except for when you use an early version before Square API 2022-07-20 and `description_html` is set to blank, setting the `description` value to null
 	// does not nullify `description_html`.
@@ -4896,7 +4896,7 @@ type CatalogItem struct {
 	ProductType *CatalogItemProductType `json:"product_type,omitempty" url:"product_type,omitempty"`
 	// If `false`, the Square Point of Sale app will present the `CatalogItem`'s
 	// details screen immediately, allowing the merchant to choose `CatalogModifier`s
-	// before adding the item to the cart. This is the default behavior.
+	// before adding the item to the cart.  This is the default behavior.
 	//
 	// If `true`, the Square Point of Sale app will immediately add the item to the cart with the pre-selected
 	// modifiers, and merchants can edit modifiers by drilling down onto the item's details.
@@ -4924,9 +4924,8 @@ type CatalogItem struct {
 	// unsupported HTML elements or attributes are ignored.
 	//
 	// Supported HTML elements include:
-	//
 	// - `a`: Link. Supports linking to website URLs, email address, and telephone numbers.
-	// - `b`, `strong`: Bold text
+	// - `b`, `strong`:  Bold text
 	// - `br`: Line break
 	// - `code`: Computer code
 	// - `div`: Section
@@ -4939,7 +4938,6 @@ type CatalogItem struct {
 	// - `u`: Underline
 	//
 	// Supported HTML attributes include:
-	//
 	// - `align`: Alignment of the text content
 	// - `href`: Link destination
 	// - `rel`: Relationship between link's target and source
@@ -5501,7 +5499,7 @@ type CatalogItemModifierListInfo struct {
 	// If 0 or larger, the smallest number of `CatalogModifier`s that must be selected from this `CatalogModifierList`.
 	// The default value is `-1`.
 	//
-	// When `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
+	// When  `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
 	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that from zero to the maximum number of modifiers of
 	// the `CatalogModifierList` can be selected from the `CatalogModifierList`.
 	//
@@ -5512,7 +5510,7 @@ type CatalogItemModifierListInfo struct {
 	// If 0 or larger, the largest number of `CatalogModifier`s that can be selected from this `CatalogModifierList`.
 	// The default value is `-1`.
 	//
-	// When `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
+	// When  `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
 	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that from zero to the maximum number of modifiers of
 	// the `CatalogModifierList` can be selected from the `CatalogModifierList`.
 	//
@@ -5692,7 +5690,8 @@ func (c *CatalogItemOption) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// An option that can be assigned to an item.
+//	An option that can be assigned to an item.
+//
 // For example, a t-shirt item may offer a color option or a size option.
 type CatalogItemOptionForItem struct {
 	// The unique id of the item option, used to form the dimensions of the item option matrix in a specified order.
@@ -5957,7 +5956,7 @@ type CatalogItemVariation struct {
 	Sku *string `json:"sku,omitempty" url:"sku,omitempty"`
 	// The universal product code (UPC) of the item variation, if any. This is a searchable attribute for use in applicable query filters.
 	//
-	// The value of this attribute should be a number of 12-14 digits long. This restriction is enforced on the Square Seller Dashboard,
+	// The value of this attribute should be a number of 12-14 digits long.  This restriction is enforced on the Square Seller Dashboard,
 	// Square Point of Sale or Retail Point of Sale apps, where this attribute shows in the GTIN field. If a non-compliant UPC value is assigned
 	// to this attribute using the API, the value is not editable on the Seller Dashboard, Square Point of Sale or Retail Point of Sale apps
 	// unless it is updated to fit the expected format.
@@ -5990,7 +5989,7 @@ type CatalogItemVariation struct {
 	// If the `CatalogItem` that owns this item variation is of type
 	// `APPOINTMENTS_SERVICE`, then this is the duration of the service in milliseconds. For
 	// example, a 30 minute appointment would have the value `1800000`, which is equal to
-	// 30 (minutes) _ 60 (seconds per minute) _ 1000 (milliseconds per second).
+	// 30 (minutes) * 60 (seconds per minute) * 1000 (milliseconds per second).
 	ServiceDuration *int64 `json:"service_duration,omitempty" url:"service_duration,omitempty"`
 	// If the `CatalogItem` that owns this item variation is of type
 	// `APPOINTMENTS_SERVICE`, a bool representing whether this service is available for booking.
@@ -6274,7 +6273,7 @@ func (c *CatalogMeasurementUnit) String() string {
 
 // A modifier applicable to items at the time of sale. An example of a modifier is a Cheese add-on to a Burger item.
 type CatalogModifier struct {
-	// The modifier name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// The modifier name.  This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// The modifier price.
 	PriceMoney *Money `json:"price_money,omitempty" url:"price_money,omitempty"`
@@ -6393,7 +6392,6 @@ type CatalogModifierList struct {
 	// A non-empty list of `CatalogModifier` objects to be included in the `CatalogModifierList`,
 	// for non text-based modifiers when the `modifier_type` attribute is `LIST`. Each element of this list
 	// is a `CatalogObject` instance of the `MODIFIER` type, containing the following attributes:
-	//
 	// ```
 	// {
 	// "id": "{{catalog_modifier_id}}",
@@ -6407,7 +6405,7 @@ type CatalogModifierList struct {
 	ImageIDs []string `json:"image_ids,omitempty" url:"image_ids,omitempty"`
 	// The type of the modifier.
 	//
-	// When this `modifier_type` value is `TEXT`, the `CatalogModifierList` represents a text-based modifier.
+	// When this `modifier_type` value is `TEXT`,  the `CatalogModifierList` represents a text-based modifier.
 	// When this `modifier_type` value is `LIST`, the `CatalogModifierList` contains a list of `CatalogModifier` objects.
 	// See [CatalogModifierListModifierType](#type-catalogmodifierlistmodifiertype) for possible values
 	ModifierType *CatalogModifierListModifierType `json:"modifier_type,omitempty" url:"modifier_type,omitempty"`
@@ -7031,6 +7029,9 @@ func (c *CatalogObject) UnmarshalJSON(data []byte) error {
 }
 
 func (c CatalogObject) MarshalJSON() ([]byte, error) {
+	if err := c.validate(); err != nil {
+		return nil, err
+	}
 	if c.Item != nil {
 		return internal.MarshalJSONWithExtraProperty(c.Item, "type", "ITEM")
 	}
@@ -7221,6 +7222,112 @@ func (c *CatalogObject) Accept(visitor CatalogObjectVisitor) error {
 		return visitor.VisitSubscriptionProduct(c.SubscriptionProduct)
 	}
 	return fmt.Errorf("type %T does not define a non-empty union type", c)
+}
+
+func (c *CatalogObject) validate() error {
+	if c == nil {
+		return fmt.Errorf("type %T is nil", c)
+	}
+	var fields []string
+	if c.Item != nil {
+		fields = append(fields, "ITEM")
+	}
+	if c.Image != nil {
+		fields = append(fields, "IMAGE")
+	}
+	if c.Category != nil {
+		fields = append(fields, "CATEGORY")
+	}
+	if c.ItemVariation != nil {
+		fields = append(fields, "ITEM_VARIATION")
+	}
+	if c.Tax != nil {
+		fields = append(fields, "TAX")
+	}
+	if c.Discount != nil {
+		fields = append(fields, "DISCOUNT")
+	}
+	if c.ModifierList != nil {
+		fields = append(fields, "MODIFIER_LIST")
+	}
+	if c.Modifier != nil {
+		fields = append(fields, "MODIFIER")
+	}
+	if c.DiningOption != nil {
+		fields = append(fields, "DINING_OPTION")
+	}
+	if c.TaxExemption != nil {
+		fields = append(fields, "TAX_EXEMPTION")
+	}
+	if c.ServiceCharge != nil {
+		fields = append(fields, "SERVICE_CHARGE")
+	}
+	if c.PricingRule != nil {
+		fields = append(fields, "PRICING_RULE")
+	}
+	if c.ProductSet != nil {
+		fields = append(fields, "PRODUCT_SET")
+	}
+	if c.TimePeriod != nil {
+		fields = append(fields, "TIME_PERIOD")
+	}
+	if c.MeasurementUnit != nil {
+		fields = append(fields, "MEASUREMENT_UNIT")
+	}
+	if c.SubscriptionPlan != nil {
+		fields = append(fields, "SUBSCRIPTION_PLAN")
+	}
+	if c.ItemOption != nil {
+		fields = append(fields, "ITEM_OPTION")
+	}
+	if c.ItemOptionVal != nil {
+		fields = append(fields, "ITEM_OPTION_VAL")
+	}
+	if c.CustomAttributeDefinition != nil {
+		fields = append(fields, "CUSTOM_ATTRIBUTE_DEFINITION")
+	}
+	if c.QuickAmountsSettings != nil {
+		fields = append(fields, "QUICK_AMOUNTS_SETTINGS")
+	}
+	if c.Component != nil {
+		fields = append(fields, "COMPONENT")
+	}
+	if c.Composition != nil {
+		fields = append(fields, "COMPOSITION")
+	}
+	if c.Resource != nil {
+		fields = append(fields, "RESOURCE")
+	}
+	if c.CheckoutLink != nil {
+		fields = append(fields, "CHECKOUT_LINK")
+	}
+	if c.Address != nil {
+		fields = append(fields, "ADDRESS")
+	}
+	if c.SubscriptionProduct != nil {
+		fields = append(fields, "SUBSCRIPTION_PRODUCT")
+	}
+	if len(fields) == 0 {
+		if c.Type != "" {
+			return fmt.Errorf("type %T defines a discriminant set to %q but the field is not set", c, c.Type)
+		}
+		return fmt.Errorf("type %T is empty", c)
+	}
+	if len(fields) > 1 {
+		return fmt.Errorf("type %T defines values for %s, but only one value is allowed", c, fields)
+	}
+	if c.Type != "" {
+		field := fields[0]
+		if c.Type != field {
+			return fmt.Errorf(
+				"type %T defines a discriminant set to %q, but it does not match the %T field; either remove or update the discriminant to match",
+				c,
+				c.Type,
+				c,
+			)
+		}
+	}
+	return nil
 }
 
 type CatalogObjectAddress struct {
@@ -11799,7 +11906,7 @@ type CatalogPricingRule struct {
 	// Unique ID for the `CatalogProductSet` that will be matched by this rule. A match rule
 	// matches within the entire cart, and can match multiple times. This field will always be set.
 	MatchProductsID *string `json:"match_products_id,omitempty" url:"match_products_id,omitempty"`
-	// **Deprecated**: Please use the `exclude_products_id` field to apply
+	// __Deprecated__: Please use the `exclude_products_id` field to apply
 	// an exclude set instead. Exclude sets allow better control over quantity
 	// ranges and offer more flexibility for which matched items receive a discount.
 	//
@@ -12000,7 +12107,8 @@ type CatalogProductSet struct {
 	// User-defined name for the product set. For example, "Clearance Items"
 	// or "Winter Sale Items".
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// Unique IDs for any `CatalogObject` included in this product set. Any
+	//	Unique IDs for any `CatalogObject` included in this product set. Any
+	//
 	// number of these catalog objects can be in an order for a pricing rule to apply.
 	//
 	// This can be used with `product_ids_all` in a parent `CatalogProductSet` to
@@ -12325,7 +12433,7 @@ type CatalogStockConversion struct {
 	StockableItemVariationID string `json:"stockable_item_variation_id" url:"stockable_item_variation_id"`
 	// The quantity of the stockable item variation (as identified by `stockable_item_variation_id`)
 	// equivalent to the non-stockable item variation quantity (as specified in `nonstockable_quantity`)
-	// as defined by this stock conversion. It accepts a decimal number in a string format that can take
+	// as defined by this stock conversion.  It accepts a decimal number in a string format that can take
 	// up to 10 digits before the decimal point and up to 5 digits after the decimal point.
 	StockableQuantity string `json:"stockable_quantity" url:"stockable_quantity"`
 	// The converted equivalent quantity of the non-stockable [CatalogItemVariation](entity:CatalogItemVariation)
@@ -15729,7 +15837,7 @@ type CustomAttribute struct {
 	// format application_id:simple key.
 	//
 	// The value for a simple key can contain up to 60 alphanumeric characters, periods (.),
-	// underscores (\_), and hyphens (-).
+	// underscores (_), and hyphens (-).
 	Key   *string     `json:"key,omitempty" url:"key,omitempty"`
 	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	// Read only. The current version of the custom attribute. This field is incremented when the custom attribute is changed.
@@ -15849,7 +15957,7 @@ type CustomAttributeDefinition struct {
 	// format application_id:simple key.
 	//
 	// The value for a simple key can contain up to 60 alphanumeric characters, periods (.),
-	// underscores (\_), and hyphens (-).
+	// underscores (_), and hyphens (-).
 	//
 	// This field can not be changed
 	// after the custom attribute definition is created. This field is required when creating
@@ -18982,7 +19090,7 @@ type FulfillmentDeliveryDetails struct {
 	Note *string `json:"note,omitempty" url:"note,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
 	// indicates when the seller completed the fulfillment.
-	// This field is automatically set when fulfillment `state` changes to `COMPLETED`.
+	// This field is automatically set when  fulfillment `state` changes to `COMPLETED`.
 	// The timestamp must be in RFC 3339 format (for example, "2016-09-04T23:59:33.123Z").
 	CompletedAt *string `json:"completed_at,omitempty" url:"completed_at,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
@@ -19816,7 +19924,7 @@ type FulfillmentShipmentDetails struct {
 	// (for example, "2016-09-04T23:59:33.123Z").
 	PlacedAt *string `json:"placed_at,omitempty" url:"placed_at,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
-	// indicating when this fulfillment was moved to the `RESERVED` state, which indicates that preparation
+	// indicating when this fulfillment was moved to the `RESERVED` state, which  indicates that preparation
 	// of this shipment has begun. The timestamp must be in RFC 3339 format (for example, "2016-09-04T23:59:33.123Z").
 	InProgressAt *string `json:"in_progress_at,omitempty" url:"in_progress_at,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
@@ -22395,7 +22503,7 @@ type GiftCardActivityRedeem struct {
 	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
 	// The status of the gift card redemption. Gift cards redeemed from Square Point of Sale or the
 	// Square Seller Dashboard use a two-state process: `PENDING`
-	// to `COMPLETED` or `PENDING` to `CANCELED`. Gift cards redeemed using the Gift Card Activities API
+	// to `COMPLETED` or `PENDING` to  `CANCELED`. Gift cards redeemed using the Gift Card Activities API
 	// always have a `COMPLETED` status.
 	// See [Status](#type-status) for possible values
 	Status *GiftCardActivityRedeemStatus `json:"status,omitempty" url:"status,omitempty"`
@@ -24583,7 +24691,8 @@ type ListPaymentLinksResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The list of payment links.
 	PaymentLinks []*PaymentLink `json:"payment_links,omitempty" url:"payment_links,omitempty"`
-	// When a response is truncated, it includes a cursor that you can use in a subsequent request
+	//	When a response is truncated, it includes a cursor that you can use in a subsequent request
+	//
 	// to retrieve the next set of gift cards. If a cursor is not present, this is the final response.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
@@ -26675,7 +26784,7 @@ func (l *LoyaltyProgramAccrualRuleVisitData) String() string {
 // Describes when the loyalty program expires.
 type LoyaltyProgramExpirationPolicy struct {
 	// The number of months before points expire, in `P[n]M` RFC 3339 duration format. For example, a value of `P12M` represents a duration of 12 months.
-	// Points are valid through the last day of the month in which they are scheduled to expire. For example, with a `P12M` duration, points earned on July 6, 2020 expire on August 1, 2021.
+	// Points are valid through the last day of the month in which they are scheduled to expire. For example, with a  `P12M` duration, points earned on July 6, 2020 expire on August 1, 2021.
 	ExpirationDuration string `json:"expiration_duration" url:"expiration_duration"`
 
 	extraProperties map[string]interface{}
@@ -27445,10 +27554,9 @@ type LoyaltyPromotionIncentivePointsMultiplierData struct {
 	// DEPRECATED at version 2023-08-16. Replaced by the `multiplier` field.
 	//
 	// One of the following is required when specifying a points multiplier:
-	//
-	//   - (Recommended) The `multiplier` field.
-	//   - This deprecated `points_multiplier` field. If provided in the request, Square also returns `multiplier`
-	//     with the equivalent value.
+	// - (Recommended) The `multiplier` field.
+	// - This deprecated `points_multiplier` field. If provided in the request, Square also returns `multiplier`
+	// with the equivalent value.
 	PointsMultiplier *int `json:"points_multiplier,omitempty" url:"points_multiplier,omitempty"`
 	// The multiplier used to calculate the number of points earned each time the promotion is triggered,
 	// specified as a string representation of a decimal. Square supports multipliers up to 10x, with three
@@ -27458,10 +27566,9 @@ type LoyaltyPromotionIncentivePointsMultiplierData struct {
 	// Fractional points are dropped.
 	//
 	// One of the following is required when specifying a points multiplier:
-	//
-	//   - (Recommended) This `multiplier` field.
-	//   - The deprecated `points_multiplier` field. If provided in the request, Square also returns `multiplier`
-	//     with the equivalent value.
+	// - (Recommended) This `multiplier` field.
+	// - The deprecated `points_multiplier` field. If provided in the request, Square also returns `multiplier`
+	// with the equivalent value.
 	Multiplier *string `json:"multiplier,omitempty" url:"multiplier,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -28289,7 +28396,7 @@ type Money struct {
 	// in cents. Monetary amounts can be positive or negative. See the specific
 	// field description to determine the meaning of the sign in a particular case.
 	Amount *int64 `json:"amount,omitempty" url:"amount,omitempty"`
-	// The type of currency, in **ISO 4217 format**. For example, the currency
+	// The type of currency, in __ISO 4217 format__. For example, the currency
 	// code for US dollars is `USD`.
 	//
 	// See [Currency](entity:Currency) for possible values.
@@ -28378,7 +28485,7 @@ type Order struct {
 	//
 	// On reads, each tax in the list includes the total amount of that tax applied to the order.
 	//
-	// **IMPORTANT**: If `LINE_ITEM` scope is set on any taxes in this field, using the deprecated
+	// __IMPORTANT__: If `LINE_ITEM` scope is set on any taxes in this field, using the deprecated
 	// `line_items.taxes` field results in an error. Use `line_items.applied_taxes`
 	// instead.
 	Taxes []*OrderLineItemTax `json:"taxes,omitempty" url:"taxes,omitempty"`
@@ -28389,7 +28496,7 @@ type Order struct {
 	// For discounts with `ORDER` scope, the server generates an `OrderLineItemAppliedDiscount`
 	// for every line item.
 	//
-	// **IMPORTANT**: If `LINE_ITEM` scope is set on any discounts in this field, using the deprecated
+	// __IMPORTANT__: If `LINE_ITEM` scope is set on any discounts in this field, using the deprecated
 	// `line_items.discounts` field results in an error. Use `line_items.applied_discounts`
 	// instead.
 	Discounts []*OrderLineItemDiscount `json:"discounts,omitempty" url:"discounts,omitempty"`
@@ -28433,7 +28540,7 @@ type Order struct {
 	// Entries written by applications are private and can only be read or modified by the same
 	// application.
 	//
-	// For more information, see [Metadata](https://developer.squareup.com/docs/build-basics/metadata).
+	// For more information, see  [Metadata](https://developer.squareup.com/docs/build-basics/metadata).
 	Metadata map[string]*string `json:"metadata,omitempty" url:"metadata,omitempty"`
 	// The timestamp for when the order was created, at server side, in RFC 3339 format (for example, "2016-09-04T23:59:33.123Z").
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
@@ -28738,9 +28845,9 @@ type OrderLineItem struct {
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// The count, or measurement, of a line item being purchased:
 	//
-	// If `quantity` is a whole number, and `quantity_unit` is not specified, then `quantity` denotes an item count. For example: `3` apples.
+	// If `quantity` is a whole number, and `quantity_unit` is not specified, then `quantity` denotes an item count.  For example: `3` apples.
 	//
-	// If `quantity` is a whole or decimal number, and `quantity_unit` is also specified, then `quantity` denotes a measurement. For example: `2.25` pounds of broccoli.
+	// If `quantity` is a whole or decimal number, and `quantity_unit` is also specified, then `quantity` denotes a measurement.  For example: `2.25` pounds of broccoli.
 	//
 	// For more information, see [Specify item quantity and measurement unit](https://developer.squareup.com/docs/orders-api/create-orders#specify-item-quantity-and-measurement-unit).
 	//
@@ -29571,7 +29678,7 @@ type OrderLineItemModifier struct {
 	// Entries written by applications are private and can only be read or modified by the same
 	// application.
 	//
-	// For more information, see [Metadata](https://developer.squareup.com/docs/build-basics/metadata).
+	// For more information, see  [Metadata](https://developer.squareup.com/docs/build-basics/metadata).
 	Metadata map[string]*string `json:"metadata,omitempty" url:"metadata,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -29911,8 +30018,8 @@ type OrderLineItemTax struct {
 	Metadata map[string]*string `json:"metadata,omitempty" url:"metadata,omitempty"`
 	// The amount of money applied to the order by the tax.
 	//
-	//   - For percentage-based taxes, `applied_money` is the money
-	//     calculated using the percentage.
+	// - For percentage-based taxes, `applied_money` is the money
+	// calculated using the percentage.
 	AppliedMoney *Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
 	// Indicates the level at which the tax applies. For `ORDER` scoped taxes,
 	// Square generates references in `applied_taxes` on all order line items that do
@@ -30640,7 +30747,7 @@ type OrderReturnLineItem struct {
 	// The price is calculated as `base_price_money` multiplied by `quantity` and
 	// does not include modifiers.
 	VariationTotalPriceMoney *Money `json:"variation_total_price_money,omitempty" url:"variation_total_price_money,omitempty"`
-	// The gross return amount of money calculated as (item base price + modifiers price) \* quantity.
+	// The gross return amount of money calculated as (item base price + modifiers price) * quantity.
 	GrossReturnMoney *Money `json:"gross_return_money,omitempty" url:"gross_return_money,omitempty"`
 	// The total amount of tax money to return for the line item.
 	TotalTaxMoney *Money `json:"total_tax_money,omitempty" url:"total_tax_money,omitempty"`
@@ -30993,7 +31100,7 @@ type OrderReturnServiceCharge struct {
 	AppliedMoney *Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
 	// The total amount of money to collect for the service charge.
 	//
-	// **NOTE**: If an inclusive tax is applied to the service charge, `total_money`
+	// __NOTE__: If an inclusive tax is applied to the service charge, `total_money`
 	// does not equal `applied_money` plus `total_tax_money` because the inclusive
 	// tax amount is already included in both `applied_money` and `total_tax_money`.
 	TotalMoney *Money `json:"total_money,omitempty" url:"total_money,omitempty"`
@@ -31300,7 +31407,8 @@ func (o *OrderReturnTax) String() string {
 type OrderReturnTip struct {
 	// A unique ID that identifies the tip only within this order.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
-	// ## The amount of tip being returned
+	// The amount of tip being returned
+	// --
 	AppliedMoney *Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
 	// The tender `uid` from the order that contains the original application of this tip.
 	SourceTenderUID *string `json:"source_tender_uid,omitempty" url:"source_tender_uid,omitempty"`
@@ -31518,13 +31626,13 @@ type OrderServiceCharge struct {
 	// The amount of money applied to the order by the service charge,
 	// including any inclusive tax amounts, as calculated by Square.
 	//
-	//   - For fixed-amount service charges, `applied_money` is equal to `amount_money`.
-	//   - For percentage-based service charges, `applied_money` is the money
-	//     calculated using the percentage.
+	// - For fixed-amount service charges, `applied_money` is equal to `amount_money`.
+	// - For percentage-based service charges, `applied_money` is the money
+	// calculated using the percentage.
 	AppliedMoney *Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
 	// The total amount of money to collect for the service charge.
 	//
-	// **Note**: If an inclusive tax is applied to the service charge,
+	// __Note__: If an inclusive tax is applied to the service charge,
 	// `total_money` does not equal `applied_money` plus `total_tax_money`
 	// because the inclusive tax amount is already included in both
 	// `applied_money` and `total_tax_money`.
@@ -32129,7 +32237,6 @@ type PaymentOptions struct {
 	// Note: This feature is only supported for card payments. This parameter can only be set for a delayed
 	// capture payment (`autocomplete=false`).
 	// Default:
-	//
 	// - Card-present payments: "PT36H" (36 hours) from the creation time.
 	// - Card-not-present payments: "P7D" (7 days) from the creation time.
 	DelayDuration *string `json:"delay_duration,omitempty" url:"delay_duration,omitempty"`
@@ -32709,7 +32816,7 @@ type Refund struct {
 	// or `FAILED`).
 	// See [RefundStatus](#type-refundstatus) for possible values
 	Status RefundStatus `json:"status" url:"status"`
-	// The amount of Square processing fee money refunded to the _merchant_.
+	// The amount of Square processing fee money refunded to the *merchant*.
 	ProcessingFeeMoney *Money `json:"processing_fee_money,omitempty" url:"processing_fee_money,omitempty"`
 	// Additional recipients (other than the merchant) receiving a portion of this refund.
 	// For example, fees assessed on a refund of a purchase by a third party integration.
@@ -34947,13 +35054,13 @@ func (s SortOrder) Ptr() *SortOrder {
 
 // Represents information about the application used to generate a change.
 type SourceApplication struct {
-	// **Read only** The [product](entity:Product) type of the application.
+	// __Read only__ The [product](entity:Product) type of the application.
 	// See [Product](#type-product) for possible values
 	Product *Product `json:"product,omitempty" url:"product,omitempty"`
-	// **Read only** The Square-assigned ID of the application. This field is used only if the
+	// __Read only__ The Square-assigned ID of the application. This field is used only if the
 	// [product](entity:Product) type is `EXTERNAL_API`.
 	ApplicationID *string `json:"application_id,omitempty" url:"application_id,omitempty"`
-	// **Read only** The display name of the application
+	// __Read only__ The display name of the application
 	// (for example, `"Custom Application"` or `"Square POS 4.74 for Android"`).
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 
@@ -36701,10 +36808,9 @@ func (t *TerminalActionQueryFilter) String() string {
 
 type TerminalActionQuerySort struct {
 	// The order in which results are listed.
-	//
-	//   - `ASC` - Oldest to newest.
-	//   - `DESC` - Newest to oldest (default).
-	//     See [SortOrder](#type-sortorder) for possible values
+	// - `ASC` - Oldest to newest.
+	// - `DESC` - Newest to oldest (default).
+	// See [SortOrder](#type-sortorder) for possible values
 	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -37485,7 +37591,6 @@ func (t *TerminalRefundQueryFilter) String() string {
 
 type TerminalRefundQuerySort struct {
 	// The order in which results are listed.
-	//
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *string `json:"sort_order,omitempty" url:"sort_order,omitempty"`

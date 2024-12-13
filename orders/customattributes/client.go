@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Deletes order [custom attributes](entity:CustomAttribute) as a bulk operation.
 //
 // Use this endpoint to delete one or more custom attributes from one or more orders.
-// A custom attribute is based on a custom attribute definition in a Square seller account. (To create a
+// A custom attribute is based on a custom attribute definition in a Square seller account.  (To create a
 // custom attribute definition, use the [CreateOrderCustomAttributeDefinition](api-endpoint:OrderCustomAttributes-CreateOrderCustomAttributeDefinition) endpoint.)
 //
 // This `BulkDeleteOrderCustomAttributes` endpoint accepts a map of 1 to 25 individual delete
@@ -95,7 +95,7 @@ func (c *Client) BatchDelete(
 // Creates or updates order [custom attributes](entity:CustomAttribute) as a bulk operation.
 //
 // Use this endpoint to delete one or more custom attributes from one or more orders.
-// A custom attribute is based on a custom attribute definition in a Square seller account. (To create a
+// A custom attribute is based on a custom attribute definition in a Square seller account.  (To create a
 // custom attribute definition, use the [CreateOrderCustomAttributeDefinition](api-endpoint:OrderCustomAttributes-CreateOrderCustomAttributeDefinition) endpoint.)
 //
 // This `BulkUpsertOrderCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert

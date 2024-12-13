@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 // Creates a loyalty reward. In the process, the endpoint does following:
 //
-//   - Uses the `reward_tier_id` in the request to determine the number of points
-//     to lock for this reward.
-//   - If the request includes `order_id`, it adds the reward and related discount to the order.
+// - Uses the `reward_tier_id` in the request to determine the number of points
+// to lock for this reward.
+// - If the request includes `order_id`, it adds the reward and related discount to the order.
 //
 // After a reward is created, the points are locked and
 // not available for the buyer to redeem another reward.
@@ -86,7 +86,7 @@ func (c *Client) Create(
 }
 
 // Searches for loyalty rewards. This endpoint accepts a request with no query filters and returns results for all loyalty accounts.
-// If you include a `query` object, `loyalty_account_id` is required and `status` is optional.
+// If you include a `query` object, `loyalty_account_id` is required and `status` is  optional.
 //
 // If you know a reward ID, use the
 // [RetrieveLoyaltyReward](api-endpoint:Loyalty-RetrieveLoyaltyReward) endpoint.
@@ -172,11 +172,11 @@ func (c *Client) Get(
 
 // Deletes a loyalty reward by doing the following:
 //
-//   - Returns the loyalty points back to the loyalty account.
-//   - If an order ID was specified when the reward was created
-//     (see [CreateLoyaltyReward](api-endpoint:Loyalty-CreateLoyaltyReward)),
-//     it updates the order by removing the reward and related
-//     discounts.
+// - Returns the loyalty points back to the loyalty account.
+// - If an order ID was specified when the reward was created
+// (see [CreateLoyaltyReward](api-endpoint:Loyalty-CreateLoyaltyReward)),
+// it updates the order by removing the reward and related
+// discounts.
 //
 // You cannot delete a reward that has reached the terminal state (REDEEMED).
 func (c *Client) Delete(

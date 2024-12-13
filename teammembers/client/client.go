@@ -44,7 +44,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 // Creates a single `TeamMember` object. The `TeamMember` object is returned on successful creates.
 // You must provide the following values in your request to this endpoint:
-//
 // - `given_name`
 // - `family_name`
 //
@@ -176,7 +175,6 @@ func (c *Client) BatchUpdate(
 
 // Returns a paginated list of `TeamMember` objects for a business.
 // The list can be filtered by the following:
-//
 // - location IDs
 // - `status`
 func (c *Client) Search(

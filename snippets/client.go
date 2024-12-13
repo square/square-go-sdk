@@ -42,7 +42,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 //
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
-// **Note:** Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+// __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Get(
 	ctx context.Context,
 	request *squaregosdk.SnippetsGetRequest,
@@ -87,7 +87,7 @@ func (c *Client) Get(
 //
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
-// **Note:** Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+// __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *squaregosdk.UpsertSnippetRequest,
@@ -133,7 +133,7 @@ func (c *Client) Upsert(
 //
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
-// **Note:** Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+// __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Delete(
 	ctx context.Context,
 	request *squaregosdk.SnippetsDeleteRequest,

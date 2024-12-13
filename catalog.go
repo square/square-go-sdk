@@ -156,7 +156,7 @@ type CatalogListRequest struct {
 	Types *string `json:"-" url:"types,omitempty"`
 	// The specific version of the catalog objects to be included in the response.
 	// This allows you to retrieve historical versions of objects. The specified version value is matched against
-	// the [CatalogObject](entity:CatalogObject)s' `version` attribute. If not included, results will be from the
+	// the [CatalogObject](entity:CatalogObject)s' `version` attribute.  If not included, results will be from the
 	// current version of the catalog.
 	CatalogVersion *int64 `json:"-" url:"catalog_version,omitempty"`
 }
@@ -712,7 +712,6 @@ func (c *CatalogObjectBatch) String() string {
 //
 // Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects).
 // Any combination of the following types may be used together:
-//
 // - [exact_query](entity:CatalogQueryExact)
 // - [prefix_query](entity:CatalogQueryPrefix)
 // - [range_query](entity:CatalogQueryRange)
@@ -725,8 +724,7 @@ func (c *CatalogObjectBatch) String() string {
 // Searchable attributes are listed as follows, along their parent types that can be searched for with applicable query filters.
 //
 // Searchable attribute and objects queryable by searchable attributes:
-//
-// - `name`: `CatalogItem`, `CatalogItemVariation`, `CatalogCategory`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, `CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
+// - `name`:  `CatalogItem`, `CatalogItemVariation`, `CatalogCategory`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, `CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
 // - `description`: `CatalogItem`, `CatalogItemOptionValue`
 // - `abbreviation`: `CatalogItem`
 // - `upc`: `CatalogItemVariation`
@@ -1439,14 +1437,14 @@ type CustomAttributeFilter struct {
 	// Exactly one of `custom_attribute_definition_id` or `key` must be specified.
 	Key *string `json:"key,omitempty" url:"key,omitempty"`
 	// A query expression to filter items or item variations by matching their custom attributes'
-	// `string_value` property value against the specified text.
+	// `string_value`  property value against the specified text.
 	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
 	StringFilter *string `json:"string_filter,omitempty" url:"string_filter,omitempty"`
 	// A query expression to filter items or item variations with their custom attributes
 	// containing a number value within the specified range.
 	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
 	NumberFilter *Range `json:"number_filter,omitempty" url:"number_filter,omitempty"`
-	// A query expression to filter items or item variations by matching their custom attributes'
+	// A query expression to filter items or item variations by matching  their custom attributes'
 	// `selection_uid_values` values against the specified selection uids.
 	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
 	SelectionUIDsFilter []string `json:"selection_uids_filter,omitempty" url:"selection_uids_filter,omitempty"`

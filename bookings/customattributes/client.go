@@ -45,8 +45,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *bookings.BulkDeleteBookingCustomAttributesRequest,
@@ -90,8 +90,8 @@ func (c *Client) BatchDelete(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *bookings.BulkUpsertBookingCustomAttributesRequest,
@@ -249,8 +249,8 @@ func (c *Client) Get(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *bookings.UpsertBookingCustomAttributeRequest,
@@ -298,8 +298,8 @@ func (c *Client) Upsert(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) Delete(
 	ctx context.Context,
 	request *bookings.CustomAttributesDeleteRequest,

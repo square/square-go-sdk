@@ -82,10 +82,10 @@ type ObtainTokenResponse struct {
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
 	// The ID of the authorizing merchant's business.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
-	// **LEGACY FIELD**. The ID of a subscription plan the merchant signed up
+	// __LEGACY FIELD__. The ID of a subscription plan the merchant signed up
 	// for. The ID is only present if the merchant signed up for a subscription plan during authorization.
 	SubscriptionID *string `json:"subscription_id,omitempty" url:"subscription_id,omitempty"`
-	// **LEGACY FIELD**. The ID of the subscription plan the merchant signed
+	// __LEGACY FIELD__. The ID of the subscription plan the merchant signed
 	// up for. The ID is only present if the merchant signed up for a subscription plan during
 	// authorization.
 	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`

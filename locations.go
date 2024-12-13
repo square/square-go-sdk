@@ -609,7 +609,7 @@ func (c *CreateLocationResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Indicates the specific day of the week.
+// Indicates the specific day  of the week.
 type DayOfWeek string
 
 const (
@@ -811,7 +811,7 @@ type Location struct {
 	// The type of the location.
 	// See [LocationType](#type-locationtype) for possible values
 	Type *LocationType `json:"type,omitempty" url:"type,omitempty"`
-	// The website URL of the location. For example, `https://squareup.com`.
+	// The website URL of the location.  For example, `https://squareup.com`.
 	WebsiteURL *string `json:"website_url,omitempty" url:"website_url,omitempty"`
 	// The hours of operation for the location.
 	BusinessHours *BusinessHours `json:"business_hours,omitempty" url:"business_hours,omitempty"`
