@@ -177,7 +177,7 @@ func (c *Client) Get(
 }
 
 // Updates a payment link. You can update the `payment_link` fields such as
-// `description`, `checkout_options`, and `pre_populated_data`.
+// `description`, `checkout_options`, and  `pre_populated_data`.
 // You cannot update other fields such as the `order_id`, `version`, `URL`, or `timestamp` field.
 func (c *Client) Update(
 	ctx context.Context,

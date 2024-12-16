@@ -235,7 +235,7 @@ func (c *Client) Info(
 // The `types` parameter is specified as a comma-separated list of the [CatalogObjectType](entity:CatalogObjectType) values,
 // for example, "`ITEM`, `ITEM_VARIATION`, `MODIFIER`, `MODIFIER_LIST`, `CATEGORY`, `DISCOUNT`, `TAX`, `IMAGE`".
 //
-// **Important:** ListCatalog does not return deleted catalog items. To retrieve
+// __Important:__ ListCatalog does not return deleted catalog items. To retrieve
 // deleted catalog items, use [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects)
 // and set the `include_deleted_objects` attribute value to `true`.
 func (c *Client) List(

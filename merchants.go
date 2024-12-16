@@ -82,7 +82,7 @@ type ListMerchantsResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested `Merchant` entities.
 	Merchant []*Merchant `json:"merchant,omitempty" url:"merchant,omitempty"`
-	// If the response is truncated, the cursor to use in next request to fetch next set of objects.
+	// If the  response is truncated, the cursor to use in next  request to fetch next set of objects.
 	Cursor *int `json:"cursor,omitempty" url:"cursor,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -162,7 +162,8 @@ type Merchant struct {
 	// The ID of the [main `Location`](https://developer.squareup.com/docs/locations-api#about-the-main-location) for this merchant.
 	MainLocationID *string `json:"main_location_id,omitempty" url:"main_location_id,omitempty"`
 	// The time when the merchant was created, in RFC 3339 format.
-	// For more information, see [Working with Dates](https://developer.squareup.com/docs/build-basics/working-with-dates).
+	//
+	//	For more information, see [Working with Dates](https://developer.squareup.com/docs/build-basics/working-with-dates).
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 
 	extraProperties map[string]interface{}

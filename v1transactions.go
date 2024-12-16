@@ -510,7 +510,7 @@ func (v V1OrderState) Ptr() *V1OrderState {
 // in the tender field. To get the receipt URLs for the remaining tenders, use
 // the receipt_url fields of the corresponding Tender objects.
 //
-// \*A note on gift cards\*\*: when a customer purchases a Square gift card from a
+// *A note on gift cards**: when a customer purchases a Square gift card from a
 // merchant, the merchant receives the full amount of the gift card in the
 // associated payment.
 //

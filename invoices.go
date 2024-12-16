@@ -444,7 +444,6 @@ type Invoice struct {
 	PrimaryRecipient *InvoiceRecipient `json:"primary_recipient,omitempty" url:"primary_recipient,omitempty"`
 	// The payment schedule for the invoice, represented by one or more payment requests that
 	// define payment settings, such as amount due and due date. An invoice supports the following payment request combinations:
-	//
 	// - One balance
 	// - One deposit with one balance
 	// - 2–12 installments
@@ -464,12 +463,11 @@ type Invoice struct {
 	// automatic payments, this field must be set to `EMAIL`.
 	//
 	// One of the following is required when creating an invoice:
-	//
-	//   - (Recommended) This `delivery_method` field. To configure an automatic payment, the
-	//     `automatic_payment_source` field of the payment request is also required.
-	//   - The deprecated `request_method` field of the payment request. Note that `invoice`
-	//     objects returned in responses do not include `request_method`.
-	//     See [InvoiceDeliveryMethod](#type-invoicedeliverymethod) for possible values
+	// - (Recommended) This `delivery_method` field. To configure an automatic payment, the
+	// `automatic_payment_source` field of the payment request is also required.
+	// - The deprecated `request_method` field of the payment request. Note that `invoice`
+	// objects returned in responses do not include `request_method`.
+	// See [InvoiceDeliveryMethod](#type-invoicedeliverymethod) for possible values
 	DeliveryMethod *InvoiceDeliveryMethod `json:"delivery_method,omitempty" url:"delivery_method,omitempty"`
 	// A user-friendly invoice number that is displayed on the invoice. The value is unique within a location.
 	// If not provided when creating an invoice, Square assigns a value.
@@ -500,8 +498,8 @@ type Invoice struct {
 	// When an invoice is created, this field is set to the `timezone` specified for the seller
 	// location. The value cannot be changed.
 	//
-	// For example, a payment `due_date` of 2021-03-09 with a `timezone` of America/Los_Angeles
-	// becomes overdue at midnight on March 9 in America/Los_Angeles (which equals a UTC timestamp
+	// For example, a payment `due_date` of 2021-03-09 with a `timezone` of America/Los\_Angeles
+	// becomes overdue at midnight on March 9 in America/Los\_Angeles (which equals a UTC timestamp
 	// of 2021-03-10T08:00:00Z).
 	Timezone *string `json:"timezone,omitempty" url:"timezone,omitempty"`
 	// The timestamp when the invoice was created, in RFC 3339 format.
@@ -534,7 +532,7 @@ type Invoice struct {
 	// "Payment conditions are not supported for this location's country" detail if this field is included in `CreateInvoice` or `UpdateInvoice` requests.
 	PaymentConditions *string `json:"payment_conditions,omitempty" url:"payment_conditions,omitempty"`
 	// Indicates whether to allow a customer to save a credit or debit card as a card on file or a bank transfer as a
-	// bank account on file. If `true`, Square displays a **Save my card on file** or **Save my bank on file** checkbox on the
+	// bank account on file. If `true`, Square displays a __Save my card on file__ or __Save my bank on file__ checkbox on the
 	// invoice payment page. Stored payment information can be used for future automatic payments. The default value is `false`.
 	StorePaymentMethodEnabled *bool `json:"store_payment_method_enabled,omitempty" url:"store_payment_method_enabled,omitempty"`
 	// Metadata about the attachments on the invoice. Invoice attachments are managed using the
@@ -1278,11 +1276,10 @@ type InvoicePaymentRequest struct {
 	// `Invoice.delivery_method` and `InvoicePaymentRequest.automatic_payment_source` fields.
 	//
 	// One of the following is required when creating an invoice:
-	//
-	//   - (Recommended) The `delivery_method` field of the invoice. To configure an automatic payment, the
-	//     `automatic_payment_source` field of the payment request is also required.
-	//   - This `request_method` field. Note that `invoice` objects returned in responses do not include `request_method`.
-	//     See [InvoiceRequestMethod](#type-invoicerequestmethod) for possible values
+	// - (Recommended) The `delivery_method` field of the invoice. To configure an automatic payment, the
+	// `automatic_payment_source` field of the payment request is also required.
+	// - This `request_method` field. Note that `invoice` objects returned in responses do not include `request_method`.
+	// See [InvoiceRequestMethod](#type-invoicerequestmethod) for possible values
 	RequestMethod *InvoiceRequestMethod `json:"request_method,omitempty" url:"request_method,omitempty"`
 	// Identifies the payment request type. This type defines how the payment request amount is determined.
 	// This field is required to create a payment request.
@@ -1293,7 +1290,7 @@ type InvoicePaymentRequest struct {
 	// charges the payment source on this date.
 	//
 	// After this date, the invoice becomes overdue. For example, a payment `due_date` of 2021-03-09 with a `timezone`
-	// of America/Los_Angeles becomes overdue at midnight on March 9 in America/Los_Angeles (which equals a UTC
+	// of America/Los\_Angeles becomes overdue at midnight on March 9 in America/Los\_Angeles (which equals a UTC
 	// timestamp of 2021-03-10T08:00:00Z).
 	DueDate *string `json:"due_date,omitempty" url:"due_date,omitempty"`
 	// If the payment request specifies `DEPOSIT` or `INSTALLMENT` as the `request_type`,
@@ -1303,10 +1300,10 @@ type InvoicePaymentRequest struct {
 	FixedAmountRequestedMoney *Money `json:"fixed_amount_requested_money,omitempty" url:"fixed_amount_requested_money,omitempty"`
 	// Specifies the amount for the payment request in percentage:
 	//
-	//   - When the payment `request_type` is `DEPOSIT`, it is the percentage of the order's total amount.
-	//   - When the payment `request_type` is `INSTALLMENT`, it is the percentage of the order's total less
-	//     the deposit, if requested. The sum of the `percentage_requested` in all installment
-	//     payment requests must be equal to 100.
+	// - When the payment `request_type` is `DEPOSIT`, it is the percentage of the order's total amount.
+	// - When the payment `request_type` is `INSTALLMENT`, it is the percentage of the order's total less
+	// the deposit, if requested. The sum of the `percentage_requested` in all installment
+	// payment requests must be equal to 100.
 	//
 	// You cannot specify this when the payment `request_type` is `BALANCE` or when the
 	// payment request specifies the `fixed_amount_requested_money` field.

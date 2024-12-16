@@ -94,7 +94,7 @@ type CustomersDeleteRequest struct {
 	CustomerID string `json:"-" url:"-"`
 	// The current version of the customer profile.
 	//
-	// As a best practice, you should include this parameter to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control. For more information, see [Delete a customer profile](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#delete-customer-profile).
+	// As a best practice, you should include this parameter to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control.  For more information, see [Delete a customer profile](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#delete-customer-profile).
 	Version *int64 `json:"-" url:"version,omitempty"`
 }
 
@@ -1289,7 +1289,7 @@ type CustomerCustomAttributeFilterValue struct {
 	// For an `exact` match, provide the complete email address.
 	//
 	// For a `fuzzy` match, provide a query expression containing one or more query tokens to match against the email address. Square removes
-	// any punctuation (including periods (.), underscores (\_), and the @ symbol) and tokenizes the email addresses on spaces. A match is found
+	// any punctuation (including periods (.), underscores (_), and the @ symbol) and tokenizes the email addresses on spaces. A match is found
 	// if a tokenized email address contains all the tokens in the search query, irrespective of the token order. For example, `Steven gmail`
 	// matches steven.jones@gmail.com and mygmail@stevensbakery.com.
 	Email *CustomerTextFilter `json:"email,omitempty" url:"email,omitempty"`
@@ -1508,7 +1508,7 @@ type CustomerFilter struct {
 	// expression in the query. For example, with `Steven gmail` provided in a search
 	// query, the search returns customers whose email address is `steven.johnson@gmail.com`
 	// or `mygmail@stevensbakery.com`. Square removes any punctuation (including periods (.),
-	// underscores (\_), and the @ symbol) and tokenizes the email addresses on spaces. A match is
+	// underscores (_), and the @ symbol) and tokenizes the email addresses on spaces. A match is
 	// found if a tokenized email address contains all the tokens in the search query,
 	// irrespective of the token order.
 	EmailAddress *CustomerTextFilter `json:"email_address,omitempty" url:"email_address,omitempty"`
@@ -1546,7 +1546,6 @@ type CustomerFilter struct {
 	// Group membership is controlled by sellers and developers.
 	//
 	// The `group_ids` filter has the following syntax:
-	//
 	// ```
 	// "group_ids": {
 	// "any":  ["{group_a_id}", "{group_b_id}", ...],
@@ -1574,7 +1573,8 @@ type CustomerFilter struct {
 	// use the [Customer Custom Attributes API](api:CustomerCustomAttributes). For example, you can call
 	// [RetrieveCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttribute) using a customer ID from the result set.
 	CustomAttribute *CustomerCustomAttributeFilters `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
-	// A filter to select customers based on the [segments](entity:CustomerSegment) they belong to.
+	//	A filter to select customers based on the [segments](entity:CustomerSegment) they belong to.
+	//
 	// Segment membership is dynamic and adjusts automatically based on whether customers meet the segment criteria.
 	//
 	// You can provide up to three segment IDs in the filter, using any combination of the `all`, `any`, and `none` fields.
@@ -1767,7 +1767,7 @@ type CustomerQuery struct {
 	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
 	// Multiple filters are combined as `AND` statements.
 	//
-	// **Note:** Combining multiple filters as `OR` statements is not supported. Instead, send multiple single-filter
+	// __Note:__ Combining multiple filters as `OR` statements is not supported. Instead, send multiple single-filter
 	// searches and join the result sets.
 	Filter *CustomerFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Sorting criteria for query results. The default behavior is to sort

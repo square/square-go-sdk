@@ -102,7 +102,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates an order-related custom attribute definition. Use this endpoint to
+// Creates an order-related custom attribute definition.  Use this endpoint to
 // define a custom attribute that can be associated with orders.
 //
 // After creating a custom attribute definition, you can set the custom attribute for orders

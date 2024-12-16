@@ -50,14 +50,13 @@ func NewClient(opts ...option.RequestOption) *Client {
 // - `start_at`
 //
 // An attempt to create a new `Shift` can result in a `BAD_REQUEST` error when:
-//
-//   - The `status` of the new `Shift` is `OPEN` and the team member has another
-//     shift with an `OPEN` status.
-//   - The `start_at` date is in the future.
-//   - The `start_at` or `end_at` date overlaps another shift for the same team member.
-//   - The `Break` instances are set in the request and a break `start_at`
-//     is before the `Shift.start_at`, a break `end_at` is after
-//     the `Shift.end_at`, or both.
+// - The `status` of the new `Shift` is `OPEN` and the team member has another
+// shift with an `OPEN` status.
+// - The `start_at` date is in the future.
+// - The `start_at` or `end_at` date overlaps another shift for the same team member.
+// - The `Break` instances are set in the request and a break `start_at`
+// is before the `Shift.start_at`, a break `end_at` is after
+// the `Shift.end_at`, or both.
 func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateShiftRequest,
@@ -98,7 +97,6 @@ func (c *Client) Create(
 
 // Returns a paginated list of `Shift` records for a business.
 // The list to be returned can be filtered by:
-//
 // - Location IDs
 // - Team member IDs
 // - Shift status (`OPEN` or `CLOSED`)
@@ -107,7 +105,6 @@ func (c *Client) Create(
 // - Workday details
 //
 // The list can be sorted by:
-//
 // - `START_AT`
 // - `END_AT`
 // - `CREATED_AT`

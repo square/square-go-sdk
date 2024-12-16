@@ -115,7 +115,6 @@ func (c *Client) List(
 // Creates a booking.
 //
 // The required input must include the following:
-//
 // - `Booking.location_id`
 // - `Booking.start_at`
 // - `Booking.AppointmentSegment.team_member_id`
@@ -125,8 +124,8 @@ func (c *Client) List(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) Create(
 	ctx context.Context,
 	request *squaregosdk.CreateBookingRequest,
@@ -412,8 +411,8 @@ func (c *Client) Get(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) Update(
 	ctx context.Context,
 	request *squaregosdk.UpdateBookingRequest,
@@ -460,8 +459,8 @@ func (c *Client) Update(
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_WRITE` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_WRITE` and `APPOINTMENTS_WRITE` for the OAuth scope.
 //
-// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to _Appointments Plus_
-// or _Appointments Premium_.
+// For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
+// or *Appointments Premium*.
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *squaregosdk.CancelBookingRequest,

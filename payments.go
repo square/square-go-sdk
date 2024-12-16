@@ -175,13 +175,12 @@ type PaymentsListRequest struct {
 	// The range is determined using the `created_at` field for each Payment.
 	// Inclusive. Default: The current time minus one year.
 	BeginTime *string `json:"-" url:"begin_time,omitempty"`
-	// Indicates the end of the time range to retrieve payments for, in RFC 3339 format. The
+	// Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The
 	// range is determined using the `created_at` field for each Payment.
 	//
 	// Default: The current time.
 	EndTime *string `json:"-" url:"end_time,omitempty"`
 	// The order in which results are listed by `Payment.created_at`:
-	//
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *string `json:"-" url:"sort_order,omitempty"`
@@ -728,14 +727,14 @@ type CardPaymentDetails struct {
 	// Note: The actual statement description varies and is likely to be truncated and appended with
 	// additional information on a per issuer basis.
 	StatementDescription *string `json:"statement_description,omitempty" url:"statement_description,omitempty"`
-	// **Deprecated**: Use `Payment.device_details` instead.
+	// __Deprecated__: Use `Payment.device_details` instead.
 	//
 	// Details about the device that took the payment.
 	DeviceDetails *DeviceDetails `json:"device_details,omitempty" url:"device_details,omitempty"`
 	// The timeline for card payments.
 	CardPaymentTimeline *CardPaymentTimeline `json:"card_payment_timeline,omitempty" url:"card_payment_timeline,omitempty"`
 	// Whether the card must be physically present for the payment to
-	// be refunded. If set to `true`, the card must be present.
+	// be refunded.  If set to `true`, the card must be present.
 	RefundRequiresCardPresence *bool `json:"refund_requires_card_presence,omitempty" url:"refund_requires_card_presence,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1444,10 +1443,9 @@ func (d *DigitalWalletDetails) String() string {
 // [Take External Payments](https://developer.squareup.com/docs/payments-api/take-payments/external-payments).
 type ExternalPaymentDetails struct {
 	// The type of external payment the seller received. It can be one of the following:
-	//
 	// - CHECK - Paid using a physical check.
 	// - BANK_TRANSFER - Paid using external bank transfer.
-	// - OTHER_GIFT_CARD - Paid using a non-Square gift card.
+	// - OTHER\_GIFT\_CARD - Paid using a non-Square gift card.
 	// - CRYPTO - Paid using a crypto currency.
 	// - SQUARE_CASH - Paid using Square Cash App.
 	// - SOCIAL - Paid using peer-to-peer payment applications.
@@ -1824,7 +1822,7 @@ type Payment struct {
 	// this process is asynchronous and it may take some time before a
 	// customer ID is added to the payment.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
-	// **Deprecated**: Use `Payment.team_member_id` instead.
+	// __Deprecated__: Use `Payment.team_member_id` instead.
 	//
 	// An optional ID of the employee associated with taking the payment.
 	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
@@ -1850,11 +1848,10 @@ type Payment struct {
 	// as part of the statement description.
 	//
 	// Note that the `statement_description_identifier` might get truncated on the statement description
-	// to fit the required information including the Square identifier (SQ \*) and the name of the
+	// to fit the required information including the Square identifier (SQ *) and the name of the
 	// seller taking the payment.
 	StatementDescriptionIdentifier *string `json:"statement_description_identifier,omitempty" url:"statement_description_identifier,omitempty"`
 	// Actions that can be performed on this payment:
-	//
 	// - `EDIT_AMOUNT_UP` - The payment amount can be edited up.
 	// - `EDIT_AMOUNT_DOWN` - The payment amount can be edited down.
 	// - `EDIT_TIP_AMOUNT_UP` - The tip amount can be edited up.

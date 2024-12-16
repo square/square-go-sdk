@@ -19,7 +19,7 @@ type BulkUpsertOrderCustomAttributesRequest struct {
 type CustomAttributesDeleteRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
-	// The key of the custom attribute to delete. This key must match the key of an
+	// The key of the custom attribute to delete.  This key must match the key of an
 	// existing custom attribute definition.
 	CustomAttributeKey string `json:"-" url:"-"`
 }
@@ -27,7 +27,7 @@ type CustomAttributesDeleteRequest struct {
 type CustomAttributesGetRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
-	// The key of the custom attribute to retrieve. This key must match the key of an
+	// The key of the custom attribute to retrieve.  This key must match the key of an
 	// existing custom attribute definition.
 	CustomAttributeKey string `json:"-" url:"-"`
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
@@ -62,7 +62,7 @@ type CustomAttributesListRequest struct {
 type UpsertOrderCustomAttributeRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
-	// The key of the custom attribute to create or update. This key must match the key
+	// The key of the custom attribute to create or update.  This key must match the key
 	// of an existing custom attribute definition.
 	CustomAttributeKey string `json:"-" url:"-"`
 	// The custom attribute to create or update, with the following fields:

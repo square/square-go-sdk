@@ -269,7 +269,7 @@ func (b *BatchGetInventoryChangesResponse) String() string {
 
 type BatchGetInventoryCountsRequest struct {
 	// The filter to return results by `CatalogObject` ID.
-	// The filter is applicable only when set. The default is null.
+	// The filter is applicable only when set.  The default is null.
 	CatalogObjectIDs []string `json:"catalog_object_ids,omitempty" url:"catalog_object_ids,omitempty"`
 	// The filter to return results by `Location` ID.
 	// This filter is applicable only when set. The default is null.

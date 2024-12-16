@@ -41,7 +41,6 @@ type ActivitiesListRequest struct {
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 	// The order in which the endpoint returns the activities, based on `created_at`.
-	//
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *string `json:"-" url:"sort_order,omitempty"`

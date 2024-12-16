@@ -42,7 +42,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 //
 // Authorization codes are one-time-use codes and expire 60 minutes after being issued.
 //
-// **Important:** The `Authorization` header you provide to this endpoint must have the following format:
+// __Important:__ The `Authorization` header you provide to this endpoint must have the following format:
 //
 // ```
 // Authorization: Bearer ACCESS_TOKEN
