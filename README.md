@@ -27,7 +27,7 @@ import (
 )
 
 client := squareclient.NewClient(
-    option.WithToken("<YOUR_API_KEY>"),
+    option.WithToken("<YOUR_ACCESS_TOKEN>"),
 )
 
 response, err := client.Payments.Create(
