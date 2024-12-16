@@ -21,13 +21,16 @@ go get github.com/square/square-go-sdk
 
 ```go
 import (
-    "github.com/square/square-go-sdk"
+    "context"
+
+    square "github.com/square/square-go-sdk"
     squareclient "github.com/square/square-go-sdk/client"
     "github.com/square/square-go-sdk/option"
 )
 
 client := squareclient.NewClient(
     option.WithToken("<YOUR_ACCESS_TOKEN>"),
+    option.WithBaseURL("https://connect.squareupsandbox.com")
 )
 
 response, err := client.Payments.Create(
