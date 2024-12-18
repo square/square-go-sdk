@@ -192,7 +192,7 @@ type SearchSubscriptionsRequest struct {
 }
 
 // Defines output parameters in a response of the
-// [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
+// [BulkSwapPlan]($e/Subscriptions/BulkSwapPlan) endpoint.
 type BulkSwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -250,7 +250,7 @@ func (b *BulkSwapPlanResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
+// [CancelSubscription]($e/Subscriptions/CancelSubscription) endpoint.
 type CancelSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -317,7 +317,7 @@ func (c *CancelSubscriptionResponse) String() string {
 }
 
 // Defines output parameters in a request to the
-// [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
+// [ChangeBillingAnchorDate]($e/Subscriptions/ChangeBillingAnchorDate) endpoint.
 type ChangeBillingAnchorDateResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -407,7 +407,7 @@ func (c ChangeTiming) Ptr() *ChangeTiming {
 }
 
 // Defines output parameters in a response from the
-// [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
+// [CreateSubscription]($e/Subscriptions/CreateSubscription) endpoint.
 type CreateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -467,7 +467,7 @@ func (c *CreateSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
+// Defines output parameters in a response of the [DeleteSubscriptionAction]($e/Subscriptions/DeleteSubscriptionAction)
 // endpoint.
 type DeleteSubscriptionActionResponse struct {
 	// Errors encountered during the request.
@@ -526,7 +526,7 @@ func (d *DeleteSubscriptionActionResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
+// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) endpoint.
 type GetSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -584,7 +584,7 @@ func (g *GetSubscriptionResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
+// [ListSubscriptionEvents]($e/Subscriptions/ListSubscriptionEvents).
 type ListSubscriptionEventsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -655,7 +655,7 @@ func (l *ListSubscriptionEventsResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
+// [PauseSubscription]($e/Subscriptions/PauseSubscription) endpoint.
 type PauseSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -854,7 +854,7 @@ func (p *PhaseInput) String() string {
 }
 
 // Defines output parameters in a response from the
-// [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
+// [ResumeSubscription]($e/Subscriptions/ResumeSubscription) endpoint.
 type ResumeSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -921,7 +921,7 @@ func (r *ResumeSubscriptionResponse) String() string {
 }
 
 // Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
-// the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+// the [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
 type SearchSubscriptionsFilter struct {
 	// A filter to select subscriptions based on the subscribing customer IDs.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
@@ -1036,7 +1036,7 @@ func (s *SearchSubscriptionsQuery) String() string {
 }
 
 // Defines output parameters in a response from the
-// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) endpoint.
 type SearchSubscriptionsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1170,9 +1170,9 @@ type Subscription struct {
 	// The origination details of the subscription.
 	Source *SubscriptionSource `json:"source,omitempty" url:"source,omitempty"`
 	// The list of scheduled actions on this subscription. It is set only in the response from
-	// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) with the query parameter
+	// [RetrieveSubscription]($e/Subscriptions/RetrieveSubscription) with the query parameter
 	// of `include=actions` or from
-	// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) with the input parameter
+	// [SearchSubscriptions]($e/Subscriptions/SearchSubscriptions) with the input parameter
 	// of `include:["actions"]`.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
 	// The day of the month on which the subscription will issue invoices and publish orders.
@@ -1792,7 +1792,7 @@ func (s SubscriptionStatus) Ptr() *SubscriptionStatus {
 }
 
 // Defines output parameters in a response of the
-// [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
+// [SwapPlan]($e/Subscriptions/SwapPlan) endpoint.
 type SwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1859,7 +1859,7 @@ func (s *SwapPlanResponse) String() string {
 }
 
 // Defines output parameters in a response from the
-// [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
+// [UpdateSubscription]($e/Subscriptions/UpdateSubscription) endpoint.
 type UpdateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

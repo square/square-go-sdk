@@ -40,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the location-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the location-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
@@ -100,12 +100,12 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a location-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Creates a location-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to define a custom attribute that can be associated with locations.
 // A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
 // for a custom attribute. After the definition is created, you can call
-// [UpsertLocationCustomAttribute](api-endpoint:LocationCustomAttributes-UpsertLocationCustomAttribute) or
-// [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes)
+// [UpsertLocationCustomAttribute]($e/LocationCustomAttributes/UpsertLocationCustomAttribute) or
+// [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes)
 // to set the custom attribute for locations.
 func (c *Client) Create(
 	ctx context.Context,
@@ -145,7 +145,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Retrieves a location-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Retrieves a location-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(

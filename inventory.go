@@ -1187,7 +1187,7 @@ func (i *InventoryAdjustmentGroup) String() string {
 
 // Represents a single physical count, inventory, adjustment, or transfer
 // that is part of the history of inventory changes for a particular
-// [CatalogObject](entity:CatalogObject) instance.
+// [CatalogObject]($m/CatalogObject) instance.
 type InventoryChange struct {
 	// Indicates how the inventory change is applied. See
 	// [InventoryChangeType](entity:InventoryChangeType) for all possible values.
@@ -1340,10 +1340,10 @@ type InventoryCount struct {
 	// the estimated count is received.
 	CalculatedAt *string `json:"calculated_at,omitempty" url:"calculated_at,omitempty"`
 	// Whether the inventory count is for composed variation (TRUE) or not (FALSE). If true, the inventory count will not be present in the response of
-	// any of these endpoints: [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory),
-	// [BatchRetrieveInventoryChanges](api-endpoint:Inventory-BatchRetrieveInventoryChanges),
-	// [BatchRetrieveInventoryCounts](api-endpoint:Inventory-BatchRetrieveInventoryCounts), and
-	// [RetrieveInventoryChanges](api-endpoint:Inventory-RetrieveInventoryChanges).
+	// any of these endpoints: [BatchChangeInventory]($e/Inventory/BatchChangeInventory),
+	// [BatchRetrieveInventoryChanges]($e/Inventory/BatchRetrieveInventoryChanges),
+	// [BatchRetrieveInventoryCounts]($e/Inventory/BatchRetrieveInventoryCounts), and
+	// [RetrieveInventoryChanges]($e/Inventory/RetrieveInventoryChanges).
 	IsEstimated *bool `json:"is_estimated,omitempty" url:"is_estimated,omitempty"`
 
 	extraProperties map[string]interface{}

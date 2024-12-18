@@ -40,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the order-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the order-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
 //
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
@@ -145,7 +145,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Retrieves an order-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Retrieves an order-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
 //
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
@@ -240,7 +240,7 @@ func (c *Client) Update(
 	return response, nil
 }
 
-// Deletes an order-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Deletes an order-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
 //
 // Only the definition owner can delete a custom attribute definition.
 func (c *Client) Delete(

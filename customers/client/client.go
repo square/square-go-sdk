@@ -164,7 +164,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Creates multiple [customer profiles](entity:Customer) for a business.
+// Creates multiple [customer profiles]($m/Customer) for a business.
 //
 // This endpoint takes a map of individual create requests and returns a map of responses.
 //
@@ -299,7 +299,7 @@ func (c *Client) BulkRetrieveCustomers(
 //
 // This endpoint takes a map of individual update requests and returns a map of responses.
 //
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
+// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API]($e/Cards) or [Gift Cards API]($e/GiftCards).
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
 	request *squaregosdk.BulkUpdateCustomersRequest,
@@ -430,7 +430,7 @@ func (c *Client) Get(
 //
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 //
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
+// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API]($e/Cards) or [Gift Cards API]($e/GiftCards).
 func (c *Client) Update(
 	ctx context.Context,
 	request *squaregosdk.UpdateCustomerRequest,

@@ -98,7 +98,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a draft [invoice](entity:Invoice)
+// Creates a draft [invoice]($m/Invoice)
 // for an order created using the Orders API.
 //
 // A draft invoice remains in your account and no action is taken.

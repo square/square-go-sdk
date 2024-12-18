@@ -82,7 +82,7 @@ func (a *AcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents an [AccumulateLoyaltyPoints](api-endpoint:Loyalty-AccumulateLoyaltyPoints) response.
+// Represents an [AccumulateLoyaltyPoints]($e/Loyalty/AccumulateLoyaltyPoints) response.
 type AccumulateLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -176,7 +176,7 @@ func (a ActionCancelReason) Ptr() *ActionCancelReason {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [AddGroupToCustomer](api-endpoint:Customers-AddGroupToCustomer) endpoint.
+// a request to the [AddGroupToCustomer]($e/Customers/AddGroupToCustomer) endpoint.
 type AddGroupToCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -474,7 +474,7 @@ func (a *Address) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents an [AdjustLoyaltyPoints](api-endpoint:Loyalty-AdjustLoyaltyPoints) request.
+// Represents an [AdjustLoyaltyPoints]($e/Loyalty/AdjustLoyaltyPoints) request.
 type AdjustLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -531,7 +531,7 @@ func (a *AdjustLoyaltyPointsResponse) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes)
 // request. An individual request contains a customer ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest struct {
@@ -610,7 +610,7 @@ func (b *BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) response,
+// Represents a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BatchUpsertCustomerCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -669,7 +669,7 @@ func (b *BatchUpsertCustomerCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes) operation.
 type BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpsertResponse struct {
 	// The ID of the customer profile associated with the custom attribute.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
@@ -735,7 +735,7 @@ func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpser
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to delete, and an optional idempotency key.
 type BookingCustomAttributeDeleteRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -795,7 +795,7 @@ func (b *BookingCustomAttributeDeleteRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) operation.
 type BookingCustomAttributeDeleteResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -852,7 +852,7 @@ func (b *BookingCustomAttributeDeleteResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BookingCustomAttributeUpsertRequest struct {
@@ -931,7 +931,7 @@ func (b *BookingCustomAttributeUpsertRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) operation.
 type BookingCustomAttributeUpsertResponse struct {
 	// The ID of the [booking](entity:Booking) associated with the custom attribute.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
@@ -1223,7 +1223,7 @@ func (b *BreakType) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes) response,
+// Represents a [BulkDeleteBookingCustomAttributes]($e/BookingCustomAttributes/BulkDeleteBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -1282,7 +1282,7 @@ func (b *BulkDeleteBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest struct {
@@ -1333,7 +1333,7 @@ func (b *BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes) response,
+// Represents a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -1392,7 +1392,7 @@ func (b *BulkDeleteLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkDeleteLocationCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteLocationCustomAttributes]($e/LocationCustomAttributes/BulkDeleteLocationCustomAttributes)
 // request.
 type BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDeleteResponse struct {
 	// The ID of the location associated with the custom attribute.
@@ -1450,7 +1450,7 @@ func (b *BulkDeleteLocationCustomAttributesResponseLocationCustomAttributeDelete
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete request in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
 // request. An individual request contains an optional ID of the associated custom attribute definition
 // and optional key of the associated custom attribute definition.
 type BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest struct {
@@ -1501,7 +1501,7 @@ func (b *BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes) response,
+// Represents a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual delete request.
 type BulkDeleteMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual delete requests. Each response has the
@@ -1560,7 +1560,7 @@ func (b *BulkDeleteMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkDeleteMerchantCustomAttributes)
+// Represents an individual delete response in a [BulkDeleteMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkDeleteMerchantCustomAttributes)
 // request.
 type BulkDeleteMerchantCustomAttributesResponseMerchantCustomAttributeDeleteResponse struct {
 	// Errors that occurred while processing the individual MerchantCustomAttributeDeleteRequest request
@@ -1726,7 +1726,7 @@ func (b *BulkDeleteOrderCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) response,
+// Represents a [BulkUpsertBookingCustomAttributes]($e/BookingCustomAttributes/BulkUpsertBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertBookingCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -1785,7 +1785,7 @@ func (b *BulkUpsertBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes)
 // request. An individual request contains a location ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest struct {
@@ -1861,7 +1861,7 @@ func (b *BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) response,
+// Represents a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertLocationCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -1920,7 +1920,7 @@ func (b *BulkUpsertLocationCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertLocationCustomAttributes]($e/LocationCustomAttributes/BulkUpsertLocationCustomAttributes) operation.
 type BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsertResponse struct {
 	// The ID of the location associated with the custom attribute.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
@@ -1986,7 +1986,7 @@ func (b *BulkUpsertLocationCustomAttributesResponseLocationCustomAttributeUpsert
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
+// Represents an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes)
 // request. An individual request contains a merchant ID, the custom attribute to create or update,
 // and an optional idempotency key.
 type BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest struct {
@@ -2062,7 +2062,7 @@ func (b *BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertR
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) response,
+// Represents a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertMerchantCustomAttributesResponse struct {
 	// A map of responses that correspond to individual upsert requests. Each response has the
@@ -2121,7 +2121,7 @@ func (b *BulkUpsertMerchantCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes) operation.
+// Represents a response for an individual upsert request in a [BulkUpsertMerchantCustomAttributes]($e/MerchantCustomAttributes/BulkUpsertMerchantCustomAttributes) operation.
 type BulkUpsertMerchantCustomAttributesResponseMerchantCustomAttributeUpsertResponse struct {
 	// The ID of the merchant associated with the custom attribute.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
@@ -2317,7 +2317,7 @@ func (b *BulkUpsertOrderCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CalculateLoyaltyPoints](api-endpoint:Loyalty-CalculateLoyaltyPoints) response.
+// Represents a [CalculateLoyaltyPoints]($e/Loyalty/CalculateLoyaltyPoints) response.
 type CalculateLoyaltyPointsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2385,7 +2385,7 @@ func (c *CalculateLoyaltyPointsResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CancelLoyaltyPromotion](api-endpoint:Loyalty-CancelLoyaltyPromotion) response.
+// Represents a [CancelLoyaltyPromotion]($e/Loyalty/CancelLoyaltyPromotion) response.
 // Either `loyalty_promotion` or `errors` is present in the response.
 type CancelLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
@@ -2444,7 +2444,7 @@ func (c *CancelLoyaltyPromotionResponse) String() string {
 }
 
 // Defines the response returned by
-// [CancelPaymentByIdempotencyKey](api-endpoint:Payments-CancelPaymentByIdempotencyKey).
+// [CancelPaymentByIdempotencyKey]($e/Payments/CancelPaymentByIdempotencyKey).
 // On success, `errors` is empty.
 type CancelPaymentByIdempotencyKeyResponse struct {
 	// Any errors that occurred during the request.
@@ -4697,9 +4697,9 @@ func (c *CatalogEcomSeoData) String() string {
 
 // A mapping between a temporary client-supplied ID and a permanent server-generated ID.
 //
-// When calling [UpsertCatalogObject](api-endpoint:Catalog-UpsertCatalogObject) or
-// [BatchUpsertCatalogObjects](api-endpoint:Catalog-BatchUpsertCatalogObjects) to
-// create a [CatalogObject](entity:CatalogObject) instance, you can supply
+// When calling [UpsertCatalogObject]($e/Catalog/UpsertCatalogObject) or
+// [BatchUpsertCatalogObjects]($e/Catalog/BatchUpsertCatalogObjects) to
+// create a [CatalogObject]($m/CatalogObject) instance, you can supply
 // a temporary ID for the to-be-created object, especially when the object is to be referenced
 // elsewhere in the same request body. This temporary ID can be any string unique within
 // the call, but must be prefixed by "#".
@@ -4849,7 +4849,7 @@ func (c *CatalogImage) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A [CatalogObject](entity:CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
+// A [CatalogObject]($m/CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
 type CatalogItem struct {
 	// The item's name. This is a searchable attribute for use in applicable query filters, its value must not be empty, and the length is of Unicode code points.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
@@ -5933,7 +5933,7 @@ func (c CatalogItemProductType) Ptr() *CatalogItemProductType {
 	return &c
 }
 
-// An item variation, representing a product for sale, in the Catalog object model. Each [item](entity:CatalogItem) must have at least one
+// An item variation, representing a product for sale, in the Catalog object model. Each [item]($m/CatalogItem) must have at least one
 // item variation and can have at most 250 item variations.
 //
 // An item variation can be sellable, stockable, or both if it has a unit of measure for its count for the sold number of the variation, the stocked
@@ -6015,7 +6015,7 @@ type CatalogItemVariation struct {
 	// Tokens of employees that can perform the service represented by this variation. Only valid for
 	// variations of type `APPOINTMENTS_SERVICE`.
 	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"team_member_ids,omitempty"`
-	// The unit conversion rule, as prescribed by the [CatalogStockConversion](entity:CatalogStockConversion) type,
+	// The unit conversion rule, as prescribed by the [CatalogStockConversion]($m/CatalogStockConversion) type,
 	// that describes how this non-stockable (i.e., sellable/receivable) item variation is converted
 	// to/from the stockable item variation sharing the same parent item. With the stock conversion,
 	// you can accurately track inventory when an item variation is sold in one unit, but stocked in
@@ -12421,7 +12421,7 @@ func (c CatalogQuickAmountsSettingsOption) Ptr() *CatalogQuickAmountsSettingsOpt
 	return &c
 }
 
-// Represents the rule of conversion between a stockable [CatalogItemVariation](entity:CatalogItemVariation)
+// Represents the rule of conversion between a stockable [CatalogItemVariation]($m/CatalogItemVariation)
 // and a non-stockable sell-by or receive-by `CatalogItemVariation` that
 // share the same underlying stock.
 type CatalogStockConversion struct {
@@ -13033,6 +13033,7 @@ const (
 	CheckoutOptionsPaymentTypeFelicaTransportationGroup CheckoutOptionsPaymentType = "FELICA_TRANSPORTATION_GROUP"
 	CheckoutOptionsPaymentTypeFelicaAll                 CheckoutOptionsPaymentType = "FELICA_ALL"
 	CheckoutOptionsPaymentTypePaypay                    CheckoutOptionsPaymentType = "PAYPAY"
+	CheckoutOptionsPaymentTypeQrCode                    CheckoutOptionsPaymentType = "QR_CODE"
 )
 
 func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentType, error) {
@@ -13051,6 +13052,8 @@ func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentTy
 		return CheckoutOptionsPaymentTypeFelicaAll, nil
 	case "PAYPAY":
 		return CheckoutOptionsPaymentTypePaypay, nil
+	case "QR_CODE":
+		return CheckoutOptionsPaymentTypeQrCode, nil
 	}
 	var t CheckoutOptionsPaymentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -14005,7 +14008,7 @@ func (c Country) Ptr() *Country {
 	return &c
 }
 
-// Represents a [CreateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-CreateBookingCustomAttributeDefinition) response.
+// Represents a [CreateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/CreateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateBookingCustomAttributeDefinitionResponse struct {
 	// The newly created custom attribute definition.
@@ -14263,7 +14266,7 @@ func (c *CreateCustomerCardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) response.
+// Represents a [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateCustomerCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -14322,7 +14325,7 @@ func (c *CreateCustomerCustomAttributeDefinitionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCustomerGroup](api-endpoint:CustomerGroups-CreateCustomerGroup) endpoint.
+// a request to the [CreateCustomerGroup]($e/CustomerGroups/CreateCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type CreateCustomerGroupResponse struct {
@@ -14495,7 +14498,7 @@ func (c *CreateGiftCardActivityResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-CreateLocationCustomAttributeDefinition) response.
+// Represents a [CreateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/CreateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateLocationCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -14610,7 +14613,7 @@ func (c *CreateLoyaltyAccountResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateLoyaltyPromotion](api-endpoint:Loyalty-CreateLoyaltyPromotion) response.
+// Represents a [CreateLoyaltyPromotion]($e/Loyalty/CreateLoyaltyPromotion) response.
 // Either `loyalty_promotion` or `errors` is present in the response.
 type CreateLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
@@ -14725,7 +14728,7 @@ func (c *CreateLoyaltyRewardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) response.
+// Represents a [CreateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/CreateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type CreateMerchantCustomAttributeDefinitionResponse struct {
 	// The new custom attribute definition.
@@ -15197,9 +15200,9 @@ func (c *CreateTerminalRefundResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateWebhookSubscription](api-endpoint:WebhookSubscriptions-CreateWebhookSubscription) endpoint.
+// a request to the [CreateWebhookSubscription]($e/WebhookSubscriptions/CreateWebhookSubscription) endpoint.
 //
-// Note: if there are errors processing the request, the [Subscription](entity:WebhookSubscription) will not be
+// Note: if there are errors processing the request, the [Subscription]($m/WebhookSubscription) will not be
 // present.
 type CreateWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -16483,7 +16486,7 @@ func (d *DateRange) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttributeDefinition) response
+// Represents a [DeleteBookingCustomAttributeDefinition]($e/BookingCustomAttributes/DeleteBookingCustomAttributeDefinition) response
 // containing error messages when errors occurred during the request. The successful response does not contain any payload.
 type DeleteBookingCustomAttributeDefinitionResponse struct {
 	// Any errors that occurred during the request.
@@ -16532,7 +16535,7 @@ func (d *DeleteBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteBookingCustomAttribute](api-endpoint:BookingCustomAttributes-DeleteBookingCustomAttribute) response.
+// Represents a [DeleteBookingCustomAttribute]($e/BookingCustomAttributes/DeleteBookingCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteBookingCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -16796,7 +16799,7 @@ func (d *DeleteCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-DeleteCustomerCustomAttribute) response.
+// Represents a [DeleteCustomerCustomAttribute]($e/CustomerCustomAttributes/DeleteCustomerCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteCustomerCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -16846,7 +16849,7 @@ func (d *DeleteCustomerCustomAttributeResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DeleteCustomerGroup](api-endpoint:CustomerGroups-DeleteCustomerGroup) endpoint.
+// a request to the [DeleteCustomerGroup]($e/CustomerGroups/DeleteCustomerGroup) endpoint.
 type DeleteCustomerGroupResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -16990,7 +16993,7 @@ func (d *DeleteLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteLocationCustomAttribute](api-endpoint:LocationCustomAttributes-DeleteLocationCustomAttribute) response.
+// Represents a [DeleteLocationCustomAttribute]($e/LocationCustomAttributes/DeleteLocationCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteLocationCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -17135,7 +17138,7 @@ func (d *DeleteMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [DeleteMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-DeleteMerchantCustomAttribute) response.
+// Represents a [DeleteMerchantCustomAttribute]($e/MerchantCustomAttributes/DeleteMerchantCustomAttribute) response.
 // Either an empty object `{}` (for a successful deletion) or `errors` is present in the response.
 type DeleteMerchantCustomAttributeResponse struct {
 	// Any errors that occurred during the request.
@@ -17395,7 +17398,7 @@ func (d *DeleteShiftResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DeleteWebhookSubscription](api-endpoint:WebhookSubscriptions-DeleteWebhookSubscription) endpoint.
+// a request to the [DeleteWebhookSubscription]($e/WebhookSubscriptions/DeleteWebhookSubscription) endpoint.
 type DeleteWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -20335,7 +20338,7 @@ func (g *GetCatalogObjectResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttributeDefinition) response.
+// Represents a [RetrieveCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type GetCustomerCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -20393,7 +20396,7 @@ func (g *GetCustomerCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-RetrieveCustomerCustomAttribute) response.
+// Represents a [RetrieveCustomerCustomAttribute]($e/CustomerCustomAttributes/RetrieveCustomerCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type GetCustomerCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -20453,7 +20456,7 @@ func (g *GetCustomerCustomAttributeResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveCustomerGroup](api-endpoint:CustomerGroups-RetrieveCustomerGroup) endpoint.
+// a request to the [RetrieveCustomerGroup]($e/CustomerGroups/RetrieveCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type GetCustomerGroupResponse struct {
@@ -20857,7 +20860,7 @@ func (g *GetLoyaltyProgramResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a [RetrieveLoyaltyPromotionPromotions](api-endpoint:Loyalty-RetrieveLoyaltyPromotion) response.
+// Represents a [RetrieveLoyaltyPromotionPromotions]($e/Loyalty/RetrieveLoyaltyPromotion) response.
 type GetLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -21487,9 +21490,9 @@ func (g *GetWageSettingResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveWebhookSubscription](api-endpoint:WebhookSubscriptions-RetrieveWebhookSubscription) endpoint.
+// a request to the [RetrieveWebhookSubscription]($e/WebhookSubscriptions/RetrieveWebhookSubscription) endpoint.
 //
-// Note: if there are errors processing the request, the [Subscription](entity:WebhookSubscription) will not be
+// Note: if there are errors processing the request, the [Subscription]($m/WebhookSubscription) will not be
 // present.
 type GetWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -21547,7 +21550,7 @@ func (g *GetWebhookSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents an action performed on a [gift card](entity:GiftCard) that affects its state or balance.
+// Represents an action performed on a [gift card]($m/GiftCard) that affects its state or balance.
 // A gift card activity contains information about a specific activity type. For example, a `REDEEM` activity
 // includes a `redeem_activity_details` field that contains information about the redemption.
 type GiftCardActivity struct {
@@ -21809,7 +21812,7 @@ func (g *GiftCardActivity) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `ACTIVATE` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `ACTIVATE` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityActivate struct {
 	// The amount added to the gift card. This value is a positive integer.
 	//
@@ -21915,7 +21918,7 @@ func (g *GiftCardActivityActivate) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `ADJUST_DECREMENT` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `ADJUST_DECREMENT` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityAdjustDecrement struct {
 	// The amount deducted from the gift card balance. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -21973,7 +21976,7 @@ func (g *GiftCardActivityAdjustDecrement) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for deducting money from a [gift card](entity:GiftCard).
+// Indicates the reason for deducting money from a [gift card]($m/GiftCard).
 type GiftCardActivityAdjustDecrementReason string
 
 const (
@@ -22002,7 +22005,7 @@ func (g GiftCardActivityAdjustDecrementReason) Ptr() *GiftCardActivityAdjustDecr
 	return &g
 }
 
-// Represents details about an `ADJUST_INCREMENT` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `ADJUST_INCREMENT` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityAdjustIncrement struct {
 	// The amount added to the gift card balance. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -22060,7 +22063,7 @@ func (g *GiftCardActivityAdjustIncrement) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for adding money to a [gift card](entity:GiftCard).
+// Indicates the reason for adding money to a [gift card]($m/GiftCard).
 type GiftCardActivityAdjustIncrementReason string
 
 const (
@@ -22086,7 +22089,7 @@ func (g GiftCardActivityAdjustIncrementReason) Ptr() *GiftCardActivityAdjustIncr
 	return &g
 }
 
-// Represents details about a `BLOCK` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `BLOCK` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityBlock struct {
 	// The reason the gift card was blocked.
 	// See [Reason](#type-reason) for possible values
@@ -22128,10 +22131,10 @@ func (g *GiftCardActivityBlock) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for blocking a [gift card](entity:GiftCard).
+// Indicates the reason for blocking a [gift card]($m/GiftCard).
 type GiftCardActivityBlockReason = string
 
-// Represents details about a `CLEAR_BALANCE` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `CLEAR_BALANCE` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityClearBalance struct {
 	// The reason the gift card balance was cleared.
 	// See [Reason](#type-reason) for possible values
@@ -22180,7 +22183,7 @@ func (g *GiftCardActivityClearBalance) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for clearing the balance of a [gift card](entity:GiftCard).
+// Indicates the reason for clearing the balance of a [gift card]($m/GiftCard).
 type GiftCardActivityClearBalanceReason string
 
 const (
@@ -22206,7 +22209,7 @@ func (g GiftCardActivityClearBalanceReason) Ptr() *GiftCardActivityClearBalanceR
 	return &g
 }
 
-// Represents details about a `DEACTIVATE` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `DEACTIVATE` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityDeactivate struct {
 	// The reason the gift card was deactivated.
 	// See [Reason](#type-reason) for possible values
@@ -22255,7 +22258,7 @@ func (g *GiftCardActivityDeactivate) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for deactivating a [gift card](entity:GiftCard).
+// Indicates the reason for deactivating a [gift card]($m/GiftCard).
 type GiftCardActivityDeactivateReason string
 
 const (
@@ -22281,7 +22284,7 @@ func (g GiftCardActivityDeactivateReason) Ptr() *GiftCardActivityDeactivateReaso
 	return &g
 }
 
-// Represents details about an `IMPORT` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `IMPORT` [gift card activity type]($m/GiftCardActivityType).
 // This activity type is used when Square imports a third-party gift card, in which case the
 // `gan_source` of the gift card is set to `OTHER`.
 type GiftCardActivityImport struct {
@@ -22331,7 +22334,7 @@ func (g *GiftCardActivityImport) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about an `IMPORT_REVERSAL` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `IMPORT_REVERSAL` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityImportReversal struct {
 	// The amount of money cleared from the third-party gift card when
 	// the import was reversed.
@@ -22380,7 +22383,7 @@ func (g *GiftCardActivityImportReversal) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `LOAD` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `LOAD` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityLoad struct {
 	// The amount added to the gift card. This value is a positive integer.
 	//
@@ -22486,7 +22489,7 @@ func (g *GiftCardActivityLoad) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `REDEEM` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `REDEEM` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityRedeem struct {
 	// The amount deducted from the gift card for the redemption. This value is a positive integer.
 	//
@@ -22572,7 +22575,7 @@ func (g *GiftCardActivityRedeem) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the status of a [gift card](entity:GiftCard) redemption. This status is relevant only for
+// Indicates the status of a [gift card]($m/GiftCard) redemption. This status is relevant only for
 // redemptions made from Square products (such as Square Point of Sale) because Square products use a
 // two-state process. Gift cards redeemed using the Gift Card Activities API always have a `COMPLETED` status.
 type GiftCardActivityRedeemStatus string
@@ -22600,7 +22603,7 @@ func (g GiftCardActivityRedeemStatus) Ptr() *GiftCardActivityRedeemStatus {
 	return &g
 }
 
-// Represents details about a `REFUND` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `REFUND` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityRefund struct {
 	// The ID of the refunded `REDEEM` gift card activity. Square populates this field if the
 	// `payment_id` in the corresponding [RefundPayment](api-endpoint:Refunds-RefundPayment) request
@@ -22684,7 +22687,7 @@ func (g *GiftCardActivityRefund) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `TRANSFER_BALANCE_FROM` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `TRANSFER_BALANCE_FROM` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityTransferBalanceFrom struct {
 	// The ID of the gift card to which the specified amount was transferred.
 	TransferToGiftCardID string `json:"transfer_to_gift_card_id" url:"transfer_to_gift_card_id"`
@@ -22741,7 +22744,7 @@ func (g *GiftCardActivityTransferBalanceFrom) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents details about a `TRANSFER_BALANCE_TO` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about a `TRANSFER_BALANCE_TO` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityTransferBalanceTo struct {
 	// The ID of the gift card from which the specified amount was transferred.
 	TransferFromGiftCardID string `json:"transfer_from_gift_card_id" url:"transfer_from_gift_card_id"`
@@ -22798,7 +22801,7 @@ func (g *GiftCardActivityTransferBalanceTo) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the type of [gift card activity](entity:GiftCardActivity).
+// Indicates the type of [gift card activity]($m/GiftCardActivity).
 type GiftCardActivityType string
 
 const (
@@ -22860,7 +22863,7 @@ func (g GiftCardActivityType) Ptr() *GiftCardActivityType {
 	return &g
 }
 
-// Represents details about an `UNBLOCK` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `UNBLOCK` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityUnblock struct {
 	// The reason the gift card was unblocked.
 	// See [Reason](#type-reason) for possible values
@@ -22902,10 +22905,10 @@ func (g *GiftCardActivityUnblock) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Indicates the reason for unblocking a [gift card](entity:GiftCard).
+// Indicates the reason for unblocking a [gift card]($m/GiftCard).
 type GiftCardActivityUnblockReason = string
 
-// Represents details about an `UNLINKED_ACTIVITY_REFUND` [gift card activity type](entity:GiftCardActivityType).
+// Represents details about an `UNLINKED_ACTIVITY_REFUND` [gift card activity type]($m/GiftCardActivityType).
 type GiftCardActivityUnlinkedActivityRefund struct {
 	// The amount added to the gift card for the refund. This value is a positive integer.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -23119,28 +23122,32 @@ func (i *ItemVariationLocationOverrides) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// An object describing a job that a team member is assigned to.
+// Represents a job assigned to a [team member]($m/TeamMember), including the compensation the team
+// member earns for the job. Job assignments are listed in the team member's [wage setting]($m/WageSetting).
 type JobAssignment struct {
 	// The title of the job.
-	JobTitle string `json:"job_title" url:"job_title"`
+	JobTitle *string `json:"job_title,omitempty" url:"job_title,omitempty"`
 	// The current pay type for the job assignment used to
 	// calculate the pay amount in a pay period.
 	// See [JobAssignmentPayType](#type-jobassignmentpaytype) for possible values
 	PayType JobAssignmentPayType `json:"pay_type" url:"pay_type"`
-	// The hourly pay rate of the job.
+	// The hourly pay rate of the job. For `SALARY` pay types, Square calculates the hourly rate based on
+	// `annual_rate` and `weekly_hours`.
 	HourlyRate *Money `json:"hourly_rate,omitempty" url:"hourly_rate,omitempty"`
 	// The total pay amount for a 12-month period on the job. Set if the job `PayType` is `SALARY`.
 	AnnualRate *Money `json:"annual_rate,omitempty" url:"annual_rate,omitempty"`
 	// The planned hours per week for the job. Set if the job `PayType` is `SALARY`.
 	WeeklyHours *int `json:"weekly_hours,omitempty" url:"weekly_hours,omitempty"`
+	// The ID of the [job]($m/Job).
+	JobID *string `json:"job_id,omitempty" url:"job_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
 }
 
-func (j *JobAssignment) GetJobTitle() string {
+func (j *JobAssignment) GetJobTitle() *string {
 	if j == nil {
-		return ""
+		return nil
 	}
 	return j.JobTitle
 }
@@ -23171,6 +23178,13 @@ func (j *JobAssignment) GetWeeklyHours() *int {
 		return nil
 	}
 	return j.WeeklyHours
+}
+
+func (j *JobAssignment) GetJobID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.JobID
 }
 
 func (j *JobAssignment) GetExtraProperties() map[string]interface{} {
@@ -23231,7 +23245,7 @@ func (j JobAssignmentPayType) Ptr() *JobAssignmentPayType {
 	return &j
 }
 
-// Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
+// Represents a [ListBookingCustomAttributeDefinitions]($e/BookingCustomAttributes/ListBookingCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListBookingCustomAttributeDefinitionsResponse struct {
@@ -23302,7 +23316,7 @@ func (l *ListBookingCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListBookingCustomAttributes](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributes) response.
+// Represents a [ListBookingCustomAttributes]($e/BookingCustomAttributes/ListBookingCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListBookingCustomAttributesResponse struct {
@@ -23509,7 +23523,7 @@ func (l *ListCashDrawerShiftsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributeDefinitions](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributeDefinitions) response.
+// Represents a [ListCustomerCustomAttributeDefinitions]($e/CustomerCustomAttributes/ListCustomerCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListCustomerCustomAttributeDefinitionsResponse struct {
@@ -23580,7 +23594,7 @@ func (l *ListCustomerCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributes) response.
+// Represents a [ListCustomerCustomAttributes]($e/CustomerCustomAttributes/ListCustomerCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListCustomerCustomAttributesResponse struct {
@@ -23654,7 +23668,7 @@ func (l *ListCustomerCustomAttributesResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListCustomerGroups](api-endpoint:CustomerGroups-ListCustomerGroups) endpoint.
+// a request to the [ListCustomerGroups]($e/CustomerGroups/ListCustomerGroups) endpoint.
 //
 // Either `errors` or `groups` is present in a given response (never both).
 type ListCustomerGroupsResponse struct {
@@ -24137,7 +24151,7 @@ func (l *ListLocationBookingProfilesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLocationCustomAttributeDefinitions](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributeDefinitions) response.
+// Represents a [ListLocationCustomAttributeDefinitions]($e/LocationCustomAttributes/ListLocationCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListLocationCustomAttributeDefinitionsResponse struct {
@@ -24208,7 +24222,7 @@ func (l *ListLocationCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLocationCustomAttributes](api-endpoint:LocationCustomAttributes-ListLocationCustomAttributes) response.
+// Represents a [ListLocationCustomAttributes]($e/LocationCustomAttributes/ListLocationCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListLocationCustomAttributesResponse struct {
@@ -24337,7 +24351,7 @@ func (l *ListLoyaltyProgramsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListLoyaltyPromotions](api-endpoint:Loyalty-ListLoyaltyPromotions) response.
+// Represents a [ListLoyaltyPromotions]($e/Loyalty/ListLoyaltyPromotions) response.
 // One of `loyalty_promotions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `loyalty_promotions`.
 type ListLoyaltyPromotionsResponse struct {
@@ -24407,7 +24421,7 @@ func (l *ListLoyaltyPromotionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListMerchantCustomAttributeDefinitions](api-endpoint:MerchantCustomAttributes-ListMerchantCustomAttributeDefinitions) response.
+// Represents a [ListMerchantCustomAttributeDefinitions]($e/MerchantCustomAttributes/ListMerchantCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
 // If additional results are available, the `cursor` field is also present along with `custom_attribute_definitions`.
 type ListMerchantCustomAttributeDefinitionsResponse struct {
@@ -24478,7 +24492,7 @@ func (l *ListMerchantCustomAttributeDefinitionsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [ListMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-ListMerchantCustomAttributes) response.
+// Represents a [ListMerchantCustomAttributes]($e/MerchantCustomAttributes/ListMerchantCustomAttributes) response.
 // Either `custom_attributes`, an empty object, or `errors` is present in the response. If additional
 // results are available, the `cursor` field is also present along with `custom_attributes`.
 type ListMerchantCustomAttributesResponse struct {
@@ -24963,7 +24977,7 @@ func (l *ListTransactionsResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListWebhookEventTypes](api-endpoint:WebhookSubscriptions-ListWebhookEventTypes) endpoint.
+// a request to the [ListWebhookEventTypes]($e/WebhookSubscriptions/ListWebhookEventTypes) endpoint.
 //
 // Note: if there are errors processing the request, the event types field will not be
 // present.
@@ -25033,7 +25047,7 @@ func (l *ListWebhookEventTypesResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListWebhookSubscriptions](api-endpoint:WebhookSubscriptions-ListWebhookSubscriptions) endpoint.
+// a request to the [ListWebhookSubscriptions]($e/WebhookSubscriptions/ListWebhookSubscriptions) endpoint.
 //
 // Note: if there are errors processing the request, the subscriptions field will not be
 // present.
@@ -25240,7 +25254,7 @@ func (l *LocationBookingProfile) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Describes a loyalty account in a [loyalty program](entity:LoyaltyProgram). For more information, see
+// Describes a loyalty account in a [loyalty program]($m/LoyaltyProgram). For more information, see
 // [Create and Retrieve Loyalty Accounts](https://developer.squareup.com/docs/loyalty-api/loyalty-accounts).
 type LoyaltyAccount struct {
 	// The Square-assigned ID of the loyalty account.
@@ -26393,7 +26407,7 @@ func (l *LoyaltyProgram) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents an accrual rule, which defines how buyers can earn points from the base [loyalty program](entity:LoyaltyProgram).
+// Represents an accrual rule, which defines how buyers can earn points from the base [loyalty program]($m/LoyaltyProgram).
 type LoyaltyProgramAccrualRule struct {
 	// The type of the accrual rule that defines how buyers can earn points.
 	// See [LoyaltyProgramAccrualRuleType](#type-loyaltyprogramaccrualruletype) for possible values
@@ -27170,7 +27184,7 @@ func (l *LoyaltyProgramTerminology) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a promotion for a [loyalty program](entity:LoyaltyProgram). Loyalty promotions enable buyers
+// Represents a promotion for a [loyalty program]($m/LoyaltyProgram). Loyalty promotions enable buyers
 // to earn extra points on top of those earned from the base program.
 //
 // A loyalty program can have a maximum of 10 loyalty promotions with an `ACTIVE` or `SCHEDULED` status.
@@ -27345,7 +27359,7 @@ func (l *LoyaltyPromotion) String() string {
 }
 
 // Represents scheduling information that determines when purchases can qualify to earn points
-// from a [loyalty promotion](entity:LoyaltyPromotion).
+// from a [loyalty promotion]($m/LoyaltyPromotion).
 type LoyaltyPromotionAvailableTimeData struct {
 	// The date that the promotion starts, in `YYYY-MM-DD` format. Square populates this field
 	// based on the provided `time_periods`.
@@ -27424,7 +27438,7 @@ func (l *LoyaltyPromotionAvailableTimeData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents how points for a [loyalty promotion](entity:LoyaltyPromotion) are calculated,
+// Represents how points for a [loyalty promotion]($m/LoyaltyPromotion) are calculated,
 // either by multiplying the points earned from the base program or by adding a specified number
 // of points to the points earned from the base program.
 type LoyaltyPromotionIncentive struct {
@@ -27493,7 +27507,7 @@ func (l *LoyaltyPromotionIncentive) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents the metadata for a `POINTS_ADDITION` type of [loyalty promotion incentive](entity:LoyaltyPromotionIncentive).
+// Represents the metadata for a `POINTS_ADDITION` type of [loyalty promotion incentive]($m/LoyaltyPromotionIncentive).
 type LoyaltyPromotionIncentivePointsAdditionData struct {
 	// The number of additional points to earn each time the promotion is triggered. For example,
 	// suppose a purchase qualifies for 5 points from the base loyalty program. If the purchase also
@@ -27544,7 +27558,7 @@ func (l *LoyaltyPromotionIncentivePointsAdditionData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents the metadata for a `POINTS_MULTIPLIER` type of [loyalty promotion incentive](entity:LoyaltyPromotionIncentive).
+// Represents the metadata for a `POINTS_MULTIPLIER` type of [loyalty promotion incentive]($m/LoyaltyPromotionIncentive).
 type LoyaltyPromotionIncentivePointsMultiplierData struct {
 	// The multiplier used to calculate the number of points earned each time the promotion
 	// is triggered. For example, suppose a purchase qualifies for 5 points from the base loyalty program.
@@ -27621,7 +27635,7 @@ func (l *LoyaltyPromotionIncentivePointsMultiplierData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Indicates the type of points incentive for a [loyalty promotion](entity:LoyaltyPromotion),
+// Indicates the type of points incentive for a [loyalty promotion]($m/LoyaltyPromotion),
 // which is used to determine how buyers can earn points from the promotion.
 type LoyaltyPromotionIncentiveType string
 
@@ -27645,7 +27659,7 @@ func (l LoyaltyPromotionIncentiveType) Ptr() *LoyaltyPromotionIncentiveType {
 	return &l
 }
 
-// Indicates the status of a [loyalty promotion](entity:LoyaltyPromotion).
+// Indicates the status of a [loyalty promotion]($m/LoyaltyPromotion).
 type LoyaltyPromotionStatus string
 
 const (
@@ -27674,7 +27688,7 @@ func (l LoyaltyPromotionStatus) Ptr() *LoyaltyPromotionStatus {
 	return &l
 }
 
-// Represents the number of times a buyer can earn points during a [loyalty promotion](entity:LoyaltyPromotion).
+// Represents the number of times a buyer can earn points during a [loyalty promotion]($m/LoyaltyPromotion).
 // If this field is not set, buyers can trigger the promotion an unlimited number of times to earn points during
 // the time that the promotion is available.
 //
@@ -27736,8 +27750,8 @@ func (l *LoyaltyPromotionTriggerLimit) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Indicates the time period that the [trigger limit](entity:LoyaltyPromotionTriggerLimit) applies to,
-// which is used to determine the number of times a buyer can earn points for a [loyalty promotion](entity:LoyaltyPromotion).
+// Indicates the time period that the [trigger limit]($m/LoyaltyPromotionTriggerLimit) applies to,
+// which is used to determine the number of times a buyer can earn points for a [loyalty promotion]($m/LoyaltyPromotion).
 type LoyaltyPromotionTriggerLimitInterval string
 
 const (
@@ -27760,7 +27774,7 @@ func (l LoyaltyPromotionTriggerLimitInterval) Ptr() *LoyaltyPromotionTriggerLimi
 	return &l
 }
 
-// Represents a contract to redeem loyalty points for a [reward tier](entity:LoyaltyProgramRewardTier) discount. Loyalty rewards can be in an ISSUED, REDEEMED, or DELETED state.
+// Represents a contract to redeem loyalty points for a [reward tier]($m/LoyaltyProgramRewardTier) discount. Loyalty rewards can be in an ISSUED, REDEEMED, or DELETED state.
 // For more information, see [Manage loyalty rewards](https://developer.squareup.com/docs/loyalty-api/loyalty-rewards).
 type LoyaltyReward struct {
 	// The Square-assigned ID of the loyalty reward.
@@ -28469,7 +28483,7 @@ type Order struct {
 	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
 	// The origination details of the order.
 	Source *OrderSource `json:"source,omitempty" url:"source,omitempty"`
-	// The ID of the [customer](entity:Customer) associated with the order.
+	// The ID of the [customer]($m/Customer) associated with the order.
 	//
 	// You should specify a `customer_id` on the order (or the payment) to ensure that transactions
 	// are reliably linked to customers. Omitting this field might result in the creation of new
@@ -29634,7 +29648,7 @@ func (o OrderLineItemItemType) Ptr() *OrderLineItemItemType {
 	return &o
 }
 
-// A [CatalogModifier](entity:CatalogModifier).
+// A [CatalogModifier]($m/CatalogModifier).
 type OrderLineItemModifier struct {
 	// A unique ID that identifies the modifier only within this order.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -30279,7 +30293,7 @@ func (o *OrderMoneyAmounts) String() string {
 
 // Pricing options for an order. The options affect how the order's price is calculated.
 // They can be used, for example, to apply automatic price adjustments that are based on preconfigured
-// [pricing rules](entity:CatalogPricingRule).
+// [pricing rules]($m/CatalogPricingRule).
 type OrderPricingOptions struct {
 	// The option to determine whether pricing rule-based
 	// discounts are automatically applied to an order.
@@ -32958,7 +32972,7 @@ func (r RefundStatus) Ptr() *RefundStatus {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RemoveGroupFromCustomer](api-endpoint:Customers-RemoveGroupFromCustomer)
+// a request to the [RemoveGroupFromCustomer]($e/Customers/RemoveGroupFromCustomer)
 // endpoint.
 type RemoveGroupFromCustomerResponse struct {
 	// Any errors that occurred during the request.
@@ -33007,7 +33021,7 @@ func (r *RemoveGroupFromCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttributeDefinition) response.
+// Represents a [RetrieveBookingCustomAttributeDefinition]($e/BookingCustomAttributes/RetrieveBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -33065,7 +33079,7 @@ func (r *RetrieveBookingCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveBookingCustomAttribute](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttribute) response.
+// Represents a [RetrieveBookingCustomAttribute]($e/BookingCustomAttributes/RetrieveBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveBookingCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -33124,7 +33138,7 @@ func (r *RetrieveBookingCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttributeDefinition) response.
+// Represents a [RetrieveLocationCustomAttributeDefinition]($e/LocationCustomAttributes/RetrieveLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -33182,7 +33196,7 @@ func (r *RetrieveLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveLocationCustomAttribute](api-endpoint:LocationCustomAttributes-RetrieveLocationCustomAttribute) response.
+// Represents a [RetrieveLocationCustomAttribute]($e/LocationCustomAttributes/RetrieveLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveLocationCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -33241,7 +33255,7 @@ func (r *RetrieveLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttributeDefinition) response.
+// Represents a [RetrieveMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeDefinitionResponse struct {
 	// The retrieved custom attribute definition.
@@ -33299,7 +33313,7 @@ func (r *RetrieveMerchantCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a [RetrieveMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-RetrieveMerchantCustomAttribute) response.
+// Represents a [RetrieveMerchantCustomAttribute]($e/MerchantCustomAttributes/RetrieveMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type RetrieveMerchantCustomAttributeResponse struct {
 	// The retrieved custom attribute. If `with_definition` was set to `true` in the request,
@@ -35121,7 +35135,7 @@ func (s *SourceApplication) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Determines the billing cadence of a [Subscription](entity:Subscription)
+// Determines the billing cadence of a [Subscription]($m/Subscription)
 type SubscriptionCadence string
 
 const (
@@ -35338,7 +35352,7 @@ func (s *SubscriptionPricing) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Determines the pricing of a [Subscription](entity:Subscription)
+// Determines the pricing of a [Subscription]($m/Subscription)
 type SubscriptionPricingType string
 
 const (
@@ -35887,7 +35901,7 @@ func (t *Tender) String() string {
 
 // Represents the details of a tender with `type` `BANK_ACCOUNT`.
 //
-// See [BankAccountPaymentDetails](entity:BankAccountPaymentDetails)
+// See [BankAccountPaymentDetails]($m/BankAccountPaymentDetails)
 // for more exposed details of a bank account payment.
 type TenderBankAccountDetails struct {
 	// The bank account payment's current state.
@@ -37639,9 +37653,9 @@ func (t *TerminalRefundQuerySort) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [TestWebhookSubscription](api-endpoint:WebhookSubscriptions-TestWebhookSubscription) endpoint.
+// a request to the [TestWebhookSubscription]($e/WebhookSubscriptions/TestWebhookSubscription) endpoint.
 //
-// Note: If there are errors processing the request, the [SubscriptionTestResult](entity:SubscriptionTestResult) field is not
+// Note: If there are errors processing the request, the [SubscriptionTestResult]($m/SubscriptionTestResult) field is not
 // present.
 type TestWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -38043,7 +38057,7 @@ func (t TransactionProduct) Ptr() *TransactionProduct {
 	return &t
 }
 
-// Represents an [UpdateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-UpdateBookingCustomAttributeDefinition) response.
+// Represents an [UpdateBookingCustomAttributeDefinition]($e/BookingCustomAttributes/UpdateBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateBookingCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -38267,7 +38281,7 @@ func (u *UpdateCatalogImageResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-UpdateCustomerCustomAttributeDefinition) response.
+// Represents an [UpdateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/UpdateCustomerCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateCustomerCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -38326,7 +38340,7 @@ func (u *UpdateCustomerCustomAttributeDefinitionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateCustomerGroup](api-endpoint:CustomerGroups-UpdateCustomerGroup) endpoint.
+// a request to the [UpdateCustomerGroup]($e/CustomerGroups/UpdateCustomerGroup) endpoint.
 //
 // Either `errors` or `group` is present in a given response (never both).
 type UpdateCustomerGroupResponse struct {
@@ -38385,7 +38399,7 @@ func (u *UpdateCustomerGroupResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-UpdateLocationCustomAttributeDefinition) response.
+// Represents an [UpdateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/UpdateLocationCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateLocationCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -38443,7 +38457,7 @@ func (u *UpdateLocationCustomAttributeDefinitionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpdateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-UpdateMerchantCustomAttributeDefinition) response.
+// Represents an [UpdateMerchantCustomAttributeDefinition]($e/MerchantCustomAttributes/UpdateMerchantCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpdateMerchantCustomAttributeDefinitionResponse struct {
 	// The updated custom attribute definition.
@@ -38732,9 +38746,9 @@ func (u *UpdateWageSettingResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateWebhookSubscription](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscription) endpoint.
+// a request to the [UpdateWebhookSubscription]($e/WebhookSubscriptions/UpdateWebhookSubscription) endpoint.
 //
-// Note: If there are errors processing the request, the [Subscription](entity:WebhookSubscription) is not
+// Note: If there are errors processing the request, the [Subscription]($m/WebhookSubscription) is not
 // present.
 type UpdateWebhookSubscriptionResponse struct {
 	// Information on errors encountered during the request.
@@ -38793,9 +38807,9 @@ func (u *UpdateWebhookSubscriptionResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [UpdateWebhookSubscriptionSignatureKey](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscriptionSignatureKey) endpoint.
+// a request to the [UpdateWebhookSubscriptionSignatureKey]($e/WebhookSubscriptions/UpdateWebhookSubscriptionSignatureKey) endpoint.
 //
-// Note: If there are errors processing the request, the [Subscription](entity:WebhookSubscription) is not
+// Note: If there are errors processing the request, the [Subscription]($m/WebhookSubscription) is not
 // present.
 type UpdateWebhookSubscriptionSignatureKeyResponse struct {
 	// Information on errors encountered during the request.
@@ -38912,7 +38926,7 @@ func (u *UpdateWorkweekConfigResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertBookingCustomAttribute](api-endpoint:BookingCustomAttributes-UpsertBookingCustomAttribute) response.
+// Represents an [UpsertBookingCustomAttribute]($e/BookingCustomAttributes/UpsertBookingCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertBookingCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -39035,7 +39049,7 @@ func (u *UpsertCatalogObjectResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-UpsertCustomerCustomAttribute) response.
+// Represents an [UpsertCustomerCustomAttribute]($e/CustomerCustomAttributes/UpsertCustomerCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertCustomerCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -39093,7 +39107,7 @@ func (u *UpsertCustomerCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertLocationCustomAttribute](api-endpoint:LocationCustomAttributes-UpsertLocationCustomAttribute) response.
+// Represents an [UpsertLocationCustomAttribute]($e/LocationCustomAttributes/UpsertLocationCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertLocationCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -39151,7 +39165,7 @@ func (u *UpsertLocationCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) response.
+// Represents an [UpsertMerchantCustomAttribute]($e/MerchantCustomAttributes/UpsertMerchantCustomAttribute) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 type UpsertMerchantCustomAttributeResponse struct {
 	// The new or updated custom attribute.
@@ -39341,27 +39355,24 @@ func (v *VoidTransactionResponse) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// An object representing a team member's wage information.
+// Represents information about the overtime exemption status, job assignments, and compensation
+// for a [team member]($m/TeamMember).
 type WageSetting struct {
-	// The unique ID of the `TeamMember` whom this wage setting describes.
+	// The ID of the team member associated with the wage setting.
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
-	// Required. The ordered list of jobs that the team member is assigned to.
+	// **Required** The ordered list of jobs that the team member is assigned to.
 	// The first job assignment is considered the team member's primary job.
-	//
-	// The minimum length is 1 and the maximum length is 12.
 	JobAssignments []*JobAssignment `json:"job_assignments,omitempty" url:"job_assignments,omitempty"`
 	// Whether the team member is exempt from the overtime rules of the seller's country.
 	IsOvertimeExempt *bool `json:"is_overtime_exempt,omitempty" url:"is_overtime_exempt,omitempty"`
-	// Used for resolving concurrency issues. The request fails if the version
+	// **Read only** Used for resolving concurrency issues. The request fails if the version
 	// provided does not match the server version at the time of the request. If not provided,
 	// Square executes a blind write, potentially overwriting data from another write. For more information,
 	// see [optimistic concurrency](https://developer.squareup.com/docs/working-with-apis/optimistic-concurrency).
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the wage setting object was created.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the wage setting was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the wage setting object was last updated.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the wage setting was last updated, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}

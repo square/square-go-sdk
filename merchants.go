@@ -19,7 +19,7 @@ type MerchantsListRequest struct {
 	Cursor *int `json:"-" url:"cursor,omitempty"`
 }
 
-// The response object returned by the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant) endpoint.
+// The response object returned by the [RetrieveMerchant]($e/Merchants/RetrieveMerchant) endpoint.
 type GetMerchantResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -76,7 +76,7 @@ func (g *GetMerchantResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// The response object returned by the [ListMerchant](api-endpoint:Merchants-ListMerchants) endpoint.
+// The response object returned by the [ListMerchant]($e/Merchants/ListMerchants) endpoint.
 type ListMerchantsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

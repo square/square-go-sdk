@@ -58,7 +58,7 @@ type CardsListRequest struct {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [CreateCard](api-endpoint:Cards-CreateCard) endpoint.
+// a request to the [CreateCard]($e/Cards/CreateCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -119,7 +119,7 @@ func (c *CreateCardResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DisableCard](api-endpoint:Cards-DisableCard) endpoint.
+// a request to the [DisableCard]($e/Cards/DisableCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -180,7 +180,7 @@ func (d *DisableCardResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RetrieveCard](api-endpoint:Cards-RetrieveCard) endpoint.
+// a request to the [RetrieveCard]($e/Cards/RetrieveCard) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
@@ -241,7 +241,7 @@ func (g *GetCardResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListCards](api-endpoint:Cards-ListCards) endpoint.
+// a request to the [ListCards]($e/Cards/ListCards) endpoint.
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.

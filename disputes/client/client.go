@@ -286,8 +286,8 @@ func (c *Client) CreateEvidenceText(
 // Submits evidence to the cardholder's bank.
 //
 // The evidence submitted by this endpoint includes evidence uploaded
-// using the [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) and
-// [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText) endpoints and
+// using the [CreateDisputeEvidenceFile]($e/Disputes/CreateDisputeEvidenceFile) and
+// [CreateDisputeEvidenceText]($e/Disputes/CreateDisputeEvidenceText) endpoints and
 // evidence automatically provided by Square, when available. Evidence cannot be removed from
 // a dispute after submission.
 func (c *Client) SubmitEvidence(

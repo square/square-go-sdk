@@ -14,7 +14,7 @@ type RegisterDomainRequest struct {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
+// a request to the [RegisterDomain]($e/ApplePay/RegisterDomain) endpoint.
 //
 // Either `errors` or `status` are present in a given response (never both).
 type RegisterDomainResponse struct {

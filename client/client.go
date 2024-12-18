@@ -34,6 +34,7 @@ import (
 	sites "github.com/square/square-go-sdk/sites"
 	snippets "github.com/square/square-go-sdk/snippets"
 	subscriptions "github.com/square/square-go-sdk/subscriptions"
+	team "github.com/square/square-go-sdk/team"
 	teammembersclient "github.com/square/square-go-sdk/teammembers/client"
 	terminalclient "github.com/square/square-go-sdk/terminal/client"
 	v1transactions "github.com/square/square-go-sdk/v1transactions"
@@ -77,6 +78,7 @@ type Client struct {
 	Snippets       *snippets.Client
 	Subscriptions  *subscriptions.Client
 	TeamMembers    *teammembersclient.Client
+	Team           *team.Client
 	Terminal       *terminalclient.Client
 	Vendors        *vendors.Client
 	CashDrawers    *cashdrawersclient.Client
@@ -129,6 +131,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Snippets:       snippets.NewClient(opts...),
 		Subscriptions:  subscriptions.NewClient(opts...),
 		TeamMembers:    teammembersclient.NewClient(opts...),
+		Team:           team.NewClient(opts...),
 		Terminal:       terminalclient.NewClient(opts...),
 		Vendors:        vendors.NewClient(opts...),
 		CashDrawers:    cashdrawersclient.NewClient(opts...),

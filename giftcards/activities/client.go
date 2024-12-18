@@ -100,7 +100,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a gift card activity to manage the balance or state of a [gift card](entity:GiftCard).
+// Creates a gift card activity to manage the balance or state of a [gift card]($m/GiftCard).
 // For example, create an `ACTIVATE` activity to activate a gift card with an initial balance before first use.
 func (c *Client) Create(
 	ctx context.Context,
