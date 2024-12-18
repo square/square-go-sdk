@@ -40,8 +40,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 }
 
 // Retrieves a `WageSetting` object for a team member specified
-// by `TeamMember.id`.
-// Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrievewagesetting).
+// by `TeamMember.id`. For more information, see
+// [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrievewagesetting).
+//
+// Square recommends using [RetrieveTeamMember](api-endpoint:Team-RetrieveTeamMember) or [SearchTeamMembers](api-endpoint:Team-SearchTeamMembers)
+// to get this information directly from the `TeamMember.wage_setting` field.
 func (c *Client) Get(
 	ctx context.Context,
 	request *teammembers.WageSettingGetRequest,
@@ -82,10 +85,13 @@ func (c *Client) Get(
 }
 
 // Creates or updates a `WageSetting` object. The object is created if a
-// `WageSetting` with the specified `team_member_id` does not exist. Otherwise,
+// `WageSetting` with the specified `team_member_id` doesn't exist. Otherwise,
 // it fully replaces the `WageSetting` object for the team member.
-// The `WageSetting` is returned on a successful update.
-// Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#create-or-update-a-wage-setting).
+// The `WageSetting` is returned on a successful update. For more information, see
+// [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#create-or-update-a-wage-setting).
+//
+// Square recommends using [CreateTeamMember](api-endpoint:Team-CreateTeamMember) or [UpdateTeamMember](api-endpoint:Team-UpdateTeamMember)
+// to manage the `TeamMember.wage_setting` field directly.
 func (c *Client) Update(
 	ctx context.Context,
 	request *teammembers.UpdateWageSettingRequest,

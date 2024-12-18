@@ -13033,6 +13033,7 @@ const (
 	CheckoutOptionsPaymentTypeFelicaTransportationGroup CheckoutOptionsPaymentType = "FELICA_TRANSPORTATION_GROUP"
 	CheckoutOptionsPaymentTypeFelicaAll                 CheckoutOptionsPaymentType = "FELICA_ALL"
 	CheckoutOptionsPaymentTypePaypay                    CheckoutOptionsPaymentType = "PAYPAY"
+	CheckoutOptionsPaymentTypeQrCode                    CheckoutOptionsPaymentType = "QR_CODE"
 )
 
 func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentType, error) {
@@ -13051,6 +13052,8 @@ func NewCheckoutOptionsPaymentTypeFromString(s string) (CheckoutOptionsPaymentTy
 		return CheckoutOptionsPaymentTypeFelicaAll, nil
 	case "PAYPAY":
 		return CheckoutOptionsPaymentTypePaypay, nil
+	case "QR_CODE":
+		return CheckoutOptionsPaymentTypeQrCode, nil
 	}
 	var t CheckoutOptionsPaymentType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -23119,28 +23122,32 @@ func (i *ItemVariationLocationOverrides) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// An object describing a job that a team member is assigned to.
+// Represents a job assigned to a [team member](entity:TeamMember), including the compensation the team
+// member earns for the job. Job assignments are listed in the team member's [wage setting](entity:WageSetting).
 type JobAssignment struct {
 	// The title of the job.
-	JobTitle string `json:"job_title" url:"job_title"`
+	JobTitle *string `json:"job_title,omitempty" url:"job_title,omitempty"`
 	// The current pay type for the job assignment used to
 	// calculate the pay amount in a pay period.
 	// See [JobAssignmentPayType](#type-jobassignmentpaytype) for possible values
 	PayType JobAssignmentPayType `json:"pay_type" url:"pay_type"`
-	// The hourly pay rate of the job.
+	// The hourly pay rate of the job. For `SALARY` pay types, Square calculates the hourly rate based on
+	// `annual_rate` and `weekly_hours`.
 	HourlyRate *Money `json:"hourly_rate,omitempty" url:"hourly_rate,omitempty"`
 	// The total pay amount for a 12-month period on the job. Set if the job `PayType` is `SALARY`.
 	AnnualRate *Money `json:"annual_rate,omitempty" url:"annual_rate,omitempty"`
 	// The planned hours per week for the job. Set if the job `PayType` is `SALARY`.
 	WeeklyHours *int `json:"weekly_hours,omitempty" url:"weekly_hours,omitempty"`
+	// The ID of the [job](entity:Job).
+	JobID *string `json:"job_id,omitempty" url:"job_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
 }
 
-func (j *JobAssignment) GetJobTitle() string {
+func (j *JobAssignment) GetJobTitle() *string {
 	if j == nil {
-		return ""
+		return nil
 	}
 	return j.JobTitle
 }
@@ -23171,6 +23178,13 @@ func (j *JobAssignment) GetWeeklyHours() *int {
 		return nil
 	}
 	return j.WeeklyHours
+}
+
+func (j *JobAssignment) GetJobID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.JobID
 }
 
 func (j *JobAssignment) GetExtraProperties() map[string]interface{} {
@@ -39341,27 +39355,24 @@ func (v *VoidTransactionResponse) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// An object representing a team member's wage information.
+// Represents information about the overtime exemption status, job assignments, and compensation
+// for a [team member](entity:TeamMember).
 type WageSetting struct {
-	// The unique ID of the `TeamMember` whom this wage setting describes.
+	// The ID of the team member associated with the wage setting.
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
-	// Required. The ordered list of jobs that the team member is assigned to.
+	// **Required** The ordered list of jobs that the team member is assigned to.
 	// The first job assignment is considered the team member's primary job.
-	//
-	// The minimum length is 1 and the maximum length is 12.
 	JobAssignments []*JobAssignment `json:"job_assignments,omitempty" url:"job_assignments,omitempty"`
 	// Whether the team member is exempt from the overtime rules of the seller's country.
 	IsOvertimeExempt *bool `json:"is_overtime_exempt,omitempty" url:"is_overtime_exempt,omitempty"`
-	// Used for resolving concurrency issues. The request fails if the version
+	// **Read only** Used for resolving concurrency issues. The request fails if the version
 	// provided does not match the server version at the time of the request. If not provided,
 	// Square executes a blind write, potentially overwriting data from another write. For more information,
 	// see [optimistic concurrency](https://developer.squareup.com/docs/working-with-apis/optimistic-concurrency).
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the wage setting object was created.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the wage setting was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the wage setting object was last updated.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the wage setting was last updated, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 
 	extraProperties map[string]interface{}

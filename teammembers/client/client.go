@@ -174,9 +174,8 @@ func (c *Client) BatchUpdate(
 }
 
 // Returns a paginated list of `TeamMember` objects for a business.
-// The list can be filtered by the following:
-// - location IDs
-// - `status`
+// The list can be filtered by location IDs, `ACTIVE` or `INACTIVE` status, or whether
+// the team member is the Square account owner.
 func (c *Client) Search(
 	ctx context.Context,
 	request *squaregosdk.SearchTeamMembersRequest,
