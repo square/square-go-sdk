@@ -99,7 +99,7 @@ func (c *Client) List(
 }
 
 // Provides the summary details for a single cash drawer shift. See
-// [ListCashDrawerShiftEvents](api-endpoint:CashDrawers-ListCashDrawerShiftEvents) for a list of cash drawer shift events.
+// [ListCashDrawerShiftEvents]($e/CashDrawers/ListCashDrawerShiftEvents) for a list of cash drawer shift events.
 func (c *Client) Get(
 	ctx context.Context,
 	request *cashdrawers.ShiftsGetRequest,

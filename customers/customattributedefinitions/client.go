@@ -40,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Lists the customer-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// Lists the customer-related [custom attribute definitions]($m/CustomAttributeDefinition) that belong to a Square seller account.
 //
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
@@ -102,13 +102,13 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Creates a customer-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Creates a customer-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to define a custom attribute that can be associated with customer profiles.
 //
 // A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
 // for a custom attribute. After the definition is created, you can call
-// [UpsertCustomerCustomAttribute](api-endpoint:CustomerCustomAttributes-UpsertCustomerCustomAttribute) or
-// [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
+// [UpsertCustomerCustomAttribute]($e/CustomerCustomAttributes/UpsertCustomerCustomAttribute) or
+// [BulkUpsertCustomerCustomAttributes]($e/CustomerCustomAttributes/BulkUpsertCustomerCustomAttributes)
 // to set the custom attribute for customer profiles in the seller's Customer Directory.
 //
 // Sellers can view all custom attributes in exported customer data, including those set to
@@ -151,7 +151,7 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Retrieves a customer-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Retrieves a customer-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
 //
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
@@ -202,7 +202,7 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Updates a customer-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Updates a customer-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
 //
 // Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
 // `schema` for a `Selection` data type.
@@ -250,7 +250,7 @@ func (c *Client) Update(
 	return response, nil
 }
 
-// Deletes a customer-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Deletes a customer-related [custom attribute definition]($m/CustomAttributeDefinition) from a Square seller account.
 //
 // Deleting a custom attribute definition also deletes the corresponding custom attribute from
 // all customer profiles in the seller's Customer Directory.
@@ -295,11 +295,11 @@ func (c *Client) Delete(
 	return response, nil
 }
 
-// Creates or updates [custom attributes](entity:CustomAttribute) for customer profiles as a bulk operation.
+// Creates or updates [custom attributes]($m/CustomAttribute) for customer profiles as a bulk operation.
 //
 // Use this endpoint to set the value of one or more custom attributes for one or more customer profiles.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which is
-// created using the [CreateCustomerCustomAttributeDefinition](api-endpoint:CustomerCustomAttributes-CreateCustomerCustomAttributeDefinition) endpoint.
+// created using the [CreateCustomerCustomAttributeDefinition]($e/CustomerCustomAttributes/CreateCustomerCustomAttributeDefinition) endpoint.
 //
 // This `BulkUpsertCustomerCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
 // requests and returns a map of individual upsert responses. Each upsert request has a unique ID

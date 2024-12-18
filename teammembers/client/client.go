@@ -8,6 +8,7 @@ import (
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
 	option "github.com/square/square-go-sdk/option"
+	jobs "github.com/square/square-go-sdk/teammembers/jobs"
 	wagesetting "github.com/square/square-go-sdk/teammembers/wagesetting"
 	http "net/http"
 	os "os"
@@ -18,6 +19,7 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
+	Jobs        *jobs.Client
 	WageSetting *wagesetting.Client
 }
 
@@ -38,6 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:      options.ToHeader(),
+		Jobs:        jobs.NewClient(opts...),
 		WageSetting: wagesetting.NewClient(opts...),
 	}
 }
@@ -174,9 +177,8 @@ func (c *Client) BatchUpdate(
 }
 
 // Returns a paginated list of `TeamMember` objects for a business.
-// The list can be filtered by the following:
-// - location IDs
-// - `status`
+// The list can be filtered by location IDs, `ACTIVE` or `INACTIVE` status, or whether
+// the team member is the Square account owner.
 func (c *Client) Search(
 	ctx context.Context,
 	request *squaregosdk.SearchTeamMembersRequest,

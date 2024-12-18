@@ -89,7 +89,7 @@ func (c *Client) Create(
 // If you include a `query` object, `loyalty_account_id` is required and `status` is  optional.
 //
 // If you know a reward ID, use the
-// [RetrieveLoyaltyReward](api-endpoint:Loyalty-RetrieveLoyaltyReward) endpoint.
+// [RetrieveLoyaltyReward]($e/Loyalty/RetrieveLoyaltyReward) endpoint.
 //
 // Search results are sorted by `updated_at` in descending order.
 func (c *Client) Search(
@@ -174,7 +174,7 @@ func (c *Client) Get(
 //
 // - Returns the loyalty points back to the loyalty account.
 // - If an order ID was specified when the reward was created
-// (see [CreateLoyaltyReward](api-endpoint:Loyalty-CreateLoyaltyReward)),
+// (see [CreateLoyaltyReward]($e/Loyalty/CreateLoyaltyReward)),
 // it updates the order by removing the reward and related
 // discounts.
 //

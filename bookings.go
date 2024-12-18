@@ -646,7 +646,7 @@ func (b *BulkRetrieveBookingsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
+// Response payload for the [BulkRetrieveTeamMemberBookingProfiles]($e/Bookings/BulkRetrieveTeamMemberBookingProfiles) endpoint.
 type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
 	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`

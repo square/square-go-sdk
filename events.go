@@ -29,7 +29,7 @@ type SearchEventsRequest struct {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [DisableEvents](api-endpoint:Events-DisableEvents) endpoint.
+// a request to the [DisableEvents]($e/Events/DisableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
@@ -81,7 +81,7 @@ func (d *DisableEventsResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [EnableEvents](api-endpoint:Events-EnableEvents) endpoint.
+// a request to the [EnableEvents]($e/Events/EnableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
@@ -298,7 +298,7 @@ func (e *EventData) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Contains metadata about a particular [Event](entity:Event).
+// Contains metadata about a particular [Event]($m/Event).
 type EventMetadata struct {
 	// A unique ID for the event.
 	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
@@ -356,7 +356,7 @@ func (e *EventMetadata) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [ListEventTypes](api-endpoint:Events-ListEventTypes) endpoint.
+// a request to the [ListEventTypes]($e/Events/ListEventTypes) endpoint.
 //
 // Note: if there are errors processing the request, the event types field will not be
 // present.
@@ -558,7 +558,7 @@ func (s *SearchEventsQuery) String() string {
 }
 
 // Defines the fields that are included in the response body of
-// a request to the [SearchEvents](api-endpoint:Events-SearchEvents) endpoint.
+// a request to the [SearchEvents]($e/Events/SearchEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.

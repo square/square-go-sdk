@@ -154,7 +154,7 @@ func (c *CancelInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
+// Represents a [CreateInvoiceAttachment]($e/Invoices/CreateInvoiceAttachment) response.
 type CreateInvoiceAttachmentResponse struct {
 	// Metadata about the attachment that was added to the invoice.
 	Attachment *InvoiceAttachment `json:"attachment,omitempty" url:"attachment,omitempty"`
@@ -268,7 +268,7 @@ func (c *CreateInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
+// Represents a [DeleteInvoiceAttachment]($e/Invoices/DeleteInvoiceAttachment) response.
 type DeleteInvoiceAttachmentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -743,7 +743,7 @@ func (i *Invoice) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
+// The payment methods that customers can use to pay an [invoice]($m/Invoice) on the Square-hosted invoice payment page.
 type InvoiceAcceptedPaymentMethods struct {
 	// Indicates whether credit card or debit card payments are accepted. The default value is `false`.
 	Card *bool `json:"card,omitempty" url:"card,omitempty"`
@@ -835,7 +835,7 @@ func (i *InvoiceAcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents a file attached to an [invoice](entity:Invoice).
+// Represents a file attached to an [invoice]($m/Invoice).
 type InvoiceAttachment struct {
 	// The Square-assigned ID of the attachment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -940,7 +940,7 @@ func (i *InvoiceAttachment) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Indicates the automatic payment method for an [invoice payment request](entity:InvoicePaymentRequest).
+// Indicates the automatic payment method for an [invoice payment request]($m/InvoicePaymentRequest).
 type InvoiceAutomaticPaymentSource string
 
 const (
@@ -1061,7 +1061,7 @@ func (i InvoiceCustomFieldPlacement) Ptr() *InvoiceCustomFieldPlacement {
 	return &i
 }
 
-// Indicates how Square delivers the [invoice](entity:Invoice) to the customer.
+// Indicates how Square delivers the [invoice]($m/Invoice) to the customer.
 type InvoiceDeliveryMethod string
 
 const (
@@ -1263,7 +1263,7 @@ func (i InvoicePaymentReminderStatus) Ptr() *InvoicePaymentReminderStatus {
 	return &i
 }
 
-// Represents a payment request for an [invoice](entity:Invoice). Invoices can specify a maximum
+// Represents a payment request for an [invoice]($m/Invoice). Invoices can specify a maximum
 // of 13 payment requests, with up to 12 `INSTALLMENT` request types. For more information,
 // see [Configuring payment requests](https://developer.squareup.com/docs/invoices-api/create-publish-invoices#payment-requests).
 //

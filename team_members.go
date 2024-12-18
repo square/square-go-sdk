@@ -9,12 +9,21 @@ import (
 )
 
 type BatchCreateTeamMembersRequest struct {
-	// The data used to create the `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`. The maximum number of create objects is 25.
+	// The data used to create the `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`.
+	// The maximum number of create objects is 25.
+	//
+	// If you include a team member's `wage_setting`, you must provide `job_id` for each job assignment. To get job IDs,
+	// call [ListJobs](api-endpoint:Team-ListJobs).
 	TeamMembers map[string]*CreateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
 }
 
 type BatchUpdateTeamMembersRequest struct {
-	// The data used to update the `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`. The maximum number of update objects is 25.
+	// The data used to update the `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`.
+	// The maximum number of update objects is 25.
+	//
+	// For each team member, include the fields to add, change, or clear. Fields can be cleared using a null value.
+	// To update `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed,
+	// call [ListJobs](api-endpoint:Team-ListJobs) to get the required `job_id` values.
 	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
 }
 
@@ -155,7 +164,8 @@ type CreateTeamMemberRequest struct {
 	//
 	// The minimum length is 1 and the maximum length is 45.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
-	// **Required** The data used to create the `TeamMember` object.
+	// **Required** The data used to create the `TeamMember` object. If you include `wage_setting`, you must provide
+	// `job_id` for each job assignment. To get job IDs, call [ListJobs](api-endpoint:Team-ListJobs).
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -527,20 +537,21 @@ type TeamMember struct {
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
 	// The family name (that is, the last name) associated with the team member.
 	FamilyName *string `json:"family_name,omitempty" url:"family_name,omitempty"`
-	// The email address associated with the team member.
+	// The email address associated with the team member. After accepting the invitation
+	// from Square, only the team member can change this value.
 	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
 	// The team member's phone number, in E.164 format. For example:
 	// +14155552671 - the country code is 1 for US
 	// +551155256325 - the country code is 55 for BR
 	PhoneNumber *string `json:"phone_number,omitempty" url:"phone_number,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the team member was created.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the team member was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// The timestamp, in RFC 3339 format, describing when the team member was last updated.
-	// For example, "2018-10-04T04:00:00-07:00" or "2019-02-05T12:00:00Z".
+	// The timestamp when the team member was last updated, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 	// Describes the team member's assigned locations.
 	AssignedLocations *TeamMemberAssignedLocations `json:"assigned_locations,omitempty" url:"assigned_locations,omitempty"`
+	// Information about the team member's overtime exemption status, job assignments, and compensation.
+	WageSetting *WageSetting `json:"wage_setting,omitempty" url:"wage_setting,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -621,6 +632,13 @@ func (t *TeamMember) GetAssignedLocations() *TeamMemberAssignedLocations {
 		return nil
 	}
 	return t.AssignedLocations
+}
+
+func (t *TeamMember) GetWageSetting() *WageSetting {
+	if t == nil {
+		return nil
+	}
+	return t.WageSetting
 }
 
 func (t *TeamMember) GetExtraProperties() map[string]interface{} {
@@ -761,7 +779,9 @@ func (t TeamMemberStatus) Ptr() *TeamMemberStatus {
 
 // Represents an update request for a `TeamMember` object.
 type UpdateTeamMemberRequest struct {
-	// The data used to update the `TeamMember` object.
+	// The team member fields to add, change, or clear. Fields can be cleared using a null value. To update
+	// `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed, call
+	// [ListJobs](api-endpoint:Team-ListJobs) to get the required `job_id` values.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 
 	extraProperties map[string]interface{}

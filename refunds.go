@@ -404,7 +404,7 @@ func (d *DestinationDetailsExternalRefundDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines the response returned by [GetRefund](api-endpoint:Refunds-GetPaymentRefund).
+// Defines the response returned by [GetRefund]($e/Refunds/GetPaymentRefund).
 //
 // Note: If there are errors processing the request, the refund field might not be
 // present or it might be present in a FAILED state.
@@ -464,7 +464,7 @@ func (g *GetPaymentRefundResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
+// Defines the response returned by [ListPaymentRefunds]($e/Refunds/ListPaymentRefunds).
 //
 // Either `errors` or `refunds` is present in a given response (never both).
 type ListPaymentRefundsResponse struct {
@@ -732,7 +732,7 @@ func (p *PaymentRefund) String() string {
 }
 
 // Defines the response returned by
-// [RefundPayment](api-endpoint:Refunds-RefundPayment).
+// [RefundPayment]($e/Refunds/RefundPayment).
 //
 // If there are errors processing the request, the `refund` field might not be
 // present, or it might be present with a status of `FAILED`.

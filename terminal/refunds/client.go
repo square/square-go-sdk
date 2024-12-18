@@ -39,7 +39,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Creates a request to refund an Interac payment completed on a Square Terminal. Refunds for Interac payments on a Square Terminal are supported only for Interac debit cards in Canada. Other refunds for Terminal payments should use the Refunds API. For more information, see [Refunds API](api:Refunds).
+// Creates a request to refund an Interac payment completed on a Square Terminal. Refunds for Interac payments on a Square Terminal are supported only for Interac debit cards in Canada. Other refunds for Terminal payments should use the Refunds API. For more information, see [Refunds API]($e/Refunds).
 func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalRefundRequest,

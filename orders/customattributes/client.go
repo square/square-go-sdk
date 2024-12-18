@@ -40,11 +40,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Deletes order [custom attributes](entity:CustomAttribute) as a bulk operation.
+// Deletes order [custom attributes]($m/CustomAttribute) as a bulk operation.
 //
 // Use this endpoint to delete one or more custom attributes from one or more orders.
 // A custom attribute is based on a custom attribute definition in a Square seller account.  (To create a
-// custom attribute definition, use the [CreateOrderCustomAttributeDefinition](api-endpoint:OrderCustomAttributes-CreateOrderCustomAttributeDefinition) endpoint.)
+// custom attribute definition, use the [CreateOrderCustomAttributeDefinition]($e/OrderCustomAttributes/CreateOrderCustomAttributeDefinition) endpoint.)
 //
 // This `BulkDeleteOrderCustomAttributes` endpoint accepts a map of 1 to 25 individual delete
 // requests and returns a map of individual delete responses. Each delete request has a unique ID
@@ -92,11 +92,11 @@ func (c *Client) BatchDelete(
 	return response, nil
 }
 
-// Creates or updates order [custom attributes](entity:CustomAttribute) as a bulk operation.
+// Creates or updates order [custom attributes]($m/CustomAttribute) as a bulk operation.
 //
 // Use this endpoint to delete one or more custom attributes from one or more orders.
 // A custom attribute is based on a custom attribute definition in a Square seller account.  (To create a
-// custom attribute definition, use the [CreateOrderCustomAttributeDefinition](api-endpoint:OrderCustomAttributes-CreateOrderCustomAttributeDefinition) endpoint.)
+// custom attribute definition, use the [CreateOrderCustomAttributeDefinition]($e/OrderCustomAttributes/CreateOrderCustomAttributeDefinition) endpoint.)
 //
 // This `BulkUpsertOrderCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
 // requests and returns a map of individual upsert responses. Each upsert request has a unique ID
@@ -144,7 +144,7 @@ func (c *Client) BatchUpsert(
 	return response, nil
 }
 
-// Lists the [custom attributes](entity:CustomAttribute) associated with an order.
+// Lists the [custom attributes]($m/CustomAttribute) associated with an order.
 //
 // You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
 // in the same call.
@@ -211,7 +211,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Retrieves a [custom attribute](entity:CustomAttribute) associated with an order.
+// Retrieves a [custom attribute]($m/CustomAttribute) associated with an order.
 //
 // You can use the `with_definition` query parameter to also retrieve the custom attribute definition
 // in the same call.
@@ -266,11 +266,11 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Creates or updates a [custom attribute](entity:CustomAttribute) for an order.
+// Creates or updates a [custom attribute]($m/CustomAttribute) for an order.
 //
 // Use this endpoint to set the value of a custom attribute for a specific order.
 // A custom attribute is based on a custom attribute definition in a Square seller account. (To create a
-// custom attribute definition, use the [CreateOrderCustomAttributeDefinition](api-endpoint:OrderCustomAttributes-CreateOrderCustomAttributeDefinition) endpoint.)
+// custom attribute definition, use the [CreateOrderCustomAttributeDefinition]($e/OrderCustomAttributes/CreateOrderCustomAttributeDefinition) endpoint.)
 //
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
@@ -317,7 +317,7 @@ func (c *Client) Upsert(
 	return response, nil
 }
 
-// Deletes a [custom attribute](entity:CustomAttribute) associated with a customer profile.
+// Deletes a [custom attribute]($m/CustomAttribute) associated with a customer profile.
 //
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes

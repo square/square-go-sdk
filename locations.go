@@ -552,7 +552,7 @@ func (c *CreateCheckoutResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response object returned by the [CreateLocation](api-endpoint:Locations-CreateLocation) endpoint.
+// The response object returned by the [CreateLocation]($e/Locations/CreateLocation) endpoint.
 type CreateLocationResponse struct {
 	// Information about [errors](https://developer.squareup.com/docs/build-basics/handling-errors) encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -647,7 +647,7 @@ func (d DayOfWeek) Ptr() *DayOfWeek {
 	return &d
 }
 
-// Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
+// Defines the fields that the [RetrieveLocation]($e/Locations/RetrieveLocation)
 // endpoint returns in a response.
 type GetLocationResponse struct {
 	// Information about errors encountered during the request.
@@ -706,7 +706,7 @@ func (g *GetLocationResponse) String() string {
 }
 
 // Defines the fields that are included in the response body of a request
-// to the [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
+// to the [ListLocations]($e/Locations/ListLocations) endpoint.
 //
 // Either `errors` or `locations` is present in a given response (never both).
 type ListLocationsResponse struct {
@@ -1232,7 +1232,7 @@ func (t *TaxIDs) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// The response object returned by the [UpdateLocation](api-endpoint:Locations-UpdateLocation) endpoint.
+// The response object returned by the [UpdateLocation]($e/Locations/UpdateLocation) endpoint.
 type UpdateLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`

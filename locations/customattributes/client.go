@@ -40,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Updates a location-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Updates a location-related [custom attribute definition]($m/CustomAttributeDefinition) for a Square seller account.
 // Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
 // `schema` for a `Selection` data type.
 // Only the definition owner can update a custom attribute definition.
@@ -85,7 +85,7 @@ func (c *Client) Update(
 	return response, nil
 }
 
-// Deletes a [custom attribute](entity:CustomAttribute) associated with a location.
+// Deletes a [custom attribute]($m/CustomAttribute) associated with a location.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Delete(
@@ -128,7 +128,7 @@ func (c *Client) Delete(
 	return response, nil
 }
 
-// Deletes [custom attributes](entity:CustomAttribute) for locations as a bulk operation.
+// Deletes [custom attributes]($m/CustomAttribute) for locations as a bulk operation.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) BatchDelete(
@@ -169,10 +169,10 @@ func (c *Client) BatchDelete(
 	return response, nil
 }
 
-// Creates or updates [custom attributes](entity:CustomAttribute) for locations as a bulk operation.
+// Creates or updates [custom attributes]($m/CustomAttribute) for locations as a bulk operation.
 // Use this endpoint to set the value of one or more custom attributes for one or more locations.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which is
-// created using the [CreateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-CreateLocationCustomAttributeDefinition) endpoint.
+// created using the [CreateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/CreateLocationCustomAttributeDefinition) endpoint.
 // This `BulkUpsertLocationCustomAttributes` endpoint accepts a map of 1 to 25 individual upsert
 // requests and returns a map of individual upsert responses. Each upsert request has a unique ID
 // and provides a location ID and custom attribute. Each upsert response is returned with the ID
@@ -217,7 +217,7 @@ func (c *Client) BatchUpsert(
 	return response, nil
 }
 
-// Lists the [custom attributes](entity:CustomAttribute) associated with a location.
+// Lists the [custom attributes]($m/CustomAttribute) associated with a location.
 // You can use the `with_definitions` query parameter to also retrieve custom attribute definitions
 // in the same call.
 // When all response pages are retrieved, the results include all custom attributes that are
@@ -282,7 +282,7 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
-// Retrieves a [custom attribute](entity:CustomAttribute) associated with a location.
+// Retrieves a [custom attribute]($m/CustomAttribute) associated with a location.
 // You can use the `with_definition` query parameter to also retrieve the custom attribute definition
 // in the same call.
 // To retrieve a custom attribute owned by another application, the `visibility` setting must be
@@ -334,10 +334,10 @@ func (c *Client) Get(
 	return response, nil
 }
 
-// Creates or updates a [custom attribute](entity:CustomAttribute) for a location.
+// Creates or updates a [custom attribute]($m/CustomAttribute) for a location.
 // Use this endpoint to set the value of a custom attribute for a specified location.
 // A custom attribute is based on a custom attribute definition in a Square seller account, which
-// is created using the [CreateLocationCustomAttributeDefinition](api-endpoint:LocationCustomAttributes-CreateLocationCustomAttributeDefinition) endpoint.
+// is created using the [CreateLocationCustomAttributeDefinition]($e/LocationCustomAttributes/CreateLocationCustomAttributeDefinition) endpoint.
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Upsert(
