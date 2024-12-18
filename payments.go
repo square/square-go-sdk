@@ -140,6 +140,13 @@ type CreatePaymentRequest struct {
 	AcceptPartialAuthorization *bool `json:"accept_partial_authorization,omitempty" url:"-"`
 	// The buyer's email address.
 	BuyerEmailAddress *string `json:"buyer_email_address,omitempty" url:"-"`
+	// The buyer's phone number.
+	// Must follow the following format:
+	// 1. A leading + symbol (followed by a country code)
+	// 2. The phone number can contain spaces and the special characters `(` , `)` , `-` , and `.`.
+	// Alphabetical characters aren't allowed.
+	// 3. The phone number must contain between 9 and 16 digits.
+	BuyerPhoneNumber *string `json:"buyer_phone_number,omitempty" url:"-"`
 	// The buyer's billing address.
 	BillingAddress *Address `json:"billing_address,omitempty" url:"-"`
 	// The buyer's shipping address.
@@ -180,7 +187,7 @@ type PaymentsListRequest struct {
 	//
 	// Default: The current time.
 	EndTime *string `json:"-" url:"end_time,omitempty"`
-	// The order in which results are listed by `Payment.created_at`:
+	// The order in which results are listed by `ListPaymentsRequest.sort_field`:
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *string `json:"-" url:"sort_order,omitempty"`
@@ -222,6 +229,14 @@ type PaymentsListRequest struct {
 	//
 	// Default: The current time.
 	OfflineEndTime *string `json:"-" url:"offline_end_time,omitempty"`
+	// Indicates the start of the time range to retrieve payments for, in RFC 3339 format.  The
+	// range is determined using the `updated_at` field for each Payment.
+	UpdatedAtBeginTime *string `json:"-" url:"updated_at_begin_time,omitempty"`
+	// Indicates the end of the time range to retrieve payments for, in RFC 3339 format.  The
+	// range is determined using the `updated_at` field for each Payment.
+	UpdatedAtEndTime *string `json:"-" url:"updated_at_end_time,omitempty"`
+	// The field used to sort results by. The default is `CREATED_AT`.
+	SortField *PaymentSortField `json:"-" url:"sort_field,omitempty"`
 }
 
 // ACH-specific details about `BANK_ACCOUNT` type payments with the `transfer_type` of `ACH`.
@@ -2218,6 +2233,31 @@ func (p *Payment) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentSortField string
+
+const (
+	PaymentSortFieldCreatedAt        PaymentSortField = "CREATED_AT"
+	PaymentSortFieldOfflineCreatedAt PaymentSortField = "OFFLINE_CREATED_AT"
+	PaymentSortFieldUpdatedAt        PaymentSortField = "UPDATED_AT"
+)
+
+func NewPaymentSortFieldFromString(s string) (PaymentSortField, error) {
+	switch s {
+	case "CREATED_AT":
+		return PaymentSortFieldCreatedAt, nil
+	case "OFFLINE_CREATED_AT":
+		return PaymentSortFieldOfflineCreatedAt, nil
+	case "UPDATED_AT":
+		return PaymentSortFieldUpdatedAt, nil
+	}
+	var t PaymentSortField
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PaymentSortField) Ptr() *PaymentSortField {
+	return &p
 }
 
 // Represents fraud risk information for the associated payment.
