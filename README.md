@@ -20,37 +20,52 @@ go get github.com/square/square-go-sdk
 ## Usage
 
 ```go
+package main
+
 import (
     "github.com/square/square-go-sdk"
     squareclient "github.com/square/square-go-sdk/client"
     "github.com/square/square-go-sdk/option"
+
+    "context"
+    "fmt"
 )
 
-client := squareclient.NewClient(
-    option.WithToken("<YOUR_ACCESS_TOKEN>"),
-)
 
-response, err := client.Payments.Create(
-    context.TODO(),
-    &square.CreatePaymentRequest{
-        IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
-        SourceID:       "CASH",
-        AmountMoney: &square.Money{
-            Amount:   square.Int64(100),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        TipMoney: &square.Money{
-            Amount:   square.Int64(50),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        CashDetails: &square.CashPaymentDetails{
-            BuyerSuppliedMoney: &square.Money{
-                Amount:   square.Int64(200),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-        },
-    },
-)
+func main() {
+	client := squareclient.NewClient(
+		option.WithToken("<YOUR_ACCESS_TOKEN>"),
+	)
+	
+	response, err := client.Payments.Create(
+		context.TODO(),
+		&square.CreatePaymentRequest{
+			IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
+			SourceID:       "CASH",
+			AmountMoney: &square.Money{
+				Amount:   square.Int64(100),
+				Currency: square.CurrencyUsd.Ptr(),
+			},
+			TipMoney: &square.Money{
+				Amount:   square.Int64(50),
+				Currency: square.CurrencyUsd.Ptr(),
+			},
+			CashDetails: &square.CashPaymentDetails{
+				BuyerSuppliedMoney: &square.Money{
+					Amount:   square.Int64(200),
+					Currency: square.CurrencyUsd.Ptr(),
+				},
+			},
+		},
+	)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(response.Payment)
+}
 ```
 
 ## Optional Parameters
