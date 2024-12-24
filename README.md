@@ -1,6 +1,6 @@
 # Square Go Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com/?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fsquare%2Fsquare-go-sdk)
 [![go shield](https://img.shields.io/badge/go-docs-blue)](https://pkg.go.dev/github.com/square/square-go-sdk)
 
 The Square Go library provides convenient access to the Square API from Go.
