@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
-	"encoding/hex"
+	"encoding/base64"
 	"errors"
 	"hash"
 
@@ -47,7 +47,7 @@ func createHmac(data, key string) (string, error) {
 	if _, err := h.Write([]byte(data)); err != nil {
 		return "", err
 	}
-	return hex.EncodeToString(h.Sum(nil)), nil
+	return base64.StdEncoding.EncodeToString(h.Sum(nil)), nil
 }
 
 func timingSafeEqual(a, b string) bool {
