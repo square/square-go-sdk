@@ -4,11 +4,11 @@ package refunds
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	terminal "github.com/square/square-go-sdk/terminal"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
+	terminal "github.com/square/square-go-sdk/v40/terminal"
 	http "net/http"
 	os "os"
 )
@@ -44,7 +44,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalRefundRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateTerminalRefundResponse, error) {
+) (*v40.CreateTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -58,7 +58,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateTerminalRefundResponse
+	var response *v40.CreateTerminalRefundResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -83,7 +83,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalRefundsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchTerminalRefundsResponse, error) {
+) (*v40.SearchTerminalRefundsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -97,7 +97,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchTerminalRefundsResponse
+	var response *v40.SearchTerminalRefundsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -122,7 +122,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.RefundsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTerminalRefundResponse, error) {
+) (*v40.GetTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -138,7 +138,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTerminalRefundResponse
+	var response *v40.GetTerminalRefundResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -162,7 +162,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.RefundsCancelRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelTerminalRefundResponse, error) {
+) (*v40.CancelTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -178,7 +178,7 @@ func (c *Client) Cancel(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CancelTerminalRefundResponse
+	var response *v40.CancelTerminalRefundResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

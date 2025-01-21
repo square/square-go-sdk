@@ -3,7 +3,7 @@
 package programs
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type PromotionsCancelRequest struct {
@@ -20,7 +20,7 @@ type CreateLoyaltyPromotionRequest struct {
 	// using the `main` keyword.
 	ProgramID string `json:"-" url:"-"`
 	// The loyalty promotion to create.
-	LoyaltyPromotion *squaregosdk.LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"-"`
+	LoyaltyPromotion *v40.LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"-"`
 	// A unique identifier for this request, which is used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -41,7 +41,7 @@ type PromotionsListRequest struct {
 	// The status to filter the results by. If a status is provided, only loyalty promotions
 	// with the specified status are returned. Otherwise, all loyalty promotions associated with
 	// the loyalty program are returned.
-	Status *squaregosdk.LoyaltyPromotionStatus `json:"-" url:"status,omitempty"`
+	Status *v40.LoyaltyPromotionStatus `json:"-" url:"status,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).

@@ -4,10 +4,10 @@ package sites
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -44,7 +44,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListSitesResponse, error) {
+) (*v40.ListSitesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -57,7 +57,7 @@ func (c *Client) List(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListSitesResponse
+	var response *v40.ListSitesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

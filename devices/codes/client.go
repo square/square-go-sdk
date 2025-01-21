@@ -5,11 +5,11 @@ package codes
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	devices "github.com/square/square-go-sdk/devices"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	devices "github.com/square/square-go-sdk/v40/devices"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *devices.CodesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.DeviceCode], error) {
+) (*core.Page[*v40.DeviceCode], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListDeviceCodesResponse) *internal.PageResponse[*string, *squaregosdk.DeviceCode] {
+	readPageResponse := func(response *v40.ListDeviceCodesResponse) *internal.PageResponse[*string, *v40.DeviceCode] {
 		next := response.Cursor
 		results := response.DeviceCodes
-		return &internal.PageResponse[*string, *squaregosdk.DeviceCode]{
+		return &internal.PageResponse[*string, *v40.DeviceCode]{
 			Next:    next,
 			Results: results,
 		}
@@ -103,7 +103,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *devices.CreateDeviceCodeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateDeviceCodeResponse, error) {
+) (*v40.CreateDeviceCodeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -117,7 +117,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateDeviceCodeResponse
+	var response *v40.CreateDeviceCodeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -142,7 +142,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *devices.CodesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetDeviceCodeResponse, error) {
+) (*v40.GetDeviceCodeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -158,7 +158,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetDeviceCodeResponse
+	var response *v40.GetDeviceCodeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

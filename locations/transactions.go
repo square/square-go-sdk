@@ -3,7 +3,7 @@
 package locations
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type TransactionsCaptureRequest struct {
@@ -37,7 +37,7 @@ type TransactionsListRequest struct {
 	// oldest first, `DESC` for newest first).
 	//
 	// Default value: `DESC`
-	SortOrder *squaregosdk.SortOrder `json:"-" url:"sort_order,omitempty"`
+	SortOrder *v40.SortOrder `json:"-" url:"sort_order,omitempty"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
 	//

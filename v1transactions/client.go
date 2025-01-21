@@ -4,10 +4,10 @@ package v1transactions
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Provides summary information for a merchant's online store orders.
 func (c *Client) V1ListOrders(
 	ctx context.Context,
-	request *squaregosdk.V1ListOrdersRequest,
+	request *v40.V1ListOrdersRequest,
 	opts ...option.RequestOption,
-) ([]*squaregosdk.V1Order, error) {
+) ([]*v40.V1Order, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -66,7 +66,7 @@ func (c *Client) V1ListOrders(
 		options.ToHeader(),
 	)
 
-	var response []*squaregosdk.V1Order
+	var response []*v40.V1Order
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -88,9 +88,9 @@ func (c *Client) V1ListOrders(
 // Provides comprehensive information for a single online store order, including the order's history.
 func (c *Client) V1RetrieveOrder(
 	ctx context.Context,
-	request *squaregosdk.V1RetrieveOrderRequest,
+	request *v40.V1RetrieveOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.V1Order, error) {
+) (*v40.V1Order, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -107,7 +107,7 @@ func (c *Client) V1RetrieveOrder(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.V1Order
+	var response *v40.V1Order
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -129,9 +129,9 @@ func (c *Client) V1RetrieveOrder(
 // Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:
 func (c *Client) V1UpdateOrder(
 	ctx context.Context,
-	request *squaregosdk.V1UpdateOrderRequest,
+	request *v40.V1UpdateOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.V1Order, error) {
+) (*v40.V1Order, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -149,7 +149,7 @@ func (c *Client) V1UpdateOrder(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.V1Order
+	var response *v40.V1Order
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

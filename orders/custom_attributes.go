@@ -3,17 +3,17 @@
 package orders
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type BulkDeleteOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual delete operations for custom attributes.
-	Values map[string]*squaregosdk.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v40.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
 }
 
 type BulkUpsertOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual upsert operations for custom attributes.
-	Values map[string]*squaregosdk.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v40.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
 }
 
 type CustomAttributesDeleteRequest struct {
@@ -43,7 +43,7 @@ type CustomAttributesListRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v40.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
@@ -72,7 +72,7 @@ type UpsertOrderCustomAttributeRequest struct {
 	//
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include this optional field and specify the current version of the custom attribute.
-	CustomAttribute *squaregosdk.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v40.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

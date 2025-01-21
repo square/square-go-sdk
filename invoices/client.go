@@ -5,10 +5,10 @@ package invoices
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -44,9 +44,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // use in a subsequent request to retrieve the next set of invoices.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.InvoicesListRequest,
+	request *v40.InvoicesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Invoice], error) {
+) (*core.Page[*v40.Invoice], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -82,10 +82,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListInvoicesResponse) *internal.PageResponse[*string, *squaregosdk.Invoice] {
+	readPageResponse := func(response *v40.ListInvoicesResponse) *internal.PageResponse[*string, *v40.Invoice] {
 		next := response.Cursor
 		results := response.Invoices
-		return &internal.PageResponse[*string, *squaregosdk.Invoice]{
+		return &internal.PageResponse[*string, *v40.Invoice]{
 			Next:    next,
 			Results: results,
 		}
@@ -105,9 +105,9 @@ func (c *Client) List(
 // You must publish the invoice before Square can process it (send it to the customer's email address or charge the customer’s card on file).
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateInvoiceRequest,
+	request *v40.CreateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateInvoiceResponse, error) {
+) (*v40.CreateInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -121,7 +121,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateInvoiceResponse
+	var response *v40.CreateInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,9 +150,9 @@ func (c *Client) Create(
 // that you use in a subsequent request to retrieve the next set of invoices.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchInvoicesRequest,
+	request *v40.SearchInvoicesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchInvoicesResponse, error) {
+) (*v40.SearchInvoicesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -166,7 +166,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchInvoicesResponse
+	var response *v40.SearchInvoicesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -189,9 +189,9 @@ func (c *Client) Search(
 // Retrieves an invoice by invoice ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.InvoicesGetRequest,
+	request *v40.InvoicesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInvoiceResponse, error) {
+) (*v40.GetInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -207,7 +207,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInvoiceResponse
+	var response *v40.GetInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -232,9 +232,9 @@ func (c *Client) Get(
 // `order_id` or `location_id` field.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateInvoiceRequest,
+	request *v40.UpdateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateInvoiceResponse, error) {
+) (*v40.UpdateInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -251,7 +251,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateInvoiceResponse
+	var response *v40.UpdateInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -276,9 +276,9 @@ func (c *Client) Update(
 // invoice (you cannot delete a published invoice, including one that is scheduled for processing).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.InvoicesDeleteRequest,
+	request *v40.InvoicesDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteInvoiceResponse, error) {
+) (*v40.DeleteInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -301,7 +301,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteInvoiceResponse
+	var response *v40.DeleteInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -328,9 +328,9 @@ func (c *Client) Delete(
 // in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
 func (c *Client) CreateInvoiceAttachment(
 	ctx context.Context,
-	request *squaregosdk.CreateInvoiceAttachmentRequest,
+	request *v40.CreateInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateInvoiceAttachmentResponse, error) {
+) (*v40.CreateInvoiceAttachmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -361,7 +361,7 @@ func (c *Client) CreateInvoiceAttachment(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *squaregosdk.CreateInvoiceAttachmentResponse
+	var response *v40.CreateInvoiceAttachmentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -385,9 +385,9 @@ func (c *Client) CreateInvoiceAttachment(
 // from invoices in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
 func (c *Client) DeleteInvoiceAttachment(
 	ctx context.Context,
-	request *squaregosdk.DeleteInvoiceAttachmentRequest,
+	request *v40.DeleteInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteInvoiceAttachmentResponse, error) {
+) (*v40.DeleteInvoiceAttachmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -404,7 +404,7 @@ func (c *Client) DeleteInvoiceAttachment(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteInvoiceAttachmentResponse
+	var response *v40.DeleteInvoiceAttachmentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -429,9 +429,9 @@ func (c *Client) DeleteInvoiceAttachment(
 // You cannot cancel an invoice in the `DRAFT` state or in a terminal state: `PAID`, `REFUNDED`, `CANCELED`, or `FAILED`.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.CancelInvoiceRequest,
+	request *v40.CancelInvoiceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelInvoiceResponse, error) {
+) (*v40.CancelInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -448,7 +448,7 @@ func (c *Client) Cancel(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CancelInvoiceResponse
+	var response *v40.CancelInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -482,11 +482,11 @@ func (c *Client) Cancel(
 //
 // In addition to the required `ORDERS_WRITE` and `INVOICES_WRITE` permissions, `CUSTOMERS_READ`
 // and `PAYMENTS_WRITE` are required when publishing invoices configured for card-on-file payments.
-func (c *Client) Publisb(
+func (c *Client) Publish(
 	ctx context.Context,
-	request *squaregosdk.PublishInvoiceRequest,
+	request *v40.PublishInvoiceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.PublishInvoiceResponse, error) {
+) (*v40.PublishInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -503,7 +503,7 @@ func (c *Client) Publisb(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.PublishInvoiceResponse
+	var response *v40.PublishInvoiceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

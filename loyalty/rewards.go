@@ -3,12 +3,12 @@
 package loyalty
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type CreateLoyaltyRewardRequest struct {
 	// The reward to create.
-	Reward *squaregosdk.LoyaltyReward `json:"reward,omitempty" url:"-"`
+	Reward *v40.LoyaltyReward `json:"reward,omitempty" url:"-"`
 	// A unique string that identifies this `CreateLoyaltyReward` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -37,7 +37,7 @@ type RedeemLoyaltyRewardRequest struct {
 type SearchLoyaltyRewardsRequest struct {
 	// The search criteria for the request.
 	// If empty, the endpoint retrieves all loyalty rewards in the loyalty program.
-	Query *squaregosdk.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
+	Query *v40.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
 	// The maximum number of results to return in the response. The default value is 30.
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to

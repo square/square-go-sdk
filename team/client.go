@@ -4,10 +4,10 @@ package team
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists jobs in a seller account. Results are sorted by title in ascending order.
 func (c *Client) ListJobs(
 	ctx context.Context,
-	request *squaregosdk.ListJobsRequest,
+	request *v40.ListJobsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListJobsResponse, error) {
+) (*v40.ListJobsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,7 +63,7 @@ func (c *Client) ListJobs(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListJobsResponse
+	var response *v40.ListJobsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -86,9 +86,9 @@ func (c *Client) ListJobs(
 // compensation is defined in a [job assignment](entity:JobAssignment) in a team member's wage setting.
 func (c *Client) CreateJob(
 	ctx context.Context,
-	request *squaregosdk.CreateJobRequest,
+	request *v40.CreateJobRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateJobResponse, error) {
+) (*v40.CreateJobResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -102,7 +102,7 @@ func (c *Client) CreateJob(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateJobResponse
+	var response *v40.CreateJobResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -125,9 +125,9 @@ func (c *Client) CreateJob(
 // Retrieves a specified job.
 func (c *Client) RetrieveJob(
 	ctx context.Context,
-	request *squaregosdk.RetrieveJobRequest,
+	request *v40.RetrieveJobRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveJobResponse, error) {
+) (*v40.RetrieveJobResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -143,7 +143,7 @@ func (c *Client) RetrieveJob(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveJobResponse
+	var response *v40.RetrieveJobResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -167,9 +167,9 @@ func (c *Client) RetrieveJob(
 // tip eligibility propagate to all `TeamMemberWage` objects that reference the job ID.
 func (c *Client) UpdateJob(
 	ctx context.Context,
-	request *squaregosdk.UpdateJobRequest,
+	request *v40.UpdateJobRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateJobResponse, error) {
+) (*v40.UpdateJobResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -186,7 +186,7 @@ func (c *Client) UpdateJob(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateJobResponse
+	var response *v40.UpdateJobResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

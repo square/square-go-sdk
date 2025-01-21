@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v40/internal"
 )
 
 type CreateMobileAuthorizationCodeRequest struct {

@@ -3,7 +3,7 @@
 package terminal
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type ActionsCancelRequest struct {
@@ -19,7 +19,7 @@ type CreateTerminalActionRequest struct {
 	// information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
-	Action *squaregosdk.TerminalAction `json:"action,omitempty" url:"-"`
+	Action *v40.TerminalAction `json:"action,omitempty" url:"-"`
 }
 
 type ActionsGetRequest struct {
@@ -30,7 +30,7 @@ type ActionsGetRequest struct {
 type SearchTerminalActionsRequest struct {
 	// Queries terminal actions based on given conditions and sort order.
 	// Leaving this unset will return all actions with the default sort order.
-	Query *squaregosdk.TerminalActionQuery `json:"query,omitempty" url:"-"`
+	Query *v40.TerminalActionQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more

@@ -4,11 +4,11 @@ package actions
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	terminal "github.com/square/square-go-sdk/terminal"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
+	terminal "github.com/square/square-go-sdk/v40/terminal"
 	http "net/http"
 	os "os"
 )
@@ -44,7 +44,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalActionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateTerminalActionResponse, error) {
+) (*v40.CreateTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -58,7 +58,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateTerminalActionResponse
+	var response *v40.CreateTerminalActionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -83,7 +83,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalActionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchTerminalActionsResponse, error) {
+) (*v40.SearchTerminalActionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -97,7 +97,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchTerminalActionsResponse
+	var response *v40.SearchTerminalActionsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -122,7 +122,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.ActionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTerminalActionResponse, error) {
+) (*v40.GetTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -138,7 +138,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTerminalActionResponse
+	var response *v40.GetTerminalActionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -162,7 +162,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.ActionsCancelRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelTerminalActionResponse, error) {
+) (*v40.CancelTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -178,7 +178,7 @@ func (c *Client) Cancel(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CancelTerminalActionResponse
+	var response *v40.CancelTerminalActionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

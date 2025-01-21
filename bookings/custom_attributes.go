@@ -3,21 +3,21 @@
 package bookings
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type BulkDeleteBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual Delete requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkDeleteBookingCustomAttributes` request and the
 	// information needed to delete a custom attribute.
-	Values map[string]*squaregosdk.BookingCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v40.BookingCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
 }
 
 type BulkUpsertBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertBookingCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*squaregosdk.BookingCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v40.BookingCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 }
 
 type CustomAttributesDeleteRequest struct {
@@ -79,7 +79,7 @@ type UpsertBookingCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *squaregosdk.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v40.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

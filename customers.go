@@ -5,18 +5,8 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v40/internal"
 )
-
-type BulkCreateCustomersRequest struct {
-	// A map of 1 to 100 individual create requests, represented by `idempotency key: { customer data }`
-	// key-value pairs.
-	//
-	// Each key is an [idempotency key](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency)
-	// that uniquely identifies the create request. Each value contains the customer data used to create the
-	// customer profile.
-	Customers map[string]*BulkCreateCustomerData `json:"customers,omitempty" url:"-"`
-}
 
 type BulkDeleteCustomersRequest struct {
 	// The IDs of the [customer profiles](entity:Customer) to delete.
@@ -38,6 +28,16 @@ type BulkUpdateCustomersRequest struct {
 	// Each value contains the updated customer data. Only new or changed fields are required. To add or
 	// update a field, specify the new value. To remove a field, specify `null`.
 	Customers map[string]*BulkUpdateCustomerData `json:"customers,omitempty" url:"-"`
+}
+
+type BulkCreateCustomersRequest struct {
+	// A map of 1 to 100 individual create requests, represented by `idempotency key: { customer data }`
+	// key-value pairs.
+	//
+	// Each key is an [idempotency key](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency)
+	// that uniquely identifies the create request. Each value contains the customer data used to create the
+	// customer profile.
+	Customers map[string]*BulkCreateCustomerData `json:"customers,omitempty" url:"-"`
 }
 
 type CreateCustomerRequest struct {
@@ -788,12 +788,6 @@ type Customer struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The timestamp when the customer profile was last updated, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// Payment details of the credit, debit, and gift cards stored on file for the customer profile.
-	//
-	// DEPRECATED at version 2021-06-16 and will be RETIRED at version 2024-12-18. Replaced by calling [ListCards](api-endpoint:Cards-ListCards) (for credit and debit cards on file)
-	// or [ListGiftCards](api-endpoint:GiftCards-ListGiftCards) (for gift cards on file) and including the `customer_id` query parameter.
-	// For more information, see [Migration notes](https://developer.squareup.com/docs/customers-api/what-it-does#migrate-customer-cards).
-	Cards []*Card `json:"cards,omitempty" url:"cards,omitempty"`
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
 	// The family name (that is, the last name) associated with the customer profile.
@@ -825,7 +819,7 @@ type Customer struct {
 	GroupIDs []string `json:"group_ids,omitempty" url:"group_ids,omitempty"`
 	// The IDs of [customer segments](entity:CustomerSegment) the customer belongs to.
 	SegmentIDs []string `json:"segment_ids,omitempty" url:"segment_ids,omitempty"`
-	// The Square-assigned version number of the customer profile. The version number is incremented each time an update is committed to the customer profile, except for changes to customer segment membership and cards on file.
+	// The Square-assigned version number of the customer profile. The version number is incremented each time an update is committed to the customer profile, except for changes to customer segment membership.
 	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
 	// The tax ID associated with the customer profile. This field is present only for customers of sellers in EU countries or the United Kingdom.
 	// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
@@ -854,13 +848,6 @@ func (c *Customer) GetUpdatedAt() *string {
 		return nil
 	}
 	return c.UpdatedAt
-}
-
-func (c *Customer) GetCards() []*Card {
-	if c == nil {
-		return nil
-	}
-	return c.Cards
 }
 
 func (c *Customer) GetGivenName() *string {

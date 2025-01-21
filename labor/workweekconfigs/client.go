@@ -5,11 +5,11 @@ package workweekconfigs
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	labor "github.com/square/square-go-sdk/v40/labor"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.WorkweekConfigsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.WorkweekConfig], error) {
+) (*core.Page[*v40.WorkweekConfig], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListWorkweekConfigsResponse) *internal.PageResponse[*string, *squaregosdk.WorkweekConfig] {
+	readPageResponse := func(response *v40.ListWorkweekConfigsResponse) *internal.PageResponse[*string, *v40.WorkweekConfig] {
 		next := response.Cursor
 		results := response.WorkweekConfigs
-		return &internal.PageResponse[*string, *squaregosdk.WorkweekConfig]{
+		return &internal.PageResponse[*string, *v40.WorkweekConfig]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.UpdateWorkweekConfigRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateWorkweekConfigResponse, error) {
+) (*v40.UpdateWorkweekConfigResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -119,7 +119,7 @@ func (c *Client) Get(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateWorkweekConfigResponse
+	var response *v40.UpdateWorkweekConfigResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

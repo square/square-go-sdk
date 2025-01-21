@@ -4,11 +4,11 @@ package transactions
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	locations "github.com/square/square-go-sdk/locations"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	locations "github.com/square/square-go-sdk/v40/locations"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -49,7 +49,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *locations.TransactionsListRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListTransactionsResponse, error) {
+) (*v40.ListTransactionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -72,7 +72,7 @@ func (c *Client) List(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListTransactionsResponse
+	var response *v40.ListTransactionsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -96,7 +96,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *locations.TransactionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTransactionResponse, error) {
+) (*v40.GetTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -113,7 +113,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTransactionResponse
+	var response *v40.GetTransactionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,7 +141,7 @@ func (c *Client) Capture(
 	ctx context.Context,
 	request *locations.TransactionsCaptureRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CaptureTransactionResponse, error) {
+) (*v40.CaptureTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -158,7 +158,7 @@ func (c *Client) Capture(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CaptureTransactionResponse
+	var response *v40.CaptureTransactionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -186,7 +186,7 @@ func (c *Client) Void(
 	ctx context.Context,
 	request *locations.TransactionsVoidRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.VoidTransactionResponse, error) {
+) (*v40.VoidTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -203,7 +203,7 @@ func (c *Client) Void(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.VoidTransactionResponse
+	var response *v40.VoidTransactionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

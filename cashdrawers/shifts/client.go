@@ -5,11 +5,11 @@ package shifts
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	cashdrawers "github.com/square/square-go-sdk/cashdrawers"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	cashdrawers "github.com/square/square-go-sdk/v40/cashdrawers"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -46,7 +46,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *cashdrawers.ShiftsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CashDrawerShiftSummary], error) {
+) (*core.Page[*v40.CashDrawerShiftSummary], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -82,10 +82,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary] {
+	readPageResponse := func(response *v40.ListCashDrawerShiftsResponse) *internal.PageResponse[*string, *v40.CashDrawerShiftSummary] {
 		next := response.Cursor
 		results := response.CashDrawerShifts
-		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary]{
+		return &internal.PageResponse[*string, *v40.CashDrawerShiftSummary]{
 			Next:    next,
 			Results: results,
 		}
@@ -104,7 +104,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *cashdrawers.ShiftsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCashDrawerShiftResponse, error) {
+) (*v40.GetCashDrawerShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,7 +127,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCashDrawerShiftResponse
+	var response *v40.GetCashDrawerShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (c *Client) ListEvents(
 	ctx context.Context,
 	request *cashdrawers.ShiftsListEventsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CashDrawerShiftEvent], error) {
+) (*core.Page[*v40.CashDrawerShiftEvent], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -190,10 +190,10 @@ func (c *Client) ListEvents(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftEventsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent] {
+	readPageResponse := func(response *v40.ListCashDrawerShiftEventsResponse) *internal.PageResponse[*string, *v40.CashDrawerShiftEvent] {
 		next := response.Cursor
 		results := response.CashDrawerShiftEvents
-		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent]{
+		return &internal.PageResponse[*string, *v40.CashDrawerShiftEvent]{
 			Next:    next,
 			Results: results,
 		}

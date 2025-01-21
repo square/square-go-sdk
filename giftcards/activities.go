@@ -3,7 +3,7 @@
 package giftcards
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type CreateGiftCardActivityRequest struct {
@@ -11,7 +11,7 @@ type CreateGiftCardActivityRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The activity to create for the gift card. This activity must specify `gift_card_id` or `gift_card_gan` for the target
 	// gift card, the `location_id` where the activity occurred, and the activity `type` along with the corresponding activity details.
-	GiftCardActivity *squaregosdk.GiftCardActivity `json:"gift_card_activity,omitempty" url:"-"`
+	GiftCardActivity *v40.GiftCardActivity `json:"gift_card_activity,omitempty" url:"-"`
 }
 
 type ActivitiesListRequest struct {

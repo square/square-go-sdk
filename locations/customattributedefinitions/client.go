@@ -5,11 +5,11 @@ package customattributedefinitions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	locations "github.com/square/square-go-sdk/locations"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	locations "github.com/square/square-go-sdk/v40/locations"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *locations.CustomAttributeDefinitionsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
+) (*core.Page[*v40.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,10 +84,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListLocationCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+	readPageResponse := func(response *v40.ListLocationCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v40.CustomAttributeDefinition] {
 		next := response.Cursor
 		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+		return &internal.PageResponse[*string, *v40.CustomAttributeDefinition]{
 			Next:    next,
 			Results: results,
 		}
@@ -111,7 +111,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *locations.CreateLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateLocationCustomAttributeDefinitionResponse, error) {
+) (*v40.CreateLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -125,7 +125,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateLocationCustomAttributeDefinitionResponse
+	var response *v40.CreateLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -152,7 +152,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *locations.CustomAttributeDefinitionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse, error) {
+) (*v40.RetrieveLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -175,12 +175,100 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse
+	var response *v40.RetrieveLocationCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
 			URL:             endpointURL,
 			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Updates a location-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
+// `schema` for a `Selection` data type.
+// Only the definition owner can update a custom attribute definition.
+func (c *Client) Update(
+	ctx context.Context,
+	request *locations.UpdateLocationCustomAttributeDefinitionRequest,
+	opts ...option.RequestOption,
+) (*v40.UpdateLocationCustomAttributeDefinitionResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *v40.UpdateLocationCustomAttributeDefinitionResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Deletes a location-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
+// Deleting a custom attribute definition also deletes the corresponding custom attribute from
+// all locations.
+// Only the definition owner can delete a custom attribute definition.
+func (c *Client) Delete(
+	ctx context.Context,
+	request *locations.CustomAttributeDefinitionsDeleteRequest,
+	opts ...option.RequestOption,
+) (*v40.DeleteLocationCustomAttributeDefinitionResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/custom-attribute-definitions/%v",
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *v40.DeleteLocationCustomAttributeDefinitionResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodDelete,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
 			BodyProperties:  options.BodyProperties,

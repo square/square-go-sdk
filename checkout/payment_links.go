@@ -3,7 +3,7 @@
 package checkout
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type CreatePaymentLinkRequest struct {
@@ -19,18 +19,18 @@ type CreatePaymentLinkRequest struct {
 	// Describes an ad hoc item and price for which to generate a quick pay checkout link.
 	// For more information,
 	// see [Quick Pay Checkout](https://developer.squareup.com/docs/checkout-api/quick-pay-checkout).
-	QuickPay *squaregosdk.QuickPay `json:"quick_pay,omitempty" url:"-"`
+	QuickPay *v40.QuickPay `json:"quick_pay,omitempty" url:"-"`
 	// Describes the `Order` for which to create a checkout link.
 	// For more information,
 	// see [Square Order Checkout](https://developer.squareup.com/docs/checkout-api/square-order-checkout).
-	Order *squaregosdk.Order `json:"order,omitempty" url:"-"`
+	Order *v40.Order `json:"order,omitempty" url:"-"`
 	// Describes optional fields to add to the resulting checkout page.
 	// For more information,
 	// see [Optional Checkout Configurations](https://developer.squareup.com/docs/checkout-api/optional-checkout-configurations).
-	CheckoutOptions *squaregosdk.CheckoutOptions `json:"checkout_options,omitempty" url:"-"`
+	CheckoutOptions *v40.CheckoutOptions `json:"checkout_options,omitempty" url:"-"`
 	// Describes fields to prepopulate in the resulting checkout page.
 	// For more information, see [Prepopulate the shipping address](https://developer.squareup.com/docs/checkout-api/optional-checkout-configurations#prepopulate-the-shipping-address).
-	PrePopulatedData *squaregosdk.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
+	PrePopulatedData *v40.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
 	// A note for the payment. After processing the payment, Square adds this note to the resulting `Payment`.
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
 }
@@ -64,5 +64,5 @@ type UpdatePaymentLinkRequest struct {
 	ID string `json:"-" url:"-"`
 	// The `payment_link` object describing the updates to apply.
 	// For more information, see [Update a payment link](https://developer.squareup.com/docs/checkout-api/manage-checkout#update-a-payment-link).
-	PaymentLink *squaregosdk.PaymentLink `json:"payment_link,omitempty" url:"-"`
+	PaymentLink *v40.PaymentLink `json:"payment_link,omitempty" url:"-"`
 }

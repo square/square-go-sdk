@@ -3,14 +3,14 @@
 package customers
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type BatchUpsertCustomerCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertCustomerCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*squaregosdk.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v40.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 }
 
 type CreateCustomerCustomAttributeDefinitionRequest struct {
@@ -20,7 +20,7 @@ type CreateCustomerCustomAttributeDefinitionRequest struct {
 	// [Specifying the schema](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attribute-definitions#specify-schema).
 	// - If provided, `name` must be unique (case-sensitive) across all visible customer-related custom attribute definitions for the seller.
 	// - All custom attributes are visible in exported customer data, including those set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v40.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -71,7 +71,7 @@ type UpdateCustomerCustomAttributeDefinitionRequest struct {
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v40.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

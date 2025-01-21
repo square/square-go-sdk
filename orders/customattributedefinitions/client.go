@@ -5,11 +5,11 @@ package customattributedefinitions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	orders "github.com/square/square-go-sdk/orders"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
+	orders "github.com/square/square-go-sdk/v40/orders"
 	http "net/http"
 	os "os"
 )
@@ -50,7 +50,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *orders.CustomAttributeDefinitionsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
+) (*core.Page[*v40.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,10 +86,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListOrderCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+	readPageResponse := func(response *v40.ListOrderCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v40.CustomAttributeDefinition] {
 		next := response.Cursor
 		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+		return &internal.PageResponse[*string, *v40.CustomAttributeDefinition]{
 			Next:    next,
 			Results: results,
 		}
@@ -111,7 +111,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *orders.CreateOrderCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateOrderCustomAttributeDefinitionResponse, error) {
+) (*v40.CreateOrderCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -125,7 +125,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateOrderCustomAttributeDefinitionResponse
+	var response *v40.CreateOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *orders.CustomAttributeDefinitionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveOrderCustomAttributeDefinitionResponse, error) {
+) (*v40.RetrieveOrderCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -177,7 +177,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveOrderCustomAttributeDefinitionResponse
+	var response *v40.RetrieveOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -203,7 +203,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *orders.UpdateOrderCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateOrderCustomAttributeDefinitionResponse, error) {
+) (*v40.UpdateOrderCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -220,7 +220,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateOrderCustomAttributeDefinitionResponse
+	var response *v40.UpdateOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -247,7 +247,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *orders.CustomAttributeDefinitionsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteOrderCustomAttributeDefinitionResponse, error) {
+) (*v40.DeleteOrderCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -263,7 +263,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteOrderCustomAttributeDefinitionResponse
+	var response *v40.DeleteOrderCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

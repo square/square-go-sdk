@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/square/square-go-sdk/core"
+	"github.com/square/square-go-sdk/v40/core"
 )
 
 // ErrorDecoder decodes *http.Response errors and returns a

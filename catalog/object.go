@@ -3,7 +3,7 @@
 package catalog
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type ObjectDeleteRequest struct {
@@ -59,5 +59,5 @@ type UpsertCatalogObjectRequest struct {
 	//
 	// - For updates, the object must be active (the `is_deleted` field is not `true`).
 	// - For creates, the object ID must start with `#`. The provided ID is replaced with a server-generated ID.
-	Object *squaregosdk.CatalogObject `json:"object,omitempty" url:"-"`
+	Object *v40.CatalogObject `json:"object,omitempty" url:"-"`
 }

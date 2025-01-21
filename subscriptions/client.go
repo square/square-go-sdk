@@ -5,10 +5,10 @@ package subscriptions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -49,9 +49,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // For more information, see [Create a subscription](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions#create-a-subscription).
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateSubscriptionRequest,
+	request *v40.CreateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateSubscriptionResponse, error) {
+) (*v40.CreateSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -65,7 +65,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateSubscriptionResponse
+	var response *v40.CreateSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -89,9 +89,9 @@ func (c *Client) Create(
 // variation. For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
 func (c *Client) BulkSwapPlan(
 	ctx context.Context,
-	request *squaregosdk.BulkSwapPlanRequest,
+	request *v40.BulkSwapPlanRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkSwapPlanResponse, error) {
+) (*v40.BulkSwapPlanResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -105,7 +105,7 @@ func (c *Client) BulkSwapPlan(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkSwapPlanResponse
+	var response *v40.BulkSwapPlanResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,9 +141,9 @@ func (c *Client) BulkSwapPlan(
 // customer by subscription creation date.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchSubscriptionsRequest,
+	request *v40.SearchSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchSubscriptionsResponse, error) {
+) (*v40.SearchSubscriptionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -157,7 +157,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchSubscriptionsResponse
+	var response *v40.SearchSubscriptionsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -180,9 +180,9 @@ func (c *Client) Search(
 // Retrieves a specific subscription.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsGetRequest,
+	request *v40.SubscriptionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetSubscriptionResponse, error) {
+) (*v40.GetSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -205,7 +205,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetSubscriptionResponse
+	var response *v40.GetSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -228,9 +228,9 @@ func (c *Client) Get(
 // To clear a field, set its value to `null`.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateSubscriptionRequest,
+	request *v40.UpdateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateSubscriptionResponse, error) {
+) (*v40.UpdateSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -247,7 +247,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateSubscriptionResponse
+	var response *v40.UpdateSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -270,9 +270,9 @@ func (c *Client) Update(
 // Deletes a scheduled action for a subscription.
 func (c *Client) DeleteAction(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsDeleteActionRequest,
+	request *v40.SubscriptionsDeleteActionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteSubscriptionActionResponse, error) {
+) (*v40.DeleteSubscriptionActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -289,7 +289,7 @@ func (c *Client) DeleteAction(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteSubscriptionActionResponse
+	var response *v40.DeleteSubscriptionActionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -312,9 +312,9 @@ func (c *Client) DeleteAction(
 // for a subscription.
 func (c *Client) ChangeBillingAnchorDate(
 	ctx context.Context,
-	request *squaregosdk.ChangeBillingAnchorDateRequest,
+	request *v40.ChangeBillingAnchorDateRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ChangeBillingAnchorDateResponse, error) {
+) (*v40.ChangeBillingAnchorDateResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -331,7 +331,7 @@ func (c *Client) ChangeBillingAnchorDate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.ChangeBillingAnchorDateResponse
+	var response *v40.ChangeBillingAnchorDateResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -356,9 +356,9 @@ func (c *Client) ChangeBillingAnchorDate(
 // the subscription status changes from ACTIVE to CANCELED.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsCancelRequest,
+	request *v40.SubscriptionsCancelRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelSubscriptionResponse, error) {
+) (*v40.CancelSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -374,7 +374,7 @@ func (c *Client) Cancel(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CancelSubscriptionResponse
+	var response *v40.CancelSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -396,9 +396,9 @@ func (c *Client) Cancel(
 // Lists all [events](https://developer.squareup.com/docs/subscriptions-api/actions-events) for a specific subscription.
 func (c *Client) ListEvents(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsListEventsRequest,
+	request *v40.SubscriptionsListEventsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.SubscriptionEvent], error) {
+) (*core.Page[*v40.SubscriptionEvent], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -437,10 +437,10 @@ func (c *Client) ListEvents(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListSubscriptionEventsResponse) *internal.PageResponse[*string, *squaregosdk.SubscriptionEvent] {
+	readPageResponse := func(response *v40.ListSubscriptionEventsResponse) *internal.PageResponse[*string, *v40.SubscriptionEvent] {
 		next := response.Cursor
 		results := response.SubscriptionEvents
-		return &internal.PageResponse[*string, *squaregosdk.SubscriptionEvent]{
+		return &internal.PageResponse[*string, *v40.SubscriptionEvent]{
 			Next:    next,
 			Results: results,
 		}
@@ -456,9 +456,9 @@ func (c *Client) ListEvents(
 // Schedules a `PAUSE` action to pause an active subscription.
 func (c *Client) Pause(
 	ctx context.Context,
-	request *squaregosdk.PauseSubscriptionRequest,
+	request *v40.PauseSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.PauseSubscriptionResponse, error) {
+) (*v40.PauseSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -475,7 +475,7 @@ func (c *Client) Pause(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.PauseSubscriptionResponse
+	var response *v40.PauseSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -498,9 +498,9 @@ func (c *Client) Pause(
 // Schedules a `RESUME` action to resume a paused or a deactivated subscription.
 func (c *Client) Resume(
 	ctx context.Context,
-	request *squaregosdk.ResumeSubscriptionRequest,
+	request *v40.ResumeSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ResumeSubscriptionResponse, error) {
+) (*v40.ResumeSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -517,7 +517,7 @@ func (c *Client) Resume(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.ResumeSubscriptionResponse
+	var response *v40.ResumeSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -541,9 +541,9 @@ func (c *Client) Resume(
 // For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
 func (c *Client) SwapPlan(
 	ctx context.Context,
-	request *squaregosdk.SwapPlanRequest,
+	request *v40.SwapPlanRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SwapPlanResponse, error) {
+) (*v40.SwapPlanResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -560,7 +560,7 @@ func (c *Client) SwapPlan(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SwapPlanResponse
+	var response *v40.SwapPlanResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

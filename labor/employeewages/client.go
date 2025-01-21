@@ -5,11 +5,11 @@ package employeewages
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	labor "github.com/square/square-go-sdk/v40/labor"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.EmployeeWagesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.EmployeeWage], error) {
+) (*core.Page[*v40.EmployeeWage], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListEmployeeWagesResponse) *internal.PageResponse[*string, *squaregosdk.EmployeeWage] {
+	readPageResponse := func(response *v40.ListEmployeeWagesResponse) *internal.PageResponse[*string, *v40.EmployeeWage] {
 		next := response.Cursor
 		results := response.EmployeeWages
-		return &internal.PageResponse[*string, *squaregosdk.EmployeeWage]{
+		return &internal.PageResponse[*string, *v40.EmployeeWage]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.EmployeeWagesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetEmployeeWageResponse, error) {
+) (*v40.GetEmployeeWageResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetEmployeeWageResponse
+	var response *v40.GetEmployeeWageResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

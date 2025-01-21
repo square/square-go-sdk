@@ -5,11 +5,11 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	activities "github.com/square/square-go-sdk/giftcards/activities"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	activities "github.com/square/square-go-sdk/v40/giftcards/activities"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -47,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // a subset of the gift cards. Results are sorted by `created_at` in ascending order.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.GiftCardsListRequest,
+	request *v40.GiftCardsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.GiftCard], error) {
+) (*core.Page[*v40.GiftCard], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,10 +85,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListGiftCardsResponse) *internal.PageResponse[*string, *squaregosdk.GiftCard] {
+	readPageResponse := func(response *v40.ListGiftCardsResponse) *internal.PageResponse[*string, *v40.GiftCard] {
 		next := response.Cursor
 		results := response.GiftCards
-		return &internal.PageResponse[*string, *squaregosdk.GiftCard]{
+		return &internal.PageResponse[*string, *v40.GiftCard]{
 			Next:    next,
 			Results: results,
 		}
@@ -108,9 +108,9 @@ func (c *Client) List(
 // to refund a payment to the new gift card.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateGiftCardRequest,
+	request *v40.CreateGiftCardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateGiftCardResponse, error) {
+) (*v40.CreateGiftCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -124,7 +124,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateGiftCardResponse
+	var response *v40.CreateGiftCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -147,9 +147,9 @@ func (c *Client) Create(
 // Retrieves a gift card using the gift card account number (GAN).
 func (c *Client) GetFromGan(
 	ctx context.Context,
-	request *squaregosdk.GetGiftCardFromGanRequest,
+	request *v40.GetGiftCardFromGanRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetGiftCardFromGanResponse, error) {
+) (*v40.GetGiftCardFromGanResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -163,7 +163,7 @@ func (c *Client) GetFromGan(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.GetGiftCardFromGanResponse
+	var response *v40.GetGiftCardFromGanResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -186,9 +186,9 @@ func (c *Client) GetFromGan(
 // Retrieves a gift card using a secure payment token that represents the gift card.
 func (c *Client) GetFromNonce(
 	ctx context.Context,
-	request *squaregosdk.GetGiftCardFromNonceRequest,
+	request *v40.GetGiftCardFromNonceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetGiftCardFromNonceResponse, error) {
+) (*v40.GetGiftCardFromNonceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -202,7 +202,7 @@ func (c *Client) GetFromNonce(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.GetGiftCardFromNonceResponse
+	var response *v40.GetGiftCardFromNonceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -225,9 +225,9 @@ func (c *Client) GetFromNonce(
 // Links a customer to a gift card, which is also referred to as adding a card on file.
 func (c *Client) LinkCustomer(
 	ctx context.Context,
-	request *squaregosdk.LinkCustomerToGiftCardRequest,
+	request *v40.LinkCustomerToGiftCardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.LinkCustomerToGiftCardResponse, error) {
+) (*v40.LinkCustomerToGiftCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -244,7 +244,7 @@ func (c *Client) LinkCustomer(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.LinkCustomerToGiftCardResponse
+	var response *v40.LinkCustomerToGiftCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -267,9 +267,9 @@ func (c *Client) LinkCustomer(
 // Unlinks a customer from a gift card, which is also referred to as removing a card on file.
 func (c *Client) UnlinkCustomer(
 	ctx context.Context,
-	request *squaregosdk.UnlinkCustomerFromGiftCardRequest,
+	request *v40.UnlinkCustomerFromGiftCardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UnlinkCustomerFromGiftCardResponse, error) {
+) (*v40.UnlinkCustomerFromGiftCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -286,7 +286,7 @@ func (c *Client) UnlinkCustomer(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UnlinkCustomerFromGiftCardResponse
+	var response *v40.UnlinkCustomerFromGiftCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -309,9 +309,9 @@ func (c *Client) UnlinkCustomer(
 // Retrieves a gift card using the gift card ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GiftCardsGetRequest,
+	request *v40.GiftCardsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetGiftCardResponse, error) {
+) (*v40.GetGiftCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -327,7 +327,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetGiftCardResponse
+	var response *v40.GetGiftCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

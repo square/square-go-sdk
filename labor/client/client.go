@@ -3,17 +3,14 @@
 package client
 
 import (
-	context "context"
-	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	breaktypes "github.com/square/square-go-sdk/labor/breaktypes"
-	employeewages "github.com/square/square-go-sdk/labor/employeewages"
-	shifts "github.com/square/square-go-sdk/labor/shifts"
-	teammemberwages "github.com/square/square-go-sdk/labor/teammemberwages"
-	workweekconfigs "github.com/square/square-go-sdk/labor/workweekconfigs"
-	option "github.com/square/square-go-sdk/option"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	breaktypes "github.com/square/square-go-sdk/v40/labor/breaktypes"
+	employeewages "github.com/square/square-go-sdk/v40/labor/employeewages"
+	shifts "github.com/square/square-go-sdk/v40/labor/shifts"
+	teammemberwages "github.com/square/square-go-sdk/v40/labor/teammemberwages"
+	workweekconfigs "github.com/square/square-go-sdk/v40/labor/workweekconfigs"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -53,113 +50,4 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TeamMemberWages: teammemberwages.NewClient(opts...),
 		WorkweekConfigs: workweekconfigs.NewClient(opts...),
 	}
-}
-
-// Returns a paginated list of `BreakType` instances for a business.
-func (c *Client) List(
-	ctx context.Context,
-	request *squaregosdk.LaborListRequest,
-	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.BreakType], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := baseURL + "/v2/labor/break-types"
-	queryParams, err := internal.QueryValues(request)
-	if err != nil {
-		return nil, err
-	}
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
-		if pageRequest.Cursor != nil {
-			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
-		}
-		nextURL := endpointURL
-		if len(queryParams) > 0 {
-			nextURL += "?" + queryParams.Encode()
-		}
-		return &internal.CallParams{
-			URL:             nextURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        pageRequest.Response,
-		}
-	}
-	readPageResponse := func(response *squaregosdk.ListBreakTypesResponse) *internal.PageResponse[*string, *squaregosdk.BreakType] {
-		next := response.Cursor
-		results := response.BreakTypes
-		return &internal.PageResponse[*string, *squaregosdk.BreakType]{
-			Next:    next,
-			Results: results,
-		}
-	}
-	pager := internal.NewCursorPager(
-		c.caller,
-		prepareCall,
-		readPageResponse,
-	)
-	return pager.GetPage(ctx, request.Cursor)
-}
-
-// Creates a new `BreakType`.
-//
-// A `BreakType` is a template for creating `Break` objects.
-// You must provide the following values in your request to this
-// endpoint:
-//
-// - `location_id`
-// - `break_name`
-// - `expected_duration`
-// - `is_paid`
-//
-// You can only have three `BreakType` instances per location. If you attempt to add a fourth
-// `BreakType` for a location, an `INVALID_REQUEST_ERROR` "Exceeded limit of 3 breaks per location."
-// is returned.
-func (c *Client) Create(
-	ctx context.Context,
-	request *squaregosdk.CreateBreakTypeRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.CreateBreakTypeResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := baseURL + "/v2/labor/break-types"
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-	headers.Set("Content-Type", "application/json")
-
-	var response *squaregosdk.CreateBreakTypeResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPost,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
 }

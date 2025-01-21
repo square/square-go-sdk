@@ -5,10 +5,10 @@ package refunds
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -47,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.RefundsListRequest,
+	request *v40.RefundsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.PaymentRefund], error) {
+) (*core.Page[*v40.PaymentRefund], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,10 +85,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListPaymentRefundsResponse) *internal.PageResponse[*string, *squaregosdk.PaymentRefund] {
+	readPageResponse := func(response *v40.ListPaymentRefundsResponse) *internal.PageResponse[*string, *v40.PaymentRefund] {
 		next := response.Cursor
 		results := response.Refunds
-		return &internal.PageResponse[*string, *squaregosdk.PaymentRefund]{
+		return &internal.PageResponse[*string, *v40.PaymentRefund]{
 			Next:    next,
 			Results: results,
 		}
@@ -107,9 +107,9 @@ func (c *Client) List(
 // [Refund Payment](https://developer.squareup.com/docs/payments-api/refund-payments).
 func (c *Client) RefundPayment(
 	ctx context.Context,
-	request *squaregosdk.RefundPaymentRequest,
+	request *v40.RefundPaymentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RefundPaymentResponse, error) {
+) (*v40.RefundPaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -123,7 +123,7 @@ func (c *Client) RefundPayment(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.RefundPaymentResponse
+	var response *v40.RefundPaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -146,9 +146,9 @@ func (c *Client) RefundPayment(
 // Retrieves a specific refund using the `refund_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.RefundsGetRequest,
+	request *v40.RefundsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetPaymentRefundResponse, error) {
+) (*v40.GetPaymentRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -164,7 +164,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetPaymentRefundResponse
+	var response *v40.GetPaymentRefundResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

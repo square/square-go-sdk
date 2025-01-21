@@ -5,11 +5,11 @@ package subscriptions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	webhooks "github.com/square/square-go-sdk/webhooks"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
+	webhooks "github.com/square/square-go-sdk/v40/webhooks"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *webhooks.SubscriptionsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.WebhookSubscription], error) {
+) (*core.Page[*v40.WebhookSubscription], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListWebhookSubscriptionsResponse) *internal.PageResponse[*string, *squaregosdk.WebhookSubscription] {
+	readPageResponse := func(response *v40.ListWebhookSubscriptionsResponse) *internal.PageResponse[*string, *v40.WebhookSubscription] {
 		next := response.Cursor
 		results := response.Subscriptions
-		return &internal.PageResponse[*string, *squaregosdk.WebhookSubscription]{
+		return &internal.PageResponse[*string, *v40.WebhookSubscription]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *webhooks.CreateWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateWebhookSubscriptionResponse, error) {
+) (*v40.CreateWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -116,7 +116,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateWebhookSubscriptionResponse
+	var response *v40.CreateWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,7 +141,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *webhooks.SubscriptionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetWebhookSubscriptionResponse, error) {
+) (*v40.GetWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -157,7 +157,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetWebhookSubscriptionResponse
+	var response *v40.GetWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -181,7 +181,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateWebhookSubscriptionResponse, error) {
+) (*v40.UpdateWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -198,7 +198,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateWebhookSubscriptionResponse
+	var response *v40.UpdateWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -223,7 +223,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *webhooks.SubscriptionsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteWebhookSubscriptionResponse, error) {
+) (*v40.DeleteWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -239,7 +239,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteWebhookSubscriptionResponse
+	var response *v40.DeleteWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -263,7 +263,7 @@ func (c *Client) UpdateSignatureKey(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionSignatureKeyRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateWebhookSubscriptionSignatureKeyResponse, error) {
+) (*v40.UpdateWebhookSubscriptionSignatureKeyResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -280,7 +280,7 @@ func (c *Client) UpdateSignatureKey(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateWebhookSubscriptionSignatureKeyResponse
+	var response *v40.UpdateWebhookSubscriptionSignatureKeyResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -305,7 +305,7 @@ func (c *Client) Test(
 	ctx context.Context,
 	request *webhooks.TestWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.TestWebhookSubscriptionResponse, error) {
+) (*v40.TestWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -322,7 +322,7 @@ func (c *Client) Test(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.TestWebhookSubscriptionResponse
+	var response *v40.TestWebhookSubscriptionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

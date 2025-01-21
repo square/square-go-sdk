@@ -3,7 +3,7 @@
 package teammembers
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type WageSettingGetRequest struct {
@@ -19,5 +19,5 @@ type UpdateWageSettingRequest struct {
 	// Requires Square API version 2024-12-18 or later.
 	// - `job_title` - Use the exact, case-sensitive spelling of an existing title unless you want to create a new job.
 	// This value is ignored if `job_id` is also provided.
-	WageSetting *squaregosdk.WageSetting `json:"wage_setting,omitempty" url:"-"`
+	WageSetting *v40.WageSetting `json:"wage_setting,omitempty" url:"-"`
 }

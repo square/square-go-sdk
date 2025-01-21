@@ -3,7 +3,7 @@
 package terminal
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type RefundsCancelRequest struct {
@@ -18,7 +18,7 @@ type CreateTerminalRefundRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The refund to create.
-	Refund *squaregosdk.TerminalRefund `json:"refund,omitempty" url:"-"`
+	Refund *v40.TerminalRefund `json:"refund,omitempty" url:"-"`
 }
 
 type RefundsGetRequest struct {
@@ -30,7 +30,7 @@ type SearchTerminalRefundsRequest struct {
 	// Queries the Terminal refunds based on given conditions and the sort order. Calling
 	// `SearchTerminalRefunds` without an explicit query parameter returns all available
 	// refunds with the default sort order.
-	Query *squaregosdk.TerminalRefundQuery `json:"query,omitempty" url:"-"`
+	Query *v40.TerminalRefundQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	Cursor *string `json:"cursor,omitempty" url:"-"`

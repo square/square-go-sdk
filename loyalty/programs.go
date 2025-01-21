@@ -3,7 +3,7 @@
 package loyalty
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 )
 
 type CalculateLoyaltyPointsRequest struct {
@@ -16,7 +16,7 @@ type CalculateLoyaltyPointsRequest struct {
 	// The purchase amount for which to calculate the points.
 	// Specify this field if your application does not use the Orders API to process orders.
 	// Otherwise, specify the `order_id`.
-	TransactionAmountMoney *squaregosdk.Money `json:"transaction_amount_money,omitempty" url:"-"`
+	TransactionAmountMoney *v40.Money `json:"transaction_amount_money,omitempty" url:"-"`
 	// The ID of the target [loyalty account](entity:LoyaltyAccount). Optionally specify this field
 	// if your application uses the Orders API to process orders.
 	//

@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v40/internal"
 )
 
 type SearchCatalogItemsRequest struct {
@@ -180,8 +180,7 @@ type SearchCatalogObjectsRequest struct {
 	// ITEM_OPTION_VAL, ITEM_VARIATION, or MODIFIER), you must explicitly include all the types of interest
 	// in this field.
 	ObjectTypes []CatalogObjectType `json:"object_types,omitempty" url:"-"`
-	// If `true`, deleted objects will be included in the results. Deleted objects will have their
-	// `is_deleted` field set to `true`.
+	// If `true`, deleted objects will be included in the results. Defaults to `false`. Deleted objects will have their `is_deleted` field set to `true`. If `include_deleted_objects` is `true`, then the `include_category_path_to_root` request parameter must be `false`. Both properties cannot be `true` at the same time.
 	IncludeDeletedObjects *bool `json:"include_deleted_objects,omitempty" url:"-"`
 	// If `true`, the response will include additional objects that are related to the
 	// requested objects. Related objects are objects that are referenced by object ID by the objects
@@ -208,10 +207,7 @@ type SearchCatalogObjectsRequest struct {
 	// the implementation may return more or fewer results. If the supplied limit is negative, zero, or
 	// is higher than the maximum limit of 1,000, it will be ignored.
 	Limit *int `json:"limit,omitempty" url:"-"`
-	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists
-	// of `CategoryPathToRootNode` objects and specifies the path that starts with the immediate parent category of the returned category
-	// and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned
-	// in the response payload.
+	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists of `CategoryPathToRootNode` objects and specifies the path that starts with the immediate parent category of the returned category and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned in the response payload. If `include_category_path_to_root` is `true`, then the `include_deleted_objects` request parameter must be `false`. Both properties cannot be `true` at the same time.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
 }
 

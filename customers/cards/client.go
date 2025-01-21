@@ -4,11 +4,11 @@ package cards
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	customers "github.com/square/square-go-sdk/customers"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	customers "github.com/square/square-go-sdk/v40/customers"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerCardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCustomerCardResponse, error) {
+) (*v40.CreateCustomerCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -65,7 +65,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateCustomerCardResponse
+	var response *v40.CreateCustomerCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -90,7 +90,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *customers.CardsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteCustomerCardResponse, error) {
+) (*v40.DeleteCustomerCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -107,7 +107,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteCustomerCardResponse
+	var response *v40.DeleteCustomerCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

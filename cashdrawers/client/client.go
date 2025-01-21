@@ -3,10 +3,10 @@
 package client
 
 import (
-	shifts "github.com/square/square-go-sdk/cashdrawers/shifts"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	shifts "github.com/square/square-go-sdk/v40/cashdrawers/shifts"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )

@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v40/internal"
 )
 
 type AcceptedPaymentMethods struct {
@@ -2443,56 +2443,6 @@ func (c *CancelLoyaltyPromotionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the response returned by
-// [CancelPaymentByIdempotencyKey](api-endpoint:Payments-CancelPaymentByIdempotencyKey).
-// On success, `errors` is empty.
-type CancelPaymentByIdempotencyKeyResponse struct {
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CancelPaymentByIdempotencyKeyResponse) GetErrors() []*Error {
-	if c == nil {
-		return nil
-	}
-	return c.Errors
-}
-
-func (c *CancelPaymentByIdempotencyKeyResponse) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CancelPaymentByIdempotencyKeyResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler CancelPaymentByIdempotencyKeyResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CancelPaymentByIdempotencyKeyResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 type CancelTerminalActionResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4868,12 +4818,6 @@ type CatalogItem struct {
 	LabelColor *string `json:"label_color,omitempty" url:"label_color,omitempty"`
 	// Indicates whether the item is taxable (`true`) or non-taxable (`false`). Default is `true`.
 	IsTaxable *bool `json:"is_taxable,omitempty" url:"is_taxable,omitempty"`
-	// If `true`, the item can be added to shipping orders from the merchant's online store.
-	AvailableOnline *bool `json:"available_online,omitempty" url:"available_online,omitempty"`
-	// If `true`, the item can be added to pickup orders from the merchant's online store.
-	AvailableForPickup *bool `json:"available_for_pickup,omitempty" url:"available_for_pickup,omitempty"`
-	// If `true`, the item can be added to electronically fulfilled orders from the merchant's online store.
-	AvailableElectronically *bool `json:"available_electronically,omitempty" url:"available_electronically,omitempty"`
 	// The ID of the item's category, if any. Deprecated since 2023-12-13. Use `CatalogItem.categories`, instead.
 	CategoryID *string `json:"category_id,omitempty" url:"category_id,omitempty"`
 	// A set of IDs indicating the taxes enabled for
@@ -4946,6 +4890,7 @@ type CatalogItem struct {
 	// A server-generated plaintext version of the `description_html` field, without formatting tags.
 	DescriptionPlaintext *string `json:"description_plaintext,omitempty" url:"description_plaintext,omitempty"`
 	// A list of IDs representing channels, such as a Square Online site, where the item can be made visible or available.
+	// This field is read only and cannot be edited.
 	Channels []string `json:"channels,omitempty" url:"channels,omitempty"`
 	// Indicates whether this item is archived (`true`) or not (`false`).
 	IsArchived *bool `json:"is_archived,omitempty" url:"is_archived,omitempty"`
@@ -4993,27 +4938,6 @@ func (c *CatalogItem) GetIsTaxable() *bool {
 		return nil
 	}
 	return c.IsTaxable
-}
-
-func (c *CatalogItem) GetAvailableOnline() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.AvailableOnline
-}
-
-func (c *CatalogItem) GetAvailableForPickup() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.AvailableForPickup
-}
-
-func (c *CatalogItem) GetAvailableElectronically() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.AvailableElectronically
 }
 
 func (c *CatalogItem) GetCategoryID() *string {
@@ -14055,6 +13979,65 @@ func (c *CreateBookingCustomAttributeDefinitionResponse) UnmarshalJSON(data []by
 }
 
 func (c *CreateBookingCustomAttributeDefinitionResponse) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The response to the request to create a `BreakType`. The response contains
+// the created `BreakType` object and might contain a set of `Error` objects if
+// the request resulted in errors.
+type CreateBreakTypeResponse struct {
+	// The `BreakType` that was created by the request.
+	BreakType *BreakType `json:"break_type,omitempty" url:"break_type,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateBreakTypeResponse) GetBreakType() *BreakType {
+	if c == nil {
+		return nil
+	}
+	return c.BreakType
+}
+
+func (c *CreateBreakTypeResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateBreakTypeResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateBreakTypeResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBreakTypeResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBreakTypeResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBreakTypeResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -23389,6 +23372,75 @@ func (l *ListBookingCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// The response to a request for a set of `BreakType` objects. The response contains
+// the requested `BreakType` objects and might contain a set of `Error` objects if
+// the request resulted in errors.
+type ListBreakTypesResponse struct {
+	// A page of `BreakType` results.
+	BreakTypes []*BreakType `json:"break_types,omitempty" url:"break_types,omitempty"`
+	// The value supplied in the subsequent request to fetch the next page
+	// of `BreakType` results.
+	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *ListBreakTypesResponse) GetBreakTypes() []*BreakType {
+	if l == nil {
+		return nil
+	}
+	return l.BreakTypes
+}
+
+func (l *ListBreakTypesResponse) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
+func (l *ListBreakTypesResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
+}
+
+func (l *ListBreakTypesResponse) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *ListBreakTypesResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListBreakTypesResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = ListBreakTypesResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *ListBreakTypesResponse) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 type ListCashDrawerShiftEventsResponse struct {
 	// Opaque cursor for fetching the next page. Cursor is not present in
 	// the last page of results.
@@ -32240,19 +32292,21 @@ func (p *PaymentLinkRelatedResources) String() string {
 type PaymentOptions struct {
 	// Indicates whether the `Payment` objects created from this `TerminalCheckout` are automatically
 	// `COMPLETED` or left in an `APPROVED` state for later modification.
+	//
+	// Default: true
 	Autocomplete *bool `json:"autocomplete,omitempty" url:"autocomplete,omitempty"`
-	// The duration of time after the payment's creation when Square automatically cancels the
-	// payment. This automatic cancellation applies only to payments that do not reach a terminal state
-	// (COMPLETED or CANCELED) before the `delay_duration` time period.
+	// The duration of time after the payment's creation when Square automatically resolves the
+	// payment. This automatic resolution applies only to payments that do not reach a terminal state
+	// (`COMPLETED` or `CANCELED`) before the `delay_duration` time period.
 	//
 	// This parameter should be specified as a time duration, in RFC 3339 format, with a minimum value
-	// of 1 minute.
+	// of 1 minute and a maximum value of 36 hours. This feature is only supported for card payments,
+	// and all payments will be considered card-present.
 	//
-	// Note: This feature is only supported for card payments. This parameter can only be set for a delayed
-	// capture payment (`autocomplete=false`).
-	// Default:
-	// - Card-present payments: "PT36H" (36 hours) from the creation time.
-	// - Card-not-present payments: "P7D" (7 days) from the creation time.
+	// This parameter can only be set for a delayed capture payment (`autocomplete=false`). For more
+	// information, see [Delayed Capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).
+	//
+	// Default: "PT36H" (36 hours) from the creation time
 	DelayDuration *string `json:"delay_duration,omitempty" url:"delay_duration,omitempty"`
 	// If set to `true` and charging a Square Gift Card, a payment might be returned with
 	// `amount_money` equal to less than what was requested. For example, a request for $20 when charging
@@ -32260,18 +32314,21 @@ type PaymentOptions struct {
 	// to prompt the buyer for an additional payment to cover the remainder or cancel the Gift Card
 	// payment.
 	//
-	// This field cannot be `true` when `autocomplete = true`.
-	// This field cannot be `true` when an `order_id` isn't specified.
+	// This parameter can only be set for a delayed capture payment (`autocomplete=false`).
 	//
-	// For more information, see
-	// [Take Partial Payments](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/partial-payments-with-gift-cards).
+	// For more information, see [Take Partial Payments](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/partial-payments-with-gift-cards).
 	//
 	// Default: false
 	AcceptPartialAuthorization *bool `json:"accept_partial_authorization,omitempty" url:"accept_partial_authorization,omitempty"`
-	// The action to be applied to the payment when the delay_duration has elapsed.
+	// The action to be applied to the `Payment` when the delay_duration has elapsed.
 	// The action must be CANCEL or COMPLETE.
 	//
-	// This parameter can only be set for a delayed capture payment (when `autocomplete` is `false`).
+	// The action cannot be set to COMPLETE if an `order_id` is present on the TerminalCheckout.
+	//
+	// This parameter can only be set for a delayed capture payment (`autocomplete=false`). For more
+	// information, see [Delayed Capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture#time-threshold).
+	//
+	// Default: CANCEL
 	// See [DelayAction](#type-delayaction) for possible values
 	DelayAction *PaymentOptionsDelayAction `json:"delay_action,omitempty" url:"delay_action,omitempty"`
 

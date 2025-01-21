@@ -4,13 +4,13 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	accounts "github.com/square/square-go-sdk/loyalty/accounts"
-	programsclient "github.com/square/square-go-sdk/loyalty/programs/client"
-	rewards "github.com/square/square-go-sdk/loyalty/rewards"
-	option "github.com/square/square-go-sdk/option"
+	v40 "github.com/square/square-go-sdk/v40"
+	core "github.com/square/square-go-sdk/v40/core"
+	internal "github.com/square/square-go-sdk/v40/internal"
+	accounts "github.com/square/square-go-sdk/v40/loyalty/accounts"
+	programsclient "github.com/square/square-go-sdk/v40/loyalty/programs/client"
+	rewards "github.com/square/square-go-sdk/v40/loyalty/rewards"
+	option "github.com/square/square-go-sdk/v40/option"
 	http "net/http"
 	os "os"
 )
@@ -58,9 +58,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Search results are sorted by `created_at` in descending order.
 func (c *Client) SearchEvents(
 	ctx context.Context,
-	request *squaregosdk.SearchLoyaltyEventsRequest,
+	request *v40.SearchLoyaltyEventsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchLoyaltyEventsResponse, error) {
+) (*v40.SearchLoyaltyEventsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -74,7 +74,7 @@ func (c *Client) SearchEvents(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchLoyaltyEventsResponse
+	var response *v40.SearchLoyaltyEventsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

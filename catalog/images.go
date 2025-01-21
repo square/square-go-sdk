@@ -3,18 +3,18 @@
 package catalog
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v40 "github.com/square/square-go-sdk/v40"
 	io "io"
 )
 
 type ImagesCreateRequest struct {
-	ImageFile io.Reader                              `json:"-" url:"-"`
-	Request   *squaregosdk.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	ImageFile io.Reader                      `json:"-" url:"-"`
+	Request   *v40.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }
 
 type ImagesUpdateRequest struct {
 	// The ID of the `CatalogImage` object to update the encapsulated image file.
-	ImageID   string                                 `json:"-" url:"-"`
-	ImageFile io.Reader                              `json:"-" url:"-"`
-	Request   *squaregosdk.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	ImageID   string                         `json:"-" url:"-"`
+	ImageFile io.Reader                      `json:"-" url:"-"`
+	Request   *v40.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }

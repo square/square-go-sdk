@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/square/square-go-sdk/core"
+	"github.com/square/square-go-sdk/v40/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
