@@ -19,18 +19,6 @@ type BulkUpsertMerchantCustomAttributesRequest struct {
 	Values map[string]*squaregosdk.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 }
 
-type CreateMerchantCustomAttributeDefinitionRequest struct {
-	// The custom attribute definition to create. Note the following:
-	// - With the exception of the `Selection` data type, the `schema` is specified as a simple URL to the JSON schema
-	// definition hosted on the Square CDN. For more information, including supported values and constraints, see
-	// [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
-	// - `name` is required unless `visibility` is set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
-	// A unique identifier for this request, used to ensure idempotency. For more information,
-	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
-	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
-}
-
 type CustomAttributesDeleteRequest struct {
 	// The ID of the target [merchant](entity:Merchant).
 	MerchantID string `json:"-" url:"-"`

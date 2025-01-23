@@ -175,7 +175,7 @@ func (c *Client) Create(
 // - `company_name`
 // - `email_address`
 // - `phone_number`
-func (c *Client) BulkCreateCustomers(
+func (c *Client) BatchCreate(
 	ctx context.Context,
 	request *squaregosdk.BulkCreateCustomersRequest,
 	opts ...option.RequestOption,
@@ -298,8 +298,6 @@ func (c *Client) BulkRetrieveCustomers(
 // Updates multiple customer profiles.
 //
 // This endpoint takes a map of individual update requests and returns a map of responses.
-//
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
 	request *squaregosdk.BulkUpdateCustomersRequest,
@@ -429,8 +427,6 @@ func (c *Client) Get(
 // To add or update a field, specify the new value. To remove a field, specify `null`.
 //
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
-//
-// You cannot use this endpoint to change cards on file. To make changes, use the [Cards API](api:Cards) or [Gift Cards API](api:GiftCards).
 func (c *Client) Update(
 	ctx context.Context,
 	request *squaregosdk.UpdateCustomerRequest,
@@ -472,7 +468,7 @@ func (c *Client) Update(
 	return response, nil
 }
 
-// Deletes a customer profile from a business. This operation also unlinks any associated cards on file.
+// Deletes a customer profile from a business.
 //
 // To delete a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Delete(

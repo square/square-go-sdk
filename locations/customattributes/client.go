@@ -40,94 +40,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Updates a location-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
-// Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
-// `schema` for a `Selection` data type.
-// Only the definition owner can update a custom attribute definition.
-func (c *Client) Update(
-	ctx context.Context,
-	request *locations.UpdateLocationCustomAttributeDefinitionRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.UpdateLocationCustomAttributeDefinitionResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/locations/custom-attribute-definitions/%v",
-		request.Key,
-	)
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-	headers.Set("Content-Type", "application/json")
-
-	var response *squaregosdk.UpdateLocationCustomAttributeDefinitionResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPut,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
-// Deletes a [custom attribute](entity:CustomAttribute) associated with a location.
-// To delete a custom attribute owned by another application, the `visibility` setting must be
-// `VISIBILITY_READ_WRITE_VALUES`.
-func (c *Client) Delete(
-	ctx context.Context,
-	request *locations.CustomAttributesDeleteRequest,
-	opts ...option.RequestOption,
-) (*squaregosdk.DeleteLocationCustomAttributeResponse, error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		c.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/locations/%v/custom-attributes/%v",
-		request.LocationID,
-		request.Key,
-	)
-	headers := internal.MergeHeaders(
-		c.header.Clone(),
-		options.ToHeader(),
-	)
-
-	var response *squaregosdk.DeleteLocationCustomAttributeResponse
-	if err := c.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodDelete,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Deletes [custom attributes](entity:CustomAttribute) for locations as a bulk operation.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
@@ -374,6 +286,49 @@ func (c *Client) Upsert(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Deletes a [custom attribute](entity:CustomAttribute) associated with a location.
+// To delete a custom attribute owned by another application, the `visibility` setting must be
+// `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) Delete(
+	ctx context.Context,
+	request *locations.CustomAttributesDeleteRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.DeleteLocationCustomAttributeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/locations/%v/custom-attributes/%v",
+		request.LocationID,
+		request.Key,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.DeleteLocationCustomAttributeResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodDelete,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
 			Response:        &response,
 		},
 	); err != nil {

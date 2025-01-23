@@ -20,8 +20,8 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	CustomAttributes           *customattributes.Client
 	CustomAttributeDefinitions *customattributedefinitions.Client
+	CustomAttributes           *customattributes.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -41,8 +41,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:                     options.ToHeader(),
-		CustomAttributes:           customattributes.NewClient(opts...),
 		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
+		CustomAttributes:           customattributes.NewClient(opts...),
 	}
 }
 

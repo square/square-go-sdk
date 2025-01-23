@@ -147,29 +147,36 @@ func (c *Client) Create(
 	return response, nil
 }
 
-// Cancels (voids) a payment. You can use this endpoint to cancel a payment with
-// the APPROVED `status`.
-func (c *Client) Cancel(
+// Cancels (voids) a payment identified by the idempotency key that is specified in the
+// request.
+//
+// Use this method when the status of a `CreatePayment` request is unknown (for example, after you send a
+// `CreatePayment` request, a network error occurs and you do not get a response). In this case, you can
+// direct Square to cancel the payment using this endpoint. In the request, you provide the same
+// idempotency key that you provided in your `CreatePayment` request that you want to cancel. After
+// canceling the payment, you can submit your `CreatePayment` request again.
+//
+// Note that if no payment with the specified idempotency key is found, no action is taken and the endpoint
+// returns successfully.
+func (c *Client) CancelByIdempotencyKey(
 	ctx context.Context,
-	request *squaregosdk.PaymentsCancelRequest,
+	request *squaregosdk.CancelPaymentByIdempotencyKeyRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelPaymentResponse, error) {
+) (*squaregosdk.CancelPaymentByIdempotencyKeyResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		c.baseURL,
 		"https://connect.squareup.com",
 	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/payments/%v/cancel",
-		request.PaymentID,
-	)
+	endpointURL := baseURL + "/v2/payments/cancel"
 	headers := internal.MergeHeaders(
 		c.header.Clone(),
 		options.ToHeader(),
 	)
+	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CancelPaymentResponse
+	var response *squaregosdk.CancelPaymentByIdempotencyKeyResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -180,6 +187,7 @@ func (c *Client) Cancel(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 		},
 	); err != nil {
@@ -263,6 +271,47 @@ func (c *Client) Update(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Cancels (voids) a payment. You can use this endpoint to cancel a payment with
+// the APPROVED `status`.
+func (c *Client) Cancel(
+	ctx context.Context,
+	request *squaregosdk.PaymentsCancelRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.CancelPaymentResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/payments/%v/cancel",
+		request.PaymentID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.CancelPaymentResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
 			Response:        &response,
 		},
 	); err != nil {

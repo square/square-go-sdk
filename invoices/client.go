@@ -482,7 +482,7 @@ func (c *Client) Cancel(
 //
 // In addition to the required `ORDERS_WRITE` and `INVOICES_WRITE` permissions, `CUSTOMERS_READ`
 // and `PAYMENTS_WRITE` are required when publishing invoices configured for card-on-file payments.
-func (c *Client) Publisb(
+func (c *Client) Publish(
 	ctx context.Context,
 	request *squaregosdk.PublishInvoiceRequest,
 	opts ...option.RequestOption,
