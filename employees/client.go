@@ -5,10 +5,10 @@ package employees
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.EmployeesListRequest,
+	request *v2.EmployeesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Employee], error) {
+) (*core.Page[*v2.Employee], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -79,10 +79,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListEmployeesResponse) *internal.PageResponse[*string, *squaregosdk.Employee] {
+	readPageResponse := func(response *v2.ListEmployeesResponse) *internal.PageResponse[*string, *v2.Employee] {
 		next := response.Cursor
 		results := response.Employees
-		return &internal.PageResponse[*string, *squaregosdk.Employee]{
+		return &internal.PageResponse[*string, *v2.Employee]{
 			Next:    next,
 			Results: results,
 		}
@@ -97,9 +97,9 @@ func (c *Client) List(
 
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.EmployeesGetRequest,
+	request *v2.EmployeesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetEmployeeResponse, error) {
+) (*v2.GetEmployeeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -115,7 +115,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetEmployeeResponse
+	var response *v2.GetEmployeeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

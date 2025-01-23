@@ -5,11 +5,11 @@ package groups
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	customers "github.com/square/square-go-sdk/customers"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	customers "github.com/square/square-go-sdk/v2/customers"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *customers.GroupsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomerGroup], error) {
+) (*core.Page[*v2.CustomerGroup], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCustomerGroupsResponse) *internal.PageResponse[*string, *squaregosdk.CustomerGroup] {
+	readPageResponse := func(response *v2.ListCustomerGroupsResponse) *internal.PageResponse[*string, *v2.CustomerGroup] {
 		next := response.Cursor
 		results := response.Groups
-		return &internal.PageResponse[*string, *squaregosdk.CustomerGroup]{
+		return &internal.PageResponse[*string, *v2.CustomerGroup]{
 			Next:    next,
 			Results: results,
 		}
@@ -104,7 +104,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerGroupRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCustomerGroupResponse, error) {
+) (*v2.CreateCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateCustomerGroupResponse
+	var response *v2.CreateCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -143,7 +143,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *customers.GroupsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCustomerGroupResponse, error) {
+) (*v2.GetCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -159,7 +159,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCustomerGroupResponse
+	var response *v2.GetCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -183,7 +183,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *customers.UpdateCustomerGroupRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateCustomerGroupResponse, error) {
+) (*v2.UpdateCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -200,7 +200,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateCustomerGroupResponse
+	var response *v2.UpdateCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -225,7 +225,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *customers.GroupsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteCustomerGroupResponse, error) {
+) (*v2.DeleteCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -241,7 +241,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteCustomerGroupResponse
+	var response *v2.DeleteCustomerGroupResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -268,7 +268,7 @@ func (c *Client) Add(
 	ctx context.Context,
 	request *customers.GroupsAddRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.AddGroupToCustomerResponse, error) {
+) (*v2.AddGroupToCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -285,7 +285,7 @@ func (c *Client) Add(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.AddGroupToCustomerResponse
+	var response *v2.AddGroupToCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -312,7 +312,7 @@ func (c *Client) Remove(
 	ctx context.Context,
 	request *customers.GroupsRemoveRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RemoveGroupFromCustomerResponse, error) {
+) (*v2.RemoveGroupFromCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -329,7 +329,7 @@ func (c *Client) Remove(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RemoveGroupFromCustomerResponse
+	var response *v2.RemoveGroupFromCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

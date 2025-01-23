@@ -5,11 +5,11 @@ package locationprofiles
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	bookings "github.com/square/square-go-sdk/bookings"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	bookings "github.com/square/square-go-sdk/v2/bookings"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *bookings.LocationProfilesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.LocationBookingProfile], error) {
+) (*core.Page[*v2.LocationBookingProfile], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListLocationBookingProfilesResponse) *internal.PageResponse[*string, *squaregosdk.LocationBookingProfile] {
+	readPageResponse := func(response *v2.ListLocationBookingProfilesResponse) *internal.PageResponse[*string, *v2.LocationBookingProfile] {
 		next := response.Cursor
 		results := response.LocationBookingProfiles
-		return &internal.PageResponse[*string, *squaregosdk.LocationBookingProfile]{
+		return &internal.PageResponse[*string, *v2.LocationBookingProfile]{
 			Next:    next,
 			Results: results,
 		}

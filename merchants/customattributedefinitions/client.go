@@ -4,11 +4,12 @@ package customattributedefinitions
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	merchants "github.com/square/square-go-sdk/merchants"
-	option "github.com/square/square-go-sdk/option"
+	fmt "fmt"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	merchants "github.com/square/square-go-sdk/v2/merchants"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -39,6 +40,111 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
+// Lists the merchant-related [custom attribute definitions](entity:CustomAttributeDefinition) that belong to a Square seller account.
+// When all response pages are retrieved, the results include all custom attribute definitions
+// that are visible to the requesting application, including those that are created by other
+// applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+func (c *Client) List(
+	ctx context.Context,
+	request *merchants.CustomAttributeDefinitionsListRequest,
+	opts ...option.RequestOption,
+) (*core.Page[*v2.CustomAttributeDefinition], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        pageRequest.Response,
+		}
+	}
+	readPageResponse := func(response *v2.ListMerchantCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v2.CustomAttributeDefinition] {
+		next := response.Cursor
+		results := response.CustomAttributeDefinitions
+		return &internal.PageResponse[*string, *v2.CustomAttributeDefinition]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
+}
+
+// Creates a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) for a Square seller account.
+// Use this endpoint to define a custom attribute that can be associated with a merchant connecting to your application.
+// A custom attribute definition specifies the `key`, `visibility`, `schema`, and other properties
+// for a custom attribute. After the definition is created, you can call
+// [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) or
+// [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
+// to set the custom attribute for a merchant.
+func (c *Client) Create(
+	ctx context.Context,
+	request *merchants.CreateMerchantCustomAttributeDefinitionRequest,
+	opts ...option.RequestOption,
+) (*v2.CreateMerchantCustomAttributeDefinitionResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/merchants/custom-attribute-definitions"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *v2.CreateMerchantCustomAttributeDefinitionResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Retrieves a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
@@ -46,7 +152,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *merchants.CustomAttributeDefinitionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.RetrieveMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -69,7 +175,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse
+	var response *v2.RetrieveMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -96,7 +202,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *merchants.UpdateMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.UpdateMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -113,7 +219,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse
+	var response *v2.UpdateMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,7 +247,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *merchants.CustomAttributeDefinitionsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.DeleteMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -157,7 +263,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse
+	var response *v2.DeleteMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

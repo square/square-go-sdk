@@ -3,43 +3,43 @@
 package client
 
 import (
-	applepay "github.com/square/square-go-sdk/applepay"
-	bankaccounts "github.com/square/square-go-sdk/bankaccounts"
-	bookingsclient "github.com/square/square-go-sdk/bookings/client"
-	cards "github.com/square/square-go-sdk/cards"
-	cashdrawersclient "github.com/square/square-go-sdk/cashdrawers/client"
-	catalogclient "github.com/square/square-go-sdk/catalog/client"
-	checkoutclient "github.com/square/square-go-sdk/checkout/client"
-	core "github.com/square/square-go-sdk/core"
-	customersclient "github.com/square/square-go-sdk/customers/client"
-	devicesclient "github.com/square/square-go-sdk/devices/client"
-	disputesclient "github.com/square/square-go-sdk/disputes/client"
-	employees "github.com/square/square-go-sdk/employees"
-	events "github.com/square/square-go-sdk/events"
-	giftcardsclient "github.com/square/square-go-sdk/giftcards/client"
-	internal "github.com/square/square-go-sdk/internal"
-	inventory "github.com/square/square-go-sdk/inventory"
-	invoices "github.com/square/square-go-sdk/invoices"
-	laborclient "github.com/square/square-go-sdk/labor/client"
-	locationsclient "github.com/square/square-go-sdk/locations/client"
-	loyaltyclient "github.com/square/square-go-sdk/loyalty/client"
-	merchantsclient "github.com/square/square-go-sdk/merchants/client"
-	mobile "github.com/square/square-go-sdk/mobile"
-	oauth "github.com/square/square-go-sdk/oauth"
-	option "github.com/square/square-go-sdk/option"
-	ordersclient "github.com/square/square-go-sdk/orders/client"
-	payments "github.com/square/square-go-sdk/payments"
-	payouts "github.com/square/square-go-sdk/payouts"
-	refunds "github.com/square/square-go-sdk/refunds"
-	sites "github.com/square/square-go-sdk/sites"
-	snippets "github.com/square/square-go-sdk/snippets"
-	subscriptions "github.com/square/square-go-sdk/subscriptions"
-	team "github.com/square/square-go-sdk/team"
-	teammembersclient "github.com/square/square-go-sdk/teammembers/client"
-	terminalclient "github.com/square/square-go-sdk/terminal/client"
-	v1transactions "github.com/square/square-go-sdk/v1transactions"
-	vendors "github.com/square/square-go-sdk/vendors"
-	webhooksclient "github.com/square/square-go-sdk/webhooks/client"
+	applepay "github.com/square/square-go-sdk/v2/applepay"
+	bankaccounts "github.com/square/square-go-sdk/v2/bankaccounts"
+	bookingsclient "github.com/square/square-go-sdk/v2/bookings/client"
+	cards "github.com/square/square-go-sdk/v2/cards"
+	cashdrawersclient "github.com/square/square-go-sdk/v2/cashdrawers/client"
+	catalogclient "github.com/square/square-go-sdk/v2/catalog/client"
+	checkoutclient "github.com/square/square-go-sdk/v2/checkout/client"
+	core "github.com/square/square-go-sdk/v2/core"
+	customersclient "github.com/square/square-go-sdk/v2/customers/client"
+	devicesclient "github.com/square/square-go-sdk/v2/devices/client"
+	disputesclient "github.com/square/square-go-sdk/v2/disputes/client"
+	employees "github.com/square/square-go-sdk/v2/employees"
+	events "github.com/square/square-go-sdk/v2/events"
+	giftcardsclient "github.com/square/square-go-sdk/v2/giftcards/client"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	inventory "github.com/square/square-go-sdk/v2/inventory"
+	invoices "github.com/square/square-go-sdk/v2/invoices"
+	laborclient "github.com/square/square-go-sdk/v2/labor/client"
+	locationsclient "github.com/square/square-go-sdk/v2/locations/client"
+	loyaltyclient "github.com/square/square-go-sdk/v2/loyalty/client"
+	merchantsclient "github.com/square/square-go-sdk/v2/merchants/client"
+	mobile "github.com/square/square-go-sdk/v2/mobile"
+	oauth "github.com/square/square-go-sdk/v2/oauth"
+	option "github.com/square/square-go-sdk/v2/option"
+	ordersclient "github.com/square/square-go-sdk/v2/orders/client"
+	payments "github.com/square/square-go-sdk/v2/payments"
+	payouts "github.com/square/square-go-sdk/v2/payouts"
+	refunds "github.com/square/square-go-sdk/v2/refunds"
+	sites "github.com/square/square-go-sdk/v2/sites"
+	snippets "github.com/square/square-go-sdk/v2/snippets"
+	subscriptions "github.com/square/square-go-sdk/v2/subscriptions"
+	team "github.com/square/square-go-sdk/v2/team"
+	teammembersclient "github.com/square/square-go-sdk/v2/teammembers/client"
+	terminalclient "github.com/square/square-go-sdk/v2/terminal/client"
+	v1transactions "github.com/square/square-go-sdk/v2/v1transactions"
+	vendors "github.com/square/square-go-sdk/v2/vendors"
+	webhooksclient "github.com/square/square-go-sdk/v2/webhooks/client"
 	http "net/http"
 	os "os"
 )
@@ -65,7 +65,6 @@ type Client struct {
 	GiftCards      *giftcardsclient.Client
 	Inventory      *inventory.Client
 	Invoices       *invoices.Client
-	Labor          *laborclient.Client
 	Locations      *locationsclient.Client
 	Loyalty        *loyaltyclient.Client
 	Merchants      *merchantsclient.Client
@@ -82,6 +81,7 @@ type Client struct {
 	Terminal       *terminalclient.Client
 	Vendors        *vendors.Client
 	CashDrawers    *cashdrawersclient.Client
+	Labor          *laborclient.Client
 	Webhooks       *webhooksclient.Client
 }
 
@@ -118,7 +118,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 		GiftCards:      giftcardsclient.NewClient(opts...),
 		Inventory:      inventory.NewClient(opts...),
 		Invoices:       invoices.NewClient(opts...),
-		Labor:          laborclient.NewClient(opts...),
 		Locations:      locationsclient.NewClient(opts...),
 		Loyalty:        loyaltyclient.NewClient(opts...),
 		Merchants:      merchantsclient.NewClient(opts...),
@@ -135,6 +134,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Terminal:       terminalclient.NewClient(opts...),
 		Vendors:        vendors.NewClient(opts...),
 		CashDrawers:    cashdrawersclient.NewClient(opts...),
+		Labor:          laborclient.NewClient(opts...),
 		Webhooks:       webhooksclient.NewClient(opts...),
 	}
 }

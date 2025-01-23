@@ -4,12 +4,12 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	loyalty "github.com/square/square-go-sdk/loyalty"
-	promotions "github.com/square/square-go-sdk/loyalty/programs/promotions"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	loyalty "github.com/square/square-go-sdk/v2/loyalty"
+	promotions "github.com/square/square-go-sdk/v2/loyalty/programs/promotions"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -50,7 +50,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListLoyaltyProgramsResponse, error) {
+) (*v2.ListLoyaltyProgramsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,7 +63,7 @@ func (c *Client) List(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListLoyaltyProgramsResponse
+	var response *v2.ListLoyaltyProgramsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -89,7 +89,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.ProgramsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetLoyaltyProgramResponse, error) {
+) (*v2.GetLoyaltyProgramResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -105,7 +105,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetLoyaltyProgramResponse
+	var response *v2.GetLoyaltyProgramResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -143,7 +143,7 @@ func (c *Client) Calculate(
 	ctx context.Context,
 	request *loyalty.CalculateLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CalculateLoyaltyPointsResponse, error) {
+) (*v2.CalculateLoyaltyPointsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -160,7 +160,7 @@ func (c *Client) Calculate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CalculateLoyaltyPointsResponse
+	var response *v2.CalculateLoyaltyPointsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

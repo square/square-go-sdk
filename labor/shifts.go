@@ -3,14 +3,14 @@
 package labor
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CreateShiftRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Shift` to be created.
-	Shift *squaregosdk.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
 }
 
 type ShiftsDeleteRequest struct {
@@ -25,7 +25,7 @@ type ShiftsGetRequest struct {
 
 type SearchShiftsRequest struct {
 	// Query filters.
-	Query *squaregosdk.ShiftQuery `json:"query,omitempty" url:"-"`
+	Query *v2.ShiftQuery `json:"query,omitempty" url:"-"`
 	// The number of resources in a page (200 by default).
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// An opaque cursor for fetching the next page.
@@ -36,5 +36,5 @@ type UpdateShiftRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Shift` object.
-	Shift *squaregosdk.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
 }

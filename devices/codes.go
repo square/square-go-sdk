@@ -3,7 +3,7 @@
 package devices
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CreateDeviceCodeRequest struct {
@@ -13,7 +13,7 @@ type CreateDeviceCodeRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The device code to create.
-	DeviceCode *squaregosdk.DeviceCode `json:"device_code,omitempty" url:"-"`
+	DeviceCode *v2.DeviceCode `json:"device_code,omitempty" url:"-"`
 }
 
 type CodesGetRequest struct {
@@ -32,8 +32,8 @@ type CodesListRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
 	// If specified, only returns DeviceCodes targeting the specified product type.
 	// Returns DeviceCodes of all product types if empty.
-	ProductType *squaregosdk.ProductType `json:"-" url:"product_type,omitempty"`
+	ProductType *v2.ProductType `json:"-" url:"product_type,omitempty"`
 	// If specified, returns DeviceCodes with the specified statuses.
 	// Returns DeviceCodes of status `PAIRED` and `UNPAIRED` if empty.
-	Status *squaregosdk.DeviceCodeStatus `json:"-" url:"status,omitempty"`
+	Status *v2.DeviceCodeStatus `json:"-" url:"status,omitempty"`
 }

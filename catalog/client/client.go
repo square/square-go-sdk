@@ -5,12 +5,12 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	images "github.com/square/square-go-sdk/catalog/images"
-	object "github.com/square/square-go-sdk/catalog/object"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	images "github.com/square/square-go-sdk/v2/catalog/images"
+	object "github.com/square/square-go-sdk/v2/catalog/object"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -62,9 +62,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // delete requests are rejected with the `429` error code.
 func (c *Client) BatchDelete(
 	ctx context.Context,
-	request *squaregosdk.BatchDeleteCatalogObjectsRequest,
+	request *v2.BatchDeleteCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchDeleteCatalogObjectsResponse, error) {
+) (*v2.BatchDeleteCatalogObjectsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -78,7 +78,7 @@ func (c *Client) BatchDelete(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchDeleteCatalogObjectsResponse
+	var response *v2.BatchDeleteCatalogObjectsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -106,9 +106,9 @@ func (c *Client) BatchDelete(
 // any [CatalogTax](entity:CatalogTax) objects that apply to it.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *squaregosdk.BatchGetCatalogObjectsRequest,
+	request *v2.BatchGetCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetCatalogObjectsResponse, error) {
+) (*v2.BatchGetCatalogObjectsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -122,7 +122,7 @@ func (c *Client) BatchGet(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetCatalogObjectsResponse
+	var response *v2.BatchGetCatalogObjectsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -157,9 +157,9 @@ func (c *Client) BatchGet(
 // update requests are rejected with the `429` error code.
 func (c *Client) BatchUpsert(
 	ctx context.Context,
-	request *squaregosdk.BatchUpsertCatalogObjectsRequest,
+	request *v2.BatchUpsertCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchUpsertCatalogObjectsResponse, error) {
+) (*v2.BatchUpsertCatalogObjectsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -173,7 +173,7 @@ func (c *Client) BatchUpsert(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchUpsertCatalogObjectsResponse
+	var response *v2.BatchUpsertCatalogObjectsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -198,7 +198,7 @@ func (c *Client) BatchUpsert(
 func (c *Client) Info(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.CatalogInfoResponse, error) {
+) (*v2.CatalogInfoResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -211,7 +211,7 @@ func (c *Client) Info(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CatalogInfoResponse
+	var response *v2.CatalogInfoResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -240,9 +240,9 @@ func (c *Client) Info(
 // and set the `include_deleted_objects` attribute value to `true`.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.CatalogListRequest,
+	request *v2.CatalogListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CatalogObject], error) {
+) (*core.Page[*v2.CatalogObject], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -278,10 +278,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCatalogResponse) *internal.PageResponse[*string, *squaregosdk.CatalogObject] {
+	readPageResponse := func(response *v2.ListCatalogResponse) *internal.PageResponse[*string, *v2.CatalogObject] {
 		next := response.Cursor
 		results := response.Objects
-		return &internal.PageResponse[*string, *squaregosdk.CatalogObject]{
+		return &internal.PageResponse[*string, *v2.CatalogObject]{
 			Next:    next,
 			Results: results,
 		}
@@ -306,9 +306,9 @@ func (c *Client) List(
 // - The both endpoints have different call conventions, including the query filter formats.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchCatalogObjectsRequest,
+	request *v2.SearchCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchCatalogObjectsResponse, error) {
+) (*v2.SearchCatalogObjectsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -322,7 +322,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchCatalogObjectsResponse
+	var response *v2.SearchCatalogObjectsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -354,9 +354,9 @@ func (c *Client) Search(
 // - The both endpoints use different call conventions, including the query filter formats.
 func (c *Client) SearchItems(
 	ctx context.Context,
-	request *squaregosdk.SearchCatalogItemsRequest,
+	request *v2.SearchCatalogItemsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchCatalogItemsResponse, error) {
+) (*v2.SearchCatalogItemsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -370,7 +370,7 @@ func (c *Client) SearchItems(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchCatalogItemsResponse
+	var response *v2.SearchCatalogItemsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -395,9 +395,9 @@ func (c *Client) SearchItems(
 // to perform an upsert on the entire item.
 func (c *Client) UpdateItemModifierLists(
 	ctx context.Context,
-	request *squaregosdk.UpdateItemModifierListsRequest,
+	request *v2.UpdateItemModifierListsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateItemModifierListsResponse, error) {
+) (*v2.UpdateItemModifierListsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -411,7 +411,7 @@ func (c *Client) UpdateItemModifierLists(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateItemModifierListsResponse
+	var response *v2.UpdateItemModifierListsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -436,9 +436,9 @@ func (c *Client) UpdateItemModifierLists(
 // upsert on the entire item.
 func (c *Client) UpdateItemTaxes(
 	ctx context.Context,
-	request *squaregosdk.UpdateItemTaxesRequest,
+	request *v2.UpdateItemTaxesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateItemTaxesResponse, error) {
+) (*v2.UpdateItemTaxesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -452,7 +452,7 @@ func (c *Client) UpdateItemTaxes(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateItemTaxesResponse
+	var response *v2.UpdateItemTaxesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

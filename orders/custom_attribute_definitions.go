@@ -3,7 +3,7 @@
 package orders
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CreateOrderCustomAttributeDefinitionRequest struct {
@@ -13,7 +13,7 @@ type CreateOrderCustomAttributeDefinitionRequest struct {
 	// [Specifying the schema](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attribute-definitions#specify-schema).
 	// - If provided, `name` must be unique (case-sensitive) across all visible customer-related custom attribute definitions for the seller.
 	// - All custom attributes are visible in exported customer data, including those set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -34,7 +34,7 @@ type CustomAttributeDefinitionsGetRequest struct {
 
 type CustomAttributeDefinitionsListRequest struct {
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v2.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
@@ -54,7 +54,7 @@ type UpdateOrderCustomAttributeDefinitionRequest struct {
 	// [Updatable definition fields](https://developer.squareup.com/docs/orders-custom-attributes-api/custom-attribute-definitions#updatable-definition-fields).
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

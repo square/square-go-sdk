@@ -5,14 +5,14 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	customattributedefinitions "github.com/square/square-go-sdk/bookings/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/bookings/customattributes"
-	locationprofiles "github.com/square/square-go-sdk/bookings/locationprofiles"
-	teammemberprofiles "github.com/square/square-go-sdk/bookings/teammemberprofiles"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	customattributedefinitions "github.com/square/square-go-sdk/v2/bookings/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v2/bookings/customattributes"
+	locationprofiles "github.com/square/square-go-sdk/v2/bookings/locationprofiles"
+	teammemberprofiles "github.com/square/square-go-sdk/v2/bookings/teammemberprofiles"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -58,9 +58,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.BookingsListRequest,
+	request *v2.BookingsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Booking], error) {
+) (*core.Page[*v2.Booking], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListBookingsResponse) *internal.PageResponse[*string, *squaregosdk.Booking] {
+	readPageResponse := func(response *v2.ListBookingsResponse) *internal.PageResponse[*string, *v2.Booking] {
 		next := response.Cursor
 		results := response.Bookings
-		return &internal.PageResponse[*string, *squaregosdk.Booking]{
+		return &internal.PageResponse[*string, *v2.Booking]{
 			Next:    next,
 			Results: results,
 		}
@@ -128,9 +128,9 @@ func (c *Client) List(
 // or *Appointments Premium*.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateBookingRequest,
+	request *v2.CreateBookingRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateBookingResponse, error) {
+) (*v2.CreateBookingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -144,7 +144,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateBookingResponse
+	var response *v2.CreateBookingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -170,9 +170,9 @@ func (c *Client) Create(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) SearchAvailability(
 	ctx context.Context,
-	request *squaregosdk.SearchAvailabilityRequest,
+	request *v2.SearchAvailabilityRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchAvailabilityResponse, error) {
+) (*v2.SearchAvailabilityResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -186,7 +186,7 @@ func (c *Client) SearchAvailability(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchAvailabilityResponse
+	var response *v2.SearchAvailabilityResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -212,9 +212,9 @@ func (c *Client) SearchAvailability(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) BulkRetrieveBookings(
 	ctx context.Context,
-	request *squaregosdk.BulkRetrieveBookingsRequest,
+	request *v2.BulkRetrieveBookingsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkRetrieveBookingsResponse, error) {
+) (*v2.BulkRetrieveBookingsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -228,7 +228,7 @@ func (c *Client) BulkRetrieveBookings(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkRetrieveBookingsResponse
+	var response *v2.BulkRetrieveBookingsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -252,7 +252,7 @@ func (c *Client) BulkRetrieveBookings(
 func (c *Client) GetBusinessProfile(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBusinessBookingProfileResponse, error) {
+) (*v2.GetBusinessBookingProfileResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -265,7 +265,7 @@ func (c *Client) GetBusinessProfile(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBusinessBookingProfileResponse
+	var response *v2.GetBusinessBookingProfileResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -287,9 +287,9 @@ func (c *Client) GetBusinessProfile(
 // Retrieves a seller's location booking profile.
 func (c *Client) RetrieveLocationBookingProfile(
 	ctx context.Context,
-	request *squaregosdk.RetrieveLocationBookingProfileRequest,
+	request *v2.RetrieveLocationBookingProfileRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveLocationBookingProfileResponse, error) {
+) (*v2.RetrieveLocationBookingProfileResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -305,7 +305,7 @@ func (c *Client) RetrieveLocationBookingProfile(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveLocationBookingProfileResponse
+	var response *v2.RetrieveLocationBookingProfileResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -327,9 +327,9 @@ func (c *Client) RetrieveLocationBookingProfile(
 // Retrieves one or more team members' booking profiles.
 func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 	ctx context.Context,
-	request *squaregosdk.BulkRetrieveTeamMemberBookingProfilesRequest,
+	request *v2.BulkRetrieveTeamMemberBookingProfilesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkRetrieveTeamMemberBookingProfilesResponse, error) {
+) (*v2.BulkRetrieveTeamMemberBookingProfilesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -343,7 +343,7 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkRetrieveTeamMemberBookingProfilesResponse
+	var response *v2.BulkRetrieveTeamMemberBookingProfilesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -369,9 +369,9 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.BookingsGetRequest,
+	request *v2.BookingsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBookingResponse, error) {
+) (*v2.GetBookingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -387,7 +387,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBookingResponse
+	var response *v2.GetBookingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -415,9 +415,9 @@ func (c *Client) Get(
 // or *Appointments Premium*.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateBookingRequest,
+	request *v2.UpdateBookingRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateBookingResponse, error) {
+) (*v2.UpdateBookingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -434,7 +434,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateBookingResponse
+	var response *v2.UpdateBookingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -463,9 +463,9 @@ func (c *Client) Update(
 // or *Appointments Premium*.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.CancelBookingRequest,
+	request *v2.CancelBookingRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelBookingResponse, error) {
+) (*v2.CancelBookingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -482,7 +482,7 @@ func (c *Client) Cancel(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CancelBookingResponse
+	var response *v2.CancelBookingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

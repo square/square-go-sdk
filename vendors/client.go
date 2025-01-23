@@ -4,10 +4,10 @@ package vendors
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Creates one or more [Vendor](entity:Vendor) objects to represent suppliers to a seller.
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *squaregosdk.BatchCreateVendorsRequest,
+	request *v2.BatchCreateVendorsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchCreateVendorsResponse, error) {
+) (*v2.BatchCreateVendorsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -57,7 +57,7 @@ func (c *Client) BatchCreate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchCreateVendorsResponse
+	var response *v2.BatchCreateVendorsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -80,9 +80,9 @@ func (c *Client) BatchCreate(
 // Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *squaregosdk.BatchGetVendorsRequest,
+	request *v2.BatchGetVendorsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetVendorsResponse, error) {
+) (*v2.BatchGetVendorsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,7 +96,7 @@ func (c *Client) BatchGet(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetVendorsResponse
+	var response *v2.BatchGetVendorsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -119,9 +119,9 @@ func (c *Client) BatchGet(
 // Updates one or more of existing [Vendor](entity:Vendor) objects as suppliers to a seller.
 func (c *Client) BatchUpdate(
 	ctx context.Context,
-	request *squaregosdk.BatchUpdateVendorsRequest,
+	request *v2.BatchUpdateVendorsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchUpdateVendorsResponse, error) {
+) (*v2.BatchUpdateVendorsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -135,7 +135,7 @@ func (c *Client) BatchUpdate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchUpdateVendorsResponse
+	var response *v2.BatchUpdateVendorsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -158,9 +158,9 @@ func (c *Client) BatchUpdate(
 // Creates a single [Vendor](entity:Vendor) object to represent a supplier to a seller.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateVendorRequest,
+	request *v2.CreateVendorRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateVendorResponse, error) {
+) (*v2.CreateVendorResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,7 +174,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateVendorResponse
+	var response *v2.CreateVendorResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -197,9 +197,9 @@ func (c *Client) Create(
 // Searches for vendors using a filter against supported [Vendor](entity:Vendor) properties and a supported sorter.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchVendorsRequest,
+	request *v2.SearchVendorsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchVendorsResponse, error) {
+) (*v2.SearchVendorsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -213,7 +213,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchVendorsResponse
+	var response *v2.SearchVendorsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -236,9 +236,9 @@ func (c *Client) Search(
 // Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.VendorsGetRequest,
+	request *v2.VendorsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetVendorResponse, error) {
+) (*v2.GetVendorResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -254,7 +254,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetVendorResponse
+	var response *v2.GetVendorResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -276,9 +276,9 @@ func (c *Client) Get(
 // Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.VendorsUpdateRequest,
+	request *v2.VendorsUpdateRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateVendorResponse, error) {
+) (*v2.UpdateVendorResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -295,7 +295,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateVendorResponse
+	var response *v2.UpdateVendorResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

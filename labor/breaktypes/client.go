@@ -4,11 +4,12 @@ package breaktypes
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	fmt "fmt"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -39,12 +40,121 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
+// Returns a paginated list of `BreakType` instances for a business.
+func (c *Client) List(
+	ctx context.Context,
+	request *labor.BreakTypesListRequest,
+	opts ...option.RequestOption,
+) (*core.Page[*v2.BreakType], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/break-types"
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+		if pageRequest.Cursor != nil {
+			queryParams.Set("cursor", fmt.Sprintf("%v", *pageRequest.Cursor))
+		}
+		nextURL := endpointURL
+		if len(queryParams) > 0 {
+			nextURL += "?" + queryParams.Encode()
+		}
+		return &internal.CallParams{
+			URL:             nextURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        pageRequest.Response,
+		}
+	}
+	readPageResponse := func(response *v2.ListBreakTypesResponse) *internal.PageResponse[*string, *v2.BreakType] {
+		next := response.Cursor
+		results := response.BreakTypes
+		return &internal.PageResponse[*string, *v2.BreakType]{
+			Next:    next,
+			Results: results,
+		}
+	}
+	pager := internal.NewCursorPager(
+		c.caller,
+		prepareCall,
+		readPageResponse,
+	)
+	return pager.GetPage(ctx, request.Cursor)
+}
+
+// Creates a new `BreakType`.
+//
+// A `BreakType` is a template for creating `Break` objects.
+// You must provide the following values in your request to this
+// endpoint:
+//
+// - `location_id`
+// - `break_name`
+// - `expected_duration`
+// - `is_paid`
+//
+// You can only have three `BreakType` instances per location. If you attempt to add a fourth
+// `BreakType` for a location, an `INVALID_REQUEST_ERROR` "Exceeded limit of 3 breaks per location."
+// is returned.
+func (c *Client) Create(
+	ctx context.Context,
+	request *labor.CreateBreakTypeRequest,
+	opts ...option.RequestOption,
+) (*v2.CreateBreakTypeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/break-types"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *v2.CreateBreakTypeResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Returns a single `BreakType` specified by `id`.
 func (c *Client) Get(
 	ctx context.Context,
 	request *labor.BreakTypesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBreakTypeResponse, error) {
+) (*v2.GetBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -60,7 +170,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBreakTypeResponse
+	var response *v2.GetBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -84,7 +194,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateBreakTypeResponse, error) {
+) (*v2.UpdateBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -101,7 +211,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateBreakTypeResponse
+	var response *v2.UpdateBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -128,7 +238,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.BreakTypesDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteBreakTypeResponse, error) {
+) (*v2.DeleteBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -144,7 +254,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteBreakTypeResponse
+	var response *v2.DeleteBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

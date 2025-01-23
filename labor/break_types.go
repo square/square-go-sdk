@@ -3,8 +3,15 @@
 package labor
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
+
+type CreateBreakTypeRequest struct {
+	// A unique string value to ensure the idempotency of the operation.
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+	// The `BreakType` to be created.
+	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
+}
 
 type BreakTypesDeleteRequest struct {
 	// The UUID for the `BreakType` being deleted.
@@ -16,9 +23,20 @@ type BreakTypesGetRequest struct {
 	ID string `json:"-" url:"-"`
 }
 
+type BreakTypesListRequest struct {
+	// Filter the returned `BreakType` results to only those that are associated with the
+	// specified location.
+	LocationID *string `json:"-" url:"location_id,omitempty"`
+	// The maximum number of `BreakType` results to return per page. The number can range between 1
+	// and 200. The default is 200.
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// A pointer to the next page of `BreakType` results to fetch.
+	Cursor *string `json:"-" url:"cursor,omitempty"`
+}
+
 type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
-	BreakType *squaregosdk.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
 }

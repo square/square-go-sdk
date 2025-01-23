@@ -3,7 +3,7 @@
 package cashdrawers
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type ShiftsGetRequest struct {
@@ -18,7 +18,7 @@ type ShiftsListRequest struct {
 	LocationID string `json:"-" url:"location_id"`
 	// The order in which cash drawer shifts are listed in the response,
 	// based on their opened_at field. Default value: ASC
-	SortOrder *squaregosdk.SortOrder `json:"-" url:"sort_order,omitempty"`
+	SortOrder *v2.SortOrder `json:"-" url:"sort_order,omitempty"`
 	// The inclusive start time of the query on opened_at, in ISO 8601 format.
 	BeginTime *string `json:"-" url:"begin_time,omitempty"`
 	// The exclusive end date of the query on opened_at, in ISO 8601 format.

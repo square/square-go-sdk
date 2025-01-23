@@ -5,11 +5,11 @@ package activities
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	giftcards "github.com/square/square-go-sdk/giftcards"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	giftcards "github.com/square/square-go-sdk/v2/giftcards"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *giftcards.ActivitiesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.GiftCardActivity], error) {
+) (*core.Page[*v2.GiftCardActivity], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,10 +84,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListGiftCardActivitiesResponse) *internal.PageResponse[*string, *squaregosdk.GiftCardActivity] {
+	readPageResponse := func(response *v2.ListGiftCardActivitiesResponse) *internal.PageResponse[*string, *v2.GiftCardActivity] {
 		next := response.Cursor
 		results := response.GiftCardActivities
-		return &internal.PageResponse[*string, *squaregosdk.GiftCardActivity]{
+		return &internal.PageResponse[*string, *v2.GiftCardActivity]{
 			Next:    next,
 			Results: results,
 		}
@@ -106,7 +106,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *giftcards.CreateGiftCardActivityRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateGiftCardActivityResponse, error) {
+) (*v2.CreateGiftCardActivityResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -120,7 +120,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateGiftCardActivityResponse
+	var response *v2.CreateGiftCardActivityResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

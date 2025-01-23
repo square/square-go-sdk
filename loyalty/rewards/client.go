@@ -4,11 +4,11 @@ package rewards
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	loyalty "github.com/square/square-go-sdk/loyalty"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	loyalty "github.com/square/square-go-sdk/v2/loyalty"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -51,7 +51,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyRewardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateLoyaltyRewardResponse, error) {
+) (*v2.CreateLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -65,7 +65,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateLoyaltyRewardResponse
+	var response *v2.CreateLoyaltyRewardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -96,7 +96,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyRewardsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchLoyaltyRewardsResponse, error) {
+) (*v2.SearchLoyaltyRewardsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -110,7 +110,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchLoyaltyRewardsResponse
+	var response *v2.SearchLoyaltyRewardsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -135,7 +135,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.RewardsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetLoyaltyRewardResponse, error) {
+) (*v2.GetLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -151,7 +151,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetLoyaltyRewardResponse
+	var response *v2.GetLoyaltyRewardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -183,7 +183,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *loyalty.RewardsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteLoyaltyRewardResponse, error) {
+) (*v2.DeleteLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -199,7 +199,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteLoyaltyRewardResponse
+	var response *v2.DeleteLoyaltyRewardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -233,7 +233,7 @@ func (c *Client) Redeem(
 	ctx context.Context,
 	request *loyalty.RedeemLoyaltyRewardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RedeemLoyaltyRewardResponse, error) {
+) (*v2.RedeemLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -250,7 +250,7 @@ func (c *Client) Redeem(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.RedeemLoyaltyRewardResponse
+	var response *v2.RedeemLoyaltyRewardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

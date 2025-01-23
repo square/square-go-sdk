@@ -4,10 +4,10 @@ package events
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -41,9 +41,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Search for Square API events that occur within a 28-day timeframe.
 func (c *Client) SearchEvents(
 	ctx context.Context,
-	request *squaregosdk.SearchEventsRequest,
+	request *v2.SearchEventsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchEventsResponse, error) {
+) (*v2.SearchEventsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -57,7 +57,7 @@ func (c *Client) SearchEvents(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchEventsResponse
+	var response *v2.SearchEventsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -83,7 +83,7 @@ func (c *Client) SearchEvents(
 func (c *Client) DisableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.DisableEventsResponse, error) {
+) (*v2.DisableEventsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,7 +96,7 @@ func (c *Client) DisableEvents(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DisableEventsResponse
+	var response *v2.DisableEventsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -119,7 +119,7 @@ func (c *Client) DisableEvents(
 func (c *Client) EnableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.EnableEventsResponse, error) {
+) (*v2.EnableEventsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,7 +132,7 @@ func (c *Client) EnableEvents(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.EnableEventsResponse
+	var response *v2.EnableEventsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,9 +154,9 @@ func (c *Client) EnableEvents(
 // Lists all event types that you can subscribe to as webhooks or query using the Events API.
 func (c *Client) ListEventTypes(
 	ctx context.Context,
-	request *squaregosdk.ListEventTypesRequest,
+	request *v2.ListEventTypesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListEventTypesResponse, error) {
+) (*v2.ListEventTypesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -176,7 +176,7 @@ func (c *Client) ListEventTypes(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListEventTypesResponse
+	var response *v2.ListEventTypesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
