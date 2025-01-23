@@ -5,11 +5,11 @@ package teammemberwages
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.TeamMemberWagesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.TeamMemberWage], error) {
+) (*core.Page[*v2.TeamMemberWage], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListTeamMemberWagesResponse) *internal.PageResponse[*string, *squaregosdk.TeamMemberWage] {
+	readPageResponse := func(response *v2.ListTeamMemberWagesResponse) *internal.PageResponse[*string, *v2.TeamMemberWage] {
 		next := response.Cursor
 		results := response.TeamMemberWages
-		return &internal.PageResponse[*string, *squaregosdk.TeamMemberWage]{
+		return &internal.PageResponse[*string, *v2.TeamMemberWage]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.TeamMemberWagesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTeamMemberWageResponse, error) {
+) (*v2.GetTeamMemberWageResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTeamMemberWageResponse
+	var response *v2.GetTeamMemberWageResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

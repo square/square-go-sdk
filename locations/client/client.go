@@ -4,13 +4,13 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	customattributedefinitions "github.com/square/square-go-sdk/locations/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/locations/customattributes"
-	transactions "github.com/square/square-go-sdk/locations/transactions"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	customattributedefinitions "github.com/square/square-go-sdk/v2/locations/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v2/locations/customattributes"
+	transactions "github.com/square/square-go-sdk/v2/locations/transactions"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -53,7 +53,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListLocationsResponse, error) {
+) (*v2.ListLocationsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -66,7 +66,7 @@ func (c *Client) List(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListLocationsResponse
+	var response *v2.ListLocationsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -94,9 +94,9 @@ func (c *Client) List(
 // each location has a sensible and unique name.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateLocationRequest,
+	request *v2.CreateLocationRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateLocationResponse, error) {
+) (*v2.CreateLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -110,7 +110,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateLocationResponse
+	var response *v2.CreateLocationResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -134,9 +134,9 @@ func (c *Client) Create(
 // as the location ID to retrieve details of the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.LocationsGetRequest,
+	request *v2.LocationsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetLocationResponse, error) {
+) (*v2.GetLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -152,7 +152,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetLocationResponse
+	var response *v2.GetLocationResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -174,9 +174,9 @@ func (c *Client) Get(
 // Updates a [location](https://developer.squareup.com/docs/locations-api).
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateLocationRequest,
+	request *v2.UpdateLocationRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateLocationResponse, error) {
+) (*v2.UpdateLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -193,7 +193,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateLocationResponse
+	var response *v2.UpdateLocationResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -221,9 +221,9 @@ func (c *Client) Update(
 // For more information, see [Checkout API highlights](https://developer.squareup.com/docs/checkout-api#checkout-api-highlights).
 func (c *Client) Checkouts(
 	ctx context.Context,
-	request *squaregosdk.CreateCheckoutRequest,
+	request *v2.CreateCheckoutRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCheckoutResponse, error) {
+) (*v2.CreateCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -240,7 +240,7 @@ func (c *Client) Checkouts(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateCheckoutResponse
+	var response *v2.CreateCheckoutResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

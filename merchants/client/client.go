@@ -5,12 +5,12 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	customattributedefinitions "github.com/square/square-go-sdk/merchants/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/merchants/customattributes"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	customattributedefinitions "github.com/square/square-go-sdk/v2/merchants/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v2/merchants/customattributes"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -20,8 +20,8 @@ type Client struct {
 	caller  *internal.Caller
 	header  http.Header
 
-	CustomAttributes           *customattributes.Client
 	CustomAttributeDefinitions *customattributedefinitions.Client
+	CustomAttributes           *customattributes.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -41,8 +41,8 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:                     options.ToHeader(),
-		CustomAttributes:           customattributes.NewClient(opts...),
 		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
+		CustomAttributes:           customattributes.NewClient(opts...),
 	}
 }
 
@@ -58,9 +58,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // endpoint to retrieve the merchant information.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.MerchantsListRequest,
+	request *v2.MerchantsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Merchant], error) {
+) (*core.Page[*v2.Merchant], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListMerchantsResponse) *internal.PageResponse[*int, *squaregosdk.Merchant] {
+	readPageResponse := func(response *v2.ListMerchantsResponse) *internal.PageResponse[*int, *v2.Merchant] {
 		next := response.Cursor
 		results := response.Merchant
-		return &internal.PageResponse[*int, *squaregosdk.Merchant]{
+		return &internal.PageResponse[*int, *v2.Merchant]{
 			Next:    next,
 			Results: results,
 		}
@@ -115,9 +115,9 @@ func (c *Client) List(
 // Retrieves the `Merchant` object for the given `merchant_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.MerchantsGetRequest,
+	request *v2.MerchantsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetMerchantResponse, error) {
+) (*v2.GetMerchantResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -133,7 +133,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetMerchantResponse
+	var response *v2.GetMerchantResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

@@ -3,14 +3,14 @@
 package labor
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type UpdateWorkweekConfigRequest struct {
 	// The UUID for the `WorkweekConfig` object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `WorkweekConfig` object.
-	WorkweekConfig *squaregosdk.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
+	WorkweekConfig *v2.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
 }
 
 type WorkweekConfigsListRequest struct {

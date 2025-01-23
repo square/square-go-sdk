@@ -5,10 +5,10 @@ package bankaccounts
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -42,9 +42,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square account.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsListRequest,
+	request *v2.BankAccountsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.BankAccount], error) {
+) (*core.Page[*v2.BankAccount], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -80,10 +80,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListBankAccountsResponse) *internal.PageResponse[*string, *squaregosdk.BankAccount] {
+	readPageResponse := func(response *v2.ListBankAccountsResponse) *internal.PageResponse[*string, *v2.BankAccount] {
 		next := response.Cursor
 		results := response.BankAccounts
-		return &internal.PageResponse[*string, *squaregosdk.BankAccount]{
+		return &internal.PageResponse[*string, *v2.BankAccount]{
 			Next:    next,
 			Results: results,
 		}
@@ -99,9 +99,9 @@ func (c *Client) List(
 // Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
 func (c *Client) GetByV1ID(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsGetByV1IDRequest,
+	request *v2.BankAccountsGetByV1IDRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBankAccountByV1IDResponse, error) {
+) (*v2.GetBankAccountByV1IDResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -117,7 +117,7 @@ func (c *Client) GetByV1ID(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBankAccountByV1IDResponse
+	var response *v2.GetBankAccountByV1IDResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -140,9 +140,9 @@ func (c *Client) GetByV1ID(
 // linked to a Square account.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsGetRequest,
+	request *v2.BankAccountsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBankAccountResponse, error) {
+) (*v2.GetBankAccountResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -158,7 +158,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBankAccountResponse
+	var response *v2.GetBankAccountResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

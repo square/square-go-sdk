@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v2/internal"
 )
 
 type DevicesGetRequest struct {

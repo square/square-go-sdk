@@ -4,10 +4,10 @@ package oauth
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -54,9 +54,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // page for your application in the Developer Dashboard.
 func (c *Client) RevokeToken(
 	ctx context.Context,
-	request *squaregosdk.RevokeTokenRequest,
+	request *v2.RevokeTokenRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RevokeTokenResponse, error) {
+) (*v2.RevokeTokenResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -70,7 +70,7 @@ func (c *Client) RevokeToken(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.RevokeTokenResponse
+	var response *v2.RevokeTokenResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,9 +109,9 @@ func (c *Client) RevokeToken(
 // Application clients should never interact directly with OAuth tokens.
 func (c *Client) ObtainToken(
 	ctx context.Context,
-	request *squaregosdk.ObtainTokenRequest,
+	request *v2.ObtainTokenRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ObtainTokenResponse, error) {
+) (*v2.ObtainTokenResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -125,7 +125,7 @@ func (c *Client) ObtainToken(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.ObtainTokenResponse
+	var response *v2.ObtainTokenResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -162,7 +162,7 @@ func (c *Client) ObtainToken(
 func (c *Client) RetrieveTokenStatus(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveTokenStatusResponse, error) {
+) (*v2.RetrieveTokenStatusResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -175,7 +175,7 @@ func (c *Client) RetrieveTokenStatus(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveTokenStatusResponse
+	var response *v2.RetrieveTokenStatusResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

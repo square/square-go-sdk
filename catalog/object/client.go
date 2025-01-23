@@ -4,11 +4,11 @@ package object
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	catalog "github.com/square/square-go-sdk/catalog"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	catalog "github.com/square/square-go-sdk/v2/catalog"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) Upsert(
 	ctx context.Context,
 	request *catalog.UpsertCatalogObjectRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpsertCatalogObjectResponse, error) {
+) (*v2.UpsertCatalogObjectResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -62,7 +62,7 @@ func (c *Client) Upsert(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpsertCatalogObjectResponse
+	var response *v2.UpsertCatalogObjectResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -93,7 +93,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *catalog.ObjectGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCatalogObjectResponse, error) {
+) (*v2.GetCatalogObjectResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -116,7 +116,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCatalogObjectResponse
+	var response *v2.GetCatalogObjectResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *catalog.ObjectDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteCatalogObjectResponse, error) {
+) (*v2.DeleteCatalogObjectResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -165,7 +165,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteCatalogObjectResponse
+	var response *v2.DeleteCatalogObjectResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

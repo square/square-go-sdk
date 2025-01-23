@@ -4,10 +4,10 @@ package applepay
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -54,9 +54,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To learn more about the Web Payments SDK and how to add Apple Pay, see [Take an Apple Pay Payment](https://developer.squareup.com/docs/web-payments/apple-pay).
 func (c *Client) RegisterDomain(
 	ctx context.Context,
-	request *squaregosdk.RegisterDomainRequest,
+	request *v2.RegisterDomainRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RegisterDomainResponse, error) {
+) (*v2.RegisterDomainResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -70,7 +70,7 @@ func (c *Client) RegisterDomain(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.RegisterDomainResponse
+	var response *v2.RegisterDomainResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

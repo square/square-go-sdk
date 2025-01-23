@@ -5,11 +5,11 @@ package paymentlinks
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	checkout "github.com/square/square-go-sdk/checkout"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	checkout "github.com/square/square-go-sdk/v2/checkout"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *checkout.PaymentLinksListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.PaymentLink], error) {
+) (*core.Page[*v2.PaymentLink], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListPaymentLinksResponse) *internal.PageResponse[*string, *squaregosdk.PaymentLink] {
+	readPageResponse := func(response *v2.ListPaymentLinksResponse) *internal.PageResponse[*string, *v2.PaymentLink] {
 		next := response.Cursor
 		results := response.PaymentLinks
-		return &internal.PageResponse[*string, *squaregosdk.PaymentLink]{
+		return &internal.PageResponse[*string, *v2.PaymentLink]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *checkout.CreatePaymentLinkRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreatePaymentLinkResponse, error) {
+) (*v2.CreatePaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -116,7 +116,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreatePaymentLinkResponse
+	var response *v2.CreatePaymentLinkResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,7 +141,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *checkout.PaymentLinksGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetPaymentLinkResponse, error) {
+) (*v2.GetPaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -157,7 +157,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetPaymentLinkResponse
+	var response *v2.GetPaymentLinkResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -183,7 +183,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *checkout.UpdatePaymentLinkRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdatePaymentLinkResponse, error) {
+) (*v2.UpdatePaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -200,7 +200,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdatePaymentLinkResponse
+	var response *v2.UpdatePaymentLinkResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -225,7 +225,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *checkout.PaymentLinksDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeletePaymentLinkResponse, error) {
+) (*v2.DeletePaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -241,7 +241,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeletePaymentLinkResponse
+	var response *v2.DeletePaymentLinkResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

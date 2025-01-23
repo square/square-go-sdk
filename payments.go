@@ -5,12 +5,17 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v2/internal"
 )
 
 type PaymentsCancelRequest struct {
 	// The ID of the payment to cancel.
 	PaymentID string `json:"-" url:"-"`
+}
+
+type CancelPaymentByIdempotencyKeyRequest struct {
+	// The `idempotency_key` identifying the payment to be canceled.
+	IdempotencyKey string `json:"idempotency_key" url:"-"`
 }
 
 type CompletePaymentRequest struct {
@@ -647,6 +652,56 @@ func (b *BuyNowPayLaterDetails) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", b)
+}
+
+// Defines the response returned by
+// [CancelPaymentByIdempotencyKey](api-endpoint:Payments-CancelPaymentByIdempotencyKey).
+// On success, `errors` is empty.
+type CancelPaymentByIdempotencyKeyResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CancelPaymentByIdempotencyKeyResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CancelPaymentByIdempotencyKeyResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CancelPaymentByIdempotencyKeyResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelPaymentByIdempotencyKeyResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CancelPaymentByIdempotencyKeyResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Defines the response returned by [CancelPayment](api-endpoint:Payments-CancelPayment).

@@ -5,10 +5,10 @@ package inventory
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -43,9 +43,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetAdjustment(
 	ctx context.Context,
-	request *squaregosdk.InventoryDeprecatedGetAdjustmentRequest,
+	request *v2.InventoryDeprecatedGetAdjustmentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
+) (*v2.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -61,7 +61,7 @@ func (c *Client) DeprecatedGetAdjustment(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryAdjustmentResponse
+	var response *v2.GetInventoryAdjustmentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -84,9 +84,9 @@ func (c *Client) DeprecatedGetAdjustment(
 // with the provided `adjustment_id`.
 func (c *Client) GetAdjustment(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetAdjustmentRequest,
+	request *v2.InventoryGetAdjustmentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
+) (*v2.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -102,7 +102,7 @@ func (c *Client) GetAdjustment(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryAdjustmentResponse
+	var response *v2.GetInventoryAdjustmentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -125,9 +125,9 @@ func (c *Client) GetAdjustment(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedBatchChange(
 	ctx context.Context,
-	request *squaregosdk.BatchChangeInventoryRequest,
+	request *v2.BatchChangeInventoryRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchChangeInventoryResponse, error) {
+) (*v2.BatchChangeInventoryResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -141,7 +141,7 @@ func (c *Client) DeprecatedBatchChange(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchChangeInventoryResponse
+	var response *v2.BatchChangeInventoryResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -165,9 +165,9 @@ func (c *Client) DeprecatedBatchChange(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedBatchGetChanges(
 	ctx context.Context,
-	request *squaregosdk.BatchRetrieveInventoryChangesRequest,
+	request *v2.BatchRetrieveInventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetInventoryChangesResponse, error) {
+) (*v2.BatchGetInventoryChangesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -181,7 +181,7 @@ func (c *Client) DeprecatedBatchGetChanges(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetInventoryChangesResponse
+	var response *v2.BatchGetInventoryChangesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -205,9 +205,9 @@ func (c *Client) DeprecatedBatchGetChanges(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedBatchGetCounts(
 	ctx context.Context,
-	request *squaregosdk.BatchGetInventoryCountsRequest,
+	request *v2.BatchGetInventoryCountsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetInventoryCountsResponse, error) {
+) (*v2.BatchGetInventoryCountsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -221,7 +221,7 @@ func (c *Client) DeprecatedBatchGetCounts(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetInventoryCountsResponse
+	var response *v2.BatchGetInventoryCountsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -248,9 +248,9 @@ func (c *Client) DeprecatedBatchGetCounts(
 // On failure: returns a list of related errors.
 func (c *Client) BatchCreateChanges(
 	ctx context.Context,
-	request *squaregosdk.BatchChangeInventoryRequest,
+	request *v2.BatchChangeInventoryRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchChangeInventoryResponse, error) {
+) (*v2.BatchChangeInventoryResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -264,7 +264,7 @@ func (c *Client) BatchCreateChanges(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchChangeInventoryResponse
+	var response *v2.BatchChangeInventoryResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -294,9 +294,9 @@ func (c *Client) BatchCreateChanges(
 // that cannot be handled by other, simpler endpoints.
 func (c *Client) BatchGetChanges(
 	ctx context.Context,
-	request *squaregosdk.BatchRetrieveInventoryChangesRequest,
+	request *v2.BatchRetrieveInventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetInventoryChangesResponse, error) {
+) (*v2.BatchGetInventoryChangesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -310,7 +310,7 @@ func (c *Client) BatchGetChanges(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetInventoryChangesResponse
+	var response *v2.BatchGetInventoryChangesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -343,9 +343,9 @@ func (c *Client) BatchGetChanges(
 // in response to receiving a Webhook notification.
 func (c *Client) BatchGetCounts(
 	ctx context.Context,
-	request *squaregosdk.BatchGetInventoryCountsRequest,
+	request *v2.BatchGetInventoryCountsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetInventoryCountsResponse, error) {
+) (*v2.BatchGetInventoryCountsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -359,7 +359,7 @@ func (c *Client) BatchGetCounts(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetInventoryCountsResponse
+	var response *v2.BatchGetInventoryCountsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -383,9 +383,9 @@ func (c *Client) BatchGetCounts(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetPhysicalCount(
 	ctx context.Context,
-	request *squaregosdk.InventoryDeprecatedGetPhysicalCountRequest,
+	request *v2.InventoryDeprecatedGetPhysicalCountRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
+) (*v2.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -401,7 +401,7 @@ func (c *Client) DeprecatedGetPhysicalCount(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryPhysicalCountResponse
+	var response *v2.GetInventoryPhysicalCountResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -424,9 +424,9 @@ func (c *Client) DeprecatedGetPhysicalCount(
 // object with the provided `physical_count_id`.
 func (c *Client) GetPhysicalCount(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetPhysicalCountRequest,
+	request *v2.InventoryGetPhysicalCountRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
+) (*v2.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -442,7 +442,7 @@ func (c *Client) GetPhysicalCount(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryPhysicalCountResponse
+	var response *v2.GetInventoryPhysicalCountResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -465,9 +465,9 @@ func (c *Client) GetPhysicalCount(
 // with the provided `transfer_id`.
 func (c *Client) GetTransfer(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetTransferRequest,
+	request *v2.InventoryGetTransferRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetInventoryTransferResponse, error) {
+) (*v2.GetInventoryTransferResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -483,7 +483,7 @@ func (c *Client) GetTransfer(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetInventoryTransferResponse
+	var response *v2.GetInventoryTransferResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -508,9 +508,9 @@ func (c *Client) GetTransfer(
 // For more sophisticated queries, use a batch endpoint.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetRequest,
+	request *v2.InventoryGetRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.InventoryCount], error) {
+) (*core.Page[*v2.InventoryCount], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -549,10 +549,10 @@ func (c *Client) Get(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.GetInventoryCountResponse) *internal.PageResponse[*string, *squaregosdk.InventoryCount] {
+	readPageResponse := func(response *v2.GetInventoryCountResponse) *internal.PageResponse[*string, *v2.InventoryCount] {
 		next := response.Cursor
 		results := response.Counts
-		return &internal.PageResponse[*string, *squaregosdk.InventoryCount]{
+		return &internal.PageResponse[*string, *v2.InventoryCount]{
 			Next:    next,
 			Results: results,
 		}
@@ -580,9 +580,9 @@ func (c *Client) Get(
 // sophisticated queries, use a batch endpoint.
 func (c *Client) Changes(
 	ctx context.Context,
-	request *squaregosdk.InventoryChangesRequest,
+	request *v2.InventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.InventoryChange], error) {
+) (*core.Page[*v2.InventoryChange], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -621,10 +621,10 @@ func (c *Client) Changes(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.GetInventoryChangesResponse) *internal.PageResponse[*string, *squaregosdk.InventoryChange] {
+	readPageResponse := func(response *v2.GetInventoryChangesResponse) *internal.PageResponse[*string, *v2.InventoryChange] {
 		next := response.Cursor
 		results := response.Changes
-		return &internal.PageResponse[*string, *squaregosdk.InventoryChange]{
+		return &internal.PageResponse[*string, *v2.InventoryChange]{
 			Next:    next,
 			Results: results,
 		}

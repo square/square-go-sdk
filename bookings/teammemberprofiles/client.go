@@ -5,11 +5,11 @@ package teammemberprofiles
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	bookings "github.com/square/square-go-sdk/bookings"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	bookings "github.com/square/square-go-sdk/v2/bookings"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *bookings.TeamMemberProfilesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.TeamMemberBookingProfile], error) {
+) (*core.Page[*v2.TeamMemberBookingProfile], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListTeamMemberBookingProfilesResponse) *internal.PageResponse[*string, *squaregosdk.TeamMemberBookingProfile] {
+	readPageResponse := func(response *v2.ListTeamMemberBookingProfilesResponse) *internal.PageResponse[*string, *v2.TeamMemberBookingProfile] {
 		next := response.Cursor
 		results := response.TeamMemberBookingProfiles
-		return &internal.PageResponse[*string, *squaregosdk.TeamMemberBookingProfile]{
+		return &internal.PageResponse[*string, *v2.TeamMemberBookingProfile]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.TeamMemberProfilesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTeamMemberBookingProfileResponse, error) {
+) (*v2.GetTeamMemberBookingProfileResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTeamMemberBookingProfileResponse
+	var response *v2.GetTeamMemberBookingProfileResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

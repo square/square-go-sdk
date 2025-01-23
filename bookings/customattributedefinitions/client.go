@@ -5,11 +5,11 @@ package customattributedefinitions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	bookings "github.com/square/square-go-sdk/bookings"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	bookings "github.com/square/square-go-sdk/v2/bookings"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *bookings.CustomAttributeDefinitionsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
+) (*core.Page[*v2.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,10 +84,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListBookingCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+	readPageResponse := func(response *v2.ListBookingCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v2.CustomAttributeDefinition] {
 		next := response.Cursor
 		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+		return &internal.PageResponse[*string, *v2.CustomAttributeDefinition]{
 			Next:    next,
 			Results: results,
 		}
@@ -111,7 +111,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *bookings.CreateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateBookingCustomAttributeDefinitionResponse, error) {
+) (*v2.CreateBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -125,7 +125,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateBookingCustomAttributeDefinitionResponse
+	var response *v2.CreateBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -153,7 +153,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.CustomAttributeDefinitionsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveBookingCustomAttributeDefinitionResponse, error) {
+) (*v2.RetrieveBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -176,7 +176,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveBookingCustomAttributeDefinitionResponse
+	var response *v2.RetrieveBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -206,7 +206,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *bookings.UpdateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateBookingCustomAttributeDefinitionResponse, error) {
+) (*v2.UpdateBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -223,7 +223,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateBookingCustomAttributeDefinitionResponse
+	var response *v2.UpdateBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -254,7 +254,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *bookings.CustomAttributeDefinitionsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteBookingCustomAttributeDefinitionResponse, error) {
+) (*v2.DeleteBookingCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -270,7 +270,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteBookingCustomAttributeDefinitionResponse
+	var response *v2.DeleteBookingCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

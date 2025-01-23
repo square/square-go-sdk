@@ -4,11 +4,11 @@ package shifts
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -61,7 +61,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateShiftResponse, error) {
+) (*v2.CreateShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -75,7 +75,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateShiftResponse
+	var response *v2.CreateShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -113,7 +113,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *labor.SearchShiftsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchShiftsResponse, error) {
+) (*v2.SearchShiftsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,7 +127,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchShiftsResponse
+	var response *v2.SearchShiftsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -152,7 +152,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.ShiftsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetShiftResponse, error) {
+) (*v2.GetShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,7 +168,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetShiftResponse
+	var response *v2.GetShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -198,7 +198,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateShiftResponse, error) {
+) (*v2.UpdateShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -215,7 +215,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateShiftResponse
+	var response *v2.UpdateShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -240,7 +240,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.ShiftsDeleteRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteShiftResponse, error) {
+) (*v2.DeleteShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -256,7 +256,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteShiftResponse
+	var response *v2.DeleteShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

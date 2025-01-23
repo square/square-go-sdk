@@ -3,7 +3,7 @@
 package customers
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CustomAttributesDeleteRequest struct {
@@ -65,7 +65,7 @@ type UpsertCustomerCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *squaregosdk.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v2.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

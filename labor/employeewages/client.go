@@ -5,11 +5,11 @@ package employeewages
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.EmployeeWagesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.EmployeeWage], error) {
+) (*core.Page[*v2.EmployeeWage], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,10 +81,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListEmployeeWagesResponse) *internal.PageResponse[*string, *squaregosdk.EmployeeWage] {
+	readPageResponse := func(response *v2.ListEmployeeWagesResponse) *internal.PageResponse[*string, *v2.EmployeeWage] {
 		next := response.Cursor
 		results := response.EmployeeWages
-		return &internal.PageResponse[*string, *squaregosdk.EmployeeWage]{
+		return &internal.PageResponse[*string, *v2.EmployeeWage]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,7 +102,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.EmployeeWagesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetEmployeeWageResponse, error) {
+) (*v2.GetEmployeeWageResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetEmployeeWageResponse
+	var response *v2.GetEmployeeWageResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

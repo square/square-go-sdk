@@ -5,11 +5,11 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	evidence "github.com/square/square-go-sdk/disputes/evidence"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	evidence "github.com/square/square-go-sdk/v2/disputes/evidence"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -46,9 +46,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of disputes associated with a particular account.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.DisputesListRequest,
+	request *v2.DisputesListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Dispute], error) {
+) (*core.Page[*v2.Dispute], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,10 +84,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListDisputesResponse) *internal.PageResponse[*string, *squaregosdk.Dispute] {
+	readPageResponse := func(response *v2.ListDisputesResponse) *internal.PageResponse[*string, *v2.Dispute] {
 		next := response.Cursor
 		results := response.Disputes
-		return &internal.PageResponse[*string, *squaregosdk.Dispute]{
+		return &internal.PageResponse[*string, *v2.Dispute]{
 			Next:    next,
 			Results: results,
 		}
@@ -103,9 +103,9 @@ func (c *Client) List(
 // Returns details about a specific dispute.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.DisputesGetRequest,
+	request *v2.DisputesGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetDisputeResponse, error) {
+) (*v2.GetDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -121,7 +121,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetDisputeResponse
+	var response *v2.GetDisputeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -147,9 +147,9 @@ func (c *Client) Get(
 // does not have sufficient funds, Square debits the associated bank account.
 func (c *Client) Accept(
 	ctx context.Context,
-	request *squaregosdk.DisputesAcceptRequest,
+	request *v2.DisputesAcceptRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.AcceptDisputeResponse, error) {
+) (*v2.AcceptDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -165,7 +165,7 @@ func (c *Client) Accept(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.AcceptDisputeResponse
+	var response *v2.AcceptDisputeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -188,9 +188,9 @@ func (c *Client) Accept(
 // multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats.
 func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
-	request *squaregosdk.DisputesCreateEvidenceFileRequest,
+	request *v2.DisputesCreateEvidenceFileRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateDisputeEvidenceFileResponse, error) {
+) (*v2.CreateDisputeEvidenceFileResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -221,7 +221,7 @@ func (c *Client) CreateEvidenceFile(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *squaregosdk.CreateDisputeEvidenceFileResponse
+	var response *v2.CreateDisputeEvidenceFileResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -244,9 +244,9 @@ func (c *Client) CreateEvidenceFile(
 // Uploads text to use as evidence for a dispute challenge.
 func (c *Client) CreateEvidenceText(
 	ctx context.Context,
-	request *squaregosdk.CreateDisputeEvidenceTextRequest,
+	request *v2.CreateDisputeEvidenceTextRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateDisputeEvidenceTextResponse, error) {
+) (*v2.CreateDisputeEvidenceTextResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -263,7 +263,7 @@ func (c *Client) CreateEvidenceText(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateDisputeEvidenceTextResponse
+	var response *v2.CreateDisputeEvidenceTextResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -292,9 +292,9 @@ func (c *Client) CreateEvidenceText(
 // a dispute after submission.
 func (c *Client) SubmitEvidence(
 	ctx context.Context,
-	request *squaregosdk.DisputesSubmitEvidenceRequest,
+	request *v2.DisputesSubmitEvidenceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SubmitEvidenceResponse, error) {
+) (*v2.SubmitEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -310,7 +310,7 @@ func (c *Client) SubmitEvidence(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.SubmitEvidenceResponse
+	var response *v2.SubmitEvidenceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

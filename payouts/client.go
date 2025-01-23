@@ -5,10 +5,10 @@ package payouts
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -44,9 +44,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.PayoutsListRequest,
+	request *v2.PayoutsListRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Payout], error) {
+) (*core.Page[*v2.Payout], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -82,10 +82,10 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListPayoutsResponse) *internal.PageResponse[*string, *squaregosdk.Payout] {
+	readPageResponse := func(response *v2.ListPayoutsResponse) *internal.PageResponse[*string, *v2.Payout] {
 		next := response.Cursor
 		results := response.Payouts
-		return &internal.PageResponse[*string, *squaregosdk.Payout]{
+		return &internal.PageResponse[*string, *v2.Payout]{
 			Next:    next,
 			Results: results,
 		}
@@ -102,9 +102,9 @@ func (c *Client) List(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.PayoutsGetRequest,
+	request *v2.PayoutsGetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetPayoutResponse, error) {
+) (*v2.GetPayoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -120,7 +120,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetPayoutResponse
+	var response *v2.GetPayoutResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -143,9 +143,9 @@ func (c *Client) Get(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) ListEntries(
 	ctx context.Context,
-	request *squaregosdk.PayoutsListEntriesRequest,
+	request *v2.PayoutsListEntriesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.PayoutEntry], error) {
+) (*core.Page[*v2.PayoutEntry], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -184,10 +184,10 @@ func (c *Client) ListEntries(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListPayoutEntriesResponse) *internal.PageResponse[*string, *squaregosdk.PayoutEntry] {
+	readPageResponse := func(response *v2.ListPayoutEntriesResponse) *internal.PageResponse[*string, *v2.PayoutEntry] {
 		next := response.Cursor
 		results := response.PayoutEntries
-		return &internal.PageResponse[*string, *squaregosdk.PayoutEntry]{
+		return &internal.PageResponse[*string, *v2.PayoutEntry]{
 			Next:    next,
 			Results: results,
 		}
