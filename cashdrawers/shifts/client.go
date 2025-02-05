@@ -83,11 +83,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.CashDrawerShifts
 		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftSummary]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -191,11 +193,13 @@ func (c *Client) ListEvents(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListCashDrawerShiftEventsResponse) *internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.CashDrawerShiftEvents
 		return &internal.PageResponse[*string, *squaregosdk.CashDrawerShiftEvent]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

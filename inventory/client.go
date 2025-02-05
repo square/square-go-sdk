@@ -550,11 +550,13 @@ func (c *Client) Get(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.GetInventoryCountResponse) *internal.PageResponse[*string, *squaregosdk.InventoryCount] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Counts
 		return &internal.PageResponse[*string, *squaregosdk.InventoryCount]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -622,11 +624,13 @@ func (c *Client) Changes(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.GetInventoryChangesResponse) *internal.PageResponse[*string, *squaregosdk.InventoryChange] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Changes
 		return &internal.PageResponse[*string, *squaregosdk.InventoryChange]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

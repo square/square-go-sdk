@@ -82,11 +82,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListCardsResponse) *internal.PageResponse[*string, *squaregosdk.Card] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Cards
 		return &internal.PageResponse[*string, *squaregosdk.Card]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

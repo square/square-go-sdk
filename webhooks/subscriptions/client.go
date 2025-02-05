@@ -82,11 +82,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListWebhookSubscriptionsResponse) *internal.PageResponse[*string, *squaregosdk.WebhookSubscription] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Subscriptions
 		return &internal.PageResponse[*string, *squaregosdk.WebhookSubscription]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

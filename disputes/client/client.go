@@ -85,11 +85,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListDisputesResponse) *internal.PageResponse[*string, *squaregosdk.Dispute] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Disputes
 		return &internal.PageResponse[*string, *squaregosdk.Dispute]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
