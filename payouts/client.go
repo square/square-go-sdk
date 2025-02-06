@@ -83,11 +83,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListPayoutsResponse) *internal.PageResponse[*string, *squaregosdk.Payout] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.Payouts
 		return &internal.PageResponse[*string, *squaregosdk.Payout]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -185,11 +187,13 @@ func (c *Client) ListEntries(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListPayoutEntriesResponse) *internal.PageResponse[*string, *squaregosdk.PayoutEntry] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.PayoutEntries
 		return &internal.PageResponse[*string, *squaregosdk.PayoutEntry]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

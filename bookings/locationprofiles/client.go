@@ -82,11 +82,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListLocationBookingProfilesResponse) *internal.PageResponse[*string, *squaregosdk.LocationBookingProfile] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.LocationBookingProfiles
 		return &internal.PageResponse[*string, *squaregosdk.LocationBookingProfile]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

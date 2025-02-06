@@ -82,11 +82,13 @@ func (c *Client) List(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListWorkweekConfigsResponse) *internal.PageResponse[*string, *squaregosdk.WorkweekConfig] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.WorkweekConfigs
 		return &internal.PageResponse[*string, *squaregosdk.WorkweekConfig]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

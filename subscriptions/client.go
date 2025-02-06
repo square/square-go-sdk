@@ -438,11 +438,13 @@ func (c *Client) ListEvents(
 		}
 	}
 	readPageResponse := func(response *squaregosdk.ListSubscriptionEventsResponse) *internal.PageResponse[*string, *squaregosdk.SubscriptionEvent] {
+		var zeroValue *string
 		next := response.Cursor
 		results := response.SubscriptionEvents
 		return &internal.PageResponse[*string, *squaregosdk.SubscriptionEvent]{
 			Next:    next,
 			Results: results,
+			Done:    next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
