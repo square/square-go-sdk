@@ -85,6 +85,25 @@ response, err := client.Payments.List(
 )
 ```
 
+## Environments
+
+By default, Square's production environment is used. However, you can choose between Square's different environments
+(i.e. sandbox and production), by using the `square.Environments` type like so:
+
+```go
+client := squareclient.NewClient(
+    option.WithBaseURL(square.Environments.Sandbox),
+)
+```
+
+You can also configure any arbitrary base URL, which is particularly useful in test environments, like so:
+
+```go
+client := squareclient.NewClient(
+    option.WithBaseURL("https://example.com),
+)
+```
+
 ## Automatic Pagination
 
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
