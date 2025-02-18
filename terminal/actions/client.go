@@ -120,7 +120,7 @@ func (c *Client) Search(
 // Retrieves a Terminal action request by `action_id`. Terminal action requests are available for 30 days.
 func (c *Client) Get(
 	ctx context.Context,
-	request *terminal.ActionsGetRequest,
+	request *terminal.GetActionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -160,7 +160,7 @@ func (c *Client) Get(
 // Cancels a Terminal action request if the status of the request permits it.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *terminal.ActionsCancelRequest,
+	request *terminal.CancelActionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 func (c *Client) Create(
 	ctx context.Context,
-	request *catalog.ImagesCreateRequest,
+	request *catalog.CreateImagesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateCatalogImageResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -103,7 +103,7 @@ func (c *Client) Create(
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 func (c *Client) Update(
 	ctx context.Context,
-	request *catalog.ImagesUpdateRequest,
+	request *catalog.UpdateImagesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateCatalogImageResponse, error) {
 	options := core.NewRequestOptions(opts...)

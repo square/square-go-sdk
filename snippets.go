@@ -8,12 +8,12 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type SnippetsDeleteRequest struct {
+type DeleteSnippetsRequest struct {
 	// The ID of the site that contains the snippet.
 	SiteID string `json:"-" url:"-"`
 }
 
-type SnippetsGetRequest struct {
+type GetSnippetsRequest struct {
 	// The ID of the site that contains the snippet.
 	SiteID string `json:"-" url:"-"`
 }

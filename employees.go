@@ -8,12 +8,12 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type EmployeesGetRequest struct {
+type GetEmployeesRequest struct {
 	// UUID for the employee that was requested.
 	ID string `json:"-" url:"-"`
 }
 
-type EmployeesListRequest struct {
+type ListEmployeesRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
 	// Specifies the EmployeeStatus to filter the employee by.
 	Status *EmployeeStatus `json:"-" url:"status,omitempty"`

@@ -46,7 +46,7 @@ type CloneOrderRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-type OrdersGetRequest struct {
+type GetOrdersRequest struct {
 	// The ID of the order to retrieve.
 	OrderID string `json:"-" url:"-"`
 }

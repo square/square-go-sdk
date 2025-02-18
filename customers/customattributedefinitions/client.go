@@ -48,7 +48,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // seller-defined custom attributes (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) List(
 	ctx context.Context,
-	request *customers.CustomAttributeDefinitionsListRequest,
+	request *customers.ListCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
@@ -160,7 +160,7 @@ func (c *Client) Create(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *customers.CustomAttributeDefinitionsGetRequest,
+	request *customers.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -260,7 +260,7 @@ func (c *Client) Update(
 // Only the definition owner can delete a custom attribute definition.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *customers.CustomAttributeDefinitionsDeleteRequest,
+	request *customers.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -58,7 +58,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // endpoint to retrieve the merchant information.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.MerchantsListRequest,
+	request *squaregosdk.ListMerchantsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Merchant], error) {
 	options := core.NewRequestOptions(opts...)
@@ -117,7 +117,7 @@ func (c *Client) List(
 // Retrieves the `Merchant` object for the given `merchant_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.MerchantsGetRequest,
+	request *squaregosdk.GetMerchantsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetMerchantResponse, error) {
 	options := core.NewRequestOptions(opts...)

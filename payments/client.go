@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.PaymentsListRequest,
+	request *squaregosdk.ListPaymentsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Payment], error) {
 	options := core.NewRequestOptions(opts...)
@@ -201,7 +201,7 @@ func (c *Client) CancelByIdempotencyKey(
 // Retrieves details for a specific payment.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.PaymentsGetRequest,
+	request *squaregosdk.GetPaymentsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetPaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -285,7 +285,7 @@ func (c *Client) Update(
 // the APPROVED `status`.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.PaymentsCancelRequest,
+	request *squaregosdk.CancelPaymentsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelPaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)

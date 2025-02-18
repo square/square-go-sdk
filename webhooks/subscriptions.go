@@ -13,17 +13,17 @@ type CreateWebhookSubscriptionRequest struct {
 	Subscription *squaregosdk.WebhookSubscription `json:"subscription,omitempty" url:"-"`
 }
 
-type SubscriptionsDeleteRequest struct {
+type DeleteSubscriptionsRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to delete.
 	SubscriptionID string `json:"-" url:"-"`
 }
 
-type SubscriptionsGetRequest struct {
+type GetSubscriptionsRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to retrieve.
 	SubscriptionID string `json:"-" url:"-"`
 }
 
-type SubscriptionsListRequest struct {
+type ListSubscriptionsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
 	//

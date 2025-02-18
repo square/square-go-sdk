@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type GroupsAddRequest struct {
+type AddGroupsRequest struct {
 	// The ID of the customer to add to a group.
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the customer group to add the customer to.
@@ -20,17 +20,17 @@ type CreateCustomerGroupRequest struct {
 	Group *squaregosdk.CustomerGroup `json:"group,omitempty" url:"-"`
 }
 
-type GroupsDeleteRequest struct {
+type DeleteGroupsRequest struct {
 	// The ID of the customer group to delete.
 	GroupID string `json:"-" url:"-"`
 }
 
-type GroupsGetRequest struct {
+type GetGroupsRequest struct {
 	// The ID of the customer group to retrieve.
 	GroupID string `json:"-" url:"-"`
 }
 
-type GroupsListRequest struct {
+type ListGroupsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for your original query.
 	//
@@ -43,7 +43,7 @@ type GroupsListRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 }
 
-type GroupsRemoveRequest struct {
+type RemoveGroupsRequest struct {
 	// The ID of the customer to remove from the group.
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the customer group to remove the customer from.

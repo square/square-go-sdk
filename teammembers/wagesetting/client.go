@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // to get this information directly from the `TeamMember.wage_setting` field.
 func (c *Client) Get(
 	ctx context.Context,
-	request *teammembers.WageSettingGetRequest,
+	request *teammembers.GetWageSettingRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)

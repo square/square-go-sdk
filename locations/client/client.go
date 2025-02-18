@@ -134,7 +134,7 @@ func (c *Client) Create(
 // as the location ID to retrieve details of the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.LocationsGetRequest,
+	request *squaregosdk.GetLocationsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLocationResponse, error) {
 	options := core.NewRequestOptions(opts...)

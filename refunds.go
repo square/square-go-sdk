@@ -83,12 +83,12 @@ type RefundPaymentRequest struct {
 	ExternalDetails *DestinationDetailsExternalRefundDetails `json:"external_details,omitempty" url:"-"`
 }
 
-type RefundsGetRequest struct {
+type GetRefundsRequest struct {
 	// The unique ID for the desired `PaymentRefund`.
 	RefundID string `json:"-" url:"-"`
 }
 
-type RefundsListRequest struct {
+type ListRefundsRequest struct {
 	// Indicates the start of the time range to retrieve each `PaymentRefund` for, in RFC 3339
 	// format.  The range is determined using the `created_at` field for each `PaymentRefund`.
 	//
@@ -131,6 +131,18 @@ type RefundsListRequest struct {
 	//
 	// Default: 100
 	Limit *int `json:"-" url:"limit,omitempty"`
+	// Indicates the start of the time range to retrieve each `PaymentRefund` for, in RFC 3339
+	// format.  The range is determined using the `updated_at` field for each `PaymentRefund`.
+	//
+	// Default: If omitted, the time range starts at `begin_time`.
+	UpdatedAtBeginTime *string `json:"-" url:"updated_at_begin_time,omitempty"`
+	// Indicates the end of the time range to retrieve each `PaymentRefund` for, in RFC 3339
+	// format.  The range is determined using the `updated_at` field for each `PaymentRefund`.
+	//
+	// Default: The current time.
+	UpdatedAtEndTime *string `json:"-" url:"updated_at_end_time,omitempty"`
+	// The field used to sort results by. The default is `CREATED_AT`.
+	SortField *ListPaymentRefundsRequestSortField `json:"-" url:"sort_field,omitempty"`
 }
 
 // Details about a refund's destination.
@@ -462,6 +474,28 @@ func (g *GetPaymentRefundResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", g)
+}
+
+type ListPaymentRefundsRequestSortField string
+
+const (
+	ListPaymentRefundsRequestSortFieldCreatedAt ListPaymentRefundsRequestSortField = "CREATED_AT"
+	ListPaymentRefundsRequestSortFieldUpdatedAt ListPaymentRefundsRequestSortField = "UPDATED_AT"
+)
+
+func NewListPaymentRefundsRequestSortFieldFromString(s string) (ListPaymentRefundsRequestSortField, error) {
+	switch s {
+	case "CREATED_AT":
+		return ListPaymentRefundsRequestSortFieldCreatedAt, nil
+	case "UPDATED_AT":
+		return ListPaymentRefundsRequestSortFieldUpdatedAt, nil
+	}
+	var t ListPaymentRefundsRequestSortField
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l ListPaymentRefundsRequestSortField) Ptr() *ListPaymentRefundsRequestSortField {
+	return &l
 }
 
 // Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).

@@ -236,7 +236,7 @@ func (c *Client) Search(
 // Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.VendorsGetRequest,
+	request *squaregosdk.GetVendorsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetVendorResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -276,7 +276,7 @@ func (c *Client) Get(
 // Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.VendorsUpdateRequest,
+	request *squaregosdk.UpdateVendorsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateVendorResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetAdjustment(
 	ctx context.Context,
-	request *squaregosdk.InventoryDeprecatedGetAdjustmentRequest,
+	request *squaregosdk.DeprecatedGetAdjustmentInventoryRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -84,7 +84,7 @@ func (c *Client) DeprecatedGetAdjustment(
 // with the provided `adjustment_id`.
 func (c *Client) GetAdjustment(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetAdjustmentRequest,
+	request *squaregosdk.GetAdjustmentInventoryRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryAdjustmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -383,7 +383,7 @@ func (c *Client) BatchGetCounts(
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetPhysicalCount(
 	ctx context.Context,
-	request *squaregosdk.InventoryDeprecatedGetPhysicalCountRequest,
+	request *squaregosdk.DeprecatedGetPhysicalCountInventoryRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -424,7 +424,7 @@ func (c *Client) DeprecatedGetPhysicalCount(
 // object with the provided `physical_count_id`.
 func (c *Client) GetPhysicalCount(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetPhysicalCountRequest,
+	request *squaregosdk.GetPhysicalCountInventoryRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryPhysicalCountResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -465,7 +465,7 @@ func (c *Client) GetPhysicalCount(
 // with the provided `transfer_id`.
 func (c *Client) GetTransfer(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetTransferRequest,
+	request *squaregosdk.GetTransferInventoryRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInventoryTransferResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -508,7 +508,7 @@ func (c *Client) GetTransfer(
 // For more sophisticated queries, use a batch endpoint.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.InventoryGetRequest,
+	request *squaregosdk.GetInventoryRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.InventoryCount], error) {
 	options := core.NewRequestOptions(opts...)
@@ -582,7 +582,7 @@ func (c *Client) Get(
 // sophisticated queries, use a batch endpoint.
 func (c *Client) Changes(
 	ctx context.Context,
-	request *squaregosdk.InventoryChangesRequest,
+	request *squaregosdk.ChangesInventoryRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.InventoryChange], error) {
 	options := core.NewRequestOptions(opts...)

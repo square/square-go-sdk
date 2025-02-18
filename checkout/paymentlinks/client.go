@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists all payment links.
 func (c *Client) List(
 	ctx context.Context,
-	request *checkout.PaymentLinksListRequest,
+	request *checkout.ListPaymentLinksRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.PaymentLink], error) {
 	options := core.NewRequestOptions(opts...)
@@ -141,7 +141,7 @@ func (c *Client) Create(
 // Retrieves a payment link.
 func (c *Client) Get(
 	ctx context.Context,
-	request *checkout.PaymentLinksGetRequest,
+	request *checkout.GetPaymentLinksRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetPaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -225,7 +225,7 @@ func (c *Client) Update(
 // Deletes a payment link.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *checkout.PaymentLinksDeleteRequest,
+	request *checkout.DeletePaymentLinksRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeletePaymentLinkResponse, error) {
 	options := core.NewRequestOptions(opts...)

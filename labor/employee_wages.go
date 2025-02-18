@@ -2,12 +2,12 @@
 
 package labor
 
-type EmployeeWagesGetRequest struct {
+type GetEmployeeWagesRequest struct {
 	// The UUID for the `EmployeeWage` being retrieved.
 	ID string `json:"-" url:"-"`
 }
 
-type EmployeeWagesListRequest struct {
+type ListEmployeeWagesRequest struct {
 	// Filter the returned wages to only those that are associated with the specified employee.
 	EmployeeID *string `json:"-" url:"employee_id,omitempty"`
 	// The maximum number of `EmployeeWage` results to return per page. The number can range between

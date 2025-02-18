@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a paginated list of `BreakType` instances for a business.
 func (c *Client) List(
 	ctx context.Context,
-	request *labor.BreakTypesListRequest,
+	request *labor.ListBreakTypesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.BreakType], error) {
 	options := core.NewRequestOptions(opts...)
@@ -154,7 +154,7 @@ func (c *Client) Create(
 // Returns a single `BreakType` specified by `id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *labor.BreakTypesGetRequest,
+	request *labor.GetBreakTypesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -238,7 +238,7 @@ func (c *Client) Update(
 // A `BreakType` can be deleted even if it is referenced from a `Shift`.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *labor.BreakTypesDeleteRequest,
+	request *labor.DeleteBreakTypesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)

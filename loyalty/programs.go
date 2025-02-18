@@ -28,7 +28,7 @@ type CalculateLoyaltyPointsRequest struct {
 	LoyaltyAccountID *string `json:"loyalty_account_id,omitempty" url:"-"`
 }
 
-type ProgramsGetRequest struct {
+type GetProgramsRequest struct {
 	// The ID of the loyalty program or the keyword `main`. Either value can be used to retrieve the single loyalty program that belongs to the seller.
 	ProgramID string `json:"-" url:"-"`
 }

@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type PromotionsCancelRequest struct {
+type CancelPromotionsRequest struct {
 	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to cancel. You can cancel a
 	// promotion that has an `ACTIVE` or `SCHEDULED` status.
 	PromotionID string `json:"-" url:"-"`
@@ -26,7 +26,7 @@ type CreateLoyaltyPromotionRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 }
 
-type PromotionsGetRequest struct {
+type GetPromotionsRequest struct {
 	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
 	PromotionID string `json:"-" url:"-"`
 	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
@@ -34,7 +34,7 @@ type PromotionsGetRequest struct {
 	ProgramID string `json:"-" url:"-"`
 }
 
-type PromotionsListRequest struct {
+type ListPromotionsRequest struct {
 	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
 	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
 	ProgramID string `json:"-" url:"-"`

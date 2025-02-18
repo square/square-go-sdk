@@ -2,12 +2,12 @@
 
 package customers
 
-type SegmentsGetRequest struct {
+type GetSegmentsRequest struct {
 	// The Square-issued ID of the customer segment.
 	SegmentID string `json:"-" url:"-"`
 }
 
-type SegmentsListRequest struct {
+type ListSegmentsRequest struct {
 	// A pagination cursor returned by previous calls to `ListCustomerSegments`.
 	// This cursor is used to retrieve the next set of query results.
 	//

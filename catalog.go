@@ -134,7 +134,7 @@ type BatchUpsertCatalogObjectsRequest struct {
 	Batches []*CatalogObjectBatch `json:"batches,omitempty" url:"-"`
 }
 
-type CatalogListRequest struct {
+type ListCatalogRequest struct {
 	// The pagination cursor returned in the previous response. Leave unset for an initial request.
 	// The page size is currently set to be 100.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.

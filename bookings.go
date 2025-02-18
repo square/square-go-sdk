@@ -44,12 +44,12 @@ type CreateBookingRequest struct {
 	Booking *Booking `json:"booking,omitempty" url:"-"`
 }
 
-type BookingsGetRequest struct {
+type GetBookingsRequest struct {
 	// The ID of the [Booking](entity:Booking) object representing the to-be-retrieved booking.
 	BookingID string `json:"-" url:"-"`
 }
 
-type BookingsListRequest struct {
+type ListBookingsRequest struct {
 	// The maximum number of results per page to return in a paged response.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The pagination cursor from the preceding response to return the next page of the results. Do not set this when retrieving the first page of the results.

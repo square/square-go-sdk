@@ -46,7 +46,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // for all gift cards in a specific region, or for activities within a time window.
 func (c *Client) List(
 	ctx context.Context,
-	request *giftcards.ActivitiesListRequest,
+	request *giftcards.ListActivitiesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.GiftCardActivity], error) {
 	options := core.NewRequestOptions(opts...)

@@ -2,7 +2,7 @@
 
 package webhooks
 
-type EventTypesListRequest struct {
+type ListEventTypesRequest struct {
 	// The API version for which to list event types. Setting this field overrides the default version used by the application.
 	APIVersion *string `json:"-" url:"api_version,omitempty"`
 }

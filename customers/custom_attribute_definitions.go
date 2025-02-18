@@ -26,12 +26,12 @@ type CreateCustomerCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-type CustomAttributeDefinitionsDeleteRequest struct {
+type DeleteCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to delete.
 	Key string `json:"-" url:"-"`
 }
 
-type CustomAttributeDefinitionsGetRequest struct {
+type GetCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to retrieve. If the requesting application
 	// is not the definition owner, you must use the qualified key.
 	Key string `json:"-" url:"-"`
@@ -42,7 +42,7 @@ type CustomAttributeDefinitionsGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type CustomAttributeDefinitionsListRequest struct {
+type ListCustomAttributeDefinitionsRequest struct {
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).

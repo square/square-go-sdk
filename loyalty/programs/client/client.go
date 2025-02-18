@@ -87,7 +87,7 @@ func (c *Client) List(
 // Loyalty programs define how buyers can earn points and redeem points for rewards. Square sellers can have only one loyalty program, which is created and managed from the Seller Dashboard. For more information, see [Loyalty Program Overview](https://developer.squareup.com/docs/loyalty/overview).
 func (c *Client) Get(
 	ctx context.Context,
-	request *loyalty.ProgramsGetRequest,
+	request *loyalty.GetProgramsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLoyaltyProgramResponse, error) {
 	options := core.NewRequestOptions(opts...)

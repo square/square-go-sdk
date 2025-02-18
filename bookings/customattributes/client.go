@@ -136,7 +136,7 @@ func (c *Client) BatchUpsert(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *bookings.CustomAttributesListRequest,
+	request *bookings.ListCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttribute], error) {
 	options := core.NewRequestOptions(opts...)
@@ -201,7 +201,7 @@ func (c *Client) List(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *bookings.CustomAttributesGetRequest,
+	request *bookings.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveBookingCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -304,7 +304,7 @@ func (c *Client) Upsert(
 // or *Appointments Premium*.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *bookings.CustomAttributesDeleteRequest,
+	request *bookings.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteBookingCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)

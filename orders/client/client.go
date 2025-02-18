@@ -269,7 +269,7 @@ func (c *Client) Search(
 // Retrieves an [Order](entity:Order) by ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.OrdersGetRequest,
+	request *squaregosdk.GetOrdersRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)

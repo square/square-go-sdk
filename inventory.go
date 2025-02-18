@@ -8,12 +8,12 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type InventoryDeprecatedGetAdjustmentRequest struct {
+type DeprecatedGetAdjustmentInventoryRequest struct {
 	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
 	AdjustmentID string `json:"-" url:"-"`
 }
 
-type InventoryChangesRequest struct {
+type ChangesInventoryRequest struct {
 	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
 	CatalogObjectID string `json:"-" url:"-"`
 	// The [Location](entity:Location) IDs to look up as a comma-separated
@@ -26,13 +26,13 @@ type InventoryChangesRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
-type InventoryDeprecatedGetPhysicalCountRequest struct {
+type DeprecatedGetPhysicalCountInventoryRequest struct {
 	// ID of the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
 	PhysicalCountID string `json:"-" url:"-"`
 }
 
-type InventoryGetRequest struct {
+type GetInventoryRequest struct {
 	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
 	CatalogObjectID string `json:"-" url:"-"`
 	// The [Location](entity:Location) IDs to look up as a comma-separated
@@ -45,18 +45,18 @@ type InventoryGetRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
-type InventoryGetAdjustmentRequest struct {
+type GetAdjustmentInventoryRequest struct {
 	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
 	AdjustmentID string `json:"-" url:"-"`
 }
 
-type InventoryGetPhysicalCountRequest struct {
+type GetPhysicalCountInventoryRequest struct {
 	// ID of the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
 	PhysicalCountID string `json:"-" url:"-"`
 }
 
-type InventoryGetTransferRequest struct {
+type GetTransferInventoryRequest struct {
 	// ID of the [InventoryTransfer](entity:InventoryTransfer) to retrieve.
 	TransferID string `json:"-" url:"-"`
 }

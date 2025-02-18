@@ -124,7 +124,7 @@ func (c *Client) Search(
 // Retrieves a loyalty account.
 func (c *Client) Get(
 	ctx context.Context,
-	request *loyalty.AccountsGetRequest,
+	request *loyalty.GetAccountsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLoyaltyAccountResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -28,17 +28,17 @@ type CreateCardRequest struct {
 	Card *Card `json:"card,omitempty" url:"-"`
 }
 
-type CardsDisableRequest struct {
+type DisableCardsRequest struct {
 	// Unique ID for the desired Card.
 	CardID string `json:"-" url:"-"`
 }
 
-type CardsGetRequest struct {
+type GetCardsRequest struct {
 	// Unique ID for the desired Card.
 	CardID string `json:"-" url:"-"`
 }
 
-type CardsListRequest struct {
+type ListCardsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
 	//

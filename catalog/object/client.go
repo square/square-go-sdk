@@ -91,7 +91,7 @@ func (c *Client) Upsert(
 // any [CatalogTax](entity:CatalogTax) objects that apply to it.
 func (c *Client) Get(
 	ctx context.Context,
-	request *catalog.ObjectGetRequest,
+	request *catalog.GetObjectRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCatalogObjectResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -147,7 +147,7 @@ func (c *Client) Get(
 // delete requests are rejected with the `429` error code.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *catalog.ObjectDeleteRequest,
+	request *catalog.DeleteObjectRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCatalogObjectResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -42,7 +42,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square account.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsListRequest,
+	request *squaregosdk.ListBankAccountsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.BankAccount], error) {
 	options := core.NewRequestOptions(opts...)
@@ -101,7 +101,7 @@ func (c *Client) List(
 // Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
 func (c *Client) GetByV1ID(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsGetByV1IDRequest,
+	request *squaregosdk.GetByV1IDBankAccountsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetBankAccountByV1IDResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -142,7 +142,7 @@ func (c *Client) GetByV1ID(
 // linked to a Square account.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.BankAccountsGetRequest,
+	request *squaregosdk.GetBankAccountsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetBankAccountResponse, error) {
 	options := core.NewRequestOptions(opts...)

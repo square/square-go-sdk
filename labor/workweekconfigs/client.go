@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of `WorkweekConfig` instances for a business.
 func (c *Client) List(
 	ctx context.Context,
-	request *labor.WorkweekConfigsListRequest,
+	request *labor.ListWorkweekConfigsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.WorkweekConfig], error) {
 	options := core.NewRequestOptions(opts...)

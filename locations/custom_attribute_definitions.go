@@ -18,12 +18,12 @@ type CreateLocationCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-type CustomAttributeDefinitionsDeleteRequest struct {
+type DeleteCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to delete.
 	Key string `json:"-" url:"-"`
 }
 
-type CustomAttributeDefinitionsGetRequest struct {
+type GetCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to retrieve. If the requesting application
 	// is not the definition owner, you must use the qualified key.
 	Key string `json:"-" url:"-"`
@@ -34,7 +34,7 @@ type CustomAttributeDefinitionsGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type CustomAttributeDefinitionsListRequest struct {
+type ListCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
 	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.

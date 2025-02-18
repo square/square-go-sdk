@@ -8,7 +8,7 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type PaymentsCancelRequest struct {
+type CancelPaymentsRequest struct {
 	// The ID of the payment to cancel.
 	PaymentID string `json:"-" url:"-"`
 }
@@ -177,12 +177,12 @@ type CreatePaymentRequest struct {
 	OfflinePaymentDetails *OfflinePaymentDetails `json:"offline_payment_details,omitempty" url:"-"`
 }
 
-type PaymentsGetRequest struct {
+type GetPaymentsRequest struct {
 	// A unique ID for the desired payment.
 	PaymentID string `json:"-" url:"-"`
 }
 
-type PaymentsListRequest struct {
+type ListPaymentsRequest struct {
 	// Indicates the start of the time range to retrieve payments for, in RFC 3339 format.
 	// The range is determined using the `created_at` field for each Payment.
 	// Inclusive. Default: The current time minus one year.
@@ -241,7 +241,7 @@ type PaymentsListRequest struct {
 	// range is determined using the `updated_at` field for each Payment.
 	UpdatedAtEndTime *string `json:"-" url:"updated_at_end_time,omitempty"`
 	// The field used to sort results by. The default is `CREATED_AT`.
-	SortField *PaymentSortField `json:"-" url:"sort_field,omitempty"`
+	SortField *ListPaymentsRequestSortField `json:"-" url:"sort_field,omitempty"`
 }
 
 // ACH-specific details about `BANK_ACCOUNT` type payments with the `transfer_type` of `ACH`.
@@ -1656,6 +1656,31 @@ func (g *GetPaymentResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type ListPaymentsRequestSortField string
+
+const (
+	ListPaymentsRequestSortFieldCreatedAt        ListPaymentsRequestSortField = "CREATED_AT"
+	ListPaymentsRequestSortFieldOfflineCreatedAt ListPaymentsRequestSortField = "OFFLINE_CREATED_AT"
+	ListPaymentsRequestSortFieldUpdatedAt        ListPaymentsRequestSortField = "UPDATED_AT"
+)
+
+func NewListPaymentsRequestSortFieldFromString(s string) (ListPaymentsRequestSortField, error) {
+	switch s {
+	case "CREATED_AT":
+		return ListPaymentsRequestSortFieldCreatedAt, nil
+	case "OFFLINE_CREATED_AT":
+		return ListPaymentsRequestSortFieldOfflineCreatedAt, nil
+	case "UPDATED_AT":
+		return ListPaymentsRequestSortFieldUpdatedAt, nil
+	}
+	var t ListPaymentsRequestSortField
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l ListPaymentsRequestSortField) Ptr() *ListPaymentsRequestSortField {
+	return &l
+}
+
 // Defines the response returned by [ListPayments](api-endpoint:Payments-ListPayments).
 type ListPaymentsResponse struct {
 	// Information about errors encountered during the request.
@@ -2288,31 +2313,6 @@ func (p *Payment) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
-}
-
-type PaymentSortField string
-
-const (
-	PaymentSortFieldCreatedAt        PaymentSortField = "CREATED_AT"
-	PaymentSortFieldOfflineCreatedAt PaymentSortField = "OFFLINE_CREATED_AT"
-	PaymentSortFieldUpdatedAt        PaymentSortField = "UPDATED_AT"
-)
-
-func NewPaymentSortFieldFromString(s string) (PaymentSortField, error) {
-	switch s {
-	case "CREATED_AT":
-		return PaymentSortFieldCreatedAt, nil
-	case "OFFLINE_CREATED_AT":
-		return PaymentSortFieldOfflineCreatedAt, nil
-	case "UPDATED_AT":
-		return PaymentSortFieldUpdatedAt, nil
-	}
-	var t PaymentSortField
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p PaymentSortField) Ptr() *PaymentSortField {
-	return &p
 }
 
 // Represents fraud risk information for the associated payment.

@@ -13,17 +13,17 @@ type CreateBreakTypeRequest struct {
 	BreakType *squaregosdk.BreakType `json:"break_type,omitempty" url:"-"`
 }
 
-type BreakTypesDeleteRequest struct {
+type DeleteBreakTypesRequest struct {
 	// The UUID for the `BreakType` being deleted.
 	ID string `json:"-" url:"-"`
 }
 
-type BreakTypesGetRequest struct {
+type GetBreakTypesRequest struct {
 	// The UUID for the `BreakType` being retrieved.
 	ID string `json:"-" url:"-"`
 }
 
-type BreakTypesListRequest struct {
+type ListBreakTypesRequest struct {
 	// Filter the returned `BreakType` results to only those that are associated with the
 	// specified location.
 	LocationID *string `json:"-" url:"location_id,omitempty"`

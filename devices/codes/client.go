@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists all DeviceCodes associated with the merchant.
 func (c *Client) List(
 	ctx context.Context,
-	request *devices.CodesListRequest,
+	request *devices.ListCodesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.DeviceCode], error) {
 	options := core.NewRequestOptions(opts...)
@@ -142,7 +142,7 @@ func (c *Client) Create(
 // Retrieves DeviceCode with the associated ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *devices.CodesGetRequest,
+	request *devices.GetCodesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDeviceCodeResponse, error) {
 	options := core.NewRequestOptions(opts...)

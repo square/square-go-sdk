@@ -62,7 +62,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.CustomersListRequest,
+	request *squaregosdk.ListCustomersRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Customer], error) {
 	options := core.NewRequestOptions(opts...)
@@ -388,7 +388,7 @@ func (c *Client) Search(
 // Returns details for a single customer.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.CustomersGetRequest,
+	request *squaregosdk.GetCustomersRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -475,7 +475,7 @@ func (c *Client) Update(
 // To delete a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.CustomersDeleteRequest,
+	request *squaregosdk.DeleteCustomersRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)

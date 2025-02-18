@@ -46,7 +46,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of disputes associated with a particular account.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.DisputesListRequest,
+	request *squaregosdk.ListDisputesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Dispute], error) {
 	options := core.NewRequestOptions(opts...)
@@ -105,7 +105,7 @@ func (c *Client) List(
 // Returns details about a specific dispute.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.DisputesGetRequest,
+	request *squaregosdk.GetDisputesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -149,7 +149,7 @@ func (c *Client) Get(
 // does not have sufficient funds, Square debits the associated bank account.
 func (c *Client) Accept(
 	ctx context.Context,
-	request *squaregosdk.DisputesAcceptRequest,
+	request *squaregosdk.AcceptDisputesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.AcceptDisputeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -190,7 +190,7 @@ func (c *Client) Accept(
 // multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats.
 func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
-	request *squaregosdk.DisputesCreateEvidenceFileRequest,
+	request *squaregosdk.CreateEvidenceFileDisputesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CreateDisputeEvidenceFileResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -294,7 +294,7 @@ func (c *Client) CreateEvidenceText(
 // a dispute after submission.
 func (c *Client) SubmitEvidence(
 	ctx context.Context,
-	request *squaregosdk.DisputesSubmitEvidenceRequest,
+	request *squaregosdk.SubmitEvidenceDisputesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.SubmitEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)

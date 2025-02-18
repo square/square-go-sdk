@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type WageSettingGetRequest struct {
+type GetWageSettingRequest struct {
 	// The ID of the team member for which to retrieve the wage setting.
 	TeamMemberID string `json:"-" url:"-"`
 }

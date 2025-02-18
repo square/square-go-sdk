@@ -7,12 +7,12 @@ import (
 	io "io"
 )
 
-type ImagesCreateRequest struct {
+type CreateImagesRequest struct {
 	ImageFile io.Reader                              `json:"-" url:"-"`
 	Request   *squaregosdk.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
 }
 
-type ImagesUpdateRequest struct {
+type UpdateImagesRequest struct {
 	// The ID of the `CatalogImage` object to update the encapsulated image file.
 	ImageID   string                                 `json:"-" url:"-"`
 	ImageFile io.Reader                              `json:"-" url:"-"`

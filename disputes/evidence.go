@@ -2,21 +2,21 @@
 
 package disputes
 
-type EvidenceDeleteRequest struct {
+type DeleteEvidenceRequest struct {
 	// The ID of the dispute from which you want to remove evidence.
 	DisputeID string `json:"-" url:"-"`
 	// The ID of the evidence you want to remove.
 	EvidenceID string `json:"-" url:"-"`
 }
 
-type EvidenceGetRequest struct {
+type GetEvidenceRequest struct {
 	// The ID of the dispute from which you want to retrieve evidence metadata.
 	DisputeID string `json:"-" url:"-"`
 	// The ID of the evidence to retrieve.
 	EvidenceID string `json:"-" url:"-"`
 }
 
-type EvidenceListRequest struct {
+type ListEvidenceRequest struct {
 	// The ID of the dispute.
 	DisputeID string `json:"-" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.

@@ -240,7 +240,7 @@ func (c *Client) Info(
 // and set the `include_deleted_objects` attribute value to `true`.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.CatalogListRequest,
+	request *squaregosdk.ListCatalogRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CatalogObject], error) {
 	options := core.NewRequestOptions(opts...)

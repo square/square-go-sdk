@@ -13,12 +13,12 @@ type CreateShiftRequest struct {
 	Shift *squaregosdk.Shift `json:"shift,omitempty" url:"-"`
 }
 
-type ShiftsDeleteRequest struct {
+type DeleteShiftsRequest struct {
 	// The UUID for the `Shift` being deleted.
 	ID string `json:"-" url:"-"`
 }
 
-type ShiftsGetRequest struct {
+type GetShiftsRequest struct {
 	// The UUID for the `Shift` being retrieved.
 	ID string `json:"-" url:"-"`
 }

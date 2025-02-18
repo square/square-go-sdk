@@ -120,7 +120,7 @@ func (c *Client) Search(
 // Retrieves an Interac Terminal refund object by ID. Terminal refund objects are available for 30 days.
 func (c *Client) Get(
 	ctx context.Context,
-	request *terminal.RefundsGetRequest,
+	request *terminal.GetRefundsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -160,7 +160,7 @@ func (c *Client) Get(
 // Cancels an Interac Terminal refund request by refund request ID if the status of the request permits it.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *terminal.RefundsCancelRequest,
+	request *terminal.CancelRefundsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)

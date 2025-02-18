@@ -89,7 +89,7 @@ type CreateCustomerRequest struct {
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"-"`
 }
 
-type CustomersDeleteRequest struct {
+type DeleteCustomersRequest struct {
 	// The ID of the customer to delete.
 	CustomerID string `json:"-" url:"-"`
 	// The current version of the customer profile.
@@ -98,12 +98,12 @@ type CustomersDeleteRequest struct {
 	Version *int64 `json:"-" url:"version,omitempty"`
 }
 
-type CustomersGetRequest struct {
+type GetCustomersRequest struct {
 	// The ID of the customer to retrieve.
 	CustomerID string `json:"-" url:"-"`
 }
 
-type CustomersListRequest struct {
+type ListCustomersRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for your original query.
 	//

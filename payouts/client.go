@@ -44,7 +44,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.PayoutsListRequest,
+	request *squaregosdk.ListPayoutsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Payout], error) {
 	options := core.NewRequestOptions(opts...)
@@ -104,7 +104,7 @@ func (c *Client) List(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.PayoutsGetRequest,
+	request *squaregosdk.GetPayoutsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetPayoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -145,7 +145,7 @@ func (c *Client) Get(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) ListEntries(
 	ctx context.Context,
-	request *squaregosdk.PayoutsListEntriesRequest,
+	request *squaregosdk.ListEntriesPayoutsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.PayoutEntry], error) {
 	options := core.NewRequestOptions(opts...)

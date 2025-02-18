@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // a subset of the gift cards. Results are sorted by `created_at` in ascending order.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.GiftCardsListRequest,
+	request *squaregosdk.ListGiftCardsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.GiftCard], error) {
 	options := core.NewRequestOptions(opts...)
@@ -311,7 +311,7 @@ func (c *Client) UnlinkCustomer(
 // Retrieves a gift card using the gift card ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GiftCardsGetRequest,
+	request *squaregosdk.GetGiftCardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetGiftCardResponse, error) {
 	options := core.NewRequestOptions(opts...)

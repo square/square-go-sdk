@@ -9,7 +9,7 @@ import (
 	io "io"
 )
 
-type DisputesCreateEvidenceFileRequest struct {
+type CreateEvidenceFileDisputesRequest struct {
 	// The ID of the dispute for which you want to upload evidence.
 	DisputeID string                            `json:"-" url:"-"`
 	ImageFile io.Reader                         `json:"-" url:"-"`
@@ -28,22 +28,22 @@ type CreateDisputeEvidenceTextRequest struct {
 	EvidenceText string `json:"evidence_text" url:"-"`
 }
 
-type DisputesSubmitEvidenceRequest struct {
+type SubmitEvidenceDisputesRequest struct {
 	// The ID of the dispute for which you want to submit evidence.
 	DisputeID string `json:"-" url:"-"`
 }
 
-type DisputesAcceptRequest struct {
+type AcceptDisputesRequest struct {
 	// The ID of the dispute you want to accept.
 	DisputeID string `json:"-" url:"-"`
 }
 
-type DisputesGetRequest struct {
+type GetDisputesRequest struct {
 	// The ID of the dispute you want more details about.
 	DisputeID string `json:"-" url:"-"`
 }
 
-type DisputesListRequest struct {
+type ListDisputesRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
