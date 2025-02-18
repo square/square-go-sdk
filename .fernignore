@@ -11,3 +11,7 @@ integration_tests
 verify_signature.go
 webhooks/client/verify_signature.go
 webhooks/client/verify_signature_test.go
+
+# Aliases to preserve backwards compatibility.
+bookings/alias.go
+catalog/alias.go
