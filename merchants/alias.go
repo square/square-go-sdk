@@ -1,0 +1,19 @@
+package merchants
+
+// CustomAttributesDeleteRequest is an alias for DeleteCustomAttributesRequest.
+type CustomAttributesDeleteRequest = DeleteCustomAttributesRequest
+
+// CustomAttributesGetRequest is an alias for GetCustomAttributesRequest.
+type CustomAttributesGetRequest = GetCustomAttributesRequest
+
+// CustomAttributesListRequest is an alias for ListCustomAttributesRequest.
+type CustomAttributesListRequest = ListCustomAttributesRequest
+
+// CustomAttributeDefinitionsDeleteRequest is an alias for DeleteCustomAttributeDefinitionsRequest.
+type CustomAttributeDefinitionsDeleteRequest = DeleteCustomAttributeDefinitionsRequest
+
+// CustomAttributeDefinitionsGetRequest is an alias for GetCustomAttributeDefinitionsRequest.
+type CustomAttributeDefinitionsGetRequest = GetCustomAttributeDefinitionsRequest
+
+// CustomAttributeDefinitionsListRequest is an alias for ListCustomAttributeDefinitionsRequest.
+type CustomAttributeDefinitionsListRequest = ListCustomAttributeDefinitionsRequest
