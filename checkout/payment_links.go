@@ -35,17 +35,17 @@ type CreatePaymentLinkRequest struct {
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
 }
 
-type PaymentLinksDeleteRequest struct {
+type DeletePaymentLinksRequest struct {
 	// The ID of the payment link to delete.
 	ID string `json:"-" url:"-"`
 }
 
-type PaymentLinksGetRequest struct {
+type GetPaymentLinksRequest struct {
 	// The ID of link to retrieve.
 	ID string `json:"-" url:"-"`
 }
 
-type PaymentLinksListRequest struct {
+type ListPaymentLinksRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// If a cursor is not provided, the endpoint returns the first page of the results.

@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Retrieves the list of customer segments of a business.
 func (c *Client) List(
 	ctx context.Context,
-	request *customers.SegmentsListRequest,
+	request *customers.ListSegmentsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomerSegment], error) {
 	options := core.NewRequestOptions(opts...)
@@ -102,7 +102,7 @@ func (c *Client) List(
 // Retrieves a specific customer segment as identified by the `segment_id` value.
 func (c *Client) Get(
 	ctx context.Context,
-	request *customers.SegmentsGetRequest,
+	request *customers.GetSegmentsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerSegmentResponse, error) {
 	options := core.NewRequestOptions(opts...)

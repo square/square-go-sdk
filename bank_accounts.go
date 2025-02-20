@@ -8,18 +8,18 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type BankAccountsGetByV1IDRequest struct {
+type GetByV1IDBankAccountsRequest struct {
 	// Connect V1 ID of the desired `BankAccount`. For more information, see
 	// [Retrieve a bank account by using an ID issued by V1 Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api#retrieve-a-bank-account-by-using-an-id-issued-by-v1-bank-accounts-api).
 	V1BankAccountID string `json:"-" url:"-"`
 }
 
-type BankAccountsGetRequest struct {
+type GetBankAccountsRequest struct {
 	// Square-issued ID of the desired `BankAccount`.
 	BankAccountID string `json:"-" url:"-"`
 }
 
-type BankAccountsListRequest struct {
+type ListBankAccountsRequest struct {
 	// The pagination cursor returned by a previous call to this endpoint.
 	// Use it in the next `ListBankAccounts` request to retrieve the next set
 	// of results.

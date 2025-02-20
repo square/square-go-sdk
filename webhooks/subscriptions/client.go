@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists all webhook subscriptions owned by your application.
 func (c *Client) List(
 	ctx context.Context,
-	request *webhooks.SubscriptionsListRequest,
+	request *webhooks.ListSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.WebhookSubscription], error) {
 	options := core.NewRequestOptions(opts...)
@@ -141,7 +141,7 @@ func (c *Client) Create(
 // Retrieves a webhook subscription identified by its ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *webhooks.SubscriptionsGetRequest,
+	request *webhooks.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -223,7 +223,7 @@ func (c *Client) Update(
 // Deletes a webhook subscription.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *webhooks.SubscriptionsDeleteRequest,
+	request *webhooks.DeleteSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteWebhookSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)

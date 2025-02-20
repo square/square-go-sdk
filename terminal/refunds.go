@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type RefundsCancelRequest struct {
+type CancelRefundsRequest struct {
 	// The unique ID for the desired `TerminalRefund`.
 	TerminalRefundID string `json:"-" url:"-"`
 }
@@ -21,7 +21,7 @@ type CreateTerminalRefundRequest struct {
 	Refund *squaregosdk.TerminalRefund `json:"refund,omitempty" url:"-"`
 }
 
-type RefundsGetRequest struct {
+type GetRefundsRequest struct {
 	// The unique ID for the desired `TerminalRefund`.
 	TerminalRefundID string `json:"-" url:"-"`
 }

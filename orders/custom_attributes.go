@@ -16,7 +16,7 @@ type BulkUpsertOrderCustomAttributesRequest struct {
 	Values map[string]*squaregosdk.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
 }
 
-type CustomAttributesDeleteRequest struct {
+type DeleteCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// The key of the custom attribute to delete.  This key must match the key of an
@@ -24,7 +24,7 @@ type CustomAttributesDeleteRequest struct {
 	CustomAttributeKey string `json:"-" url:"-"`
 }
 
-type CustomAttributesGetRequest struct {
+type GetCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// The key of the custom attribute to retrieve.  This key must match the key of an
@@ -39,7 +39,7 @@ type CustomAttributesGetRequest struct {
 	WithDefinition *bool `json:"-" url:"with_definition,omitempty"`
 }
 
-type CustomAttributesListRequest struct {
+type ListCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.

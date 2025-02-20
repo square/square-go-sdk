@@ -8,7 +8,7 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type PayoutsListEntriesRequest struct {
+type ListEntriesPayoutsRequest struct {
 	// The ID of the payout to retrieve the information for.
 	PayoutID string `json:"-" url:"-"`
 	// The order in which payout entries are listed.
@@ -26,12 +26,12 @@ type PayoutsListEntriesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 }
 
-type PayoutsGetRequest struct {
+type GetPayoutsRequest struct {
 	// The ID of the payout to retrieve the information for.
 	PayoutID string `json:"-" url:"-"`
 }
 
-type PayoutsListRequest struct {
+type ListPayoutsRequest struct {
 	// The ID of the location for which to list the payouts.
 	// By default, payouts are returned for the default (main) location associated with the seller.
 	LocationID *string `json:"-" url:"location_id,omitempty"`

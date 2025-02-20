@@ -42,7 +42,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists all webhook event types that can be subscribed to.
 func (c *Client) List(
 	ctx context.Context,
-	request *webhooks.EventTypesListRequest,
+	request *webhooks.ListEventTypesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListWebhookEventTypesResponse, error) {
 	options := core.NewRequestOptions(opts...)

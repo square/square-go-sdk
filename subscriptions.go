@@ -34,7 +34,7 @@ type ChangeBillingAnchorDateRequest struct {
 	EffectiveDate *string `json:"effective_date,omitempty" url:"-"`
 }
 
-type SubscriptionsDeleteActionRequest struct {
+type DeleteActionSubscriptionsRequest struct {
 	// The ID of the subscription the targeted action is to act upon.
 	SubscriptionID string `json:"-" url:"-"`
 	// The ID of the targeted action to be deleted.
@@ -52,7 +52,7 @@ type SwapPlanRequest struct {
 	Phases []*PhaseInput `json:"phases,omitempty" url:"-"`
 }
 
-type SubscriptionsCancelRequest struct {
+type CancelSubscriptionsRequest struct {
 	// The ID of the subscription to cancel.
 	SubscriptionID string `json:"-" url:"-"`
 }
@@ -108,7 +108,7 @@ type CreateSubscriptionRequest struct {
 	Phases []*Phase `json:"phases,omitempty" url:"-"`
 }
 
-type SubscriptionsGetRequest struct {
+type GetSubscriptionsRequest struct {
 	// The ID of the subscription to retrieve.
 	SubscriptionID string `json:"-" url:"-"`
 	// A query parameter to specify related information to be included in the response.
@@ -119,7 +119,7 @@ type SubscriptionsGetRequest struct {
 	Include *string `json:"-" url:"include,omitempty"`
 }
 
-type SubscriptionsListEventsRequest struct {
+type ListEventsSubscriptionsRequest struct {
 	// The ID of the subscription to retrieve the events for.
 	SubscriptionID string `json:"-" url:"-"`
 	// When the total number of resulting subscription events exceeds the limit of a paged response,

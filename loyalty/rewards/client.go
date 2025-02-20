@@ -133,7 +133,7 @@ func (c *Client) Search(
 // Retrieves a loyalty reward.
 func (c *Client) Get(
 	ctx context.Context,
-	request *loyalty.RewardsGetRequest,
+	request *loyalty.GetRewardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -181,7 +181,7 @@ func (c *Client) Get(
 // You cannot delete a reward that has reached the terminal state (REDEEMED).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *loyalty.RewardsDeleteRequest,
+	request *loyalty.DeleteRewardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteLoyaltyRewardResponse, error) {
 	options := core.NewRequestOptions(opts...)

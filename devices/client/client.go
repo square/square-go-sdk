@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // devices are supported.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.DevicesListRequest,
+	request *squaregosdk.ListDevicesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Device], error) {
 	options := core.NewRequestOptions(opts...)
@@ -106,7 +106,7 @@ func (c *Client) List(
 // Retrieves Device with the associated `device_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.DevicesGetRequest,
+	request *squaregosdk.GetDevicesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDeviceResponse, error) {
 	options := core.NewRequestOptions(opts...)

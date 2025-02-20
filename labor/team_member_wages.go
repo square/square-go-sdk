@@ -2,12 +2,12 @@
 
 package labor
 
-type TeamMemberWagesGetRequest struct {
+type GetTeamMemberWagesRequest struct {
 	// The UUID for the `TeamMemberWage` being retrieved.
 	ID string `json:"-" url:"-"`
 }
 
-type TeamMemberWagesListRequest struct {
+type ListTeamMemberWagesRequest struct {
 	// Filter the returned wages to only those that are associated with the
 	// specified team member.
 	TeamMemberID *string `json:"-" url:"team_member_id,omitempty"`

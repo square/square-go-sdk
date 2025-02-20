@@ -13,7 +13,7 @@ type UpdateWorkweekConfigRequest struct {
 	WorkweekConfig *squaregosdk.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
 }
 
-type WorkweekConfigsListRequest struct {
+type ListWorkweekConfigsRequest struct {
 	// The maximum number of `WorkweekConfigs` results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// A pointer to the next page of `WorkweekConfig` results to fetch.

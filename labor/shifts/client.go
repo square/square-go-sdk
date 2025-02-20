@@ -150,7 +150,7 @@ func (c *Client) Search(
 // Returns a single `Shift` specified by `id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *labor.ShiftsGetRequest,
+	request *labor.GetShiftsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -238,7 +238,7 @@ func (c *Client) Update(
 // Deletes a `Shift`.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *labor.ShiftsDeleteRequest,
+	request *labor.DeleteShiftsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)

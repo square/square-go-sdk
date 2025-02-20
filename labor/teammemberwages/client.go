@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a paginated list of `TeamMemberWage` instances for a business.
 func (c *Client) List(
 	ctx context.Context,
-	request *labor.TeamMemberWagesListRequest,
+	request *labor.ListTeamMemberWagesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.TeamMemberWage], error) {
 	options := core.NewRequestOptions(opts...)
@@ -102,7 +102,7 @@ func (c *Client) List(
 // Returns a single `TeamMemberWage` specified by `id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *labor.TeamMemberWagesGetRequest,
+	request *labor.GetTeamMemberWagesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTeamMemberWageResponse, error) {
 	options := core.NewRequestOptions(opts...)

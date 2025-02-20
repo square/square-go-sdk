@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type CustomAttributesDeleteRequest struct {
+type DeleteCustomAttributesRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
 	CustomerID string `json:"-" url:"-"`
 	// The key of the custom attribute to delete. This key must match the `key` of a custom
@@ -15,7 +15,7 @@ type CustomAttributesDeleteRequest struct {
 	Key string `json:"-" url:"-"`
 }
 
-type CustomAttributesGetRequest struct {
+type GetCustomAttributesRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
 	CustomerID string `json:"-" url:"-"`
 	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
@@ -33,7 +33,7 @@ type CustomAttributesGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type CustomAttributesListRequest struct {
+type ListCustomAttributesRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
 	CustomerID string `json:"-" url:"-"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.

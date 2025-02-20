@@ -137,7 +137,7 @@ func (c *Client) BatchUpsert(
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) List(
 	ctx context.Context,
-	request *locations.CustomAttributesListRequest,
+	request *locations.ListCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttribute], error) {
 	options := core.NewRequestOptions(opts...)
@@ -203,7 +203,7 @@ func (c *Client) List(
 // `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *locations.CustomAttributesGetRequest,
+	request *locations.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -301,7 +301,7 @@ func (c *Client) Upsert(
 // `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *locations.CustomAttributesDeleteRequest,
+	request *locations.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)

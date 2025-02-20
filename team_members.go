@@ -27,7 +27,7 @@ type BatchUpdateTeamMembersRequest struct {
 	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
 }
 
-type TeamMembersGetRequest struct {
+type GetTeamMembersRequest struct {
 	// The ID of the team member to retrieve.
 	TeamMemberID string `json:"-" url:"-"`
 }
@@ -884,21 +884,21 @@ func (u *UpdateTeamMemberResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-type TeamMembersUpdateRequest struct {
+type UpdateTeamMembersRequest struct {
 	// The ID of the team member to update.
 	TeamMemberID string                   `json:"-" url:"-"`
 	Body         *UpdateTeamMemberRequest `json:"-" url:"-"`
 }
 
-func (t *TeamMembersUpdateRequest) UnmarshalJSON(data []byte) error {
+func (u *UpdateTeamMembersRequest) UnmarshalJSON(data []byte) error {
 	body := new(UpdateTeamMemberRequest)
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
-	t.Body = body
+	u.Body = body
 	return nil
 }
 
-func (t *TeamMembersUpdateRequest) MarshalJSON() ([]byte, error) {
-	return json.Marshal(t.Body)
+func (u *UpdateTeamMembersRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
 }

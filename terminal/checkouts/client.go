@@ -121,7 +121,7 @@ func (c *Client) Search(
 // Retrieves a Terminal checkout request by `checkout_id`. Terminal checkout requests are available for 30 days.
 func (c *Client) Get(
 	ctx context.Context,
-	request *terminal.CheckoutsGetRequest,
+	request *terminal.GetCheckoutsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -161,7 +161,7 @@ func (c *Client) Get(
 // Cancels a Terminal checkout request if the status of the request permits it.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *terminal.CheckoutsCancelRequest,
+	request *terminal.CancelCheckoutsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)

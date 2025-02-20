@@ -86,7 +86,7 @@ type CreateLocationRequest struct {
 	Location *Location `json:"location,omitempty" url:"-"`
 }
 
-type LocationsGetRequest struct {
+type GetLocationsRequest struct {
 	// The ID of the location to retrieve. Specify the string
 	// "main" to return the main location.
 	LocationID string `json:"-" url:"-"`

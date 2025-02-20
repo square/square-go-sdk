@@ -88,7 +88,7 @@ func (c *Client) Create(
 // Removes a card on file from a customer.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *customers.CardsDeleteRequest,
+	request *customers.DeleteCardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerCardResponse, error) {
 	options := core.NewRequestOptions(opts...)

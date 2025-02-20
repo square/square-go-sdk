@@ -43,7 +43,7 @@ type CreateInvoiceRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-type InvoicesDeleteRequest struct {
+type DeleteInvoicesRequest struct {
 	// The ID of the invoice to delete.
 	InvoiceID string `json:"-" url:"-"`
 	// The version of the [invoice](entity:Invoice) to delete.
@@ -52,12 +52,12 @@ type InvoicesDeleteRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type InvoicesGetRequest struct {
+type GetInvoicesRequest struct {
 	// The ID of the invoice to retrieve.
 	InvoiceID string `json:"-" url:"-"`
 }
 
-type InvoicesListRequest struct {
+type ListInvoicesRequest struct {
 	// The ID of the location for which to list invoices.
 	LocationID string `json:"-" url:"location_id"`
 	// A pagination cursor returned by a previous call to this endpoint.

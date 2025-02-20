@@ -180,7 +180,7 @@ func (c *Client) Search(
 // Retrieves a specific subscription.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsGetRequest,
+	request *squaregosdk.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -270,7 +270,7 @@ func (c *Client) Update(
 // Deletes a scheduled action for a subscription.
 func (c *Client) DeleteAction(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsDeleteActionRequest,
+	request *squaregosdk.DeleteActionSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteSubscriptionActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -356,7 +356,7 @@ func (c *Client) ChangeBillingAnchorDate(
 // the subscription status changes from ACTIVE to CANCELED.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsCancelRequest,
+	request *squaregosdk.CancelSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelSubscriptionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -396,7 +396,7 @@ func (c *Client) Cancel(
 // Lists all [events](https://developer.squareup.com/docs/subscriptions-api/actions-events) for a specific subscription.
 func (c *Client) ListEvents(
 	ctx context.Context,
-	request *squaregosdk.SubscriptionsListEventsRequest,
+	request *squaregosdk.ListEventsSubscriptionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.SubscriptionEvent], error) {
 	options := core.NewRequestOptions(opts...)

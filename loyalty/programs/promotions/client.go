@@ -44,7 +44,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Results are sorted by the `created_at` date in descending order (newest to oldest).
 func (c *Client) List(
 	ctx context.Context,
-	request *programs.PromotionsListRequest,
+	request *programs.ListPromotionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.LoyaltyPromotion], error) {
 	options := core.NewRequestOptions(opts...)
@@ -153,7 +153,7 @@ func (c *Client) Create(
 // Retrieves a loyalty promotion.
 func (c *Client) Get(
 	ctx context.Context,
-	request *programs.PromotionsGetRequest,
+	request *programs.GetPromotionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -199,7 +199,7 @@ func (c *Client) Get(
 // This endpoint sets the loyalty promotion to the `CANCELED` state
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *programs.PromotionsCancelRequest,
+	request *programs.CancelPromotionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CancelLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists booking profiles for team members.
 func (c *Client) List(
 	ctx context.Context,
-	request *bookings.TeamMemberProfilesListRequest,
+	request *bookings.ListTeamMemberProfilesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.TeamMemberBookingProfile], error) {
 	options := core.NewRequestOptions(opts...)
@@ -102,7 +102,7 @@ func (c *Client) List(
 // Retrieves a team member's booking profile.
 func (c *Client) Get(
 	ctx context.Context,
-	request *bookings.TeamMemberProfilesGetRequest,
+	request *bookings.GetTeamMemberProfilesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTeamMemberBookingProfileResponse, error) {
 	options := core.NewRequestOptions(opts...)

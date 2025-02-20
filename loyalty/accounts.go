@@ -43,7 +43,7 @@ type CreateLoyaltyAccountRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 }
 
-type AccountsGetRequest struct {
+type GetAccountsRequest struct {
 	// The ID of the [loyalty account](entity:LoyaltyAccount) to retrieve.
 	AccountID string `json:"-" url:"-"`
 }

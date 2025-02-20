@@ -6,14 +6,14 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type ShiftsGetRequest struct {
+type GetShiftsRequest struct {
 	// The shift ID.
 	ShiftID string `json:"-" url:"-"`
 	// The ID of the location to retrieve cash drawer shifts from.
 	LocationID string `json:"-" url:"location_id"`
 }
 
-type ShiftsListRequest struct {
+type ListShiftsRequest struct {
 	// The ID of the location to query for a list of cash drawer shifts.
 	LocationID string `json:"-" url:"location_id"`
 	// The order in which cash drawer shifts are listed in the response,
@@ -30,7 +30,7 @@ type ShiftsListRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
-type ShiftsListEventsRequest struct {
+type ListEventsShiftsRequest struct {
 	// The shift ID.
 	ShiftID string `json:"-" url:"-"`
 	// The ID of the location to list cash drawer shifts for.

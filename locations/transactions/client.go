@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Max results per [page](https://developer.squareup.com/docs/working-with-apis/pagination): 50
 func (c *Client) List(
 	ctx context.Context,
-	request *locations.TransactionsListRequest,
+	request *locations.ListTransactionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.ListTransactionsResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -94,7 +94,7 @@ func (c *Client) List(
 // Retrieves details for a single transaction.
 func (c *Client) Get(
 	ctx context.Context,
-	request *locations.TransactionsGetRequest,
+	request *locations.GetTransactionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -139,7 +139,7 @@ func (c *Client) Get(
 // for more information.
 func (c *Client) Capture(
 	ctx context.Context,
-	request *locations.TransactionsCaptureRequest,
+	request *locations.CaptureTransactionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.CaptureTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -184,7 +184,7 @@ func (c *Client) Capture(
 // for more information.
 func (c *Client) Void(
 	ctx context.Context,
-	request *locations.TransactionsVoidRequest,
+	request *locations.VoidTransactionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.VoidTransactionResponse, error) {
 	options := core.NewRequestOptions(opts...)

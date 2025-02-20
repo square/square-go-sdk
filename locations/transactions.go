@@ -6,19 +6,19 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type TransactionsCaptureRequest struct {
+type CaptureTransactionsRequest struct {
 	LocationID    string `json:"-" url:"-"`
 	TransactionID string `json:"-" url:"-"`
 }
 
-type TransactionsGetRequest struct {
+type GetTransactionsRequest struct {
 	// The ID of the transaction's associated location.
 	LocationID string `json:"-" url:"-"`
 	// The ID of the transaction to retrieve.
 	TransactionID string `json:"-" url:"-"`
 }
 
-type TransactionsListRequest struct {
+type ListTransactionsRequest struct {
 	// The ID of the location to list transactions for.
 	LocationID string `json:"-" url:"-"`
 	// The beginning of the requested reporting period, in RFC 3339 format.
@@ -45,7 +45,7 @@ type TransactionsListRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 }
 
-type TransactionsVoidRequest struct {
+type VoidTransactionsRequest struct {
 	LocationID    string `json:"-" url:"-"`
 	TransactionID string `json:"-" url:"-"`
 }

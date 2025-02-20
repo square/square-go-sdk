@@ -35,7 +35,7 @@ type CreateVendorRequest struct {
 	Vendor *Vendor `json:"vendor,omitempty" url:"-"`
 }
 
-type VendorsGetRequest struct {
+type GetVendorsRequest struct {
 	// ID of the [Vendor](entity:Vendor) to retrieve.
 	VendorID string `json:"-" url:"-"`
 }
@@ -925,21 +925,21 @@ func (v VendorStatus) Ptr() *VendorStatus {
 	return &v
 }
 
-type VendorsUpdateRequest struct {
+type UpdateVendorsRequest struct {
 	// ID of the [Vendor](entity:Vendor) to retrieve.
 	VendorID string               `json:"-" url:"-"`
 	Body     *UpdateVendorRequest `json:"-" url:"-"`
 }
 
-func (v *VendorsUpdateRequest) UnmarshalJSON(data []byte) error {
+func (u *UpdateVendorsRequest) UnmarshalJSON(data []byte) error {
 	body := new(UpdateVendorRequest)
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
-	v.Body = body
+	u.Body = body
 	return nil
 }
 
-func (v *VendorsUpdateRequest) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.Body)
+func (u *UpdateVendorsRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
 }

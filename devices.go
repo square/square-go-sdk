@@ -8,12 +8,12 @@ import (
 	internal "github.com/square/square-go-sdk/internal"
 )
 
-type DevicesGetRequest struct {
+type GetDevicesRequest struct {
 	// The unique ID for the desired `Device`.
 	DeviceID string `json:"-" url:"-"`
 }
 
-type DevicesListRequest struct {
+type ListDevicesRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.

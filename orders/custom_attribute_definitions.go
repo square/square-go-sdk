@@ -19,12 +19,12 @@ type CreateOrderCustomAttributeDefinitionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 }
 
-type CustomAttributeDefinitionsDeleteRequest struct {
+type DeleteCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to delete.
 	Key string `json:"-" url:"-"`
 }
 
-type CustomAttributeDefinitionsGetRequest struct {
+type GetCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to retrieve.
 	Key string `json:"-" url:"-"`
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
@@ -32,7 +32,7 @@ type CustomAttributeDefinitionsGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type CustomAttributeDefinitionsListRequest struct {
+type ListCustomAttributeDefinitionsRequest struct {
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
 	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.

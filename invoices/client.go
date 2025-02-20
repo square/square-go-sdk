@@ -44,7 +44,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // use in a subsequent request to retrieve the next set of invoices.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.InvoicesListRequest,
+	request *squaregosdk.ListInvoicesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Invoice], error) {
 	options := core.NewRequestOptions(opts...)
@@ -191,7 +191,7 @@ func (c *Client) Search(
 // Retrieves an invoice by invoice ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.InvoicesGetRequest,
+	request *squaregosdk.GetInvoicesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -278,7 +278,7 @@ func (c *Client) Update(
 // invoice (you cannot delete a published invoice, including one that is scheduled for processing).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.InvoicesDeleteRequest,
+	request *squaregosdk.DeleteInvoicesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteInvoiceResponse, error) {
 	options := core.NewRequestOptions(opts...)

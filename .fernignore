@@ -11,3 +11,23 @@ integration_tests
 verify_signature.go
 webhooks/client/verify_signature.go
 webhooks/client/verify_signature_test.go
+
+# Aliases to preserve backwards compatibility.
+alias.go
+bookings/alias.go
+cashdrawers/alias.go
+catalog/alias.go
+checkout/alias.go
+customers/alias.go
+devices/alias.go
+disputes/alias.go
+giftcards/alias.go
+labor/alias.go
+locations/alias.go
+loyalty/alias.go
+loyalty/programs/alias.go
+merchants/alias.go
+orders/alias.go
+teammembers/alias.go
+terminal/alias.go
+webhooks/alias.go

@@ -48,7 +48,7 @@ type CreateGiftCardRequest struct {
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"-"`
 }
 
-type GiftCardsGetRequest struct {
+type GetGiftCardsRequest struct {
 	// The ID of the gift card to retrieve.
 	ID string `json:"-" url:"-"`
 }
@@ -66,7 +66,7 @@ type GetGiftCardFromNonceRequest struct {
 	Nonce string `json:"nonce" url:"-"`
 }
 
-type GiftCardsListRequest struct {
+type ListGiftCardsRequest struct {
 	// If a [type](entity:GiftCardType) is provided, the endpoint returns gift cards of the specified type.
 	// Otherwise, the endpoint returns gift cards of all types.
 	Type *string `json:"-" url:"type,omitempty"`

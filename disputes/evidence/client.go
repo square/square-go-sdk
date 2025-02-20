@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Returns a list of evidence associated with a dispute.
 func (c *Client) List(
 	ctx context.Context,
-	request *disputes.EvidenceListRequest,
+	request *disputes.ListEvidenceRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.DisputeEvidence], error) {
 	options := core.NewRequestOptions(opts...)
@@ -107,7 +107,7 @@ func (c *Client) List(
 // You must maintain a copy of any evidence uploaded if you want to reference it later. Evidence cannot be downloaded after you upload it.
 func (c *Client) Get(
 	ctx context.Context,
-	request *disputes.EvidenceGetRequest,
+	request *disputes.GetEvidenceRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -149,7 +149,7 @@ func (c *Client) Get(
 // Square does not send the bank any evidence that is removed.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *disputes.EvidenceDeleteRequest,
+	request *disputes.DeleteEvidenceRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)

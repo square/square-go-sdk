@@ -218,7 +218,7 @@ func (c *Client) Search(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrieve-a-team-member).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.TeamMembersGetRequest,
+	request *squaregosdk.GetTeamMembersRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetTeamMemberResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -259,7 +259,7 @@ func (c *Client) Get(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#update-a-team-member).
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.TeamMembersUpdateRequest,
+	request *squaregosdk.UpdateTeamMembersRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.UpdateTeamMemberResponse, error) {
 	options := core.NewRequestOptions(opts...)

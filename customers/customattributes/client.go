@@ -50,7 +50,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) List(
 	ctx context.Context,
-	request *customers.CustomAttributesListRequest,
+	request *customers.ListCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttribute], error) {
 	options := core.NewRequestOptions(opts...)
@@ -119,7 +119,7 @@ func (c *Client) List(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *customers.CustomAttributesGetRequest,
+	request *customers.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -222,7 +222,7 @@ func (c *Client) Upsert(
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *customers.CustomAttributesDeleteRequest,
+	request *customers.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)

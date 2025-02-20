@@ -32,7 +32,7 @@ type CreateCustomerCardRequest struct {
 	VerificationToken *string `json:"verification_token,omitempty" url:"-"`
 }
 
-type CardsDeleteRequest struct {
+type DeleteCardsRequest struct {
 	// The ID of the customer that the card on file belongs to.
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the card on file to delete.

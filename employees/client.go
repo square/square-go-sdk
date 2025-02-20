@@ -41,7 +41,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.EmployeesListRequest,
+	request *squaregosdk.ListEmployeesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Employee], error) {
 	options := core.NewRequestOptions(opts...)
@@ -99,7 +99,7 @@ func (c *Client) List(
 
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.EmployeesGetRequest,
+	request *squaregosdk.GetEmployeesRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetEmployeeResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -14,7 +14,7 @@ type CreateGiftCardActivityRequest struct {
 	GiftCardActivity *squaregosdk.GiftCardActivity `json:"gift_card_activity,omitempty" url:"-"`
 }
 
-type ActivitiesListRequest struct {
+type ListActivitiesRequest struct {
 	// If a gift card ID is provided, the endpoint returns activities related
 	// to the specified gift card. Otherwise, the endpoint returns all gift card activities for
 	// the seller.

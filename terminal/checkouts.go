@@ -6,7 +6,7 @@ import (
 	squaregosdk "github.com/square/square-go-sdk"
 )
 
-type CheckoutsCancelRequest struct {
+type CancelCheckoutsRequest struct {
 	// The unique ID for the desired `TerminalCheckout`.
 	CheckoutID string `json:"-" url:"-"`
 }
@@ -21,7 +21,7 @@ type CreateTerminalCheckoutRequest struct {
 	Checkout *squaregosdk.TerminalCheckout `json:"checkout,omitempty" url:"-"`
 }
 
-type CheckoutsGetRequest struct {
+type GetCheckoutsRequest struct {
 	// The unique ID for the desired `TerminalCheckout`.
 	CheckoutID string `json:"-" url:"-"`
 }

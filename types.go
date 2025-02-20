@@ -18329,6 +18329,7 @@ const (
 	ErrorCodePanFailure                                    ErrorCode = "PAN_FAILURE"
 	ErrorCodeExpirationFailure                             ErrorCode = "EXPIRATION_FAILURE"
 	ErrorCodeCardNotSupported                              ErrorCode = "CARD_NOT_SUPPORTED"
+	ErrorCodeReaderDeclined                                ErrorCode = "READER_DECLINED"
 	ErrorCodeInvalidPin                                    ErrorCode = "INVALID_PIN"
 	ErrorCodeMissingPin                                    ErrorCode = "MISSING_PIN"
 	ErrorCodeMissingAccountType                            ErrorCode = "MISSING_ACCOUNT_TYPE"
@@ -18351,6 +18352,7 @@ const (
 	ErrorCodeRefundAlreadyPending                          ErrorCode = "REFUND_ALREADY_PENDING"
 	ErrorCodePaymentNotRefundable                          ErrorCode = "PAYMENT_NOT_REFUNDABLE"
 	ErrorCodePaymentNotRefundableDueToDispute              ErrorCode = "PAYMENT_NOT_REFUNDABLE_DUE_TO_DISPUTE"
+	ErrorCodeRefundErrorPaymentNeedsCompletion             ErrorCode = "REFUND_ERROR_PAYMENT_NEEDS_COMPLETION"
 	ErrorCodeRefundDeclined                                ErrorCode = "REFUND_DECLINED"
 	ErrorCodeInsufficientPermissionsForRefund              ErrorCode = "INSUFFICIENT_PERMISSIONS_FOR_REFUND"
 	ErrorCodeInvalidCardData                               ErrorCode = "INVALID_CARD_DATA"
@@ -18563,6 +18565,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeExpirationFailure, nil
 	case "CARD_NOT_SUPPORTED":
 		return ErrorCodeCardNotSupported, nil
+	case "READER_DECLINED":
+		return ErrorCodeReaderDeclined, nil
 	case "INVALID_PIN":
 		return ErrorCodeInvalidPin, nil
 	case "MISSING_PIN":
@@ -18607,6 +18611,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePaymentNotRefundable, nil
 	case "PAYMENT_NOT_REFUNDABLE_DUE_TO_DISPUTE":
 		return ErrorCodePaymentNotRefundableDueToDispute, nil
+	case "REFUND_ERROR_PAYMENT_NEEDS_COMPLETION":
+		return ErrorCodeRefundErrorPaymentNeedsCompletion, nil
 	case "REFUND_DECLINED":
 		return ErrorCodeRefundDeclined, nil
 	case "INSUFFICIENT_PERMISSIONS_FOR_REFUND":
@@ -36941,7 +36947,7 @@ type TerminalCheckout struct {
 	// An optional note to associate with the checkout, as well as with any payments used to complete the checkout.
 	// Note: maximum 500 characters
 	Note *string `json:"note,omitempty" url:"note,omitempty"`
-	// The reference to the Square order ID for the checkout request. Supported only in the US.
+	// The reference to the Square order ID for the checkout request.
 	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
 	// Payment-specific options for the checkout request. Supported only in the US.
 	PaymentOptions *PaymentOptions `json:"payment_options,omitempty" url:"payment_options,omitempty"`

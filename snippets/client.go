@@ -45,7 +45,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.SnippetsGetRequest,
+	request *squaregosdk.GetSnippetsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetSnippetResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -136,7 +136,7 @@ func (c *Client) Upsert(
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.SnippetsDeleteRequest,
+	request *squaregosdk.DeleteSnippetsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteSnippetResponse, error) {
 	options := core.NewRequestOptions(opts...)

@@ -44,7 +44,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // in a date range.
 func (c *Client) List(
 	ctx context.Context,
-	request *cashdrawers.ShiftsListRequest,
+	request *cashdrawers.ListShiftsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CashDrawerShiftSummary], error) {
 	options := core.NewRequestOptions(opts...)
@@ -104,7 +104,7 @@ func (c *Client) List(
 // [ListCashDrawerShiftEvents](api-endpoint:CashDrawers-ListCashDrawerShiftEvents) for a list of cash drawer shift events.
 func (c *Client) Get(
 	ctx context.Context,
-	request *cashdrawers.ShiftsGetRequest,
+	request *cashdrawers.GetShiftsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCashDrawerShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -151,7 +151,7 @@ func (c *Client) Get(
 // Provides a paginated list of events for a single cash drawer shift.
 func (c *Client) ListEvents(
 	ctx context.Context,
-	request *cashdrawers.ShiftsListEventsRequest,
+	request *cashdrawers.ListEventsShiftsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CashDrawerShiftEvent], error) {
 	options := core.NewRequestOptions(opts...)

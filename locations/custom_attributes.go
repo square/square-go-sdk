@@ -19,7 +19,7 @@ type BulkUpsertLocationCustomAttributesRequest struct {
 	Values map[string]*squaregosdk.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 }
 
-type CustomAttributesDeleteRequest struct {
+type DeleteCustomAttributesRequest struct {
 	// The ID of the target [location](entity:Location).
 	LocationID string `json:"-" url:"-"`
 	// The key of the custom attribute to delete. This key must match the `key` of a custom
@@ -28,7 +28,7 @@ type CustomAttributesDeleteRequest struct {
 	Key string `json:"-" url:"-"`
 }
 
-type CustomAttributesGetRequest struct {
+type GetCustomAttributesRequest struct {
 	// The ID of the target [location](entity:Location).
 	LocationID string `json:"-" url:"-"`
 	// The key of the custom attribute to retrieve. This key must match the `key` of a custom
@@ -46,7 +46,7 @@ type CustomAttributesGetRequest struct {
 	Version *int `json:"-" url:"version,omitempty"`
 }
 
-type CustomAttributesListRequest struct {
+type ListCustomAttributesRequest struct {
 	// The ID of the target [location](entity:Location).
 	LocationID string `json:"-" url:"-"`
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.

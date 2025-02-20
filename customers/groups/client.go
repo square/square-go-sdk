@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Retrieves the list of customer groups of a business.
 func (c *Client) List(
 	ctx context.Context,
-	request *customers.GroupsListRequest,
+	request *customers.ListGroupsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomerGroup], error) {
 	options := core.NewRequestOptions(opts...)
@@ -143,7 +143,7 @@ func (c *Client) Create(
 // Retrieves a specific customer group as identified by the `group_id` value.
 func (c *Client) Get(
 	ctx context.Context,
-	request *customers.GroupsGetRequest,
+	request *customers.GetGroupsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -225,7 +225,7 @@ func (c *Client) Update(
 // Deletes a customer group as identified by the `group_id` value.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *customers.GroupsDeleteRequest,
+	request *customers.DeleteGroupsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteCustomerGroupResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -268,7 +268,7 @@ func (c *Client) Delete(
 // and the customer group is identified by the `group_id` value.
 func (c *Client) Add(
 	ctx context.Context,
-	request *customers.GroupsAddRequest,
+	request *customers.AddGroupsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.AddGroupToCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -312,7 +312,7 @@ func (c *Client) Add(
 // and the customer group is identified by the `group_id` value.
 func (c *Client) Remove(
 	ctx context.Context,
-	request *customers.GroupsRemoveRequest,
+	request *customers.RemoveGroupsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RemoveGroupFromCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)

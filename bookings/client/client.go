@@ -58,7 +58,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.BookingsListRequest,
+	request *squaregosdk.ListBookingsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Booking], error) {
 	options := core.NewRequestOptions(opts...)
@@ -371,7 +371,7 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.BookingsGetRequest,
+	request *squaregosdk.GetBookingsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetBookingResponse, error) {
 	options := core.NewRequestOptions(opts...)

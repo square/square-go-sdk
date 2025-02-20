@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // A max of 25 cards will be returned.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.CardsListRequest,
+	request *squaregosdk.ListCardsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.Card], error) {
 	options := core.NewRequestOptions(opts...)
@@ -141,7 +141,7 @@ func (c *Client) Create(
 // Retrieves details for a specific Card.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.CardsGetRequest,
+	request *squaregosdk.GetCardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -182,7 +182,7 @@ func (c *Client) Get(
 // Disabling an already disabled card is allowed but has no effect.
 func (c *Client) Disable(
 	ctx context.Context,
-	request *squaregosdk.CardsDisableRequest,
+	request *squaregosdk.DisableCardsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DisableCardResponse, error) {
 	options := core.NewRequestOptions(opts...)

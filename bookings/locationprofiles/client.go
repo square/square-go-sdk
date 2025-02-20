@@ -43,7 +43,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Lists location booking profiles of a seller.
 func (c *Client) List(
 	ctx context.Context,
-	request *bookings.LocationProfilesListRequest,
+	request *bookings.ListLocationProfilesRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.LocationBookingProfile], error) {
 	options := core.NewRequestOptions(opts...)

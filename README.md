@@ -23,12 +23,12 @@ go get github.com/square/square-go-sdk
 package main
 
 import (
+    "context"
+    "fmt"
+
     "github.com/square/square-go-sdk"
     squareclient "github.com/square/square-go-sdk/client"
     "github.com/square/square-go-sdk/option"
-
-    "context"
-    "fmt"
 )
 
 
@@ -79,7 +79,7 @@ For example, consider the `client.Payments.List` endpoint usage below:
 ```go
 response, err := client.Payments.List(
     context.TODO(),
-    &square.PaymentsListRequest{
+    &square.ListPaymentsRequest{
         Total: square.Int64(100),
     },
 )
@@ -100,7 +100,7 @@ You can also configure any arbitrary base URL, which is particularly useful in t
 
 ```go
 client := squareclient.NewClient(
-    option.WithBaseURL("https://example.com),
+    option.WithBaseURL("https://example.com"),
 )
 ```
 
@@ -112,7 +112,7 @@ List endpoints are paginated. The SDK provides an iterator so that you can simpl
 ctx := context.TODO()
 page, err := client.Payments.List(
     ctx,
-    &square.PaymentsListRequest{
+    &square.ListPaymentsRequest{
         Total: square.Int64(100),
     },
 )
@@ -158,7 +158,7 @@ defer cancel()
 
 response, err := client.Payments.List(
     ctx,
-    &square.PaymentsListRequest{
+    &square.ListPaymentsRequest{
         Total: square.Int64(100),
     },
 )
@@ -251,7 +251,7 @@ request (shown above), or for an individual request like so:
 ```go
 response, err := client.Payments.List(
     ctx,
-    &square.PaymentsListRequest{
+    &square.ListPaymentsRequest{
         Total: square.Int64(100),
     },
     option.WithToken("<YOUR_API_KEY>"),
@@ -327,7 +327,7 @@ This can be done for an individual request, too:
 ```go
 response, err := client.Payments.List(
     context.TODO(),
-    &square.PaymentsListRequest{
+    &square.ListPaymentsRequest{
         Total: square.Int64(100),
     },
     option.WithMaxAttempts(1),

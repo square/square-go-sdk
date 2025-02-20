@@ -46,7 +46,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) List(
 	ctx context.Context,
-	request *locations.CustomAttributeDefinitionsListRequest,
+	request *locations.ListCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
@@ -152,7 +152,7 @@ func (c *Client) Create(
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *locations.CustomAttributeDefinitionsGetRequest,
+	request *locations.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.RetrieveLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -247,7 +247,7 @@ func (c *Client) Update(
 // Only the definition owner can delete a custom attribute definition.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *locations.CustomAttributeDefinitionsDeleteRequest,
+	request *locations.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.DeleteLocationCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)

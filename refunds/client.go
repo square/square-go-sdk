@@ -47,7 +47,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.RefundsListRequest,
+	request *squaregosdk.ListRefundsRequest,
 	opts ...option.RequestOption,
 ) (*core.Page[*squaregosdk.PaymentRefund], error) {
 	options := core.NewRequestOptions(opts...)
@@ -148,7 +148,7 @@ func (c *Client) RefundPayment(
 // Retrieves a specific refund using the `refund_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.RefundsGetRequest,
+	request *squaregosdk.GetRefundsRequest,
 	opts ...option.RequestOption,
 ) (*squaregosdk.GetPaymentRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
