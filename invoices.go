@@ -538,6 +538,9 @@ type Invoice struct {
 	// Metadata about the attachments on the invoice. Invoice attachments are managed using the
 	// [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) and [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) endpoints.
 	Attachments []*InvoiceAttachment `json:"attachments,omitempty" url:"attachments,omitempty"`
+	// The ID of the [team member](entity:TeamMember) who created the invoice.
+	// This field is present only on invoices created in the Square Dashboard or Square Invoices app by a logged-in team member.
+	CreatorTeamMemberID *string `json:"creator_team_member_id,omitempty" url:"creator_team_member_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -709,6 +712,13 @@ func (i *Invoice) GetAttachments() []*InvoiceAttachment {
 		return nil
 	}
 	return i.Attachments
+}
+
+func (i *Invoice) GetCreatorTeamMemberID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatorTeamMemberID
 }
 
 func (i *Invoice) GetExtraProperties() map[string]interface{} {
