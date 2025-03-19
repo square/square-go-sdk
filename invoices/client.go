@@ -328,6 +328,8 @@ func (c *Client) Delete(
 //
 // Invoices can have up to 10 attachments with a total file size of 25 MB. Attachments can be added only to invoices
 // in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
+//
+// __NOTE:__ When testing in the Sandbox environment, the total file size is limited to 1 KB.
 func (c *Client) CreateInvoiceAttachment(
 	ctx context.Context,
 	request *squaregosdk.CreateInvoiceAttachmentRequest,

@@ -2676,13 +2676,15 @@ type Card struct {
 	ExpYear *int64 `json:"exp_year,omitempty" url:"exp_year,omitempty"`
 	// The name of the cardholder.
 	CardholderName *string `json:"cardholder_name,omitempty" url:"cardholder_name,omitempty"`
-	// The billing address for this card.
+	// The billing address for this card. `US` postal codes can be provided as a 5-digit zip code
+	// or 9-digit ZIP+4 (example: `12345-6789`). For a full list of field meanings by country, see
+	// [Working with Addresses](https://developer.squareup.com/docs/build-basics/common-data-types/working-with-addresses).
 	BillingAddress *Address `json:"billing_address,omitempty" url:"billing_address,omitempty"`
 	// Intended as a Square-assigned identifier, based
 	// on the card number, to identify the card across multiple locations within a
 	// single application.
 	Fingerprint *string `json:"fingerprint,omitempty" url:"fingerprint,omitempty"`
-	// **Required** The ID of a customer created using the Customers API to be associated with the card.
+	// **Required** The ID of a [customer](entity:Customer) to be associated with the card.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
 	// The ID of the merchant associated with the card.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
@@ -2696,8 +2698,7 @@ type Card struct {
 	// The Card object includes this field only in response to Payments API calls.
 	// See [CardType](#type-cardtype) for possible values
 	CardType *CardType `json:"card_type,omitempty" url:"card_type,omitempty"`
-	// Indicates whether the Card is prepaid or not.
-	// The Card object includes this field only in response to Payments API calls.
+	// Indicates whether the card is prepaid or not.
 	// See [CardPrepaidType](#type-cardprepaidtype) for possible values
 	PrepaidType *CardPrepaidType `json:"prepaid_type,omitempty" url:"prepaid_type,omitempty"`
 	// The first six digits of the card number, known as the Bank Identification Number (BIN). Only the Payments API
@@ -2711,6 +2712,21 @@ type Card struct {
 	// co-brand of AFTERPAY.
 	// See [CardCoBrand](#type-cardcobrand) for possible values
 	CardCoBrand *CardCoBrand `json:"card_co_brand,omitempty" url:"card_co_brand,omitempty"`
+	// An alert from the issuing bank about the card status. Alerts can indicate whether
+	// future charges to the card are likely to fail. For more information, see
+	// [Manage Card on File Declines](https://developer.squareup.com/docs/cards-api/manage-card-on-file-declines).
+	//
+	// This field is present only if there's an active issuer alert.
+	// See [IssuerAlert](#type-issueralert) for possible values
+	IssuerAlert *CardIssuerAlert `json:"issuer_alert,omitempty" url:"issuer_alert,omitempty"`
+	// The timestamp of when the current issuer alert was received and processed, in
+	// RFC 3339 format.
+	//
+	// This field is present only if there's an active issuer alert.
+	IssuerAlertAt *string `json:"issuer_alert_at,omitempty" url:"issuer_alert_at,omitempty"`
+	// Indicates whether the card is linked to a Health Savings Account (HSA) or Flexible
+	// Spending Account (FSA), based on the card BIN.
+	HsaFsa *bool `json:"hsa_fsa,omitempty" url:"hsa_fsa,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2835,6 +2851,20 @@ func (c *Card) GetCardCoBrand() *CardCoBrand {
 	return c.CardCoBrand
 }
 
+func (c *Card) GetIssuerAlertAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IssuerAlertAt
+}
+
+func (c *Card) GetHsaFsa() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HsaFsa
+}
+
 func (c *Card) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
@@ -2951,6 +2981,9 @@ func NewCardCoBrandFromString(s string) (CardCoBrand, error) {
 func (c CardCoBrand) Ptr() *CardCoBrand {
 	return &c
 }
+
+// Indicates the type of issuer alert for a [card on file](entity:Card).
+type CardIssuerAlert = string
 
 // Indicates a card's prepaid type, such as `NOT_PREPAID` or `PREPAID`.
 type CardPrepaidType string
@@ -18360,6 +18393,7 @@ const (
 	ErrorCodeSourceExpired                                 ErrorCode = "SOURCE_EXPIRED"
 	ErrorCodeUnsupportedLoyaltyRewardTier                  ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
 	ErrorCodeLocationMismatch                              ErrorCode = "LOCATION_MISMATCH"
+	ErrorCodeOrderUnpaidNotReturnable                      ErrorCode = "ORDER_UNPAID_NOT_RETURNABLE"
 	ErrorCodeIdempotencyKeyReused                          ErrorCode = "IDEMPOTENCY_KEY_REUSED"
 	ErrorCodeUnexpectedValue                               ErrorCode = "UNEXPECTED_VALUE"
 	ErrorCodeSandboxNotSupported                           ErrorCode = "SANDBOX_NOT_SUPPORTED"
@@ -18627,6 +18661,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeUnsupportedLoyaltyRewardTier, nil
 	case "LOCATION_MISMATCH":
 		return ErrorCodeLocationMismatch, nil
+	case "ORDER_UNPAID_NOT_RETURNABLE":
+		return ErrorCodeOrderUnpaidNotReturnable, nil
 	case "IDEMPOTENCY_KEY_REUSED":
 		return ErrorCodeIdempotencyKeyReused, nil
 	case "UNEXPECTED_VALUE":

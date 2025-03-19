@@ -9,49 +9,63 @@ import (
 )
 
 type ObtainTokenRequest struct {
-	// The Square-issued ID of your application, which is available on the **OAuth** page in the
-	// [Developer Dashboard](https://developer.squareup.com/apps).
+	// The Square-issued ID of your application, which is available as the **Application ID**
+	// on the **OAuth** page in the [Developer Console](https://developer.squareup.com/apps).
+	//
+	// Required for the code flow and PKCE flow for any grant type.
 	ClientID string `json:"client_id" url:"-"`
-	// The Square-issued application secret for your application, which is available on the **OAuth** page
-	// in the [Developer Dashboard](https://developer.squareup.com/apps). This parameter is only required when
-	// you're not using the [OAuth PKCE (Proof Key for Code Exchange) flow](https://developer.squareup.com/docs/oauth-api/overview#pkce-flow).
-	// The PKCE flow requires a `code_verifier` instead of a `client_secret` when `grant_type` is set to `authorization_code`.
-	// If `grant_type` is set to `refresh_token` and the `refresh_token` is obtained uaing PKCE, the PKCE flow only requires `client_id`,
-	// `grant_type`, and `refresh_token`.
+	// The secret key for your application, which is available as the **Application secret**
+	// on the **OAuth** page in the [Developer Console](https://developer.squareup.com/apps).
+	//
+	// Required for the code flow for any grant type. Don't confuse your client secret with your
+	// personal access token.
 	ClientSecret *string `json:"client_secret,omitempty" url:"-"`
-	// The authorization code to exchange.
-	// This code is required if `grant_type` is set to `authorization_code` to indicate that
-	// the application wants to exchange an authorization code for an OAuth access token.
+	// The authorization code to exchange for an OAuth access token. This is the `code`
+	// value that Square sent to your redirect URL in the authorization response.
+	//
+	// Required for the code flow and PKCE flow if `grant_type` is `authorization_code`.
 	Code *string `json:"code,omitempty" url:"-"`
-	// The redirect URL assigned on the **OAuth** page for your application in the [Developer Dashboard](https://developer.squareup.com/apps).
+	// The redirect URL for your application, which you registered as the **Redirect URL**
+	// on the **OAuth** page in the [Developer Console](https://developer.squareup.com/apps).
+	//
+	// Required for the code flow and PKCE flow if `grant_type` is `authorization_code` and
+	// you provided the `redirect_uri` parameter in your authorization URL.
 	RedirectURI *string `json:"redirect_uri,omitempty" url:"-"`
-	// Specifies the method to request an OAuth access token.
-	// Valid values are `authorization_code`, `refresh_token`, and `migration_token`.
+	// The method used to obtain an OAuth access token. The request must include the
+	// credential that corresponds to the specified grant type. Valid values are:
+	// - `authorization_code` - Requires the `code` field.
+	// - `refresh_token` - Requires the `refresh_token` field.
+	// - `migration_token` - LEGACY for access tokens obtained using a Square API version prior
+	// to 2019-03-13. Requires the `migration_token` field.
 	GrantType string `json:"grant_type" url:"-"`
-	// A valid refresh token for generating a new OAuth access token.
+	// A valid refresh token used to generate a new OAuth access token. This is a
+	// refresh token that was returned in a previous `ObtainToken` response.
 	//
-	// A valid refresh token is required if `grant_type` is set to `refresh_token`
-	// to indicate that the application wants a replacement for an expired OAuth access token.
+	// Required for the code flow and PKCE flow if `grant_type` is `refresh_token`.
 	RefreshToken *string `json:"refresh_token,omitempty" url:"-"`
-	// A legacy OAuth access token obtained using a Connect API version prior
-	// to 2019-03-13. This parameter is required if `grant_type` is set to
-	// `migration_token` to indicate that the application wants to get a replacement
-	// OAuth access token. The response also returns a refresh token.
-	// For more information, see [Migrate to Using Refresh Tokens](https://developer.squareup.com/docs/oauth-api/migrate-to-refresh-tokens).
+	// __LEGACY__ A valid access token (obtained using a Square API version prior to 2019-03-13)
+	// used to generate a new OAuth access token.
+	//
+	// Required if `grant_type` is `migration_token`. For more information, see
+	// [Migrate to Using Refresh Tokens](https://developer.squareup.com/docs/oauth-api/migrate-to-refresh-tokens).
 	MigrationToken *string `json:"migration_token,omitempty" url:"-"`
-	// A JSON list of strings representing the permissions that the application is requesting.
-	// For example, "`["MERCHANT_PROFILE_READ","PAYMENTS_READ","BANK_ACCOUNTS_READ"]`".
+	// The list of permissions that are explicitly requested for the access token.
+	// For example, ["MERCHANT_PROFILE_READ","PAYMENTS_READ","BANK_ACCOUNTS_READ"].
 	//
-	// The access token returned in the response is granted the permissions
-	// that comprise the intersection between the requested list of permissions and those
-	// that belong to the provided refresh token.
+	// The returned access token is limited to the permissions that are the intersection
+	// of these requested permissions and those authorized by the provided `refresh_token`.
+	//
+	// Optional for the code flow and PKCE flow if `grant_type` is `refresh_token`.
 	Scopes []string `json:"scopes,omitempty" url:"-"`
-	// A Boolean indicating a request for a short-lived access token.
+	// Indicates whether the returned access token should expire in 24 hours.
 	//
-	// The short-lived access token returned in the response expires in 24 hours.
+	// Optional for the code flow and PKCE flow for any grant type. The default value is `false`.
 	ShortLived *bool `json:"short_lived,omitempty" url:"-"`
-	// Must be provided when using the PKCE OAuth flow if `grant_type` is set to `authorization_code`. The `code_verifier` is used to verify against the
-	// `code_challenge` associated with the `authorization_code`.
+	// The secret your application generated for the authorization request used to
+	// obtain the authorization code. This is the source of the `code_challenge` hash you
+	// provided in your authorization URL.
+	//
+	// Required for the PKCE flow if `grant_type` is `authorization_code`.
 	CodeVerifier *string `json:"code_verifier,omitempty" url:"-"`
 }
 
@@ -71,36 +85,55 @@ type RevokeTokenRequest struct {
 	RevokeOnlyAccessToken *bool `json:"revoke_only_access_token,omitempty" url:"-"`
 }
 
+// Represents an [ObtainToken](api-endpoint:OAuth-ObtainToken) response.
 type ObtainTokenResponse struct {
-	// A valid OAuth access token.
-	// Provide the access token in a header with every request to Connect API
-	// endpoints. For more information, see [OAuth API: Walkthrough](https://developer.squareup.com/docs/oauth-api/walkthrough).
+	// An OAuth access token used to authorize Square API requests on behalf of the seller.
+	// Include this token as a bearer token in the `Authorization` header of your API requests.
+	//
+	// OAuth access tokens expire in 30 days (except `short_lived` access tokens). You should call
+	// `ObtainToken` and provide the returned `refresh_token` to get a new access token well before
+	// the current one expires. For more information, see [OAuth API: Walkthrough](https://developer.squareup.com/docs/oauth-api/walkthrough).
 	AccessToken *string `json:"access_token,omitempty" url:"access_token,omitempty"`
-	// This value is always _bearer_.
+	// The type of access token. This value is always `bearer`.
 	TokenType *string `json:"token_type,omitempty" url:"token_type,omitempty"`
-	// The date when the `access_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	// The timestamp of when the `access_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
-	// The ID of the authorizing merchant's business.
+	// The ID of the authorizing [merchant](entity:Merchant) (seller), which represents a business.
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
-	// __LEGACY FIELD__. The ID of a subscription plan the merchant signed up
-	// for. The ID is only present if the merchant signed up for a subscription plan during authorization.
+	// __LEGACY__ The ID of merchant's subscription.
+	// The ID is only present if the merchant signed up for a subscription plan during authorization.
 	SubscriptionID *string `json:"subscription_id,omitempty" url:"subscription_id,omitempty"`
-	// __LEGACY FIELD__. The ID of the subscription plan the merchant signed
+	// __LEGACY__ The ID of the subscription plan the merchant signed
 	// up for. The ID is only present if the merchant signed up for a subscription plan during
 	// authorization.
 	PlanID *string `json:"plan_id,omitempty" url:"plan_id,omitempty"`
-	// The OpenID token belonging to this person. This token is only present if the
-	// OPENID scope is included in the authorization request.
+	// The OpenID token that belongs to this person. This token is only present if the
+	// `OPENID` scope is included in the authorization request.
+	//
+	// Deprecated at version 2021-09-15. Square doesn't support OpenID or other single sign-on (SSO)
+	// protocols on top of OAuth.
 	IDToken *string `json:"id_token,omitempty" url:"id_token,omitempty"`
-	// A refresh token.
+	// A refresh token that can be used in an `ObtainToken` request to generate a new access token.
+	//
+	// With the code flow:
+	// - For the `authorization_code` grant type, the refresh token is multi-use and never expires.
+	// - For the `refresh_token` grant type, the response returns the same refresh token.
+	//
+	// With the PKCE flow:
+	// - For the `authorization_code` grant type, the refresh token is single-use and expires in 90 days.
+	// - For the `refresh_token` grant type, the refresh token is a new single-use refresh token that expires in 90 days.
+	//
 	// For more information, see [Refresh, Revoke, and Limit the Scope of OAuth Tokens](https://developer.squareup.com/docs/oauth-api/refresh-revoke-limit-scope).
 	RefreshToken *string `json:"refresh_token,omitempty" url:"refresh_token,omitempty"`
-	// A Boolean indicating that the access token is a short-lived access token.
-	// The short-lived access token returned in the response expires in 24 hours.
+	// Indicates whether the access_token is short lived. If `true`, the access token expires
+	// in 24 hours. If `false`, the access token expires in 30 days.
 	ShortLived *bool `json:"short_lived,omitempty" url:"short_lived,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-	// The date when the `refresh_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm) format.
+	// The timestamp of when the `refresh_token` expires, in [ISO 8601](http://www.iso.org/iso/home/standards/iso8601.htm)
+	// format.
+	//
+	// This field is only returned for the PKCE flow.
 	RefreshTokenExpiresAt *string `json:"refresh_token_expires_at,omitempty" url:"refresh_token_expires_at,omitempty"`
 
 	extraProperties map[string]interface{}
