@@ -609,44 +609,6 @@ func (c *CreateLocationResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Indicates the specific day  of the week.
-type DayOfWeek string
-
-const (
-	DayOfWeekSun DayOfWeek = "SUN"
-	DayOfWeekMon DayOfWeek = "MON"
-	DayOfWeekTue DayOfWeek = "TUE"
-	DayOfWeekWed DayOfWeek = "WED"
-	DayOfWeekThu DayOfWeek = "THU"
-	DayOfWeekFri DayOfWeek = "FRI"
-	DayOfWeekSat DayOfWeek = "SAT"
-)
-
-func NewDayOfWeekFromString(s string) (DayOfWeek, error) {
-	switch s {
-	case "SUN":
-		return DayOfWeekSun, nil
-	case "MON":
-		return DayOfWeekMon, nil
-	case "TUE":
-		return DayOfWeekTue, nil
-	case "WED":
-		return DayOfWeekWed, nil
-	case "THU":
-		return DayOfWeekThu, nil
-	case "FRI":
-		return DayOfWeekFri, nil
-	case "SAT":
-		return DayOfWeekSat, nil
-	}
-	var t DayOfWeek
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (d DayOfWeek) Ptr() *DayOfWeek {
-	return &d
-}
-
 // Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
 // endpoint returns in a response.
 type GetLocationResponse struct {
