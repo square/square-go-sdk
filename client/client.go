@@ -65,6 +65,7 @@ type Client struct {
 	GiftCards      *giftcardsclient.Client
 	Inventory      *inventory.Client
 	Invoices       *invoices.Client
+	Labor          *laborclient.Client
 	Locations      *locationsclient.Client
 	Loyalty        *loyaltyclient.Client
 	Merchants      *merchantsclient.Client
@@ -81,7 +82,6 @@ type Client struct {
 	Terminal       *terminalclient.Client
 	Vendors        *vendors.Client
 	CashDrawers    *cashdrawersclient.Client
-	Labor          *laborclient.Client
 	Webhooks       *webhooksclient.Client
 }
 
@@ -118,6 +118,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		GiftCards:      giftcardsclient.NewClient(opts...),
 		Inventory:      inventory.NewClient(opts...),
 		Invoices:       invoices.NewClient(opts...),
+		Labor:          laborclient.NewClient(opts...),
 		Locations:      locationsclient.NewClient(opts...),
 		Loyalty:        loyaltyclient.NewClient(opts...),
 		Merchants:      merchantsclient.NewClient(opts...),
@@ -134,7 +135,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Terminal:       terminalclient.NewClient(opts...),
 		Vendors:        vendors.NewClient(opts...),
 		CashDrawers:    cashdrawersclient.NewClient(opts...),
-		Labor:          laborclient.NewClient(opts...),
 		Webhooks:       webhooksclient.NewClient(opts...),
 	}
 }

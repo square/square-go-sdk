@@ -3,6 +3,8 @@
 package client
 
 import (
+	context "context"
+	squaregosdk "github.com/square/square-go-sdk"
 	core "github.com/square/square-go-sdk/core"
 	internal "github.com/square/square-go-sdk/internal"
 	breaktypes "github.com/square/square-go-sdk/labor/breaktypes"
@@ -50,4 +52,504 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TeamMemberWages: teammemberwages.NewClient(opts...),
 		WorkweekConfigs: workweekconfigs.NewClient(opts...),
 	}
+}
+
+// Creates a scheduled shift by providing draft shift details such as job ID,
+// team member assignment, and start and end times.
+//
+// The following `draft_shift_details` fields are required:
+// - `location_id`
+// - `job_id`
+// - `start_at`
+// - `end_at`
+func (c *Client) CreateScheduledShift(
+	ctx context.Context,
+	request *squaregosdk.CreateScheduledShiftRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.CreateScheduledShiftResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/scheduled-shifts"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.CreateScheduledShiftResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Publishes 1 - 100 scheduled shifts. This endpoint takes a map of individual publish
+// requests and returns a map of responses. When a scheduled shift is published, Square keeps
+// the `draft_shift_details` field as is and copies it to the `published_shift_details` field.
+//
+// The minimum `start_at` and maximum `end_at` timestamps of all shifts in a
+// `BulkPublishScheduledShifts` request must fall within a two-week period.
+func (c *Client) BulkPublishScheduledShifts(
+	ctx context.Context,
+	request *squaregosdk.BulkPublishScheduledShiftsRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.BulkPublishScheduledShiftsResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/scheduled-shifts/bulk-publish"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.BulkPublishScheduledShiftsResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Returns a paginated list of scheduled shifts, with optional filter and sort settings.
+// By default, results are sorted by `start_at` in ascending order.
+func (c *Client) SearchScheduledShifts(
+	ctx context.Context,
+	request *squaregosdk.SearchScheduledShiftsRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.SearchScheduledShiftsResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/scheduled-shifts/search"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.SearchScheduledShiftsResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Retrieves a scheduled shift by ID.
+func (c *Client) RetrieveScheduledShift(
+	ctx context.Context,
+	request *squaregosdk.RetrieveScheduledShiftRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.RetrieveScheduledShiftResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/scheduled-shifts/%v",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.RetrieveScheduledShiftResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Updates the draft shift details for a scheduled shift. This endpoint supports
+// sparse updates, so only new, changed, or removed fields are required in the request.
+// You must publish the shift to make updates public.
+//
+// You can make the following updates to `draft_shift_details`:
+// - Change the `location_id`, `job_id`, `start_at`, and `end_at` fields.
+// - Add, change, or clear the `team_member_id` and `notes` fields. To clear these fields,
+// set the value to null.
+// - Change the `is_deleted` field. To delete a scheduled shift, set `is_deleted` to true
+// and then publish the shift.
+func (c *Client) UpdateScheduledShift(
+	ctx context.Context,
+	request *squaregosdk.UpdateScheduledShiftRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.UpdateScheduledShiftResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/scheduled-shifts/%v",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.UpdateScheduledShiftResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Publishes a scheduled shift. When a scheduled shift is published, Square keeps the
+// `draft_shift_details` field as is and copies it to the `published_shift_details` field.
+func (c *Client) PublishScheduledShift(
+	ctx context.Context,
+	request *squaregosdk.PublishScheduledShiftRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.PublishScheduledShiftResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/scheduled-shifts/%v/publish",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.PublishScheduledShiftResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Creates a new `Timecard`.
+//
+// A `Timecard` represents a complete workday for a single team member.
+// You must provide the following values in your request to this
+// endpoint:
+//
+// - `location_id`
+// - `team_member_id`
+// - `start_at`
+//
+// An attempt to create a new `Timecard` can result in a `BAD_REQUEST` error when:
+// - The `status` of the new `Timecard` is `OPEN` and the team member has another
+// timecard with an `OPEN` status.
+// - The `start_at` date is in the future.
+// - The `start_at` or `end_at` date overlaps another timecard for the same team member.
+// - The `Break` instances are set in the request and a break `start_at`
+// is before the `Timecard.start_at`, a break `end_at` is after
+// the `Timecard.end_at`, or both.
+func (c *Client) CreateTimecard(
+	ctx context.Context,
+	request *squaregosdk.CreateTimecardRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.CreateTimecardResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/timecards"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.CreateTimecardResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Returns a paginated list of `Timecard` records for a business.
+// The list to be returned can be filtered by:
+// - Location IDs
+// - Team member IDs
+// - Timecard status (`OPEN` or `CLOSED`)
+// - Timecard start
+// - Timecard end
+// - Workday details
+//
+// The list can be sorted by:
+// - `START_AT`
+// - `END_AT`
+// - `CREATED_AT`
+// - `UPDATED_AT`
+func (c *Client) SearchTimecards(
+	ctx context.Context,
+	request *squaregosdk.SearchTimecardsRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.SearchTimecardsResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/labor/timecards/search"
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.SearchTimecardsResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Returns a single `Timecard` specified by `id`.
+func (c *Client) RetrieveTimecard(
+	ctx context.Context,
+	request *squaregosdk.RetrieveTimecardRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.RetrieveTimecardResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/timecards/%v",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.RetrieveTimecardResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Updates an existing `Timecard`.
+//
+// When adding a `Break` to a `Timecard`, any earlier `Break` instances in the `Timecard` have
+// the `end_at` property set to a valid RFC-3339 datetime string.
+//
+// When closing a `Timecard`, all `Break` instances in the `Timecard` must be complete with `end_at`
+// set on each `Break`.
+func (c *Client) UpdateTimecard(
+	ctx context.Context,
+	request *squaregosdk.UpdateTimecardRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.UpdateTimecardResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/timecards/%v",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+	headers.Set("Content-Type", "application/json")
+
+	var response *squaregosdk.UpdateTimecardResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Deletes a `Timecard`.
+func (c *Client) DeleteTimecard(
+	ctx context.Context,
+	request *squaregosdk.DeleteTimecardRequest,
+	opts ...option.RequestOption,
+) (*squaregosdk.DeleteTimecardResponse, error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		c.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/labor/timecards/%v",
+		request.ID,
+	)
+	headers := internal.MergeHeaders(
+		c.header.Clone(),
+		options.ToHeader(),
+	)
+
+	var response *squaregosdk.DeleteTimecardResponse
+	if err := c.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodDelete,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }

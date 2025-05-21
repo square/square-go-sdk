@@ -11,9 +11,9 @@ import (
 
 type CreateInvoiceAttachmentRequest struct {
 	// The ID of the [invoice](entity:Invoice) to attach the file to.
-	InvoiceID string      `json:"-" url:"-"`
-	ImageFile io.Reader   `json:"-" url:"-"`
-	Request   interface{} `json:"request,omitempty" url:"-"`
+	InvoiceID string                              `json:"-" url:"-"`
+	ImageFile io.Reader                           `json:"-" url:"-"`
+	Request   *CreateInvoiceAttachmentRequestData `json:"request,omitempty" url:"-"`
 }
 
 type DeleteInvoiceAttachmentRequest struct {
@@ -143,6 +143,64 @@ func (c *CancelInvoiceResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CancelInvoiceResponse) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) request.
+type CreateInvoiceAttachmentRequestData struct {
+	// A unique string that identifies the `CreateInvoiceAttachment` request.
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
+	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
+	// The description of the attachment to display on the invoice.
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateInvoiceAttachmentRequestData) GetIdempotencyKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IdempotencyKey
+}
+
+func (c *CreateInvoiceAttachmentRequestData) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *CreateInvoiceAttachmentRequestData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateInvoiceAttachmentRequestData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateInvoiceAttachmentRequestData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateInvoiceAttachmentRequestData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateInvoiceAttachmentRequestData) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value

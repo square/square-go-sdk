@@ -997,22 +997,24 @@ func (b *BookingCustomAttributeUpsertResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// A record of an employee's break during a shift.
+// A record of a team member's break on a [timecard](entity:Timecard).
 type Break struct {
 	// The UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// RFC 3339; follows the same timezone information as `Shift`. Precision up to
+	// RFC 3339; follows the same timezone information as the [timecard](entity:Timecard). Precision up to
 	// the minute is respected; seconds are truncated.
 	StartAt string `json:"start_at" url:"start_at"`
-	// RFC 3339; follows the same timezone information as `Shift`. Precision up to
+	// RFC 3339; follows the same timezone information as the [timecard](entity:Timecard). Precision up to
 	// the minute is respected; seconds are truncated.
 	EndAt *string `json:"end_at,omitempty" url:"end_at,omitempty"`
-	// The `BreakType` that this `Break` was templated on.
+	// The [BreakType](entity:BreakType) that this break was templated on.
 	BreakTypeID string `json:"break_type_id" url:"break_type_id"`
 	// A human-readable name.
 	Name string `json:"name" url:"name"`
 	// Format: RFC-3339 P[n]Y[n]M[n]DT[n]H[n]M[n]S. The expected length of
 	// the break.
+	//
+	// Example for break expected duration of 15 minutes: PT15M
 	ExpectedDuration string `json:"expected_duration" url:"expected_duration"`
 	// Whether this break counts towards time worked for compensation
 	// purposes.
@@ -1103,20 +1105,20 @@ func (b *Break) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// A defined break template that sets an expectation for possible `Break`
-// instances on a `Shift`.
+// A template for a type of [break](entity:Break) that can be added to a
+// [timecard](entity:Timecard), including the expected duration and paid status.
 type BreakType struct {
 	// The UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// The ID of the business location this type of break applies to.
 	LocationID string `json:"location_id" url:"location_id"`
 	// A human-readable name for this type of break. The name is displayed to
-	// employees in Square products.
+	// team members in Square products.
 	BreakName string `json:"break_name" url:"break_name"`
 	// Format: RFC-3339 P[n]Y[n]M[n]DT[n]H[n]M[n]S. The expected length of
 	// this break. Precision less than minutes is truncated.
 	//
-	// Example for break expected duration of 15 minutes: T15M
+	// Example for break expected duration of 15 minutes: PT15M
 	ExpectedDuration string `json:"expected_duration" url:"expected_duration"`
 	// Whether this break counts towards time worked for compensation
 	// purposes.
@@ -4956,9 +4958,9 @@ type CatalogItem struct {
 	//
 	// Maximum: 6 item options.
 	ItemOptions []*CatalogItemOptionForItem `json:"item_options,omitempty" url:"item_options,omitempty"`
-	// Deprecated; see go/ecomUriUseCases. A URI pointing to a published e-commerce product page for the Item.
+	// Deprecated. A URI pointing to a published e-commerce product page for the Item.
 	EcomURI *string `json:"ecom_uri,omitempty" url:"ecom_uri,omitempty"`
-	// Deprecated; see go/ecomUriUseCases. A comma-separated list of encoded URIs pointing to a set of published e-commerce images for the Item.
+	// Deprecated. A comma-separated list of encoded URIs pointing to a set of published e-commerce images for the Item.
 	EcomImageURIs []string `json:"ecom_image_uris,omitempty" url:"ecom_image_uris,omitempty"`
 	// The IDs of images associated with this `CatalogItem` instance.
 	// These images will be shown to customers in Square Online Store.
@@ -5544,40 +5546,39 @@ func (c CatalogItemFoodAndBeverageDetailsIngredientStandardIngredient) Ptr() *Ca
 	return &c
 }
 
-// References a text-based modifier or a list of non text-based modifiers applied to a `CatalogItem` instance
-// and specifies supported behaviors of the application.
+// Controls how a modifier list is applied to a specific item. This object allows for item-specific customization of modifier list behavior
+// and provides the ability to override global modifier list settings.
 type CatalogItemModifierListInfo struct {
 	// The ID of the `CatalogModifierList` controlled by this `CatalogModifierListInfo`.
 	ModifierListID string `json:"modifier_list_id" url:"modifier_list_id"`
-	// A set of `CatalogModifierOverride` objects that override whether a given `CatalogModifier` is enabled by default.
+	// A set of `CatalogModifierOverride` objects that override default modifier settings for this item.
 	ModifierOverrides []*CatalogModifierOverride `json:"modifier_overrides,omitempty" url:"modifier_overrides,omitempty"`
-	// If 0 or larger, the smallest number of `CatalogModifier`s that must be selected from this `CatalogModifierList`.
-	// The default value is `-1`.
+	// The minimum number of modifiers that must be selected from this modifier list.
+	// Values:
 	//
-	// When  `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
-	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that from zero to the maximum number of modifiers of
-	// the `CatalogModifierList` can be selected from the `CatalogModifierList`.
-	//
-	// When the `CatalogModifierList.selection_type` is `SINGLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
-	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that exactly one modifier must be present in
-	// and can be selected from the `CatalogModifierList`
+	// - 0: No selection is required.
+	// - -1: Default value, the attribute was not set by the client. When `max_selected_modifiers` is
+	// also -1, use the minimum and maximum selection values set on the `CatalogItemModifierList`.
+	// - &gt;0: The required minimum modifier selections. This can be larger than the total `CatalogModifiers` when `allow_quantities` is enabled.
+	// - &lt; -1: Invalid. Treated as no selection required.
 	MinSelectedModifiers *int `json:"min_selected_modifiers,omitempty" url:"min_selected_modifiers,omitempty"`
-	// If 0 or larger, the largest number of `CatalogModifier`s that can be selected from this `CatalogModifierList`.
-	// The default value is `-1`.
+	// The maximum number of modifiers that can be selected.
+	// Values:
 	//
-	// When  `CatalogModifierList.selection_type` is `MULTIPLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
-	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that from zero to the maximum number of modifiers of
-	// the `CatalogModifierList` can be selected from the `CatalogModifierList`.
-	//
-	// When the `CatalogModifierList.selection_type` is `SINGLE`, `CatalogModifierListInfo.min_selected_modifiers=-1`
-	// and `CatalogModifierListInfo.max_selected_modifier=-1` means that exactly one modifier must be present in
-	// and can be selected from the `CatalogModifierList`
+	// - 0: No maximum limit.
+	// - -1: Default value, the attribute was not set by the client. When `min_selected_modifiers` is
+	// also -1, use the minimum and maximum selection values set on the `CatalogItemModifierList`.
+	// - &gt;0: The maximum total modifier selections. This can be larger than the total `CatalogModifiers` when `allow_quantities` is enabled.
+	// - &lt; -1: Invalid. Treated as no maximum limit.
 	MaxSelectedModifiers *int `json:"max_selected_modifiers,omitempty" url:"max_selected_modifiers,omitempty"`
 	// If `true`, enable this `CatalogModifierList`. The default value is `true`.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 	// The position of this `CatalogItemModifierListInfo` object within the `modifier_list_info` list applied
 	// to a `CatalogItem` instance.
-	Ordinal *int `json:"ordinal,omitempty" url:"ordinal,omitempty"`
+	Ordinal                    *int        `json:"ordinal,omitempty" url:"ordinal,omitempty"`
+	AllowQuantities            interface{} `json:"allow_quantities,omitempty" url:"allow_quantities,omitempty"`
+	IsConversational           interface{} `json:"is_conversational,omitempty" url:"is_conversational,omitempty"`
+	HiddenFromCustomerOverride interface{} `json:"hidden_from_customer_override,omitempty" url:"hidden_from_customer_override,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -5623,6 +5624,27 @@ func (c *CatalogItemModifierListInfo) GetOrdinal() *int {
 		return nil
 	}
 	return c.Ordinal
+}
+
+func (c *CatalogItemModifierListInfo) GetAllowQuantities() interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.AllowQuantities
+}
+
+func (c *CatalogItemModifierListInfo) GetIsConversational() interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.IsConversational
+}
+
+func (c *CatalogItemModifierListInfo) GetHiddenFromCustomerOverride() interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.HiddenFromCustomerOverride
 }
 
 func (c *CatalogItemModifierListInfo) GetExtraProperties() map[string]interface{} {
@@ -6326,12 +6348,15 @@ func (c *CatalogMeasurementUnit) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A modifier applicable to items at the time of sale. An example of a modifier is a Cheese add-on to a Burger item.
+// A modifier that can be applied to items at the time of sale. For example, a cheese modifier for a burger, or a flavor modifier for a serving of ice cream.
 type CatalogModifier struct {
 	// The modifier name.  This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// The modifier price.
 	PriceMoney *Money `json:"price_money,omitempty" url:"price_money,omitempty"`
+	// When `true`, this modifier is selected by default when displaying the modifier list.
+	// This setting can be overridden at the item level using `CatalogModifierListInfo.modifier_overrides`.
+	OnByDefault *bool `json:"on_by_default,omitempty" url:"on_by_default,omitempty"`
 	// Determines where this `CatalogModifier` appears in the `CatalogModifierList`.
 	Ordinal *int `json:"ordinal,omitempty" url:"ordinal,omitempty"`
 	// The ID of the `CatalogModifierList` associated with this modifier.
@@ -6341,6 +6366,8 @@ type CatalogModifier struct {
 	// The ID of the image associated with this `CatalogModifier` instance.
 	// Currently this image is not displayed by Square, but is free to be displayed in 3rd party applications.
 	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
+	// When `true`, this modifier is hidden from online ordering channels. This setting can be overridden at the item level using `CatalogModifierListInfo.modifier_overrides`.
+	HiddenOnline *bool `json:"hidden_online,omitempty" url:"hidden_online,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -6358,6 +6385,13 @@ func (c *CatalogModifier) GetPriceMoney() *Money {
 		return nil
 	}
 	return c.PriceMoney
+}
+
+func (c *CatalogModifier) GetOnByDefault() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.OnByDefault
 }
 
 func (c *CatalogModifier) GetOrdinal() *int {
@@ -6386,6 +6420,13 @@ func (c *CatalogModifier) GetImageID() *string {
 		return nil
 	}
 	return c.ImageID
+}
+
+func (c *CatalogModifier) GetHiddenOnline() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HiddenOnline
 }
 
 func (c *CatalogModifier) GetExtraProperties() map[string]interface{} {
@@ -6420,28 +6461,19 @@ func (c *CatalogModifier) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// For a text-based modifier, this encapsulates the modifier's text when its `modifier_type` is `TEXT`.
-// For example, to sell T-shirts with custom prints, a text-based modifier can be used to capture the buyer-supplied
-// text string to be selected for the T-shirt at the time of sale.
-//
-// For non text-based modifiers, this encapsulates a non-empty list of modifiers applicable to items
-// at the time of sale. Each element of the modifier list is a `CatalogObject` instance of the `MODIFIER` type.
-// For example, a "Condiments" modifier list applicable to a "Hot Dog" item
-// may contain "Ketchup", "Mustard", and "Relish" modifiers.
-//
-// A non text-based modifier can be applied to the modified item once or multiple times, if the `selection_type` field
-// is set to `SINGLE` or `MULTIPLE`, respectively. On the other hand, a text-based modifier can be applied to the item
-// only once and the `selection_type` field is always set to `SINGLE`.
+// A container for a list of modifiers, or a text-based modifier.
+// For text-based modifiers, this represents text configuration for an item. (For example, custom text to print on a t-shirt).
+// For non text-based modifiers, this represents a list of modifiers that can be applied to items at the time of sale.
+// (For example, a list of condiments for a hot dog, or a list of ice cream flavors).
+// Each element of the modifier list is a `CatalogObject` instance of the `MODIFIER` type.
 type CatalogModifierList struct {
 	// The name of the `CatalogModifierList` instance. This is a searchable attribute for use in applicable query filters, and its value length is of
 	// Unicode code points.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// The position of this `CatalogModifierList` within a list of `CatalogModifierList` instances.
 	Ordinal *int `json:"ordinal,omitempty" url:"ordinal,omitempty"`
-	// Indicates whether a single (`SINGLE`) or multiple (`MULTIPLE`) modifiers from the list
-	// can be applied to a single `CatalogItem`.
-	//
-	// For text-based modifiers, the `selection_type` attribute is always `SINGLE`. The other value is ignored.
+	// __Deprecated__: Indicates whether a single (`SINGLE`) modifier or multiple (`MULTIPLE`) modifiers can be selected. Use
+	// `min_selected_modifiers` and `max_selected_modifiers` instead.
 	// See [CatalogModifierListSelectionType](#type-catalogmodifierlistselectiontype) for possible values
 	SelectionType *CatalogModifierListSelectionType `json:"selection_type,omitempty" url:"selection_type,omitempty"`
 	// A non-empty list of `CatalogModifier` objects to be included in the `CatalogModifierList`,
@@ -6458,6 +6490,10 @@ type CatalogModifierList struct {
 	// The IDs of images associated with this `CatalogModifierList` instance.
 	// Currently these images are not displayed on Square products, but may be displayed in 3rd-party applications.
 	ImageIDs []string `json:"image_ids,omitempty" url:"image_ids,omitempty"`
+	// When `true`, allows multiple quantities of the same modifier to be selected.
+	AllowQuantities *bool `json:"allow_quantities,omitempty" url:"allow_quantities,omitempty"`
+	// True if modifiers belonging to this list can be used conversationally.
+	IsConversational *bool `json:"is_conversational,omitempty" url:"is_conversational,omitempty"`
 	// The type of the modifier.
 	//
 	// When this `modifier_type` value is `TEXT`,  the `CatalogModifierList` represents a text-based modifier.
@@ -6479,6 +6515,27 @@ type CatalogModifierList struct {
 	// For non text-based modifiers, this `internal_name` attribute can be
 	// used to include SKUs, internal codes, or supplemental descriptions for internal use.
 	InternalName *string `json:"internal_name,omitempty" url:"internal_name,omitempty"`
+	// The minimum number of modifiers that must be selected from this list. The value can be overridden with `CatalogItemModifierListInfo`.
+	//
+	// Values:
+	//
+	// - 0: No selection is required.
+	// - -1: Default value, the attribute was not set by the client. Treated as no selection required.
+	// - &gt;0: The required minimum modifier selections. This can be larger than the total `CatalogModifiers` when `allow_quantities` is enabled.
+	// - &lt; -1: Invalid. Treated as no selection required.
+	MinSelectedModifiers *int64 `json:"min_selected_modifiers,omitempty" url:"min_selected_modifiers,omitempty"`
+	// The maximum number of modifiers that must be selected from this list. The value can be overridden with `CatalogItemModifierListInfo`.
+	//
+	// Values:
+	//
+	// - 0: No maximum limit.
+	// - -1: Default value, the attribute was not set by the client. Treated as no maximum limit.
+	// - &gt;0: The maximum total modifier selections. This can be larger than the total `CatalogModifiers` when `allow_quantities` is enabled.
+	// - &lt; -1: Invalid. Treated as no maximum limit.
+	MaxSelectedModifiers *int64 `json:"max_selected_modifiers,omitempty" url:"max_selected_modifiers,omitempty"`
+	// If `true`, modifiers from this list are hidden from customer receipts. The default value is `false`.
+	// This setting can be overridden with `CatalogItemModifierListInfo.hidden_from_customer_override`.
+	HiddenFromCustomer *bool `json:"hidden_from_customer,omitempty" url:"hidden_from_customer,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -6519,6 +6576,20 @@ func (c *CatalogModifierList) GetImageIDs() []string {
 	return c.ImageIDs
 }
 
+func (c *CatalogModifierList) GetAllowQuantities() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.AllowQuantities
+}
+
+func (c *CatalogModifierList) GetIsConversational() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IsConversational
+}
+
 func (c *CatalogModifierList) GetModifierType() *CatalogModifierListModifierType {
 	if c == nil {
 		return nil
@@ -6545,6 +6616,27 @@ func (c *CatalogModifierList) GetInternalName() *string {
 		return nil
 	}
 	return c.InternalName
+}
+
+func (c *CatalogModifierList) GetMinSelectedModifiers() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.MinSelectedModifiers
+}
+
+func (c *CatalogModifierList) GetMaxSelectedModifiers() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.MaxSelectedModifiers
+}
+
+func (c *CatalogModifierList) GetHiddenFromCustomer() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HiddenFromCustomer
 }
 
 func (c *CatalogModifierList) GetExtraProperties() map[string]interface{} {
@@ -6629,8 +6721,10 @@ func (c CatalogModifierListSelectionType) Ptr() *CatalogModifierListSelectionTyp
 type CatalogModifierOverride struct {
 	// The ID of the `CatalogModifier` whose default behavior is being overridden.
 	ModifierID string `json:"modifier_id" url:"modifier_id"`
-	// If `true`, this `CatalogModifier` should be selected by default for this `CatalogItem`.
-	OnByDefault *bool `json:"on_by_default,omitempty" url:"on_by_default,omitempty"`
+	// __Deprecated__: Use `on_by_default_override` instead.
+	OnByDefault          *bool       `json:"on_by_default,omitempty" url:"on_by_default,omitempty"`
+	HiddenOnlineOverride interface{} `json:"hidden_online_override,omitempty" url:"hidden_online_override,omitempty"`
+	OnByDefaultOverride  interface{} `json:"on_by_default_override,omitempty" url:"on_by_default_override,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -6648,6 +6742,20 @@ func (c *CatalogModifierOverride) GetOnByDefault() *bool {
 		return nil
 	}
 	return c.OnByDefault
+}
+
+func (c *CatalogModifierOverride) GetHiddenOnlineOverride() interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.HiddenOnlineOverride
+}
+
+func (c *CatalogModifierOverride) GetOnByDefaultOverride() interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.OnByDefaultOverride
 }
 
 func (c *CatalogModifierOverride) GetExtraProperties() map[string]interface{} {
@@ -6702,25 +6810,16 @@ type CatalogObject struct {
 	Discount                  *CatalogObjectDiscount
 	ModifierList              *CatalogObjectModifierList
 	Modifier                  *CatalogObjectModifier
-	DiningOption              *CatalogObjectDiningOption
-	TaxExemption              *CatalogObjectTaxExemption
-	ServiceCharge             *CatalogObjectServiceCharge
 	PricingRule               *CatalogObjectPricingRule
 	ProductSet                *CatalogObjectProductSet
 	TimePeriod                *CatalogObjectTimePeriod
 	MeasurementUnit           *CatalogObjectMeasurementUnit
-	SubscriptionPlan          *CatalogObjectSubscriptionPlan
+	SubscriptionPlanVariation *CatalogObjectSubscriptionPlanVariation
 	ItemOption                *CatalogObjectItemOption
 	ItemOptionVal             *CatalogObjectItemOptionValue
 	CustomAttributeDefinition *CatalogObjectCustomAttributeDefinition
 	QuickAmountsSettings      *CatalogObjectQuickAmountsSettings
-	Component                 *CatalogObjectComponent
-	Composition               *CatalogObjectComposition
-	Resource                  *CatalogObjectResource
-	CheckoutLink              *CatalogObjectCheckoutLink
-	Address                   *CatalogObjectAddress
-	SubscriptionProduct       *CatalogObjectSubscriptionProduct
-	SubscriptionPlanVariation *CatalogObjectSubscriptionPlanVariation
+	SubscriptionPlan          *CatalogObjectSubscriptionPlan
 	AvailabilityPeriod        *CatalogObjectAvailabilityPeriod
 }
 
@@ -6787,27 +6886,6 @@ func (c *CatalogObject) GetModifier() *CatalogObjectModifier {
 	return c.Modifier
 }
 
-func (c *CatalogObject) GetDiningOption() *CatalogObjectDiningOption {
-	if c == nil {
-		return nil
-	}
-	return c.DiningOption
-}
-
-func (c *CatalogObject) GetTaxExemption() *CatalogObjectTaxExemption {
-	if c == nil {
-		return nil
-	}
-	return c.TaxExemption
-}
-
-func (c *CatalogObject) GetServiceCharge() *CatalogObjectServiceCharge {
-	if c == nil {
-		return nil
-	}
-	return c.ServiceCharge
-}
-
 func (c *CatalogObject) GetPricingRule() *CatalogObjectPricingRule {
 	if c == nil {
 		return nil
@@ -6836,11 +6914,11 @@ func (c *CatalogObject) GetMeasurementUnit() *CatalogObjectMeasurementUnit {
 	return c.MeasurementUnit
 }
 
-func (c *CatalogObject) GetSubscriptionPlan() *CatalogObjectSubscriptionPlan {
+func (c *CatalogObject) GetSubscriptionPlanVariation() *CatalogObjectSubscriptionPlanVariation {
 	if c == nil {
 		return nil
 	}
-	return c.SubscriptionPlan
+	return c.SubscriptionPlanVariation
 }
 
 func (c *CatalogObject) GetItemOption() *CatalogObjectItemOption {
@@ -6871,53 +6949,11 @@ func (c *CatalogObject) GetQuickAmountsSettings() *CatalogObjectQuickAmountsSett
 	return c.QuickAmountsSettings
 }
 
-func (c *CatalogObject) GetComponent() *CatalogObjectComponent {
+func (c *CatalogObject) GetSubscriptionPlan() *CatalogObjectSubscriptionPlan {
 	if c == nil {
 		return nil
 	}
-	return c.Component
-}
-
-func (c *CatalogObject) GetComposition() *CatalogObjectComposition {
-	if c == nil {
-		return nil
-	}
-	return c.Composition
-}
-
-func (c *CatalogObject) GetResource() *CatalogObjectResource {
-	if c == nil {
-		return nil
-	}
-	return c.Resource
-}
-
-func (c *CatalogObject) GetCheckoutLink() *CatalogObjectCheckoutLink {
-	if c == nil {
-		return nil
-	}
-	return c.CheckoutLink
-}
-
-func (c *CatalogObject) GetAddress() *CatalogObjectAddress {
-	if c == nil {
-		return nil
-	}
-	return c.Address
-}
-
-func (c *CatalogObject) GetSubscriptionProduct() *CatalogObjectSubscriptionProduct {
-	if c == nil {
-		return nil
-	}
-	return c.SubscriptionProduct
-}
-
-func (c *CatalogObject) GetSubscriptionPlanVariation() *CatalogObjectSubscriptionPlanVariation {
-	if c == nil {
-		return nil
-	}
-	return c.SubscriptionPlanVariation
+	return c.SubscriptionPlan
 }
 
 func (c *CatalogObject) GetAvailabilityPeriod() *CatalogObjectAvailabilityPeriod {
@@ -6987,24 +7023,6 @@ func (c *CatalogObject) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.Modifier = value
-	case "DINING_OPTION":
-		value := new(CatalogObjectDiningOption)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.DiningOption = value
-	case "TAX_EXEMPTION":
-		value := new(CatalogObjectTaxExemption)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.TaxExemption = value
-	case "SERVICE_CHARGE":
-		value := new(CatalogObjectServiceCharge)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.ServiceCharge = value
 	case "PRICING_RULE":
 		value := new(CatalogObjectPricingRule)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -7029,12 +7047,12 @@ func (c *CatalogObject) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.MeasurementUnit = value
-	case "SUBSCRIPTION_PLAN":
-		value := new(CatalogObjectSubscriptionPlan)
+	case "SUBSCRIPTION_PLAN_VARIATION":
+		value := new(CatalogObjectSubscriptionPlanVariation)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		c.SubscriptionPlan = value
+		c.SubscriptionPlanVariation = value
 	case "ITEM_OPTION":
 		value := new(CatalogObjectItemOption)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -7059,48 +7077,12 @@ func (c *CatalogObject) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.QuickAmountsSettings = value
-	case "COMPONENT":
-		value := new(CatalogObjectComponent)
+	case "SUBSCRIPTION_PLAN":
+		value := new(CatalogObjectSubscriptionPlan)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
-		c.Component = value
-	case "COMPOSITION":
-		value := new(CatalogObjectComposition)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.Composition = value
-	case "RESOURCE":
-		value := new(CatalogObjectResource)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.Resource = value
-	case "CHECKOUT_LINK":
-		value := new(CatalogObjectCheckoutLink)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.CheckoutLink = value
-	case "ADDRESS":
-		value := new(CatalogObjectAddress)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.Address = value
-	case "SUBSCRIPTION_PRODUCT":
-		value := new(CatalogObjectSubscriptionProduct)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.SubscriptionProduct = value
-	case "SUBSCRIPTION_PLAN_VARIATION":
-		value := new(CatalogObjectSubscriptionPlanVariation)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		c.SubscriptionPlanVariation = value
+		c.SubscriptionPlan = value
 	case "AVAILABILITY_PERIOD":
 		value := new(CatalogObjectAvailabilityPeriod)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -7139,15 +7121,6 @@ func (c CatalogObject) MarshalJSON() ([]byte, error) {
 	if c.Modifier != nil {
 		return internal.MarshalJSONWithExtraProperty(c.Modifier, "type", "MODIFIER")
 	}
-	if c.DiningOption != nil {
-		return internal.MarshalJSONWithExtraProperty(c.DiningOption, "type", "DINING_OPTION")
-	}
-	if c.TaxExemption != nil {
-		return internal.MarshalJSONWithExtraProperty(c.TaxExemption, "type", "TAX_EXEMPTION")
-	}
-	if c.ServiceCharge != nil {
-		return internal.MarshalJSONWithExtraProperty(c.ServiceCharge, "type", "SERVICE_CHARGE")
-	}
 	if c.PricingRule != nil {
 		return internal.MarshalJSONWithExtraProperty(c.PricingRule, "type", "PRICING_RULE")
 	}
@@ -7160,8 +7133,8 @@ func (c CatalogObject) MarshalJSON() ([]byte, error) {
 	if c.MeasurementUnit != nil {
 		return internal.MarshalJSONWithExtraProperty(c.MeasurementUnit, "type", "MEASUREMENT_UNIT")
 	}
-	if c.SubscriptionPlan != nil {
-		return internal.MarshalJSONWithExtraProperty(c.SubscriptionPlan, "type", "SUBSCRIPTION_PLAN")
+	if c.SubscriptionPlanVariation != nil {
+		return internal.MarshalJSONWithExtraProperty(c.SubscriptionPlanVariation, "type", "SUBSCRIPTION_PLAN_VARIATION")
 	}
 	if c.ItemOption != nil {
 		return internal.MarshalJSONWithExtraProperty(c.ItemOption, "type", "ITEM_OPTION")
@@ -7175,26 +7148,8 @@ func (c CatalogObject) MarshalJSON() ([]byte, error) {
 	if c.QuickAmountsSettings != nil {
 		return internal.MarshalJSONWithExtraProperty(c.QuickAmountsSettings, "type", "QUICK_AMOUNTS_SETTINGS")
 	}
-	if c.Component != nil {
-		return internal.MarshalJSONWithExtraProperty(c.Component, "type", "COMPONENT")
-	}
-	if c.Composition != nil {
-		return internal.MarshalJSONWithExtraProperty(c.Composition, "type", "COMPOSITION")
-	}
-	if c.Resource != nil {
-		return internal.MarshalJSONWithExtraProperty(c.Resource, "type", "RESOURCE")
-	}
-	if c.CheckoutLink != nil {
-		return internal.MarshalJSONWithExtraProperty(c.CheckoutLink, "type", "CHECKOUT_LINK")
-	}
-	if c.Address != nil {
-		return internal.MarshalJSONWithExtraProperty(c.Address, "type", "ADDRESS")
-	}
-	if c.SubscriptionProduct != nil {
-		return internal.MarshalJSONWithExtraProperty(c.SubscriptionProduct, "type", "SUBSCRIPTION_PRODUCT")
-	}
-	if c.SubscriptionPlanVariation != nil {
-		return internal.MarshalJSONWithExtraProperty(c.SubscriptionPlanVariation, "type", "SUBSCRIPTION_PLAN_VARIATION")
+	if c.SubscriptionPlan != nil {
+		return internal.MarshalJSONWithExtraProperty(c.SubscriptionPlan, "type", "SUBSCRIPTION_PLAN")
 	}
 	if c.AvailabilityPeriod != nil {
 		return internal.MarshalJSONWithExtraProperty(c.AvailabilityPeriod, "type", "AVAILABILITY_PERIOD")
@@ -7211,25 +7166,16 @@ type CatalogObjectVisitor interface {
 	VisitDiscount(*CatalogObjectDiscount) error
 	VisitModifierList(*CatalogObjectModifierList) error
 	VisitModifier(*CatalogObjectModifier) error
-	VisitDiningOption(*CatalogObjectDiningOption) error
-	VisitTaxExemption(*CatalogObjectTaxExemption) error
-	VisitServiceCharge(*CatalogObjectServiceCharge) error
 	VisitPricingRule(*CatalogObjectPricingRule) error
 	VisitProductSet(*CatalogObjectProductSet) error
 	VisitTimePeriod(*CatalogObjectTimePeriod) error
 	VisitMeasurementUnit(*CatalogObjectMeasurementUnit) error
-	VisitSubscriptionPlan(*CatalogObjectSubscriptionPlan) error
+	VisitSubscriptionPlanVariation(*CatalogObjectSubscriptionPlanVariation) error
 	VisitItemOption(*CatalogObjectItemOption) error
 	VisitItemOptionVal(*CatalogObjectItemOptionValue) error
 	VisitCustomAttributeDefinition(*CatalogObjectCustomAttributeDefinition) error
 	VisitQuickAmountsSettings(*CatalogObjectQuickAmountsSettings) error
-	VisitComponent(*CatalogObjectComponent) error
-	VisitComposition(*CatalogObjectComposition) error
-	VisitResource(*CatalogObjectResource) error
-	VisitCheckoutLink(*CatalogObjectCheckoutLink) error
-	VisitAddress(*CatalogObjectAddress) error
-	VisitSubscriptionProduct(*CatalogObjectSubscriptionProduct) error
-	VisitSubscriptionPlanVariation(*CatalogObjectSubscriptionPlanVariation) error
+	VisitSubscriptionPlan(*CatalogObjectSubscriptionPlan) error
 	VisitAvailabilityPeriod(*CatalogObjectAvailabilityPeriod) error
 }
 
@@ -7258,15 +7204,6 @@ func (c *CatalogObject) Accept(visitor CatalogObjectVisitor) error {
 	if c.Modifier != nil {
 		return visitor.VisitModifier(c.Modifier)
 	}
-	if c.DiningOption != nil {
-		return visitor.VisitDiningOption(c.DiningOption)
-	}
-	if c.TaxExemption != nil {
-		return visitor.VisitTaxExemption(c.TaxExemption)
-	}
-	if c.ServiceCharge != nil {
-		return visitor.VisitServiceCharge(c.ServiceCharge)
-	}
 	if c.PricingRule != nil {
 		return visitor.VisitPricingRule(c.PricingRule)
 	}
@@ -7279,8 +7216,8 @@ func (c *CatalogObject) Accept(visitor CatalogObjectVisitor) error {
 	if c.MeasurementUnit != nil {
 		return visitor.VisitMeasurementUnit(c.MeasurementUnit)
 	}
-	if c.SubscriptionPlan != nil {
-		return visitor.VisitSubscriptionPlan(c.SubscriptionPlan)
+	if c.SubscriptionPlanVariation != nil {
+		return visitor.VisitSubscriptionPlanVariation(c.SubscriptionPlanVariation)
 	}
 	if c.ItemOption != nil {
 		return visitor.VisitItemOption(c.ItemOption)
@@ -7294,26 +7231,8 @@ func (c *CatalogObject) Accept(visitor CatalogObjectVisitor) error {
 	if c.QuickAmountsSettings != nil {
 		return visitor.VisitQuickAmountsSettings(c.QuickAmountsSettings)
 	}
-	if c.Component != nil {
-		return visitor.VisitComponent(c.Component)
-	}
-	if c.Composition != nil {
-		return visitor.VisitComposition(c.Composition)
-	}
-	if c.Resource != nil {
-		return visitor.VisitResource(c.Resource)
-	}
-	if c.CheckoutLink != nil {
-		return visitor.VisitCheckoutLink(c.CheckoutLink)
-	}
-	if c.Address != nil {
-		return visitor.VisitAddress(c.Address)
-	}
-	if c.SubscriptionProduct != nil {
-		return visitor.VisitSubscriptionProduct(c.SubscriptionProduct)
-	}
-	if c.SubscriptionPlanVariation != nil {
-		return visitor.VisitSubscriptionPlanVariation(c.SubscriptionPlanVariation)
+	if c.SubscriptionPlan != nil {
+		return visitor.VisitSubscriptionPlan(c.SubscriptionPlan)
 	}
 	if c.AvailabilityPeriod != nil {
 		return visitor.VisitAvailabilityPeriod(c.AvailabilityPeriod)
@@ -7350,15 +7269,6 @@ func (c *CatalogObject) validate() error {
 	if c.Modifier != nil {
 		fields = append(fields, "MODIFIER")
 	}
-	if c.DiningOption != nil {
-		fields = append(fields, "DINING_OPTION")
-	}
-	if c.TaxExemption != nil {
-		fields = append(fields, "TAX_EXEMPTION")
-	}
-	if c.ServiceCharge != nil {
-		fields = append(fields, "SERVICE_CHARGE")
-	}
 	if c.PricingRule != nil {
 		fields = append(fields, "PRICING_RULE")
 	}
@@ -7371,8 +7281,8 @@ func (c *CatalogObject) validate() error {
 	if c.MeasurementUnit != nil {
 		fields = append(fields, "MEASUREMENT_UNIT")
 	}
-	if c.SubscriptionPlan != nil {
-		fields = append(fields, "SUBSCRIPTION_PLAN")
+	if c.SubscriptionPlanVariation != nil {
+		fields = append(fields, "SUBSCRIPTION_PLAN_VARIATION")
 	}
 	if c.ItemOption != nil {
 		fields = append(fields, "ITEM_OPTION")
@@ -7386,26 +7296,8 @@ func (c *CatalogObject) validate() error {
 	if c.QuickAmountsSettings != nil {
 		fields = append(fields, "QUICK_AMOUNTS_SETTINGS")
 	}
-	if c.Component != nil {
-		fields = append(fields, "COMPONENT")
-	}
-	if c.Composition != nil {
-		fields = append(fields, "COMPOSITION")
-	}
-	if c.Resource != nil {
-		fields = append(fields, "RESOURCE")
-	}
-	if c.CheckoutLink != nil {
-		fields = append(fields, "CHECKOUT_LINK")
-	}
-	if c.Address != nil {
-		fields = append(fields, "ADDRESS")
-	}
-	if c.SubscriptionProduct != nil {
-		fields = append(fields, "SUBSCRIPTION_PRODUCT")
-	}
-	if c.SubscriptionPlanVariation != nil {
-		fields = append(fields, "SUBSCRIPTION_PLAN_VARIATION")
+	if c.SubscriptionPlan != nil {
+		fields = append(fields, "SUBSCRIPTION_PLAN")
 	}
 	if c.AvailabilityPeriod != nil {
 		fields = append(fields, "AVAILABILITY_PERIOD")
@@ -7431,164 +7323,6 @@ func (c *CatalogObject) validate() error {
 		}
 	}
 	return nil
-}
-
-type CatalogObjectAddress struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectAddress) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectAddress) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectAddress) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectAddress) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectAddress) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectAddress) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectAddress) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectAddress) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectAddress) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectAddress) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectAddress) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectAddress) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectAddress
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectAddress(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectAddress) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
 }
 
 type CatalogObjectAvailabilityPeriod struct {
@@ -8089,480 +7823,6 @@ func (c *CatalogObjectCategory) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CatalogObjectCheckoutLink struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectCheckoutLink) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectCheckoutLink) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectCheckoutLink) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectCheckoutLink) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectCheckoutLink) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectCheckoutLink) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectCheckoutLink) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectCheckoutLink) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectCheckoutLink) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectCheckoutLink) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectCheckoutLink) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectCheckoutLink) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectCheckoutLink
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectCheckoutLink(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectCheckoutLink) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CatalogObjectComponent struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectComponent) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectComponent) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectComponent) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectComponent) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectComponent) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectComponent) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectComponent) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectComponent) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectComponent) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectComponent) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectComponent) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectComponent) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectComponent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectComponent(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectComponent) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CatalogObjectComposition struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectComposition) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectComposition) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectComposition) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectComposition) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectComposition) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectComposition) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectComposition) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectComposition) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectComposition) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectComposition) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectComposition) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectComposition) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectComposition
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectComposition(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectComposition) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 type CatalogObjectCustomAttributeDefinition struct {
 	// An identifier to reference this object in the catalog. When a new `CatalogObject`
 	// is inserted, the client should set the id to a temporary identifier starting with
@@ -8719,164 +7979,6 @@ func (c *CatalogObjectCustomAttributeDefinition) UnmarshalJSON(data []byte) erro
 }
 
 func (c *CatalogObjectCustomAttributeDefinition) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CatalogObjectDiningOption struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectDiningOption) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectDiningOption) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectDiningOption) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectDiningOption) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectDiningOption) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectDiningOption) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectDiningOption) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectDiningOption) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectDiningOption) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectDiningOption) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectDiningOption) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectDiningOption) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectDiningOption
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectDiningOption(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectDiningOption) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -10952,322 +10054,6 @@ func (c *CatalogObjectReference) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CatalogObjectResource struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectResource) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectResource) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectResource) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectResource) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectResource) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectResource) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectResource) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectResource) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectResource) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectResource) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectResource) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectResource) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectResource
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectResource(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectResource) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CatalogObjectServiceCharge struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectServiceCharge) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectServiceCharge) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectServiceCharge) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectServiceCharge) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectServiceCharge) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectServiceCharge) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectServiceCharge) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectServiceCharge) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectServiceCharge) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectServiceCharge) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectServiceCharge) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectServiceCharge) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectServiceCharge
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectServiceCharge(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectServiceCharge) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 type CatalogObjectSubscriptionPlan struct {
 	// An identifier to reference this object in the catalog. When a new `CatalogObject`
 	// is inserted, the client should set the id to a temporary identifier starting with
@@ -11602,164 +10388,6 @@ func (c *CatalogObjectSubscriptionPlanVariation) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CatalogObjectSubscriptionProduct struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectSubscriptionProduct) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectSubscriptionProduct) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectSubscriptionProduct
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectSubscriptionProduct(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectSubscriptionProduct) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
 type CatalogObjectTax struct {
 	// An identifier to reference this object in the catalog. When a new `CatalogObject`
 	// is inserted, the client should set the id to a temporary identifier starting with
@@ -11916,164 +10544,6 @@ func (c *CatalogObjectTax) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CatalogObjectTax) String() string {
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type CatalogObjectTaxExemption struct {
-	// An identifier to reference this object in the catalog. When a new `CatalogObject`
-	// is inserted, the client should set the id to a temporary identifier starting with
-	// a "`#`" character. Other objects being inserted or updated within the same request
-	// may use this identifier to refer to the new object.
-	//
-	// When the server receives the new object, it will supply a unique identifier that
-	// replaces the temporary identifier for all future references.
-	ID string `json:"id" url:"id"`
-	// Last modification [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) in RFC 3339 format, e.g., `"2016-08-15T23:59:33.123Z"`
-	// would indicate the UTC time (denoted by `Z`) of August 15, 2016 at 23:59:33 and 123 milliseconds.
-	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
-	// The version of the object. When updating an object, the version supplied
-	// must match the version in the database, otherwise the write will be rejected as conflicting.
-	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
-	// If `true`, the object has been deleted from the database. Must be `false` for new objects
-	// being inserted. When deleted, the `updated_at` field will equal the deletion time.
-	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
-	// A map (key-value pairs) of application-defined custom attribute values. The value of a key-value pair
-	// is a [CatalogCustomAttributeValue](entity:CatalogCustomAttributeValue) object. The key is the `key` attribute
-	// value defined in the associated [CatalogCustomAttributeDefinition](entity:CatalogCustomAttributeDefinition)
-	// object defined by the application making the request.
-	//
-	// If the `CatalogCustomAttributeDefinition` object is
-	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
-	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
-	// if the application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
-	//
-	// Application-defined custom attributes are set at a global (location-independent) level.
-	// Custom attribute values are intended to store additional information about a catalog object
-	// or associations with an entity in another system. Do not use custom attributes
-	// to store any sensitive information (personally identifiable information, card details, etc.).
-	CustomAttributeValues map[string]*CatalogCustomAttributeValue `json:"custom_attribute_values,omitempty" url:"custom_attribute_values,omitempty"`
-	// The Connect v1 IDs for this object at each location where it is present, where they
-	// differ from the object's Connect V2 ID. The field will only be present for objects that
-	// have been created or modified by legacy APIs.
-	CatalogV1IDs []*CatalogV1ID `json:"catalog_v1_ids,omitempty" url:"catalog_v1_ids,omitempty"`
-	// If `true`, this object is present at all locations (including future locations), except where specified in
-	// the `absent_at_location_ids` field. If `false`, this object is not present at any locations (including future locations),
-	// except where specified in the `present_at_location_ids` field. If not specified, defaults to `true`.
-	PresentAtAllLocations *bool `json:"present_at_all_locations,omitempty" url:"present_at_all_locations,omitempty"`
-	// A list of locations where the object is present, even if `present_at_all_locations` is `false`.
-	// This can include locations that are deactivated.
-	PresentAtLocationIDs []string `json:"present_at_location_ids,omitempty" url:"present_at_location_ids,omitempty"`
-	// A list of locations where the object is not present, even if `present_at_all_locations` is `true`.
-	// This can include locations that are deactivated.
-	AbsentAtLocationIDs []string `json:"absent_at_location_ids,omitempty" url:"absent_at_location_ids,omitempty"`
-	// Identifies the `CatalogImage` attached to this `CatalogObject`.
-	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CatalogObjectTaxExemption) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CatalogObjectTaxExemption) GetUpdatedAt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UpdatedAt
-}
-
-func (c *CatalogObjectTaxExemption) GetVersion() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Version
-}
-
-func (c *CatalogObjectTaxExemption) GetIsDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.IsDeleted
-}
-
-func (c *CatalogObjectTaxExemption) GetCustomAttributeValues() map[string]*CatalogCustomAttributeValue {
-	if c == nil {
-		return nil
-	}
-	return c.CustomAttributeValues
-}
-
-func (c *CatalogObjectTaxExemption) GetCatalogV1IDs() []*CatalogV1ID {
-	if c == nil {
-		return nil
-	}
-	return c.CatalogV1IDs
-}
-
-func (c *CatalogObjectTaxExemption) GetPresentAtAllLocations() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtAllLocations
-}
-
-func (c *CatalogObjectTaxExemption) GetPresentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.PresentAtLocationIDs
-}
-
-func (c *CatalogObjectTaxExemption) GetAbsentAtLocationIDs() []string {
-	if c == nil {
-		return nil
-	}
-	return c.AbsentAtLocationIDs
-}
-
-func (c *CatalogObjectTaxExemption) GetImageID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ImageID
-}
-
-func (c *CatalogObjectTaxExemption) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *CatalogObjectTaxExemption) UnmarshalJSON(data []byte) error {
-	type unmarshaler CatalogObjectTaxExemption
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CatalogObjectTaxExemption(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CatalogObjectTaxExemption) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -34934,6 +33404,9 @@ func (s *SelectOptions) String() string {
 // A record of the hourly rate, start, and end times for a single work shift
 // for an employee. This might include a record of the start and end times for breaks
 // taken during the shift.
+//
+// Deprecated at Square API version 2025-05-21. Replaced by [Timecard](entity:Timecard).
+// See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type Shift struct {
 	// The UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -35111,6 +33584,8 @@ func (s *Shift) String() string {
 
 // Defines a filter used in a search for `Shift` records. `AND` logic is
 // used by Square's servers to apply each filter property specified.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftFilter struct {
 	// Fetch shifts for the specified location.
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
@@ -35214,6 +33689,8 @@ func (s *ShiftFilter) String() string {
 }
 
 // Specifies the `status` of `Shift` records to be returned.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftFilterStatus string
 
 const (
@@ -35237,6 +33714,8 @@ func (s ShiftFilterStatus) Ptr() *ShiftFilterStatus {
 }
 
 // The parameters of a `Shift` search query, which includes filter and sort options.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftQuery struct {
 	// Query filter options.
 	Filter *ShiftFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -35294,6 +33773,8 @@ func (s *ShiftQuery) String() string {
 }
 
 // Sets the sort order of search results.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftSort struct {
 	// The field to sort on.
 	// See [ShiftSortField](#type-shiftsortfield) for possible values
@@ -35353,6 +33834,8 @@ func (s *ShiftSort) String() string {
 }
 
 // Enumerates the `Shift` fields to sort on.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftSortField string
 
 const (
@@ -35382,6 +33865,8 @@ func (s ShiftSortField) Ptr() *ShiftSortField {
 }
 
 // Enumerates the possible status of a `Shift`.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftStatus string
 
 const (
@@ -35405,6 +33890,8 @@ func (s ShiftStatus) Ptr() *ShiftStatus {
 }
 
 // The hourly wage rate used to compensate an employee for this shift.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftWage struct {
 	// The name of the job performed during this shift.
 	Title *string `json:"title,omitempty" url:"title,omitempty"`
@@ -35412,7 +33899,7 @@ type ShiftWage struct {
 	// wage based on the annual wage and hours worked per week.
 	HourlyRate *Money `json:"hourly_rate,omitempty" url:"hourly_rate,omitempty"`
 	// The id of the job performed during this shift. Square
-	// labor-reporting UIs might group shifts together by id. This cannot be used to retrieve the job.
+	// labor-reporting UIs might group shifts together by id.
 	JobID *string `json:"job_id,omitempty" url:"job_id,omitempty"`
 	// Whether team members are eligible for tips when working this job.
 	TipEligible *bool `json:"tip_eligible,omitempty" url:"tip_eligible,omitempty"`
@@ -35483,6 +33970,8 @@ func (s *ShiftWage) String() string {
 
 // A `Shift` search query filter parameter that sets a range of days that
 // a `Shift` must start or end in before passing the filter condition.
+//
+// Deprecated at Square API version 2025-05-21. See the [migration notes](https://developer.squareup.com/docs/labor-api/what-it-does#migration-notes).
 type ShiftWorkday struct {
 	// Dates for fetching the shifts.
 	DateRange *DateRange `json:"date_range,omitempty" url:"date_range,omitempty"`
@@ -36305,8 +34794,9 @@ func (t *TeamMemberBookingProfile) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// The hourly wage rate that a team member earns on a `Shift` for doing the job
-// specified by the `title` property of this object.
+// Job and wage information for a [team member](entity:TeamMember).
+// This convenience object provides details needed to specify the `wage`
+// field for a [timecard](entity:Timecard).
 type TeamMemberWage struct {
 	// The UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -36317,8 +34807,7 @@ type TeamMemberWage struct {
 	// Can be a custom-set hourly wage or the calculated effective hourly
 	// wage based on the annual wage and hours worked per week.
 	HourlyRate *Money `json:"hourly_rate,omitempty" url:"hourly_rate,omitempty"`
-	// An identifier for the job that this wage relates to. This cannot be
-	// used to retrieve the job.
+	// An identifier for the [job](entity:Job) that this wage relates to.
 	JobID *string `json:"job_id,omitempty" url:"job_id,omitempty"`
 	// Whether team members are eligible for tips when working this job.
 	TipEligible *bool `json:"tip_eligible,omitempty" url:"tip_eligible,omitempty"`
