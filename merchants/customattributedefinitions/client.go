@@ -5,11 +5,11 @@ package customattributedefinitions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	merchants "github.com/square/square-go-sdk/merchants"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	merchants "github.com/square/square-go-sdk/v2/merchants"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -48,7 +48,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *merchants.ListCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttributeDefinition], error) {
+) (*core.Page[*v2.CustomAttributeDefinition], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,11 +84,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListMerchantCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition] {
+	readPageResponse := func(response *v2.ListMerchantCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v2.CustomAttributeDefinition] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.CustomAttributeDefinitions
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttributeDefinition]{
+		return &internal.PageResponse[*string, *v2.CustomAttributeDefinition]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -113,7 +113,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *merchants.CreateMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.CreateMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,7 +127,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateMerchantCustomAttributeDefinitionResponse
+	var response *v2.CreateMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *merchants.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.RetrieveMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -177,7 +177,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveMerchantCustomAttributeDefinitionResponse
+	var response *v2.RetrieveMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -204,7 +204,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *merchants.UpdateMerchantCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.UpdateMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -221,7 +221,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateMerchantCustomAttributeDefinitionResponse
+	var response *v2.UpdateMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -249,7 +249,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *merchants.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse, error) {
+) (*v2.DeleteMerchantCustomAttributeDefinitionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -265,7 +265,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteMerchantCustomAttributeDefinitionResponse
+	var response *v2.DeleteMerchantCustomAttributeDefinitionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

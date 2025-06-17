@@ -3,20 +3,20 @@
 package locations
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type BulkDeleteLocationCustomAttributesRequest struct {
 	// The data used to update the `CustomAttribute` objects.
 	// The keys must be unique and are used to map to the corresponding response.
-	Values map[string]*squaregosdk.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v2.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
 }
 
 type BulkUpsertLocationCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertLocationCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*squaregosdk.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v2.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 }
 
 type DeleteCustomAttributesRequest struct {
@@ -50,7 +50,7 @@ type ListCustomAttributesRequest struct {
 	// The ID of the target [location](entity:Location).
 	LocationID string `json:"-" url:"-"`
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
-	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v2.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -78,7 +78,7 @@ type UpsertLocationCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include the current version of the custom attribute.
 	// If this is not important for your application, version can be set to -1.
-	CustomAttribute *squaregosdk.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v2.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

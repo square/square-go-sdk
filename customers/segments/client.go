@@ -5,11 +5,11 @@ package segments
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	customers "github.com/square/square-go-sdk/customers"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	customers "github.com/square/square-go-sdk/v2/customers"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *customers.ListSegmentsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomerSegment], error) {
+) (*core.Page[*v2.CustomerSegment], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,11 +81,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCustomerSegmentsResponse) *internal.PageResponse[*string, *squaregosdk.CustomerSegment] {
+	readPageResponse := func(response *v2.ListCustomerSegmentsResponse) *internal.PageResponse[*string, *v2.CustomerSegment] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Segments
-		return &internal.PageResponse[*string, *squaregosdk.CustomerSegment]{
+		return &internal.PageResponse[*string, *v2.CustomerSegment]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -104,7 +104,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *customers.GetSegmentsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCustomerSegmentResponse, error) {
+) (*v2.GetCustomerSegmentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -120,7 +120,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCustomerSegmentResponse
+	var response *v2.GetCustomerSegmentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

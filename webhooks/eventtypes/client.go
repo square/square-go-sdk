@@ -4,11 +4,11 @@ package eventtypes
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	webhooks "github.com/square/square-go-sdk/webhooks"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
+	webhooks "github.com/square/square-go-sdk/v2/webhooks"
 	http "net/http"
 	os "os"
 )
@@ -44,7 +44,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *webhooks.ListEventTypesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.ListWebhookEventTypesResponse, error) {
+) (*v2.ListWebhookEventTypesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -64,7 +64,7 @@ func (c *Client) List(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.ListWebhookEventTypesResponse
+	var response *v2.ListWebhookEventTypesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

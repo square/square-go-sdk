@@ -12,7 +12,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/square/square-go-sdk/core"
+	"github.com/square/square-go-sdk/v2/core"
 )
 
 const (

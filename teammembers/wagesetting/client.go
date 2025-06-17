@@ -4,11 +4,11 @@ package wagesetting
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	teammembers "github.com/square/square-go-sdk/teammembers"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
+	teammembers "github.com/square/square-go-sdk/v2/teammembers"
 	http "net/http"
 	os "os"
 )
@@ -49,7 +49,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *teammembers.GetWageSettingRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetWageSettingResponse, error) {
+) (*v2.GetWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -65,7 +65,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetWageSettingResponse
+	var response *v2.GetWageSettingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -96,7 +96,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *teammembers.UpdateWageSettingRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateWageSettingResponse, error) {
+) (*v2.UpdateWageSettingResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -113,7 +113,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateWageSettingResponse
+	var response *v2.UpdateWageSettingResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

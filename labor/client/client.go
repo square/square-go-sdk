@@ -4,15 +4,15 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	breaktypes "github.com/square/square-go-sdk/labor/breaktypes"
-	employeewages "github.com/square/square-go-sdk/labor/employeewages"
-	shifts "github.com/square/square-go-sdk/labor/shifts"
-	teammemberwages "github.com/square/square-go-sdk/labor/teammemberwages"
-	workweekconfigs "github.com/square/square-go-sdk/labor/workweekconfigs"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	breaktypes "github.com/square/square-go-sdk/v2/labor/breaktypes"
+	employeewages "github.com/square/square-go-sdk/v2/labor/employeewages"
+	shifts "github.com/square/square-go-sdk/v2/labor/shifts"
+	teammemberwages "github.com/square/square-go-sdk/v2/labor/teammemberwages"
+	workweekconfigs "github.com/square/square-go-sdk/v2/labor/workweekconfigs"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -64,9 +64,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // - `end_at`
 func (c *Client) CreateScheduledShift(
 	ctx context.Context,
-	request *squaregosdk.CreateScheduledShiftRequest,
+	request *v2.CreateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateScheduledShiftResponse, error) {
+) (*v2.CreateScheduledShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -80,7 +80,7 @@ func (c *Client) CreateScheduledShift(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateScheduledShiftResponse
+	var response *v2.CreateScheduledShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,9 +108,9 @@ func (c *Client) CreateScheduledShift(
 // `BulkPublishScheduledShifts` request must fall within a two-week period.
 func (c *Client) BulkPublishScheduledShifts(
 	ctx context.Context,
-	request *squaregosdk.BulkPublishScheduledShiftsRequest,
+	request *v2.BulkPublishScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkPublishScheduledShiftsResponse, error) {
+) (*v2.BulkPublishScheduledShiftsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -124,7 +124,7 @@ func (c *Client) BulkPublishScheduledShifts(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkPublishScheduledShiftsResponse
+	var response *v2.BulkPublishScheduledShiftsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -148,9 +148,9 @@ func (c *Client) BulkPublishScheduledShifts(
 // By default, results are sorted by `start_at` in ascending order.
 func (c *Client) SearchScheduledShifts(
 	ctx context.Context,
-	request *squaregosdk.SearchScheduledShiftsRequest,
+	request *v2.SearchScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchScheduledShiftsResponse, error) {
+) (*v2.SearchScheduledShiftsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -164,7 +164,7 @@ func (c *Client) SearchScheduledShifts(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchScheduledShiftsResponse
+	var response *v2.SearchScheduledShiftsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -187,9 +187,9 @@ func (c *Client) SearchScheduledShifts(
 // Retrieves a scheduled shift by ID.
 func (c *Client) RetrieveScheduledShift(
 	ctx context.Context,
-	request *squaregosdk.RetrieveScheduledShiftRequest,
+	request *v2.RetrieveScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveScheduledShiftResponse, error) {
+) (*v2.RetrieveScheduledShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -205,7 +205,7 @@ func (c *Client) RetrieveScheduledShift(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveScheduledShiftResponse
+	var response *v2.RetrieveScheduledShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -236,9 +236,9 @@ func (c *Client) RetrieveScheduledShift(
 // and then publish the shift.
 func (c *Client) UpdateScheduledShift(
 	ctx context.Context,
-	request *squaregosdk.UpdateScheduledShiftRequest,
+	request *v2.UpdateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateScheduledShiftResponse, error) {
+) (*v2.UpdateScheduledShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -255,7 +255,7 @@ func (c *Client) UpdateScheduledShift(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateScheduledShiftResponse
+	var response *v2.UpdateScheduledShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -279,9 +279,9 @@ func (c *Client) UpdateScheduledShift(
 // `draft_shift_details` field as is and copies it to the `published_shift_details` field.
 func (c *Client) PublishScheduledShift(
 	ctx context.Context,
-	request *squaregosdk.PublishScheduledShiftRequest,
+	request *v2.PublishScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.PublishScheduledShiftResponse, error) {
+) (*v2.PublishScheduledShiftResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -298,7 +298,7 @@ func (c *Client) PublishScheduledShift(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.PublishScheduledShiftResponse
+	var response *v2.PublishScheduledShiftResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -338,9 +338,9 @@ func (c *Client) PublishScheduledShift(
 // the `Timecard.end_at`, or both.
 func (c *Client) CreateTimecard(
 	ctx context.Context,
-	request *squaregosdk.CreateTimecardRequest,
+	request *v2.CreateTimecardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateTimecardResponse, error) {
+) (*v2.CreateTimecardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -354,7 +354,7 @@ func (c *Client) CreateTimecard(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateTimecardResponse
+	var response *v2.CreateTimecardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -390,9 +390,9 @@ func (c *Client) CreateTimecard(
 // - `UPDATED_AT`
 func (c *Client) SearchTimecards(
 	ctx context.Context,
-	request *squaregosdk.SearchTimecardsRequest,
+	request *v2.SearchTimecardsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchTimecardsResponse, error) {
+) (*v2.SearchTimecardsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -406,7 +406,7 @@ func (c *Client) SearchTimecards(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchTimecardsResponse
+	var response *v2.SearchTimecardsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -429,9 +429,9 @@ func (c *Client) SearchTimecards(
 // Returns a single `Timecard` specified by `id`.
 func (c *Client) RetrieveTimecard(
 	ctx context.Context,
-	request *squaregosdk.RetrieveTimecardRequest,
+	request *v2.RetrieveTimecardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveTimecardResponse, error) {
+) (*v2.RetrieveTimecardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -447,7 +447,7 @@ func (c *Client) RetrieveTimecard(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveTimecardResponse
+	var response *v2.RetrieveTimecardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -475,9 +475,9 @@ func (c *Client) RetrieveTimecard(
 // set on each `Break`.
 func (c *Client) UpdateTimecard(
 	ctx context.Context,
-	request *squaregosdk.UpdateTimecardRequest,
+	request *v2.UpdateTimecardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateTimecardResponse, error) {
+) (*v2.UpdateTimecardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -494,7 +494,7 @@ func (c *Client) UpdateTimecard(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateTimecardResponse
+	var response *v2.UpdateTimecardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -517,9 +517,9 @@ func (c *Client) UpdateTimecard(
 // Deletes a `Timecard`.
 func (c *Client) DeleteTimecard(
 	ctx context.Context,
-	request *squaregosdk.DeleteTimecardRequest,
+	request *v2.DeleteTimecardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteTimecardResponse, error) {
+) (*v2.DeleteTimecardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -535,7 +535,7 @@ func (c *Client) DeleteTimecard(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteTimecardResponse
+	var response *v2.DeleteTimecardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

@@ -4,11 +4,11 @@ package images
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	catalog "github.com/square/square-go-sdk/catalog"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	catalog "github.com/square/square-go-sdk/v2/catalog"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -49,7 +49,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *catalog.CreateImagesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCatalogImageResponse, error) {
+) (*v2.CreateCatalogImageResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -77,7 +77,7 @@ func (c *Client) Create(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *squaregosdk.CreateCatalogImageResponse
+	var response *v2.CreateCatalogImageResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -105,7 +105,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *catalog.UpdateImagesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateCatalogImageResponse, error) {
+) (*v2.UpdateCatalogImageResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -136,7 +136,7 @@ func (c *Client) Update(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *squaregosdk.UpdateCatalogImageResponse
+	var response *v2.UpdateCatalogImageResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

@@ -4,13 +4,13 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	actions "github.com/square/square-go-sdk/terminal/actions"
-	checkouts "github.com/square/square-go-sdk/terminal/checkouts"
-	refunds "github.com/square/square-go-sdk/terminal/refunds"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
+	actions "github.com/square/square-go-sdk/v2/terminal/actions"
+	checkouts "github.com/square/square-go-sdk/v2/terminal/checkouts"
+	refunds "github.com/square/square-go-sdk/v2/terminal/refunds"
 	http "net/http"
 	os "os"
 )
@@ -53,9 +53,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // See [Link and Dismiss Actions](https://developer.squareup.com/docs/terminal-api/advanced-features/custom-workflows/link-and-dismiss-actions) for more details.
 func (c *Client) DismissTerminalAction(
 	ctx context.Context,
-	request *squaregosdk.DismissTerminalActionRequest,
+	request *v2.DismissTerminalActionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DismissTerminalActionResponse, error) {
+) (*v2.DismissTerminalActionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -71,7 +71,7 @@ func (c *Client) DismissTerminalAction(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DismissTerminalActionResponse
+	var response *v2.DismissTerminalActionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -93,9 +93,9 @@ func (c *Client) DismissTerminalAction(
 // Dismisses a Terminal checkout request if the status and type of the request permits it.
 func (c *Client) DismissTerminalCheckout(
 	ctx context.Context,
-	request *squaregosdk.DismissTerminalCheckoutRequest,
+	request *v2.DismissTerminalCheckoutRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DismissTerminalCheckoutResponse, error) {
+) (*v2.DismissTerminalCheckoutResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -111,7 +111,7 @@ func (c *Client) DismissTerminalCheckout(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DismissTerminalCheckoutResponse
+	var response *v2.DismissTerminalCheckoutResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -133,9 +133,9 @@ func (c *Client) DismissTerminalCheckout(
 // Dismisses a Terminal refund request if the status and type of the request permits it.
 func (c *Client) DismissTerminalRefund(
 	ctx context.Context,
-	request *squaregosdk.DismissTerminalRefundRequest,
+	request *v2.DismissTerminalRefundRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DismissTerminalRefundResponse, error) {
+) (*v2.DismissTerminalRefundResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -151,7 +151,7 @@ func (c *Client) DismissTerminalRefund(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DismissTerminalRefundResponse
+	var response *v2.DismissTerminalRefundResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

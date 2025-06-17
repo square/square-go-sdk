@@ -3,7 +3,7 @@ package internal
 import (
 	"context"
 
-	"github.com/square/square-go-sdk/core"
+	"github.com/square/square-go-sdk/v2/core"
 )
 
 // PagerMode represents the different types of pagination modes.

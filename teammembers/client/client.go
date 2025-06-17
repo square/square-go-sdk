@@ -4,11 +4,11 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	wagesetting "github.com/square/square-go-sdk/teammembers/wagesetting"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
+	wagesetting "github.com/square/square-go-sdk/v2/teammembers/wagesetting"
 	http "net/http"
 	os "os"
 )
@@ -50,9 +50,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#createteammember).
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateTeamMemberRequest,
+	request *v2.CreateTeamMemberRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateTeamMemberResponse, error) {
+) (*v2.CreateTeamMemberResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -66,7 +66,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateTeamMemberResponse
+	var response *v2.CreateTeamMemberResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -94,9 +94,9 @@ func (c *Client) Create(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-create-team-members).
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *squaregosdk.BatchCreateTeamMembersRequest,
+	request *v2.BatchCreateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchCreateTeamMembersResponse, error) {
+) (*v2.BatchCreateTeamMembersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -110,7 +110,7 @@ func (c *Client) BatchCreate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchCreateTeamMembersResponse
+	var response *v2.BatchCreateTeamMembersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -137,9 +137,9 @@ func (c *Client) BatchCreate(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-update-team-members).
 func (c *Client) BatchUpdate(
 	ctx context.Context,
-	request *squaregosdk.BatchUpdateTeamMembersRequest,
+	request *v2.BatchUpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchUpdateTeamMembersResponse, error) {
+) (*v2.BatchUpdateTeamMembersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -153,7 +153,7 @@ func (c *Client) BatchUpdate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchUpdateTeamMembersResponse
+	var response *v2.BatchUpdateTeamMembersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -178,9 +178,9 @@ func (c *Client) BatchUpdate(
 // the team member is the Square account owner.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchTeamMembersRequest,
+	request *v2.SearchTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchTeamMembersResponse, error) {
+) (*v2.SearchTeamMembersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -194,7 +194,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchTeamMembersResponse
+	var response *v2.SearchTeamMembersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -218,9 +218,9 @@ func (c *Client) Search(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrieve-a-team-member).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetTeamMembersRequest,
+	request *v2.GetTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetTeamMemberResponse, error) {
+) (*v2.GetTeamMemberResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -236,7 +236,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetTeamMemberResponse
+	var response *v2.GetTeamMemberResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -259,9 +259,9 @@ func (c *Client) Get(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#update-a-team-member).
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateTeamMembersRequest,
+	request *v2.UpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateTeamMemberResponse, error) {
+) (*v2.UpdateTeamMemberResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -278,7 +278,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateTeamMemberResponse
+	var response *v2.UpdateTeamMemberResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
