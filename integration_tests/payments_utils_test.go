@@ -3,7 +3,7 @@
 package integration
 
 import (
-	"github.com/square/square-go-sdk"
+	square "github.com/square/square-go-sdk/v2"
 )
 
 type TestPaymentRequest struct {
