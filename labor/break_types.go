@@ -3,14 +3,14 @@
 package labor
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CreateBreakTypeRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `BreakType` to be created.
-	BreakType *squaregosdk.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
 }
 
 type DeleteBreakTypesRequest struct {
@@ -38,5 +38,5 @@ type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
-	BreakType *squaregosdk.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
 }

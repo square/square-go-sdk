@@ -5,11 +5,11 @@ package promotions
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	programs "github.com/square/square-go-sdk/loyalty/programs"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	programs "github.com/square/square-go-sdk/v2/loyalty/programs"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -46,7 +46,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *programs.ListPromotionsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.LoyaltyPromotion], error) {
+) (*core.Page[*v2.LoyaltyPromotion], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListLoyaltyPromotionsResponse) *internal.PageResponse[*string, *squaregosdk.LoyaltyPromotion] {
+	readPageResponse := func(response *v2.ListLoyaltyPromotionsResponse) *internal.PageResponse[*string, *v2.LoyaltyPromotion] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.LoyaltyPromotions
-		return &internal.PageResponse[*string, *squaregosdk.LoyaltyPromotion]{
+		return &internal.PageResponse[*string, *v2.LoyaltyPromotion]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -113,7 +113,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *programs.CreateLoyaltyPromotionRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateLoyaltyPromotionResponse, error) {
+) (*v2.CreateLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -130,7 +130,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateLoyaltyPromotionResponse
+	var response *v2.CreateLoyaltyPromotionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -155,7 +155,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *programs.GetPromotionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetLoyaltyPromotionResponse, error) {
+) (*v2.GetLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -172,7 +172,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetLoyaltyPromotionResponse
+	var response *v2.GetLoyaltyPromotionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -201,7 +201,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	request *programs.CancelPromotionsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelLoyaltyPromotionResponse, error) {
+) (*v2.CancelLoyaltyPromotionResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -218,7 +218,7 @@ func (c *Client) Cancel(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CancelLoyaltyPromotionResponse
+	var response *v2.CancelLoyaltyPromotionResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

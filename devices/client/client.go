@@ -5,11 +5,11 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	codes "github.com/square/square-go-sdk/devices/codes"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	codes "github.com/square/square-go-sdk/v2/devices/codes"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -47,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // devices are supported.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.ListDevicesRequest,
+	request *v2.ListDevicesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Device], error) {
+) (*core.Page[*v2.Device], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListDevicesResponse) *internal.PageResponse[*string, *squaregosdk.Device] {
+	readPageResponse := func(response *v2.ListDevicesResponse) *internal.PageResponse[*string, *v2.Device] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Devices
-		return &internal.PageResponse[*string, *squaregosdk.Device]{
+		return &internal.PageResponse[*string, *v2.Device]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -106,9 +106,9 @@ func (c *Client) List(
 // Retrieves Device with the associated `device_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetDevicesRequest,
+	request *v2.GetDevicesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetDeviceResponse, error) {
+) (*v2.GetDeviceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -124,7 +124,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetDeviceResponse
+	var response *v2.GetDeviceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

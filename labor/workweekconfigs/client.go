@@ -5,11 +5,11 @@ package workweekconfigs
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.ListWorkweekConfigsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.WorkweekConfig], error) {
+) (*core.Page[*v2.WorkweekConfig], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,11 +81,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListWorkweekConfigsResponse) *internal.PageResponse[*string, *squaregosdk.WorkweekConfig] {
+	readPageResponse := func(response *v2.ListWorkweekConfigsResponse) *internal.PageResponse[*string, *v2.WorkweekConfig] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.WorkweekConfigs
-		return &internal.PageResponse[*string, *squaregosdk.WorkweekConfig]{
+		return &internal.PageResponse[*string, *v2.WorkweekConfig]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -104,7 +104,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.UpdateWorkweekConfigRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateWorkweekConfigResponse, error) {
+) (*v2.UpdateWorkweekConfigResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -121,7 +121,7 @@ func (c *Client) Get(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateWorkweekConfigResponse
+	var response *v2.UpdateWorkweekConfigResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

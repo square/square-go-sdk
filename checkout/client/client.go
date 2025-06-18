@@ -4,11 +4,11 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	paymentlinks "github.com/square/square-go-sdk/checkout/paymentlinks"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	paymentlinks "github.com/square/square-go-sdk/v2/checkout/paymentlinks"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,9 +45,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Retrieves the location-level settings for a Square-hosted checkout page.
 func (c *Client) RetrieveLocationSettings(
 	ctx context.Context,
-	request *squaregosdk.RetrieveLocationSettingsRequest,
+	request *v2.RetrieveLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveLocationSettingsResponse, error) {
+) (*v2.RetrieveLocationSettingsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,7 +63,7 @@ func (c *Client) RetrieveLocationSettings(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveLocationSettingsResponse
+	var response *v2.RetrieveLocationSettingsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -85,9 +85,9 @@ func (c *Client) RetrieveLocationSettings(
 // Updates the location-level settings for a Square-hosted checkout page.
 func (c *Client) UpdateLocationSettings(
 	ctx context.Context,
-	request *squaregosdk.UpdateLocationSettingsRequest,
+	request *v2.UpdateLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateLocationSettingsResponse, error) {
+) (*v2.UpdateLocationSettingsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -104,7 +104,7 @@ func (c *Client) UpdateLocationSettings(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateLocationSettingsResponse
+	var response *v2.UpdateLocationSettingsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -128,7 +128,7 @@ func (c *Client) UpdateLocationSettings(
 func (c *Client) RetrieveMerchantSettings(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveMerchantSettingsResponse, error) {
+) (*v2.RetrieveMerchantSettingsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -141,7 +141,7 @@ func (c *Client) RetrieveMerchantSettings(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveMerchantSettingsResponse
+	var response *v2.RetrieveMerchantSettingsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -163,9 +163,9 @@ func (c *Client) RetrieveMerchantSettings(
 // Updates the merchant-level settings for a Square-hosted checkout page.
 func (c *Client) UpdateMerchantSettings(
 	ctx context.Context,
-	request *squaregosdk.UpdateMerchantSettingsRequest,
+	request *v2.UpdateMerchantSettingsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateMerchantSettingsResponse, error) {
+) (*v2.UpdateMerchantSettingsResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -179,7 +179,7 @@ func (c *Client) UpdateMerchantSettings(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateMerchantSettingsResponse
+	var response *v2.UpdateMerchantSettingsResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

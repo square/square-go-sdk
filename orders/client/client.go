@@ -4,12 +4,12 @@ package client
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
-	customattributedefinitions "github.com/square/square-go-sdk/orders/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/orders/customattributes"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
+	customattributedefinitions "github.com/square/square-go-sdk/v2/orders/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v2/orders/customattributes"
 	http "net/http"
 	os "os"
 )
@@ -54,9 +54,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // You can modify open orders using the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateOrderRequest,
+	request *v2.CreateOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateOrderResponse, error) {
+) (*v2.CreateOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -70,7 +70,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateOrderResponse
+	var response *v2.CreateOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -95,9 +95,9 @@ func (c *Client) Create(
 // If a given order ID does not exist, the ID is ignored instead of generating an error.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *squaregosdk.BatchGetOrdersRequest,
+	request *v2.BatchGetOrdersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BatchGetOrdersResponse, error) {
+) (*v2.BatchGetOrdersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -111,7 +111,7 @@ func (c *Client) BatchGet(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BatchGetOrdersResponse
+	var response *v2.BatchGetOrdersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -134,9 +134,9 @@ func (c *Client) BatchGet(
 // Enables applications to preview order pricing without creating an order.
 func (c *Client) Calculate(
 	ctx context.Context,
-	request *squaregosdk.CalculateOrderRequest,
+	request *v2.CalculateOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CalculateOrderResponse, error) {
+) (*v2.CalculateOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -150,7 +150,7 @@ func (c *Client) Calculate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CalculateOrderResponse
+	var response *v2.CalculateOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -174,9 +174,9 @@ func (c *Client) Calculate(
 // only the core fields (such as line items, taxes, and discounts) copied from the original order.
 func (c *Client) Clone(
 	ctx context.Context,
-	request *squaregosdk.CloneOrderRequest,
+	request *v2.CloneOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CloneOrderResponse, error) {
+) (*v2.CloneOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -190,7 +190,7 @@ func (c *Client) Clone(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CloneOrderResponse
+	var response *v2.CloneOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -230,9 +230,9 @@ func (c *Client) Clone(
 // not the time it was subsequently transmitted to Square.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchOrdersRequest,
+	request *v2.SearchOrdersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchOrdersResponse, error) {
+) (*v2.SearchOrdersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -246,7 +246,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchOrdersResponse
+	var response *v2.SearchOrdersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -269,9 +269,9 @@ func (c *Client) Search(
 // Retrieves an [Order](entity:Order) by ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetOrdersRequest,
+	request *v2.GetOrdersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetOrderResponse, error) {
+) (*v2.GetOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -287,7 +287,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetOrderResponse
+	var response *v2.GetOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -323,9 +323,9 @@ func (c *Client) Get(
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateOrderRequest,
+	request *v2.UpdateOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateOrderResponse, error) {
+) (*v2.UpdateOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -342,7 +342,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateOrderResponse
+	var response *v2.UpdateOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -378,9 +378,9 @@ func (c *Client) Update(
 // Using a delayed capture payment with `PayOrder` completes the approved payment.
 func (c *Client) Pay(
 	ctx context.Context,
-	request *squaregosdk.PayOrderRequest,
+	request *v2.PayOrderRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.PayOrderResponse, error) {
+) (*v2.PayOrderResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -397,7 +397,7 @@ func (c *Client) Pay(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.PayOrderResponse
+	var response *v2.PayOrderResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

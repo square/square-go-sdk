@@ -5,11 +5,11 @@ package breaktypes
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	labor "github.com/square/square-go-sdk/labor"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	labor "github.com/square/square-go-sdk/v2/labor"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.ListBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.BreakType], error) {
+) (*core.Page[*v2.BreakType], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,11 +81,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListBreakTypesResponse) *internal.PageResponse[*string, *squaregosdk.BreakType] {
+	readPageResponse := func(response *v2.ListBreakTypesResponse) *internal.PageResponse[*string, *v2.BreakType] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.BreakTypes
-		return &internal.PageResponse[*string, *squaregosdk.BreakType]{
+		return &internal.PageResponse[*string, *v2.BreakType]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -117,7 +117,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateBreakTypeResponse, error) {
+) (*v2.CreateBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,7 +131,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateBreakTypeResponse
+	var response *v2.CreateBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -156,7 +156,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.GetBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetBreakTypeResponse, error) {
+) (*v2.GetBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -172,7 +172,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetBreakTypeResponse
+	var response *v2.GetBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -196,7 +196,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateBreakTypeResponse, error) {
+) (*v2.UpdateBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -213,7 +213,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateBreakTypeResponse
+	var response *v2.UpdateBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -240,7 +240,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.DeleteBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteBreakTypeResponse, error) {
+) (*v2.DeleteBreakTypeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -256,7 +256,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteBreakTypeResponse
+	var response *v2.DeleteBreakTypeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

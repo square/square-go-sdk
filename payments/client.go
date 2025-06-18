@@ -5,10 +5,10 @@ package payments
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -47,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.ListPaymentsRequest,
+	request *v2.ListPaymentsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Payment], error) {
+) (*core.Page[*v2.Payment], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListPaymentsResponse) *internal.PageResponse[*string, *squaregosdk.Payment] {
+	readPageResponse := func(response *v2.ListPaymentsResponse) *internal.PageResponse[*string, *v2.Payment] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Payments
-		return &internal.PageResponse[*string, *squaregosdk.Payment]{
+		return &internal.PageResponse[*string, *v2.Payment]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -113,9 +113,9 @@ func (c *Client) List(
 // `Payment` object and returns it in the response.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreatePaymentRequest,
+	request *v2.CreatePaymentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreatePaymentResponse, error) {
+) (*v2.CreatePaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -129,7 +129,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreatePaymentResponse
+	var response *v2.CreatePaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -162,9 +162,9 @@ func (c *Client) Create(
 // returns successfully.
 func (c *Client) CancelByIdempotencyKey(
 	ctx context.Context,
-	request *squaregosdk.CancelPaymentByIdempotencyKeyRequest,
+	request *v2.CancelPaymentByIdempotencyKeyRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelPaymentByIdempotencyKeyResponse, error) {
+) (*v2.CancelPaymentByIdempotencyKeyResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -178,7 +178,7 @@ func (c *Client) CancelByIdempotencyKey(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CancelPaymentByIdempotencyKeyResponse
+	var response *v2.CancelPaymentByIdempotencyKeyResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -201,9 +201,9 @@ func (c *Client) CancelByIdempotencyKey(
 // Retrieves details for a specific payment.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetPaymentsRequest,
+	request *v2.GetPaymentsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetPaymentResponse, error) {
+) (*v2.GetPaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -219,7 +219,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetPaymentResponse
+	var response *v2.GetPaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -242,9 +242,9 @@ func (c *Client) Get(
 // You can update the `amount_money` and `tip_money` using this endpoint.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdatePaymentRequest,
+	request *v2.UpdatePaymentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdatePaymentResponse, error) {
+) (*v2.UpdatePaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -261,7 +261,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdatePaymentResponse
+	var response *v2.UpdatePaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -285,9 +285,9 @@ func (c *Client) Update(
 // the APPROVED `status`.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *squaregosdk.CancelPaymentsRequest,
+	request *v2.CancelPaymentsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CancelPaymentResponse, error) {
+) (*v2.CancelPaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -303,7 +303,7 @@ func (c *Client) Cancel(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.CancelPaymentResponse
+	var response *v2.CancelPaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -328,9 +328,9 @@ func (c *Client) Cancel(
 // You can use this endpoint to complete a payment with the APPROVED `status`.
 func (c *Client) Complete(
 	ctx context.Context,
-	request *squaregosdk.CompletePaymentRequest,
+	request *v2.CompletePaymentRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CompletePaymentResponse, error) {
+) (*v2.CompletePaymentResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -347,7 +347,7 @@ func (c *Client) Complete(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CompletePaymentResponse
+	var response *v2.CompletePaymentResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

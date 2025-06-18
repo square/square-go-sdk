@@ -5,11 +5,11 @@ package evidence
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	disputes "github.com/square/square-go-sdk/disputes"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	disputes "github.com/square/square-go-sdk/v2/disputes"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,7 +45,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *disputes.ListEvidenceRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.DisputeEvidence], error) {
+) (*core.Page[*v2.DisputeEvidence], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,11 +84,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListDisputeEvidenceResponse) *internal.PageResponse[*string, *squaregosdk.DisputeEvidence] {
+	readPageResponse := func(response *v2.ListDisputeEvidenceResponse) *internal.PageResponse[*string, *v2.DisputeEvidence] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Evidence
-		return &internal.PageResponse[*string, *squaregosdk.DisputeEvidence]{
+		return &internal.PageResponse[*string, *v2.DisputeEvidence]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -109,7 +109,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *disputes.GetEvidenceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetDisputeEvidenceResponse, error) {
+) (*v2.GetDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -126,7 +126,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetDisputeEvidenceResponse
+	var response *v2.GetDisputeEvidenceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *disputes.DeleteEvidenceRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteDisputeEvidenceResponse, error) {
+) (*v2.DeleteDisputeEvidenceResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,7 +168,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteDisputeEvidenceResponse
+	var response *v2.DeleteDisputeEvidenceResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

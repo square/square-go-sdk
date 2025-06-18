@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/internal"
+	internal "github.com/square/square-go-sdk/v2/internal"
 )
 
 type AcceptedPaymentMethods struct {
@@ -531,6 +531,625 @@ func (a *AdjustLoyaltyPointsResponse) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// Published when you link an external bank account to a Square
+// account in the Seller Dashboard. Square sets the initial status to
+// `VERIFICATION_IN_PROGRESS` and publishes the event.
+type BankAccountCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountCreatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BankAccountCreatedEvent) GetLocationID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationID
+}
+
+func (b *BankAccountCreatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountCreatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BankAccountCreatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BankAccountCreatedEvent) GetData() *BankAccountCreatedEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BankAccountCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountCreatedEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created bank account.
+	Object *BankAccountCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountCreatedEventData) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountCreatedEventData) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *BankAccountCreatedEventData) GetObject() *BankAccountCreatedEventObject {
+	if b == nil {
+		return nil
+	}
+	return b.Object
+}
+
+func (b *BankAccountCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEventData) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountCreatedEventObject struct {
+	// The created bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountCreatedEventObject) GetBankAccount() *BankAccount {
+	if b == nil {
+		return nil
+	}
+	return b.BankAccount
+}
+
+func (b *BankAccountCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountCreatedEventObject) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when Square sets the status of a
+// [BankAccount](entity:BankAccount) to `DISABLED`.
+type BankAccountDisabledEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.disabled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was disabled, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountDisabledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountDisabledEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BankAccountDisabledEvent) GetLocationID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationID
+}
+
+func (b *BankAccountDisabledEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountDisabledEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BankAccountDisabledEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BankAccountDisabledEvent) GetData() *BankAccountDisabledEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BankAccountDisabledEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountDisabledEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the disabled bank account.
+	Object *BankAccountDisabledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountDisabledEventData) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountDisabledEventData) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *BankAccountDisabledEventData) GetObject() *BankAccountDisabledEventObject {
+	if b == nil {
+		return nil
+	}
+	return b.Object
+}
+
+func (b *BankAccountDisabledEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEventData) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountDisabledEventObject struct {
+	// The disabled bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountDisabledEventObject) GetBankAccount() *BankAccount {
+	if b == nil {
+		return nil
+	}
+	return b.BankAccount
+}
+
+func (b *BankAccountDisabledEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountDisabledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountDisabledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountDisabledEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountDisabledEventObject) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when Square sets the status of a
+// [BankAccount](entity:BankAccount) to `VERIFIED`.
+type BankAccountVerifiedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"bank_account.verified"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *BankAccountVerifiedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountVerifiedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BankAccountVerifiedEvent) GetLocationID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.LocationID
+}
+
+func (b *BankAccountVerifiedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountVerifiedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BankAccountVerifiedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BankAccountVerifiedEvent) GetData() *BankAccountVerifiedEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BankAccountVerifiedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountVerifiedEventData struct {
+	// Name of the affected object’s type, `"bank_account"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected bank account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the verified bank account.
+	Object *BankAccountVerifiedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountVerifiedEventData) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BankAccountVerifiedEventData) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *BankAccountVerifiedEventData) GetObject() *BankAccountVerifiedEventObject {
+	if b == nil {
+		return nil
+	}
+	return b.Object
+}
+
+func (b *BankAccountVerifiedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEventData) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BankAccountVerifiedEventObject struct {
+	// The verified bank account.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BankAccountVerifiedEventObject) GetBankAccount() *BankAccount {
+	if b == nil {
+		return nil
+	}
+	return b.BankAccount
+}
+
+func (b *BankAccountVerifiedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BankAccountVerifiedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BankAccountVerifiedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BankAccountVerifiedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BankAccountVerifiedEventObject) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Represents an individual upsert request in a [BulkUpsertCustomerCustomAttributes](api-endpoint:CustomerCustomAttributes-BulkUpsertCustomerCustomAttributes)
 // request. An individual request contains a customer ID, the custom attribute to create or update,
 // and an optional idempotency key.
@@ -735,6 +1354,724 @@ func (b *BatchUpsertCustomerCustomAttributesResponseCustomerCustomAttributeUpser
 	return fmt.Sprintf("%#v", b)
 }
 
+// Published when a booking is created.
+//
+// To receive this event with buyer-level permissions, you must have `APPOINTMENTS_READ` set for the OAuth scope.
+// To receive this event with seller-level permissions, you must have `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` set for the OAuth scope.
+type BookingCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *BookingCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCreatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCreatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCreatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCreatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCreatedEvent) GetData() *BookingCreatedEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingCreatedEventData struct {
+	// The type of the event data object. The value is `"booking"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created booking.
+	Object *BookingCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCreatedEventData) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCreatedEventData) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *BookingCreatedEventData) GetObject() *BookingCreatedEventObject {
+	if b == nil {
+		return nil
+	}
+	return b.Object
+}
+
+func (b *BookingCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEventData) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingCreatedEventObject struct {
+	// The created booking.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCreatedEventObject) GetBooking() *Booking {
+	if b == nil {
+		return nil
+	}
+	return b.Booking
+}
+
+func (b *BookingCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCreatedEventObject) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application. Subscribe to this event to be notified
+// when your application creates a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is deleted by the subscribing application. Subscribe to this event to be notified
+// when your application deletes a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a booking custom attribute definition.
+type BookingCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is created.
+// An application that subscribes to this event is notified when a booking custom attribute definition is created
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a booking custom attribute definition is deleted
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute definition](entity:CustomAttributeDefinition)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a booking custom attribute definition is updated
+// by any application for which the subscribing application has read access to the booking custom attribute definition.
+type BookingCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeDefinitionVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 // Represents an individual delete request in a [BulkDeleteBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkDeleteBookingCustomAttributes)
 // request. An individual request contains a booking ID, the custom attribute to delete, and an optional idempotency key.
 type BookingCustomAttributeDeleteRequest struct {
@@ -841,6 +2178,180 @@ func (b *BookingCustomAttributeDeleteResponse) UnmarshalJSON(data []byte) error 
 }
 
 func (b *BookingCustomAttributeDeleteResponse) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is deleted.
+// Subscribe to this event to be notified
+// when your application deletes a booking custom attribute.
+type BookingCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetData() *CustomAttributeEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeOwnedDeletedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a booking custom attribute.
+type BookingCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetData() *CustomAttributeEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeOwnedUpdatedEvent) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -986,6 +2497,379 @@ func (b *BookingCustomAttributeUpsertResponse) UnmarshalJSON(data []byte) error 
 }
 
 func (b *BookingCustomAttributeUpsertResponse) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a booking custom attribute is deleted
+// by any application for which the subscribing application has read access to the booking custom attribute.
+type BookingCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetData() *CustomAttributeEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeVisibleDeletedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking [custom attribute](entity:CustomAttribute)
+// with the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a booking custom attribute is updated
+// by any application for which the subscribing application has read access to the booking custom attribute.
+type BookingCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetData() *CustomAttributeEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingCustomAttributeVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Published when a booking is updated or cancelled.
+//
+// To receive this event with buyer-level permissions, you must have `APPOINTMENTS_READ` set for the OAuth scope.
+// To receive this event with seller-level permissions, you must have `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` set for the OAuth scope.
+type BookingUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"booking.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *BookingUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingUpdatedEvent) GetMerchantID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.MerchantID
+}
+
+func (b *BookingUpdatedEvent) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingUpdatedEvent) GetEventID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.EventID
+}
+
+func (b *BookingUpdatedEvent) GetCreatedAt() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CreatedAt
+}
+
+func (b *BookingUpdatedEvent) GetData() *BookingUpdatedEventData {
+	if b == nil {
+		return nil
+	}
+	return b.Data
+}
+
+func (b *BookingUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEvent) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingUpdatedEventData struct {
+	// The type of the event data object. The value is `"booking"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated booking.
+	Object *BookingUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingUpdatedEventData) GetType() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Type
+}
+
+func (b *BookingUpdatedEventData) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
+}
+
+func (b *BookingUpdatedEventData) GetObject() *BookingUpdatedEventObject {
+	if b == nil {
+		return nil
+	}
+	return b.Object
+}
+
+func (b *BookingUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEventData) String() string {
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BookingUpdatedEventObject struct {
+	// The updated booking.
+	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BookingUpdatedEventObject) GetBooking() *Booking {
+	if b == nil {
+		return nil
+	}
+	return b.Booking
+}
+
+func (b *BookingUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BookingUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler BookingUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BookingUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BookingUpdatedEventObject) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -2899,6 +4783,203 @@ func (c *Card) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Published when Square automatically updates the expiration date or
+// primary account number (PAN) of a [card](entity:Card) or adds or removes an issuer alert.
+type CardAutomaticallyUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.automatically_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardAutomaticallyUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetData() *CardAutomaticallyUpdatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CardAutomaticallyUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardAutomaticallyUpdatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the automatically updated card.
+	Object *CardAutomaticallyUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardAutomaticallyUpdatedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardAutomaticallyUpdatedEventData) GetObject() *CardAutomaticallyUpdatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CardAutomaticallyUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardAutomaticallyUpdatedEventObject struct {
+	// The automatically updated card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) GetCard() *Card {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardAutomaticallyUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardAutomaticallyUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardAutomaticallyUpdatedEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Indicates a card's brand, such as `VISA` or `MASTERCARD`.
 type CardBrand string
 
@@ -2984,6 +5065,690 @@ func (c CardCoBrand) Ptr() *CardCoBrand {
 	return &c
 }
 
+// Published when a [card](entity:Card) is created or imported.
+type CardCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardCreatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardCreatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardCreatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CardCreatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CardCreatedEvent) GetData() *CardCreatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CardCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardCreatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created card.
+	Object *CardCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardCreatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardCreatedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardCreatedEventData) GetObject() *CardCreatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CardCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardCreatedEventObject struct {
+	// The created card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardCreatedEventObject) GetCard() *Card {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardCreatedEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [card](entity:Card) is disabled.
+type CardDisabledEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.disabled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardDisabledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardDisabledEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardDisabledEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardDisabledEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CardDisabledEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CardDisabledEvent) GetData() *CardDisabledEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CardDisabledEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardDisabledEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the disabled card.
+	Object *CardDisabledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardDisabledEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardDisabledEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardDisabledEventData) GetObject() *CardDisabledEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CardDisabledEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardDisabledEventObject struct {
+	// The disabled card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardDisabledEventObject) GetCard() *Card {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardDisabledEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardDisabledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardDisabledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardDisabledEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardDisabledEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [card](entity:Card) is GDPR forgotten or vaulted.
+type CardForgottenEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.forgotten"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardForgottenEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardForgottenEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardForgottenEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardForgottenEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CardForgottenEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CardForgottenEvent) GetData() *CardForgottenEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CardForgottenEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventCard struct {
+	// Unique ID for this card. Generated by Square.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// The ID of a customer created using the Customers API associated with the card.
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+	// Indicates whether or not a card can be used for payments.
+	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
+	// An optional user-defined reference ID that associates this card with
+	// another entity in an external system. For example, a customer ID from an
+	// external customer management system.
+	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
+	// Current version number of the card. Increments with each card update. Requests to update an
+	// existing Card object will be rejected unless the version in the request matches the current
+	// version for the Card.
+	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+	// The ID of the merchant associated with the card.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardForgottenEventCard) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardForgottenEventCard) GetCustomerID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CustomerID
+}
+
+func (c *CardForgottenEventCard) GetEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Enabled
+}
+
+func (c *CardForgottenEventCard) GetReferenceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ReferenceID
+}
+
+func (c *CardForgottenEventCard) GetVersion() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.Version
+}
+
+func (c *CardForgottenEventCard) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardForgottenEventCard) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventCard) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventCard
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventCard(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventCard) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the forgotten card.
+	Object *CardForgottenEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardForgottenEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardForgottenEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardForgottenEventData) GetObject() *CardForgottenEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CardForgottenEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardForgottenEventObject struct {
+	// The forgotten card.
+	Card *CardForgottenEventCard `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardForgottenEventObject) GetCard() *CardForgottenEventCard {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardForgottenEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardForgottenEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardForgottenEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardForgottenEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardForgottenEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Indicates the type of issuer alert for a [card on file](entity:Card).
 type CardIssuerAlert = string
 
@@ -3037,6 +5802,202 @@ func NewCardTypeFromString(s string) (CardType, error) {
 
 func (c CardType) Ptr() *CardType {
 	return &c
+}
+
+// Published when a [card](entity:Card) is updated by the seller in the Square Dashboard.
+type CardUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"card.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CardUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CardUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CardUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CardUpdatedEvent) GetData() *CardUpdatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CardUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardUpdatedEventData struct {
+	// The type of the event data object. The value is `"card"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated card.
+	Object *CardUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardUpdatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CardUpdatedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CardUpdatedEventData) GetObject() *CardUpdatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CardUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CardUpdatedEventObject struct {
+	// The updated card.
+	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardUpdatedEventObject) GetCard() *Card {
+	if c == nil {
+		return nil
+	}
+	return c.Card
+}
+
+func (c *CardUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CardUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardUpdatedEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 type CashDrawerDevice struct {
@@ -11823,6 +14784,240 @@ func (c *CatalogV1ID) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Published when the catalog is updated.
+type CatalogVersionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *CatalogVersionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CatalogVersionUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CatalogVersionUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CatalogVersionUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CatalogVersionUpdatedEvent) GetData() *CatalogVersionUpdatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CatalogVersionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventCatalogVersion struct {
+	// Last modification timestamp in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) GetUpdatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.UpdatedAt
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventCatalogVersion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventCatalogVersion(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventCatalogVersion) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventData struct {
+	// Name of the affected object’s type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *CatalogVersionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CatalogVersionUpdatedEventData) GetObject() *CatalogVersionUpdatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CatalogVersionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CatalogVersionUpdatedEventObject struct {
+	// The version of the object.
+	CatalogVersion *CatalogVersionUpdatedEventCatalogVersion `json:"catalog_version,omitempty" url:"catalog_version,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CatalogVersionUpdatedEventObject) GetCatalogVersion() *CatalogVersionUpdatedEventCatalogVersion {
+	if c == nil {
+		return nil
+	}
+	return c.CatalogVersion
+}
+
+func (c *CatalogVersionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CatalogVersionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogVersionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogVersionUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogVersionUpdatedEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // A node in the path from a retrieved category to its root node.
 type CategoryPathToRootNode struct {
 	// The category's ID.
@@ -15152,6 +18347,120 @@ func (c *CustomAttributeDefinition) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Represents an object in the CustomAttributeDefinition event notification
+// payload that contains the affected custom attribute definition.
+type CustomAttributeDefinitionEventData struct {
+	// The type of the event data object. The value is `"custom_attribute_definition"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the custom attribute definition.
+	Object *CustomAttributeDefinitionEventDataObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomAttributeDefinitionEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomAttributeDefinitionEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CustomAttributeDefinitionEventData) GetObject() *CustomAttributeDefinitionEventDataObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CustomAttributeDefinitionEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeDefinitionEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeDefinitionEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeDefinitionEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeDefinitionEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CustomAttributeDefinitionEventDataObject struct {
+	// The custom attribute definition.
+	CustomAttributeDefinition *CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"custom_attribute_definition,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) GetCustomAttributeDefinition() *CustomAttributeDefinition {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttributeDefinition
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeDefinitionEventDataObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeDefinitionEventDataObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeDefinitionEventDataObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // The level of permission that a seller or other applications requires to
 // view this custom attribute definition.
 // The `Visibility` field controls who can read and write the custom attribute values
@@ -15179,6 +18488,118 @@ func NewCustomAttributeDefinitionVisibilityFromString(s string) (CustomAttribute
 
 func (c CustomAttributeDefinitionVisibility) Ptr() *CustomAttributeDefinitionVisibility {
 	return &c
+}
+
+type CustomAttributeEventData struct {
+	// The type of the event data object. The value is `"custom_attribute"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the custom attribute.
+	Object *CustomAttributeEventDataObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomAttributeEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomAttributeEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CustomAttributeEventData) GetObject() *CustomAttributeEventDataObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CustomAttributeEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CustomAttributeEventDataObject struct {
+	// The custom attribute.
+	CustomAttribute *CustomAttribute `json:"custom_attribute,omitempty" url:"custom_attribute,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomAttributeEventDataObject) GetCustomAttribute() *CustomAttribute {
+	if c == nil {
+		return nil
+	}
+	return c.CustomAttribute
+}
+
+func (c *CustomAttributeEventDataObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomAttributeEventDataObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomAttributeEventDataObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomAttributeEventDataObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomAttributeEventDataObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Describes a custom form field to add to the checkout page to collect more information from buyers during checkout.
@@ -15220,6 +18641,2409 @@ func (c *CustomField) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CustomField) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [customer](entity:Customer) is created. Subscribe to this event to track customer profiles affected by a merge operation.
+// For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// The `customer` object in the event notification does not include the `segment_ids` field.
+type CustomerCreatedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCreatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCreatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCreatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCreatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCreatedEvent) GetData() *CustomerCreatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new customer.
+	Object *CustomerCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCreatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCreatedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CustomerCreatedEventData) GetObject() *CustomerCreatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CustomerCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about the change that triggered the event.
+type CustomerCreatedEventEventContext struct {
+	// Information about the merge operation associated with the event.
+	Merge *CustomerCreatedEventEventContextMerge `json:"merge,omitempty" url:"merge,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCreatedEventEventContext) GetMerge() *CustomerCreatedEventEventContextMerge {
+	if c == nil {
+		return nil
+	}
+	return c.Merge
+}
+
+func (c *CustomerCreatedEventEventContext) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventEventContext) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventEventContext
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventEventContext(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventEventContext) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about a merge operation, which creates a new customer using aggregated properties from two or more existing customers.
+type CustomerCreatedEventEventContextMerge struct {
+	// The IDs of the existing customers that were merged and then deleted.
+	FromCustomerIDs []string `json:"from_customer_ids,omitempty" url:"from_customer_ids,omitempty"`
+	// The ID of the new customer created by the merge.
+	ToCustomerID *string `json:"to_customer_id,omitempty" url:"to_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCreatedEventEventContextMerge) GetFromCustomerIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.FromCustomerIDs
+}
+
+func (c *CustomerCreatedEventEventContextMerge) GetToCustomerID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ToCustomerID
+}
+
+func (c *CustomerCreatedEventEventContextMerge) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventEventContextMerge) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventEventContextMerge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventEventContextMerge(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventEventContextMerge) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerCreatedEventObject struct {
+	// The new customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+	// Information about the change that triggered the event. This field is returned only if the customer is created by a merge operation.
+	EventContext *CustomerCreatedEventEventContext `json:"event_context,omitempty" url:"event_context,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCreatedEventObject) GetCustomer() *Customer {
+	if c == nil {
+		return nil
+	}
+	return c.Customer
+}
+
+func (c *CustomerCreatedEventObject) GetEventContext() *CustomerCreatedEventEventContext {
+	if c == nil {
+		return nil
+	}
+	return c.EventContext
+}
+
+func (c *CustomerCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCreatedEventObject) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.created](webhook:customer.custom_attribute_definition.owned.created).
+type CustomerCustomAttributeDefinitionCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is created. A notification is sent when any application creates a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.created](webhook:customer.custom_attribute_definition.visible.created),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionCreatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionCreatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionCreatedPublicEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionCreatedPublicEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.deleted](webhook:customer.custom_attribute_definition.owned.deleted).
+type CustomerCustomAttributeDefinitionDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is deleted. A notification is sent when any application deletes a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.deleted](webhook:customer.custom_attribute_definition.visible.deleted),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionDeletedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionDeletedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionDeletedPublicEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionDeletedPublicEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+type CustomerCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+type CustomerCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated by
+// the application that created it.
+type CustomerCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated by
+// the application that created it.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.owned.updated](webhook:customer.custom_attribute_definition.owned.updated).
+type CustomerCustomAttributeDefinitionUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to all applications is updated. A notification is sent when any application updates a custom
+// attribute definition whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute_definition.visible.updated](webhook:customer.custom_attribute_definition.visible.updated),
+// which applies to custom attribute definitions that are visible to the subscribing application.
+type CustomerCustomAttributeDefinitionUpdatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.public.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionUpdatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionUpdatedPublicEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionUpdatedPublicEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A custom attribute definition can only be deleted
+// by the application that created it. A notification is sent when your application deletes a custom attribute
+// definition or when another application deletes a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it. A notification is sent when your application updates a custom
+// attribute definition or when another application updates a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type CustomerCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDefinitionVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is deleted. Custom attributes are owned by the application that created the
+// corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+//
+// This event is replaced by
+// [customer.custom_attribute.owned.deleted](webhook:customer.custom_attribute.owned.deleted).
+type CustomerCustomAttributeDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible
+// to all applications is deleted. A notification is sent when any application deletes a custom attribute
+// whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute.visible.deleted](webhook:customer.custom_attribute.visible.deleted),
+// which applies to custom attributes that are visible to the subscribing application.
+type CustomerCustomAttributeDeletedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.public.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeDeletedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeDeletedPublicEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeDeletedPublicEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is deleted. Custom attributes are owned by the application that created the
+// corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+type CustomerCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeOwnedDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+type CustomerCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+//
+// This event is replaced by
+// [customer.custom_attribute.owned.updated](webhook:customer.custom_attribute.owned.updated).
+type CustomerCustomAttributeUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible
+// to all applications is created or updated. A notification is sent when any application creates or updates
+// a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// This event is replaced by
+// [customer.custom_attribute.visible.updated](webhook:customer.custom_attribute.visible.updated),
+// which applies to custom attributes that are visible to the subscribing application.
+type CustomerCustomAttributeUpdatedPublicEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.public.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeUpdatedPublicEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeUpdatedPublicEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeUpdatedPublicEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is deleted. A notification is sent when:
+// - Your application deletes a custom attribute owned by your application, regardless of the `visibility` setting.
+// - Any application deletes a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+// or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be deleted by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type CustomerCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeVisibleDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a customer [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is created or updated. A notification is sent when:
+// - Your application creates or updates a custom attribute owned by your application, regardless of the `visibility` setting.
+// - Any application creates or updates a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+// or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be created or updated by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type CustomerCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"customer.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetData() *CustomAttributeEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerCustomAttributeVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [customer](entity:Customer) is deleted.  For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// The `customer` object in the event notification does not include the following fields: `group_ids` and `segment_ids`.
+type CustomerDeletedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerDeletedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerDeletedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerDeletedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerDeletedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerDeletedEvent) GetData() *CustomerDeletedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the deleted customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the deleted customer.
+	Object *CustomerDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerDeletedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerDeletedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CustomerDeletedEventData) GetObject() *CustomerDeletedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CustomerDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about the change that triggered the event.
+type CustomerDeletedEventEventContext struct {
+	// Information about the merge operation associated with the event.
+	Merge *CustomerDeletedEventEventContextMerge `json:"merge,omitempty" url:"merge,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerDeletedEventEventContext) GetMerge() *CustomerDeletedEventEventContextMerge {
+	if c == nil {
+		return nil
+	}
+	return c.Merge
+}
+
+func (c *CustomerDeletedEventEventContext) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventEventContext) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventEventContext
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventEventContext(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventEventContext) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Information about a merge operation, which creates a new customer using aggregated properties from two or more existing customers.
+type CustomerDeletedEventEventContextMerge struct {
+	// The IDs of the existing customers that were merged and then deleted.
+	FromCustomerIDs []string `json:"from_customer_ids,omitempty" url:"from_customer_ids,omitempty"`
+	// The ID of the new customer created by the merge.
+	ToCustomerID *string `json:"to_customer_id,omitempty" url:"to_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerDeletedEventEventContextMerge) GetFromCustomerIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.FromCustomerIDs
+}
+
+func (c *CustomerDeletedEventEventContextMerge) GetToCustomerID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ToCustomerID
+}
+
+func (c *CustomerDeletedEventEventContextMerge) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventEventContextMerge) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventEventContextMerge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventEventContextMerge(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventEventContextMerge) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerDeletedEventObject struct {
+	// The deleted customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+	// Information about the change that triggered the event. This field is returned only if the customer is deleted by a merge operation.
+	EventContext *CustomerDeletedEventEventContext `json:"event_context,omitempty" url:"event_context,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerDeletedEventObject) GetCustomer() *Customer {
+	if c == nil {
+		return nil
+	}
+	return c.Customer
+}
+
+func (c *CustomerDeletedEventObject) GetEventContext() *CustomerDeletedEventEventContext {
+	if c == nil {
+		return nil
+	}
+	return c.EventContext
+}
+
+func (c *CustomerDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerDeletedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerDeletedEventObject) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -15376,6 +21200,206 @@ func (c *CustomerSegment) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CustomerSegment) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Published when a [customer](entity:Customer) is updated. For more information, see [Use Customer Webhooks](https://developer.squareup.com/docs/customers-api/use-the-api/customer-webhooks).
+//
+// Updates to the 'segment_ids' customer field does not invoke a `customer.updated` event. In addition, the `customer` object in the event notification does not include this field.
+type CustomerUpdatedEvent struct {
+	// The ID of the seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this object, the value is `customer.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomerUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerUpdatedEvent) GetMerchantID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MerchantID
+}
+
+func (c *CustomerUpdatedEvent) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerUpdatedEvent) GetEventID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.EventID
+}
+
+func (c *CustomerUpdatedEvent) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *CustomerUpdatedEvent) GetData() *CustomerUpdatedEventData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CustomerUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEvent) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The data associated with the event.
+type CustomerUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `customer`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated customer.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated customer.
+	Object *CustomerUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerUpdatedEventData) GetType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Type
+}
+
+func (c *CustomerUpdatedEventData) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CustomerUpdatedEventData) GetObject() *CustomerUpdatedEventObject {
+	if c == nil {
+		return nil
+	}
+	return c.Object
+}
+
+func (c *CustomerUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEventData) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An object that contains the customer associated with the event.
+type CustomerUpdatedEventObject struct {
+	// The updated customer.
+	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CustomerUpdatedEventObject) GetCustomer() *Customer {
+	if c == nil {
+		return nil
+	}
+	return c.Customer
+}
+
+func (c *CustomerUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CustomerUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler CustomerUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CustomerUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CustomerUpdatedEventObject) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -16763,6 +22787,213 @@ func (d *DeviceCode) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Published when a Square Terminal has been paired with a
+// Terminal API client and the device_id of the paired Square Terminal is
+// available.
+type DeviceCodePairedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"device.code.paired"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DeviceCodePairedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCodePairedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DeviceCodePairedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DeviceCodePairedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DeviceCodePairedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DeviceCodePairedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DeviceCodePairedEvent) GetData() *DeviceCodePairedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DeviceCodePairedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCodePairedEventData struct {
+	// Name of the paired object’s type, `"device_code"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the paired device code.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the paired device code.
+	Object *DeviceCodePairedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCodePairedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DeviceCodePairedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DeviceCodePairedEventData) GetObject() *DeviceCodePairedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DeviceCodePairedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCodePairedEventObject struct {
+	// The created terminal checkout
+	DeviceCode *DeviceCode `json:"device_code,omitempty" url:"device_code,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCodePairedEventObject) GetDeviceCode() *DeviceCode {
+	if d == nil {
+		return nil
+	}
+	return d.DeviceCode
+}
+
+func (d *DeviceCodePairedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCodePairedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCodePairedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCodePairedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCodePairedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 // DeviceCode.Status enum.
 type DeviceCodeStatus string
 
@@ -16790,6 +23021,202 @@ func NewDeviceCodeStatusFromString(s string) (DeviceCodeStatus, error) {
 
 func (d DeviceCodeStatus) Ptr() *DeviceCodeStatus {
 	return &d
+}
+
+// Published when a Device is created.
+type DeviceCreatedEvent struct {
+	// The merchant the newly created device belongs to.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents. The value is `"device.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A UUID that uniquely identifies this device creation event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The time when the device creation event was first created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The metadata associated with the device creation event.
+	Data *DeviceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCreatedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DeviceCreatedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DeviceCreatedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DeviceCreatedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DeviceCreatedEvent) GetData() *DeviceCreatedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DeviceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCreatedEventData struct {
+	// The type of the event data object. The value is `"device"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the device.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created device.
+	Object *DeviceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCreatedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DeviceCreatedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DeviceCreatedEventData) GetObject() *DeviceCreatedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DeviceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeviceCreatedEventObject struct {
+	// The created device.
+	Device *Device `json:"device,omitempty" url:"device,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeviceCreatedEventObject) GetDevice() *Device {
+	if d == nil {
+		return nil
+	}
+	return d.Device
+}
+
+func (d *DeviceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeviceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeviceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeviceCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeviceCreatedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
 }
 
 type DeviceMetadata struct {
@@ -16942,6 +23369,211 @@ func (d *DeviceMetadata) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Published when a [Dispute](entity:Dispute) is created.
+type DisputeCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeCreatedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeCreatedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeCreatedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeCreatedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeCreatedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeCreatedEvent) GetData() *DisputeCreatedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeCreatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeCreatedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeCreatedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeCreatedEventData) GetObject() *DisputeCreatedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeCreatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeCreatedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeCreatedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DisputeEvidence struct {
 	// The Square-generated ID of the evidence.
 	EvidenceID *string `json:"evidence_id,omitempty" url:"evidence_id,omitempty"`
@@ -17044,6 +23676,627 @@ func (d *DisputeEvidence) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// Published when evidence is added to a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling either [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) or [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText).
+type DisputeEvidenceAddedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceAddedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeEvidenceAddedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeEvidenceAddedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceAddedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeEvidenceAddedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeEvidenceAddedEvent) GetData() *DisputeEvidenceAddedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeEvidenceAddedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceAddedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceAddedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceAddedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeEvidenceAddedEventData) GetObject() *DisputeEvidenceAddedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceAddedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceAddedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceAddedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceAddedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceAddedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceAddedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceAddedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceAddedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is added to a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling either [CreateDisputeEvidenceFile](api-endpoint:Disputes-CreateDisputeEvidenceFile) or [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText).
+type DisputeEvidenceCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetData() *DisputeEvidenceCreatedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeEvidenceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceCreatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceCreatedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeEvidenceCreatedEventData) GetObject() *DisputeEvidenceCreatedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceCreatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceCreatedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceCreatedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is removed from a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling [DeleteDisputeEvidence](api-endpoint:Disputes-DeleteDisputeEvidence).
+type DisputeEvidenceDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetData() *DisputeEvidenceDeletedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeEvidenceDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceDeletedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceDeletedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeEvidenceDeletedEventData) GetObject() *DisputeEvidenceDeletedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceDeletedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceDeletedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceDeletedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceDeletedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 // A file to be uploaded as dispute evidence.
 type DisputeEvidenceFile struct {
 	// The file name including the file extension. For example: "receipt.tiff".
@@ -17090,6 +24343,213 @@ func (d *DisputeEvidenceFile) UnmarshalJSON(data []byte) error {
 }
 
 func (d *DisputeEvidenceFile) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when evidence is removed from a [Dispute](entity:Dispute)
+// from the Disputes Dashboard in the Seller Dashboard, the Square Point of Sale app,
+// or by calling [DeleteDisputeEvidence](api-endpoint:Disputes-DeleteDisputeEvidence).
+type DisputeEvidenceRemovedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeEvidenceRemovedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetData() *DisputeEvidenceRemovedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeEvidenceRemovedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceRemovedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeEvidenceRemovedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeEvidenceRemovedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeEvidenceRemovedEventData) GetObject() *DisputeEvidenceRemovedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceRemovedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeEvidenceRemovedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeEvidenceRemovedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeEvidenceRemovedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeEvidenceRemovedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeEvidenceRemovedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeEvidenceRemovedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeEvidenceRemovedEventObject) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -17161,6 +24621,449 @@ func NewDisputeEvidenceTypeFromString(s string) (DisputeEvidenceType, error) {
 
 func (d DisputeEvidenceType) Ptr() *DisputeEvidenceType {
 	return &d
+}
+
+// Published when the state of a [Dispute](entity:Dispute) changes.
+// This includes the dispute resolution (WON, LOST) reported by the bank. The event
+// data includes details of what changed.
+type DisputeStateChangedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeStateChangedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateChangedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeStateChangedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeStateChangedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeStateChangedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeStateChangedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeStateChangedEvent) GetData() *DisputeStateChangedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeStateChangedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateChangedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeStateChangedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateChangedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeStateChangedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeStateChangedEventData) GetObject() *DisputeStateChangedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeStateChangedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateChangedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateChangedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeStateChangedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateChangedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateChangedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateChangedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateChangedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Published when the state of a [Dispute](entity:Dispute) changes.
+// This includes the dispute resolution (WON, LOST) reported by the bank. The event
+// data includes details of what changed.
+type DisputeStateUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *DisputeStateUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEvent) GetMerchantID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MerchantID
+}
+
+func (d *DisputeStateUpdatedEvent) GetLocationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LocationID
+}
+
+func (d *DisputeStateUpdatedEvent) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeStateUpdatedEvent) GetEventID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EventID
+}
+
+func (d *DisputeStateUpdatedEvent) GetCreatedAt() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedAt
+}
+
+func (d *DisputeStateUpdatedEvent) GetData() *DisputeStateUpdatedEventData {
+	if d == nil {
+		return nil
+	}
+	return d.Data
+}
+
+func (d *DisputeStateUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEvent) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateUpdatedEventData struct {
+	// Name of the affected dispute's type.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected dispute.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event.
+	Object *DisputeStateUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEventData) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
+}
+
+func (d *DisputeStateUpdatedEventData) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DisputeStateUpdatedEventData) GetObject() *DisputeStateUpdatedEventObject {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeStateUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEventData) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DisputeStateUpdatedEventObject struct {
+	// The dispute object.
+	Object *Dispute `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisputeStateUpdatedEventObject) GetObject() *Dispute {
+	if d == nil {
+		return nil
+	}
+	return d.Object
+}
+
+func (d *DisputeStateUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisputeStateUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisputeStateUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisputeStateUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisputeStateUpdatedEventObject) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// Determines item visibility in Ecom (Online Store) and Online Checkout.
+type EcomVisibility string
+
+const (
+	EcomVisibilityUnindexed   EcomVisibility = "UNINDEXED"
+	EcomVisibilityUnavailable EcomVisibility = "UNAVAILABLE"
+	EcomVisibilityHidden      EcomVisibility = "HIDDEN"
+	EcomVisibilityVisible     EcomVisibility = "VISIBLE"
+)
+
+func NewEcomVisibilityFromString(s string) (EcomVisibility, error) {
+	switch s {
+	case "UNINDEXED":
+		return EcomVisibilityUnindexed, nil
+	case "UNAVAILABLE":
+		return EcomVisibilityUnavailable, nil
+	case "HIDDEN":
+		return EcomVisibilityHidden, nil
+	case "VISIBLE":
+		return EcomVisibilityVisible, nil
+	}
+	var t EcomVisibility
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (e EcomVisibility) Ptr() *EcomVisibility {
+	return &e
 }
 
 // The hourly wage rate that an employee earns on a `Shift` for doing the job specified by the `title` property of this object. Deprecated at version 2020-08-26. Use [TeamMemberWage](entity:TeamMemberWage).
@@ -19267,6 +27170,8 @@ func (f FulfillmentType) Ptr() *FulfillmentType {
 	return &f
 }
 
+type GetBookingRequest = interface{}
+
 // The response to a request to get a `BreakType`. The response contains
 // the requested `BreakType` objects and might contain a set of `Error` objects if
 // the request resulted in errors.
@@ -19325,6 +27230,10 @@ func (g *GetBreakTypeResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetBusinessBookingProfileRequest = interface{}
+
+type GetCardRequest = interface{}
 
 type GetCashDrawerShiftResponse struct {
 	// The cash drawer shift queried for.
@@ -19564,6 +27473,8 @@ func (g *GetCustomerCustomAttributeResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetCustomerGroupRequest = interface{}
+
 // Defines the fields that are included in the response body of
 // a request to the [RetrieveCustomerGroup](api-endpoint:CustomerGroups-RetrieveCustomerGroup) endpoint.
 //
@@ -19623,6 +27534,10 @@ func (g *GetCustomerGroupResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetCustomerRequest = interface{}
+
+type GetCustomerSegmentRequest = interface{}
 
 // Defines the fields that are included in the response body for requests to the `RetrieveCustomerSegment` endpoint.
 //
@@ -19739,6 +27654,8 @@ func (g *GetDeviceCodeResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetDisputeEvidenceRequest = interface{}
+
 // Defines the fields in a `RetrieveDisputeEvidence` response.
 type GetDisputeEvidenceResponse struct {
 	// Any errors that occurred during the request.
@@ -19795,6 +27712,10 @@ func (g *GetDisputeEvidenceResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetDisputeRequest = interface{}
+
+type GetEmployeeRequest = interface{}
 
 // A response to a request to get an `EmployeeWage`. The response contains
 // the requested `EmployeeWage` objects and might contain a set of `Error` objects if
@@ -19855,6 +27776,18 @@ func (g *GetEmployeeWageResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetGiftCardRequest = interface{}
+
+type GetInventoryAdjustmentRequest = interface{}
+
+type GetInventoryPhysicalCountRequest = interface{}
+
+type GetInventoryTransferRequest = interface{}
+
+type GetLocationRequest = interface{}
+
+type GetLoyaltyAccountRequest = interface{}
+
 // A response that includes the loyalty account.
 type GetLoyaltyAccountResponse struct {
 	// Any errors that occurred during the request.
@@ -19911,6 +27844,8 @@ func (g *GetLoyaltyAccountResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetLoyaltyProgramRequest = interface{}
 
 // A response that contains the loyalty program.
 type GetLoyaltyProgramResponse struct {
@@ -19969,6 +27904,8 @@ func (g *GetLoyaltyProgramResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetLoyaltyPromotionRequest = interface{}
+
 // Represents a [RetrieveLoyaltyPromotionPromotions](api-endpoint:Loyalty-RetrieveLoyaltyPromotion) response.
 type GetLoyaltyPromotionResponse struct {
 	// Any errors that occurred during the request.
@@ -20026,6 +27963,8 @@ func (g *GetLoyaltyPromotionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetLoyaltyRewardRequest = interface{}
+
 // A response that includes the loyalty reward.
 type GetLoyaltyRewardResponse struct {
 	// Any errors that occurred during the request.
@@ -20082,6 +28021,12 @@ func (g *GetLoyaltyRewardResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetMerchantRequest = interface{}
+
+type GetOrderRequest = interface{}
+
+type GetPaymentLinkRequest = interface{}
 
 type GetPaymentLinkResponse struct {
 	// Any errors that occurred during the request.
@@ -20198,6 +28143,10 @@ func (g *GetShiftResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetSnippetRequest = interface{}
+
+type GetTeamMemberBookingProfileRequest = interface{}
+
 type GetTeamMemberBookingProfileResponse struct {
 	// The returned team member booking profile.
 	TeamMemberBookingProfile *TeamMemberBookingProfile `json:"team_member_booking_profile,omitempty" url:"team_member_booking_profile,omitempty"`
@@ -20253,6 +28202,8 @@ func (g *GetTeamMemberBookingProfileResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetTeamMemberRequest = interface{}
 
 // A response to a request to get a `TeamMemberWage`. The response contains
 // the requested `TeamMemberWage` objects and might contain a set of `Error` objects if
@@ -20481,6 +28432,8 @@ func (g *GetTerminalRefundResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetTransactionRequest = interface{}
+
 // Defines the fields that are included in the response body of
 // a request to the [RetrieveTransaction](api-endpoint:Transactions-RetrieveTransaction) endpoint.
 //
@@ -20541,6 +28494,10 @@ func (g *GetTransactionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GetVendorRequest = interface{}
+
+type GetWageSettingRequest = interface{}
+
 // Represents a response from a retrieve request containing the specified `WageSetting` object or error messages.
 type GetWageSettingResponse struct {
 	// The successfully retrieved `WageSetting` object.
@@ -20597,6 +28554,8 @@ func (g *GetWageSettingResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", g)
 }
+
+type GetWebhookSubscriptionRequest = interface{}
 
 // Defines the fields that are included in the response body of
 // a request to the [RetrieveWebhookSubscription](api-endpoint:WebhookSubscriptions-RetrieveWebhookSubscription) endpoint.
@@ -21316,6 +29275,206 @@ func NewGiftCardActivityClearBalanceReasonFromString(s string) (GiftCardActivity
 
 func (g GiftCardActivityClearBalanceReason) Ptr() *GiftCardActivityClearBalanceReason {
 	return &g
+}
+
+// Published when a [gift card activity](entity:GiftCardActivity) is created.
+type GiftCardActivityCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.activity.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardActivityCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardActivityCreatedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardActivityCreatedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardActivityCreatedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardActivityCreatedEvent) GetData() *GiftCardActivityCreatedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardActivityCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Represents the data associated with a `gift_card.activity.created` event.
+type GiftCardActivityCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card_activity`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new gift card activity.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new gift card activity.
+	Object *GiftCardActivityCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardActivityCreatedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardActivityCreatedEventData) GetObject() *GiftCardActivityCreatedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardActivityCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card activity associated with a
+// `gift_card.activity.created` event.
+type GiftCardActivityCreatedEventObject struct {
+	// The new gift card activity.
+	GiftCardActivity *GiftCardActivity `json:"gift_card_activity,omitempty" url:"gift_card_activity,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityCreatedEventObject) GetGiftCardActivity() *GiftCardActivity {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCardActivity
+}
+
+func (g *GiftCardActivityCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityCreatedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
 }
 
 // Represents details about a `DEACTIVATE` [gift card activity type](entity:GiftCardActivityType).
@@ -22083,6 +30242,1029 @@ func (g *GiftCardActivityUnlinkedActivityRefund) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+// Published when a [gift card activity](entity:GiftCardActivity) is updated.
+// Subscribe to this event to be notified about the following changes:
+// - An update to the `REDEEM` activity for a gift card redemption made from a Square product (such as Square Point of Sale).
+// These redemptions are initially assigned a `PENDING` state, but then change to a `COMPLETED` or `CANCELED` state.
+// - An update to the `IMPORT` activity for an imported gift card when the balance is later adjusted by Square.
+type GiftCardActivityUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.activity.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardActivityUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetData() *GiftCardActivityUpdatedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardActivityUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.activity.updated` event.
+type GiftCardActivityUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card_activity`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card activity.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card activity.
+	Object *GiftCardActivityUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardActivityUpdatedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardActivityUpdatedEventData) GetObject() *GiftCardActivityUpdatedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardActivityUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card activity associated with a
+// `gift_card.activity.updated` event.
+type GiftCardActivityUpdatedEventObject struct {
+	// The updated gift card activity.
+	GiftCardActivity *GiftCardActivity `json:"gift_card_activity,omitempty" url:"gift_card_activity,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardActivityUpdatedEventObject) GetGiftCardActivity() *GiftCardActivity {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCardActivity
+}
+
+func (g *GiftCardActivityUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardActivityUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardActivityUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardActivityUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardActivityUpdatedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [gift card](entity:GiftCard) is created.
+type GiftCardCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCreatedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardCreatedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCreatedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardCreatedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardCreatedEvent) GetData() *GiftCardCreatedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.created` event.
+type GiftCardCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the new gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new gift card.
+	Object *GiftCardCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCreatedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCreatedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardCreatedEventData) GetObject() *GiftCardCreatedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card associated with a `gift_card.created` event.
+type GiftCardCreatedEventObject struct {
+	// The new gift card.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCreatedEventObject) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GiftCardCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCreatedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [customer](entity:Customer) is linked to a [gift card](entity:GiftCard).
+type GiftCardCustomerLinkedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.customer_linked`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCustomerLinkedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetData() *GiftCardCustomerLinkedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardCustomerLinkedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.customer_linked` event.
+type GiftCardCustomerLinkedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card and the ID of the linked customer.
+	Object *GiftCardCustomerLinkedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCustomerLinkedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardCustomerLinkedEventData) GetObject() *GiftCardCustomerLinkedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardCustomerLinkedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card and customer ID associated with a
+// `gift_card.customer_linked` event.
+type GiftCardCustomerLinkedEventObject struct {
+	// The gift card with the updated `customer_ids` field.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+	// The ID of the linked [customer](entity:Customer).
+	LinkedCustomerID *string `json:"linked_customer_id,omitempty" url:"linked_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerLinkedEventObject) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GiftCardCustomerLinkedEventObject) GetLinkedCustomerID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.LinkedCustomerID
+}
+
+func (g *GiftCardCustomerLinkedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerLinkedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerLinkedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerLinkedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerLinkedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [customer](entity:Customer) is unlinked from a [gift card](entity:GiftCard).
+type GiftCardCustomerUnlinkedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `gift_card.customer_unlinked`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardCustomerUnlinkedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetData() *GiftCardCustomerUnlinkedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.customer_unlinked` event.
+type GiftCardCustomerUnlinkedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card and the ID of the unlinked customer.
+	Object *GiftCardCustomerUnlinkedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) GetObject() *GiftCardCustomerUnlinkedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card and the customer ID associated with a
+// `gift_card.customer_linked` event.
+type GiftCardCustomerUnlinkedEventObject struct {
+	// The gift card with the updated `customer_ids` field.
+	// The field is removed if the gift card is not linked to any customers.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+	// The ID of the unlinked [customer](entity:Customer).
+	UnlinkedCustomerID *string `json:"unlinked_customer_id,omitempty" url:"unlinked_customer_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) GetUnlinkedCustomerID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.UnlinkedCustomerID
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardCustomerUnlinkedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardCustomerUnlinkedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardCustomerUnlinkedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Published when a [gift card](entity:GiftCard) is updated. This includes
+// changes to the state, balance, and customer association.
+type GiftCardUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. For this event, the value is `gift_card.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID of the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *GiftCardUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardUpdatedEvent) GetMerchantID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MerchantID
+}
+
+func (g *GiftCardUpdatedEvent) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardUpdatedEvent) GetEventID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EventID
+}
+
+func (g *GiftCardUpdatedEvent) GetCreatedAt() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CreatedAt
+}
+
+func (g *GiftCardUpdatedEvent) GetData() *GiftCardUpdatedEventData {
+	if g == nil {
+		return nil
+	}
+	return g.Data
+}
+
+func (g *GiftCardUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEvent) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// The data associated with a `gift_card.updated` event.
+type GiftCardUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `gift_card`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the updated gift card.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the updated gift card.
+	Object *GiftCardUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardUpdatedEventData) GetType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Type
+}
+
+func (g *GiftCardUpdatedEventData) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GiftCardUpdatedEventData) GetObject() *GiftCardUpdatedEventObject {
+	if g == nil {
+		return nil
+	}
+	return g.Object
+}
+
+func (g *GiftCardUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEventData) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// An object that contains the gift card associated with a `gift_card.updated` event.
+type GiftCardUpdatedEventObject struct {
+	// The gift card with the updated `balance_money`, `state`, or `customer_ids` field.
+	// Some events can affect both `balance_money` and `state`.
+	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (g *GiftCardUpdatedEventObject) GetGiftCard() *GiftCard {
+	if g == nil {
+		return nil
+	}
+	return g.GiftCard
+}
+
+func (g *GiftCardUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GiftCardUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler GiftCardUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GiftCardUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+	g.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GiftCardUpdatedEventObject) String() string {
+	if len(g.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 // Indicates whether Square should alert the merchant when the inventory quantity of a CatalogItemVariation is low.
 type InventoryAlertType string
 
@@ -22104,6 +31286,1726 @@ func NewInventoryAlertTypeFromString(s string) (InventoryAlertType, error) {
 
 func (i InventoryAlertType) Ptr() *InventoryAlertType {
 	return &i
+}
+
+// Published when the quantity is updated for a
+// [CatalogItemVariation](entity:CatalogItemVariation).
+type InventoryCountUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InventoryCountUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InventoryCountUpdatedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InventoryCountUpdatedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InventoryCountUpdatedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InventoryCountUpdatedEvent) GetData() *InventoryCountUpdatedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InventoryCountUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryCountUpdatedEventData struct {
+	// Name of the affected object’s type. For this event, the value is `inventory_counts`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing fields and values relevant to the event. Is absent if affected object was deleted.
+	Object *InventoryCountUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InventoryCountUpdatedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryCountUpdatedEventData) GetObject() *InventoryCountUpdatedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InventoryCountUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryCountUpdatedEventObject struct {
+	// The inventory counts.
+	InventoryCounts []*InventoryCount `json:"inventory_counts,omitempty" url:"inventory_counts,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InventoryCountUpdatedEventObject) GetInventoryCounts() []*InventoryCount {
+	if i == nil {
+		return nil
+	}
+	return i.InventoryCounts
+}
+
+func (i *InventoryCountUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InventoryCountUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryCountUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryCountUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryCountUpdatedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) is canceled.
+type InvoiceCanceledEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.canceled"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceCanceledEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCanceledEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceCanceledEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceCanceledEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceCanceledEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceCanceledEvent) GetData() *InvoiceCanceledEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceCanceledEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCanceledEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the canceled invoice.
+	Object *InvoiceCanceledEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCanceledEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceCanceledEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceCanceledEventData) GetObject() *InvoiceCanceledEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoiceCanceledEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCanceledEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCanceledEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoiceCanceledEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCanceledEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCanceledEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCanceledEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCanceledEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) is created.
+type InvoiceCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCreatedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceCreatedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceCreatedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceCreatedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceCreatedEvent) GetData() *InvoiceCreatedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCreatedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created invoice.
+	Object *InvoiceCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCreatedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceCreatedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceCreatedEventData) GetObject() *InvoiceCreatedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoiceCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceCreatedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceCreatedEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoiceCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceCreatedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when a draft [Invoice](entity:Invoice) is deleted.
+type InvoiceDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceDeletedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceDeletedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceDeletedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceDeletedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceDeletedEvent) GetData() *InvoiceDeletedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceDeletedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceDeletedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Indicates that the invoice was deleted.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceDeletedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceDeletedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceDeletedEventData) GetDeleted() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.Deleted
+}
+
+func (i *InvoiceDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceDeletedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when a payment that is associated with an [invoice](entity:Invoice) is completed.
+// For more information about invoice payments, see [Pay an invoice](https://developer.squareup.com/docs/invoices-api/pay-refund-invoices#pay-invoice).
+type InvoicePaymentMadeEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.payment_made"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoicePaymentMadeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoicePaymentMadeEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoicePaymentMadeEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoicePaymentMadeEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoicePaymentMadeEvent) GetData() *InvoicePaymentMadeEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoicePaymentMadeEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePaymentMadeEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the invoice that was paid.
+	Object *InvoicePaymentMadeEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoicePaymentMadeEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoicePaymentMadeEventData) GetObject() *InvoicePaymentMadeEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoicePaymentMadeEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePaymentMadeEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePaymentMadeEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoicePaymentMadeEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePaymentMadeEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePaymentMadeEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePaymentMadeEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePaymentMadeEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) transitions from a draft to a non-draft status.
+type InvoicePublishedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.published"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoicePublishedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePublishedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoicePublishedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoicePublishedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoicePublishedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoicePublishedEvent) GetData() *InvoicePublishedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoicePublishedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePublishedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the published invoice.
+	Object *InvoicePublishedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePublishedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoicePublishedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoicePublishedEventData) GetObject() *InvoicePublishedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoicePublishedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoicePublishedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoicePublishedEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoicePublishedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoicePublishedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoicePublishedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoicePublishedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoicePublishedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when a refund is applied toward a payment of an [invoice](entity:Invoice).
+// For more information about invoice refunds, see [Refund an invoice](https://developer.squareup.com/docs/invoices-api/pay-refund-invoices#refund-invoice).
+type InvoiceRefundedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.refunded"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceRefundedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceRefundedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceRefundedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceRefundedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceRefundedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceRefundedEvent) GetData() *InvoiceRefundedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceRefundedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceRefundedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the refunded invoice.
+	Object *InvoiceRefundedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceRefundedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceRefundedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceRefundedEventData) GetObject() *InvoiceRefundedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoiceRefundedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceRefundedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceRefundedEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoiceRefundedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceRefundedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceRefundedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceRefundedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceRefundedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an automatic scheduled payment for an [Invoice](entity:Invoice) has failed.
+type InvoiceScheduledChargeFailedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.scheduled_charge_failed"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceScheduledChargeFailedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetData() *InvoiceScheduledChargeFailedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceScheduledChargeFailedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the invoice that experienced the failed scheduled charge.
+	Object *InvoiceScheduledChargeFailedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) GetObject() *InvoiceScheduledChargeFailedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceScheduledChargeFailedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceScheduledChargeFailedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceScheduledChargeFailedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceScheduledChargeFailedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Published when an [Invoice](entity:Invoice) is updated.
+type InvoiceUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"invoice.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *InvoiceUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceUpdatedEvent) GetMerchantID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.MerchantID
+}
+
+func (i *InvoiceUpdatedEvent) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceUpdatedEvent) GetEventID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.EventID
+}
+
+func (i *InvoiceUpdatedEvent) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InvoiceUpdatedEvent) GetData() *InvoiceUpdatedEventData {
+	if i == nil {
+		return nil
+	}
+	return i.Data
+}
+
+func (i *InvoiceUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEvent) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceUpdatedEventData struct {
+	// Name of the affected object’s type, `"invoice"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected invoice.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated invoice.
+	Object *InvoiceUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceUpdatedEventData) GetType() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Type
+}
+
+func (i *InvoiceUpdatedEventData) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InvoiceUpdatedEventData) GetObject() *InvoiceUpdatedEventObject {
+	if i == nil {
+		return nil
+	}
+	return i.Object
+}
+
+func (i *InvoiceUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEventData) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InvoiceUpdatedEventObject struct {
+	// The related invoice.
+	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InvoiceUpdatedEventObject) GetInvoice() *Invoice {
+	if i == nil {
+		return nil
+	}
+	return i.Invoice
+}
+
+func (i *InvoiceUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InvoiceUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler InvoiceUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InvoiceUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InvoiceUpdatedEventObject) String() string {
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }
 
 // Price and inventory alerting overrides for a `CatalogItemVariation` at a specific `Location`.
@@ -22352,6 +33254,2259 @@ func NewJobAssignmentPayTypeFromString(s string) (JobAssignmentPayType, error) {
 
 func (j JobAssignmentPayType) Ptr() *JobAssignmentPayType {
 	return &j
+}
+
+// Published when a Job is created.
+type JobCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"job.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *JobCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobCreatedEvent) GetMerchantID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.MerchantID
+}
+
+func (j *JobCreatedEvent) GetType() *string {
+	if j == nil {
+		return nil
+	}
+	return j.Type
+}
+
+func (j *JobCreatedEvent) GetEventID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.EventID
+}
+
+func (j *JobCreatedEvent) GetCreatedAt() *string {
+	if j == nil {
+		return nil
+	}
+	return j.CreatedAt
+}
+
+func (j *JobCreatedEvent) GetData() *JobCreatedEventData {
+	if j == nil {
+		return nil
+	}
+	return j.Data
+}
+
+func (j *JobCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobCreatedEvent) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JobCreatedEventData struct {
+	// Name of the affected object’s type, `"job"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created job.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created job.
+	Object *JobCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobCreatedEventData) GetType() *string {
+	if j == nil {
+		return nil
+	}
+	return j.Type
+}
+
+func (j *JobCreatedEventData) GetID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.ID
+}
+
+func (j *JobCreatedEventData) GetObject() *JobCreatedEventObject {
+	if j == nil {
+		return nil
+	}
+	return j.Object
+}
+
+func (j *JobCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobCreatedEventData) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JobCreatedEventObject struct {
+	// The created job.
+	Job *Job `json:"job,omitempty" url:"job,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobCreatedEventObject) GetJob() *Job {
+	if j == nil {
+		return nil
+	}
+	return j.Job
+}
+
+func (j *JobCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobCreatedEventObject) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// Published when a Job is updated.
+type JobUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"job.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *JobUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobUpdatedEvent) GetMerchantID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.MerchantID
+}
+
+func (j *JobUpdatedEvent) GetType() *string {
+	if j == nil {
+		return nil
+	}
+	return j.Type
+}
+
+func (j *JobUpdatedEvent) GetEventID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.EventID
+}
+
+func (j *JobUpdatedEvent) GetCreatedAt() *string {
+	if j == nil {
+		return nil
+	}
+	return j.CreatedAt
+}
+
+func (j *JobUpdatedEvent) GetData() *JobUpdatedEventData {
+	if j == nil {
+		return nil
+	}
+	return j.Data
+}
+
+func (j *JobUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobUpdatedEvent) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JobUpdatedEventData struct {
+	// Name of the affected object’s type, `"job"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated job.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated job.
+	Object *JobUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobUpdatedEventData) GetType() *string {
+	if j == nil {
+		return nil
+	}
+	return j.Type
+}
+
+func (j *JobUpdatedEventData) GetID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.ID
+}
+
+func (j *JobUpdatedEventData) GetObject() *JobUpdatedEventObject {
+	if j == nil {
+		return nil
+	}
+	return j.Object
+}
+
+func (j *JobUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobUpdatedEventData) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JobUpdatedEventObject struct {
+	// The updated job.
+	Job *Job `json:"job,omitempty" url:"job,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (j *JobUpdatedEventObject) GetJob() *Job {
+	if j == nil {
+		return nil
+	}
+	return j.Job
+}
+
+func (j *JobUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JobUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler JobUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JobUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+	j.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JobUpdatedEventObject) String() string {
+	if len(j.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// Published when a [ScheduledShift](entity:ScheduledShift) is created.
+type LaborScheduledShiftCreatedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event. For this event, the value is `labor.scheduled_shift.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborScheduledShiftCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetData() *LaborScheduledShiftCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborScheduledShiftCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `scheduled_shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `ScheduledShift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `ScheduledShift`.
+	Object *LaborScheduledShiftCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborScheduledShiftCreatedEventData) GetObject() *LaborScheduledShiftCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborScheduledShiftCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftCreatedEventObject struct {
+	// The new `ScheduledShift`.
+	ScheduledShift *ScheduledShift `json:"ScheduledShift,omitempty" url:"ScheduledShift,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftCreatedEventObject) GetScheduledShift() *ScheduledShift {
+	if l == nil {
+		return nil
+	}
+	return l.ScheduledShift
+}
+
+func (l *LaborScheduledShiftCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftCreatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [ScheduledShift](entity:ScheduledShift) is deleted.
+type LaborScheduledShiftDeletedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event. For this event, the value is `labor.scheduled_shift.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborScheduledShiftDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetData() *LaborScheduledShiftDeletedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborScheduledShiftDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `scheduled_shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `ScheduledShift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Is true if the affected object was deleted. Otherwise absent.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftDeletedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftDeletedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborScheduledShiftDeletedEventData) GetDeleted() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Deleted
+}
+
+func (l *LaborScheduledShiftDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftDeletedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [ScheduledShift](entity:ScheduledShift) is published.
+type LaborScheduledShiftPublishedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event. For this event, the value is `labor.scheduled_shift.published`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborScheduledShiftPublishedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetData() *LaborScheduledShiftPublishedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborScheduledShiftPublishedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftPublishedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftPublishedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftPublishedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftPublishedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftPublishedEventData struct {
+	// The type of object affected by the event. For this event, the value is `scheduled_shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `ScheduledShift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `ScheduledShift`.
+	Object *LaborScheduledShiftPublishedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftPublishedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftPublishedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborScheduledShiftPublishedEventData) GetObject() *LaborScheduledShiftPublishedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborScheduledShiftPublishedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftPublishedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftPublishedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftPublishedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftPublishedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftPublishedEventObject struct {
+	// The published `ScheduledShift`.
+	ScheduledShift *ScheduledShift `json:"ScheduledShift,omitempty" url:"ScheduledShift,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftPublishedEventObject) GetScheduledShift() *ScheduledShift {
+	if l == nil {
+		return nil
+	}
+	return l.ScheduledShift
+}
+
+func (l *LaborScheduledShiftPublishedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftPublishedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftPublishedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftPublishedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftPublishedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [ScheduledShift](entity:ScheduledShift) is updated.
+type LaborScheduledShiftUpdatedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event. For this event, the value is `labor.scheduled_shift.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborScheduledShiftUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetData() *LaborScheduledShiftUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `scheduled_shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `ScheduledShift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `ScheduledShift`.
+	Object *LaborScheduledShiftUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) GetObject() *LaborScheduledShiftUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborScheduledShiftUpdatedEventObject struct {
+	// The updated `ScheduledShift`.
+	ScheduledShift *ScheduledShift `json:"ScheduledShift,omitempty" url:"ScheduledShift,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborScheduledShiftUpdatedEventObject) GetScheduledShift() *ScheduledShift {
+	if l == nil {
+		return nil
+	}
+	return l.ScheduledShift
+}
+
+func (l *LaborScheduledShiftUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborScheduledShiftUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborScheduledShiftUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborScheduledShiftUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborScheduledShiftUpdatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a worker starts a [Shift](entity:Shift).
+//
+// Deprecated at Square API version 2025-05-21. Replaced by `labor.timecard.created`.
+type LaborShiftCreatedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.shift.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborShiftCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborShiftCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborShiftCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborShiftCreatedEvent) GetData() *LaborShiftCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborShiftCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `Shift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `Shift`.
+	Object *LaborShiftCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborShiftCreatedEventData) GetObject() *LaborShiftCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborShiftCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftCreatedEventObject struct {
+	// The new `Shift`.
+	Shift *Shift `json:"shift,omitempty" url:"shift,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftCreatedEventObject) GetShift() *Shift {
+	if l == nil {
+		return nil
+	}
+	return l.Shift
+}
+
+func (l *LaborShiftCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftCreatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Shift](entity:Shift) is deleted.
+//
+// Deprecated at Square API version 2025-05-21. Replaced by `labor.timecard.deleted`.
+type LaborShiftDeletedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.shift.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborShiftDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborShiftDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborShiftDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborShiftDeletedEvent) GetData() *LaborShiftDeletedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborShiftDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `Shift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Is true if the affected object was deleted. Otherwise absent.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftDeletedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftDeletedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborShiftDeletedEventData) GetDeleted() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Deleted
+}
+
+func (l *LaborShiftDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftDeletedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Shift](entity:Shift) is updated.
+//
+// Deprecated at Square API version 2025-05-21. Replaced by `labor.timecard.updated`.
+type LaborShiftUpdatedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.shift.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborShiftUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborShiftUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborShiftUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborShiftUpdatedEvent) GetData() *LaborShiftUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborShiftUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `shift`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected `Shift`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `Shift`.
+	Object *LaborShiftUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborShiftUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborShiftUpdatedEventData) GetObject() *LaborShiftUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborShiftUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborShiftUpdatedEventObject struct {
+	// The updated `Shift`.
+	Shift *Shift `json:"shift,omitempty" url:"shift,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborShiftUpdatedEventObject) GetShift() *Shift {
+	if l == nil {
+		return nil
+	}
+	return l.Shift
+}
+
+func (l *LaborShiftUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborShiftUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborShiftUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborShiftUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborShiftUpdatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a worker starts a [Timecard](entity:Timecard).
+type LaborTimecardCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.timecard.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborTimecardCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborTimecardCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborTimecardCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborTimecardCreatedEvent) GetData() *LaborTimecardCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborTimecardCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborTimecardCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `timecard`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `Timecard`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `Timecard`.
+	Object *LaborTimecardCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborTimecardCreatedEventData) GetObject() *LaborTimecardCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborTimecardCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborTimecardCreatedEventObject struct {
+	// The new `Timecard`.
+	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardCreatedEventObject) GetTimecard() *Timecard {
+	if l == nil {
+		return nil
+	}
+	return l.Timecard
+}
+
+func (l *LaborTimecardCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardCreatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Timecard](entity:Timecard) is deleted.
+type LaborTimecardDeletedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.timecard.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborTimecardDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborTimecardDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborTimecardDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborTimecardDeletedEvent) GetData() *LaborTimecardDeletedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborTimecardDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborTimecardDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `timecard`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `Timecard`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Is true if the affected object was deleted. Otherwise absent.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardDeletedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardDeletedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborTimecardDeletedEventData) GetDeleted() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Deleted
+}
+
+func (l *LaborTimecardDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardDeletedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Timecard](entity:Timecard) is updated.
+type LaborTimecardUpdatedEvent struct {
+	// The ID of the merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `labor.timecard.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LaborTimecardUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LaborTimecardUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LaborTimecardUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LaborTimecardUpdatedEvent) GetData() *LaborTimecardUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LaborTimecardUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborTimecardUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `timecard`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected `Timecard`.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the affected `Timecard`.
+	Object *LaborTimecardUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LaborTimecardUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LaborTimecardUpdatedEventData) GetObject() *LaborTimecardUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LaborTimecardUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LaborTimecardUpdatedEventObject struct {
+	// The updated `Timecard`.
+	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LaborTimecardUpdatedEventObject) GetTimecard() *Timecard {
+	if l == nil {
+		return nil
+	}
+	return l.Timecard
+}
+
+func (l *LaborTimecardUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LaborTimecardUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LaborTimecardUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LaborTimecardUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LaborTimecardUpdatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 // Represents a [ListBookingCustomAttributeDefinitions](api-endpoint:BookingCustomAttributes-ListBookingCustomAttributeDefinitions) response.
@@ -24432,6 +37587,1378 @@ func (l *LocationBookingProfile) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// Published when a [Location](entity:Location) is created.
+type LocationCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the [Location](entity:Location) associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"location.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCreatedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LocationCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCreatedEvent) GetData() *LocationCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationCreatedEventData struct {
+	// Name of the affected object’s type, `"location"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated [Location](entity:Location).
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LocationCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application.
+type LocationCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is deleted. A custom attribute definition can only be deleted by
+// the application that created it.
+type LocationCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// created by the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it.
+type LocationCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A custom attribute definition can only
+// be deleted by the application that created it. A notification is sent when your application deletes
+// a custom attribute definition or when another application deletes a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A custom attribute definition can only be updated
+// by the application that created it. A notification is sent when your application updates a custom attribute
+// definition or when another application updates a custom attribute definition whose `visibility` is
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type LocationCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeDefinitionVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute)
+// owned by the subscribing application is deleted. Custom attributes are owned by the
+// application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+// Custom attributes whose `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application.
+type LocationCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetData() *CustomAttributeEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeOwnedDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) owned by the
+// subscribing application is created or updated. Custom attributes are owned by the application that created
+// the corresponding [custom attribute definition](entity:CustomAttributeDefinition). Custom attributes whose
+// `visibility` is `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application.
+type LocationCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetData() *CustomAttributeEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) that is visible to the
+// subscribing application is deleted. A notification is sent when:
+// - Your application deletes a custom attribute owned by your application, regardless of the `visibility` setting.
+// - Any application deletes a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+// or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be deleted by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be deleted by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type LocationCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetData() *CustomAttributeEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeVisibleDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a location [custom attribute](entity:CustomAttribute) that is visible
+// to the subscribing application is created or updated. A notification is sent when:
+// - Your application creates or updates a custom attribute owned by your application, regardless of the `visibility` setting.
+// - Any application creates or updates a custom attribute whose `visibility` is `VISIBILITY_READ_ONLY`
+// or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Custom attributes set to `VISIBILITY_READ_WRITE_VALUES` can be created or updated by any application, but those set to
+// `VISIBILITY_READ_ONLY` or `VISIBILITY_HIDDEN` can only be created or updated by the owner. Custom attributes are owned
+// by the application that created the corresponding [custom attribute definition](entity:CustomAttributeDefinition).
+type LocationCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"location.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetData() *CustomAttributeEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationCustomAttributeVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when online checkout location settings are updated
+type LocationSettingsUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"online_checkout.location_settings.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationSettingsUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationSettingsUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationSettingsUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationSettingsUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationSettingsUpdatedEvent) GetData() *LocationSettingsUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationSettingsUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationSettingsUpdatedEventData struct {
+	// Name of the updated object’s type, `"online_checkout.location_settings"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated location settings.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated location settings.
+	Object *LocationSettingsUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationSettingsUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LocationSettingsUpdatedEventData) GetObject() *LocationSettingsUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LocationSettingsUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationSettingsUpdatedEventObject struct {
+	// The updated location settings.
+	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationSettingsUpdatedEventObject) GetLocationSettings() *CheckoutLocationSettings {
+	if l == nil {
+		return nil
+	}
+	return l.LocationSettings
+}
+
+func (l *LocationSettingsUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationSettingsUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationSettingsUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationSettingsUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationSettingsUpdatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [Location](entity:Location) is updated.
+type LocationUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the [Location](entity:Location) associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"location.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *LocationUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LocationUpdatedEvent) GetLocationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LocationID
+}
+
+func (l *LocationUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LocationUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LocationUpdatedEvent) GetData() *LocationUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LocationUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LocationUpdatedEventData struct {
+	// Name of the affected object’s type, `"location"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated [Location](entity:Location).
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LocationUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LocationUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LocationUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LocationUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LocationUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LocationUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LocationUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // Describes a loyalty account in a [loyalty program](entity:LoyaltyProgram). For more information, see
 // [Create and Retrieve Loyalty Accounts](https://developer.squareup.com/docs/loyalty-api/loyalty-accounts).
 type LoyaltyAccount struct {
@@ -24576,6 +39103,402 @@ func (l *LoyaltyAccount) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// Published when a [loyalty account](entity:LoyaltyAccount) is created.
+type LoyaltyAccountCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetData() *LoyaltyAccountCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyAccountCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.created` event.
+type LoyaltyAccountCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new loyalty account.
+	Object *LoyaltyAccountCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyAccountCreatedEventData) GetObject() *LoyaltyAccountCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyAccountCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountCreatedEventObject struct {
+	// The loyalty account that was created.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountCreatedEventObject) GetLoyaltyAccount() *LoyaltyAccount {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyAccount
+}
+
+func (l *LoyaltyAccountCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountCreatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty account](entity:LoyaltyAccount) is deleted.
+type LoyaltyAccountDeletedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.deleted`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetData() *LoyaltyAccountDeletedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyAccountDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.deleted` event.
+type LoyaltyAccountDeletedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty account that was deleted.
+	Object *LoyaltyAccountDeletedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountDeletedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyAccountDeletedEventData) GetObject() *LoyaltyAccountDeletedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyAccountDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountDeletedEventObject struct {
+	// The loyalty account that was deleted.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountDeletedEventObject) GetLoyaltyAccount() *LoyaltyAccount {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyAccount
+}
+
+func (l *LoyaltyAccountDeletedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountDeletedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountDeletedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountDeletedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountDeletedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // Represents a set of points for a loyalty account that are scheduled to expire on a specific date.
 type LoyaltyAccountExpiringPointDeadline struct {
 	// The number of points scheduled to expire at the `expires_at` timestamp.
@@ -24691,6 +39614,207 @@ func (l *LoyaltyAccountMapping) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyAccountMapping) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The type of mapping.
+type LoyaltyAccountMappingType = string
+
+// Published when a [loyalty account](entity:LoyaltyAccount) is updated.
+type LoyaltyAccountUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.account.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyAccountUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetData() *LoyaltyAccountUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyAccountUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.account.updated` event.
+type LoyaltyAccountUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_account`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty account.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty account that was updated.
+	Object *LoyaltyAccountUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyAccountUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyAccountUpdatedEventData) GetObject() *LoyaltyAccountUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyAccountUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyAccountUpdatedEventObject struct {
+	// The loyalty account that was updated.
+	LoyaltyAccount *LoyaltyAccount `json:"loyalty_account,omitempty" url:"loyalty_account,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) GetLoyaltyAccount() *LoyaltyAccount {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyAccount
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyAccountUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyAccountUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyAccountUpdatedEventObject) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -25135,6 +40259,204 @@ func (l *LoyaltyEventCreateReward) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyEventCreateReward) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty event](entity:LoyaltyEvent) is created.
+type LoyaltyEventCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.event.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyEventCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyEventCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyEventCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyEventCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyEventCreatedEvent) GetData() *LoyaltyEventCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyEventCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.event.created` event.
+type LoyaltyEventCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_event`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected loyalty event.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the new loyalty event.
+	Object *LoyaltyEventCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyEventCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyEventCreatedEventData) GetObject() *LoyaltyEventCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyEventCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LoyaltyEventCreatedEventObject struct {
+	// The loyalty event that was created.
+	LoyaltyEvent *LoyaltyEvent `json:"loyalty_event,omitempty" url:"loyalty_event,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyEventCreatedEventObject) GetLoyaltyEvent() *LoyaltyEvent {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyEvent
+}
+
+func (l *LoyaltyEventCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyEventCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyEventCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyEventCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyEventCreatedEventObject) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -25973,6 +41295,205 @@ func (l *LoyaltyProgramAccrualRuleVisitData) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+// Published when a [loyalty program](entity:LoyaltyProgram) is created.
+type LoyaltyProgramCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.program.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyProgramCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetData() *LoyaltyProgramCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyProgramCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.program.created` event.
+type LoyaltyProgramCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_program`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the created loyalty program.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty program that was created.
+	Object *LoyaltyProgramCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyProgramCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyProgramCreatedEventData) GetObject() *LoyaltyProgramCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyProgramCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty program associated with a `loyalty.program.created` event.
+type LoyaltyProgramCreatedEventObject struct {
+	// The loyalty program that was created.
+	LoyaltyProgram *LoyaltyProgram `json:"loyalty_program,omitempty" url:"loyalty_program,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramCreatedEventObject) GetLoyaltyProgram() *LoyaltyProgram {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyProgram
+}
+
+func (l *LoyaltyProgramCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramCreatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
 // Describes when the loyalty program expires.
 type LoyaltyProgramExpirationPolicy struct {
 	// The number of months before points expire, in `P[n]M` RFC 3339 duration format. For example, a value of `P12M` represents a duration of 12 months.
@@ -26022,168 +41543,6 @@ func (l *LoyaltyProgramExpirationPolicy) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Provides details about the reward tier discount. DEPRECATED at version 2020-12-16. Discount details
-// are now defined using a catalog pricing rule and other catalog objects. For more information, see
-// [Getting discount details for a reward tier](https://developer.squareup.com/docs/loyalty-api/loyalty-rewards#get-discount-details).
-type LoyaltyProgramRewardDefinition struct {
-	// Indicates the scope of the reward tier. DEPRECATED at version 2020-12-16. You can find this information in the
-	// `product_set_data` field of the `PRODUCT_SET` catalog object referenced by the pricing rule. For `ORDER` scopes,
-	// `all_products` is true. For `ITEM_VARIATION` or `CATEGORY` scopes, `product_ids_any` is a list of
-	// catalog object IDs of the given type.
-	// See [LoyaltyProgramRewardDefinitionScope](#type-loyaltyprogramrewarddefinitionscope) for possible values
-	Scope LoyaltyProgramRewardDefinitionScope `json:"scope" url:"scope"`
-	// The type of discount the reward tier offers. DEPRECATED at version 2020-12-16. You can find this information
-	// in the `discount_data.discount_type` field of the `DISCOUNT` catalog object referenced by the pricing rule.
-	// See [LoyaltyProgramRewardDefinitionType](#type-loyaltyprogramrewarddefinitiontype) for possible values
-	DiscountType LoyaltyProgramRewardDefinitionType `json:"discount_type" url:"discount_type"`
-	// The fixed percentage of the discount. Present if `discount_type` is `FIXED_PERCENTAGE`.
-	// For example, a 7.25% off discount will be represented as "7.25". DEPRECATED at version 2020-12-16. You can find this
-	// information in the `discount_data.percentage` field of the `DISCOUNT` catalog object referenced by the pricing rule.
-	PercentageDiscount *string `json:"percentage_discount,omitempty" url:"percentage_discount,omitempty"`
-	// The list of catalog objects to which this reward can be applied. They are either all item-variation ids or category ids, depending on the `type` field.
-	// DEPRECATED at version 2020-12-16. You can find this information in the `product_set_data.product_ids_any` field
-	// of the `PRODUCT_SET` catalog object referenced by the pricing rule.
-	CatalogObjectIDs []string `json:"catalog_object_ids,omitempty" url:"catalog_object_ids,omitempty"`
-	// The amount of the discount. Present if `discount_type` is `FIXED_AMOUNT`. For example, $5 off.
-	// DEPRECATED at version 2020-12-16. You can find this information in the `discount_data.amount_money` field of the
-	// `DISCOUNT` catalog object referenced by the pricing rule.
-	FixedDiscountMoney *Money `json:"fixed_discount_money,omitempty" url:"fixed_discount_money,omitempty"`
-	// When `discount_type` is `FIXED_PERCENTAGE`, the maximum discount amount that can be applied.
-	// DEPRECATED at version 2020-12-16. You can find this information in the `discount_data.maximum_amount_money` field
-	// of the `DISCOUNT` catalog object referenced by the the pricing rule.
-	MaxDiscountMoney *Money `json:"max_discount_money,omitempty" url:"max_discount_money,omitempty"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetScope() LoyaltyProgramRewardDefinitionScope {
-	if l == nil {
-		return ""
-	}
-	return l.Scope
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetDiscountType() LoyaltyProgramRewardDefinitionType {
-	if l == nil {
-		return ""
-	}
-	return l.DiscountType
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetPercentageDiscount() *string {
-	if l == nil {
-		return nil
-	}
-	return l.PercentageDiscount
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetCatalogObjectIDs() []string {
-	if l == nil {
-		return nil
-	}
-	return l.CatalogObjectIDs
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetFixedDiscountMoney() *Money {
-	if l == nil {
-		return nil
-	}
-	return l.FixedDiscountMoney
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetMaxDiscountMoney() *Money {
-	if l == nil {
-		return nil
-	}
-	return l.MaxDiscountMoney
-}
-
-func (l *LoyaltyProgramRewardDefinition) GetExtraProperties() map[string]interface{} {
-	return l.extraProperties
-}
-
-func (l *LoyaltyProgramRewardDefinition) UnmarshalJSON(data []byte) error {
-	type unmarshaler LoyaltyProgramRewardDefinition
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*l = LoyaltyProgramRewardDefinition(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *l)
-	if err != nil {
-		return err
-	}
-	l.extraProperties = extraProperties
-	l.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (l *LoyaltyProgramRewardDefinition) String() string {
-	if len(l.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(l); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", l)
-}
-
-// Indicates the scope of the reward tier. DEPRECATED at version 2020-12-16. Discount details
-// are now defined using a catalog pricing rule and other catalog objects. For more information, see
-// [Getting discount details for a reward tier](https://developer.squareup.com/docs/loyalty-api/loyalty-rewards#get-discount-details).
-type LoyaltyProgramRewardDefinitionScope string
-
-const (
-	LoyaltyProgramRewardDefinitionScopeOrder         LoyaltyProgramRewardDefinitionScope = "ORDER"
-	LoyaltyProgramRewardDefinitionScopeItemVariation LoyaltyProgramRewardDefinitionScope = "ITEM_VARIATION"
-	LoyaltyProgramRewardDefinitionScopeCategory      LoyaltyProgramRewardDefinitionScope = "CATEGORY"
-)
-
-func NewLoyaltyProgramRewardDefinitionScopeFromString(s string) (LoyaltyProgramRewardDefinitionScope, error) {
-	switch s {
-	case "ORDER":
-		return LoyaltyProgramRewardDefinitionScopeOrder, nil
-	case "ITEM_VARIATION":
-		return LoyaltyProgramRewardDefinitionScopeItemVariation, nil
-	case "CATEGORY":
-		return LoyaltyProgramRewardDefinitionScopeCategory, nil
-	}
-	var t LoyaltyProgramRewardDefinitionScope
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (l LoyaltyProgramRewardDefinitionScope) Ptr() *LoyaltyProgramRewardDefinitionScope {
-	return &l
-}
-
-// The type of discount the reward tier offers. DEPRECATED at version 2020-12-16. Discount details
-// are now defined using a catalog pricing rule and other catalog objects. For more information, see
-// [Getting discount details for a reward tier](https://developer.squareup.com/docs/loyalty-api/loyalty-rewards#get-discount-details).
-type LoyaltyProgramRewardDefinitionType string
-
-const (
-	LoyaltyProgramRewardDefinitionTypeFixedAmount     LoyaltyProgramRewardDefinitionType = "FIXED_AMOUNT"
-	LoyaltyProgramRewardDefinitionTypeFixedPercentage LoyaltyProgramRewardDefinitionType = "FIXED_PERCENTAGE"
-)
-
-func NewLoyaltyProgramRewardDefinitionTypeFromString(s string) (LoyaltyProgramRewardDefinitionType, error) {
-	switch s {
-	case "FIXED_AMOUNT":
-		return LoyaltyProgramRewardDefinitionTypeFixedAmount, nil
-	case "FIXED_PERCENTAGE":
-		return LoyaltyProgramRewardDefinitionTypeFixedPercentage, nil
-	}
-	var t LoyaltyProgramRewardDefinitionType
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (l LoyaltyProgramRewardDefinitionType) Ptr() *LoyaltyProgramRewardDefinitionType {
-	return &l
-}
-
 // Represents a reward tier in a loyalty program. A reward tier defines how buyers can redeem points for a reward, such as the number of points required and the value and scope of the discount. A loyalty program can offer multiple reward tiers.
 type LoyaltyProgramRewardTier struct {
 	// The Square-assigned ID of the reward tier.
@@ -26192,9 +41551,6 @@ type LoyaltyProgramRewardTier struct {
 	Points int `json:"points" url:"points"`
 	// The name of the reward tier.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
-	// Provides details about the reward tier definition.
-	// DEPRECATED at version 2020-12-16. Replaced by the `pricing_rule_reference` field.
-	Definition *LoyaltyProgramRewardDefinition `json:"definition,omitempty" url:"definition,omitempty"`
 	// The timestamp when the reward tier was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// A reference to the specific version of a `PRICING_RULE` catalog object that contains information about the reward tier discount.
@@ -26227,13 +41583,6 @@ func (l *LoyaltyProgramRewardTier) GetName() *string {
 		return nil
 	}
 	return l.Name
-}
-
-func (l *LoyaltyProgramRewardTier) GetDefinition() *LoyaltyProgramRewardDefinition {
-	if l == nil {
-		return nil
-	}
-	return l.Definition
 }
 
 func (l *LoyaltyProgramRewardTier) GetCreatedAt() *string {
@@ -26351,6 +41700,205 @@ func (l *LoyaltyProgramTerminology) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyProgramTerminology) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty program](entity:LoyaltyProgram) is updated.
+type LoyaltyProgramUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.program.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyProgramUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetData() *LoyaltyProgramUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyProgramUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.program.updated` event.
+type LoyaltyProgramUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_program`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty program.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty program that was updated.
+	Object *LoyaltyProgramUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyProgramUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyProgramUpdatedEventData) GetObject() *LoyaltyProgramUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyProgramUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty program associated with a `loyalty.program.updated` event.
+type LoyaltyProgramUpdatedEventObject struct {
+	// The loyalty program that was updated.
+	LoyaltyProgram *LoyaltyProgram `json:"loyalty_program,omitempty" url:"loyalty_program,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) GetLoyaltyProgram() *LoyaltyProgram {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyProgram
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyProgramUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyProgramUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyProgramUpdatedEventObject) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -26605,6 +42153,205 @@ func (l *LoyaltyPromotionAvailableTimeData) UnmarshalJSON(data []byte) error {
 }
 
 func (l *LoyaltyPromotionAvailableTimeData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Published when a [loyalty promotion](entity:LoyaltyPromotion) is created.
+type LoyaltyPromotionCreatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.promotion.created`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyPromotionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetData() *LoyaltyPromotionCreatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyPromotionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.promotion.created` event.
+type LoyaltyPromotionCreatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_promotion`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty promotion.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty promotion that was created.
+	Object *LoyaltyPromotionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyPromotionCreatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyPromotionCreatedEventData) GetObject() *LoyaltyPromotionCreatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyPromotionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty promotion associated with a `loyalty.promotion.created` event.
+type LoyaltyPromotionCreatedEventObject struct {
+	// The loyalty promotion that was created.
+	LoyaltyPromotion *LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"loyalty_promotion,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) GetLoyaltyPromotion() *LoyaltyPromotion {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyPromotion
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionCreatedEventObject) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -26950,6 +42697,206 @@ func NewLoyaltyPromotionTriggerLimitIntervalFromString(s string) (LoyaltyPromoti
 
 func (l LoyaltyPromotionTriggerLimitInterval) Ptr() *LoyaltyPromotionTriggerLimitInterval {
 	return &l
+}
+
+// Published when a [loyalty promotion](entity:LoyaltyPromotion) is updated. This event is
+// invoked only when a loyalty promotion is canceled.
+type LoyaltyPromotionUpdatedEvent struct {
+	// The ID of the Square seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event. For this event, the value is `loyalty.promotion.updated`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The unique ID for the event, which is used for
+	// [idempotency support](https://developer.squareup.com/docs/webhooks/step4manage#webhooks-best-practices).
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *LoyaltyPromotionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetMerchantID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MerchantID
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetEventID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventID
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetCreatedAt() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAt
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetData() *LoyaltyPromotionUpdatedEventData {
+	if l == nil {
+		return nil
+	}
+	return l.Data
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEvent) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// The data associated with a `loyalty.promotion.updated` event.
+type LoyaltyPromotionUpdatedEventData struct {
+	// The type of object affected by the event. For this event, the value is `loyalty_promotion`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the affected loyalty promotion.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object that contains the loyalty promotion that was updated.
+	Object *LoyaltyPromotionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) GetType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Type
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) GetObject() *LoyaltyPromotionUpdatedEventObject {
+	if l == nil {
+		return nil
+	}
+	return l.Object
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEventData) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// An object that contains the loyalty promotion associated with a `loyalty.promotion.updated` event.
+type LoyaltyPromotionUpdatedEventObject struct {
+	// The loyalty promotion that was updated.
+	LoyaltyPromotion *LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"loyalty_promotion,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) GetLoyaltyPromotion() *LoyaltyPromotion {
+	if l == nil {
+		return nil
+	}
+	return l.LoyaltyPromotion
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler LoyaltyPromotionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LoyaltyPromotionUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LoyaltyPromotionUpdatedEventObject) String() string {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 // Represents a contract to redeem loyalty points for a [reward tier](entity:LoyaltyProgramRewardTier) discount. Loyalty rewards can be in an ISSUED, REDEEMED, or DELETED state.
@@ -27508,6 +43455,1069 @@ func (m MeasurementUnitWeight) Ptr() *MeasurementUnitWeight {
 	return &m
 }
 
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is created by the subscribing application. Subscribe to this event to be notified
+// when your application creates a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is deleted by the subscribing application. Subscribe to this event to be notified
+// when your application deletes a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// is updated by the subscribing application. Subscribe to this event to be notified
+// when your application updates a merchant custom attribute definition.
+type MerchantCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is created. A notification is sent when your application
+// creates a custom attribute definition or another application creates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is deleted. A notification is sent when your application
+// deletes a custom attribute definition or another application deletes a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute definition](entity:CustomAttributeDefinition)
+// that is visible to the subscribing application is updated. A notification is sent when your application
+// updates a custom attribute definition or another application updates a custom attribute definition whose
+// `visibility` is `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+type MerchantCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeDefinitionVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is deleted. Subscribe to this event to be notified
+// when your application deletes a merchant custom attribute.
+type MerchantCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetData() *CustomAttributeEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeOwnedDeletedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute)
+// associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is
+// owned by the subscribing application is updated. Subscribe to this event to be notified
+// when your application updates a merchant custom attribute.
+type MerchantCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetData() *CustomAttributeEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is deleted.
+// An application that subscribes to this event is notified when a merchant custom attribute is deleted
+// by any application for which the subscribing application has read access to the merchant custom attribute.
+type MerchantCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetData() *CustomAttributeEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeVisibleDeletedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant [custom attribute](entity:CustomAttribute) with
+// the `visibility` field set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES` is updated.
+// An application that subscribes to this event is notified when a merchant custom attribute is updated
+// by any application for which the subscribing application has read access to the merchant custom attribute.
+type MerchantCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the seller associated with the event that triggered the event notification.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"merchant.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event notification.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp that indicates when the event notification was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event that triggered the event notification.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetData() *CustomAttributeEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantCustomAttributeVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// Published when online checkout merchant settings are updated
+type MerchantSettingsUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"online_checkout.merchant_settings.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *MerchantSettingsUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetMerchantID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantID
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetEventID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.EventID
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetCreatedAt() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CreatedAt
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetData() *MerchantSettingsUpdatedEventData {
+	if m == nil {
+		return nil
+	}
+	return m.Data
+}
+
+func (m *MerchantSettingsUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEvent) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MerchantSettingsUpdatedEventData struct {
+	// Name of the updated object’s type, `"online_checkout.merchant_settings"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated merchant settings.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated merchant settings.
+	Object *MerchantSettingsUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEventData) GetType() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Type
+}
+
+func (m *MerchantSettingsUpdatedEventData) GetID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ID
+}
+
+func (m *MerchantSettingsUpdatedEventData) GetObject() *MerchantSettingsUpdatedEventObject {
+	if m == nil {
+		return nil
+	}
+	return m.Object
+}
+
+func (m *MerchantSettingsUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEventData) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MerchantSettingsUpdatedEventObject struct {
+	// The updated merchant settings.
+	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (m *MerchantSettingsUpdatedEventObject) GetMerchantSettings() *CheckoutMerchantSettings {
+	if m == nil {
+		return nil
+	}
+	return m.MerchantSettings
+}
+
+func (m *MerchantSettingsUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MerchantSettingsUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler MerchantSettingsUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MerchantSettingsUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+	m.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MerchantSettingsUpdatedEventObject) String() string {
+	if len(m.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
 // Location-specific overrides for specified properties of a `CatalogModifier` object.
 type ModifierLocationOverrides struct {
 	// The ID of the `Location` object representing the location. This can include a deactivated location.
@@ -27643,6 +44653,285 @@ func (m *Money) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", m)
+}
+
+// Published when a merchant/application revokes all access tokens and refresh tokens granted to an application.
+type OauthAuthorizationRevokedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"oauth.authorization.revoked"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OauthAuthorizationRevokedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetData() *OauthAuthorizationRevokedEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OauthAuthorizationRevokedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventData struct {
+	// Name of the affected object’s type, `"revocation"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// Not applicable, revocation is not an object
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about revocation event.
+	Object *OauthAuthorizationRevokedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventData) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OauthAuthorizationRevokedEventData) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *OauthAuthorizationRevokedEventData) GetObject() *OauthAuthorizationRevokedEventObject {
+	if o == nil {
+		return nil
+	}
+	return o.Object
+}
+
+func (o *OauthAuthorizationRevokedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventData) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventObject struct {
+	// The revocation event.
+	Revocation *OauthAuthorizationRevokedEventRevocationObject `json:"revocation,omitempty" url:"revocation,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventObject) GetRevocation() *OauthAuthorizationRevokedEventRevocationObject {
+	if o == nil {
+		return nil
+	}
+	return o.Revocation
+}
+
+func (o *OauthAuthorizationRevokedEventObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventObject) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OauthAuthorizationRevokedEventRevocationObject struct {
+	// Timestamp of when the revocation event occurred, in RFC 3339 format.
+	RevokedAt *string `json:"revoked_at,omitempty" url:"revoked_at,omitempty"`
+	// Type of client that performed the revocation, either APPLICATION, MERCHANT, or SQUARE.
+	// See [OauthAuthorizationRevokedEventRevokerType](#type-oauthauthorizationrevokedeventrevokertype) for possible values
+	RevokerType *OauthAuthorizationRevokedEventRevokerType `json:"revoker_type,omitempty" url:"revoker_type,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) GetRevokedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.RevokedAt
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) GetRevokerType() *OauthAuthorizationRevokedEventRevokerType {
+	if o == nil {
+		return nil
+	}
+	return o.RevokerType
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OauthAuthorizationRevokedEventRevocationObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OauthAuthorizationRevokedEventRevocationObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OauthAuthorizationRevokedEventRevocationObject) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Defines the possible types for the revoking client.
+type OauthAuthorizationRevokedEventRevokerType string
+
+const (
+	OauthAuthorizationRevokedEventRevokerTypeApplication OauthAuthorizationRevokedEventRevokerType = "APPLICATION"
+	OauthAuthorizationRevokedEventRevokerTypeMerchant    OauthAuthorizationRevokedEventRevokerType = "MERCHANT"
+	OauthAuthorizationRevokedEventRevokerTypeSquare      OauthAuthorizationRevokedEventRevokerType = "SQUARE"
+)
+
+func NewOauthAuthorizationRevokedEventRevokerTypeFromString(s string) (OauthAuthorizationRevokedEventRevokerType, error) {
+	switch s {
+	case "APPLICATION":
+		return OauthAuthorizationRevokedEventRevokerTypeApplication, nil
+	case "MERCHANT":
+		return OauthAuthorizationRevokedEventRevokerTypeMerchant, nil
+	case "SQUARE":
+		return OauthAuthorizationRevokedEventRevokerTypeSquare, nil
+	}
+	var t OauthAuthorizationRevokedEventRevokerType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OauthAuthorizationRevokedEventRevokerType) Ptr() *OauthAuthorizationRevokedEventRevokerType {
+	return &o
 }
 
 // Contains all information related to a single order to process with Square,
@@ -28017,6 +45306,1636 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 }
 
 func (o *Order) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderCreated struct {
+	// The order's unique ID.
+	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
+	// The version number, which is incremented each time an update is committed to the order.
+	// Orders that were not created through the API do not include a version number and
+	// therefore cannot be updated.
+	//
+	// [Read more about working with versions.](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders)
+	Version *int `json:"version,omitempty" url:"version,omitempty"`
+	// The ID of the seller location that this order is associated with.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The state of the order.
+	// See [OrderState](#type-orderstate) for possible values
+	State *OrderState `json:"state,omitempty" url:"state,omitempty"`
+	// The timestamp for when the order was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCreated) GetOrderID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrderID
+}
+
+func (o *OrderCreated) GetVersion() *int {
+	if o == nil {
+		return nil
+	}
+	return o.Version
+}
+
+func (o *OrderCreated) GetLocationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LocationID
+}
+
+func (o *OrderCreated) GetState() *OrderState {
+	if o == nil {
+		return nil
+	}
+	return o.State
+}
+
+func (o *OrderCreated) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCreated) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreated) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreated
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreated(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreated) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an [Order](entity:Order) is created. This event is
+// triggered only by the [CreateOrder](api-endpoint:Orders-CreateOrder) endpoint call.
+//
+// Creating an order in the Point of Sale app will **not** publish this event.
+type OrderCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCreatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCreatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCreatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCreatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCreatedEvent) GetData() *OrderCreatedEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderCreatedEventData struct {
+	// Name of the affected object’s type, `"order_created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the created Order.
+	Object *OrderCreatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCreatedEventData) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCreatedEventData) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *OrderCreatedEventData) GetObject() *OrderCreatedObject {
+	if o == nil {
+		return nil
+	}
+	return o.Object
+}
+
+func (o *OrderCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreatedEventData) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderCreatedObject struct {
+	// Information about the created order.
+	OrderCreated *OrderCreated `json:"order_created,omitempty" url:"order_created,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCreatedObject) GetOrderCreated() *OrderCreated {
+	if o == nil {
+		return nil
+	}
+	return o.OrderCreated
+}
+
+func (o *OrderCreatedObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCreatedObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCreatedObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCreatedObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCreatedObject) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is created.
+type OrderCustomAttributeDefinitionOwnedCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedCreatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is deleted.
+type OrderCustomAttributeDefinitionOwnedDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedDeletedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is updated.
+type OrderCustomAttributeDefinitionOwnedUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionOwnedUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is created.
+type OrderCustomAttributeDefinitionVisibleCreatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleCreatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is deleted.
+type OrderCustomAttributeDefinitionVisibleDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleDeletedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute definition](entity:CustomAttributeDefinition) that is visible to the subscribing app is updated.
+type OrderCustomAttributeDefinitionVisibleUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute_definition.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeDefinitionEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetData() *CustomAttributeDefinitionEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeDefinitionVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeDefinitionVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeDefinitionVisibleUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is deleted.
+type OrderCustomAttributeOwnedDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.owned.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetData() *CustomAttributeEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeOwnedDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeOwnedDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeOwnedDeletedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) associated with a [custom attribute definition](entity:CustomAttributeDefinition) that is owned by the subscribing app is updated.
+type OrderCustomAttributeOwnedUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.owned.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetData() *CustomAttributeEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeOwnedUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeOwnedUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeOwnedUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) that is visible to the subscribing app is deleted.
+type OrderCustomAttributeVisibleDeletedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.visible.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetData() *CustomAttributeEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeVisibleDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeVisibleDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeVisibleDeletedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an order [custom attribute](entity:CustomAttribute) that is visible to the subscribing app is updated.
+type OrderCustomAttributeVisibleUpdatedEvent struct {
+	// The ID of the target seller associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of this event. The value is `"order.custom_attribute.visible.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with the event.
+	Data *CustomAttributeEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetData() *CustomAttributeEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderCustomAttributeVisibleUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderCustomAttributeVisibleUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderCustomAttributeVisibleUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// The schedule type of the delivery fulfillment.
+type OrderFulfillmentDeliveryDetailsScheduleType string
+
+const (
+	OrderFulfillmentDeliveryDetailsScheduleTypeScheduled OrderFulfillmentDeliveryDetailsScheduleType = "SCHEDULED"
+	OrderFulfillmentDeliveryDetailsScheduleTypeAsap      OrderFulfillmentDeliveryDetailsScheduleType = "ASAP"
+)
+
+func NewOrderFulfillmentDeliveryDetailsScheduleTypeFromString(s string) (OrderFulfillmentDeliveryDetailsScheduleType, error) {
+	switch s {
+	case "SCHEDULED":
+		return OrderFulfillmentDeliveryDetailsScheduleTypeScheduled, nil
+	case "ASAP":
+		return OrderFulfillmentDeliveryDetailsScheduleTypeAsap, nil
+	}
+	var t OrderFulfillmentDeliveryDetailsScheduleType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderFulfillmentDeliveryDetailsScheduleType) Ptr() *OrderFulfillmentDeliveryDetailsScheduleType {
+	return &o
+}
+
+// The `line_item_application` describes what order line items this fulfillment applies
+// to. It can be `ALL` or `ENTRY_LIST` with a supplied list of fulfillment entries.
+type OrderFulfillmentFulfillmentLineItemApplication string
+
+const (
+	OrderFulfillmentFulfillmentLineItemApplicationAll       OrderFulfillmentFulfillmentLineItemApplication = "ALL"
+	OrderFulfillmentFulfillmentLineItemApplicationEntryList OrderFulfillmentFulfillmentLineItemApplication = "ENTRY_LIST"
+)
+
+func NewOrderFulfillmentFulfillmentLineItemApplicationFromString(s string) (OrderFulfillmentFulfillmentLineItemApplication, error) {
+	switch s {
+	case "ALL":
+		return OrderFulfillmentFulfillmentLineItemApplicationAll, nil
+	case "ENTRY_LIST":
+		return OrderFulfillmentFulfillmentLineItemApplicationEntryList, nil
+	}
+	var t OrderFulfillmentFulfillmentLineItemApplication
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderFulfillmentFulfillmentLineItemApplication) Ptr() *OrderFulfillmentFulfillmentLineItemApplication {
+	return &o
+}
+
+// The schedule type of the pickup fulfillment.
+type OrderFulfillmentPickupDetailsScheduleType string
+
+const (
+	OrderFulfillmentPickupDetailsScheduleTypeScheduled OrderFulfillmentPickupDetailsScheduleType = "SCHEDULED"
+	OrderFulfillmentPickupDetailsScheduleTypeAsap      OrderFulfillmentPickupDetailsScheduleType = "ASAP"
+)
+
+func NewOrderFulfillmentPickupDetailsScheduleTypeFromString(s string) (OrderFulfillmentPickupDetailsScheduleType, error) {
+	switch s {
+	case "SCHEDULED":
+		return OrderFulfillmentPickupDetailsScheduleTypeScheduled, nil
+	case "ASAP":
+		return OrderFulfillmentPickupDetailsScheduleTypeAsap, nil
+	}
+	var t OrderFulfillmentPickupDetailsScheduleType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderFulfillmentPickupDetailsScheduleType) Ptr() *OrderFulfillmentPickupDetailsScheduleType {
+	return &o
+}
+
+// The current state of this fulfillment.
+type OrderFulfillmentState string
+
+const (
+	OrderFulfillmentStateProposed  OrderFulfillmentState = "PROPOSED"
+	OrderFulfillmentStateReserved  OrderFulfillmentState = "RESERVED"
+	OrderFulfillmentStatePrepared  OrderFulfillmentState = "PREPARED"
+	OrderFulfillmentStateCompleted OrderFulfillmentState = "COMPLETED"
+	OrderFulfillmentStateCanceled  OrderFulfillmentState = "CANCELED"
+	OrderFulfillmentStateFailed    OrderFulfillmentState = "FAILED"
+)
+
+func NewOrderFulfillmentStateFromString(s string) (OrderFulfillmentState, error) {
+	switch s {
+	case "PROPOSED":
+		return OrderFulfillmentStateProposed, nil
+	case "RESERVED":
+		return OrderFulfillmentStateReserved, nil
+	case "PREPARED":
+		return OrderFulfillmentStatePrepared, nil
+	case "COMPLETED":
+		return OrderFulfillmentStateCompleted, nil
+	case "CANCELED":
+		return OrderFulfillmentStateCanceled, nil
+	case "FAILED":
+		return OrderFulfillmentStateFailed, nil
+	}
+	var t OrderFulfillmentState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderFulfillmentState) Ptr() *OrderFulfillmentState {
+	return &o
+}
+
+// The type of fulfillment.
+type OrderFulfillmentType string
+
+const (
+	OrderFulfillmentTypePickup   OrderFulfillmentType = "PICKUP"
+	OrderFulfillmentTypeShipment OrderFulfillmentType = "SHIPMENT"
+	OrderFulfillmentTypeDelivery OrderFulfillmentType = "DELIVERY"
+)
+
+func NewOrderFulfillmentTypeFromString(s string) (OrderFulfillmentType, error) {
+	switch s {
+	case "PICKUP":
+		return OrderFulfillmentTypePickup, nil
+	case "SHIPMENT":
+		return OrderFulfillmentTypeShipment, nil
+	case "DELIVERY":
+		return OrderFulfillmentTypeDelivery, nil
+	}
+	var t OrderFulfillmentType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderFulfillmentType) Ptr() *OrderFulfillmentType {
+	return &o
+}
+
+type OrderFulfillmentUpdated struct {
+	// The order's unique ID.
+	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
+	// The version number, which is incremented each time an update is committed to the order.
+	// Orders that were not created through the API do not include a version number and
+	// therefore cannot be updated.
+	//
+	// [Read more about working with versions.](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders)
+	Version *int `json:"version,omitempty" url:"version,omitempty"`
+	// The ID of the seller location that this order is associated with.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The state of the order.
+	// See [OrderState](#type-orderstate) for possible values
+	State *OrderState `json:"state,omitempty" url:"state,omitempty"`
+	// The timestamp for when the order was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp for when the order was last updated, in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// The fulfillments that were updated with this version change.
+	FulfillmentUpdate []*OrderFulfillmentUpdatedUpdate `json:"fulfillment_update,omitempty" url:"fulfillment_update,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdated) GetOrderID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrderID
+}
+
+func (o *OrderFulfillmentUpdated) GetVersion() *int {
+	if o == nil {
+		return nil
+	}
+	return o.Version
+}
+
+func (o *OrderFulfillmentUpdated) GetLocationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LocationID
+}
+
+func (o *OrderFulfillmentUpdated) GetState() *OrderState {
+	if o == nil {
+		return nil
+	}
+	return o.State
+}
+
+func (o *OrderFulfillmentUpdated) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderFulfillmentUpdated) GetUpdatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *OrderFulfillmentUpdated) GetFulfillmentUpdate() []*OrderFulfillmentUpdatedUpdate {
+	if o == nil {
+		return nil
+	}
+	return o.FulfillmentUpdate
+}
+
+func (o *OrderFulfillmentUpdated) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdated) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdated
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdated(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdated) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an [OrderFulfillment](entity:OrderFulfillment)
+// is created or updated. This event is triggered only by the
+// [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint call.
+type OrderFulfillmentUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.fulfillment.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderFulfillmentUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetData() *OrderFulfillmentUpdatedEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderFulfillmentUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderFulfillmentUpdatedEventData struct {
+	// Name of the affected object’s type, `"order_fulfillment_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the updated Order.
+	Object *OrderFulfillmentUpdatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedEventData) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderFulfillmentUpdatedEventData) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *OrderFulfillmentUpdatedEventData) GetObject() *OrderFulfillmentUpdatedObject {
+	if o == nil {
+		return nil
+	}
+	return o.Object
+}
+
+func (o *OrderFulfillmentUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedEventData) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderFulfillmentUpdatedObject struct {
+	// Information about the updated order fulfillment.
+	OrderFulfillmentUpdated *OrderFulfillmentUpdated `json:"order_fulfillment_updated,omitempty" url:"order_fulfillment_updated,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedObject) GetOrderFulfillmentUpdated() *OrderFulfillmentUpdated {
+	if o == nil {
+		return nil
+	}
+	return o.OrderFulfillmentUpdated
+}
+
+func (o *OrderFulfillmentUpdatedObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedObject) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Information about fulfillment updates.
+type OrderFulfillmentUpdatedUpdate struct {
+	// A unique ID that identifies the fulfillment only within this order.
+	FulfillmentUID *string `json:"fulfillment_uid,omitempty" url:"fulfillment_uid,omitempty"`
+	// The state of the fulfillment before the change.
+	// The state is not populated if the fulfillment is created with this new `Order` version.
+	OldState *FulfillmentState `json:"old_state,omitempty" url:"old_state,omitempty"`
+	// The state of the fulfillment after the change. The state might be equal to `old_state` if a non-state
+	// field was changed on the fulfillment (such as the tracking number).
+	NewState *FulfillmentState `json:"new_state,omitempty" url:"new_state,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) GetFulfillmentUID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FulfillmentUID
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) GetOldState() *FulfillmentState {
+	if o == nil {
+		return nil
+	}
+	return o.OldState
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) GetNewState() *FulfillmentState {
+	if o == nil {
+		return nil
+	}
+	return o.NewState
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderFulfillmentUpdatedUpdate
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderFulfillmentUpdatedUpdate(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderFulfillmentUpdatedUpdate) String() string {
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -31218,6 +50137,497 @@ func (o OrderState) Ptr() *OrderState {
 	return &o
 }
 
+type OrderUpdated struct {
+	// The order's unique ID.
+	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
+	// The version number, which is incremented each time an update is committed to the order.
+	// Orders that were not created through the API do not include a version number and
+	// therefore cannot be updated.
+	//
+	// [Read more about working with versions.](https://developer.squareup.com/docs/orders-api/manage-orders/update-orders)
+	Version *int `json:"version,omitempty" url:"version,omitempty"`
+	// The ID of the seller location that this order is associated with.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The state of the order.
+	// See [OrderState](#type-orderstate) for possible values
+	State *OrderState `json:"state,omitempty" url:"state,omitempty"`
+	// The timestamp for when the order was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The timestamp for when the order was last updated, in RFC 3339 format.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderUpdated) GetOrderID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrderID
+}
+
+func (o *OrderUpdated) GetVersion() *int {
+	if o == nil {
+		return nil
+	}
+	return o.Version
+}
+
+func (o *OrderUpdated) GetLocationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.LocationID
+}
+
+func (o *OrderUpdated) GetState() *OrderState {
+	if o == nil {
+		return nil
+	}
+	return o.State
+}
+
+func (o *OrderUpdated) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderUpdated) GetUpdatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UpdatedAt
+}
+
+func (o *OrderUpdated) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdated) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdated
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdated(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdated) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when an [Order](entity:Order) is updated. This
+// event is triggered by the [UpdateOrder](api-endpoint:Orders-UpdateOrder)
+// endpoint call, Order Manager, or the Square Dashboard.
+type OrderUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"order.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *OrderUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderUpdatedEvent) GetMerchantID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.MerchantID
+}
+
+func (o *OrderUpdatedEvent) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderUpdatedEvent) GetEventID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EventID
+}
+
+func (o *OrderUpdatedEvent) GetCreatedAt() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CreatedAt
+}
+
+func (o *OrderUpdatedEvent) GetData() *OrderUpdatedEventData {
+	if o == nil {
+		return nil
+	}
+	return o.Data
+}
+
+func (o *OrderUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdatedEvent) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderUpdatedEventData struct {
+	// Name of the affected object’s type, `"order_updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing information about the updated Order.
+	Object *OrderUpdatedObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderUpdatedEventData) GetType() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Type
+}
+
+func (o *OrderUpdatedEventData) GetID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ID
+}
+
+func (o *OrderUpdatedEventData) GetObject() *OrderUpdatedObject {
+	if o == nil {
+		return nil
+	}
+	return o.Object
+}
+
+func (o *OrderUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdatedEventData) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OrderUpdatedObject struct {
+	// Information about the updated order.
+	OrderUpdated *OrderUpdated `json:"order_updated,omitempty" url:"order_updated,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderUpdatedObject) GetOrderUpdated() *OrderUpdated {
+	if o == nil {
+		return nil
+	}
+	return o.OrderUpdated
+}
+
+func (o *OrderUpdatedObject) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderUpdatedObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderUpdatedObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderUpdatedObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderUpdatedObject) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Published when a [Payment](entity:Payment) is created.
+type PaymentCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"payment.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PaymentCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentCreatedEvent) GetMerchantID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MerchantID
+}
+
+func (p *PaymentCreatedEvent) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PaymentCreatedEvent) GetEventID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EventID
+}
+
+func (p *PaymentCreatedEvent) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PaymentCreatedEvent) GetData() *PaymentCreatedEventData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PaymentCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEvent) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentCreatedEventData struct {
+	// Name of the affected object’s type, `"payment"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected payment.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created payment.
+	Object *PaymentCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentCreatedEventData) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PaymentCreatedEventData) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PaymentCreatedEventData) GetObject() *PaymentCreatedEventObject {
+	if p == nil {
+		return nil
+	}
+	return p.Object
+}
+
+func (p *PaymentCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEventData) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentCreatedEventObject struct {
+	// The created payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentCreatedEventObject) GetPayment() *Payment {
+	if p == nil {
+		return nil
+	}
+	return p.Payment
+}
+
+func (p *PaymentCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentCreatedEventObject) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaymentLink struct {
 	// The Square-assigned ID of the payment link.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -31544,6 +50954,819 @@ func NewPaymentOptionsDelayActionFromString(s string) (PaymentOptionsDelayAction
 
 func (p PaymentOptionsDelayAction) Ptr() *PaymentOptionsDelayAction {
 	return &p
+}
+
+// Published when a [Payment](entity:Payment) is updated.
+// Typically the `payment.status`, or `card_details.status` fields are updated
+// as a payment is canceled, authorized, or completed.
+type PaymentUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"payment.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PaymentUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentUpdatedEvent) GetMerchantID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MerchantID
+}
+
+func (p *PaymentUpdatedEvent) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PaymentUpdatedEvent) GetEventID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EventID
+}
+
+func (p *PaymentUpdatedEvent) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PaymentUpdatedEvent) GetData() *PaymentUpdatedEventData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PaymentUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEvent) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentUpdatedEventData struct {
+	// Name of the affected object’s type, `"payment"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected payment.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated payment.
+	Object *PaymentUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentUpdatedEventData) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PaymentUpdatedEventData) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PaymentUpdatedEventData) GetObject() *PaymentUpdatedEventObject {
+	if p == nil {
+		return nil
+	}
+	return p.Object
+}
+
+func (p *PaymentUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEventData) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaymentUpdatedEventObject struct {
+	// The updated payment.
+	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PaymentUpdatedEventObject) GetPayment() *Payment {
+	if p == nil {
+		return nil
+	}
+	return p.Payment
+}
+
+func (p *PaymentUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaymentUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaymentUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaymentUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaymentUpdatedEventObject) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Published when a [Payout](entity:Payout) has failed.
+type PayoutFailedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event that this represents, `payout.failed`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutFailedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutFailedEvent) GetMerchantID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MerchantID
+}
+
+func (p *PayoutFailedEvent) GetLocationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LocationID
+}
+
+func (p *PayoutFailedEvent) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutFailedEvent) GetEventID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EventID
+}
+
+func (p *PayoutFailedEvent) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PayoutFailedEvent) GetData() *PayoutFailedEventData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PayoutFailedEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEvent) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutFailedEventData struct {
+	// The name of the affected object's type, `payout`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the failed payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the failed payout.
+	Object *PayoutFailedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutFailedEventData) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutFailedEventData) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PayoutFailedEventData) GetObject() *PayoutFailedEventObject {
+	if p == nil {
+		return nil
+	}
+	return p.Object
+}
+
+func (p *PayoutFailedEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEventData) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutFailedEventObject struct {
+	// The payout that failed.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutFailedEventObject) GetPayout() *Payout {
+	if p == nil {
+		return nil
+	}
+	return p.Payout
+}
+
+func (p *PayoutFailedEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutFailedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutFailedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutFailedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutFailedEventObject) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Published when a [Payout](entity:Payout) is complete.
+type PayoutPaidEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"payout.paid"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutPaidEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutPaidEvent) GetMerchantID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MerchantID
+}
+
+func (p *PayoutPaidEvent) GetLocationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LocationID
+}
+
+func (p *PayoutPaidEvent) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutPaidEvent) GetEventID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EventID
+}
+
+func (p *PayoutPaidEvent) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PayoutPaidEvent) GetData() *PayoutPaidEventData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PayoutPaidEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEvent) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutPaidEventData struct {
+	// Name of the affected object’s type, `"payout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the completed payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the completed payout.
+	Object *PayoutPaidEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutPaidEventData) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutPaidEventData) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PayoutPaidEventData) GetObject() *PayoutPaidEventObject {
+	if p == nil {
+		return nil
+	}
+	return p.Object
+}
+
+func (p *PayoutPaidEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEventData) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutPaidEventObject struct {
+	// The payout that has completed.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutPaidEventObject) GetPayout() *Payout {
+	if p == nil {
+		return nil
+	}
+	return p.Payout
+}
+
+func (p *PayoutPaidEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutPaidEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutPaidEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutPaidEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutPaidEventObject) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Published when a [Payout](entity:Payout) is sent.
+type PayoutSentEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of the target location associated with the event.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of event this represents, `"payout.sent"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was verified, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *PayoutSentEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutSentEvent) GetMerchantID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MerchantID
+}
+
+func (p *PayoutSentEvent) GetLocationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LocationID
+}
+
+func (p *PayoutSentEvent) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutSentEvent) GetEventID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.EventID
+}
+
+func (p *PayoutSentEvent) GetCreatedAt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PayoutSentEvent) GetData() *PayoutSentEventData {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PayoutSentEvent) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEvent) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutSentEventData struct {
+	// Name of the affected object’s type, `"payout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the sent payout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the sent payout.
+	Object *PayoutSentEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutSentEventData) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PayoutSentEventData) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PayoutSentEventData) GetObject() *PayoutSentEventObject {
+	if p == nil {
+		return nil
+	}
+	return p.Object
+}
+
+func (p *PayoutSentEventData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEventData) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PayoutSentEventObject struct {
+	// The payout that was sent.
+	Payout *Payout `json:"payout,omitempty" url:"payout,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (p *PayoutSentEventObject) GetPayout() *Payout {
+	if p == nil {
+		return nil
+	}
+	return p.Payout
+}
+
+func (p *PayoutSentEventObject) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PayoutSentEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayoutSentEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PayoutSentEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+	p.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PayoutSentEventObject) String() string {
+	if len(p.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 // Describes buyer data to prepopulate in the payment form.
@@ -32002,7 +52225,7 @@ type Refund struct {
 	// The ID of the transaction that the refunded tender is part of.
 	TransactionID *string `json:"transaction_id,omitempty" url:"transaction_id,omitempty"`
 	// The ID of the refunded tender.
-	TenderID string `json:"tender_id" url:"tender_id"`
+	TenderID *string `json:"tender_id,omitempty" url:"tender_id,omitempty"`
 	// The timestamp for when the refund was created, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The reason for the refund being issued.
@@ -32044,9 +52267,9 @@ func (r *Refund) GetTransactionID() *string {
 	return r.TransactionID
 }
 
-func (r *Refund) GetTenderID() string {
+func (r *Refund) GetTenderID() *string {
 	if r == nil {
-		return ""
+		return nil
 	}
 	return r.TenderID
 }
@@ -32125,6 +52348,202 @@ func (r *Refund) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// Published when a [Refund](entity:PaymentRefund) is created.
+type RefundCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"refund.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *RefundCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundCreatedEvent) GetMerchantID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.MerchantID
+}
+
+func (r *RefundCreatedEvent) GetType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Type
+}
+
+func (r *RefundCreatedEvent) GetEventID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.EventID
+}
+
+func (r *RefundCreatedEvent) GetCreatedAt() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CreatedAt
+}
+
+func (r *RefundCreatedEvent) GetData() *RefundCreatedEventData {
+	if r == nil {
+		return nil
+	}
+	return r.Data
+}
+
+func (r *RefundCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEvent) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundCreatedEventData struct {
+	// Name of the affected object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created refund.
+	Object *RefundCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundCreatedEventData) GetType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Type
+}
+
+func (r *RefundCreatedEventData) GetID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.ID
+}
+
+func (r *RefundCreatedEventData) GetObject() *RefundCreatedEventObject {
+	if r == nil {
+		return nil
+	}
+	return r.Object
+}
+
+func (r *RefundCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEventData) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundCreatedEventObject struct {
+	// The created refund.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundCreatedEventObject) GetRefund() *PaymentRefund {
+	if r == nil {
+		return nil
+	}
+	return r.Refund
+}
+
+func (r *RefundCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundCreatedEventObject) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Indicates a refund's current status.
 type RefundStatus string
 
@@ -32152,6 +52571,203 @@ func NewRefundStatusFromString(s string) (RefundStatus, error) {
 
 func (r RefundStatus) Ptr() *RefundStatus {
 	return &r
+}
+
+// Published when a [Refund](entity:PaymentRefund) is updated.
+// Typically the `refund.status` changes when a refund is completed.
+type RefundUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"refund.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *RefundUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundUpdatedEvent) GetMerchantID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.MerchantID
+}
+
+func (r *RefundUpdatedEvent) GetType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Type
+}
+
+func (r *RefundUpdatedEvent) GetEventID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.EventID
+}
+
+func (r *RefundUpdatedEvent) GetCreatedAt() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CreatedAt
+}
+
+func (r *RefundUpdatedEvent) GetData() *RefundUpdatedEventData {
+	if r == nil {
+		return nil
+	}
+	return r.Data
+}
+
+func (r *RefundUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEvent) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundUpdatedEventData struct {
+	// Name of the affected object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated refund.
+	Object *RefundUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundUpdatedEventData) GetType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Type
+}
+
+func (r *RefundUpdatedEventData) GetID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.ID
+}
+
+func (r *RefundUpdatedEventData) GetObject() *RefundUpdatedEventObject {
+	if r == nil {
+		return nil
+	}
+	return r.Object
+}
+
+func (r *RefundUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEventData) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RefundUpdatedEventObject struct {
+	// The updated refund.
+	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RefundUpdatedEventObject) GetRefund() *PaymentRefund {
+	if r == nil {
+		return nil
+	}
+	return r.Refund
+}
+
+func (r *RefundUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RefundUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RefundUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RefundUpdatedEventObject) String() string {
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }
 
 // Defines the fields that are included in the response body of
@@ -34393,6 +55009,202 @@ func (s SubscriptionCadence) Ptr() *SubscriptionCadence {
 	return &s
 }
 
+// Published when a [Subscription](entity:Subscription) is created.
+type SubscriptionCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"subscription.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *SubscriptionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionCreatedEvent) GetMerchantID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.MerchantID
+}
+
+func (s *SubscriptionCreatedEvent) GetType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Type
+}
+
+func (s *SubscriptionCreatedEvent) GetEventID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.EventID
+}
+
+func (s *SubscriptionCreatedEvent) GetCreatedAt() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CreatedAt
+}
+
+func (s *SubscriptionCreatedEvent) GetData() *SubscriptionCreatedEventData {
+	if s == nil {
+		return nil
+	}
+	return s.Data
+}
+
+func (s *SubscriptionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEvent) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionCreatedEventData struct {
+	// Name of the affected object’s type, `"subscription"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected subscription.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created subscription.
+	Object *SubscriptionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionCreatedEventData) GetType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Type
+}
+
+func (s *SubscriptionCreatedEventData) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
+}
+
+func (s *SubscriptionCreatedEventData) GetObject() *SubscriptionCreatedEventObject {
+	if s == nil {
+		return nil
+	}
+	return s.Object
+}
+
+func (s *SubscriptionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEventData) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionCreatedEventObject struct {
+	// The created subscription.
+	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionCreatedEventObject) GetSubscription() *Subscription {
+	if s == nil {
+		return nil
+	}
+	return s.Subscription
+}
+
+func (s *SubscriptionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionCreatedEventObject) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 // Describes a phase in a subscription plan variation. For more information, see [Subscription Plans and Variations](https://developer.squareup.com/docs/subscriptions-api/plans-and-variations).
 type SubscriptionPhase struct {
 	// The Square-assigned ID of the subscription phase. This field cannot be changed after a `SubscriptionPhase` is created.
@@ -34664,6 +55476,204 @@ func (s *SubscriptionTestResult) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+// Published when a [Subscription](entity:Subscription) is updated.
+// Typically the `subscription.status` is updated as subscriptions become active
+// or cancelled.
+type SubscriptionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"subscription.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *SubscriptionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEvent) GetMerchantID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.MerchantID
+}
+
+func (s *SubscriptionUpdatedEvent) GetType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Type
+}
+
+func (s *SubscriptionUpdatedEvent) GetEventID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.EventID
+}
+
+func (s *SubscriptionUpdatedEvent) GetCreatedAt() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CreatedAt
+}
+
+func (s *SubscriptionUpdatedEvent) GetData() *SubscriptionUpdatedEventData {
+	if s == nil {
+		return nil
+	}
+	return s.Data
+}
+
+func (s *SubscriptionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEvent) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionUpdatedEventData struct {
+	// Name of the affected object’s type, `"subscription"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected subscription.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated subscription.
+	Object *SubscriptionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEventData) GetType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Type
+}
+
+func (s *SubscriptionUpdatedEventData) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
+}
+
+func (s *SubscriptionUpdatedEventData) GetObject() *SubscriptionUpdatedEventObject {
+	if s == nil {
+		return nil
+	}
+	return s.Object
+}
+
+func (s *SubscriptionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEventData) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubscriptionUpdatedEventObject struct {
+	// The updated subscription.
+	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *SubscriptionUpdatedEventObject) GetSubscription() *Subscription {
+	if s == nil {
+		return nil
+	}
+	return s.Subscription
+}
+
+func (s *SubscriptionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SubscriptionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubscriptionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubscriptionUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubscriptionUpdatedEventObject) String() string {
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 // When to calculate the taxes due on a cart.
 type TaxCalculationPhase string
 
@@ -34794,6 +55804,424 @@ func (t *TeamMemberBookingProfile) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a Team Member is created.
+type TeamMemberCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberCreatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TeamMemberCreatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberCreatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TeamMemberCreatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TeamMemberCreatedEvent) GetData() *TeamMemberCreatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TeamMemberCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberCreatedEventData struct {
+	// Name of the affected object’s type, `"team_member"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created team member.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created team member.
+	Object *TeamMemberCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberCreatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberCreatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TeamMemberCreatedEventData) GetObject() *TeamMemberCreatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TeamMemberCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberCreatedEventObject struct {
+	// The created team member.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberCreatedEventObject) GetTeamMember() *TeamMember {
+	if t == nil {
+		return nil
+	}
+	return t.TeamMember
+}
+
+func (t *TeamMemberCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberCreatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Enumerates the possible invitation statuses the team member can have within a business.
+type TeamMemberInvitationStatus string
+
+const (
+	TeamMemberInvitationStatusUninvited TeamMemberInvitationStatus = "UNINVITED"
+	TeamMemberInvitationStatusPending   TeamMemberInvitationStatus = "PENDING"
+	TeamMemberInvitationStatusAccepted  TeamMemberInvitationStatus = "ACCEPTED"
+)
+
+func NewTeamMemberInvitationStatusFromString(s string) (TeamMemberInvitationStatus, error) {
+	switch s {
+	case "UNINVITED":
+		return TeamMemberInvitationStatusUninvited, nil
+	case "PENDING":
+		return TeamMemberInvitationStatusPending, nil
+	case "ACCEPTED":
+		return TeamMemberInvitationStatusAccepted, nil
+	}
+	var t TeamMemberInvitationStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TeamMemberInvitationStatus) Ptr() *TeamMemberInvitationStatus {
+	return &t
+}
+
+// Published when a Team Member is updated.
+type TeamMemberUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TeamMemberUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TeamMemberUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TeamMemberUpdatedEvent) GetData() *TeamMemberUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TeamMemberUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberUpdatedEventData struct {
+	// Name of the affected object’s type, `"team_member"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected team member.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated team member.
+	Object *TeamMemberUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TeamMemberUpdatedEventData) GetObject() *TeamMemberUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TeamMemberUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberUpdatedEventObject struct {
+	// The updated team member.
+	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberUpdatedEventObject) GetTeamMember() *TeamMember {
+	if t == nil {
+		return nil
+	}
+	return t.TeamMember
+}
+
+func (t *TeamMemberUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberUpdatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Job and wage information for a [team member](entity:TeamMember).
 // This convenience object provides details needed to specify the `wage`
 // field for a [timecard](entity:Timecard).
@@ -34879,6 +56307,202 @@ func (t *TeamMemberWage) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TeamMemberWage) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a Wage Setting is updated.
+type TeamMemberWageSettingUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"team_member.wage_setting.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TeamMemberWageSettingUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetData() *TeamMemberWageSettingUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberWageSettingUpdatedEventData struct {
+	// Name of the affected object’s type, `"wage_setting"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated team member wage setting.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated team member wage setting.
+	Object *TeamMemberWageSettingUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) GetObject() *TeamMemberWageSettingUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TeamMemberWageSettingUpdatedEventObject struct {
+	// The updated team member wage setting.
+	WageSetting *WageSetting `json:"wage_setting,omitempty" url:"wage_setting,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) GetWageSetting() *WageSetting {
+	if t == nil {
+		return nil
+	}
+	return t.WageSetting
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TeamMemberWageSettingUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TeamMemberWageSettingUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TeamMemberWageSettingUpdatedEventObject) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -35887,6 +57511,202 @@ func (t TerminalActionActionType) Ptr() *TerminalActionActionType {
 	return &t
 }
 
+// Published when a TerminalAction is created.
+type TerminalActionCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.action.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalActionCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionCreatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalActionCreatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalActionCreatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalActionCreatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalActionCreatedEvent) GetData() *TerminalActionCreatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalActionCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionCreatedEventData struct {
+	// Name of the created object’s type, `"action"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal action.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal action.
+	Object *TerminalActionCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionCreatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalActionCreatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalActionCreatedEventData) GetObject() *TerminalActionCreatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalActionCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionCreatedEventObject struct {
+	// The created terminal action.
+	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionCreatedEventObject) GetAction() *TerminalAction {
+	if t == nil {
+		return nil
+	}
+	return t.Action
+}
+
+func (t *TerminalActionCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionCreatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TerminalActionQuery struct {
 	// Options for filtering returned `TerminalAction`s
 	Filter *TerminalActionQueryFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -36061,6 +57881,202 @@ func (t *TerminalActionQuerySort) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalActionQuerySort) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a TerminalAction is updated.
+type TerminalActionUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.action.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalActionUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalActionUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalActionUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalActionUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalActionUpdatedEvent) GetData() *TerminalActionUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalActionUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionUpdatedEventData struct {
+	// Name of the updated object’s type, `"action"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal action.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal action.
+	Object *TerminalActionUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalActionUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalActionUpdatedEventData) GetObject() *TerminalActionUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalActionUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalActionUpdatedEventObject struct {
+	// The updated terminal action.
+	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalActionUpdatedEventObject) GetAction() *TerminalAction {
+	if t == nil {
+		return nil
+	}
+	return t.Action
+}
+
+func (t *TerminalActionUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalActionUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalActionUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalActionUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalActionUpdatedEventObject) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -36327,6 +58343,202 @@ func (t *TerminalCheckout) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a [TerminalCheckout](entity:TerminalCheckout) is created.
+type TerminalCheckoutCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.checkout.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalCheckoutCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetData() *TerminalCheckoutCreatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalCheckoutCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutCreatedEventData struct {
+	// Name of the created object’s type, `"checkout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal checkout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal checkout
+	Object *TerminalCheckoutCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalCheckoutCreatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalCheckoutCreatedEventData) GetObject() *TerminalCheckoutCreatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalCheckoutCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutCreatedEventObject struct {
+	// The created terminal checkout
+	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutCreatedEventObject) GetCheckout() *TerminalCheckout {
+	if t == nil {
+		return nil
+	}
+	return t.Checkout
+}
+
+func (t *TerminalCheckoutCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutCreatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TerminalCheckoutQuery struct {
 	// Options for filtering returned `TerminalCheckout` objects.
 	Filter *TerminalCheckoutQueryFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -36490,6 +58702,202 @@ func (t *TerminalCheckoutQuerySort) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalCheckoutQuerySort) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a [TerminalCheckout](entity:TerminalCheckout) is updated.
+type TerminalCheckoutUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.checkout.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalCheckoutUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetData() *TerminalCheckoutUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalCheckoutUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutUpdatedEventData struct {
+	// Name of the updated object’s type, `"checkout"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal checkout.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal checkout
+	Object *TerminalCheckoutUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalCheckoutUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalCheckoutUpdatedEventData) GetObject() *TerminalCheckoutUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalCheckoutUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalCheckoutUpdatedEventObject struct {
+	// The updated terminal checkout
+	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) GetCheckout() *TerminalCheckout {
+	if t == nil {
+		return nil
+	}
+	return t.Checkout
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalCheckoutUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalCheckoutUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalCheckoutUpdatedEventObject) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -36677,6 +59085,202 @@ func (t *TerminalRefund) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Published when a Terminal API refund is created.
+type TerminalRefundCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.refund.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalRefundCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalRefundCreatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalRefundCreatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalRefundCreatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalRefundCreatedEvent) GetData() *TerminalRefundCreatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalRefundCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundCreatedEventData struct {
+	// Name of the created object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the created terminal refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created terminal refund.
+	Object *TerminalRefundCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalRefundCreatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalRefundCreatedEventData) GetObject() *TerminalRefundCreatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalRefundCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundCreatedEventObject struct {
+	// The created terminal refund.
+	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundCreatedEventObject) GetRefund() *TerminalRefund {
+	if t == nil {
+		return nil
+	}
+	return t.Refund
+}
+
+func (t *TerminalRefundCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundCreatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TerminalRefundQuery struct {
 	// The filter for the Terminal refund query.
 	Filter *TerminalRefundQueryFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -36840,6 +59444,202 @@ func (t *TerminalRefundQuerySort) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalRefundQuerySort) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a Terminal API refund is updated.
+type TerminalRefundUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"terminal.refund.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// RFC 3339 timestamp of when the event was created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TerminalRefundUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TerminalRefundUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalRefundUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TerminalRefundUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TerminalRefundUpdatedEvent) GetData() *TerminalRefundUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TerminalRefundUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundUpdatedEventData struct {
+	// Name of the updated object’s type, `"refund"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the updated terminal refund.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated terminal refund.
+	Object *TerminalRefundUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TerminalRefundUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TerminalRefundUpdatedEventData) GetObject() *TerminalRefundUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TerminalRefundUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalRefundUpdatedEventObject struct {
+	// The updated terminal refund.
+	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TerminalRefundUpdatedEventObject) GetRefund() *TerminalRefund {
+	if t == nil {
+		return nil
+	}
+	return t.Refund
+}
+
+func (t *TerminalRefundUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TerminalRefundUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalRefundUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalRefundUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalRefundUpdatedEventObject) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -37253,6 +60053,29 @@ func NewTransactionProductFromString(s string) (TransactionProduct, error) {
 }
 
 func (t TransactionProduct) Ptr() *TransactionProduct {
+	return &t
+}
+
+// The transaction type used in the disputed payment.
+type TransactionType string
+
+const (
+	TransactionTypeDebit  TransactionType = "DEBIT"
+	TransactionTypeCredit TransactionType = "CREDIT"
+)
+
+func NewTransactionTypeFromString(s string) (TransactionType, error) {
+	switch s {
+	case "DEBIT":
+		return TransactionTypeDebit, nil
+	case "CREDIT":
+		return TransactionTypeCredit, nil
+	}
+	var t TransactionType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TransactionType) Ptr() *TransactionType {
 	return &t
 }
 
@@ -38478,6 +61301,434 @@ func (u *UpsertOrderCustomAttributeResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", u)
 }
+
+type V1GetPaymentRequest = interface{}
+
+type V1GetSettlementRequest = interface{}
+
+// Published when a [Vendor](entity:Vendor) is created.
+type VendorCreatedEvent struct {
+	// The ID of a seller associated with this event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of a location associated with the event, if the event is associated with the location of the seller.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of this event. The value is `"vendor.created".`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for this event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The RFC 3339-formatted time when the underlying event data object is created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with this event.
+	Data *VendorCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorCreatedEvent) GetMerchantID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.MerchantID
+}
+
+func (v *VendorCreatedEvent) GetLocationID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.LocationID
+}
+
+func (v *VendorCreatedEvent) GetType() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Type
+}
+
+func (v *VendorCreatedEvent) GetEventID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.EventID
+}
+
+func (v *VendorCreatedEvent) GetCreatedAt() *string {
+	if v == nil {
+		return nil
+	}
+	return v.CreatedAt
+}
+
+func (v *VendorCreatedEvent) GetData() *VendorCreatedEventData {
+	if v == nil {
+		return nil
+	}
+	return v.Data
+}
+
+func (v *VendorCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEvent) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Defines the `vendor.created` event data structure.
+type VendorCreatedEventData struct {
+	// The type of the event data object. The value is `vendor`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created vendor.
+	Object *VendorCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorCreatedEventData) GetType() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Type
+}
+
+func (v *VendorCreatedEventData) GetID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.ID
+}
+
+func (v *VendorCreatedEventData) GetObject() *VendorCreatedEventObject {
+	if v == nil {
+		return nil
+	}
+	return v.Object
+}
+
+func (v *VendorCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEventData) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VendorCreatedEventObject struct {
+	// The operation on the vendor that caused the event to be published. The value is `CREATED`.
+	// See [Operation](#type-operation) for possible values
+	Operation *VendorCreatedEventObjectOperation `json:"operation,omitempty" url:"operation,omitempty"`
+	// The created vendor as the result of the specified operation.
+	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorCreatedEventObject) GetVendor() *Vendor {
+	if v == nil {
+		return nil
+	}
+	return v.Vendor
+}
+
+func (v *VendorCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorCreatedEventObject) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// The operation that can be performed against a vendor to cause the event to be published.
+type VendorCreatedEventObjectOperation = string
+
+// Published when a [Vendor](entity:Vendor) is updated.
+type VendorUpdatedEvent struct {
+	// The ID of a seller associated with this event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The ID of a seller location associated with this event, if the event is associated with the location.
+	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// The type of this event. The value is `"vendor.updated".`
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for this webhoook event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// The RFC 3339-formatted time when the underlying event data object is created.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The data associated with this event.
+	Data *VendorUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorUpdatedEvent) GetMerchantID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.MerchantID
+}
+
+func (v *VendorUpdatedEvent) GetLocationID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.LocationID
+}
+
+func (v *VendorUpdatedEvent) GetType() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Type
+}
+
+func (v *VendorUpdatedEvent) GetEventID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.EventID
+}
+
+func (v *VendorUpdatedEvent) GetCreatedAt() *string {
+	if v == nil {
+		return nil
+	}
+	return v.CreatedAt
+}
+
+func (v *VendorUpdatedEvent) GetData() *VendorUpdatedEventData {
+	if v == nil {
+		return nil
+	}
+	return v.Data
+}
+
+func (v *VendorUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEvent) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// Defines the `vendor.updated` event data structure.
+type VendorUpdatedEventData struct {
+	// The type of the event data object. The value is `vendor`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// The ID of the event data object.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing updated vendor.
+	Object *VendorUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorUpdatedEventData) GetType() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Type
+}
+
+func (v *VendorUpdatedEventData) GetID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.ID
+}
+
+func (v *VendorUpdatedEventData) GetObject() *VendorUpdatedEventObject {
+	if v == nil {
+		return nil
+	}
+	return v.Object
+}
+
+func (v *VendorUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEventData) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VendorUpdatedEventObject struct {
+	// The operation on the vendor that caused the event to be published. The value is `UPDATED`.
+	// See [Operation](#type-operation) for possible values
+	Operation *VendorUpdatedEventObjectOperation `json:"operation,omitempty" url:"operation,omitempty"`
+	// The updated vendor as the result of the specified operation.
+	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (v *VendorUpdatedEventObject) GetVendor() *Vendor {
+	if v == nil {
+		return nil
+	}
+	return v.Vendor
+}
+
+func (v *VendorUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VendorUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler VendorUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VendorUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+	v.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VendorUpdatedEventObject) String() string {
+	if len(v.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// The operation that can be performed against a vendor to cause the event to be published.
+type VendorUpdatedEventObjectOperation = string
 
 // Enumeration of visibility-filter values used to set the ability to view custom attributes or custom attribute definitions.
 type VisibilityFilter string

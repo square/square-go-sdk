@@ -5,11 +5,11 @@ package customattributes
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	locations "github.com/square/square-go-sdk/locations"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	locations "github.com/square/square-go-sdk/v2/locations"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -47,7 +47,7 @@ func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *locations.BulkDeleteLocationCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkDeleteLocationCustomAttributesResponse, error) {
+) (*v2.BulkDeleteLocationCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -61,7 +61,7 @@ func (c *Client) BatchDelete(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkDeleteLocationCustomAttributesResponse
+	var response *v2.BulkDeleteLocationCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -95,7 +95,7 @@ func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *locations.BulkUpsertLocationCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkUpsertLocationCustomAttributesResponse, error) {
+) (*v2.BulkUpsertLocationCustomAttributesResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -109,7 +109,7 @@ func (c *Client) BatchUpsert(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkUpsertLocationCustomAttributesResponse
+	var response *v2.BulkUpsertLocationCustomAttributesResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -139,7 +139,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *locations.ListCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.CustomAttribute], error) {
+) (*core.Page[*v2.CustomAttribute], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -178,11 +178,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListLocationCustomAttributesResponse) *internal.PageResponse[*string, *squaregosdk.CustomAttribute] {
+	readPageResponse := func(response *v2.ListLocationCustomAttributesResponse) *internal.PageResponse[*string, *v2.CustomAttribute] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.CustomAttributes
-		return &internal.PageResponse[*string, *squaregosdk.CustomAttribute]{
+		return &internal.PageResponse[*string, *v2.CustomAttribute]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -205,7 +205,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *locations.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.RetrieveLocationCustomAttributeResponse, error) {
+) (*v2.RetrieveLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -229,7 +229,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.RetrieveLocationCustomAttributeResponse
+	var response *v2.RetrieveLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -258,7 +258,7 @@ func (c *Client) Upsert(
 	ctx context.Context,
 	request *locations.UpsertLocationCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpsertLocationCustomAttributeResponse, error) {
+) (*v2.UpsertLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -276,7 +276,7 @@ func (c *Client) Upsert(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpsertLocationCustomAttributeResponse
+	var response *v2.UpsertLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -303,7 +303,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *locations.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteLocationCustomAttributeResponse, error) {
+) (*v2.DeleteLocationCustomAttributeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -320,7 +320,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteLocationCustomAttributeResponse
+	var response *v2.DeleteLocationCustomAttributeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

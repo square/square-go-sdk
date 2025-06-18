@@ -3,7 +3,7 @@
 package customers
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type AddGroupsRequest struct {
@@ -17,7 +17,7 @@ type CreateCustomerGroupRequest struct {
 	// The idempotency key for the request. For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The customer group to create.
-	Group *squaregosdk.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
 }
 
 type DeleteGroupsRequest struct {
@@ -54,5 +54,5 @@ type UpdateCustomerGroupRequest struct {
 	// The ID of the customer group to update.
 	GroupID string `json:"-" url:"-"`
 	// The `CustomerGroup` object including all the updates you want to make.
-	Group *squaregosdk.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
 }

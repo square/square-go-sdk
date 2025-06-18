@@ -5,10 +5,10 @@ package cards
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -43,9 +43,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // A max of 25 cards will be returned.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.ListCardsRequest,
+	request *v2.ListCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Card], error) {
+) (*core.Page[*v2.Card], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -81,11 +81,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCardsResponse) *internal.PageResponse[*string, *squaregosdk.Card] {
+	readPageResponse := func(response *v2.ListCardsResponse) *internal.PageResponse[*string, *v2.Card] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Cards
-		return &internal.PageResponse[*string, *squaregosdk.Card]{
+		return &internal.PageResponse[*string, *v2.Card]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -102,9 +102,9 @@ func (c *Client) List(
 // Adds a card on file to an existing merchant.
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateCardRequest,
+	request *v2.CreateCardRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCardResponse, error) {
+) (*v2.CreateCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -118,7 +118,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateCardResponse
+	var response *v2.CreateCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -141,9 +141,9 @@ func (c *Client) Create(
 // Retrieves details for a specific Card.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetCardsRequest,
+	request *v2.GetCardsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCardResponse, error) {
+) (*v2.GetCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -159,7 +159,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCardResponse
+	var response *v2.GetCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -182,9 +182,9 @@ func (c *Client) Get(
 // Disabling an already disabled card is allowed but has no effect.
 func (c *Client) Disable(
 	ctx context.Context,
-	request *squaregosdk.DisableCardsRequest,
+	request *v2.DisableCardsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DisableCardResponse, error) {
+) (*v2.DisableCardResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -200,7 +200,7 @@ func (c *Client) Disable(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DisableCardResponse
+	var response *v2.DisableCardResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

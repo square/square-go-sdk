@@ -4,10 +4,10 @@ package mobile
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -55,9 +55,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // [valid production authorization credential](https://developer.squareup.com/docs/build-basics/access-tokens).
 func (c *Client) AuthorizationCode(
 	ctx context.Context,
-	request *squaregosdk.CreateMobileAuthorizationCodeRequest,
+	request *v2.CreateMobileAuthorizationCodeRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateMobileAuthorizationCodeResponse, error) {
+) (*v2.CreateMobileAuthorizationCodeResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -71,7 +71,7 @@ func (c *Client) AuthorizationCode(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateMobileAuthorizationCodeResponse
+	var response *v2.CreateMobileAuthorizationCodeResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

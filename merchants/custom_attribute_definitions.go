@@ -3,7 +3,7 @@
 package merchants
 
 import (
-	squaregosdk "github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 type CreateMerchantCustomAttributeDefinitionRequest struct {
@@ -12,7 +12,7 @@ type CreateMerchantCustomAttributeDefinitionRequest struct {
 	// definition hosted on the Square CDN. For more information, including supported values and constraints, see
 	// [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
 	// - `name` is required unless `visibility` is set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -36,7 +36,7 @@ type GetCustomAttributeDefinitionsRequest struct {
 
 type ListCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
-	VisibilityFilter *squaregosdk.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v2.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -63,7 +63,7 @@ type UpdateMerchantCustomAttributeDefinitionRequest struct {
 	// The version field must match the current version of the custom attribute definition to enable
 	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// If this is not important for your application, version can be set to -1. For any other values, the request fails with a BAD_REQUEST error.
-	CustomAttributeDefinition *squaregosdk.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`

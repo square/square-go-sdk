@@ -5,15 +5,15 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	cards "github.com/square/square-go-sdk/customers/cards"
-	customattributedefinitions "github.com/square/square-go-sdk/customers/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/customers/customattributes"
-	groups "github.com/square/square-go-sdk/customers/groups"
-	segments "github.com/square/square-go-sdk/customers/segments"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	cards "github.com/square/square-go-sdk/v2/customers/cards"
+	customattributedefinitions "github.com/square/square-go-sdk/v2/customers/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v2/customers/customattributes"
+	groups "github.com/square/square-go-sdk/v2/customers/groups"
+	segments "github.com/square/square-go-sdk/v2/customers/segments"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -62,9 +62,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
 func (c *Client) List(
 	ctx context.Context,
-	request *squaregosdk.ListCustomersRequest,
+	request *v2.ListCustomersRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*squaregosdk.Customer], error) {
+) (*core.Page[*v2.Customer], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -100,11 +100,11 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *squaregosdk.ListCustomersResponse) *internal.PageResponse[*string, *squaregosdk.Customer] {
+	readPageResponse := func(response *v2.ListCustomersResponse) *internal.PageResponse[*string, *v2.Customer] {
 		var zeroValue *string
 		next := response.Cursor
 		results := response.Customers
-		return &internal.PageResponse[*string, *squaregosdk.Customer]{
+		return &internal.PageResponse[*string, *v2.Customer]{
 			Next:    next,
 			Results: results,
 			Done:    next == zeroValue,
@@ -130,9 +130,9 @@ func (c *Client) List(
 // - `phone_number`
 func (c *Client) Create(
 	ctx context.Context,
-	request *squaregosdk.CreateCustomerRequest,
+	request *v2.CreateCustomerRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.CreateCustomerResponse, error) {
+) (*v2.CreateCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -146,7 +146,7 @@ func (c *Client) Create(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.CreateCustomerResponse
+	var response *v2.CreateCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -179,9 +179,9 @@ func (c *Client) Create(
 // - `phone_number`
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *squaregosdk.BulkCreateCustomersRequest,
+	request *v2.BulkCreateCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkCreateCustomersResponse, error) {
+) (*v2.BulkCreateCustomersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -195,7 +195,7 @@ func (c *Client) BatchCreate(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkCreateCustomersResponse
+	var response *v2.BulkCreateCustomersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -220,9 +220,9 @@ func (c *Client) BatchCreate(
 // The endpoint takes a list of customer IDs and returns a map of responses.
 func (c *Client) BulkDeleteCustomers(
 	ctx context.Context,
-	request *squaregosdk.BulkDeleteCustomersRequest,
+	request *v2.BulkDeleteCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkDeleteCustomersResponse, error) {
+) (*v2.BulkDeleteCustomersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -236,7 +236,7 @@ func (c *Client) BulkDeleteCustomers(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkDeleteCustomersResponse
+	var response *v2.BulkDeleteCustomersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -261,9 +261,9 @@ func (c *Client) BulkDeleteCustomers(
 // This endpoint takes a list of customer IDs and returns a map of responses.
 func (c *Client) BulkRetrieveCustomers(
 	ctx context.Context,
-	request *squaregosdk.BulkRetrieveCustomersRequest,
+	request *v2.BulkRetrieveCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkRetrieveCustomersResponse, error) {
+) (*v2.BulkRetrieveCustomersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -277,7 +277,7 @@ func (c *Client) BulkRetrieveCustomers(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkRetrieveCustomersResponse
+	var response *v2.BulkRetrieveCustomersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -302,9 +302,9 @@ func (c *Client) BulkRetrieveCustomers(
 // This endpoint takes a map of individual update requests and returns a map of responses.
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
-	request *squaregosdk.BulkUpdateCustomersRequest,
+	request *v2.BulkUpdateCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.BulkUpdateCustomersResponse, error) {
+) (*v2.BulkUpdateCustomersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -318,7 +318,7 @@ func (c *Client) BulkUpdateCustomers(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.BulkUpdateCustomersResponse
+	var response *v2.BulkUpdateCustomersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -349,9 +349,9 @@ func (c *Client) BulkUpdateCustomers(
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
 func (c *Client) Search(
 	ctx context.Context,
-	request *squaregosdk.SearchCustomersRequest,
+	request *v2.SearchCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.SearchCustomersResponse, error) {
+) (*v2.SearchCustomersResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -365,7 +365,7 @@ func (c *Client) Search(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.SearchCustomersResponse
+	var response *v2.SearchCustomersResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -388,9 +388,9 @@ func (c *Client) Search(
 // Returns details for a single customer.
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetCustomersRequest,
+	request *v2.GetCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetCustomerResponse, error) {
+) (*v2.GetCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -406,7 +406,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetCustomerResponse
+	var response *v2.GetCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -431,9 +431,9 @@ func (c *Client) Get(
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Update(
 	ctx context.Context,
-	request *squaregosdk.UpdateCustomerRequest,
+	request *v2.UpdateCustomerRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpdateCustomerResponse, error) {
+) (*v2.UpdateCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -450,7 +450,7 @@ func (c *Client) Update(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpdateCustomerResponse
+	var response *v2.UpdateCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -475,9 +475,9 @@ func (c *Client) Update(
 // To delete a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.DeleteCustomersRequest,
+	request *v2.DeleteCustomersRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteCustomerResponse, error) {
+) (*v2.DeleteCustomerResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -500,7 +500,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteCustomerResponse
+	var response *v2.DeleteCustomerResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{

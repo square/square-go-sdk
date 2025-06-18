@@ -4,10 +4,10 @@ package snippets
 
 import (
 	context "context"
-	squaregosdk "github.com/square/square-go-sdk"
-	core "github.com/square/square-go-sdk/core"
-	internal "github.com/square/square-go-sdk/internal"
-	option "github.com/square/square-go-sdk/option"
+	v2 "github.com/square/square-go-sdk/v2"
+	core "github.com/square/square-go-sdk/v2/core"
+	internal "github.com/square/square-go-sdk/v2/internal"
+	option "github.com/square/square-go-sdk/v2/option"
 	http "net/http"
 	os "os"
 )
@@ -45,9 +45,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Get(
 	ctx context.Context,
-	request *squaregosdk.GetSnippetsRequest,
+	request *v2.GetSnippetsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.GetSnippetResponse, error) {
+) (*v2.GetSnippetResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,7 +63,7 @@ func (c *Client) Get(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.GetSnippetResponse
+	var response *v2.GetSnippetResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -90,9 +90,9 @@ func (c *Client) Get(
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Upsert(
 	ctx context.Context,
-	request *squaregosdk.UpsertSnippetRequest,
+	request *v2.UpsertSnippetRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.UpsertSnippetResponse, error) {
+) (*v2.UpsertSnippetResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -109,7 +109,7 @@ func (c *Client) Upsert(
 	)
 	headers.Set("Content-Type", "application/json")
 
-	var response *squaregosdk.UpsertSnippetResponse
+	var response *v2.UpsertSnippetResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -136,9 +136,9 @@ func (c *Client) Upsert(
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *squaregosdk.DeleteSnippetsRequest,
+	request *v2.DeleteSnippetsRequest,
 	opts ...option.RequestOption,
-) (*squaregosdk.DeleteSnippetResponse, error) {
+) (*v2.DeleteSnippetResponse, error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -154,7 +154,7 @@ func (c *Client) Delete(
 		options.ToHeader(),
 	)
 
-	var response *squaregosdk.DeleteSnippetResponse
+	var response *v2.DeleteSnippetResponse
 	if err := c.caller.Call(
 		ctx,
 		&internal.CallParams{
