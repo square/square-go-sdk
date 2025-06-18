@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/square/square-go-sdk/orders"
+	"github.com/square/square-go-sdk/v2/orders"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/square/square-go-sdk"
+	square "github.com/square/square-go-sdk/v2"
 )
 
 // Orders API integration tests.

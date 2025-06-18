@@ -8,11 +8,11 @@ import (
 	"errors"
 	"hash"
 
-	"github.com/square/square-go-sdk"
+	v2 "github.com/square/square-go-sdk/v2"
 )
 
 // VerifySignature verifies and validates an event notification.
-func (c *Client) VerifySignature(_ context.Context, request *square.VerifySignatureRequest) error {
+func (c *Client) VerifySignature(_ context.Context, request *v2.VerifySignatureRequest) error {
 	if request.RequestBody == "" {
 		return nil
 	}
@@ -29,7 +29,7 @@ func (c *Client) VerifySignature(_ context.Context, request *square.VerifySignat
 	return nil
 }
 
-func validateVerifySignatureRequest(request *square.VerifySignatureRequest) error {
+func validateVerifySignatureRequest(request *v2.VerifySignatureRequest) error {
 	if request.SignatureHeader == "" {
 		return errors.New("signature header is required")
 	}
