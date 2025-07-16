@@ -80,6 +80,35 @@ func ExtractExtraProperties(bytes []byte, value interface{}, exclude ...string) 
 	return extraProperties, nil
 }
 
+// ExtractExtraPropertiesUnmarshalled behaves like ExtractExtraProperties, but does not unmarshal the bytes into the value.
+func ExtractExtraPropertiesUnmarshalled(bytes []byte, value interface{}, exclude ...string) (map[string]interface{}, error) {
+	val := reflect.ValueOf(value)
+	for val.Kind() == reflect.Ptr {
+		if val.IsNil() {
+			return nil, fmt.Errorf("value must be non-nil to extract extra properties")
+		}
+		val = val.Elem()
+	}
+	var extraProperties map[string]interface{}
+	if err := json.Unmarshal(bytes, &extraProperties); err != nil {
+		return nil, err
+	}
+	for i := 0; i < val.Type().NumField(); i++ {
+		key := jsonKey(val.Type().Field(i))
+		if key == "" || key == "-" {
+			continue
+		}
+		delete(extraProperties, key)
+	}
+	for _, key := range exclude {
+		delete(extraProperties, key)
+	}
+	if len(extraProperties) == 0 {
+		return nil, nil
+	}
+	return extraProperties, nil
+}
+
 // getKeys returns the keys associated with the given value. The value must be a
 // a struct or a map with string keys.
 func getKeys(value interface{}) ([]string, error) {

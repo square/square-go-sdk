@@ -1,9 +1,12 @@
 module github.com/square/square-go-sdk/v2
 
-go 1.18
+go 1.21
+
+toolchain go1.24.5
 
 require (
 	github.com/google/uuid v1.4.0
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.7.0
 )
 
