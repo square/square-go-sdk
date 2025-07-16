@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/google/uuid v1.4.0
-	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.7.0
 )
 

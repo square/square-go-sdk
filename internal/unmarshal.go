@@ -18,105 +18,142 @@ func PermissiveUnmarshal(data []byte, out interface{}) error {
 	v = v.Elem()
 	t := v.Type()
 
-	switch t.Kind() {
-	case reflect.Struct:
-		var raw map[string]json.RawMessage
-		if err := json.Unmarshal(data, &raw); err != nil {
-			return err
-		}
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			jsonTag := field.Tag.Get("json")
-			if jsonTag == "" || jsonTag == "-" {
-				continue
-			}
-
-			// TODO: Parse custom tags to enforce strict validation of input values
-			// Ignore json tags after the first comma (e.g. omitempty)
-			jsonTags := strings.Split(jsonTag, ",")
-			key := jsonTags[0]
-			if val, ok := raw[key]; ok {
-				fieldVal := v.Field(i)
-				if !fieldVal.CanSet() {
-					continue
-				}
-				handleField(val, fieldVal)
-			}
-		}
-
-		// Set fern:extra and fern:raw fields if present
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			fernTag := field.Tag.Get("fern")
-			if fernTag == "extra" {
-				fieldVal := v.Field(i)
-				if fieldVal.CanSet() && fieldVal.Kind() == reflect.Map {
-					extra, err := ExtractExtraPropertiesUnmarshalled(data, v.Interface())
-					if err == nil {
-						if extra == nil {
-							// Set to nil explicitly
-							fieldVal.Set(reflect.Zero(fieldVal.Type()))
-						} else {
-							fieldVal.Set(reflect.ValueOf(extra))
-						}
-					}
-				}
-			} else if fernTag == "raw" {
-				fieldVal := v.Field(i)
-				if fieldVal.CanSet() && fieldVal.Type() == reflect.TypeOf(json.RawMessage{}) {
-					fieldVal.Set(reflect.ValueOf(json.RawMessage(data)))
-				}
-			}
-		}
-	default:
+	if t.Kind() != reflect.Struct {
 		// fallback to standard unmarshal for non-structs
 		return json.Unmarshal(data, out)
+	}
+
+	if err := populateStructFields(data, v, t); err != nil {
+		return err
+	}
+	if err := setFernFields(data, v, t); err != nil {
+		return err
 	}
 	return nil
 }
 
+// populateStructFields sets struct fields from JSON using permissive logic.
+func populateStructFields(data []byte, v reflect.Value, t reflect.Type) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == "" || jsonTag == "-" {
+			continue
+		}
+		// Ignore json tags after the first comma (e.g. omitempty)
+		jsonTags := strings.Split(jsonTag, ",")
+		key := jsonTags[0]
+		val, ok := raw[key]
+		if !ok {
+			continue
+		}
+		fieldVal := v.Field(i)
+		if !fieldVal.CanSet() {
+			continue
+		}
+		handleField(val, fieldVal)
+	}
+	return nil
+}
+
+// setFernFields sets fields tagged with fern:"extra" or fern:"raw" on the struct v of type t.
+// "extra" is used to store extra properties that are not part of the JSON schema.
+// "raw" is used to store the raw JSON of data.
+func setFernFields(data []byte, v reflect.Value, t reflect.Type) error {
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		fernTag := field.Tag.Get("fern")
+		if fernTag == "" {
+			continue // Skip fields without a fern tag
+		}
+		fieldVal := v.Field(i)
+		if !fieldVal.CanSet() {
+			continue // Skip unsettable fields (e.g., unexported)
+		}
+		switch fernTag {
+		case "extra":
+			// Only set if the field is a map
+			if fieldVal.Kind() != reflect.Map {
+				continue
+			}
+			extra, err := ExtractExtraPropertiesUnmarshalled(data, v.Interface())
+			if err != nil {
+				return err
+			}
+			if extra == nil {
+				fieldVal.Set(reflect.Zero(fieldVal.Type()))
+			} else {
+				fieldVal.Set(reflect.ValueOf(extra))
+			}
+		case "raw":
+			// Only set if the field is a json.RawMessage
+			if fieldVal.Type() != reflect.TypeOf(json.RawMessage{}) {
+				continue
+			}
+			fieldVal.Set(reflect.ValueOf(json.RawMessage(data)))
+		}
+	}
+	return nil
+}
+
+// handleField sets the value v from the provided JSON data, handling structs, pointers, slices, and maps recursively.
 func handleField(data json.RawMessage, v reflect.Value) error {
 	t := v.Type()
+
 	switch t.Kind() {
 	case reflect.Struct:
-		// Pass the correct JSON for this field
-		PermissiveUnmarshal(data, v.Addr().Interface())
+		// Recursively unmarshal into struct fields.
+		return PermissiveUnmarshal(data, v.Addr().Interface())
 	case reflect.Ptr:
+		// Allocate and set the pointed-to value.
 		elemType := t.Elem()
 		ptr := reflect.New(elemType)
-		handleField(data, ptr.Elem())
+		// Ignore errors for permissive behavior
+		_ = handleField(data, ptr.Elem())
 		v.Set(ptr)
+		return nil
 	case reflect.Slice:
+		// Decode each element recursively.
 		elemType := t.Elem()
 		var rawSlice []json.RawMessage
-		if err := json.Unmarshal(data, &rawSlice); err == nil {
-			slice := reflect.MakeSlice(t, 0, len(rawSlice))
-			for _, elemData := range rawSlice {
-				elem := reflect.New(elemType).Elem()
-				handleField(elemData, elem)
-				slice = reflect.Append(slice, elem)
-			}
-			v.Set(slice)
+		if err := json.Unmarshal(data, &rawSlice); err != nil {
+			return nil // Ignore errors for permissive behavior
 		}
+		slice := reflect.MakeSlice(t, 0, len(rawSlice))
+		for _, elemData := range rawSlice {
+			elem := reflect.New(elemType).Elem()
+			_ = handleField(elemData, elem) // Ignore errors for permissive behavior
+			slice = reflect.Append(slice, elem)
+		}
+		v.Set(slice)
+		return nil
 	case reflect.Map:
+		// Decode each value recursively.
 		keyType := t.Key()
 		elemType := t.Elem()
 		var rawMap map[string]json.RawMessage
-		if err := json.Unmarshal(data, &rawMap); err == nil {
-			m := reflect.MakeMap(t)
-			for k, elemData := range rawMap {
-				key := reflect.ValueOf(k).Convert(keyType)
-				elem := reflect.New(elemType).Elem()
-				handleField(elemData, elem)
-				m.SetMapIndex(key, elem)
-			}
-			v.Set(m)
+		// Ignore errors for permissive behavior
+		_ = json.Unmarshal(data, &rawMap)
+		m := reflect.MakeMap(t)
+		for k, elemData := range rawMap {
+			key := reflect.ValueOf(k).Convert(keyType)
+			elem := reflect.New(elemType).Elem()
+			// Ignore errors for permissive behavior
+			_ = handleField(elemData, elem)
+			m.SetMapIndex(key, elem)
 		}
+		v.Set(m)
+		return nil
 	default:
+		// Try to unmarshal directly into the value.
 		ptr := reflect.New(t)
 		if err := json.Unmarshal(data, ptr.Interface()); err == nil {
 			v.Set(ptr.Elem())
 		}
+		return nil
 	}
-	return nil
 }
