@@ -1837,7 +1837,7 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) String() string {
 // external bank account or to the Square balance.
 type Payout struct {
 	// A unique ID for the payout.
-	ID string `json:"id,omitempty" url:"id"`
+	ID string `json:"id" url:"id"`
 	// Indicates the payout status.
 	// See [PayoutStatus](#type-payoutstatus) for possible values
 	Status *PayoutStatus `json:"status,omitempty" url:"status,omitempty"`
