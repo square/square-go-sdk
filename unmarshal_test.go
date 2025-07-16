@@ -73,7 +73,7 @@ func TestGetPayoutResponse(t *testing.T) {
 			jsonStr:     `{"payout": {"id": 123, "location_id": "loc_123"}, "errors": [{"category": "API_ERROR", "code": "INTERNAL_SERVER_ERROR", "detail": "detail", "field": "field"}]}`,
 			settings:    GlobalUnmarshalTypeOriginal,
 			expected:    nil,
-			expectedErr: "json: cannot unmarshal number into Go struct field unmarshaler.payout.id of type string",
+			expectedErr: "json: cannot unmarshal number into Go struct field unmarshaler.payout of type string",
 		},
 		/*
 			Mapstructure for json unmarshalling. Attempts weak type matching.

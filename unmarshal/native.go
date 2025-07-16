@@ -7,7 +7,9 @@ import (
 	"strings"
 )
 
-func UnmarshalCustom(data []byte, out interface{}) error {
+// UnmarshalNative unmarshals the JSON data into the provided interface using the native reflect package.
+// If the input contains unassignable values, it will be ignored.
+func UnmarshalNative(data []byte, out interface{}) error {
 	v := reflect.ValueOf(out)
 	if v.Kind() != reflect.Ptr || v.IsNil() {
 		return fmt.Errorf("out must be a non-nil pointer")
@@ -28,9 +30,9 @@ func UnmarshalCustom(data []byte, out interface{}) error {
 				continue
 			}
 
-			// Ignore parts of the tag after the first comma (e.g. omitempty)
-			parts := strings.Split(jsonTag, ",")
-			key := parts[0]
+			// Ignore json tags after the first comma (e.g. omitempty)
+			jsonTags := strings.Split(jsonTag, ",")
+			key := jsonTags[0]
 			if val, ok := raw[key]; ok {
 				fieldVal := v.Field(i)
 				if !fieldVal.CanSet() {
@@ -55,7 +57,7 @@ func handleField(data json.RawMessage, v reflect.Value) {
 		handleField(data, ptr.Elem())
 		v.Set(ptr)
 	case reflect.Struct:
-		UnmarshalCustom(data, v.Addr().Interface())
+		UnmarshalNative(data, v.Addr().Interface())
 	case reflect.Slice:
 		elemType := t.Elem()
 		var rawSlice []json.RawMessage

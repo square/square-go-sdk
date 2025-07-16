@@ -387,7 +387,7 @@ func (g *GetPayoutResponse) UnmarshalJSON(data []byte) error {
 	var err error
 	switch GlobalUnmarshalSettings {
 	case GlobalUnmarshalTypeNative:
-		if err := unmarshal.UnmarshalCustom(data, &value); err != nil {
+		if err := unmarshal.UnmarshalNative(data, &value); err != nil {
 			return err
 		}
 		if extraProperties, err = internal.ExtractExtraPropertiesUnmarshalled(data, value); err != nil {

@@ -6,6 +6,9 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+// UnmarshalMapstructure unmarshals the JSON data into the provided interface using the mapstructure package.
+// It makes an attempt with weakly typed input to convert strings to numbers, booleans, etc.
+// See https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig
 func UnmarshalMapstructure(data []byte, out interface{}) error {
 	var jsonMap map[string]interface{}
 	err := json.Unmarshal([]byte(data), &jsonMap)
@@ -14,8 +17,6 @@ func UnmarshalMapstructure(data []byte, out interface{}) error {
 	}
 
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
-		// Attempts to convert strings to numbers, booleans, etc.
-		// See https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig
 		WeaklyTypedInput: true,
 		Result:           out,
 		TagName:          "json",
