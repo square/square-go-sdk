@@ -7,21 +7,6 @@ import (
 	fmt "fmt"
 
 	internal "github.com/square/square-go-sdk/v2/internal"
-	unmarshal "github.com/square/square-go-sdk/v2/unmarshal"
-)
-
-// Only used for testing and demonstration purposes. Do not use this in production.
-type GlobalUnmarshalType string
-
-// Only used for testing and demonstration purposes. Do not use this in production.
-var (
-	GlobalUnmarshalTypeNative       GlobalUnmarshalType = "native"
-	GlobalUnmarshalTypeMapstructure GlobalUnmarshalType = "mapstructure"
-	GlobalUnmarshalTypeOriginal     GlobalUnmarshalType = "original"
-)
-
-var (
-	GlobalUnmarshalSettings GlobalUnmarshalType = GlobalUnmarshalTypeNative
 )
 
 type ListEntriesPayoutsRequest struct {
@@ -357,8 +342,10 @@ type GetPayoutResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `fern:"extra"`
+	// RawJSON is used to store the raw JSON of the response. Accessing this field
+	// is usually not necessary for most use cases.
+	RawJSON json.RawMessage `fern:"raw"`
 }
 
 func (g *GetPayoutResponse) GetPayout() *Payout {
@@ -376,52 +363,29 @@ func (g *GetPayoutResponse) GetErrors() []*Error {
 }
 
 func (g *GetPayoutResponse) GetExtraProperties() map[string]interface{} {
-	return g.extraProperties
+	return g.ExtraProperties
 }
 
 func (g *GetPayoutResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetPayoutResponse
 	var value unmarshaler
 
-	var extraProperties map[string]interface{}
-	var err error
-	switch GlobalUnmarshalSettings {
-	case GlobalUnmarshalTypeNative:
-		if err := unmarshal.UnmarshalNative(data, &value); err != nil {
-			return err
-		}
-		if extraProperties, err = internal.ExtractExtraPropertiesUnmarshalled(data, value); err != nil {
-			return err
-		}
-	case GlobalUnmarshalTypeMapstructure:
-		if err := unmarshal.UnmarshalMapstructure(data, &value); err != nil {
-			return err
-		}
-		if extraProperties, err = internal.ExtractExtraPropertiesUnmarshalled(data, value); err != nil {
-			return err
-		}
-	case GlobalUnmarshalTypeOriginal:
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		// Performs a second unmarshal to check for extra properties.
-		var err error
-		extraProperties, err = internal.ExtractExtraProperties(data, *g)
-		if err != nil {
-			return err
-		}
-	default:
-		return fmt.Errorf("unsupported unmarshal type: %s", GlobalUnmarshalSettings)
+	if err := internal.PermissiveUnmarshal(data, &value); err != nil {
+		return err
+	}
+	extraProperties, err := internal.ExtractExtraPropertiesUnmarshalled(data, value)
+	if err != nil {
+		return err
 	}
 	*g = GetPayoutResponse(value)
-	g.rawJSON = json.RawMessage(data)
-	g.extraProperties = extraProperties
+	g.RawJSON = json.RawMessage(data)
+	g.ExtraProperties = extraProperties
 	return nil
 }
 
 func (g *GetPayoutResponse) String() string {
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+	if len(g.RawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.RawJSON); err == nil {
 			return value
 		}
 	}
@@ -1865,8 +1829,8 @@ type Payout struct {
 	// A unique ID for each `Payout` object that might also appear on the seller's bank statement. You can use this ID to automate the process of reconciling each payout with the corresponding line item on the bank statement.
 	EndToEndID *string `json:"end_to_end_id,omitempty" url:"end_to_end_id,omitempty"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `fern:"extra"`
+	RawJSON         json.RawMessage        `fern:"raw"`
 }
 
 func (p *Payout) GetID() string {
@@ -1954,7 +1918,7 @@ func (p *Payout) GetEndToEndID() *string {
 }
 
 func (p *Payout) GetExtraProperties() map[string]interface{} {
-	return p.extraProperties
+	return p.ExtraProperties
 }
 
 func (p *Payout) UnmarshalJSON(data []byte) error {
@@ -1968,14 +1932,14 @@ func (p *Payout) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
+	p.ExtraProperties = extraProperties
+	p.RawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *Payout) String() string {
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+	if len(p.RawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.RawJSON); err == nil {
 			return value
 		}
 	}

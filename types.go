@@ -5,6 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
+
 	internal "github.com/square/square-go-sdk/v2/internal"
 )
 
@@ -25158,8 +25159,8 @@ type Error struct {
 	// the error pertains to.
 	Field *string `json:"field,omitempty" url:"field,omitempty"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `fern:"extra"`
+	RawJSON         json.RawMessage        `fern:"raw"`
 }
 
 func (e *Error) GetCategory() ErrorCategory {
@@ -25191,7 +25192,7 @@ func (e *Error) GetField() *string {
 }
 
 func (e *Error) GetExtraProperties() map[string]interface{} {
-	return e.extraProperties
+	return e.ExtraProperties
 }
 
 func (e *Error) UnmarshalJSON(data []byte) error {
@@ -25205,14 +25206,14 @@ func (e *Error) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	e.extraProperties = extraProperties
-	e.rawJSON = json.RawMessage(data)
+	e.ExtraProperties = extraProperties
+	e.RawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (e *Error) String() string {
-	if len(e.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+	if len(e.RawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.RawJSON); err == nil {
 			return value
 		}
 	}
