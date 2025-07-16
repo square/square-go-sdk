@@ -9,7 +9,8 @@ import (
 
 // PermissiveUnmarshal unmarshals the JSON data into the provided interface using the native reflect package.
 // If the input contains unassignable values, the corresponding input field will be ignored. Other
-// errors will be returned.
+// errors will be returned. It also sets fields tagged with fern:"extra" or fern:"raw" on the struct.
+// TODO: Log errors instead of silently ignoring them.
 func PermissiveUnmarshal(data []byte, out interface{}) error {
 	v := reflect.ValueOf(out)
 	if v.Kind() != reflect.Ptr || v.IsNil() {
@@ -112,48 +113,44 @@ func handleField(data json.RawMessage, v reflect.Value) error {
 		// Allocate and set the pointed-to value.
 		elemType := t.Elem()
 		ptr := reflect.New(elemType)
-		// Ignore errors for permissive behavior
-		_ = handleField(data, ptr.Elem())
-		v.Set(ptr)
-		return nil
+		if err := handleField(data, ptr.Elem()); err == nil {
+			v.Set(ptr)
+		}
 	case reflect.Slice:
 		// Decode each element recursively.
 		elemType := t.Elem()
 		var rawSlice []json.RawMessage
-		if err := json.Unmarshal(data, &rawSlice); err != nil {
-			return nil // Ignore errors for permissive behavior
-		}
+		_ = json.Unmarshal(data, &rawSlice)
 		slice := reflect.MakeSlice(t, 0, len(rawSlice))
 		for _, elemData := range rawSlice {
 			elem := reflect.New(elemType).Elem()
-			_ = handleField(elemData, elem) // Ignore errors for permissive behavior
-			slice = reflect.Append(slice, elem)
+			if err := handleField(elemData, elem); err == nil {
+				slice = reflect.Append(slice, elem)
+			}
 		}
 		v.Set(slice)
-		return nil
 	case reflect.Map:
 		// Decode each value recursively.
 		keyType := t.Key()
 		elemType := t.Elem()
 		var rawMap map[string]json.RawMessage
-		// Ignore errors for permissive behavior
 		_ = json.Unmarshal(data, &rawMap)
 		m := reflect.MakeMap(t)
 		for k, elemData := range rawMap {
 			key := reflect.ValueOf(k).Convert(keyType)
 			elem := reflect.New(elemType).Elem()
-			// Ignore errors for permissive behavior
-			_ = handleField(elemData, elem)
-			m.SetMapIndex(key, elem)
+			if err := handleField(elemData, elem); err == nil {
+				// Skip invalid map values.
+				m.SetMapIndex(key, elem)
+			}
 		}
 		v.Set(m)
-		return nil
 	default:
 		// Try to unmarshal directly into the value.
 		ptr := reflect.New(t)
 		if err := json.Unmarshal(data, ptr.Interface()); err == nil {
 			v.Set(ptr.Elem())
 		}
-		return nil
 	}
+	return nil
 }
