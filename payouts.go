@@ -5,6 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
+
 	internal "github.com/square/square-go-sdk/v2/internal"
 )
 
@@ -341,8 +342,10 @@ type GetPayoutResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `fern:"extra"`
+	// RawJSON is used to store the raw JSON of the response. Accessing this field
+	// is usually not necessary for most use cases.
+	RawJSON json.RawMessage `fern:"raw"`
 }
 
 func (g *GetPayoutResponse) GetPayout() *Payout {
@@ -360,28 +363,29 @@ func (g *GetPayoutResponse) GetErrors() []*Error {
 }
 
 func (g *GetPayoutResponse) GetExtraProperties() map[string]interface{} {
-	return g.extraProperties
+	return g.ExtraProperties
 }
 
 func (g *GetPayoutResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetPayoutResponse
 	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+
+	if err := internal.PermissiveUnmarshal(data, &value); err != nil {
 		return err
 	}
-	*g = GetPayoutResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
+	extraProperties, err := internal.ExtractExtraPropertiesUnmarshalled(data, value)
 	if err != nil {
 		return err
 	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
+	*g = GetPayoutResponse(value)
+	g.RawJSON = json.RawMessage(data)
+	g.ExtraProperties = extraProperties
 	return nil
 }
 
 func (g *GetPayoutResponse) String() string {
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
+	if len(g.RawJSON) > 0 {
+		if value, err := internal.StringifyJSON(g.RawJSON); err == nil {
 			return value
 		}
 	}
@@ -1820,13 +1824,13 @@ type Payout struct {
 	Type *PayoutType `json:"type,omitempty" url:"type,omitempty"`
 	// A list of transfer fees and any taxes on the fees assessed by Square for this payout.
 	PayoutFee []*PayoutFee `json:"payout_fee,omitempty" url:"payout_fee,omitempty"`
-	// The calendar date, in ISO 8601 format (YYYY-MM-DD), when the payout is due to arrive in the seller’s banking destination.
+	// The calendar date, in ISO 8601 format (YYYY-MM-DD), when the payout is due to arrive in the seller's banking destination.
 	ArrivalDate *string `json:"arrival_date,omitempty" url:"arrival_date,omitempty"`
-	// A unique ID for each `Payout` object that might also appear on the seller’s bank statement. You can use this ID to automate the process of reconciling each payout with the corresponding line item on the bank statement.
+	// A unique ID for each `Payout` object that might also appear on the seller's bank statement. You can use this ID to automate the process of reconciling each payout with the corresponding line item on the bank statement.
 	EndToEndID *string `json:"end_to_end_id,omitempty" url:"end_to_end_id,omitempty"`
 
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
+	ExtraProperties map[string]interface{} `fern:"extra"`
+	RawJSON         json.RawMessage        `fern:"raw"`
 }
 
 func (p *Payout) GetID() string {
@@ -1914,7 +1918,7 @@ func (p *Payout) GetEndToEndID() *string {
 }
 
 func (p *Payout) GetExtraProperties() map[string]interface{} {
-	return p.extraProperties
+	return p.ExtraProperties
 }
 
 func (p *Payout) UnmarshalJSON(data []byte) error {
@@ -1928,14 +1932,14 @@ func (p *Payout) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	p.extraProperties = extraProperties
-	p.rawJSON = json.RawMessage(data)
+	p.ExtraProperties = extraProperties
+	p.RawJSON = json.RawMessage(data)
 	return nil
 }
 
 func (p *Payout) String() string {
-	if len(p.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
+	if len(p.RawJSON) > 0 {
+		if value, err := internal.StringifyJSON(p.RawJSON); err == nil {
 			return value
 		}
 	}
@@ -1950,7 +1954,7 @@ func (p *Payout) String() string {
 type PayoutEntry struct {
 	// A unique ID for the payout entry.
 	ID string `json:"id" url:"id"`
-	// The ID of the payout entries’ associated payout.
+	// The ID of the payout entries' associated payout.
 	PayoutID string `json:"payout_id" url:"payout_id"`
 	// The timestamp of when the payout entry affected the balance, in RFC 3339 format.
 	EffectiveAt *string `json:"effective_at,omitempty" url:"effective_at,omitempty"`
@@ -2009,9 +2013,9 @@ type PayoutEntry struct {
 	TypeThirdPartyFeeDetails *PaymentBalanceActivityThirdPartyFeeDetail `json:"type_third_party_fee_details,omitempty" url:"type_third_party_fee_details,omitempty"`
 	// Details of refunded fees from a 3rd party platform.
 	TypeThirdPartyFeeRefundDetails *PaymentBalanceActivityThirdPartyFeeRefundDetail `json:"type_third_party_fee_refund_details,omitempty" url:"type_third_party_fee_refund_details,omitempty"`
-	// Details of a payroll payment that was transferred to a team member’s bank account.
+	// Details of a payroll payment that was transferred to a team member's bank account.
 	TypeSquarePayrollTransferDetails *PaymentBalanceActivitySquarePayrollTransferDetail `json:"type_square_payroll_transfer_details,omitempty" url:"type_square_payroll_transfer_details,omitempty"`
-	// Details of a payroll payment to a team member’s bank account that was deposited back to the seller’s account by Square.
+	// Details of a payroll payment to a team member's bank account that was deposited back to the seller's account by Square.
 	TypeSquarePayrollTransferReversedDetails *PaymentBalanceActivitySquarePayrollTransferReversedDetail `json:"type_square_payroll_transfer_reversed_details,omitempty" url:"type_square_payroll_transfer_reversed_details,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -2390,7 +2394,7 @@ func (p PayoutStatus) Ptr() *PayoutStatus {
 	return &p
 }
 
-// The type of payout: “BATCH” or “SIMPLE”.
+// The type of payout: "BATCH" or "SIMPLE".
 // BATCH payouts include a list of payout entries that can be considered settled.
 // SIMPLE payouts do not have any payout entries associated with them
 // and will show up as one of the payout entries in a future BATCH payout.

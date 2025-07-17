@@ -5,12 +5,13 @@ package payouts
 import (
 	context "context"
 	fmt "fmt"
+	http "net/http"
+	os "os"
+
 	v2 "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
