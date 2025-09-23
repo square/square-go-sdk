@@ -260,6 +260,13 @@ type DeviceAttributes struct {
 	rawJSON         json.RawMessage
 }
 
+func (d *DeviceAttributes) GetType() DeviceAttributesDeviceType {
+	if d == nil {
+		return ""
+	}
+	return d.Type
+}
+
 func (d *DeviceAttributes) GetManufacturer() string {
 	if d == nil {
 		return ""
@@ -342,7 +349,27 @@ func (d *DeviceAttributes) String() string {
 }
 
 // An enum identifier of the device type.
-type DeviceAttributesDeviceType = string
+type DeviceAttributesDeviceType string
+
+const (
+	DeviceAttributesDeviceTypeTerminal DeviceAttributesDeviceType = "TERMINAL"
+	DeviceAttributesDeviceTypeHandheld DeviceAttributesDeviceType = "HANDHELD"
+)
+
+func NewDeviceAttributesDeviceTypeFromString(s string) (DeviceAttributesDeviceType, error) {
+	switch s {
+	case "TERMINAL":
+		return DeviceAttributesDeviceTypeTerminal, nil
+	case "HANDHELD":
+		return DeviceAttributesDeviceTypeHandheld, nil
+	}
+	var t DeviceAttributesDeviceType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DeviceAttributesDeviceType) Ptr() *DeviceAttributesDeviceType {
+	return &d
+}
 
 type DeviceComponentDetailsApplicationDetails struct {
 	// The type of application.
@@ -521,6 +548,8 @@ type DeviceComponentDetailsEthernetDetails struct {
 	Active *bool `json:"active,omitempty" url:"active,omitempty"`
 	// The string representation of the device’s IPv4 address.
 	IPAddressV4 *string `json:"ip_address_v4,omitempty" url:"ip_address_v4,omitempty"`
+	// The mac address of the device in this network.
+	MacAddress *string `json:"mac_address,omitempty" url:"mac_address,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -538,6 +567,13 @@ func (d *DeviceComponentDetailsEthernetDetails) GetIPAddressV4() *string {
 		return nil
 	}
 	return d.IPAddressV4
+}
+
+func (d *DeviceComponentDetailsEthernetDetails) GetMacAddress() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MacAddress
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) GetExtraProperties() map[string]interface{} {
@@ -603,6 +639,7 @@ func (d DeviceComponentDetailsExternalPower) Ptr() *DeviceComponentDetailsExtern
 
 // A value qualified by unit of measure.
 type DeviceComponentDetailsMeasurement struct {
+	// Value of measure.
 	Value *int `json:"value,omitempty" url:"value,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -660,6 +697,8 @@ type DeviceComponentDetailsWiFiDetails struct {
 	SecureConnection *string `json:"secure_connection,omitempty" url:"secure_connection,omitempty"`
 	// A representation of signal strength of the WIFI network connection.
 	SignalStrength *DeviceComponentDetailsMeasurement `json:"signal_strength,omitempty" url:"signal_strength,omitempty"`
+	// The mac address of the device in this network.
+	MacAddress *string `json:"mac_address,omitempty" url:"mac_address,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -700,6 +739,13 @@ func (d *DeviceComponentDetailsWiFiDetails) GetSignalStrength() *DeviceComponent
 	return d.SignalStrength
 }
 
+func (d *DeviceComponentDetailsWiFiDetails) GetMacAddress() *string {
+	if d == nil {
+		return nil
+	}
+	return d.MacAddress
+}
+
 func (d *DeviceComponentDetailsWiFiDetails) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
@@ -733,6 +779,7 @@ func (d *DeviceComponentDetailsWiFiDetails) String() string {
 }
 
 type DeviceStatus struct {
+	// Category of the device status.
 	// See [Category](#type-category) for possible values
 	Category *DeviceStatusCategory `json:"category,omitempty" url:"category,omitempty"`
 

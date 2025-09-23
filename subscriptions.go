@@ -80,7 +80,7 @@ type CreateSubscriptionRequest struct {
 	// at the canceled date and the subscriber is sent a prorated invoice at the beginning of the canceled cycle.
 	//
 	// When the subscription plan of the newly created subscription has a fixed number of cycles and the `canceled_date`
-	// occurs before the subscription plan expires, the specified `canceled_date` sets the date when the subscription
+	// occurs before the subscription plan completes, the specified `canceled_date` sets the date when the subscription
 	// stops through the end of the last cycle.
 	CanceledDate *string `json:"canceled_date,omitempty" url:"-"`
 	// The tax to add when billing the subscription.
@@ -1179,6 +1179,8 @@ type Subscription struct {
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"monthly_billing_anchor_date,omitempty"`
 	// array of phases for this subscription
 	Phases []*Phase `json:"phases,omitempty" url:"phases,omitempty"`
+	// The `YYYY-MM-DD`-formatted date when the subscription enters a terminal state.
+	CompletedDate *string `json:"completed_date,omitempty" url:"completed_date,omitempty"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1317,6 +1319,13 @@ func (s *Subscription) GetPhases() []*Phase {
 	return s.Phases
 }
 
+func (s *Subscription) GetCompletedDate() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CompletedDate
+}
+
 func (s *Subscription) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
@@ -1452,6 +1461,7 @@ const (
 	SubscriptionActionTypeResume                  SubscriptionActionType = "RESUME"
 	SubscriptionActionTypeSwapPlan                SubscriptionActionType = "SWAP_PLAN"
 	SubscriptionActionTypeChangeBillingAnchorDate SubscriptionActionType = "CHANGE_BILLING_ANCHOR_DATE"
+	SubscriptionActionTypeComplete                SubscriptionActionType = "COMPLETE"
 )
 
 func NewSubscriptionActionTypeFromString(s string) (SubscriptionActionType, error) {
@@ -1466,6 +1476,8 @@ func NewSubscriptionActionTypeFromString(s string) (SubscriptionActionType, erro
 		return SubscriptionActionTypeSwapPlan, nil
 	case "CHANGE_BILLING_ANCHOR_DATE":
 		return SubscriptionActionTypeChangeBillingAnchorDate, nil
+	case "COMPLETE":
+		return SubscriptionActionTypeComplete, nil
 	}
 	var t SubscriptionActionType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1768,6 +1780,7 @@ const (
 	SubscriptionStatusCanceled    SubscriptionStatus = "CANCELED"
 	SubscriptionStatusDeactivated SubscriptionStatus = "DEACTIVATED"
 	SubscriptionStatusPaused      SubscriptionStatus = "PAUSED"
+	SubscriptionStatusCompleted   SubscriptionStatus = "COMPLETED"
 )
 
 func NewSubscriptionStatusFromString(s string) (SubscriptionStatus, error) {
@@ -1782,6 +1795,8 @@ func NewSubscriptionStatusFromString(s string) (SubscriptionStatus, error) {
 		return SubscriptionStatusDeactivated, nil
 	case "PAUSED":
 		return SubscriptionStatusPaused, nil
+	case "COMPLETED":
+		return SubscriptionStatusCompleted, nil
 	}
 	var t SubscriptionStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
