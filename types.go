@@ -3612,6 +3612,8 @@ func (b *BulkDeleteOrderCustomAttributesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+type BulkRetrieveChannelsRequestConstants = string
+
 // Represents a [BulkUpsertBookingCustomAttributes](api-endpoint:BookingCustomAttributes-BulkUpsertBookingCustomAttributes) response,
 // which contains a map of responses that each corresponds to an individual upsert request.
 type BulkUpsertBookingCustomAttributesResponse struct {
@@ -18098,7 +18100,11 @@ type CustomAttribute struct {
 	//
 	// The value for a simple key can contain up to 60 alphanumeric characters, periods (.),
 	// underscores (_), and hyphens (-).
-	Key   *string     `json:"key,omitempty" url:"key,omitempty"`
+	Key *string `json:"key,omitempty" url:"key,omitempty"`
+	// The value assigned to the custom attribute. It is validated against the custom
+	// attribute definition's schema on write operations. For more information about custom
+	// attribute values,
+	// see [Custom Attributes Overview](https://developer.squareup.com/docs/devtools/customattributes/overview).
 	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	// Read only. The current version of the custom attribute. This field is incremented when the custom attribute is changed.
 	// When updating an existing custom attribute value, you can provide this field
@@ -35855,6 +35861,8 @@ func (l *ListCashDrawerShiftsResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", l)
 }
+
+type ListChannelsRequestConstants = string
 
 // Represents a [ListCustomerCustomAttributeDefinitions](api-endpoint:CustomerCustomAttributes-ListCustomerCustomAttributeDefinitions) response.
 // Either `custom_attribute_definitions`, an empty object, or `errors` is present in the response.
@@ -60078,6 +60086,547 @@ func NewTransactionTypeFromString(s string) (TransactionType, error) {
 
 func (t TransactionType) Ptr() *TransactionType {
 	return &t
+}
+
+// Published when a transfer_order is created.
+type TransferOrderCreatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"transfer_order.created"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TransferOrderCreatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderCreatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TransferOrderCreatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderCreatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TransferOrderCreatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TransferOrderCreatedEvent) GetData() *TransferOrderCreatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TransferOrderCreatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderCreatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderCreatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderCreatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderCreatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TransferOrderCreatedEventData struct {
+	// Name of the affected object’s type, `"transfer_order"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected transfer_order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the created transfer_order.
+	Object *TransferOrderCreatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderCreatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderCreatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TransferOrderCreatedEventData) GetObject() *TransferOrderCreatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TransferOrderCreatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderCreatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderCreatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderCreatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderCreatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TransferOrderCreatedEventObject struct {
+	// The created transfer_order.
+	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderCreatedEventObject) GetTransferOrder() *TransferOrder {
+	if t == nil {
+		return nil
+	}
+	return t.TransferOrder
+}
+
+func (t *TransferOrderCreatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderCreatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderCreatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderCreatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderCreatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a transfer_order is deleted.
+type TransferOrderDeletedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"transfer_order.deleted"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TransferOrderDeletedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderDeletedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TransferOrderDeletedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderDeletedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TransferOrderDeletedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TransferOrderDeletedEvent) GetData() *TransferOrderDeletedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TransferOrderDeletedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderDeletedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderDeletedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderDeletedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderDeletedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TransferOrderDeletedEventData struct {
+	// Name of the affected object’s type, `"transfer_order"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected transfer_order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// Is true if the affected object was deleted. Otherwise absent.
+	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderDeletedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderDeletedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TransferOrderDeletedEventData) GetDeleted() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.Deleted
+}
+
+func (t *TransferOrderDeletedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderDeletedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderDeletedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderDeletedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderDeletedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Published when a transfer_order is updated.
+type TransferOrderUpdatedEvent struct {
+	// The ID of the target merchant associated with the event.
+	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
+	// The type of event this represents, `"transfer_order.updated"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// A unique ID for the event.
+	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
+	// Timestamp of when the event was created, in RFC 3339 format.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Data associated with the event.
+	Data *TransferOrderUpdatedEventData `json:"data,omitempty" url:"data,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderUpdatedEvent) GetMerchantID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MerchantID
+}
+
+func (t *TransferOrderUpdatedEvent) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderUpdatedEvent) GetEventID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.EventID
+}
+
+func (t *TransferOrderUpdatedEvent) GetCreatedAt() *string {
+	if t == nil {
+		return nil
+	}
+	return t.CreatedAt
+}
+
+func (t *TransferOrderUpdatedEvent) GetData() *TransferOrderUpdatedEventData {
+	if t == nil {
+		return nil
+	}
+	return t.Data
+}
+
+func (t *TransferOrderUpdatedEvent) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderUpdatedEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderUpdatedEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderUpdatedEvent(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderUpdatedEvent) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TransferOrderUpdatedEventData struct {
+	// Name of the affected object’s type, `"transfer_order"`.
+	Type *string `json:"type,omitempty" url:"type,omitempty"`
+	// ID of the affected transfer_order.
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
+	// An object containing the updated transfer_order.
+	Object *TransferOrderUpdatedEventObject `json:"object,omitempty" url:"object,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderUpdatedEventData) GetType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Type
+}
+
+func (t *TransferOrderUpdatedEventData) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *TransferOrderUpdatedEventData) GetObject() *TransferOrderUpdatedEventObject {
+	if t == nil {
+		return nil
+	}
+	return t.Object
+}
+
+func (t *TransferOrderUpdatedEventData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderUpdatedEventData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderUpdatedEventData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderUpdatedEventData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderUpdatedEventData) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TransferOrderUpdatedEventObject struct {
+	// The updated transfer_order.
+	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (t *TransferOrderUpdatedEventObject) GetTransferOrder() *TransferOrder {
+	if t == nil {
+		return nil
+	}
+	return t.TransferOrder
+}
+
+func (t *TransferOrderUpdatedEventObject) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TransferOrderUpdatedEventObject) UnmarshalJSON(data []byte) error {
+	type unmarshaler TransferOrderUpdatedEventObject
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TransferOrderUpdatedEventObject(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+	t.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TransferOrderUpdatedEventObject) String() string {
+	if len(t.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
 
 // Represents an [UpdateBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-UpdateBookingCustomAttributeDefinition) response.
