@@ -7,11 +7,11 @@ import (
 )
 
 type CancelPromotionsRequest struct {
+	// The ID of the base [loyalty program](entity:LoyaltyProgram).
+	ProgramID string `json:"-" url:"-"`
 	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to cancel. You can cancel a
 	// promotion that has an `ACTIVE` or `SCHEDULED` status.
 	PromotionID string `json:"-" url:"-"`
-	// The ID of the base [loyalty program](entity:LoyaltyProgram).
-	ProgramID string `json:"-" url:"-"`
 }
 
 type CreateLoyaltyPromotionRequest struct {
@@ -27,11 +27,11 @@ type CreateLoyaltyPromotionRequest struct {
 }
 
 type GetPromotionsRequest struct {
-	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
-	PromotionID string `json:"-" url:"-"`
 	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
 	// call [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) using the `main` keyword.
 	ProgramID string `json:"-" url:"-"`
+	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
+	PromotionID string `json:"-" url:"-"`
 }
 
 type ListPromotionsRequest struct {
