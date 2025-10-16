@@ -9,6 +9,7 @@ import (
 	cards "github.com/square/square-go-sdk/v2/cards"
 	cashdrawersclient "github.com/square/square-go-sdk/v2/cashdrawers/client"
 	catalogclient "github.com/square/square-go-sdk/v2/catalog/client"
+	channels "github.com/square/square-go-sdk/v2/channels"
 	checkoutclient "github.com/square/square-go-sdk/v2/checkout/client"
 	core "github.com/square/square-go-sdk/v2/core"
 	customersclient "github.com/square/square-go-sdk/v2/customers/client"
@@ -37,6 +38,7 @@ import (
 	team "github.com/square/square-go-sdk/v2/team"
 	teammembersclient "github.com/square/square-go-sdk/v2/teammembers/client"
 	terminalclient "github.com/square/square-go-sdk/v2/terminal/client"
+	transferorders "github.com/square/square-go-sdk/v2/transferorders"
 	v1transactions "github.com/square/square-go-sdk/v2/v1transactions"
 	vendors "github.com/square/square-go-sdk/v2/vendors"
 	webhooksclient "github.com/square/square-go-sdk/v2/webhooks/client"
@@ -53,6 +55,7 @@ type Client struct {
 	Bookings       *client.Client
 	Cards          *cards.Client
 	Catalog        *catalogclient.Client
+	Channels       *channels.Client
 	Customers      *customersclient.Client
 	Devices        *devicesclient.Client
 	Disputes       *disputesclient.Client
@@ -76,6 +79,7 @@ type Client struct {
 	TeamMembers    *teammembersclient.Client
 	Team           *team.Client
 	Terminal       *terminalclient.Client
+	TransferOrders *transferorders.Client
 	Vendors        *vendors.Client
 	CashDrawers    *cashdrawersclient.Client
 	Webhooks       *webhooksclient.Client
@@ -102,6 +106,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Bookings:       client.NewClient(opts...),
 		Cards:          cards.NewClient(opts...),
 		Catalog:        catalogclient.NewClient(opts...),
+		Channels:       channels.NewClient(opts...),
 		Customers:      customersclient.NewClient(opts...),
 		Devices:        devicesclient.NewClient(opts...),
 		Disputes:       disputesclient.NewClient(opts...),
@@ -125,6 +130,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TeamMembers:    teammembersclient.NewClient(opts...),
 		Team:           team.NewClient(opts...),
 		Terminal:       terminalclient.NewClient(opts...),
+		TransferOrders: transferorders.NewClient(opts...),
 		Vendors:        vendors.NewClient(opts...),
 		CashDrawers:    cashdrawersclient.NewClient(opts...),
 		Webhooks:       webhooksclient.NewClient(opts...),
