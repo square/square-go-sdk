@@ -6,12 +6,41 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	getEmployeesRequestFieldID = big.NewInt(1 << 0)
 )
 
 type GetEmployeesRequest struct {
 	// UUID for the employee that was requested.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetEmployeesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEmployeesRequest) SetID(id string) {
+	g.ID = id
+	g.require(getEmployeesRequestFieldID)
+}
+
+var (
+	listEmployeesRequestFieldLocationID = big.NewInt(1 << 0)
+	listEmployeesRequestFieldStatus     = big.NewInt(1 << 1)
+	listEmployeesRequestFieldLimit      = big.NewInt(1 << 2)
+	listEmployeesRequestFieldCursor     = big.NewInt(1 << 3)
+)
 
 type ListEmployeesRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
@@ -21,11 +50,62 @@ type ListEmployeesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The token required to retrieve the specified page of results.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListEmployeesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listEmployeesRequestFieldLocationID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesRequest) SetStatus(status *EmployeeStatus) {
+	l.Status = status
+	l.require(listEmployeesRequestFieldStatus)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listEmployeesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEmployeesRequestFieldCursor)
 }
 
 // An employee object that is used by the external API.
 //
 // DEPRECATED at version 2020-08-26. Replaced by [TeamMember](entity:TeamMember).
+var (
+	employeeFieldID          = big.NewInt(1 << 0)
+	employeeFieldFirstName   = big.NewInt(1 << 1)
+	employeeFieldLastName    = big.NewInt(1 << 2)
+	employeeFieldEmail       = big.NewInt(1 << 3)
+	employeeFieldPhoneNumber = big.NewInt(1 << 4)
+	employeeFieldLocationIDs = big.NewInt(1 << 5)
+	employeeFieldStatus      = big.NewInt(1 << 6)
+	employeeFieldIsOwner     = big.NewInt(1 << 7)
+	employeeFieldCreatedAt   = big.NewInt(1 << 8)
+	employeeFieldUpdatedAt   = big.NewInt(1 << 9)
+)
+
 type Employee struct {
 	// UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -50,6 +130,9 @@ type Employee struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// A read-only timestamp in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -129,6 +212,83 @@ func (e *Employee) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
+func (e *Employee) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetID(id *string) {
+	e.ID = id
+	e.require(employeeFieldID)
+}
+
+// SetFirstName sets the FirstName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetFirstName(firstName *string) {
+	e.FirstName = firstName
+	e.require(employeeFieldFirstName)
+}
+
+// SetLastName sets the LastName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetLastName(lastName *string) {
+	e.LastName = lastName
+	e.require(employeeFieldLastName)
+}
+
+// SetEmail sets the Email field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetEmail(email *string) {
+	e.Email = email
+	e.require(employeeFieldEmail)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetPhoneNumber(phoneNumber *string) {
+	e.PhoneNumber = phoneNumber
+	e.require(employeeFieldPhoneNumber)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetLocationIDs(locationIDs []string) {
+	e.LocationIDs = locationIDs
+	e.require(employeeFieldLocationIDs)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetStatus(status *EmployeeStatus) {
+	e.Status = status
+	e.require(employeeFieldStatus)
+}
+
+// SetIsOwner sets the IsOwner field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetIsOwner(isOwner *bool) {
+	e.IsOwner = isOwner
+	e.require(employeeFieldIsOwner)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetCreatedAt(createdAt *string) {
+	e.CreatedAt = createdAt
+	e.require(employeeFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Employee) SetUpdatedAt(updatedAt *string) {
+	e.UpdatedAt = updatedAt
+	e.require(employeeFieldUpdatedAt)
+}
+
 func (e *Employee) UnmarshalJSON(data []byte) error {
 	type unmarshaler Employee
 	var value unmarshaler
@@ -143,6 +303,17 @@ func (e *Employee) UnmarshalJSON(data []byte) error {
 	e.extraProperties = extraProperties
 	e.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (e *Employee) MarshalJSON() ([]byte, error) {
+	type embed Employee
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (e *Employee) String() string {
@@ -182,10 +353,18 @@ func (e EmployeeStatus) Ptr() *EmployeeStatus {
 	return &e
 }
 
+var (
+	getEmployeeResponseFieldEmployee = big.NewInt(1 << 0)
+	getEmployeeResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type GetEmployeeResponse struct {
 	Employee *Employee `json:"employee,omitempty" url:"employee,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -209,6 +388,27 @@ func (g *GetEmployeeResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetEmployeeResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetEmployee sets the Employee field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEmployeeResponse) SetEmployee(employee *Employee) {
+	g.Employee = employee
+	g.require(getEmployeeResponseFieldEmployee)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEmployeeResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getEmployeeResponseFieldErrors)
+}
+
 func (g *GetEmployeeResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetEmployeeResponse
 	var value unmarshaler
@@ -225,6 +425,17 @@ func (g *GetEmployeeResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetEmployeeResponse) MarshalJSON() ([]byte, error) {
+	type embed GetEmployeeResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetEmployeeResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -237,12 +448,21 @@ func (g *GetEmployeeResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	listEmployeesResponseFieldEmployees = big.NewInt(1 << 0)
+	listEmployeesResponseFieldCursor    = big.NewInt(1 << 1)
+	listEmployeesResponseFieldErrors    = big.NewInt(1 << 2)
+)
+
 type ListEmployeesResponse struct {
 	Employees []*Employee `json:"employees,omitempty" url:"employees,omitempty"`
 	// The token to be used to retrieve the next page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -273,6 +493,34 @@ func (l *ListEmployeesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListEmployeesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetEmployees sets the Employees field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesResponse) SetEmployees(employees []*Employee) {
+	l.Employees = employees
+	l.require(listEmployeesResponseFieldEmployees)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEmployeesResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listEmployeesResponseFieldErrors)
+}
+
 func (l *ListEmployeesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListEmployeesResponse
 	var value unmarshaler
@@ -287,6 +535,17 @@ func (l *ListEmployeesResponse) UnmarshalJSON(data []byte) error {
 	l.extraProperties = extraProperties
 	l.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (l *ListEmployeesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListEmployeesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (l *ListEmployeesResponse) String() string {

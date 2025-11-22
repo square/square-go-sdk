@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateOrderRequest,
+	request *square.CreateOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateOrderResponse], error) {
+) (*core.Response[*square.CreateOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,10 +43,10 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/orders"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CreateOrderResponse
+	var response *square.CreateOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -64,7 +64,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateOrderResponse]{
+	return &core.Response[*square.CreateOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -73,9 +73,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) BatchGet(
 	ctx context.Context,
-	request *v2.BatchGetOrdersRequest,
+	request *square.BatchGetOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetOrdersResponse], error) {
+) (*core.Response[*square.BatchGetOrdersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,11 +84,11 @@ func (r *RawClient) BatchGet(
 	)
 	endpointURL := baseURL + "/v2/orders/batch-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchGetOrdersResponse
+	var response *square.BatchGetOrdersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -106,7 +106,7 @@ func (r *RawClient) BatchGet(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetOrdersResponse]{
+	return &core.Response[*square.BatchGetOrdersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -115,9 +115,9 @@ func (r *RawClient) BatchGet(
 
 func (r *RawClient) Calculate(
 	ctx context.Context,
-	request *v2.CalculateOrderRequest,
+	request *square.CalculateOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CalculateOrderResponse], error) {
+) (*core.Response[*square.CalculateOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -126,11 +126,11 @@ func (r *RawClient) Calculate(
 	)
 	endpointURL := baseURL + "/v2/orders/calculate"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CalculateOrderResponse
+	var response *square.CalculateOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -148,7 +148,7 @@ func (r *RawClient) Calculate(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CalculateOrderResponse]{
+	return &core.Response[*square.CalculateOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -157,9 +157,9 @@ func (r *RawClient) Calculate(
 
 func (r *RawClient) Clone(
 	ctx context.Context,
-	request *v2.CloneOrderRequest,
+	request *square.CloneOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CloneOrderResponse], error) {
+) (*core.Response[*square.CloneOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,11 +168,11 @@ func (r *RawClient) Clone(
 	)
 	endpointURL := baseURL + "/v2/orders/clone"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CloneOrderResponse
+	var response *square.CloneOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -190,7 +190,7 @@ func (r *RawClient) Clone(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CloneOrderResponse]{
+	return &core.Response[*square.CloneOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -199,9 +199,9 @@ func (r *RawClient) Clone(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchOrdersRequest,
+	request *square.SearchOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchOrdersResponse], error) {
+) (*core.Response[*square.SearchOrdersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -210,11 +210,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/orders/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchOrdersResponse
+	var response *square.SearchOrdersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -232,7 +232,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchOrdersResponse]{
+	return &core.Response[*square.SearchOrdersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -241,9 +241,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetOrdersRequest,
+	request *square.GetOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetOrderResponse], error) {
+) (*core.Response[*square.GetOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -255,10 +255,10 @@ func (r *RawClient) Get(
 		request.OrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetOrderResponse
+	var response *square.GetOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -275,7 +275,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetOrderResponse]{
+	return &core.Response[*square.GetOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -284,9 +284,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateOrderRequest,
+	request *square.UpdateOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateOrderResponse], error) {
+) (*core.Response[*square.UpdateOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -298,11 +298,11 @@ func (r *RawClient) Update(
 		request.OrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateOrderResponse
+	var response *square.UpdateOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -320,7 +320,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateOrderResponse]{
+	return &core.Response[*square.UpdateOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -329,9 +329,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Pay(
 	ctx context.Context,
-	request *v2.PayOrderRequest,
+	request *square.PayOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.PayOrderResponse], error) {
+) (*core.Response[*square.PayOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -343,11 +343,11 @@ func (r *RawClient) Pay(
 		request.OrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.PayOrderResponse
+	var response *square.PayOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -365,7 +365,7 @@ func (r *RawClient) Pay(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.PayOrderResponse]{
+	return &core.Response[*square.PayOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

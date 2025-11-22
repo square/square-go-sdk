@@ -4,6 +4,12 @@ package merchants
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createMerchantCustomAttributeDefinitionRequestFieldCustomAttributeDefinition = big.NewInt(1 << 0)
+	createMerchantCustomAttributeDefinitionRequestFieldIdempotencyKey            = big.NewInt(1 << 1)
 )
 
 type CreateMerchantCustomAttributeDefinitionRequest struct {
@@ -16,12 +22,62 @@ type CreateMerchantCustomAttributeDefinitionRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateMerchantCustomAttributeDefinitionRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMerchantCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+	c.CustomAttributeDefinition = customAttributeDefinition
+	c.require(createMerchantCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMerchantCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createMerchantCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+var (
+	deleteCustomAttributeDefinitionsRequestFieldKey = big.NewInt(1 << 0)
+)
 
 type DeleteCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to delete.
 	Key string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteCustomAttributeDefinitionsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributeDefinitionsRequest) SetKey(key string) {
+	d.Key = key
+	d.require(deleteCustomAttributeDefinitionsRequestFieldKey)
+}
+
+var (
+	getCustomAttributeDefinitionsRequestFieldKey     = big.NewInt(1 << 0)
+	getCustomAttributeDefinitionsRequestFieldVersion = big.NewInt(1 << 1)
+)
 
 type GetCustomAttributeDefinitionsRequest struct {
 	// The key of the custom attribute definition to retrieve. If the requesting application
@@ -32,7 +88,37 @@ type GetCustomAttributeDefinitionsRequest struct {
 	// Square returns the specified version or a higher version if one exists. If the specified version
 	// is higher than the current version, Square returns a `BAD_REQUEST` error.
 	Version *int `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCustomAttributeDefinitionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributeDefinitionsRequest) SetKey(key string) {
+	g.Key = key
+	g.require(getCustomAttributeDefinitionsRequestFieldKey)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributeDefinitionsRequest) SetVersion(version *int) {
+	g.Version = version
+	g.require(getCustomAttributeDefinitionsRequestFieldVersion)
+}
+
+var (
+	listCustomAttributeDefinitionsRequestFieldVisibilityFilter = big.NewInt(1 << 0)
+	listCustomAttributeDefinitionsRequestFieldLimit            = big.NewInt(1 << 1)
+	listCustomAttributeDefinitionsRequestFieldCursor           = big.NewInt(1 << 2)
+)
 
 type ListCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
@@ -45,7 +131,44 @@ type ListCustomAttributeDefinitionsRequest struct {
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCustomAttributeDefinitionsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributeDefinitionsRequest) SetVisibilityFilter(visibilityFilter *v2.VisibilityFilter) {
+	l.VisibilityFilter = visibilityFilter
+	l.require(listCustomAttributeDefinitionsRequestFieldVisibilityFilter)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributeDefinitionsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listCustomAttributeDefinitionsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributeDefinitionsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomAttributeDefinitionsRequestFieldCursor)
+}
+
+var (
+	updateMerchantCustomAttributeDefinitionRequestFieldKey                       = big.NewInt(1 << 0)
+	updateMerchantCustomAttributeDefinitionRequestFieldCustomAttributeDefinition = big.NewInt(1 << 1)
+	updateMerchantCustomAttributeDefinitionRequestFieldIdempotencyKey            = big.NewInt(1 << 2)
+)
 
 type UpdateMerchantCustomAttributeDefinitionRequest struct {
 	// The key of the custom attribute definition to update.
@@ -67,4 +190,35 @@ type UpdateMerchantCustomAttributeDefinitionRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateMerchantCustomAttributeDefinitionRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantCustomAttributeDefinitionRequest) SetKey(key string) {
+	u.Key = key
+	u.require(updateMerchantCustomAttributeDefinitionRequestFieldKey)
+}
+
+// SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+	u.CustomAttributeDefinition = customAttributeDefinition
+	u.require(updateMerchantCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateMerchantCustomAttributeDefinitionRequestFieldIdempotencyKey)
 }

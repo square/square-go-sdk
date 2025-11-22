@@ -4,25 +4,23 @@ package shifts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	labor "github.com/square/square-go-sdk/v2/labor"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -64,7 +62,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateShiftResponse, error) {
+) (*square.CreateShiftResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -94,7 +92,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *labor.SearchShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchShiftsResponse, error) {
+) (*square.SearchShiftsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -111,7 +109,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.GetShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetShiftResponse, error) {
+) (*square.GetShiftResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -134,7 +132,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateShiftResponse, error) {
+) (*square.UpdateShiftResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -151,7 +149,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.DeleteShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteShiftResponse, error) {
+) (*square.DeleteShiftResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

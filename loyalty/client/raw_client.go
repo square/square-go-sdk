@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) SearchEvents(
 	ctx context.Context,
-	request *v2.SearchLoyaltyEventsRequest,
+	request *square.SearchLoyaltyEventsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchLoyaltyEventsResponse], error) {
+) (*core.Response[*square.SearchLoyaltyEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) SearchEvents(
 	)
 	endpointURL := baseURL + "/v2/loyalty/events/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchLoyaltyEventsResponse
+	var response *square.SearchLoyaltyEventsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) SearchEvents(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchLoyaltyEventsResponse]{
+	return &core.Response[*square.SearchLoyaltyEventsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

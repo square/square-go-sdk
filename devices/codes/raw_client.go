@@ -4,7 +4,7 @@ package codes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	devices "github.com/square/square-go-sdk/v2/devices"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *devices.CreateDeviceCodeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateDeviceCodeResponse], error) {
+) (*core.Response[*square.CreateDeviceCodeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/devices/codes"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateDeviceCodeResponse
+	var response *square.CreateDeviceCodeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateDeviceCodeResponse]{
+	return &core.Response[*square.CreateDeviceCodeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *devices.GetCodesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetDeviceCodeResponse], error) {
+) (*core.Response[*square.GetDeviceCodeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Get(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetDeviceCodeResponse
+	var response *square.GetDeviceCodeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetDeviceCodeResponse]{
+	return &core.Response[*square.GetDeviceCodeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

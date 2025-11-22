@@ -6,22 +6,72 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	deleteSnippetsRequestFieldSiteID = big.NewInt(1 << 0)
 )
 
 type DeleteSnippetsRequest struct {
 	// The ID of the site that contains the snippet.
 	SiteID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteSnippetsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetSiteID sets the SiteID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteSnippetsRequest) SetSiteID(siteID string) {
+	d.SiteID = siteID
+	d.require(deleteSnippetsRequestFieldSiteID)
+}
+
+var (
+	getSnippetsRequestFieldSiteID = big.NewInt(1 << 0)
+)
 
 type GetSnippetsRequest struct {
 	// The ID of the site that contains the snippet.
 	SiteID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetSnippetsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetSiteID sets the SiteID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSnippetsRequest) SetSiteID(siteID string) {
+	g.SiteID = siteID
+	g.require(getSnippetsRequestFieldSiteID)
 }
 
 // Represents a `DeleteSnippet` response.
+var (
+	deleteSnippetResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -36,6 +86,20 @@ func (d *DeleteSnippetResponse) GetErrors() []*Error {
 
 func (d *DeleteSnippetResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteSnippetResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteSnippetResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteSnippetResponseFieldErrors)
 }
 
 func (d *DeleteSnippetResponse) UnmarshalJSON(data []byte) error {
@@ -54,6 +118,17 @@ func (d *DeleteSnippetResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteSnippetResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteSnippetResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteSnippetResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -67,11 +142,19 @@ func (d *DeleteSnippetResponse) String() string {
 }
 
 // Represents a `RetrieveSnippet` response. The response can include either `snippet` or `errors`.
+var (
+	getSnippetResponseFieldErrors  = big.NewInt(1 << 0)
+	getSnippetResponseFieldSnippet = big.NewInt(1 << 1)
+)
+
 type GetSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The retrieved snippet.
 	Snippet *Snippet `json:"snippet,omitempty" url:"snippet,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -95,6 +178,27 @@ func (g *GetSnippetResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetSnippetResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSnippetResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getSnippetResponseFieldErrors)
+}
+
+// SetSnippet sets the Snippet field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSnippetResponse) SetSnippet(snippet *Snippet) {
+	g.Snippet = snippet
+	g.require(getSnippetResponseFieldSnippet)
+}
+
 func (g *GetSnippetResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetSnippetResponse
 	var value unmarshaler
@@ -111,6 +215,17 @@ func (g *GetSnippetResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetSnippetResponse) MarshalJSON() ([]byte, error) {
+	type embed GetSnippetResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetSnippetResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -124,6 +239,14 @@ func (g *GetSnippetResponse) String() string {
 }
 
 // Represents the snippet that is added to a Square Online site. The snippet code is injected into the `head` element of all pages on the site, except for checkout pages.
+var (
+	snippetFieldID        = big.NewInt(1 << 0)
+	snippetFieldSiteID    = big.NewInt(1 << 1)
+	snippetFieldContent   = big.NewInt(1 << 2)
+	snippetFieldCreatedAt = big.NewInt(1 << 3)
+	snippetFieldUpdatedAt = big.NewInt(1 << 4)
+)
+
 type Snippet struct {
 	// The Square-assigned ID for the snippet.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -135,6 +258,9 @@ type Snippet struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The timestamp of when the snippet was last updated on the site, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -179,6 +305,48 @@ func (s *Snippet) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *Snippet) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Snippet) SetID(id *string) {
+	s.ID = id
+	s.require(snippetFieldID)
+}
+
+// SetSiteID sets the SiteID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Snippet) SetSiteID(siteID *string) {
+	s.SiteID = siteID
+	s.require(snippetFieldSiteID)
+}
+
+// SetContent sets the Content field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Snippet) SetContent(content string) {
+	s.Content = content
+	s.require(snippetFieldContent)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Snippet) SetCreatedAt(createdAt *string) {
+	s.CreatedAt = createdAt
+	s.require(snippetFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Snippet) SetUpdatedAt(updatedAt *string) {
+	s.UpdatedAt = updatedAt
+	s.require(snippetFieldUpdatedAt)
+}
+
 func (s *Snippet) UnmarshalJSON(data []byte) error {
 	type unmarshaler Snippet
 	var value unmarshaler
@@ -195,6 +363,17 @@ func (s *Snippet) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *Snippet) MarshalJSON() ([]byte, error) {
+	type embed Snippet
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *Snippet) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -208,11 +387,19 @@ func (s *Snippet) String() string {
 }
 
 // Represents an `UpsertSnippet` response. The response can include either `snippet` or `errors`.
+var (
+	upsertSnippetResponseFieldErrors  = big.NewInt(1 << 0)
+	upsertSnippetResponseFieldSnippet = big.NewInt(1 << 1)
+)
+
 type UpsertSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The new or updated snippet.
 	Snippet *Snippet `json:"snippet,omitempty" url:"snippet,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -236,6 +423,27 @@ func (u *UpsertSnippetResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpsertSnippetResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertSnippetResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(upsertSnippetResponseFieldErrors)
+}
+
+// SetSnippet sets the Snippet field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertSnippetResponse) SetSnippet(snippet *Snippet) {
+	u.Snippet = snippet
+	u.require(upsertSnippetResponseFieldSnippet)
+}
+
 func (u *UpsertSnippetResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpsertSnippetResponse
 	var value unmarshaler
@@ -252,6 +460,17 @@ func (u *UpsertSnippetResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpsertSnippetResponse) MarshalJSON() ([]byte, error) {
+	type embed UpsertSnippetResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpsertSnippetResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -264,9 +483,38 @@ func (u *UpsertSnippetResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	upsertSnippetRequestFieldSiteID  = big.NewInt(1 << 0)
+	upsertSnippetRequestFieldSnippet = big.NewInt(1 << 1)
+)
+
 type UpsertSnippetRequest struct {
 	// The ID of the site where you want to add or update the snippet.
 	SiteID string `json:"-" url:"-"`
 	// The snippet for the site.
 	Snippet *Snippet `json:"snippet,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpsertSnippetRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSiteID sets the SiteID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertSnippetRequest) SetSiteID(siteID string) {
+	u.SiteID = siteID
+	u.require(upsertSnippetRequestFieldSiteID)
+}
+
+// SetSnippet sets the Snippet field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertSnippetRequest) SetSnippet(snippet *Snippet) {
+	u.Snippet = snippet
+	u.require(upsertSnippetRequestFieldSnippet)
 }

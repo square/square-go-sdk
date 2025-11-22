@@ -2,10 +2,40 @@
 
 package customers
 
+import (
+	big "math/big"
+)
+
+var (
+	getSegmentsRequestFieldSegmentID = big.NewInt(1 << 0)
+)
+
 type GetSegmentsRequest struct {
 	// The Square-issued ID of the customer segment.
 	SegmentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetSegmentsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetSegmentID sets the SegmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSegmentsRequest) SetSegmentID(segmentID string) {
+	g.SegmentID = segmentID
+	g.require(getSegmentsRequestFieldSegmentID)
+}
+
+var (
+	listSegmentsRequestFieldCursor = big.NewInt(1 << 0)
+	listSegmentsRequestFieldLimit  = big.NewInt(1 << 1)
+)
 
 type ListSegmentsRequest struct {
 	// A pagination cursor returned by previous calls to `ListCustomerSegments`.
@@ -18,4 +48,28 @@ type ListSegmentsRequest struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListSegmentsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSegmentsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listSegmentsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSegmentsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listSegmentsRequestFieldLimit)
 }

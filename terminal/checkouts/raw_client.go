@@ -4,7 +4,7 @@ package checkouts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalCheckoutRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTerminalCheckoutResponse], error) {
+) (*core.Response[*square.CreateTerminalCheckoutResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/terminals/checkouts"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateTerminalCheckoutResponse
+	var response *square.CreateTerminalCheckoutResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTerminalCheckoutResponse]{
+	return &core.Response[*square.CreateTerminalCheckoutResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTerminalCheckoutsResponse], error) {
+) (*core.Response[*square.SearchTerminalCheckoutsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/terminals/checkouts/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTerminalCheckoutsResponse
+	var response *square.SearchTerminalCheckoutsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTerminalCheckoutsResponse]{
+	return &core.Response[*square.SearchTerminalCheckoutsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *terminal.GetCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetTerminalCheckoutResponse], error) {
+) (*core.Response[*square.GetTerminalCheckoutResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Get(
 		request.CheckoutID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetTerminalCheckoutResponse
+	var response *square.GetTerminalCheckoutResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetTerminalCheckoutResponse]{
+	return &core.Response[*square.GetTerminalCheckoutResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -162,7 +162,7 @@ func (r *RawClient) Cancel(
 	ctx context.Context,
 	request *terminal.CancelCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelTerminalCheckoutResponse], error) {
+) (*core.Response[*square.CancelTerminalCheckoutResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,10 +174,10 @@ func (r *RawClient) Cancel(
 		request.CheckoutID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelTerminalCheckoutResponse
+	var response *square.CancelTerminalCheckoutResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -194,7 +194,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelTerminalCheckoutResponse]{
+	return &core.Response[*square.CancelTerminalCheckoutResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

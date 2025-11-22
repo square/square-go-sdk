@@ -6,12 +6,41 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	getDevicesRequestFieldDeviceID = big.NewInt(1 << 0)
 )
 
 type GetDevicesRequest struct {
 	// The unique ID for the desired `Device`.
 	DeviceID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetDevicesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetDeviceID sets the DeviceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDevicesRequest) SetDeviceID(deviceID string) {
+	g.DeviceID = deviceID
+	g.require(getDevicesRequestFieldDeviceID)
+}
+
+var (
+	listDevicesRequestFieldCursor     = big.NewInt(1 << 0)
+	listDevicesRequestFieldSortOrder  = big.NewInt(1 << 1)
+	listDevicesRequestFieldLimit      = big.NewInt(1 << 2)
+	listDevicesRequestFieldLocationID = big.NewInt(1 << 3)
+)
 
 type ListDevicesRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -26,11 +55,58 @@ type ListDevicesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// If present, only returns devices at the target location.
 	LocationID *string `json:"-" url:"location_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListDevicesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listDevicesRequestFieldCursor)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesRequest) SetSortOrder(sortOrder *SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listDevicesRequestFieldSortOrder)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listDevicesRequestFieldLimit)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listDevicesRequestFieldLocationID)
 }
 
 type ApplicationType = string
 
 // The wrapper object for the component entries of a given component type.
+var (
+	componentFieldType               = big.NewInt(1 << 0)
+	componentFieldApplicationDetails = big.NewInt(1 << 1)
+	componentFieldCardReaderDetails  = big.NewInt(1 << 2)
+	componentFieldBatteryDetails     = big.NewInt(1 << 3)
+	componentFieldWifiDetails        = big.NewInt(1 << 4)
+	componentFieldEthernetDetails    = big.NewInt(1 << 5)
+)
+
 type Component struct {
 	// The type of this component. Each component type has expected properties expressed
 	// in a structured format within its corresponding `*_details` field.
@@ -46,6 +122,9 @@ type Component struct {
 	WifiDetails *DeviceComponentDetailsWiFiDetails `json:"wifi_details,omitempty" url:"wifi_details,omitempty"`
 	// Structured data for an `Ethernet` interface, set for Components of type `ETHERNET`.
 	EthernetDetails *DeviceComponentDetailsEthernetDetails `json:"ethernet_details,omitempty" url:"ethernet_details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -97,6 +176,55 @@ func (c *Component) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *Component) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetType(type_ ComponentComponentType) {
+	c.Type = type_
+	c.require(componentFieldType)
+}
+
+// SetApplicationDetails sets the ApplicationDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetApplicationDetails(applicationDetails *DeviceComponentDetailsApplicationDetails) {
+	c.ApplicationDetails = applicationDetails
+	c.require(componentFieldApplicationDetails)
+}
+
+// SetCardReaderDetails sets the CardReaderDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetCardReaderDetails(cardReaderDetails *DeviceComponentDetailsCardReaderDetails) {
+	c.CardReaderDetails = cardReaderDetails
+	c.require(componentFieldCardReaderDetails)
+}
+
+// SetBatteryDetails sets the BatteryDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetBatteryDetails(batteryDetails *DeviceComponentDetailsBatteryDetails) {
+	c.BatteryDetails = batteryDetails
+	c.require(componentFieldBatteryDetails)
+}
+
+// SetWifiDetails sets the WifiDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetWifiDetails(wifiDetails *DeviceComponentDetailsWiFiDetails) {
+	c.WifiDetails = wifiDetails
+	c.require(componentFieldWifiDetails)
+}
+
+// SetEthernetDetails sets the EthernetDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Component) SetEthernetDetails(ethernetDetails *DeviceComponentDetailsEthernetDetails) {
+	c.EthernetDetails = ethernetDetails
+	c.require(componentFieldEthernetDetails)
+}
+
 func (c *Component) UnmarshalJSON(data []byte) error {
 	type unmarshaler Component
 	var value unmarshaler
@@ -111,6 +239,17 @@ func (c *Component) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *Component) MarshalJSON() ([]byte, error) {
+	type embed Component
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *Component) String() string {
@@ -160,6 +299,13 @@ func (c ComponentComponentType) Ptr() *ComponentComponentType {
 	return &c
 }
 
+var (
+	deviceFieldID         = big.NewInt(1 << 0)
+	deviceFieldAttributes = big.NewInt(1 << 1)
+	deviceFieldComponents = big.NewInt(1 << 2)
+	deviceFieldStatus     = big.NewInt(1 << 3)
+)
+
 type Device struct {
 	// A synthetic identifier for the device. The identifier includes a standardized prefix and
 	// is otherwise an opaque id generated from key device fields.
@@ -170,6 +316,9 @@ type Device struct {
 	Components []*Component `json:"components,omitempty" url:"components,omitempty"`
 	// The current status of the device.
 	Status *DeviceStatus `json:"status,omitempty" url:"status,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -207,6 +356,41 @@ func (d *Device) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *Device) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Device) SetID(id *string) {
+	d.ID = id
+	d.require(deviceFieldID)
+}
+
+// SetAttributes sets the Attributes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Device) SetAttributes(attributes *DeviceAttributes) {
+	d.Attributes = attributes
+	d.require(deviceFieldAttributes)
+}
+
+// SetComponents sets the Components field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Device) SetComponents(components []*Component) {
+	d.Components = components
+	d.require(deviceFieldComponents)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Device) SetStatus(status *DeviceStatus) {
+	d.Status = status
+	d.require(deviceFieldStatus)
+}
+
 func (d *Device) UnmarshalJSON(data []byte) error {
 	type unmarshaler Device
 	var value unmarshaler
@@ -223,6 +407,17 @@ func (d *Device) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *Device) MarshalJSON() ([]byte, error) {
+	type embed Device
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *Device) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -234,6 +429,17 @@ func (d *Device) String() string {
 	}
 	return fmt.Sprintf("%#v", d)
 }
+
+var (
+	deviceAttributesFieldType            = big.NewInt(1 << 0)
+	deviceAttributesFieldManufacturer    = big.NewInt(1 << 1)
+	deviceAttributesFieldModel           = big.NewInt(1 << 2)
+	deviceAttributesFieldName            = big.NewInt(1 << 3)
+	deviceAttributesFieldManufacturersID = big.NewInt(1 << 4)
+	deviceAttributesFieldUpdatedAt       = big.NewInt(1 << 5)
+	deviceAttributesFieldVersion         = big.NewInt(1 << 6)
+	deviceAttributesFieldMerchantToken   = big.NewInt(1 << 7)
+)
 
 type DeviceAttributes struct {
 	// The device type.
@@ -255,6 +461,9 @@ type DeviceAttributes struct {
 	Version *string `json:"version,omitempty" url:"version,omitempty"`
 	// The merchant_token identifying the merchant controlling the device.
 	MerchantToken *string `json:"merchant_token,omitempty" url:"merchant_token,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -320,6 +529,69 @@ func (d *DeviceAttributes) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DeviceAttributes) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetType(type_ DeviceAttributesDeviceType) {
+	d.Type = type_
+	d.require(deviceAttributesFieldType)
+}
+
+// SetManufacturer sets the Manufacturer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetManufacturer(manufacturer string) {
+	d.Manufacturer = manufacturer
+	d.require(deviceAttributesFieldManufacturer)
+}
+
+// SetModel sets the Model field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetModel(model *string) {
+	d.Model = model
+	d.require(deviceAttributesFieldModel)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetName(name *string) {
+	d.Name = name
+	d.require(deviceAttributesFieldName)
+}
+
+// SetManufacturersID sets the ManufacturersID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetManufacturersID(manufacturersID *string) {
+	d.ManufacturersID = manufacturersID
+	d.require(deviceAttributesFieldManufacturersID)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetUpdatedAt(updatedAt *string) {
+	d.UpdatedAt = updatedAt
+	d.require(deviceAttributesFieldUpdatedAt)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetVersion(version *string) {
+	d.Version = version
+	d.require(deviceAttributesFieldVersion)
+}
+
+// SetMerchantToken sets the MerchantToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceAttributes) SetMerchantToken(merchantToken *string) {
+	d.MerchantToken = merchantToken
+	d.require(deviceAttributesFieldMerchantToken)
+}
+
 func (d *DeviceAttributes) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceAttributes
 	var value unmarshaler
@@ -334,6 +606,17 @@ func (d *DeviceAttributes) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DeviceAttributes) MarshalJSON() ([]byte, error) {
+	type embed DeviceAttributes
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DeviceAttributes) String() string {
@@ -371,6 +654,13 @@ func (d DeviceAttributesDeviceType) Ptr() *DeviceAttributesDeviceType {
 	return &d
 }
 
+var (
+	deviceComponentDetailsApplicationDetailsFieldApplicationType = big.NewInt(1 << 0)
+	deviceComponentDetailsApplicationDetailsFieldVersion         = big.NewInt(1 << 1)
+	deviceComponentDetailsApplicationDetailsFieldSessionLocation = big.NewInt(1 << 2)
+	deviceComponentDetailsApplicationDetailsFieldDeviceCodeID    = big.NewInt(1 << 3)
+)
+
 type DeviceComponentDetailsApplicationDetails struct {
 	// The type of application.
 	// See [ApplicationType](#type-applicationtype) for possible values
@@ -381,6 +671,9 @@ type DeviceComponentDetailsApplicationDetails struct {
 	SessionLocation *string `json:"session_location,omitempty" url:"session_location,omitempty"`
 	// The id of the device code that was used to log in to the device.
 	DeviceCodeID *string `json:"device_code_id,omitempty" url:"device_code_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -411,6 +704,41 @@ func (d *DeviceComponentDetailsApplicationDetails) GetExtraProperties() map[stri
 	return d.extraProperties
 }
 
+func (d *DeviceComponentDetailsApplicationDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetApplicationType sets the ApplicationType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsApplicationDetails) SetApplicationType(applicationType *ApplicationType) {
+	d.ApplicationType = applicationType
+	d.require(deviceComponentDetailsApplicationDetailsFieldApplicationType)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsApplicationDetails) SetVersion(version *string) {
+	d.Version = version
+	d.require(deviceComponentDetailsApplicationDetailsFieldVersion)
+}
+
+// SetSessionLocation sets the SessionLocation field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsApplicationDetails) SetSessionLocation(sessionLocation *string) {
+	d.SessionLocation = sessionLocation
+	d.require(deviceComponentDetailsApplicationDetailsFieldSessionLocation)
+}
+
+// SetDeviceCodeID sets the DeviceCodeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsApplicationDetails) SetDeviceCodeID(deviceCodeID *string) {
+	d.DeviceCodeID = deviceCodeID
+	d.require(deviceComponentDetailsApplicationDetailsFieldDeviceCodeID)
+}
+
 func (d *DeviceComponentDetailsApplicationDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceComponentDetailsApplicationDetails
 	var value unmarshaler
@@ -427,6 +755,17 @@ func (d *DeviceComponentDetailsApplicationDetails) UnmarshalJSON(data []byte) er
 	return nil
 }
 
+func (d *DeviceComponentDetailsApplicationDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsApplicationDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceComponentDetailsApplicationDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -439,12 +778,20 @@ func (d *DeviceComponentDetailsApplicationDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	deviceComponentDetailsBatteryDetailsFieldVisiblePercent = big.NewInt(1 << 0)
+	deviceComponentDetailsBatteryDetailsFieldExternalPower  = big.NewInt(1 << 1)
+)
+
 type DeviceComponentDetailsBatteryDetails struct {
 	// The battery charge percentage as displayed on the device.
 	VisiblePercent *int `json:"visible_percent,omitempty" url:"visible_percent,omitempty"`
 	// The status of external_power.
 	// See [ExternalPower](#type-externalpower) for possible values
 	ExternalPower *DeviceComponentDetailsExternalPower `json:"external_power,omitempty" url:"external_power,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -468,6 +815,27 @@ func (d *DeviceComponentDetailsBatteryDetails) GetExtraProperties() map[string]i
 	return d.extraProperties
 }
 
+func (d *DeviceComponentDetailsBatteryDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetVisiblePercent sets the VisiblePercent field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsBatteryDetails) SetVisiblePercent(visiblePercent *int) {
+	d.VisiblePercent = visiblePercent
+	d.require(deviceComponentDetailsBatteryDetailsFieldVisiblePercent)
+}
+
+// SetExternalPower sets the ExternalPower field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsBatteryDetails) SetExternalPower(externalPower *DeviceComponentDetailsExternalPower) {
+	d.ExternalPower = externalPower
+	d.require(deviceComponentDetailsBatteryDetailsFieldExternalPower)
+}
+
 func (d *DeviceComponentDetailsBatteryDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceComponentDetailsBatteryDetails
 	var value unmarshaler
@@ -484,6 +852,17 @@ func (d *DeviceComponentDetailsBatteryDetails) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
+func (d *DeviceComponentDetailsBatteryDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsBatteryDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceComponentDetailsBatteryDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -496,9 +875,16 @@ func (d *DeviceComponentDetailsBatteryDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	deviceComponentDetailsCardReaderDetailsFieldVersion = big.NewInt(1 << 0)
+)
+
 type DeviceComponentDetailsCardReaderDetails struct {
 	// The version of the card reader.
 	Version *string `json:"version,omitempty" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -513,6 +899,20 @@ func (d *DeviceComponentDetailsCardReaderDetails) GetVersion() *string {
 
 func (d *DeviceComponentDetailsCardReaderDetails) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeviceComponentDetailsCardReaderDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsCardReaderDetails) SetVersion(version *string) {
+	d.Version = version
+	d.require(deviceComponentDetailsCardReaderDetailsFieldVersion)
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) UnmarshalJSON(data []byte) error {
@@ -531,6 +931,17 @@ func (d *DeviceComponentDetailsCardReaderDetails) UnmarshalJSON(data []byte) err
 	return nil
 }
 
+func (d *DeviceComponentDetailsCardReaderDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsCardReaderDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceComponentDetailsCardReaderDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -543,6 +954,12 @@ func (d *DeviceComponentDetailsCardReaderDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	deviceComponentDetailsEthernetDetailsFieldActive      = big.NewInt(1 << 0)
+	deviceComponentDetailsEthernetDetailsFieldIPAddressV4 = big.NewInt(1 << 1)
+	deviceComponentDetailsEthernetDetailsFieldMacAddress  = big.NewInt(1 << 2)
+)
+
 type DeviceComponentDetailsEthernetDetails struct {
 	// A boolean to represent whether the Ethernet interface is currently active.
 	Active *bool `json:"active,omitempty" url:"active,omitempty"`
@@ -550,6 +967,9 @@ type DeviceComponentDetailsEthernetDetails struct {
 	IPAddressV4 *string `json:"ip_address_v4,omitempty" url:"ip_address_v4,omitempty"`
 	// The mac address of the device in this network.
 	MacAddress *string `json:"mac_address,omitempty" url:"mac_address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -580,6 +1000,34 @@ func (d *DeviceComponentDetailsEthernetDetails) GetExtraProperties() map[string]
 	return d.extraProperties
 }
 
+func (d *DeviceComponentDetailsEthernetDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetActive sets the Active field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsEthernetDetails) SetActive(active *bool) {
+	d.Active = active
+	d.require(deviceComponentDetailsEthernetDetailsFieldActive)
+}
+
+// SetIPAddressV4 sets the IPAddressV4 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsEthernetDetails) SetIPAddressV4(ipAddressV4 *string) {
+	d.IPAddressV4 = ipAddressV4
+	d.require(deviceComponentDetailsEthernetDetailsFieldIPAddressV4)
+}
+
+// SetMacAddress sets the MacAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsEthernetDetails) SetMacAddress(macAddress *string) {
+	d.MacAddress = macAddress
+	d.require(deviceComponentDetailsEthernetDetailsFieldMacAddress)
+}
+
 func (d *DeviceComponentDetailsEthernetDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceComponentDetailsEthernetDetails
 	var value unmarshaler
@@ -594,6 +1042,17 @@ func (d *DeviceComponentDetailsEthernetDetails) UnmarshalJSON(data []byte) error
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DeviceComponentDetailsEthernetDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsEthernetDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) String() string {
@@ -638,9 +1097,16 @@ func (d DeviceComponentDetailsExternalPower) Ptr() *DeviceComponentDetailsExtern
 }
 
 // A value qualified by unit of measure.
+var (
+	deviceComponentDetailsMeasurementFieldValue = big.NewInt(1 << 0)
+)
+
 type DeviceComponentDetailsMeasurement struct {
 	// Value of measure.
 	Value *int `json:"value,omitempty" url:"value,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -655,6 +1121,20 @@ func (d *DeviceComponentDetailsMeasurement) GetValue() *int {
 
 func (d *DeviceComponentDetailsMeasurement) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeviceComponentDetailsMeasurement) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsMeasurement) SetValue(value *int) {
+	d.Value = value
+	d.require(deviceComponentDetailsMeasurementFieldValue)
 }
 
 func (d *DeviceComponentDetailsMeasurement) UnmarshalJSON(data []byte) error {
@@ -673,6 +1153,17 @@ func (d *DeviceComponentDetailsMeasurement) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeviceComponentDetailsMeasurement) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsMeasurement
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceComponentDetailsMeasurement) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -684,6 +1175,15 @@ func (d *DeviceComponentDetailsMeasurement) String() string {
 	}
 	return fmt.Sprintf("%#v", d)
 }
+
+var (
+	deviceComponentDetailsWiFiDetailsFieldActive           = big.NewInt(1 << 0)
+	deviceComponentDetailsWiFiDetailsFieldSsid             = big.NewInt(1 << 1)
+	deviceComponentDetailsWiFiDetailsFieldIPAddressV4      = big.NewInt(1 << 2)
+	deviceComponentDetailsWiFiDetailsFieldSecureConnection = big.NewInt(1 << 3)
+	deviceComponentDetailsWiFiDetailsFieldSignalStrength   = big.NewInt(1 << 4)
+	deviceComponentDetailsWiFiDetailsFieldMacAddress       = big.NewInt(1 << 5)
+)
 
 type DeviceComponentDetailsWiFiDetails struct {
 	// A boolean to represent whether the WiFI interface is currently active.
@@ -699,6 +1199,9 @@ type DeviceComponentDetailsWiFiDetails struct {
 	SignalStrength *DeviceComponentDetailsMeasurement `json:"signal_strength,omitempty" url:"signal_strength,omitempty"`
 	// The mac address of the device in this network.
 	MacAddress *string `json:"mac_address,omitempty" url:"mac_address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -750,6 +1253,55 @@ func (d *DeviceComponentDetailsWiFiDetails) GetExtraProperties() map[string]inte
 	return d.extraProperties
 }
 
+func (d *DeviceComponentDetailsWiFiDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetActive sets the Active field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetActive(active *bool) {
+	d.Active = active
+	d.require(deviceComponentDetailsWiFiDetailsFieldActive)
+}
+
+// SetSsid sets the Ssid field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetSsid(ssid *string) {
+	d.Ssid = ssid
+	d.require(deviceComponentDetailsWiFiDetailsFieldSsid)
+}
+
+// SetIPAddressV4 sets the IPAddressV4 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetIPAddressV4(ipAddressV4 *string) {
+	d.IPAddressV4 = ipAddressV4
+	d.require(deviceComponentDetailsWiFiDetailsFieldIPAddressV4)
+}
+
+// SetSecureConnection sets the SecureConnection field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetSecureConnection(secureConnection *string) {
+	d.SecureConnection = secureConnection
+	d.require(deviceComponentDetailsWiFiDetailsFieldSecureConnection)
+}
+
+// SetSignalStrength sets the SignalStrength field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetSignalStrength(signalStrength *DeviceComponentDetailsMeasurement) {
+	d.SignalStrength = signalStrength
+	d.require(deviceComponentDetailsWiFiDetailsFieldSignalStrength)
+}
+
+// SetMacAddress sets the MacAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceComponentDetailsWiFiDetails) SetMacAddress(macAddress *string) {
+	d.MacAddress = macAddress
+	d.require(deviceComponentDetailsWiFiDetailsFieldMacAddress)
+}
+
 func (d *DeviceComponentDetailsWiFiDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceComponentDetailsWiFiDetails
 	var value unmarshaler
@@ -766,6 +1318,17 @@ func (d *DeviceComponentDetailsWiFiDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeviceComponentDetailsWiFiDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceComponentDetailsWiFiDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceComponentDetailsWiFiDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -778,10 +1341,17 @@ func (d *DeviceComponentDetailsWiFiDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	deviceStatusFieldCategory = big.NewInt(1 << 0)
+)
+
 type DeviceStatus struct {
 	// Category of the device status.
 	// See [Category](#type-category) for possible values
 	Category *DeviceStatusCategory `json:"category,omitempty" url:"category,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -798,6 +1368,20 @@ func (d *DeviceStatus) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DeviceStatus) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCategory sets the Category field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceStatus) SetCategory(category *DeviceStatusCategory) {
+	d.Category = category
+	d.require(deviceStatusFieldCategory)
+}
+
 func (d *DeviceStatus) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceStatus
 	var value unmarshaler
@@ -812,6 +1396,17 @@ func (d *DeviceStatus) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DeviceStatus) MarshalJSON() ([]byte, error) {
+	type embed DeviceStatus
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DeviceStatus) String() string {
@@ -851,11 +1446,19 @@ func (d DeviceStatusCategory) Ptr() *DeviceStatusCategory {
 	return &d
 }
 
+var (
+	getDeviceResponseFieldErrors = big.NewInt(1 << 0)
+	getDeviceResponseFieldDevice = big.NewInt(1 << 1)
+)
+
 type GetDeviceResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested `Device`.
 	Device *Device `json:"device,omitempty" url:"device,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -879,6 +1482,27 @@ func (g *GetDeviceResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetDeviceResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDeviceResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getDeviceResponseFieldErrors)
+}
+
+// SetDevice sets the Device field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDeviceResponse) SetDevice(device *Device) {
+	g.Device = device
+	g.require(getDeviceResponseFieldDevice)
+}
+
 func (g *GetDeviceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetDeviceResponse
 	var value unmarshaler
@@ -895,6 +1519,17 @@ func (g *GetDeviceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetDeviceResponse) MarshalJSON() ([]byte, error) {
+	type embed GetDeviceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetDeviceResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -907,6 +1542,12 @@ func (g *GetDeviceResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	listDevicesResponseFieldErrors  = big.NewInt(1 << 0)
+	listDevicesResponseFieldDevices = big.NewInt(1 << 1)
+	listDevicesResponseFieldCursor  = big.NewInt(1 << 2)
+)
+
 type ListDevicesResponse struct {
 	// Information about errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -916,6 +1557,9 @@ type ListDevicesResponse struct {
 	// this is the final response.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -946,6 +1590,34 @@ func (l *ListDevicesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListDevicesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listDevicesResponseFieldErrors)
+}
+
+// SetDevices sets the Devices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesResponse) SetDevices(devices []*Device) {
+	l.Devices = devices
+	l.require(listDevicesResponseFieldDevices)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDevicesResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listDevicesResponseFieldCursor)
+}
+
 func (l *ListDevicesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListDevicesResponse
 	var value unmarshaler
@@ -960,6 +1632,17 @@ func (l *ListDevicesResponse) UnmarshalJSON(data []byte) error {
 	l.extraProperties = extraProperties
 	l.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (l *ListDevicesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListDevicesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (l *ListDevicesResponse) String() string {

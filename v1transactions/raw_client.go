@@ -4,7 +4,7 @@ package v1transactions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) V1ListOrders(
 	ctx context.Context,
-	request *v2.V1ListOrdersRequest,
+	request *square.V1ListOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[[]*v2.V1Order], error) {
+) (*core.Response[[]*square.V1Order], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -53,10 +53,10 @@ func (r *RawClient) V1ListOrders(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response []*v2.V1Order
+	var response []*square.V1Order
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -73,7 +73,7 @@ func (r *RawClient) V1ListOrders(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[[]*v2.V1Order]{
+	return &core.Response[[]*square.V1Order]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -82,9 +82,9 @@ func (r *RawClient) V1ListOrders(
 
 func (r *RawClient) V1RetrieveOrder(
 	ctx context.Context,
-	request *v2.V1RetrieveOrderRequest,
+	request *square.V1RetrieveOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.V1Order], error) {
+) (*core.Response[*square.V1Order], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -97,10 +97,10 @@ func (r *RawClient) V1RetrieveOrder(
 		request.OrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.V1Order
+	var response *square.V1Order
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -117,7 +117,7 @@ func (r *RawClient) V1RetrieveOrder(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.V1Order]{
+	return &core.Response[*square.V1Order]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -126,9 +126,9 @@ func (r *RawClient) V1RetrieveOrder(
 
 func (r *RawClient) V1UpdateOrder(
 	ctx context.Context,
-	request *v2.V1UpdateOrderRequest,
+	request *square.V1UpdateOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.V1Order], error) {
+) (*core.Response[*square.V1Order], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -141,11 +141,11 @@ func (r *RawClient) V1UpdateOrder(
 		request.OrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.V1Order
+	var response *square.V1Order
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -163,7 +163,7 @@ func (r *RawClient) V1UpdateOrder(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.V1Order]{
+	return &core.Response[*square.V1Order]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

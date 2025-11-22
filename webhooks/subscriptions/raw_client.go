@@ -4,7 +4,7 @@ package subscriptions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *webhooks.CreateWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateWebhookSubscriptionResponse], error) {
+) (*core.Response[*square.CreateWebhookSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/webhooks/subscriptions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateWebhookSubscriptionResponse
+	var response *square.CreateWebhookSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateWebhookSubscriptionResponse]{
+	return &core.Response[*square.CreateWebhookSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *webhooks.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetWebhookSubscriptionResponse], error) {
+) (*core.Response[*square.GetWebhookSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Get(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetWebhookSubscriptionResponse
+	var response *square.GetWebhookSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetWebhookSubscriptionResponse]{
+	return &core.Response[*square.GetWebhookSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -120,7 +120,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateWebhookSubscriptionResponse], error) {
+) (*core.Response[*square.UpdateWebhookSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,11 +132,11 @@ func (r *RawClient) Update(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateWebhookSubscriptionResponse
+	var response *square.UpdateWebhookSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateWebhookSubscriptionResponse]{
+	return &core.Response[*square.UpdateWebhookSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -165,7 +165,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *webhooks.DeleteSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteWebhookSubscriptionResponse], error) {
+) (*core.Response[*square.DeleteWebhookSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -177,10 +177,10 @@ func (r *RawClient) Delete(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteWebhookSubscriptionResponse
+	var response *square.DeleteWebhookSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -197,7 +197,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteWebhookSubscriptionResponse]{
+	return &core.Response[*square.DeleteWebhookSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -208,7 +208,7 @@ func (r *RawClient) UpdateSignatureKey(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionSignatureKeyRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateWebhookSubscriptionSignatureKeyResponse], error) {
+) (*core.Response[*square.UpdateWebhookSubscriptionSignatureKeyResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -220,11 +220,11 @@ func (r *RawClient) UpdateSignatureKey(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateWebhookSubscriptionSignatureKeyResponse
+	var response *square.UpdateWebhookSubscriptionSignatureKeyResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -242,7 +242,7 @@ func (r *RawClient) UpdateSignatureKey(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateWebhookSubscriptionSignatureKeyResponse]{
+	return &core.Response[*square.UpdateWebhookSubscriptionSignatureKeyResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -253,7 +253,7 @@ func (r *RawClient) Test(
 	ctx context.Context,
 	request *webhooks.TestWebhookSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.TestWebhookSubscriptionResponse], error) {
+) (*core.Response[*square.TestWebhookSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -265,11 +265,11 @@ func (r *RawClient) Test(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.TestWebhookSubscriptionResponse
+	var response *square.TestWebhookSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -287,7 +287,7 @@ func (r *RawClient) Test(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.TestWebhookSubscriptionResponse]{
+	return &core.Response[*square.TestWebhookSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

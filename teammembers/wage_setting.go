@@ -4,12 +4,39 @@ package teammembers
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	getWageSettingRequestFieldTeamMemberID = big.NewInt(1 << 0)
 )
 
 type GetWageSettingRequest struct {
 	// The ID of the team member for which to retrieve the wage setting.
 	TeamMemberID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetWageSettingRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetWageSettingRequest) SetTeamMemberID(teamMemberID string) {
+	g.TeamMemberID = teamMemberID
+	g.require(getWageSettingRequestFieldTeamMemberID)
+}
+
+var (
+	updateWageSettingRequestFieldTeamMemberID = big.NewInt(1 << 0)
+	updateWageSettingRequestFieldWageSetting  = big.NewInt(1 << 1)
+)
 
 type UpdateWageSettingRequest struct {
 	// The ID of the team member for which to update the `WageSetting` object.
@@ -20,4 +47,28 @@ type UpdateWageSettingRequest struct {
 	// - `job_title` - Use the exact, case-sensitive spelling of an existing title unless you want to create a new job.
 	// This value is ignored if `job_id` is also provided.
 	WageSetting *v2.WageSetting `json:"wage_setting,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateWageSettingRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWageSettingRequest) SetTeamMemberID(teamMemberID string) {
+	u.TeamMemberID = teamMemberID
+	u.require(updateWageSettingRequestFieldTeamMemberID)
+}
+
+// SetWageSetting sets the WageSetting field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWageSettingRequest) SetWageSetting(wageSetting *v2.WageSetting) {
+	u.WageSetting = wageSetting
+	u.require(updateWageSettingRequestFieldWageSetting)
 }

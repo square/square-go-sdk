@@ -4,7 +4,7 @@ package transactions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	locations "github.com/square/square-go-sdk/v2/locations"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) List(
 	ctx context.Context,
 	request *locations.ListTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ListTransactionsResponse], error) {
+) (*core.Response[*square.ListTransactionsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -54,10 +54,10 @@ func (r *RawClient) List(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.ListTransactionsResponse
+	var response *square.ListTransactionsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -74,7 +74,7 @@ func (r *RawClient) List(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ListTransactionsResponse]{
+	return &core.Response[*square.ListTransactionsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -85,7 +85,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *locations.GetTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetTransactionResponse], error) {
+) (*core.Response[*square.GetTransactionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -98,10 +98,10 @@ func (r *RawClient) Get(
 		request.TransactionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetTransactionResponse
+	var response *square.GetTransactionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -118,7 +118,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetTransactionResponse]{
+	return &core.Response[*square.GetTransactionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -129,7 +129,7 @@ func (r *RawClient) Capture(
 	ctx context.Context,
 	request *locations.CaptureTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CaptureTransactionResponse], error) {
+) (*core.Response[*square.CaptureTransactionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -142,10 +142,10 @@ func (r *RawClient) Capture(
 		request.TransactionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CaptureTransactionResponse
+	var response *square.CaptureTransactionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -162,7 +162,7 @@ func (r *RawClient) Capture(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CaptureTransactionResponse]{
+	return &core.Response[*square.CaptureTransactionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -173,7 +173,7 @@ func (r *RawClient) Void(
 	ctx context.Context,
 	request *locations.VoidTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.VoidTransactionResponse], error) {
+) (*core.Response[*square.VoidTransactionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -186,10 +186,10 @@ func (r *RawClient) Void(
 		request.TransactionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.VoidTransactionResponse
+	var response *square.VoidTransactionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -206,7 +206,7 @@ func (r *RawClient) Void(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.VoidTransactionResponse]{
+	return &core.Response[*square.VoidTransactionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

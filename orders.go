@@ -6,6 +6,12 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	batchGetOrdersRequestFieldLocationID = big.NewInt(1 << 0)
+	batchGetOrdersRequestFieldOrderIDs   = big.NewInt(1 << 1)
 )
 
 type BatchGetOrdersRequest struct {
@@ -14,7 +20,36 @@ type BatchGetOrdersRequest struct {
 	LocationID *string `json:"location_id,omitempty" url:"-"`
 	// The IDs of the orders to retrieve. A maximum of 100 orders can be retrieved per request.
 	OrderIDs []string `json:"order_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchGetOrdersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetOrdersRequest) SetLocationID(locationID *string) {
+	b.LocationID = locationID
+	b.require(batchGetOrdersRequestFieldLocationID)
+}
+
+// SetOrderIDs sets the OrderIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetOrdersRequest) SetOrderIDs(orderIDs []string) {
+	b.OrderIDs = orderIDs
+	b.require(batchGetOrdersRequestFieldOrderIDs)
+}
+
+var (
+	calculateOrderRequestFieldOrder           = big.NewInt(1 << 0)
+	calculateOrderRequestFieldProposedRewards = big.NewInt(1 << 1)
+)
 
 type CalculateOrderRequest struct {
 	// The order to be calculated. Expects the entire order, not a sparse update.
@@ -25,7 +60,37 @@ type CalculateOrderRequest struct {
 	// redemptions; that is, no `reward`s are created. Therefore, the reward `id`s are
 	// random strings used only to reference the reward tier.
 	ProposedRewards []*OrderReward `json:"proposed_rewards,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CalculateOrderRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateOrderRequest) SetOrder(order *Order) {
+	c.Order = order
+	c.require(calculateOrderRequestFieldOrder)
+}
+
+// SetProposedRewards sets the ProposedRewards field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateOrderRequest) SetProposedRewards(proposedRewards []*OrderReward) {
+	c.ProposedRewards = proposedRewards
+	c.require(calculateOrderRequestFieldProposedRewards)
+}
+
+var (
+	cloneOrderRequestFieldOrderID        = big.NewInt(1 << 0)
+	cloneOrderRequestFieldVersion        = big.NewInt(1 << 1)
+	cloneOrderRequestFieldIdempotencyKey = big.NewInt(1 << 2)
+)
 
 type CloneOrderRequest struct {
 	// The ID of the order to clone.
@@ -44,12 +109,71 @@ type CloneOrderRequest struct {
 	//
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CloneOrderRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CloneOrderRequest) SetOrderID(orderID string) {
+	c.OrderID = orderID
+	c.require(cloneOrderRequestFieldOrderID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CloneOrderRequest) SetVersion(version *int) {
+	c.Version = version
+	c.require(cloneOrderRequestFieldVersion)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CloneOrderRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(cloneOrderRequestFieldIdempotencyKey)
+}
+
+var (
+	getOrdersRequestFieldOrderID = big.NewInt(1 << 0)
+)
 
 type GetOrdersRequest struct {
 	// The ID of the order to retrieve.
 	OrderID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetOrdersRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetOrdersRequest) SetOrderID(orderID string) {
+	g.OrderID = orderID
+	g.require(getOrdersRequestFieldOrderID)
+}
+
+var (
+	payOrderRequestFieldOrderID        = big.NewInt(1 << 0)
+	payOrderRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+	payOrderRequestFieldOrderVersion   = big.NewInt(1 << 2)
+	payOrderRequestFieldPaymentIDs     = big.NewInt(1 << 3)
+)
 
 type PayOrderRequest struct {
 	// The ID of the order being paid.
@@ -65,7 +189,53 @@ type PayOrderRequest struct {
 	// The IDs of the [payments](entity:Payment) to collect.
 	// The payment total must match the order total.
 	PaymentIDs []string `json:"payment_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (p *PayOrderRequest) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderRequest) SetOrderID(orderID string) {
+	p.OrderID = orderID
+	p.require(payOrderRequestFieldOrderID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	p.IdempotencyKey = idempotencyKey
+	p.require(payOrderRequestFieldIdempotencyKey)
+}
+
+// SetOrderVersion sets the OrderVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderRequest) SetOrderVersion(orderVersion *int) {
+	p.OrderVersion = orderVersion
+	p.require(payOrderRequestFieldOrderVersion)
+}
+
+// SetPaymentIDs sets the PaymentIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderRequest) SetPaymentIDs(paymentIDs []string) {
+	p.PaymentIDs = paymentIDs
+	p.require(payOrderRequestFieldPaymentIDs)
+}
+
+var (
+	searchOrdersRequestFieldLocationIDs   = big.NewInt(1 << 0)
+	searchOrdersRequestFieldCursor        = big.NewInt(1 << 1)
+	searchOrdersRequestFieldQuery         = big.NewInt(1 << 2)
+	searchOrdersRequestFieldLimit         = big.NewInt(1 << 3)
+	searchOrdersRequestFieldReturnEntries = big.NewInt(1 << 4)
+)
 
 type SearchOrdersRequest struct {
 	// The location IDs for the orders to query. All locations must belong to
@@ -91,15 +261,68 @@ type SearchOrdersRequest struct {
 	//
 	// Default: `false`.
 	ReturnEntries *bool `json:"return_entries,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchOrdersRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersRequest) SetLocationIDs(locationIDs []string) {
+	s.LocationIDs = locationIDs
+	s.require(searchOrdersRequestFieldLocationIDs)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchOrdersRequestFieldCursor)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersRequest) SetQuery(query *SearchOrdersQuery) {
+	s.Query = query
+	s.require(searchOrdersRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchOrdersRequestFieldLimit)
+}
+
+// SetReturnEntries sets the ReturnEntries field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersRequest) SetReturnEntries(returnEntries *bool) {
+	s.ReturnEntries = returnEntries
+	s.require(searchOrdersRequestFieldReturnEntries)
 }
 
 // Defines the fields that are included in the response body of
 // a request to the `BatchRetrieveOrders` endpoint.
+var (
+	batchGetOrdersResponseFieldOrders = big.NewInt(1 << 0)
+	batchGetOrdersResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type BatchGetOrdersResponse struct {
 	// The requested orders. This will omit any requested orders that do not exist.
 	Orders []*Order `json:"orders,omitempty" url:"orders,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -123,6 +346,27 @@ func (b *BatchGetOrdersResponse) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BatchGetOrdersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetOrders sets the Orders field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetOrdersResponse) SetOrders(orders []*Order) {
+	b.Orders = orders
+	b.require(batchGetOrdersResponseFieldOrders)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetOrdersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchGetOrdersResponseFieldErrors)
+}
+
 func (b *BatchGetOrdersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetOrdersResponse
 	var value unmarshaler
@@ -139,6 +383,17 @@ func (b *BatchGetOrdersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetOrdersResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchGetOrdersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetOrdersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -151,11 +406,19 @@ func (b *BatchGetOrdersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	calculateOrderResponseFieldOrder  = big.NewInt(1 << 0)
+	calculateOrderResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type CalculateOrderResponse struct {
 	// The calculated version of the order provided in the request.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -179,6 +442,27 @@ func (c *CalculateOrderResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CalculateOrderResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateOrderResponse) SetOrder(order *Order) {
+	c.Order = order
+	c.require(calculateOrderResponseFieldOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateOrderResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(calculateOrderResponseFieldErrors)
+}
+
 func (c *CalculateOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CalculateOrderResponse
 	var value unmarshaler
@@ -195,6 +479,17 @@ func (c *CalculateOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CalculateOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed CalculateOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CalculateOrderResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -209,11 +504,19 @@ func (c *CalculateOrderResponse) String() string {
 
 // Defines the fields that are included in the response body of
 // a request to the [CloneOrder](api-endpoint:Orders-CloneOrder) endpoint.
+var (
+	cloneOrderResponseFieldOrder  = big.NewInt(1 << 0)
+	cloneOrderResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type CloneOrderResponse struct {
 	// The cloned order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -237,6 +540,27 @@ func (c *CloneOrderResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CloneOrderResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CloneOrderResponse) SetOrder(order *Order) {
+	c.Order = order
+	c.require(cloneOrderResponseFieldOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CloneOrderResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cloneOrderResponseFieldErrors)
+}
+
 func (c *CloneOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CloneOrderResponse
 	var value unmarshaler
@@ -251,6 +575,17 @@ func (c *CloneOrderResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CloneOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed CloneOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CloneOrderResponse) String() string {
@@ -269,11 +604,19 @@ func (c *CloneOrderResponse) String() string {
 // a request to the `CreateOrder` endpoint.
 //
 // Either `errors` or `order` is present in a given response, but never both.
+var (
+	createOrderResponseFieldOrder  = big.NewInt(1 << 0)
+	createOrderResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type CreateOrderResponse struct {
 	// The newly created order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -297,6 +640,27 @@ func (c *CreateOrderResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateOrderResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateOrderResponse) SetOrder(order *Order) {
+	c.Order = order
+	c.require(createOrderResponseFieldOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateOrderResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createOrderResponseFieldErrors)
+}
+
 func (c *CreateOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateOrderResponse
 	var value unmarshaler
@@ -313,6 +677,17 @@ func (c *CreateOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateOrderResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -325,11 +700,19 @@ func (c *CreateOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	getOrderResponseFieldOrder  = big.NewInt(1 << 0)
+	getOrderResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type GetOrderResponse struct {
 	// The requested order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -353,6 +736,27 @@ func (g *GetOrderResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetOrderResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetOrderResponse) SetOrder(order *Order) {
+	g.Order = order
+	g.require(getOrderResponseFieldOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetOrderResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getOrderResponseFieldErrors)
+}
+
 func (g *GetOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetOrderResponse
 	var value unmarshaler
@@ -369,6 +773,17 @@ func (g *GetOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed GetOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetOrderResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -383,6 +798,12 @@ func (g *GetOrderResponse) String() string {
 
 // A lightweight description of an [order](entity:Order) that is returned when
 // `returned_entries` is `true` on a [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
+var (
+	orderEntryFieldOrderID    = big.NewInt(1 << 0)
+	orderEntryFieldVersion    = big.NewInt(1 << 1)
+	orderEntryFieldLocationID = big.NewInt(1 << 2)
+)
+
 type OrderEntry struct {
 	// The ID of the order.
 	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
@@ -394,6 +815,9 @@ type OrderEntry struct {
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
 	// The location ID the order belongs to.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -424,6 +848,34 @@ func (o *OrderEntry) GetExtraProperties() map[string]interface{} {
 	return o.extraProperties
 }
 
+func (o *OrderEntry) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderEntry) SetOrderID(orderID *string) {
+	o.OrderID = orderID
+	o.require(orderEntryFieldOrderID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderEntry) SetVersion(version *int) {
+	o.Version = version
+	o.require(orderEntryFieldVersion)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderEntry) SetLocationID(locationID *string) {
+	o.LocationID = locationID
+	o.require(orderEntryFieldLocationID)
+}
+
 func (o *OrderEntry) UnmarshalJSON(data []byte) error {
 	type unmarshaler OrderEntry
 	var value unmarshaler
@@ -440,6 +892,17 @@ func (o *OrderEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (o *OrderEntry) MarshalJSON() ([]byte, error) {
+	type embed OrderEntry
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (o *OrderEntry) String() string {
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
@@ -454,11 +917,19 @@ func (o *OrderEntry) String() string {
 
 // Defines the fields that are included in the response body of a request to the
 // [PayOrder](api-endpoint:Orders-PayOrder) endpoint.
+var (
+	payOrderResponseFieldErrors = big.NewInt(1 << 0)
+	payOrderResponseFieldOrder  = big.NewInt(1 << 1)
+)
+
 type PayOrderResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The paid, updated [order](entity:Order).
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -482,6 +953,27 @@ func (p *PayOrderResponse) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *PayOrderResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderResponse) SetErrors(errors []*Error) {
+	p.Errors = errors
+	p.require(payOrderResponseFieldErrors)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PayOrderResponse) SetOrder(order *Order) {
+	p.Order = order
+	p.require(payOrderResponseFieldOrder)
+}
+
 func (p *PayOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler PayOrderResponse
 	var value unmarshaler
@@ -496,6 +988,17 @@ func (p *PayOrderResponse) UnmarshalJSON(data []byte) error {
 	p.extraProperties = extraProperties
 	p.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (p *PayOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed PayOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (p *PayOrderResponse) String() string {
@@ -513,11 +1016,18 @@ func (p *PayOrderResponse) String() string {
 // A filter based on the order `customer_id` and any tender `customer_id`
 // associated with the order. It does not filter based on the
 // [FulfillmentRecipient](entity:FulfillmentRecipient) `customer_id`.
+var (
+	searchOrdersCustomerFilterFieldCustomerIDs = big.NewInt(1 << 0)
+)
+
 type SearchOrdersCustomerFilter struct {
 	// A list of customer IDs to filter by.
 	//
 	// Max: 10 customer ids.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -534,6 +1044,20 @@ func (s *SearchOrdersCustomerFilter) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *SearchOrdersCustomerFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersCustomerFilter) SetCustomerIDs(customerIDs []string) {
+	s.CustomerIDs = customerIDs
+	s.require(searchOrdersCustomerFilterFieldCustomerIDs)
+}
+
 func (s *SearchOrdersCustomerFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersCustomerFilter
 	var value unmarshaler
@@ -548,6 +1072,17 @@ func (s *SearchOrdersCustomerFilter) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchOrdersCustomerFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersCustomerFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchOrdersCustomerFilter) String() string {
@@ -576,6 +1111,12 @@ func (s *SearchOrdersCustomerFilter) String() string {
 // in `DateTimeFilter`, you must set the `sort_field` in `SearchOrdersSort` to
 // `CLOSED_AT`. Otherwise, `SearchOrders` throws an error.
 // [Learn more about filtering orders by time range.](https://developer.squareup.com/docs/orders-api/manage-orders/search-orders#important-note-about-filtering-orders-by-time-range)
+var (
+	searchOrdersDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
+	searchOrdersDateTimeFilterFieldUpdatedAt = big.NewInt(1 << 1)
+	searchOrdersDateTimeFilterFieldClosedAt  = big.NewInt(1 << 2)
+)
+
 type SearchOrdersDateTimeFilter struct {
 	// The time range for filtering on the `created_at` timestamp. If you use this
 	// value, you must set the `sort_field` in the `OrdersSearchSort` object to
@@ -589,6 +1130,9 @@ type SearchOrdersDateTimeFilter struct {
 	// value, you must set the `sort_field` in the `OrdersSearchSort` object to
 	// `CLOSED_AT`.
 	ClosedAt *TimeRange `json:"closed_at,omitempty" url:"closed_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -619,6 +1163,34 @@ func (s *SearchOrdersDateTimeFilter) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *SearchOrdersDateTimeFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersDateTimeFilter) SetCreatedAt(createdAt *TimeRange) {
+	s.CreatedAt = createdAt
+	s.require(searchOrdersDateTimeFilterFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersDateTimeFilter) SetUpdatedAt(updatedAt *TimeRange) {
+	s.UpdatedAt = updatedAt
+	s.require(searchOrdersDateTimeFilterFieldUpdatedAt)
+}
+
+// SetClosedAt sets the ClosedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersDateTimeFilter) SetClosedAt(closedAt *TimeRange) {
+	s.ClosedAt = closedAt
+	s.require(searchOrdersDateTimeFilterFieldClosedAt)
+}
+
 func (s *SearchOrdersDateTimeFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersDateTimeFilter
 	var value unmarshaler
@@ -635,6 +1207,17 @@ func (s *SearchOrdersDateTimeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersDateTimeFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersDateTimeFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersDateTimeFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -649,6 +1232,14 @@ func (s *SearchOrdersDateTimeFilter) String() string {
 
 // Filtering criteria to use for a `SearchOrders` request. Multiple filters
 // are ANDed together.
+var (
+	searchOrdersFilterFieldStateFilter       = big.NewInt(1 << 0)
+	searchOrdersFilterFieldDateTimeFilter    = big.NewInt(1 << 1)
+	searchOrdersFilterFieldFulfillmentFilter = big.NewInt(1 << 2)
+	searchOrdersFilterFieldSourceFilter      = big.NewInt(1 << 3)
+	searchOrdersFilterFieldCustomerFilter    = big.NewInt(1 << 4)
+)
+
 type SearchOrdersFilter struct {
 	// Filter by [OrderState](entity:OrderState).
 	StateFilter *SearchOrdersStateFilter `json:"state_filter,omitempty" url:"state_filter,omitempty"`
@@ -664,6 +1255,9 @@ type SearchOrdersFilter struct {
 	SourceFilter *SearchOrdersSourceFilter `json:"source_filter,omitempty" url:"source_filter,omitempty"`
 	// Filter by customers associated with the order.
 	CustomerFilter *SearchOrdersCustomerFilter `json:"customer_filter,omitempty" url:"customer_filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -708,6 +1302,48 @@ func (s *SearchOrdersFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchOrdersFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetStateFilter sets the StateFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFilter) SetStateFilter(stateFilter *SearchOrdersStateFilter) {
+	s.StateFilter = stateFilter
+	s.require(searchOrdersFilterFieldStateFilter)
+}
+
+// SetDateTimeFilter sets the DateTimeFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFilter) SetDateTimeFilter(dateTimeFilter *SearchOrdersDateTimeFilter) {
+	s.DateTimeFilter = dateTimeFilter
+	s.require(searchOrdersFilterFieldDateTimeFilter)
+}
+
+// SetFulfillmentFilter sets the FulfillmentFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFilter) SetFulfillmentFilter(fulfillmentFilter *SearchOrdersFulfillmentFilter) {
+	s.FulfillmentFilter = fulfillmentFilter
+	s.require(searchOrdersFilterFieldFulfillmentFilter)
+}
+
+// SetSourceFilter sets the SourceFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFilter) SetSourceFilter(sourceFilter *SearchOrdersSourceFilter) {
+	s.SourceFilter = sourceFilter
+	s.require(searchOrdersFilterFieldSourceFilter)
+}
+
+// SetCustomerFilter sets the CustomerFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFilter) SetCustomerFilter(customerFilter *SearchOrdersCustomerFilter) {
+	s.CustomerFilter = customerFilter
+	s.require(searchOrdersFilterFieldCustomerFilter)
+}
+
 func (s *SearchOrdersFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersFilter
 	var value unmarshaler
@@ -724,6 +1360,17 @@ func (s *SearchOrdersFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -737,6 +1384,11 @@ func (s *SearchOrdersFilter) String() string {
 }
 
 // Filter based on [order fulfillment](entity:Fulfillment) information.
+var (
+	searchOrdersFulfillmentFilterFieldFulfillmentTypes  = big.NewInt(1 << 0)
+	searchOrdersFulfillmentFilterFieldFulfillmentStates = big.NewInt(1 << 1)
+)
+
 type SearchOrdersFulfillmentFilter struct {
 	// A list of [fulfillment types](entity:FulfillmentType) to filter
 	// for. The list returns orders if any of its fulfillments match any of the fulfillment types
@@ -748,6 +1400,9 @@ type SearchOrdersFulfillmentFilter struct {
 	// fulfillment states listed in this field.
 	// See [FulfillmentState](#type-fulfillmentstate) for possible values
 	FulfillmentStates []FulfillmentState `json:"fulfillment_states,omitempty" url:"fulfillment_states,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -771,6 +1426,27 @@ func (s *SearchOrdersFulfillmentFilter) GetExtraProperties() map[string]interfac
 	return s.extraProperties
 }
 
+func (s *SearchOrdersFulfillmentFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFulfillmentTypes sets the FulfillmentTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFulfillmentFilter) SetFulfillmentTypes(fulfillmentTypes []FulfillmentType) {
+	s.FulfillmentTypes = fulfillmentTypes
+	s.require(searchOrdersFulfillmentFilterFieldFulfillmentTypes)
+}
+
+// SetFulfillmentStates sets the FulfillmentStates field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersFulfillmentFilter) SetFulfillmentStates(fulfillmentStates []FulfillmentState) {
+	s.FulfillmentStates = fulfillmentStates
+	s.require(searchOrdersFulfillmentFilterFieldFulfillmentStates)
+}
+
 func (s *SearchOrdersFulfillmentFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersFulfillmentFilter
 	var value unmarshaler
@@ -787,6 +1463,17 @@ func (s *SearchOrdersFulfillmentFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersFulfillmentFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersFulfillmentFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersFulfillmentFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -800,11 +1487,19 @@ func (s *SearchOrdersFulfillmentFilter) String() string {
 }
 
 // Contains query criteria for the search.
+var (
+	searchOrdersQueryFieldFilter = big.NewInt(1 << 0)
+	searchOrdersQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type SearchOrdersQuery struct {
 	// Criteria to filter results by.
 	Filter *SearchOrdersFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Criteria to sort results by.
 	Sort *SearchOrdersSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -828,6 +1523,27 @@ func (s *SearchOrdersQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchOrdersQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersQuery) SetFilter(filter *SearchOrdersFilter) {
+	s.Filter = filter
+	s.require(searchOrdersQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersQuery) SetSort(sort *SearchOrdersSort) {
+	s.Sort = sort
+	s.require(searchOrdersQueryFieldSort)
+}
+
 func (s *SearchOrdersQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersQuery
 	var value unmarshaler
@@ -844,6 +1560,17 @@ func (s *SearchOrdersQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersQuery) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersQuery) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -858,6 +1585,13 @@ func (s *SearchOrdersQuery) String() string {
 
 // Either the `order_entries` or `orders` field is set, depending on whether
 // `return_entries` is set on the [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
+var (
+	searchOrdersResponseFieldOrderEntries = big.NewInt(1 << 0)
+	searchOrdersResponseFieldOrders       = big.NewInt(1 << 1)
+	searchOrdersResponseFieldCursor       = big.NewInt(1 << 2)
+	searchOrdersResponseFieldErrors       = big.NewInt(1 << 3)
+)
+
 type SearchOrdersResponse struct {
 	// A list of [OrderEntries](entity:OrderEntry) that fit the query
 	// conditions. The list is populated only if `return_entries` is set to `true` in the request.
@@ -872,6 +1606,9 @@ type SearchOrdersResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// [Errors](entity:Error) encountered during the search.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -909,6 +1646,41 @@ func (s *SearchOrdersResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchOrdersResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetOrderEntries sets the OrderEntries field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersResponse) SetOrderEntries(orderEntries []*OrderEntry) {
+	s.OrderEntries = orderEntries
+	s.require(searchOrdersResponseFieldOrderEntries)
+}
+
+// SetOrders sets the Orders field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersResponse) SetOrders(orders []*Order) {
+	s.Orders = orders
+	s.require(searchOrdersResponseFieldOrders)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchOrdersResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchOrdersResponseFieldErrors)
+}
+
 func (s *SearchOrdersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersResponse
 	var value unmarshaler
@@ -925,6 +1697,17 @@ func (s *SearchOrdersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -939,6 +1722,11 @@ func (s *SearchOrdersResponse) String() string {
 
 // Sorting criteria for a `SearchOrders` request. Results can only be sorted
 // by a timestamp field.
+var (
+	searchOrdersSortFieldSortField = big.NewInt(1 << 0)
+	searchOrdersSortFieldSortOrder = big.NewInt(1 << 1)
+)
+
 type SearchOrdersSort struct {
 	// The field to sort by.
 	//
@@ -955,6 +1743,9 @@ type SearchOrdersSort struct {
 	// The chronological order in which results are returned. Defaults to `DESC`.
 	// See [SortOrder](#type-sortorder) for possible values
 	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -978,6 +1769,27 @@ func (s *SearchOrdersSort) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchOrdersSort) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetSortField sets the SortField field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersSort) SetSortField(sortField SearchOrdersSortField) {
+	s.SortField = sortField
+	s.require(searchOrdersSortFieldSortField)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersSort) SetSortOrder(sortOrder *SortOrder) {
+	s.SortOrder = sortOrder
+	s.require(searchOrdersSortFieldSortOrder)
+}
+
 func (s *SearchOrdersSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchOrdersSort
 	var value unmarshaler
@@ -992,6 +1804,17 @@ func (s *SearchOrdersSort) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchOrdersSort) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchOrdersSort) String() string {
@@ -1033,12 +1856,19 @@ func (s SearchOrdersSortField) Ptr() *SearchOrdersSortField {
 }
 
 // A filter based on order `source` information.
+var (
+	searchOrdersSourceFilterFieldSourceNames = big.NewInt(1 << 0)
+)
+
 type SearchOrdersSourceFilter struct {
 	// Filters by the [Source](entity:OrderSource) `name`. The filter returns any orders
 	// with a `source.name` that matches any of the listed source names.
 	//
 	// Max: 10 source names.
 	SourceNames []string `json:"source_names,omitempty" url:"source_names,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1053,6 +1883,20 @@ func (s *SearchOrdersSourceFilter) GetSourceNames() []string {
 
 func (s *SearchOrdersSourceFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
+}
+
+func (s *SearchOrdersSourceFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetSourceNames sets the SourceNames field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersSourceFilter) SetSourceNames(sourceNames []string) {
+	s.SourceNames = sourceNames
+	s.require(searchOrdersSourceFilterFieldSourceNames)
 }
 
 func (s *SearchOrdersSourceFilter) UnmarshalJSON(data []byte) error {
@@ -1071,6 +1915,17 @@ func (s *SearchOrdersSourceFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersSourceFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersSourceFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersSourceFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1084,10 +1939,17 @@ func (s *SearchOrdersSourceFilter) String() string {
 }
 
 // Filter by the current order `state`.
+var (
+	searchOrdersStateFilterFieldStates = big.NewInt(1 << 0)
+)
+
 type SearchOrdersStateFilter struct {
 	// States to filter for.
 	// See [OrderState](#type-orderstate) for possible values
 	States []OrderState `json:"states" url:"states"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1102,6 +1964,20 @@ func (s *SearchOrdersStateFilter) GetStates() []OrderState {
 
 func (s *SearchOrdersStateFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
+}
+
+func (s *SearchOrdersStateFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetStates sets the States field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersStateFilter) SetStates(states []OrderState) {
+	s.States = states
+	s.require(searchOrdersStateFilterFieldStates)
 }
 
 func (s *SearchOrdersStateFilter) UnmarshalJSON(data []byte) error {
@@ -1120,6 +1996,17 @@ func (s *SearchOrdersStateFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchOrdersStateFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersStateFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchOrdersStateFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1134,11 +2021,19 @@ func (s *SearchOrdersStateFilter) String() string {
 
 // Defines the fields that are included in the response body of
 // a request to the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
+var (
+	updateOrderResponseFieldOrder  = big.NewInt(1 << 0)
+	updateOrderResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type UpdateOrderResponse struct {
 	// The updated order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1162,6 +2057,27 @@ func (u *UpdateOrderResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateOrderResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderResponse) SetOrder(order *Order) {
+	u.Order = order
+	u.require(updateOrderResponseFieldOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateOrderResponseFieldErrors)
+}
+
 func (u *UpdateOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateOrderResponse
 	var value unmarshaler
@@ -1178,6 +2094,17 @@ func (u *UpdateOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateOrderResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1189,6 +2116,13 @@ func (u *UpdateOrderResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", u)
 }
+
+var (
+	updateOrderRequestFieldOrderID        = big.NewInt(1 << 0)
+	updateOrderRequestFieldOrder          = big.NewInt(1 << 1)
+	updateOrderRequestFieldFieldsToClear  = big.NewInt(1 << 2)
+	updateOrderRequestFieldIdempotencyKey = big.NewInt(1 << 3)
+)
 
 type UpdateOrderRequest struct {
 	// The ID of the order to update.
@@ -1210,4 +2144,42 @@ type UpdateOrderRequest struct {
 	//
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateOrderRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderRequest) SetOrderID(orderID string) {
+	u.OrderID = orderID
+	u.require(updateOrderRequestFieldOrderID)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderRequest) SetOrder(order *Order) {
+	u.Order = order
+	u.require(updateOrderRequestFieldOrder)
+}
+
+// SetFieldsToClear sets the FieldsToClear field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderRequest) SetFieldsToClear(fieldsToClear []string) {
+	u.FieldsToClear = fieldsToClear
+	u.require(updateOrderRequestFieldFieldsToClear)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateOrderRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateOrderRequestFieldIdempotencyKey)
 }

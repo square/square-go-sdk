@@ -6,12 +6,40 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	listEventTypesRequestFieldAPIVersion = big.NewInt(1 << 0)
 )
 
 type ListEventTypesRequest struct {
 	// The API version for which to list event types. Setting this field overrides the default version used by the application.
 	APIVersion *string `json:"-" url:"api_version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListEventTypesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetAPIVersion sets the APIVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventTypesRequest) SetAPIVersion(apiVersion *string) {
+	l.APIVersion = apiVersion
+	l.require(listEventTypesRequestFieldAPIVersion)
+}
+
+var (
+	searchEventsRequestFieldCursor = big.NewInt(1 << 0)
+	searchEventsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchEventsRequestFieldQuery  = big.NewInt(1 << 2)
+)
 
 type SearchEventsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint. Provide this cursor to retrieve the next set of events for your original query.
@@ -26,6 +54,37 @@ type SearchEventsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// The filtering and sorting criteria for the search request. To retrieve additional pages using a cursor, you must use the original query.
 	Query *SearchEventsQuery `json:"query,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchEventsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchEventsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchEventsRequestFieldLimit)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsRequest) SetQuery(query *SearchEventsQuery) {
+	s.Query = query
+	s.require(searchEventsRequestFieldQuery)
 }
 
 // Defines the fields that are included in the response body of
@@ -33,9 +92,16 @@ type SearchEventsRequest struct {
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
+var (
+	disableEventsResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DisableEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -52,6 +118,20 @@ func (d *DisableEventsResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DisableEventsResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableEventsResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(disableEventsResponseFieldErrors)
+}
+
 func (d *DisableEventsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DisableEventsResponse
 	var value unmarshaler
@@ -66,6 +146,17 @@ func (d *DisableEventsResponse) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DisableEventsResponse) MarshalJSON() ([]byte, error) {
+	type embed DisableEventsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DisableEventsResponse) String() string {
@@ -85,9 +176,16 @@ func (d *DisableEventsResponse) String() string {
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
+var (
+	enableEventsResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type EnableEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -102,6 +200,20 @@ func (e *EnableEventsResponse) GetErrors() []*Error {
 
 func (e *EnableEventsResponse) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
+}
+
+func (e *EnableEventsResponse) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EnableEventsResponse) SetErrors(errors []*Error) {
+	e.Errors = errors
+	e.require(enableEventsResponseFieldErrors)
 }
 
 func (e *EnableEventsResponse) UnmarshalJSON(data []byte) error {
@@ -120,6 +232,17 @@ func (e *EnableEventsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (e *EnableEventsResponse) MarshalJSON() ([]byte, error) {
+	type embed EnableEventsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (e *EnableEventsResponse) String() string {
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
@@ -131,6 +254,15 @@ func (e *EnableEventsResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", e)
 }
+
+var (
+	eventFieldMerchantID = big.NewInt(1 << 0)
+	eventFieldLocationID = big.NewInt(1 << 1)
+	eventFieldType       = big.NewInt(1 << 2)
+	eventFieldEventID    = big.NewInt(1 << 3)
+	eventFieldCreatedAt  = big.NewInt(1 << 4)
+	eventFieldData       = big.NewInt(1 << 5)
+)
 
 type Event struct {
 	// The ID of the target merchant associated with the event.
@@ -145,6 +277,9 @@ type Event struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The data associated with the event.
 	Data *EventData `json:"data,omitempty" url:"data,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -196,6 +331,55 @@ func (e *Event) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
+func (e *Event) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetMerchantID(merchantID *string) {
+	e.MerchantID = merchantID
+	e.require(eventFieldMerchantID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetLocationID(locationID *string) {
+	e.LocationID = locationID
+	e.require(eventFieldLocationID)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetType(type_ *string) {
+	e.Type = type_
+	e.require(eventFieldType)
+}
+
+// SetEventID sets the EventID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetEventID(eventID *string) {
+	e.EventID = eventID
+	e.require(eventFieldEventID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetCreatedAt(createdAt *string) {
+	e.CreatedAt = createdAt
+	e.require(eventFieldCreatedAt)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *Event) SetData(data *EventData) {
+	e.Data = data
+	e.require(eventFieldData)
+}
+
 func (e *Event) UnmarshalJSON(data []byte) error {
 	type unmarshaler Event
 	var value unmarshaler
@@ -212,6 +396,17 @@ func (e *Event) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (e *Event) MarshalJSON() ([]byte, error) {
+	type embed Event
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (e *Event) String() string {
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
@@ -224,6 +419,13 @@ func (e *Event) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+var (
+	eventDataFieldType    = big.NewInt(1 << 0)
+	eventDataFieldID      = big.NewInt(1 << 1)
+	eventDataFieldDeleted = big.NewInt(1 << 2)
+	eventDataFieldObject  = big.NewInt(1 << 3)
+)
+
 type EventData struct {
 	// The name of the affected object’s type.
 	Type *string `json:"type,omitempty" url:"type,omitempty"`
@@ -233,6 +435,9 @@ type EventData struct {
 	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
 	// An object containing fields and values relevant to the event. It is absent if the affected object has been deleted.
 	Object map[string]interface{} `json:"object,omitempty" url:"object,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -270,6 +475,41 @@ func (e *EventData) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
+func (e *EventData) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventData) SetType(type_ *string) {
+	e.Type = type_
+	e.require(eventDataFieldType)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventData) SetID(id *string) {
+	e.ID = id
+	e.require(eventDataFieldID)
+}
+
+// SetDeleted sets the Deleted field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventData) SetDeleted(deleted *bool) {
+	e.Deleted = deleted
+	e.require(eventDataFieldDeleted)
+}
+
+// SetObject sets the Object field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventData) SetObject(object map[string]interface{}) {
+	e.Object = object
+	e.require(eventDataFieldObject)
+}
+
 func (e *EventData) UnmarshalJSON(data []byte) error {
 	type unmarshaler EventData
 	var value unmarshaler
@@ -286,6 +526,17 @@ func (e *EventData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (e *EventData) MarshalJSON() ([]byte, error) {
+	type embed EventData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (e *EventData) String() string {
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
@@ -299,11 +550,19 @@ func (e *EventData) String() string {
 }
 
 // Contains metadata about a particular [Event](entity:Event).
+var (
+	eventMetadataFieldEventID    = big.NewInt(1 << 0)
+	eventMetadataFieldAPIVersion = big.NewInt(1 << 1)
+)
+
 type EventMetadata struct {
 	// A unique ID for the event.
 	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
 	// The API version of the event. This corresponds to the default API version of the developer application at the time when the event was created.
 	APIVersion *string `json:"api_version,omitempty" url:"api_version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -327,6 +586,27 @@ func (e *EventMetadata) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
+func (e *EventMetadata) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetEventID sets the EventID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventMetadata) SetEventID(eventID *string) {
+	e.EventID = eventID
+	e.require(eventMetadataFieldEventID)
+}
+
+// SetAPIVersion sets the APIVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *EventMetadata) SetAPIVersion(apiVersion *string) {
+	e.APIVersion = apiVersion
+	e.require(eventMetadataFieldAPIVersion)
+}
+
 func (e *EventMetadata) UnmarshalJSON(data []byte) error {
 	type unmarshaler EventMetadata
 	var value unmarshaler
@@ -341,6 +621,17 @@ func (e *EventMetadata) UnmarshalJSON(data []byte) error {
 	e.extraProperties = extraProperties
 	e.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (e *EventMetadata) MarshalJSON() ([]byte, error) {
+	type embed EventMetadata
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (e *EventMetadata) String() string {
@@ -360,6 +651,12 @@ func (e *EventMetadata) String() string {
 //
 // Note: if there are errors processing the request, the event types field will not be
 // present.
+var (
+	listEventTypesResponseFieldErrors     = big.NewInt(1 << 0)
+	listEventTypesResponseFieldEventTypes = big.NewInt(1 << 1)
+	listEventTypesResponseFieldMetadata   = big.NewInt(1 << 2)
+)
+
 type ListEventTypesResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -367,6 +664,9 @@ type ListEventTypesResponse struct {
 	EventTypes []string `json:"event_types,omitempty" url:"event_types,omitempty"`
 	// Contains the metadata of an event type. For more information, see [EventTypeMetadata](entity:EventTypeMetadata).
 	Metadata []*EventTypeMetadata `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -397,6 +697,34 @@ func (l *ListEventTypesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListEventTypesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventTypesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listEventTypesResponseFieldErrors)
+}
+
+// SetEventTypes sets the EventTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventTypesResponse) SetEventTypes(eventTypes []string) {
+	l.EventTypes = eventTypes
+	l.require(listEventTypesResponseFieldEventTypes)
+}
+
+// SetMetadata sets the Metadata field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventTypesResponse) SetMetadata(metadata []*EventTypeMetadata) {
+	l.Metadata = metadata
+	l.require(listEventTypesResponseFieldMetadata)
+}
+
 func (l *ListEventTypesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListEventTypesResponse
 	var value unmarshaler
@@ -413,6 +741,17 @@ func (l *ListEventTypesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListEventTypesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListEventTypesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListEventTypesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -426,6 +765,13 @@ func (l *ListEventTypesResponse) String() string {
 }
 
 // Criteria to filter events by.
+var (
+	searchEventsFilterFieldEventTypes  = big.NewInt(1 << 0)
+	searchEventsFilterFieldMerchantIDs = big.NewInt(1 << 1)
+	searchEventsFilterFieldLocationIDs = big.NewInt(1 << 2)
+	searchEventsFilterFieldCreatedAt   = big.NewInt(1 << 3)
+)
+
 type SearchEventsFilter struct {
 	// Filter events by event types.
 	EventTypes []string `json:"event_types,omitempty" url:"event_types,omitempty"`
@@ -435,6 +781,9 @@ type SearchEventsFilter struct {
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
 	// Filter events by when they were created.
 	CreatedAt *TimeRange `json:"created_at,omitempty" url:"created_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -472,6 +821,41 @@ func (s *SearchEventsFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchEventsFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetEventTypes sets the EventTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsFilter) SetEventTypes(eventTypes []string) {
+	s.EventTypes = eventTypes
+	s.require(searchEventsFilterFieldEventTypes)
+}
+
+// SetMerchantIDs sets the MerchantIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsFilter) SetMerchantIDs(merchantIDs []string) {
+	s.MerchantIDs = merchantIDs
+	s.require(searchEventsFilterFieldMerchantIDs)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsFilter) SetLocationIDs(locationIDs []string) {
+	s.LocationIDs = locationIDs
+	s.require(searchEventsFilterFieldLocationIDs)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsFilter) SetCreatedAt(createdAt *TimeRange) {
+	s.CreatedAt = createdAt
+	s.require(searchEventsFilterFieldCreatedAt)
+}
+
 func (s *SearchEventsFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchEventsFilter
 	var value unmarshaler
@@ -488,6 +872,17 @@ func (s *SearchEventsFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchEventsFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchEventsFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchEventsFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -501,11 +896,19 @@ func (s *SearchEventsFilter) String() string {
 }
 
 // Contains query criteria for the search.
+var (
+	searchEventsQueryFieldFilter = big.NewInt(1 << 0)
+	searchEventsQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type SearchEventsQuery struct {
 	// Criteria to filter events by.
 	Filter *SearchEventsFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Criteria to sort events by.
 	Sort *SearchEventsSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -529,6 +932,27 @@ func (s *SearchEventsQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchEventsQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsQuery) SetFilter(filter *SearchEventsFilter) {
+	s.Filter = filter
+	s.require(searchEventsQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsQuery) SetSort(sort *SearchEventsSort) {
+	s.Sort = sort
+	s.require(searchEventsQueryFieldSort)
+}
+
 func (s *SearchEventsQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchEventsQuery
 	var value unmarshaler
@@ -543,6 +967,17 @@ func (s *SearchEventsQuery) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchEventsQuery) MarshalJSON() ([]byte, error) {
+	type embed SearchEventsQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchEventsQuery) String() string {
@@ -562,6 +997,13 @@ func (s *SearchEventsQuery) String() string {
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
+var (
+	searchEventsResponseFieldErrors   = big.NewInt(1 << 0)
+	searchEventsResponseFieldEvents   = big.NewInt(1 << 1)
+	searchEventsResponseFieldMetadata = big.NewInt(1 << 2)
+	searchEventsResponseFieldCursor   = big.NewInt(1 << 3)
+)
+
 type SearchEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -573,6 +1015,9 @@ type SearchEventsResponse struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -610,6 +1055,41 @@ func (s *SearchEventsResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchEventsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchEventsResponseFieldErrors)
+}
+
+// SetEvents sets the Events field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsResponse) SetEvents(events []*Event) {
+	s.Events = events
+	s.require(searchEventsResponseFieldEvents)
+}
+
+// SetMetadata sets the Metadata field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsResponse) SetMetadata(metadata []*EventMetadata) {
+	s.Metadata = metadata
+	s.require(searchEventsResponseFieldMetadata)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchEventsResponseFieldCursor)
+}
+
 func (s *SearchEventsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchEventsResponse
 	var value unmarshaler
@@ -626,6 +1106,17 @@ func (s *SearchEventsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchEventsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchEventsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchEventsResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -639,6 +1130,11 @@ func (s *SearchEventsResponse) String() string {
 }
 
 // Criteria to sort events by.
+var (
+	searchEventsSortFieldField = big.NewInt(1 << 0)
+	searchEventsSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type SearchEventsSort struct {
 	// Sort events by event types.
 	// See [SearchEventsSortField](#type-searcheventssortfield) for possible values
@@ -646,6 +1142,9 @@ type SearchEventsSort struct {
 	// The order to use for sorting the events.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -662,6 +1161,27 @@ func (s *SearchEventsSort) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchEventsSort) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsSort) SetField(field *SearchEventsSortField) {
+	s.Field = field
+	s.require(searchEventsSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchEventsSort) SetOrder(order *SortOrder) {
+	s.Order = order
+	s.require(searchEventsSortFieldOrder)
+}
+
 func (s *SearchEventsSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchEventsSort
 	var value unmarshaler
@@ -676,6 +1196,17 @@ func (s *SearchEventsSort) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchEventsSort) MarshalJSON() ([]byte, error) {
+	type embed SearchEventsSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchEventsSort) String() string {

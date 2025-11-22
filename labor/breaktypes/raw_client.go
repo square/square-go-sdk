@@ -4,7 +4,7 @@ package breaktypes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	labor "github.com/square/square-go-sdk/v2/labor"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *labor.CreateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateBreakTypeResponse], error) {
+) (*core.Response[*square.CreateBreakTypeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/labor/break-types"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateBreakTypeResponse
+	var response *square.CreateBreakTypeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateBreakTypeResponse]{
+	return &core.Response[*square.CreateBreakTypeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *labor.GetBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetBreakTypeResponse], error) {
+) (*core.Response[*square.GetBreakTypeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Get(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetBreakTypeResponse
+	var response *square.GetBreakTypeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetBreakTypeResponse]{
+	return &core.Response[*square.GetBreakTypeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -120,7 +120,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *labor.UpdateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateBreakTypeResponse], error) {
+) (*core.Response[*square.UpdateBreakTypeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,11 +132,11 @@ func (r *RawClient) Update(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateBreakTypeResponse
+	var response *square.UpdateBreakTypeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateBreakTypeResponse]{
+	return &core.Response[*square.UpdateBreakTypeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -165,7 +165,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *labor.DeleteBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteBreakTypeResponse], error) {
+) (*core.Response[*square.DeleteBreakTypeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -177,10 +177,10 @@ func (r *RawClient) Delete(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteBreakTypeResponse
+	var response *square.DeleteBreakTypeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -197,7 +197,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteBreakTypeResponse]{
+	return &core.Response[*square.DeleteBreakTypeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	codes "github.com/square/square-go-sdk/v2/devices/codes"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -17,13 +17,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	Codes           *codes.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,8 +30,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Codes:           codes.NewClient(opts...),
+		Codes:           codes.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -40,7 +40,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -48,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // devices are supported.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListDevicesRequest,
+	request *square.ListDevicesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Device], error) {
+) (*core.Page[*string, *square.Device, *square.ListDevicesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,10 +62,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -85,14 +84,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListDevicesResponse) *internal.PageResponse[*string, *v2.Device] {
+	readPageResponse := func(response *square.ListDevicesResponse) *core.PageResponse[*string, *square.Device, *square.ListDevicesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetDevices()
-		return &internal.PageResponse[*string, *v2.Device]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Device, *square.ListDevicesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,9 +106,9 @@ func (c *Client) List(
 // Retrieves Device with the associated `device_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetDevicesRequest,
+	request *square.GetDevicesRequest,
 	opts ...option.RequestOption,
-) (*v2.GetDeviceResponse, error) {
+) (*square.GetDeviceResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,

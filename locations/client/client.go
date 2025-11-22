@@ -4,14 +4,13 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	customattributedefinitions "github.com/square/square-go-sdk/v2/locations/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v2/locations/customattributes"
 	transactions "github.com/square/square-go-sdk/v2/locations/transactions"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
@@ -21,13 +20,12 @@ type Client struct {
 	CustomAttributes           *customattributes.Client
 	Transactions               *transactions.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -35,10 +33,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
-		CustomAttributes:           customattributes.NewClient(opts...),
-		Transactions:               transactions.NewClient(opts...),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(options),
+		CustomAttributes:           customattributes.NewClient(options),
+		Transactions:               transactions.NewClient(options),
 		WithRawResponse:            NewRawClient(options),
+		options:                    options,
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -46,7 +45,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -55,7 +53,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.ListLocationsResponse, error) {
+) (*square.ListLocationsResponse, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
 		opts...,
@@ -75,9 +73,9 @@ func (c *Client) List(
 // each location has a sensible and unique name.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateLocationRequest,
+	request *square.CreateLocationRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateLocationResponse, error) {
+) (*square.CreateLocationResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -93,9 +91,9 @@ func (c *Client) Create(
 // as the location ID to retrieve details of the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetLocationsRequest,
+	request *square.GetLocationsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetLocationResponse, error) {
+) (*square.GetLocationResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -110,9 +108,9 @@ func (c *Client) Get(
 // Updates a [location](https://developer.squareup.com/docs/locations-api).
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateLocationRequest,
+	request *square.UpdateLocationRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateLocationResponse, error) {
+) (*square.UpdateLocationResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -132,9 +130,9 @@ func (c *Client) Update(
 // For more information, see [Checkout API highlights](https://developer.squareup.com/docs/checkout-api#checkout-api-highlights).
 func (c *Client) Checkouts(
 	ctx context.Context,
-	request *v2.CreateCheckoutRequest,
+	request *square.CreateCheckoutRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateCheckoutResponse, error) {
+) (*square.CreateCheckoutResponse, error) {
 	response, err := c.WithRawResponse.Checkouts(
 		ctx,
 		request,

@@ -4,7 +4,7 @@ package activities
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	giftcards "github.com/square/square-go-sdk/v2/giftcards"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -50,7 +49,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *giftcards.ListActivitiesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.GiftCardActivity], error) {
+) (*core.Page[*string, *square.GiftCardActivity, *square.ListGiftCardActivitiesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,10 +62,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -85,14 +84,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListGiftCardActivitiesResponse) *internal.PageResponse[*string, *v2.GiftCardActivity] {
+	readPageResponse := func(response *square.ListGiftCardActivitiesResponse) *core.PageResponse[*string, *square.GiftCardActivity, *square.ListGiftCardActivitiesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetGiftCardActivities()
-		return &internal.PageResponse[*string, *v2.GiftCardActivity]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.GiftCardActivity, *square.ListGiftCardActivitiesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -109,7 +109,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *giftcards.CreateGiftCardActivityRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateGiftCardActivityResponse, error) {
+) (*square.CreateGiftCardActivityResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,

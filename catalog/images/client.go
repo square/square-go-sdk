@@ -4,25 +4,23 @@ package images
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	catalog "github.com/square/square-go-sdk/v2/catalog"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -52,7 +50,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *catalog.CreateImagesRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateCatalogImageResponse, error) {
+) (*square.CreateCatalogImageResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -72,7 +70,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *catalog.UpdateImagesRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateCatalogImageResponse, error) {
+) (*square.UpdateCatalogImageResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,

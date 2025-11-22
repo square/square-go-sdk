@@ -4,12 +4,11 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	paymentlinks "github.com/square/square-go-sdk/v2/checkout/paymentlinks"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
@@ -17,13 +16,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	PaymentLinks    *paymentlinks.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,8 +29,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		PaymentLinks:    paymentlinks.NewClient(opts...),
+		PaymentLinks:    paymentlinks.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -40,16 +39,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 // Retrieves the location-level settings for a Square-hosted checkout page.
 func (c *Client) RetrieveLocationSettings(
 	ctx context.Context,
-	request *v2.RetrieveLocationSettingsRequest,
+	request *square.RetrieveLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveLocationSettingsResponse, error) {
+) (*square.RetrieveLocationSettingsResponse, error) {
 	response, err := c.WithRawResponse.RetrieveLocationSettings(
 		ctx,
 		request,
@@ -64,9 +62,9 @@ func (c *Client) RetrieveLocationSettings(
 // Updates the location-level settings for a Square-hosted checkout page.
 func (c *Client) UpdateLocationSettings(
 	ctx context.Context,
-	request *v2.UpdateLocationSettingsRequest,
+	request *square.UpdateLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateLocationSettingsResponse, error) {
+) (*square.UpdateLocationSettingsResponse, error) {
 	response, err := c.WithRawResponse.UpdateLocationSettings(
 		ctx,
 		request,
@@ -82,7 +80,7 @@ func (c *Client) UpdateLocationSettings(
 func (c *Client) RetrieveMerchantSettings(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.RetrieveMerchantSettingsResponse, error) {
+) (*square.RetrieveMerchantSettingsResponse, error) {
 	response, err := c.WithRawResponse.RetrieveMerchantSettings(
 		ctx,
 		opts...,
@@ -96,9 +94,9 @@ func (c *Client) RetrieveMerchantSettings(
 // Updates the merchant-level settings for a Square-hosted checkout page.
 func (c *Client) UpdateMerchantSettings(
 	ctx context.Context,
-	request *v2.UpdateMerchantSettingsRequest,
+	request *square.UpdateMerchantSettingsRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateMerchantSettingsResponse, error) {
+) (*square.UpdateMerchantSettingsResponse, error) {
 	response, err := c.WithRawResponse.UpdateMerchantSettings(
 		ctx,
 		request,

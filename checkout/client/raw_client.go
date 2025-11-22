@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) RetrieveLocationSettings(
 	ctx context.Context,
-	request *v2.RetrieveLocationSettingsRequest,
+	request *square.RetrieveLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveLocationSettingsResponse], error) {
+) (*core.Response[*square.RetrieveLocationSettingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) RetrieveLocationSettings(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveLocationSettingsResponse
+	var response *square.RetrieveLocationSettingsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) RetrieveLocationSettings(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveLocationSettingsResponse]{
+	return &core.Response[*square.RetrieveLocationSettingsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) RetrieveLocationSettings(
 
 func (r *RawClient) UpdateLocationSettings(
 	ctx context.Context,
-	request *v2.UpdateLocationSettingsRequest,
+	request *square.UpdateLocationSettingsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateLocationSettingsResponse], error) {
+) (*core.Response[*square.UpdateLocationSettingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,11 +89,11 @@ func (r *RawClient) UpdateLocationSettings(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateLocationSettingsResponse
+	var response *square.UpdateLocationSettingsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -111,7 +111,7 @@ func (r *RawClient) UpdateLocationSettings(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateLocationSettingsResponse]{
+	return &core.Response[*square.UpdateLocationSettingsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -121,7 +121,7 @@ func (r *RawClient) UpdateLocationSettings(
 func (r *RawClient) RetrieveMerchantSettings(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveMerchantSettingsResponse], error) {
+) (*core.Response[*square.RetrieveMerchantSettingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -130,10 +130,10 @@ func (r *RawClient) RetrieveMerchantSettings(
 	)
 	endpointURL := baseURL + "/v2/online-checkout/merchant-settings"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveMerchantSettingsResponse
+	var response *square.RetrieveMerchantSettingsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,7 +150,7 @@ func (r *RawClient) RetrieveMerchantSettings(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveMerchantSettingsResponse]{
+	return &core.Response[*square.RetrieveMerchantSettingsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,9 +159,9 @@ func (r *RawClient) RetrieveMerchantSettings(
 
 func (r *RawClient) UpdateMerchantSettings(
 	ctx context.Context,
-	request *v2.UpdateMerchantSettingsRequest,
+	request *square.UpdateMerchantSettingsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateMerchantSettingsResponse], error) {
+) (*core.Response[*square.UpdateMerchantSettingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -170,11 +170,11 @@ func (r *RawClient) UpdateMerchantSettings(
 	)
 	endpointURL := baseURL + "/v2/online-checkout/merchant-settings"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateMerchantSettingsResponse
+	var response *square.UpdateMerchantSettingsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -192,7 +192,7 @@ func (r *RawClient) UpdateMerchantSettings(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateMerchantSettingsResponse]{
+	return &core.Response[*square.UpdateMerchantSettingsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -7,6 +7,11 @@ import (
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	io "io"
+	big "math/big"
+)
+
+var (
+	createEvidenceFileDisputesRequestFieldDisputeID = big.NewInt(1 << 0)
 )
 
 type CreateEvidenceFileDisputesRequest struct {
@@ -14,7 +19,31 @@ type CreateEvidenceFileDisputesRequest struct {
 	DisputeID string                            `json:"-" url:"-"`
 	ImageFile io.Reader                         `json:"-" url:"-"`
 	Request   *CreateDisputeEvidenceFileRequest `json:"request,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateEvidenceFileDisputesRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateEvidenceFileDisputesRequest) SetDisputeID(disputeID string) {
+	c.DisputeID = disputeID
+	c.require(createEvidenceFileDisputesRequestFieldDisputeID)
+}
+
+var (
+	createDisputeEvidenceTextRequestFieldDisputeID      = big.NewInt(1 << 0)
+	createDisputeEvidenceTextRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+	createDisputeEvidenceTextRequestFieldEvidenceType   = big.NewInt(1 << 2)
+	createDisputeEvidenceTextRequestFieldEvidenceText   = big.NewInt(1 << 3)
+)
 
 type CreateDisputeEvidenceTextRequest struct {
 	// The ID of the dispute for which you want to upload evidence.
@@ -26,22 +55,129 @@ type CreateDisputeEvidenceTextRequest struct {
 	EvidenceType *DisputeEvidenceType `json:"evidence_type,omitempty" url:"-"`
 	// The evidence string.
 	EvidenceText string `json:"evidence_text" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateDisputeEvidenceTextRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextRequest) SetDisputeID(disputeID string) {
+	c.DisputeID = disputeID
+	c.require(createDisputeEvidenceTextRequestFieldDisputeID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createDisputeEvidenceTextRequestFieldIdempotencyKey)
+}
+
+// SetEvidenceType sets the EvidenceType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextRequest) SetEvidenceType(evidenceType *DisputeEvidenceType) {
+	c.EvidenceType = evidenceType
+	c.require(createDisputeEvidenceTextRequestFieldEvidenceType)
+}
+
+// SetEvidenceText sets the EvidenceText field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextRequest) SetEvidenceText(evidenceText string) {
+	c.EvidenceText = evidenceText
+	c.require(createDisputeEvidenceTextRequestFieldEvidenceText)
+}
+
+var (
+	submitEvidenceDisputesRequestFieldDisputeID = big.NewInt(1 << 0)
+)
 
 type SubmitEvidenceDisputesRequest struct {
 	// The ID of the dispute for which you want to submit evidence.
 	DisputeID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SubmitEvidenceDisputesRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubmitEvidenceDisputesRequest) SetDisputeID(disputeID string) {
+	s.DisputeID = disputeID
+	s.require(submitEvidenceDisputesRequestFieldDisputeID)
+}
+
+var (
+	acceptDisputesRequestFieldDisputeID = big.NewInt(1 << 0)
+)
 
 type AcceptDisputesRequest struct {
 	// The ID of the dispute you want to accept.
 	DisputeID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (a *AcceptDisputesRequest) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AcceptDisputesRequest) SetDisputeID(disputeID string) {
+	a.DisputeID = disputeID
+	a.require(acceptDisputesRequestFieldDisputeID)
+}
+
+var (
+	getDisputesRequestFieldDisputeID = big.NewInt(1 << 0)
+)
 
 type GetDisputesRequest struct {
 	// The ID of the dispute you want more details about.
 	DisputeID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetDisputesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDisputesRequest) SetDisputeID(disputeID string) {
+	g.DisputeID = disputeID
+	g.require(getDisputesRequestFieldDisputeID)
+}
+
+var (
+	listDisputesRequestFieldCursor     = big.NewInt(1 << 0)
+	listDisputesRequestFieldStates     = big.NewInt(1 << 1)
+	listDisputesRequestFieldLocationID = big.NewInt(1 << 2)
+)
 
 type ListDisputesRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -53,14 +189,53 @@ type ListDisputesRequest struct {
 	// The ID of the location for which to return a list of disputes.
 	// If not specified, the endpoint returns disputes associated with all locations.
 	LocationID *string `json:"-" url:"location_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListDisputesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listDisputesRequestFieldCursor)
+}
+
+// SetStates sets the States field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesRequest) SetStates(states *DisputeState) {
+	l.States = states
+	l.require(listDisputesRequestFieldStates)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listDisputesRequestFieldLocationID)
 }
 
 // Defines the fields in an `AcceptDispute` response.
+var (
+	acceptDisputeResponseFieldErrors  = big.NewInt(1 << 0)
+	acceptDisputeResponseFieldDispute = big.NewInt(1 << 1)
+)
+
 type AcceptDisputeResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// Details about the accepted dispute.
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -84,6 +259,27 @@ func (a *AcceptDisputeResponse) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
+func (a *AcceptDisputeResponse) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AcceptDisputeResponse) SetErrors(errors []*Error) {
+	a.Errors = errors
+	a.require(acceptDisputeResponseFieldErrors)
+}
+
+// SetDispute sets the Dispute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AcceptDisputeResponse) SetDispute(dispute *Dispute) {
+	a.Dispute = dispute
+	a.require(acceptDisputeResponseFieldDispute)
+}
+
 func (a *AcceptDisputeResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler AcceptDisputeResponse
 	var value unmarshaler
@@ -100,6 +296,17 @@ func (a *AcceptDisputeResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AcceptDisputeResponse) MarshalJSON() ([]byte, error) {
+	type embed AcceptDisputeResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (a *AcceptDisputeResponse) String() string {
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
@@ -113,6 +320,12 @@ func (a *AcceptDisputeResponse) String() string {
 }
 
 // Defines the parameters for a `CreateDisputeEvidenceFile` request.
+var (
+	createDisputeEvidenceFileRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createDisputeEvidenceFileRequestFieldEvidenceType   = big.NewInt(1 << 1)
+	createDisputeEvidenceFileRequestFieldContentType    = big.NewInt(1 << 2)
+)
+
 type CreateDisputeEvidenceFileRequest struct {
 	// A unique key identifying the request. For more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"idempotency_key"`
@@ -122,6 +335,9 @@ type CreateDisputeEvidenceFileRequest struct {
 	// The MIME type of the uploaded file.
 	// The type can be image/heic, image/heif, image/jpeg, application/pdf, image/png, or image/tiff.
 	ContentType *string `json:"content_type,omitempty" url:"content_type,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -152,6 +368,34 @@ func (c *CreateDisputeEvidenceFileRequest) GetExtraProperties() map[string]inter
 	return c.extraProperties
 }
 
+func (c *CreateDisputeEvidenceFileRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceFileRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createDisputeEvidenceFileRequestFieldIdempotencyKey)
+}
+
+// SetEvidenceType sets the EvidenceType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceFileRequest) SetEvidenceType(evidenceType *DisputeEvidenceType) {
+	c.EvidenceType = evidenceType
+	c.require(createDisputeEvidenceFileRequestFieldEvidenceType)
+}
+
+// SetContentType sets the ContentType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceFileRequest) SetContentType(contentType *string) {
+	c.ContentType = contentType
+	c.require(createDisputeEvidenceFileRequestFieldContentType)
+}
+
 func (c *CreateDisputeEvidenceFileRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateDisputeEvidenceFileRequest
 	var value unmarshaler
@@ -168,6 +412,17 @@ func (c *CreateDisputeEvidenceFileRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateDisputeEvidenceFileRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateDisputeEvidenceFileRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateDisputeEvidenceFileRequest) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -181,11 +436,19 @@ func (c *CreateDisputeEvidenceFileRequest) String() string {
 }
 
 // Defines the fields in a `CreateDisputeEvidenceFile` response.
+var (
+	createDisputeEvidenceFileResponseFieldErrors   = big.NewInt(1 << 0)
+	createDisputeEvidenceFileResponseFieldEvidence = big.NewInt(1 << 1)
+)
+
 type CreateDisputeEvidenceFileResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The metadata of the newly uploaded dispute evidence.
 	Evidence *DisputeEvidence `json:"evidence,omitempty" url:"evidence,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -209,6 +472,27 @@ func (c *CreateDisputeEvidenceFileResponse) GetExtraProperties() map[string]inte
 	return c.extraProperties
 }
 
+func (c *CreateDisputeEvidenceFileResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceFileResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createDisputeEvidenceFileResponseFieldErrors)
+}
+
+// SetEvidence sets the Evidence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceFileResponse) SetEvidence(evidence *DisputeEvidence) {
+	c.Evidence = evidence
+	c.require(createDisputeEvidenceFileResponseFieldEvidence)
+}
+
 func (c *CreateDisputeEvidenceFileResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateDisputeEvidenceFileResponse
 	var value unmarshaler
@@ -225,6 +509,17 @@ func (c *CreateDisputeEvidenceFileResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateDisputeEvidenceFileResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateDisputeEvidenceFileResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateDisputeEvidenceFileResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -238,11 +533,19 @@ func (c *CreateDisputeEvidenceFileResponse) String() string {
 }
 
 // Defines the fields in a `CreateDisputeEvidenceText` response.
+var (
+	createDisputeEvidenceTextResponseFieldErrors   = big.NewInt(1 << 0)
+	createDisputeEvidenceTextResponseFieldEvidence = big.NewInt(1 << 1)
+)
+
 type CreateDisputeEvidenceTextResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The newly uploaded dispute evidence metadata.
 	Evidence *DisputeEvidence `json:"evidence,omitempty" url:"evidence,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -266,6 +569,27 @@ func (c *CreateDisputeEvidenceTextResponse) GetExtraProperties() map[string]inte
 	return c.extraProperties
 }
 
+func (c *CreateDisputeEvidenceTextResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createDisputeEvidenceTextResponseFieldErrors)
+}
+
+// SetEvidence sets the Evidence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDisputeEvidenceTextResponse) SetEvidence(evidence *DisputeEvidence) {
+	c.Evidence = evidence
+	c.require(createDisputeEvidenceTextResponseFieldEvidence)
+}
+
 func (c *CreateDisputeEvidenceTextResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateDisputeEvidenceTextResponse
 	var value unmarshaler
@@ -282,6 +606,17 @@ func (c *CreateDisputeEvidenceTextResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateDisputeEvidenceTextResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateDisputeEvidenceTextResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateDisputeEvidenceTextResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -295,6 +630,25 @@ func (c *CreateDisputeEvidenceTextResponse) String() string {
 }
 
 // Represents a [dispute](https://developer.squareup.com/docs/disputes-api/overview) a cardholder initiated with their bank.
+var (
+	disputeFieldDisputeID       = big.NewInt(1 << 0)
+	disputeFieldID              = big.NewInt(1 << 1)
+	disputeFieldAmountMoney     = big.NewInt(1 << 2)
+	disputeFieldReason          = big.NewInt(1 << 3)
+	disputeFieldState           = big.NewInt(1 << 4)
+	disputeFieldDueAt           = big.NewInt(1 << 5)
+	disputeFieldDisputedPayment = big.NewInt(1 << 6)
+	disputeFieldEvidenceIDs     = big.NewInt(1 << 7)
+	disputeFieldCardBrand       = big.NewInt(1 << 8)
+	disputeFieldCreatedAt       = big.NewInt(1 << 9)
+	disputeFieldUpdatedAt       = big.NewInt(1 << 10)
+	disputeFieldBrandDisputeID  = big.NewInt(1 << 11)
+	disputeFieldReportedDate    = big.NewInt(1 << 12)
+	disputeFieldReportedAt      = big.NewInt(1 << 13)
+	disputeFieldVersion         = big.NewInt(1 << 14)
+	disputeFieldLocationID      = big.NewInt(1 << 15)
+)
+
 type Dispute struct {
 	// The unique ID for this `Dispute`, generated by Square.
 	DisputeID *string `json:"dispute_id,omitempty" url:"dispute_id,omitempty"`
@@ -332,6 +686,9 @@ type Dispute struct {
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
 	// The ID of the location where the dispute originated.
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -453,6 +810,125 @@ func (d *Dispute) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *Dispute) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetDisputeID(disputeID *string) {
+	d.DisputeID = disputeID
+	d.require(disputeFieldDisputeID)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetID(id *string) {
+	d.ID = id
+	d.require(disputeFieldID)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetAmountMoney(amountMoney *Money) {
+	d.AmountMoney = amountMoney
+	d.require(disputeFieldAmountMoney)
+}
+
+// SetReason sets the Reason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetReason(reason *DisputeReason) {
+	d.Reason = reason
+	d.require(disputeFieldReason)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetState(state *DisputeState) {
+	d.State = state
+	d.require(disputeFieldState)
+}
+
+// SetDueAt sets the DueAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetDueAt(dueAt *string) {
+	d.DueAt = dueAt
+	d.require(disputeFieldDueAt)
+}
+
+// SetDisputedPayment sets the DisputedPayment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetDisputedPayment(disputedPayment *DisputedPayment) {
+	d.DisputedPayment = disputedPayment
+	d.require(disputeFieldDisputedPayment)
+}
+
+// SetEvidenceIDs sets the EvidenceIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetEvidenceIDs(evidenceIDs []string) {
+	d.EvidenceIDs = evidenceIDs
+	d.require(disputeFieldEvidenceIDs)
+}
+
+// SetCardBrand sets the CardBrand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetCardBrand(cardBrand *CardBrand) {
+	d.CardBrand = cardBrand
+	d.require(disputeFieldCardBrand)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetCreatedAt(createdAt *string) {
+	d.CreatedAt = createdAt
+	d.require(disputeFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetUpdatedAt(updatedAt *string) {
+	d.UpdatedAt = updatedAt
+	d.require(disputeFieldUpdatedAt)
+}
+
+// SetBrandDisputeID sets the BrandDisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetBrandDisputeID(brandDisputeID *string) {
+	d.BrandDisputeID = brandDisputeID
+	d.require(disputeFieldBrandDisputeID)
+}
+
+// SetReportedDate sets the ReportedDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetReportedDate(reportedDate *string) {
+	d.ReportedDate = reportedDate
+	d.require(disputeFieldReportedDate)
+}
+
+// SetReportedAt sets the ReportedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetReportedAt(reportedAt *string) {
+	d.ReportedAt = reportedAt
+	d.require(disputeFieldReportedAt)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetVersion(version *int) {
+	d.Version = version
+	d.require(disputeFieldVersion)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *Dispute) SetLocationID(locationID *string) {
+	d.LocationID = locationID
+	d.require(disputeFieldLocationID)
+}
+
 func (d *Dispute) UnmarshalJSON(data []byte) error {
 	type unmarshaler Dispute
 	var value unmarshaler
@@ -467,6 +943,17 @@ func (d *Dispute) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *Dispute) MarshalJSON() ([]byte, error) {
+	type embed Dispute
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *Dispute) String() string {
@@ -568,9 +1055,16 @@ func (d DisputeState) Ptr() *DisputeState {
 }
 
 // The payment the cardholder disputed.
+var (
+	disputedPaymentFieldPaymentID = big.NewInt(1 << 0)
+)
+
 type DisputedPayment struct {
 	// Square-generated unique ID of the payment being disputed.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -585,6 +1079,20 @@ func (d *DisputedPayment) GetPaymentID() *string {
 
 func (d *DisputedPayment) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DisputedPayment) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisputedPayment) SetPaymentID(paymentID *string) {
+	d.PaymentID = paymentID
+	d.require(disputedPaymentFieldPaymentID)
 }
 
 func (d *DisputedPayment) UnmarshalJSON(data []byte) error {
@@ -603,6 +1111,17 @@ func (d *DisputedPayment) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DisputedPayment) MarshalJSON() ([]byte, error) {
+	type embed DisputedPayment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DisputedPayment) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -616,11 +1135,19 @@ func (d *DisputedPayment) String() string {
 }
 
 // Defines fields in a `RetrieveDispute` response.
+var (
+	getDisputeResponseFieldErrors  = big.NewInt(1 << 0)
+	getDisputeResponseFieldDispute = big.NewInt(1 << 1)
+)
+
 type GetDisputeResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// Details about the requested `Dispute`.
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -644,6 +1171,27 @@ func (g *GetDisputeResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetDisputeResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDisputeResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getDisputeResponseFieldErrors)
+}
+
+// SetDispute sets the Dispute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetDisputeResponse) SetDispute(dispute *Dispute) {
+	g.Dispute = dispute
+	g.require(getDisputeResponseFieldDispute)
+}
+
 func (g *GetDisputeResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetDisputeResponse
 	var value unmarshaler
@@ -660,6 +1208,17 @@ func (g *GetDisputeResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetDisputeResponse) MarshalJSON() ([]byte, error) {
+	type embed GetDisputeResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetDisputeResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -673,6 +1232,12 @@ func (g *GetDisputeResponse) String() string {
 }
 
 // Defines fields in a `ListDisputes` response.
+var (
+	listDisputesResponseFieldErrors   = big.NewInt(1 << 0)
+	listDisputesResponseFieldDisputes = big.NewInt(1 << 1)
+	listDisputesResponseFieldCursor   = big.NewInt(1 << 2)
+)
+
 type ListDisputesResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -681,6 +1246,9 @@ type ListDisputesResponse struct {
 	// The pagination cursor to be used in a subsequent request.
 	// If unset, this is the final response. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -711,6 +1279,34 @@ func (l *ListDisputesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListDisputesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listDisputesResponseFieldErrors)
+}
+
+// SetDisputes sets the Disputes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesResponse) SetDisputes(disputes []*Dispute) {
+	l.Disputes = disputes
+	l.require(listDisputesResponseFieldDisputes)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListDisputesResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listDisputesResponseFieldCursor)
+}
+
 func (l *ListDisputesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListDisputesResponse
 	var value unmarshaler
@@ -727,6 +1323,17 @@ func (l *ListDisputesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListDisputesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListDisputesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListDisputesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -740,11 +1347,19 @@ func (l *ListDisputesResponse) String() string {
 }
 
 // Defines the fields in a `SubmitEvidence` response.
+var (
+	submitEvidenceResponseFieldErrors  = big.NewInt(1 << 0)
+	submitEvidenceResponseFieldDispute = big.NewInt(1 << 1)
+)
+
 type SubmitEvidenceResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The `Dispute` for which evidence was submitted.
 	Dispute *Dispute `json:"dispute,omitempty" url:"dispute,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -768,6 +1383,27 @@ func (s *SubmitEvidenceResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SubmitEvidenceResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubmitEvidenceResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(submitEvidenceResponseFieldErrors)
+}
+
+// SetDispute sets the Dispute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubmitEvidenceResponse) SetDispute(dispute *Dispute) {
+	s.Dispute = dispute
+	s.require(submitEvidenceResponseFieldDispute)
+}
+
 func (s *SubmitEvidenceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SubmitEvidenceResponse
 	var value unmarshaler
@@ -782,6 +1418,17 @@ func (s *SubmitEvidenceResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SubmitEvidenceResponse) MarshalJSON() ([]byte, error) {
+	type embed SubmitEvidenceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SubmitEvidenceResponse) String() string {

@@ -4,7 +4,7 @@ package team
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) ListJobs(
 	ctx context.Context,
-	request *v2.ListJobsRequest,
+	request *square.ListJobsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ListJobsResponse], error) {
+) (*core.Response[*square.ListJobsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -50,10 +50,10 @@ func (r *RawClient) ListJobs(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.ListJobsResponse
+	var response *square.ListJobsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -70,7 +70,7 @@ func (r *RawClient) ListJobs(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ListJobsResponse]{
+	return &core.Response[*square.ListJobsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -79,9 +79,9 @@ func (r *RawClient) ListJobs(
 
 func (r *RawClient) CreateJob(
 	ctx context.Context,
-	request *v2.CreateJobRequest,
+	request *square.CreateJobRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateJobResponse], error) {
+) (*core.Response[*square.CreateJobResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -90,11 +90,11 @@ func (r *RawClient) CreateJob(
 	)
 	endpointURL := baseURL + "/v2/team-members/jobs"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateJobResponse
+	var response *square.CreateJobResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -112,7 +112,7 @@ func (r *RawClient) CreateJob(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateJobResponse]{
+	return &core.Response[*square.CreateJobResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -121,9 +121,9 @@ func (r *RawClient) CreateJob(
 
 func (r *RawClient) RetrieveJob(
 	ctx context.Context,
-	request *v2.RetrieveJobRequest,
+	request *square.RetrieveJobRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveJobResponse], error) {
+) (*core.Response[*square.RetrieveJobResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -135,10 +135,10 @@ func (r *RawClient) RetrieveJob(
 		request.JobID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveJobResponse
+	var response *square.RetrieveJobResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -155,7 +155,7 @@ func (r *RawClient) RetrieveJob(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveJobResponse]{
+	return &core.Response[*square.RetrieveJobResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -164,9 +164,9 @@ func (r *RawClient) RetrieveJob(
 
 func (r *RawClient) UpdateJob(
 	ctx context.Context,
-	request *v2.UpdateJobRequest,
+	request *square.UpdateJobRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateJobResponse], error) {
+) (*core.Response[*square.UpdateJobResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -178,11 +178,11 @@ func (r *RawClient) UpdateJob(
 		request.JobID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateJobResponse
+	var response *square.UpdateJobResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -200,7 +200,7 @@ func (r *RawClient) UpdateJob(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateJobResponse]{
+	return &core.Response[*square.UpdateJobResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

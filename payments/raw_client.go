@@ -4,7 +4,7 @@ package payments
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreatePaymentRequest,
+	request *square.CreatePaymentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreatePaymentResponse], error) {
+) (*core.Response[*square.CreatePaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/payments"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreatePaymentResponse
+	var response *square.CreatePaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreatePaymentResponse]{
+	return &core.Response[*square.CreatePaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) CancelByIdempotencyKey(
 	ctx context.Context,
-	request *v2.CancelPaymentByIdempotencyKeyRequest,
+	request *square.CancelPaymentByIdempotencyKeyRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelPaymentByIdempotencyKeyResponse], error) {
+) (*core.Response[*square.CancelPaymentByIdempotencyKeyResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) CancelByIdempotencyKey(
 	)
 	endpointURL := baseURL + "/v2/payments/cancel"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CancelPaymentByIdempotencyKeyResponse
+	var response *square.CancelPaymentByIdempotencyKeyResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) CancelByIdempotencyKey(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelPaymentByIdempotencyKeyResponse]{
+	return &core.Response[*square.CancelPaymentByIdempotencyKeyResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) CancelByIdempotencyKey(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetPaymentsRequest,
+	request *square.GetPaymentsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetPaymentResponse], error) {
+) (*core.Response[*square.GetPaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -130,10 +130,10 @@ func (r *RawClient) Get(
 		request.PaymentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetPaymentResponse
+	var response *square.GetPaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,7 +150,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetPaymentResponse]{
+	return &core.Response[*square.GetPaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,9 +159,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdatePaymentRequest,
+	request *square.UpdatePaymentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdatePaymentResponse], error) {
+) (*core.Response[*square.UpdatePaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -173,11 +173,11 @@ func (r *RawClient) Update(
 		request.PaymentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdatePaymentResponse
+	var response *square.UpdatePaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -195,7 +195,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdatePaymentResponse]{
+	return &core.Response[*square.UpdatePaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -204,9 +204,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Cancel(
 	ctx context.Context,
-	request *v2.CancelPaymentsRequest,
+	request *square.CancelPaymentsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelPaymentResponse], error) {
+) (*core.Response[*square.CancelPaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -218,10 +218,10 @@ func (r *RawClient) Cancel(
 		request.PaymentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelPaymentResponse
+	var response *square.CancelPaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -238,7 +238,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelPaymentResponse]{
+	return &core.Response[*square.CancelPaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -247,9 +247,9 @@ func (r *RawClient) Cancel(
 
 func (r *RawClient) Complete(
 	ctx context.Context,
-	request *v2.CompletePaymentRequest,
+	request *square.CompletePaymentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CompletePaymentResponse], error) {
+) (*core.Response[*square.CompletePaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -261,11 +261,11 @@ func (r *RawClient) Complete(
 		request.PaymentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CompletePaymentResponse
+	var response *square.CompletePaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -283,7 +283,7 @@ func (r *RawClient) Complete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CompletePaymentResponse]{
+	return &core.Response[*square.CompletePaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

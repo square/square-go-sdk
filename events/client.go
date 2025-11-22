@@ -4,24 +4,22 @@ package events
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,16 +36,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 // Search for Square API events that occur within a 28-day timeframe.
 func (c *Client) SearchEvents(
 	ctx context.Context,
-	request *v2.SearchEventsRequest,
+	request *square.SearchEventsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchEventsResponse, error) {
+) (*square.SearchEventsResponse, error) {
 	response, err := c.WithRawResponse.SearchEvents(
 		ctx,
 		request,
@@ -64,7 +62,7 @@ func (c *Client) SearchEvents(
 func (c *Client) DisableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.DisableEventsResponse, error) {
+) (*square.DisableEventsResponse, error) {
 	response, err := c.WithRawResponse.DisableEvents(
 		ctx,
 		opts...,
@@ -79,7 +77,7 @@ func (c *Client) DisableEvents(
 func (c *Client) EnableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.EnableEventsResponse, error) {
+) (*square.EnableEventsResponse, error) {
 	response, err := c.WithRawResponse.EnableEvents(
 		ctx,
 		opts...,
@@ -93,9 +91,9 @@ func (c *Client) EnableEvents(
 // Lists all event types that you can subscribe to as webhooks or query using the Events API.
 func (c *Client) ListEventTypes(
 	ctx context.Context,
-	request *v2.ListEventTypesRequest,
+	request *square.ListEventTypesRequest,
 	opts ...option.RequestOption,
-) (*v2.ListEventTypesResponse, error) {
+) (*square.ListEventTypesResponse, error) {
 	response, err := c.WithRawResponse.ListEventTypes(
 		ctx,
 		request,

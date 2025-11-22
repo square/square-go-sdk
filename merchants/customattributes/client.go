@@ -4,7 +4,7 @@ package customattributes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	merchants "github.com/square/square-go-sdk/v2/merchants"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -49,7 +48,7 @@ func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *merchants.BulkDeleteMerchantCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkDeleteMerchantCustomAttributesResponse, error) {
+) (*square.BulkDeleteMerchantCustomAttributesResponse, error) {
 	response, err := c.WithRawResponse.BatchDelete(
 		ctx,
 		request,
@@ -75,7 +74,7 @@ func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *merchants.BulkUpsertMerchantCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkUpsertMerchantCustomAttributesResponse, error) {
+) (*square.BulkUpsertMerchantCustomAttributesResponse, error) {
 	response, err := c.WithRawResponse.BatchUpsert(
 		ctx,
 		request,
@@ -97,7 +96,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *merchants.ListCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.CustomAttribute], error) {
+) (*core.Page[*string, *square.CustomAttribute, *square.ListMerchantCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -113,10 +112,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -135,14 +134,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListMerchantCustomAttributesResponse) *internal.PageResponse[*string, *v2.CustomAttribute] {
+	readPageResponse := func(response *square.ListMerchantCustomAttributesResponse) *core.PageResponse[*string, *square.CustomAttribute, *square.ListMerchantCustomAttributesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCustomAttributes()
-		return &internal.PageResponse[*string, *v2.CustomAttribute]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.CustomAttribute, *square.ListMerchantCustomAttributesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -162,7 +162,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *merchants.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveMerchantCustomAttributeResponse, error) {
+) (*square.RetrieveMerchantCustomAttributeResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -184,7 +184,7 @@ func (c *Client) Upsert(
 	ctx context.Context,
 	request *merchants.UpsertMerchantCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*v2.UpsertMerchantCustomAttributeResponse, error) {
+) (*square.UpsertMerchantCustomAttributeResponse, error) {
 	response, err := c.WithRawResponse.Upsert(
 		ctx,
 		request,
@@ -203,7 +203,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *merchants.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteMerchantCustomAttributeResponse, error) {
+) (*square.DeleteMerchantCustomAttributeResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

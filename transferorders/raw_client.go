@@ -4,7 +4,7 @@ package transferorders
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateTransferOrderRequest,
+	request *square.CreateTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTransferOrderResponse], error) {
+) (*core.Response[*square.CreateTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/transfer-orders"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateTransferOrderResponse
+	var response *square.CreateTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTransferOrderResponse]{
+	return &core.Response[*square.CreateTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchTransferOrdersRequest,
+	request *square.SearchTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTransferOrdersResponse], error) {
+) (*core.Response[*square.SearchTransferOrdersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/transfer-orders/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTransferOrdersResponse
+	var response *square.SearchTransferOrdersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTransferOrdersResponse]{
+	return &core.Response[*square.SearchTransferOrdersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetTransferOrdersRequest,
+	request *square.GetTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveTransferOrderResponse], error) {
+) (*core.Response[*square.RetrieveTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -130,10 +130,10 @@ func (r *RawClient) Get(
 		request.TransferOrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveTransferOrderResponse
+	var response *square.RetrieveTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,7 +150,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveTransferOrderResponse]{
+	return &core.Response[*square.RetrieveTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,9 +159,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateTransferOrderRequest,
+	request *square.UpdateTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateTransferOrderResponse], error) {
+) (*core.Response[*square.UpdateTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -173,11 +173,11 @@ func (r *RawClient) Update(
 		request.TransferOrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateTransferOrderResponse
+	var response *square.UpdateTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -195,7 +195,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateTransferOrderResponse]{
+	return &core.Response[*square.UpdateTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -204,9 +204,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Delete(
 	ctx context.Context,
-	request *v2.DeleteTransferOrdersRequest,
+	request *square.DeleteTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteTransferOrderResponse], error) {
+) (*core.Response[*square.DeleteTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -225,10 +225,10 @@ func (r *RawClient) Delete(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteTransferOrderResponse
+	var response *square.DeleteTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -245,7 +245,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteTransferOrderResponse]{
+	return &core.Response[*square.DeleteTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -254,9 +254,9 @@ func (r *RawClient) Delete(
 
 func (r *RawClient) Cancel(
 	ctx context.Context,
-	request *v2.CancelTransferOrderRequest,
+	request *square.CancelTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelTransferOrderResponse], error) {
+) (*core.Response[*square.CancelTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -268,11 +268,11 @@ func (r *RawClient) Cancel(
 		request.TransferOrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CancelTransferOrderResponse
+	var response *square.CancelTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -290,7 +290,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelTransferOrderResponse]{
+	return &core.Response[*square.CancelTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -299,9 +299,9 @@ func (r *RawClient) Cancel(
 
 func (r *RawClient) Receive(
 	ctx context.Context,
-	request *v2.ReceiveTransferOrderRequest,
+	request *square.ReceiveTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ReceiveTransferOrderResponse], error) {
+) (*core.Response[*square.ReceiveTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -313,11 +313,11 @@ func (r *RawClient) Receive(
 		request.TransferOrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.ReceiveTransferOrderResponse
+	var response *square.ReceiveTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -335,7 +335,7 @@ func (r *RawClient) Receive(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ReceiveTransferOrderResponse]{
+	return &core.Response[*square.ReceiveTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -344,9 +344,9 @@ func (r *RawClient) Receive(
 
 func (r *RawClient) Start(
 	ctx context.Context,
-	request *v2.StartTransferOrderRequest,
+	request *square.StartTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.StartTransferOrderResponse], error) {
+) (*core.Response[*square.StartTransferOrderResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -358,11 +358,11 @@ func (r *RawClient) Start(
 		request.TransferOrderID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.StartTransferOrderResponse
+	var response *square.StartTransferOrderResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -380,7 +380,7 @@ func (r *RawClient) Start(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.StartTransferOrderResponse]{
+	return &core.Response[*square.StartTransferOrderResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

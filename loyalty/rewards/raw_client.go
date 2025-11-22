@@ -4,7 +4,7 @@ package rewards
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	loyalty "github.com/square/square-go-sdk/v2/loyalty"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyRewardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateLoyaltyRewardResponse], error) {
+) (*core.Response[*square.CreateLoyaltyRewardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/loyalty/rewards"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateLoyaltyRewardResponse
+	var response *square.CreateLoyaltyRewardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateLoyaltyRewardResponse]{
+	return &core.Response[*square.CreateLoyaltyRewardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyRewardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchLoyaltyRewardsResponse], error) {
+) (*core.Response[*square.SearchLoyaltyRewardsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/loyalty/rewards/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchLoyaltyRewardsResponse
+	var response *square.SearchLoyaltyRewardsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchLoyaltyRewardsResponse]{
+	return &core.Response[*square.SearchLoyaltyRewardsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *loyalty.GetRewardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetLoyaltyRewardResponse], error) {
+) (*core.Response[*square.GetLoyaltyRewardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Get(
 		request.RewardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetLoyaltyRewardResponse
+	var response *square.GetLoyaltyRewardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetLoyaltyRewardResponse]{
+	return &core.Response[*square.GetLoyaltyRewardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -162,7 +162,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *loyalty.DeleteRewardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteLoyaltyRewardResponse], error) {
+) (*core.Response[*square.DeleteLoyaltyRewardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,10 +174,10 @@ func (r *RawClient) Delete(
 		request.RewardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteLoyaltyRewardResponse
+	var response *square.DeleteLoyaltyRewardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -194,7 +194,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteLoyaltyRewardResponse]{
+	return &core.Response[*square.DeleteLoyaltyRewardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -205,7 +205,7 @@ func (r *RawClient) Redeem(
 	ctx context.Context,
 	request *loyalty.RedeemLoyaltyRewardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RedeemLoyaltyRewardResponse], error) {
+) (*core.Response[*square.RedeemLoyaltyRewardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -217,11 +217,11 @@ func (r *RawClient) Redeem(
 		request.RewardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.RedeemLoyaltyRewardResponse
+	var response *square.RedeemLoyaltyRewardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -239,7 +239,7 @@ func (r *RawClient) Redeem(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RedeemLoyaltyRewardResponse]{
+	return &core.Response[*square.RedeemLoyaltyRewardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

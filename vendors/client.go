@@ -4,24 +4,22 @@ package vendors
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,16 +36,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 // Creates one or more [Vendor](entity:Vendor) objects to represent suppliers to a seller.
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *v2.BatchCreateVendorsRequest,
+	request *square.BatchCreateVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchCreateVendorsResponse, error) {
+) (*square.BatchCreateVendorsResponse, error) {
 	response, err := c.WithRawResponse.BatchCreate(
 		ctx,
 		request,
@@ -61,9 +59,9 @@ func (c *Client) BatchCreate(
 // Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *v2.BatchGetVendorsRequest,
+	request *square.BatchGetVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchGetVendorsResponse, error) {
+) (*square.BatchGetVendorsResponse, error) {
 	response, err := c.WithRawResponse.BatchGet(
 		ctx,
 		request,
@@ -78,9 +76,9 @@ func (c *Client) BatchGet(
 // Updates one or more of existing [Vendor](entity:Vendor) objects as suppliers to a seller.
 func (c *Client) BatchUpdate(
 	ctx context.Context,
-	request *v2.BatchUpdateVendorsRequest,
+	request *square.BatchUpdateVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchUpdateVendorsResponse, error) {
+) (*square.BatchUpdateVendorsResponse, error) {
 	response, err := c.WithRawResponse.BatchUpdate(
 		ctx,
 		request,
@@ -95,9 +93,9 @@ func (c *Client) BatchUpdate(
 // Creates a single [Vendor](entity:Vendor) object to represent a supplier to a seller.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateVendorRequest,
+	request *square.CreateVendorRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateVendorResponse, error) {
+) (*square.CreateVendorResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -112,9 +110,9 @@ func (c *Client) Create(
 // Searches for vendors using a filter against supported [Vendor](entity:Vendor) properties and a supported sorter.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchVendorsRequest,
+	request *square.SearchVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchVendorsResponse, error) {
+) (*square.SearchVendorsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -129,9 +127,9 @@ func (c *Client) Search(
 // Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetVendorsRequest,
+	request *square.GetVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetVendorResponse, error) {
+) (*square.GetVendorResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -146,9 +144,9 @@ func (c *Client) Get(
 // Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateVendorsRequest,
+	request *square.UpdateVendorsRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateVendorResponse, error) {
+) (*square.UpdateVendorResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,

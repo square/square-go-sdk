@@ -6,6 +6,11 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	batchCreateTeamMembersRequestFieldTeamMembers = big.NewInt(1 << 0)
 )
 
 type BatchCreateTeamMembersRequest struct {
@@ -15,7 +20,28 @@ type BatchCreateTeamMembersRequest struct {
 	// If you include a team member's `wage_setting`, you must provide `job_id` for each job assignment. To get job IDs,
 	// call [ListJobs](api-endpoint:Team-ListJobs).
 	TeamMembers map[string]*CreateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchCreateTeamMembersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMembers sets the TeamMembers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateTeamMembersRequest) SetTeamMembers(teamMembers map[string]*CreateTeamMemberRequest) {
+	b.TeamMembers = teamMembers
+	b.require(batchCreateTeamMembersRequestFieldTeamMembers)
+}
+
+var (
+	batchUpdateTeamMembersRequestFieldTeamMembers = big.NewInt(1 << 0)
+)
 
 type BatchUpdateTeamMembersRequest struct {
 	// The data used to update the `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`.
@@ -25,12 +51,56 @@ type BatchUpdateTeamMembersRequest struct {
 	// To update `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed,
 	// call [ListJobs](api-endpoint:Team-ListJobs) to get the required `job_id` values.
 	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchUpdateTeamMembersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMembers sets the TeamMembers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateTeamMembersRequest) SetTeamMembers(teamMembers map[string]*UpdateTeamMemberRequest) {
+	b.TeamMembers = teamMembers
+	b.require(batchUpdateTeamMembersRequestFieldTeamMembers)
+}
+
+var (
+	getTeamMembersRequestFieldTeamMemberID = big.NewInt(1 << 0)
+)
 
 type GetTeamMembersRequest struct {
 	// The ID of the team member to retrieve.
 	TeamMemberID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTeamMembersRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTeamMembersRequest) SetTeamMemberID(teamMemberID string) {
+	g.TeamMemberID = teamMemberID
+	g.require(getTeamMembersRequestFieldTeamMemberID)
+}
+
+var (
+	searchTeamMembersRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTeamMembersRequestFieldLimit  = big.NewInt(1 << 1)
+	searchTeamMembersRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchTeamMembersRequest struct {
 	// The query parameters.
@@ -40,14 +110,53 @@ type SearchTeamMembersRequest struct {
 	// The opaque cursor for fetching the next page. For more information, see
 	// [pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchTeamMembersRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersRequest) SetQuery(query *SearchTeamMembersQuery) {
+	s.Query = query
+	s.require(searchTeamMembersRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTeamMembersRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTeamMembersRequestFieldCursor)
 }
 
 // Represents a response from a bulk create request containing the created `TeamMember` objects or error messages.
+var (
+	batchCreateTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
+	batchCreateTeamMembersResponseFieldErrors      = big.NewInt(1 << 1)
+)
+
 type BatchCreateTeamMembersResponse struct {
 	// The successfully created `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`.
 	TeamMembers map[string]*CreateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -71,6 +180,27 @@ func (b *BatchCreateTeamMembersResponse) GetExtraProperties() map[string]interfa
 	return b.extraProperties
 }
 
+func (b *BatchCreateTeamMembersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMembers sets the TeamMembers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateTeamMembersResponse) SetTeamMembers(teamMembers map[string]*CreateTeamMemberResponse) {
+	b.TeamMembers = teamMembers
+	b.require(batchCreateTeamMembersResponseFieldTeamMembers)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateTeamMembersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchCreateTeamMembersResponseFieldErrors)
+}
+
 func (b *BatchCreateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchCreateTeamMembersResponse
 	var value unmarshaler
@@ -87,6 +217,17 @@ func (b *BatchCreateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchCreateTeamMembersResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchCreateTeamMembersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchCreateTeamMembersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -100,11 +241,19 @@ func (b *BatchCreateTeamMembersResponse) String() string {
 }
 
 // Represents a response from a bulk update request containing the updated `TeamMember` objects or error messages.
+var (
+	batchUpdateTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
+	batchUpdateTeamMembersResponseFieldErrors      = big.NewInt(1 << 1)
+)
+
 type BatchUpdateTeamMembersResponse struct {
 	// The successfully updated `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`.
 	TeamMembers map[string]*UpdateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -128,6 +277,27 @@ func (b *BatchUpdateTeamMembersResponse) GetExtraProperties() map[string]interfa
 	return b.extraProperties
 }
 
+func (b *BatchUpdateTeamMembersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMembers sets the TeamMembers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateTeamMembersResponse) SetTeamMembers(teamMembers map[string]*UpdateTeamMemberResponse) {
+	b.TeamMembers = teamMembers
+	b.require(batchUpdateTeamMembersResponseFieldTeamMembers)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateTeamMembersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchUpdateTeamMembersResponseFieldErrors)
+}
+
 func (b *BatchUpdateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchUpdateTeamMembersResponse
 	var value unmarshaler
@@ -144,6 +314,17 @@ func (b *BatchUpdateTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchUpdateTeamMembersResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchUpdateTeamMembersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchUpdateTeamMembersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -157,6 +338,11 @@ func (b *BatchUpdateTeamMembersResponse) String() string {
 }
 
 // Represents a create request for a `TeamMember` object.
+var (
+	createTeamMemberRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTeamMemberRequestFieldTeamMember     = big.NewInt(1 << 1)
+)
+
 type CreateTeamMemberRequest struct {
 	// A unique string that identifies this `CreateTeamMember` request.
 	// Keys can be any valid string, but must be unique for every request.
@@ -167,6 +353,9 @@ type CreateTeamMemberRequest struct {
 	// **Required** The data used to create the `TeamMember` object. If you include `wage_setting`, you must provide
 	// `job_id` for each job assignment. To get job IDs, call [ListJobs](api-endpoint:Team-ListJobs).
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -190,6 +379,27 @@ func (c *CreateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateTeamMemberRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTeamMemberRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTeamMemberRequestFieldIdempotencyKey)
+}
+
+// SetTeamMember sets the TeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTeamMemberRequest) SetTeamMember(teamMember *TeamMember) {
+	c.TeamMember = teamMember
+	c.require(createTeamMemberRequestFieldTeamMember)
+}
+
 func (c *CreateTeamMemberRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTeamMemberRequest
 	var value unmarshaler
@@ -206,6 +416,17 @@ func (c *CreateTeamMemberRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTeamMemberRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTeamMemberRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTeamMemberRequest) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -219,11 +440,19 @@ func (c *CreateTeamMemberRequest) String() string {
 }
 
 // Represents a response from a create request containing the created `TeamMember` object or error messages.
+var (
+	createTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
+	createTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
+)
+
 type CreateTeamMemberResponse struct {
 	// The successfully created `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -247,6 +476,27 @@ func (c *CreateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateTeamMemberResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTeamMember sets the TeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTeamMemberResponse) SetTeamMember(teamMember *TeamMember) {
+	c.TeamMember = teamMember
+	c.require(createTeamMemberResponseFieldTeamMember)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTeamMemberResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createTeamMemberResponseFieldErrors)
+}
+
 func (c *CreateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTeamMemberResponse
 	var value unmarshaler
@@ -263,6 +513,17 @@ func (c *CreateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTeamMemberResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateTeamMemberResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTeamMemberResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -276,11 +537,19 @@ func (c *CreateTeamMemberResponse) String() string {
 }
 
 // Represents a response from a retrieve request containing a `TeamMember` object or error messages.
+var (
+	getTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
+	getTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
+)
+
 type GetTeamMemberResponse struct {
 	// The successfully retrieved `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -304,6 +573,27 @@ func (g *GetTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetTeamMemberResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTeamMember sets the TeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTeamMemberResponse) SetTeamMember(teamMember *TeamMember) {
+	g.TeamMember = teamMember
+	g.require(getTeamMemberResponseFieldTeamMember)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTeamMemberResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getTeamMemberResponseFieldErrors)
+}
+
 func (g *GetTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetTeamMemberResponse
 	var value unmarshaler
@@ -318,6 +608,17 @@ func (g *GetTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetTeamMemberResponse) MarshalJSON() ([]byte, error) {
+	type embed GetTeamMemberResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetTeamMemberResponse) String() string {
@@ -339,6 +640,12 @@ func (g *GetTeamMemberResponse) String() string {
 // filter = (locations_ids = ["A", "B"], status = ACTIVE)
 // ```
 // returns only active team members assigned to either location "A" or "B".
+var (
+	searchTeamMembersFilterFieldLocationIDs = big.NewInt(1 << 0)
+	searchTeamMembersFilterFieldStatus      = big.NewInt(1 << 1)
+	searchTeamMembersFilterFieldIsOwner     = big.NewInt(1 << 2)
+)
+
 type SearchTeamMembersFilter struct {
 	// When present, filters by team members assigned to the specified locations.
 	// When empty, includes team members assigned to any location.
@@ -349,6 +656,9 @@ type SearchTeamMembersFilter struct {
 	Status *TeamMemberStatus `json:"status,omitempty" url:"status,omitempty"`
 	// When present and set to true, returns the team member who is the owner of the Square account.
 	IsOwner *bool `json:"is_owner,omitempty" url:"is_owner,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -379,6 +689,34 @@ func (s *SearchTeamMembersFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchTeamMembersFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersFilter) SetLocationIDs(locationIDs []string) {
+	s.LocationIDs = locationIDs
+	s.require(searchTeamMembersFilterFieldLocationIDs)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersFilter) SetStatus(status *TeamMemberStatus) {
+	s.Status = status
+	s.require(searchTeamMembersFilterFieldStatus)
+}
+
+// SetIsOwner sets the IsOwner field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersFilter) SetIsOwner(isOwner *bool) {
+	s.IsOwner = isOwner
+	s.require(searchTeamMembersFilterFieldIsOwner)
+}
+
 func (s *SearchTeamMembersFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchTeamMembersFilter
 	var value unmarshaler
@@ -395,6 +733,17 @@ func (s *SearchTeamMembersFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchTeamMembersFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchTeamMembersFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchTeamMembersFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -408,9 +757,16 @@ func (s *SearchTeamMembersFilter) String() string {
 }
 
 // Represents the parameters in a search for `TeamMember` objects.
+var (
+	searchTeamMembersQueryFieldFilter = big.NewInt(1 << 0)
+)
+
 type SearchTeamMembersQuery struct {
 	// The options to filter by.
 	Filter *SearchTeamMembersFilter `json:"filter,omitempty" url:"filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -425,6 +781,20 @@ func (s *SearchTeamMembersQuery) GetFilter() *SearchTeamMembersFilter {
 
 func (s *SearchTeamMembersQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
+}
+
+func (s *SearchTeamMembersQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersQuery) SetFilter(filter *SearchTeamMembersFilter) {
+	s.Filter = filter
+	s.require(searchTeamMembersQueryFieldFilter)
 }
 
 func (s *SearchTeamMembersQuery) UnmarshalJSON(data []byte) error {
@@ -443,6 +813,17 @@ func (s *SearchTeamMembersQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchTeamMembersQuery) MarshalJSON() ([]byte, error) {
+	type embed SearchTeamMembersQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchTeamMembersQuery) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -456,6 +837,12 @@ func (s *SearchTeamMembersQuery) String() string {
 }
 
 // Represents a response from a search request containing a filtered list of `TeamMember` objects.
+var (
+	searchTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
+	searchTeamMembersResponseFieldCursor      = big.NewInt(1 << 1)
+	searchTeamMembersResponseFieldErrors      = big.NewInt(1 << 2)
+)
+
 type SearchTeamMembersResponse struct {
 	// The filtered list of `TeamMember` objects.
 	TeamMembers []*TeamMember `json:"team_members,omitempty" url:"team_members,omitempty"`
@@ -464,6 +851,9 @@ type SearchTeamMembersResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -494,6 +884,34 @@ func (s *SearchTeamMembersResponse) GetExtraProperties() map[string]interface{} 
 	return s.extraProperties
 }
 
+func (s *SearchTeamMembersResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTeamMembers sets the TeamMembers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersResponse) SetTeamMembers(teamMembers []*TeamMember) {
+	s.TeamMembers = teamMembers
+	s.require(searchTeamMembersResponseFieldTeamMembers)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTeamMembersResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTeamMembersResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchTeamMembersResponseFieldErrors)
+}
+
 func (s *SearchTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchTeamMembersResponse
 	var value unmarshaler
@@ -510,6 +928,17 @@ func (s *SearchTeamMembersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchTeamMembersResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchTeamMembersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchTeamMembersResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -523,6 +952,21 @@ func (s *SearchTeamMembersResponse) String() string {
 }
 
 // A record representing an individual team member for a business.
+var (
+	teamMemberFieldID                = big.NewInt(1 << 0)
+	teamMemberFieldReferenceID       = big.NewInt(1 << 1)
+	teamMemberFieldIsOwner           = big.NewInt(1 << 2)
+	teamMemberFieldStatus            = big.NewInt(1 << 3)
+	teamMemberFieldGivenName         = big.NewInt(1 << 4)
+	teamMemberFieldFamilyName        = big.NewInt(1 << 5)
+	teamMemberFieldEmailAddress      = big.NewInt(1 << 6)
+	teamMemberFieldPhoneNumber       = big.NewInt(1 << 7)
+	teamMemberFieldCreatedAt         = big.NewInt(1 << 8)
+	teamMemberFieldUpdatedAt         = big.NewInt(1 << 9)
+	teamMemberFieldAssignedLocations = big.NewInt(1 << 10)
+	teamMemberFieldWageSetting       = big.NewInt(1 << 11)
+)
+
 type TeamMember struct {
 	// The unique ID for the team member.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -552,6 +996,9 @@ type TeamMember struct {
 	AssignedLocations *TeamMemberAssignedLocations `json:"assigned_locations,omitempty" url:"assigned_locations,omitempty"`
 	// Information about the team member's overtime exemption status, job assignments, and compensation.
 	WageSetting *WageSetting `json:"wage_setting,omitempty" url:"wage_setting,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -645,6 +1092,97 @@ func (t *TeamMember) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TeamMember) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetID(id *string) {
+	t.ID = id
+	t.require(teamMemberFieldID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetReferenceID(referenceID *string) {
+	t.ReferenceID = referenceID
+	t.require(teamMemberFieldReferenceID)
+}
+
+// SetIsOwner sets the IsOwner field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetIsOwner(isOwner *bool) {
+	t.IsOwner = isOwner
+	t.require(teamMemberFieldIsOwner)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetStatus(status *TeamMemberStatus) {
+	t.Status = status
+	t.require(teamMemberFieldStatus)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetGivenName(givenName *string) {
+	t.GivenName = givenName
+	t.require(teamMemberFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetFamilyName(familyName *string) {
+	t.FamilyName = familyName
+	t.require(teamMemberFieldFamilyName)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetEmailAddress(emailAddress *string) {
+	t.EmailAddress = emailAddress
+	t.require(teamMemberFieldEmailAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetPhoneNumber(phoneNumber *string) {
+	t.PhoneNumber = phoneNumber
+	t.require(teamMemberFieldPhoneNumber)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetCreatedAt(createdAt *string) {
+	t.CreatedAt = createdAt
+	t.require(teamMemberFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetUpdatedAt(updatedAt *string) {
+	t.UpdatedAt = updatedAt
+	t.require(teamMemberFieldUpdatedAt)
+}
+
+// SetAssignedLocations sets the AssignedLocations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetAssignedLocations(assignedLocations *TeamMemberAssignedLocations) {
+	t.AssignedLocations = assignedLocations
+	t.require(teamMemberFieldAssignedLocations)
+}
+
+// SetWageSetting sets the WageSetting field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMember) SetWageSetting(wageSetting *WageSetting) {
+	t.WageSetting = wageSetting
+	t.require(teamMemberFieldWageSetting)
+}
+
 func (t *TeamMember) UnmarshalJSON(data []byte) error {
 	type unmarshaler TeamMember
 	var value unmarshaler
@@ -661,6 +1199,17 @@ func (t *TeamMember) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TeamMember) MarshalJSON() ([]byte, error) {
+	type embed TeamMember
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TeamMember) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -674,12 +1223,20 @@ func (t *TeamMember) String() string {
 }
 
 // An object that represents a team member's assignment to locations.
+var (
+	teamMemberAssignedLocationsFieldAssignmentType = big.NewInt(1 << 0)
+	teamMemberAssignedLocationsFieldLocationIDs    = big.NewInt(1 << 1)
+)
+
 type TeamMemberAssignedLocations struct {
 	// The current assignment type of the team member.
 	// See [TeamMemberAssignedLocationsAssignmentType](#type-teammemberassignedlocationsassignmenttype) for possible values
 	AssignmentType *TeamMemberAssignedLocationsAssignmentType `json:"assignment_type,omitempty" url:"assignment_type,omitempty"`
 	// The explicit locations that the team member is assigned to.
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -703,6 +1260,27 @@ func (t *TeamMemberAssignedLocations) GetExtraProperties() map[string]interface{
 	return t.extraProperties
 }
 
+func (t *TeamMemberAssignedLocations) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetAssignmentType sets the AssignmentType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMemberAssignedLocations) SetAssignmentType(assignmentType *TeamMemberAssignedLocationsAssignmentType) {
+	t.AssignmentType = assignmentType
+	t.require(teamMemberAssignedLocationsFieldAssignmentType)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TeamMemberAssignedLocations) SetLocationIDs(locationIDs []string) {
+	t.LocationIDs = locationIDs
+	t.require(teamMemberAssignedLocationsFieldLocationIDs)
+}
+
 func (t *TeamMemberAssignedLocations) UnmarshalJSON(data []byte) error {
 	type unmarshaler TeamMemberAssignedLocations
 	var value unmarshaler
@@ -717,6 +1295,17 @@ func (t *TeamMemberAssignedLocations) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TeamMemberAssignedLocations) MarshalJSON() ([]byte, error) {
+	type embed TeamMemberAssignedLocations
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TeamMemberAssignedLocations) String() string {
@@ -778,11 +1367,18 @@ func (t TeamMemberStatus) Ptr() *TeamMemberStatus {
 }
 
 // Represents an update request for a `TeamMember` object.
+var (
+	updateTeamMemberRequestFieldTeamMember = big.NewInt(1 << 0)
+)
+
 type UpdateTeamMemberRequest struct {
 	// The team member fields to add, change, or clear. Fields can be cleared using a null value. To update
 	// `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed, call
 	// [ListJobs](api-endpoint:Team-ListJobs) to get the required `job_id` values.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -797,6 +1393,20 @@ func (u *UpdateTeamMemberRequest) GetTeamMember() *TeamMember {
 
 func (u *UpdateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
+}
+
+func (u *UpdateTeamMemberRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTeamMember sets the TeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTeamMemberRequest) SetTeamMember(teamMember *TeamMember) {
+	u.TeamMember = teamMember
+	u.require(updateTeamMemberRequestFieldTeamMember)
 }
 
 func (u *UpdateTeamMemberRequest) UnmarshalJSON(data []byte) error {
@@ -815,6 +1425,17 @@ func (u *UpdateTeamMemberRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateTeamMemberRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateTeamMemberRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateTeamMemberRequest) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -828,11 +1449,19 @@ func (u *UpdateTeamMemberRequest) String() string {
 }
 
 // Represents a response from an update request containing the updated `TeamMember` object or error messages.
+var (
+	updateTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
+	updateTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
+)
+
 type UpdateTeamMemberResponse struct {
 	// The successfully updated `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -856,6 +1485,27 @@ func (u *UpdateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateTeamMemberResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTeamMember sets the TeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTeamMemberResponse) SetTeamMember(teamMember *TeamMember) {
+	u.TeamMember = teamMember
+	u.require(updateTeamMemberResponseFieldTeamMember)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTeamMemberResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateTeamMemberResponseFieldErrors)
+}
+
 func (u *UpdateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateTeamMemberResponse
 	var value unmarshaler
@@ -872,6 +1522,17 @@ func (u *UpdateTeamMemberResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateTeamMemberResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateTeamMemberResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateTeamMemberResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -884,10 +1545,31 @@ func (u *UpdateTeamMemberResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateTeamMembersRequestFieldTeamMemberID = big.NewInt(1 << 0)
+)
+
 type UpdateTeamMembersRequest struct {
 	// The ID of the team member to update.
 	TeamMemberID string                   `json:"-" url:"-"`
 	Body         *UpdateTeamMemberRequest `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateTeamMembersRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTeamMembersRequest) SetTeamMemberID(teamMemberID string) {
+	u.TeamMemberID = teamMemberID
+	u.require(updateTeamMembersRequestFieldTeamMemberID)
 }
 
 func (u *UpdateTeamMembersRequest) UnmarshalJSON(data []byte) error {

@@ -4,7 +4,7 @@ package payments
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -49,9 +48,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListPaymentsRequest,
+	request *square.ListPaymentsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Payment], error) {
+) (*core.Page[*string, *square.Payment, *square.ListPaymentsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -64,10 +63,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -86,14 +85,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListPaymentsResponse) *internal.PageResponse[*string, *v2.Payment] {
+	readPageResponse := func(response *square.ListPaymentsResponse) *core.PageResponse[*string, *square.Payment, *square.ListPaymentsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetPayments()
-		return &internal.PageResponse[*string, *v2.Payment]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Payment, *square.ListPaymentsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -114,9 +114,9 @@ func (c *Client) List(
 // `Payment` object and returns it in the response.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreatePaymentRequest,
+	request *square.CreatePaymentRequest,
 	opts ...option.RequestOption,
-) (*v2.CreatePaymentResponse, error) {
+) (*square.CreatePaymentResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -141,9 +141,9 @@ func (c *Client) Create(
 // returns successfully.
 func (c *Client) CancelByIdempotencyKey(
 	ctx context.Context,
-	request *v2.CancelPaymentByIdempotencyKeyRequest,
+	request *square.CancelPaymentByIdempotencyKeyRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelPaymentByIdempotencyKeyResponse, error) {
+) (*square.CancelPaymentByIdempotencyKeyResponse, error) {
 	response, err := c.WithRawResponse.CancelByIdempotencyKey(
 		ctx,
 		request,
@@ -158,9 +158,9 @@ func (c *Client) CancelByIdempotencyKey(
 // Retrieves details for a specific payment.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetPaymentsRequest,
+	request *square.GetPaymentsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetPaymentResponse, error) {
+) (*square.GetPaymentResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -176,9 +176,9 @@ func (c *Client) Get(
 // You can update the `amount_money` and `tip_money` using this endpoint.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdatePaymentRequest,
+	request *square.UpdatePaymentRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdatePaymentResponse, error) {
+) (*square.UpdatePaymentResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -194,9 +194,9 @@ func (c *Client) Update(
 // the APPROVED `status`.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *v2.CancelPaymentsRequest,
+	request *square.CancelPaymentsRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelPaymentResponse, error) {
+) (*square.CancelPaymentResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,
@@ -214,9 +214,9 @@ func (c *Client) Cancel(
 // You can use this endpoint to complete a payment with the APPROVED `status`.
 func (c *Client) Complete(
 	ctx context.Context,
-	request *v2.CompletePaymentRequest,
+	request *square.CompletePaymentRequest,
 	opts ...option.RequestOption,
-) (*v2.CompletePaymentResponse, error) {
+) (*square.CompletePaymentResponse, error) {
 	response, err := c.WithRawResponse.Complete(
 		ctx,
 		request,

@@ -4,6 +4,12 @@ package cashdrawers
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	getShiftsRequestFieldShiftID    = big.NewInt(1 << 0)
+	getShiftsRequestFieldLocationID = big.NewInt(1 << 1)
 )
 
 type GetShiftsRequest struct {
@@ -11,7 +17,40 @@ type GetShiftsRequest struct {
 	ShiftID string `json:"-" url:"-"`
 	// The ID of the location to retrieve cash drawer shifts from.
 	LocationID string `json:"-" url:"location_id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetShiftsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetShiftID sets the ShiftID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetShiftsRequest) SetShiftID(shiftID string) {
+	g.ShiftID = shiftID
+	g.require(getShiftsRequestFieldShiftID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetShiftsRequest) SetLocationID(locationID string) {
+	g.LocationID = locationID
+	g.require(getShiftsRequestFieldLocationID)
+}
+
+var (
+	listShiftsRequestFieldLocationID = big.NewInt(1 << 0)
+	listShiftsRequestFieldSortOrder  = big.NewInt(1 << 1)
+	listShiftsRequestFieldBeginTime  = big.NewInt(1 << 2)
+	listShiftsRequestFieldEndTime    = big.NewInt(1 << 3)
+	listShiftsRequestFieldLimit      = big.NewInt(1 << 4)
+	listShiftsRequestFieldCursor     = big.NewInt(1 << 5)
+)
 
 type ListShiftsRequest struct {
 	// The ID of the location to query for a list of cash drawer shifts.
@@ -28,7 +67,66 @@ type ListShiftsRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// Opaque cursor for fetching the next page of results.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListShiftsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetLocationID(locationID string) {
+	l.LocationID = locationID
+	l.require(listShiftsRequestFieldLocationID)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetSortOrder(sortOrder *v2.SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listShiftsRequestFieldSortOrder)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetBeginTime(beginTime *string) {
+	l.BeginTime = beginTime
+	l.require(listShiftsRequestFieldBeginTime)
+}
+
+// SetEndTime sets the EndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetEndTime(endTime *string) {
+	l.EndTime = endTime
+	l.require(listShiftsRequestFieldEndTime)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listShiftsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListShiftsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listShiftsRequestFieldCursor)
+}
+
+var (
+	listEventsShiftsRequestFieldShiftID    = big.NewInt(1 << 0)
+	listEventsShiftsRequestFieldLocationID = big.NewInt(1 << 1)
+	listEventsShiftsRequestFieldLimit      = big.NewInt(1 << 2)
+	listEventsShiftsRequestFieldCursor     = big.NewInt(1 << 3)
+)
 
 type ListEventsShiftsRequest struct {
 	// The shift ID.
@@ -40,4 +138,42 @@ type ListEventsShiftsRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// Opaque cursor for fetching the next page of results.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListEventsShiftsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetShiftID sets the ShiftID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsShiftsRequest) SetShiftID(shiftID string) {
+	l.ShiftID = shiftID
+	l.require(listEventsShiftsRequestFieldShiftID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsShiftsRequest) SetLocationID(locationID string) {
+	l.LocationID = locationID
+	l.require(listEventsShiftsRequestFieldLocationID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsShiftsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listEventsShiftsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsShiftsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEventsShiftsRequestFieldCursor)
 }

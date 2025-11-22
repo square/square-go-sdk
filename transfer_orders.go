@@ -6,6 +6,13 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	cancelTransferOrderRequestFieldTransferOrderID = big.NewInt(1 << 0)
+	cancelTransferOrderRequestFieldIdempotencyKey  = big.NewInt(1 << 1)
+	cancelTransferOrderRequestFieldVersion         = big.NewInt(1 << 2)
 )
 
 type CancelTransferOrderRequest struct {
@@ -16,7 +23,43 @@ type CancelTransferOrderRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelTransferOrderRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelTransferOrderRequest) SetTransferOrderID(transferOrderID string) {
+	c.TransferOrderID = transferOrderID
+	c.require(cancelTransferOrderRequestFieldTransferOrderID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(cancelTransferOrderRequestFieldIdempotencyKey)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelTransferOrderRequest) SetVersion(version *int64) {
+	c.Version = version
+	c.require(cancelTransferOrderRequestFieldVersion)
+}
+
+var (
+	createTransferOrderRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTransferOrderRequestFieldTransferOrder  = big.NewInt(1 << 1)
+)
 
 type CreateTransferOrderRequest struct {
 	// A unique string that identifies this CreateTransferOrder request. Keys can be
@@ -24,19 +67,100 @@ type CreateTransferOrderRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The transfer order to create
 	TransferOrder *CreateTransferOrderData `json:"transfer_order,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateTransferOrderRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTransferOrderRequestFieldIdempotencyKey)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderRequest) SetTransferOrder(transferOrder *CreateTransferOrderData) {
+	c.TransferOrder = transferOrder
+	c.require(createTransferOrderRequestFieldTransferOrder)
+}
+
+var (
+	deleteTransferOrdersRequestFieldTransferOrderID = big.NewInt(1 << 0)
+	deleteTransferOrdersRequestFieldVersion         = big.NewInt(1 << 1)
+)
 
 type DeleteTransferOrdersRequest struct {
 	// The ID of the transfer order to delete
 	TransferOrderID string `json:"-" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteTransferOrdersRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteTransferOrdersRequest) SetTransferOrderID(transferOrderID string) {
+	d.TransferOrderID = transferOrderID
+	d.require(deleteTransferOrdersRequestFieldTransferOrderID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteTransferOrdersRequest) SetVersion(version *int64) {
+	d.Version = version
+	d.require(deleteTransferOrdersRequestFieldVersion)
+}
+
+var (
+	getTransferOrdersRequestFieldTransferOrderID = big.NewInt(1 << 0)
+)
 
 type GetTransferOrdersRequest struct {
 	// The ID of the transfer order to retrieve
 	TransferOrderID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTransferOrdersRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTransferOrdersRequest) SetTransferOrderID(transferOrderID string) {
+	g.TransferOrderID = transferOrderID
+	g.require(getTransferOrdersRequestFieldTransferOrderID)
+}
+
+var (
+	receiveTransferOrderRequestFieldTransferOrderID = big.NewInt(1 << 0)
+	receiveTransferOrderRequestFieldIdempotencyKey  = big.NewInt(1 << 1)
+	receiveTransferOrderRequestFieldReceipt         = big.NewInt(1 << 2)
+	receiveTransferOrderRequestFieldVersion         = big.NewInt(1 << 3)
+)
 
 type ReceiveTransferOrderRequest struct {
 	// The ID of the transfer order to receive items for
@@ -47,7 +171,51 @@ type ReceiveTransferOrderRequest struct {
 	Receipt *TransferOrderGoodsReceipt `json:"receipt,omitempty" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *ReceiveTransferOrderRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderRequest) SetTransferOrderID(transferOrderID string) {
+	r.TransferOrderID = transferOrderID
+	r.require(receiveTransferOrderRequestFieldTransferOrderID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	r.IdempotencyKey = idempotencyKey
+	r.require(receiveTransferOrderRequestFieldIdempotencyKey)
+}
+
+// SetReceipt sets the Receipt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderRequest) SetReceipt(receipt *TransferOrderGoodsReceipt) {
+	r.Receipt = receipt
+	r.require(receiveTransferOrderRequestFieldReceipt)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderRequest) SetVersion(version *int64) {
+	r.Version = version
+	r.require(receiveTransferOrderRequestFieldVersion)
+}
+
+var (
+	searchTransferOrdersRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTransferOrdersRequestFieldCursor = big.NewInt(1 << 1)
+	searchTransferOrdersRequestFieldLimit  = big.NewInt(1 << 2)
+)
 
 type SearchTransferOrdersRequest struct {
 	// The search query
@@ -56,7 +224,44 @@ type SearchTransferOrdersRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"-"`
 	// Maximum number of results to return (1-100)
 	Limit *int `json:"limit,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchTransferOrdersRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersRequest) SetQuery(query *TransferOrderQuery) {
+	s.Query = query
+	s.require(searchTransferOrdersRequestFieldQuery)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTransferOrdersRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTransferOrdersRequestFieldLimit)
+}
+
+var (
+	startTransferOrderRequestFieldTransferOrderID = big.NewInt(1 << 0)
+	startTransferOrderRequestFieldIdempotencyKey  = big.NewInt(1 << 1)
+	startTransferOrderRequestFieldVersion         = big.NewInt(1 << 2)
+)
 
 type StartTransferOrderRequest struct {
 	// The ID of the transfer order to start. Must be in DRAFT status.
@@ -66,14 +271,53 @@ type StartTransferOrderRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *StartTransferOrderRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StartTransferOrderRequest) SetTransferOrderID(transferOrderID string) {
+	s.TransferOrderID = transferOrderID
+	s.require(startTransferOrderRequestFieldTransferOrderID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StartTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	s.IdempotencyKey = idempotencyKey
+	s.require(startTransferOrderRequestFieldIdempotencyKey)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StartTransferOrderRequest) SetVersion(version *int64) {
+	s.Version = version
+	s.require(startTransferOrderRequestFieldVersion)
 }
 
 // Response for canceling a transfer order
+var (
+	cancelTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	cancelTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type CancelTransferOrderResponse struct {
 	// The updated transfer order with status changed to CANCELED
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -97,6 +341,27 @@ func (c *CancelTransferOrderResponse) GetExtraProperties() map[string]interface{
 	return c.extraProperties
 }
 
+func (c *CancelTransferOrderResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	c.TransferOrder = transferOrder
+	c.require(cancelTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelTransferOrderResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelTransferOrderResponseFieldErrors)
+}
+
 func (c *CancelTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CancelTransferOrderResponse
 	var value unmarshaler
@@ -111,6 +376,17 @@ func (c *CancelTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CancelTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CancelTransferOrderResponse) String() string {
@@ -128,6 +404,16 @@ func (c *CancelTransferOrderResponse) String() string {
 // Data for creating a new transfer order to move [CatalogItemVariation](entity:CatalogItemVariation)s
 // between [Location](entity:Location)s. Used with the [CreateTransferOrder](api-endpoint:TransferOrders-CreateTransferOrder)
 // endpoint.
+var (
+	createTransferOrderDataFieldSourceLocationID      = big.NewInt(1 << 0)
+	createTransferOrderDataFieldDestinationLocationID = big.NewInt(1 << 1)
+	createTransferOrderDataFieldExpectedAt            = big.NewInt(1 << 2)
+	createTransferOrderDataFieldNotes                 = big.NewInt(1 << 3)
+	createTransferOrderDataFieldTrackingNumber        = big.NewInt(1 << 4)
+	createTransferOrderDataFieldCreatedByTeamMemberID = big.NewInt(1 << 5)
+	createTransferOrderDataFieldLineItems             = big.NewInt(1 << 6)
+)
+
 type CreateTransferOrderData struct {
 	// The source [Location](entity:Location) that will send the items. Must be an active location
 	// in your Square account with sufficient inventory of the requested items.
@@ -146,6 +432,9 @@ type CreateTransferOrderData struct {
 	CreatedByTeamMemberID *string `json:"created_by_team_member_id,omitempty" url:"created_by_team_member_id,omitempty"`
 	// List of [CatalogItemVariation](entity:CatalogItemVariation)s to transfer, including quantities
 	LineItems []*CreateTransferOrderLineData `json:"line_items,omitempty" url:"line_items,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -204,6 +493,62 @@ func (c *CreateTransferOrderData) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateTransferOrderData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetSourceLocationID sets the SourceLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetSourceLocationID(sourceLocationID string) {
+	c.SourceLocationID = sourceLocationID
+	c.require(createTransferOrderDataFieldSourceLocationID)
+}
+
+// SetDestinationLocationID sets the DestinationLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetDestinationLocationID(destinationLocationID string) {
+	c.DestinationLocationID = destinationLocationID
+	c.require(createTransferOrderDataFieldDestinationLocationID)
+}
+
+// SetExpectedAt sets the ExpectedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetExpectedAt(expectedAt *string) {
+	c.ExpectedAt = expectedAt
+	c.require(createTransferOrderDataFieldExpectedAt)
+}
+
+// SetNotes sets the Notes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetNotes(notes *string) {
+	c.Notes = notes
+	c.require(createTransferOrderDataFieldNotes)
+}
+
+// SetTrackingNumber sets the TrackingNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetTrackingNumber(trackingNumber *string) {
+	c.TrackingNumber = trackingNumber
+	c.require(createTransferOrderDataFieldTrackingNumber)
+}
+
+// SetCreatedByTeamMemberID sets the CreatedByTeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetCreatedByTeamMemberID(createdByTeamMemberID *string) {
+	c.CreatedByTeamMemberID = createdByTeamMemberID
+	c.require(createTransferOrderDataFieldCreatedByTeamMemberID)
+}
+
+// SetLineItems sets the LineItems field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderData) SetLineItems(lineItems []*CreateTransferOrderLineData) {
+	c.LineItems = lineItems
+	c.require(createTransferOrderDataFieldLineItems)
+}
+
 func (c *CreateTransferOrderData) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTransferOrderData
 	var value unmarshaler
@@ -220,6 +565,17 @@ func (c *CreateTransferOrderData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTransferOrderData) MarshalJSON() ([]byte, error) {
+	type embed CreateTransferOrderData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTransferOrderData) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -234,6 +590,11 @@ func (c *CreateTransferOrderData) String() string {
 
 // Data for creating a new transfer order line item. Each line item specifies a
 // [CatalogItemVariation](entity:CatalogItemVariation) and quantity to transfer.
+var (
+	createTransferOrderLineDataFieldItemVariationID = big.NewInt(1 << 0)
+	createTransferOrderLineDataFieldQuantityOrdered = big.NewInt(1 << 1)
+)
+
 type CreateTransferOrderLineData struct {
 	// ID of the [CatalogItemVariation](entity:CatalogItemVariation) to transfer. Must reference a valid
 	// item variation in the [Catalog](api:Catalog). The item variation must be:
@@ -243,6 +604,9 @@ type CreateTransferOrderLineData struct {
 	ItemVariationID string `json:"item_variation_id" url:"item_variation_id"`
 	// Total quantity ordered
 	QuantityOrdered string `json:"quantity_ordered" url:"quantity_ordered"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -266,6 +630,27 @@ func (c *CreateTransferOrderLineData) GetExtraProperties() map[string]interface{
 	return c.extraProperties
 }
 
+func (c *CreateTransferOrderLineData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetItemVariationID sets the ItemVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderLineData) SetItemVariationID(itemVariationID string) {
+	c.ItemVariationID = itemVariationID
+	c.require(createTransferOrderLineDataFieldItemVariationID)
+}
+
+// SetQuantityOrdered sets the QuantityOrdered field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderLineData) SetQuantityOrdered(quantityOrdered string) {
+	c.QuantityOrdered = quantityOrdered
+	c.require(createTransferOrderLineDataFieldQuantityOrdered)
+}
+
 func (c *CreateTransferOrderLineData) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTransferOrderLineData
 	var value unmarshaler
@@ -282,6 +667,17 @@ func (c *CreateTransferOrderLineData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTransferOrderLineData) MarshalJSON() ([]byte, error) {
+	type embed CreateTransferOrderLineData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTransferOrderLineData) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -295,11 +691,19 @@ func (c *CreateTransferOrderLineData) String() string {
 }
 
 // Response for creating a transfer order.
+var (
+	createTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	createTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type CreateTransferOrderResponse struct {
 	// The created transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -323,6 +727,27 @@ func (c *CreateTransferOrderResponse) GetExtraProperties() map[string]interface{
 	return c.extraProperties
 }
 
+func (c *CreateTransferOrderResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	c.TransferOrder = transferOrder
+	c.require(createTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferOrderResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createTransferOrderResponseFieldErrors)
+}
+
 func (c *CreateTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTransferOrderResponse
 	var value unmarshaler
@@ -339,6 +764,17 @@ func (c *CreateTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTransferOrderResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -352,9 +788,16 @@ func (c *CreateTransferOrderResponse) String() string {
 }
 
 // Response for deleting a transfer order
+var (
+	deleteTransferOrderResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteTransferOrderResponse struct {
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -369,6 +812,20 @@ func (d *DeleteTransferOrderResponse) GetErrors() []*Error {
 
 func (d *DeleteTransferOrderResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteTransferOrderResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteTransferOrderResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteTransferOrderResponseFieldErrors)
 }
 
 func (d *DeleteTransferOrderResponse) UnmarshalJSON(data []byte) error {
@@ -387,6 +844,17 @@ func (d *DeleteTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteTransferOrderResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -400,11 +868,19 @@ func (d *DeleteTransferOrderResponse) String() string {
 }
 
 // Response for receiving items for a transfer order
+var (
+	receiveTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	receiveTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type ReceiveTransferOrderResponse struct {
 	// The updated transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -428,6 +904,27 @@ func (r *ReceiveTransferOrderResponse) GetExtraProperties() map[string]interface
 	return r.extraProperties
 }
 
+func (r *ReceiveTransferOrderResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	r.TransferOrder = transferOrder
+	r.require(receiveTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReceiveTransferOrderResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(receiveTransferOrderResponseFieldErrors)
+}
+
 func (r *ReceiveTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ReceiveTransferOrderResponse
 	var value unmarshaler
@@ -444,6 +941,17 @@ func (r *ReceiveTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *ReceiveTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed ReceiveTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *ReceiveTransferOrderResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -457,11 +965,19 @@ func (r *ReceiveTransferOrderResponse) String() string {
 }
 
 // Response containing the requested transfer order
+var (
+	retrieveTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	retrieveTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type RetrieveTransferOrderResponse struct {
 	// The requested transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -485,6 +1001,27 @@ func (r *RetrieveTransferOrderResponse) GetExtraProperties() map[string]interfac
 	return r.extraProperties
 }
 
+func (r *RetrieveTransferOrderResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	r.TransferOrder = transferOrder
+	r.require(retrieveTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTransferOrderResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveTransferOrderResponseFieldErrors)
+}
+
 func (r *RetrieveTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveTransferOrderResponse
 	var value unmarshaler
@@ -501,6 +1038,17 @@ func (r *RetrieveTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *RetrieveTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveTransferOrderResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -514,6 +1062,12 @@ func (r *RetrieveTransferOrderResponse) String() string {
 }
 
 // Response for searching transfer orders
+var (
+	searchTransferOrdersResponseFieldTransferOrders = big.NewInt(1 << 0)
+	searchTransferOrdersResponseFieldCursor         = big.NewInt(1 << 1)
+	searchTransferOrdersResponseFieldErrors         = big.NewInt(1 << 2)
+)
+
 type SearchTransferOrdersResponse struct {
 	// List of transfer orders matching the search criteria
 	TransferOrders []*TransferOrder `json:"transfer_orders,omitempty" url:"transfer_orders,omitempty"`
@@ -521,6 +1075,9 @@ type SearchTransferOrdersResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -551,6 +1108,34 @@ func (s *SearchTransferOrdersResponse) GetExtraProperties() map[string]interface
 	return s.extraProperties
 }
 
+func (s *SearchTransferOrdersResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTransferOrders sets the TransferOrders field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersResponse) SetTransferOrders(transferOrders []*TransferOrder) {
+	s.TransferOrders = transferOrders
+	s.require(searchTransferOrdersResponseFieldTransferOrders)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTransferOrdersResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTransferOrdersResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchTransferOrdersResponseFieldErrors)
+}
+
 func (s *SearchTransferOrdersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchTransferOrdersResponse
 	var value unmarshaler
@@ -567,6 +1152,17 @@ func (s *SearchTransferOrdersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchTransferOrdersResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchTransferOrdersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchTransferOrdersResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -580,11 +1176,19 @@ func (s *SearchTransferOrdersResponse) String() string {
 }
 
 // Response for starting a transfer order.
+var (
+	startTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	startTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type StartTransferOrderResponse struct {
 	// The updated transfer order with status changed to STARTED
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -608,6 +1212,27 @@ func (s *StartTransferOrderResponse) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *StartTransferOrderResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StartTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	s.TransferOrder = transferOrder
+	s.require(startTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StartTransferOrderResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(startTransferOrderResponseFieldErrors)
+}
+
 func (s *StartTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler StartTransferOrderResponse
 	var value unmarshaler
@@ -622,6 +1247,17 @@ func (s *StartTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *StartTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed StartTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *StartTransferOrderResponse) String() string {
@@ -650,6 +1286,22 @@ func (s *StartTransferOrderResponse) String() string {
 // - Reconcile expected vs received quantities
 // - Monitor transfer progress and shipping status
 // - Audit inventory movement history
+var (
+	transferOrderFieldID                    = big.NewInt(1 << 0)
+	transferOrderFieldSourceLocationID      = big.NewInt(1 << 1)
+	transferOrderFieldDestinationLocationID = big.NewInt(1 << 2)
+	transferOrderFieldStatus                = big.NewInt(1 << 3)
+	transferOrderFieldCreatedAt             = big.NewInt(1 << 4)
+	transferOrderFieldUpdatedAt             = big.NewInt(1 << 5)
+	transferOrderFieldExpectedAt            = big.NewInt(1 << 6)
+	transferOrderFieldCompletedAt           = big.NewInt(1 << 7)
+	transferOrderFieldNotes                 = big.NewInt(1 << 8)
+	transferOrderFieldTrackingNumber        = big.NewInt(1 << 9)
+	transferOrderFieldCreatedByTeamMemberID = big.NewInt(1 << 10)
+	transferOrderFieldLineItems             = big.NewInt(1 << 11)
+	transferOrderFieldVersion               = big.NewInt(1 << 12)
+)
+
 type TransferOrder struct {
 	// Unique system-generated identifier for this transfer order. Use this ID for:
 	// - Retrieving transfer order details
@@ -717,6 +1369,9 @@ type TransferOrder struct {
 	// [UpdateTransferOrder](api-endpoint:TransferOrders-UpdateTransferOrder) and other endpoints to ensure you're
 	// not overwriting concurrent changes.
 	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -817,6 +1472,104 @@ func (t *TransferOrder) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TransferOrder) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetID(id *string) {
+	t.ID = id
+	t.require(transferOrderFieldID)
+}
+
+// SetSourceLocationID sets the SourceLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetSourceLocationID(sourceLocationID *string) {
+	t.SourceLocationID = sourceLocationID
+	t.require(transferOrderFieldSourceLocationID)
+}
+
+// SetDestinationLocationID sets the DestinationLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetDestinationLocationID(destinationLocationID *string) {
+	t.DestinationLocationID = destinationLocationID
+	t.require(transferOrderFieldDestinationLocationID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetStatus(status *TransferOrderStatus) {
+	t.Status = status
+	t.require(transferOrderFieldStatus)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetCreatedAt(createdAt *string) {
+	t.CreatedAt = createdAt
+	t.require(transferOrderFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetUpdatedAt(updatedAt *string) {
+	t.UpdatedAt = updatedAt
+	t.require(transferOrderFieldUpdatedAt)
+}
+
+// SetExpectedAt sets the ExpectedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetExpectedAt(expectedAt *string) {
+	t.ExpectedAt = expectedAt
+	t.require(transferOrderFieldExpectedAt)
+}
+
+// SetCompletedAt sets the CompletedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetCompletedAt(completedAt *string) {
+	t.CompletedAt = completedAt
+	t.require(transferOrderFieldCompletedAt)
+}
+
+// SetNotes sets the Notes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetNotes(notes *string) {
+	t.Notes = notes
+	t.require(transferOrderFieldNotes)
+}
+
+// SetTrackingNumber sets the TrackingNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetTrackingNumber(trackingNumber *string) {
+	t.TrackingNumber = trackingNumber
+	t.require(transferOrderFieldTrackingNumber)
+}
+
+// SetCreatedByTeamMemberID sets the CreatedByTeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetCreatedByTeamMemberID(createdByTeamMemberID *string) {
+	t.CreatedByTeamMemberID = createdByTeamMemberID
+	t.require(transferOrderFieldCreatedByTeamMemberID)
+}
+
+// SetLineItems sets the LineItems field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetLineItems(lineItems []*TransferOrderLine) {
+	t.LineItems = lineItems
+	t.require(transferOrderFieldLineItems)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrder) SetVersion(version *int64) {
+	t.Version = version
+	t.require(transferOrderFieldVersion)
+}
+
 func (t *TransferOrder) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrder
 	var value unmarshaler
@@ -833,6 +1586,17 @@ func (t *TransferOrder) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TransferOrder) MarshalJSON() ([]byte, error) {
+	type embed TransferOrder
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TransferOrder) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -846,6 +1610,12 @@ func (t *TransferOrder) String() string {
 }
 
 // Filter criteria for searching transfer orders
+var (
+	transferOrderFilterFieldSourceLocationIDs      = big.NewInt(1 << 0)
+	transferOrderFilterFieldDestinationLocationIDs = big.NewInt(1 << 1)
+	transferOrderFilterFieldStatuses               = big.NewInt(1 << 2)
+)
+
 type TransferOrderFilter struct {
 	// Filter by source location IDs
 	SourceLocationIDs []string `json:"source_location_ids,omitempty" url:"source_location_ids,omitempty"`
@@ -854,6 +1624,9 @@ type TransferOrderFilter struct {
 	// Filter by order statuses
 	// See [TransferOrderStatus](#type-transferorderstatus) for possible values
 	Statuses []TransferOrderStatus `json:"statuses,omitempty" url:"statuses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -884,6 +1657,34 @@ func (t *TransferOrderFilter) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TransferOrderFilter) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetSourceLocationIDs sets the SourceLocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderFilter) SetSourceLocationIDs(sourceLocationIDs []string) {
+	t.SourceLocationIDs = sourceLocationIDs
+	t.require(transferOrderFilterFieldSourceLocationIDs)
+}
+
+// SetDestinationLocationIDs sets the DestinationLocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderFilter) SetDestinationLocationIDs(destinationLocationIDs []string) {
+	t.DestinationLocationIDs = destinationLocationIDs
+	t.require(transferOrderFilterFieldDestinationLocationIDs)
+}
+
+// SetStatuses sets the Statuses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderFilter) SetStatuses(statuses []TransferOrderStatus) {
+	t.Statuses = statuses
+	t.require(transferOrderFilterFieldStatuses)
+}
+
 func (t *TransferOrderFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrderFilter
 	var value unmarshaler
@@ -898,6 +1699,17 @@ func (t *TransferOrderFilter) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TransferOrderFilter) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TransferOrderFilter) String() string {
@@ -930,6 +1742,10 @@ func (t *TransferOrderFilter) String() string {
 // - Updates the transfer order status
 // - Adjusts received quantities
 // - Updates inventory levels at both source and destination [Location](entity:Location)s
+var (
+	transferOrderGoodsReceiptFieldLineItems = big.NewInt(1 << 0)
+)
+
 type TransferOrderGoodsReceipt struct {
 	// Line items being received. Each line item specifies:
 	// - The item being received
@@ -944,6 +1760,9 @@ type TransferOrderGoodsReceipt struct {
 	// - Total of received, damaged, and canceled quantities cannot exceed ordered quantity
 	LineItems []*TransferOrderGoodsReceiptLineItem `json:"line_items,omitempty" url:"line_items,omitempty"`
 
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
 }
@@ -957,6 +1776,20 @@ func (t *TransferOrderGoodsReceipt) GetLineItems() []*TransferOrderGoodsReceiptL
 
 func (t *TransferOrderGoodsReceipt) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
+}
+
+func (t *TransferOrderGoodsReceipt) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetLineItems sets the LineItems field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderGoodsReceipt) SetLineItems(lineItems []*TransferOrderGoodsReceiptLineItem) {
+	t.LineItems = lineItems
+	t.require(transferOrderGoodsReceiptFieldLineItems)
 }
 
 func (t *TransferOrderGoodsReceipt) UnmarshalJSON(data []byte) error {
@@ -975,6 +1808,17 @@ func (t *TransferOrderGoodsReceipt) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TransferOrderGoodsReceipt) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderGoodsReceipt
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TransferOrderGoodsReceipt) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -988,6 +1832,13 @@ func (t *TransferOrderGoodsReceipt) String() string {
 }
 
 // A simplified line item for goods receipts in transfer orders
+var (
+	transferOrderGoodsReceiptLineItemFieldTransferOrderLineUID = big.NewInt(1 << 0)
+	transferOrderGoodsReceiptLineItemFieldQuantityReceived     = big.NewInt(1 << 1)
+	transferOrderGoodsReceiptLineItemFieldQuantityDamaged      = big.NewInt(1 << 2)
+	transferOrderGoodsReceiptLineItemFieldQuantityCanceled     = big.NewInt(1 << 3)
+)
+
 type TransferOrderGoodsReceiptLineItem struct {
 	// The unique identifier of the Transfer Order line being received
 	TransferOrderLineUID string `json:"transfer_order_line_uid" url:"transfer_order_line_uid"`
@@ -999,6 +1850,9 @@ type TransferOrderGoodsReceiptLineItem struct {
 	QuantityDamaged *string `json:"quantity_damaged,omitempty" url:"quantity_damaged,omitempty"`
 	// The quantity that was canceled during shipping/handling as a decimal string (e.g. "1.5"). These will be immediately added to inventory in the source location.
 	QuantityCanceled *string `json:"quantity_canceled,omitempty" url:"quantity_canceled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1036,6 +1890,41 @@ func (t *TransferOrderGoodsReceiptLineItem) GetExtraProperties() map[string]inte
 	return t.extraProperties
 }
 
+func (t *TransferOrderGoodsReceiptLineItem) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetTransferOrderLineUID sets the TransferOrderLineUID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderGoodsReceiptLineItem) SetTransferOrderLineUID(transferOrderLineUID string) {
+	t.TransferOrderLineUID = transferOrderLineUID
+	t.require(transferOrderGoodsReceiptLineItemFieldTransferOrderLineUID)
+}
+
+// SetQuantityReceived sets the QuantityReceived field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderGoodsReceiptLineItem) SetQuantityReceived(quantityReceived *string) {
+	t.QuantityReceived = quantityReceived
+	t.require(transferOrderGoodsReceiptLineItemFieldQuantityReceived)
+}
+
+// SetQuantityDamaged sets the QuantityDamaged field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderGoodsReceiptLineItem) SetQuantityDamaged(quantityDamaged *string) {
+	t.QuantityDamaged = quantityDamaged
+	t.require(transferOrderGoodsReceiptLineItemFieldQuantityDamaged)
+}
+
+// SetQuantityCanceled sets the QuantityCanceled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderGoodsReceiptLineItem) SetQuantityCanceled(quantityCanceled *string) {
+	t.QuantityCanceled = quantityCanceled
+	t.require(transferOrderGoodsReceiptLineItemFieldQuantityCanceled)
+}
+
 func (t *TransferOrderGoodsReceiptLineItem) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrderGoodsReceiptLineItem
 	var value unmarshaler
@@ -1050,6 +1939,17 @@ func (t *TransferOrderGoodsReceiptLineItem) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TransferOrderGoodsReceiptLineItem) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderGoodsReceiptLineItem
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TransferOrderGoodsReceiptLineItem) String() string {
@@ -1067,6 +1967,16 @@ func (t *TransferOrderGoodsReceiptLineItem) String() string {
 // Represents a line item in a transfer order. Each line item tracks a specific
 // [CatalogItemVariation](entity:CatalogItemVariation) being transferred, including ordered quantities
 // and receipt status.
+var (
+	transferOrderLineFieldUID              = big.NewInt(1 << 0)
+	transferOrderLineFieldItemVariationID  = big.NewInt(1 << 1)
+	transferOrderLineFieldQuantityOrdered  = big.NewInt(1 << 2)
+	transferOrderLineFieldQuantityPending  = big.NewInt(1 << 3)
+	transferOrderLineFieldQuantityReceived = big.NewInt(1 << 4)
+	transferOrderLineFieldQuantityDamaged  = big.NewInt(1 << 5)
+	transferOrderLineFieldQuantityCanceled = big.NewInt(1 << 6)
+)
+
 type TransferOrderLine struct {
 	// Unique system-generated identifier for the line item. Provide when updating/removing a line via [UpdateTransferOrder](api-endpoint:TransferOrders-UpdateTransferOrder).
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -1093,6 +2003,9 @@ type TransferOrderLine struct {
 	//
 	// This field cannot be updated directly in Create/Update operations, instead use [ReceiveTransferOrder](api-endpoint:TransferOrders-ReceiveTransferOrder) or [CancelTransferOrder](api-endpoint:TransferOrders-CancelTransferOrder).
 	QuantityCanceled *string `json:"quantity_canceled,omitempty" url:"quantity_canceled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1151,6 +2064,62 @@ func (t *TransferOrderLine) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TransferOrderLine) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetUID(uid *string) {
+	t.UID = uid
+	t.require(transferOrderLineFieldUID)
+}
+
+// SetItemVariationID sets the ItemVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetItemVariationID(itemVariationID string) {
+	t.ItemVariationID = itemVariationID
+	t.require(transferOrderLineFieldItemVariationID)
+}
+
+// SetQuantityOrdered sets the QuantityOrdered field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetQuantityOrdered(quantityOrdered string) {
+	t.QuantityOrdered = quantityOrdered
+	t.require(transferOrderLineFieldQuantityOrdered)
+}
+
+// SetQuantityPending sets the QuantityPending field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetQuantityPending(quantityPending *string) {
+	t.QuantityPending = quantityPending
+	t.require(transferOrderLineFieldQuantityPending)
+}
+
+// SetQuantityReceived sets the QuantityReceived field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetQuantityReceived(quantityReceived *string) {
+	t.QuantityReceived = quantityReceived
+	t.require(transferOrderLineFieldQuantityReceived)
+}
+
+// SetQuantityDamaged sets the QuantityDamaged field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetQuantityDamaged(quantityDamaged *string) {
+	t.QuantityDamaged = quantityDamaged
+	t.require(transferOrderLineFieldQuantityDamaged)
+}
+
+// SetQuantityCanceled sets the QuantityCanceled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderLine) SetQuantityCanceled(quantityCanceled *string) {
+	t.QuantityCanceled = quantityCanceled
+	t.require(transferOrderLineFieldQuantityCanceled)
+}
+
 func (t *TransferOrderLine) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrderLine
 	var value unmarshaler
@@ -1167,6 +2136,17 @@ func (t *TransferOrderLine) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TransferOrderLine) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderLine
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TransferOrderLine) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1180,11 +2160,19 @@ func (t *TransferOrderLine) String() string {
 }
 
 // Query parameters for searching transfer orders
+var (
+	transferOrderQueryFieldFilter = big.NewInt(1 << 0)
+	transferOrderQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type TransferOrderQuery struct {
 	// Filter criteria
 	Filter *TransferOrderFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Sort configuration
 	Sort *TransferOrderSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1208,6 +2196,27 @@ func (t *TransferOrderQuery) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TransferOrderQuery) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderQuery) SetFilter(filter *TransferOrderFilter) {
+	t.Filter = filter
+	t.require(transferOrderQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderQuery) SetSort(sort *TransferOrderSort) {
+	t.Sort = sort
+	t.require(transferOrderQueryFieldSort)
+}
+
 func (t *TransferOrderQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrderQuery
 	var value unmarshaler
@@ -1224,6 +2233,17 @@ func (t *TransferOrderQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TransferOrderQuery) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TransferOrderQuery) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1237,6 +2257,11 @@ func (t *TransferOrderQuery) String() string {
 }
 
 // Sort configuration for search results
+var (
+	transferOrderSortFieldField = big.NewInt(1 << 0)
+	transferOrderSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type TransferOrderSort struct {
 	// Field to sort by
 	// See [TransferOrderSortField](#type-transferordersortfield) for possible values
@@ -1244,6 +2269,9 @@ type TransferOrderSort struct {
 	// Sort order direction
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1267,6 +2295,27 @@ func (t *TransferOrderSort) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TransferOrderSort) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderSort) SetField(field *TransferOrderSortField) {
+	t.Field = field
+	t.require(transferOrderSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TransferOrderSort) SetOrder(order *SortOrder) {
+	t.Order = order
+	t.require(transferOrderSortFieldOrder)
+}
+
 func (t *TransferOrderSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler TransferOrderSort
 	var value unmarshaler
@@ -1281,6 +2330,17 @@ func (t *TransferOrderSort) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TransferOrderSort) MarshalJSON() ([]byte, error) {
+	type embed TransferOrderSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TransferOrderSort) String() string {
@@ -1355,6 +2415,15 @@ func (t TransferOrderStatus) Ptr() *TransferOrderStatus {
 }
 
 // Data model for updating a transfer order. All fields are optional.
+var (
+	updateTransferOrderDataFieldSourceLocationID      = big.NewInt(1 << 0)
+	updateTransferOrderDataFieldDestinationLocationID = big.NewInt(1 << 1)
+	updateTransferOrderDataFieldExpectedAt            = big.NewInt(1 << 2)
+	updateTransferOrderDataFieldNotes                 = big.NewInt(1 << 3)
+	updateTransferOrderDataFieldTrackingNumber        = big.NewInt(1 << 4)
+	updateTransferOrderDataFieldLineItems             = big.NewInt(1 << 5)
+)
+
 type UpdateTransferOrderData struct {
 	// The source [Location](entity:Location) that will send the items. Must be an active location
 	// in your Square account with sufficient inventory of the requested items.
@@ -1370,6 +2439,9 @@ type UpdateTransferOrderData struct {
 	TrackingNumber *string `json:"tracking_number,omitempty" url:"tracking_number,omitempty"`
 	// List of items being transferred
 	LineItems []*UpdateTransferOrderLineData `json:"line_items,omitempty" url:"line_items,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1421,6 +2493,55 @@ func (u *UpdateTransferOrderData) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateTransferOrderData) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSourceLocationID sets the SourceLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetSourceLocationID(sourceLocationID *string) {
+	u.SourceLocationID = sourceLocationID
+	u.require(updateTransferOrderDataFieldSourceLocationID)
+}
+
+// SetDestinationLocationID sets the DestinationLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetDestinationLocationID(destinationLocationID *string) {
+	u.DestinationLocationID = destinationLocationID
+	u.require(updateTransferOrderDataFieldDestinationLocationID)
+}
+
+// SetExpectedAt sets the ExpectedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetExpectedAt(expectedAt *string) {
+	u.ExpectedAt = expectedAt
+	u.require(updateTransferOrderDataFieldExpectedAt)
+}
+
+// SetNotes sets the Notes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetNotes(notes *string) {
+	u.Notes = notes
+	u.require(updateTransferOrderDataFieldNotes)
+}
+
+// SetTrackingNumber sets the TrackingNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetTrackingNumber(trackingNumber *string) {
+	u.TrackingNumber = trackingNumber
+	u.require(updateTransferOrderDataFieldTrackingNumber)
+}
+
+// SetLineItems sets the LineItems field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderData) SetLineItems(lineItems []*UpdateTransferOrderLineData) {
+	u.LineItems = lineItems
+	u.require(updateTransferOrderDataFieldLineItems)
+}
+
 func (u *UpdateTransferOrderData) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateTransferOrderData
 	var value unmarshaler
@@ -1437,6 +2558,17 @@ func (u *UpdateTransferOrderData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateTransferOrderData) MarshalJSON() ([]byte, error) {
+	type embed UpdateTransferOrderData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateTransferOrderData) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1450,6 +2582,13 @@ func (u *UpdateTransferOrderData) String() string {
 }
 
 // Represents a line item update in a transfer order
+var (
+	updateTransferOrderLineDataFieldUID             = big.NewInt(1 << 0)
+	updateTransferOrderLineDataFieldItemVariationID = big.NewInt(1 << 1)
+	updateTransferOrderLineDataFieldQuantityOrdered = big.NewInt(1 << 2)
+	updateTransferOrderLineDataFieldRemove          = big.NewInt(1 << 3)
+)
+
 type UpdateTransferOrderLineData struct {
 	// Line item id being updated. Required for updating/removing existing line items, but should not be set for new line items.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -1461,6 +2600,9 @@ type UpdateTransferOrderLineData struct {
 	QuantityOrdered *string `json:"quantity_ordered,omitempty" url:"quantity_ordered,omitempty"`
 	// Flag to remove the line item during update. Must include `uid` in removal request
 	Remove *bool `json:"remove,omitempty" url:"remove,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1498,6 +2640,41 @@ func (u *UpdateTransferOrderLineData) GetExtraProperties() map[string]interface{
 	return u.extraProperties
 }
 
+func (u *UpdateTransferOrderLineData) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderLineData) SetUID(uid *string) {
+	u.UID = uid
+	u.require(updateTransferOrderLineDataFieldUID)
+}
+
+// SetItemVariationID sets the ItemVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderLineData) SetItemVariationID(itemVariationID *string) {
+	u.ItemVariationID = itemVariationID
+	u.require(updateTransferOrderLineDataFieldItemVariationID)
+}
+
+// SetQuantityOrdered sets the QuantityOrdered field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderLineData) SetQuantityOrdered(quantityOrdered *string) {
+	u.QuantityOrdered = quantityOrdered
+	u.require(updateTransferOrderLineDataFieldQuantityOrdered)
+}
+
+// SetRemove sets the Remove field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderLineData) SetRemove(remove *bool) {
+	u.Remove = remove
+	u.require(updateTransferOrderLineDataFieldRemove)
+}
+
 func (u *UpdateTransferOrderLineData) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateTransferOrderLineData
 	var value unmarshaler
@@ -1514,6 +2691,17 @@ func (u *UpdateTransferOrderLineData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateTransferOrderLineData) MarshalJSON() ([]byte, error) {
+	type embed UpdateTransferOrderLineData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateTransferOrderLineData) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1527,11 +2715,19 @@ func (u *UpdateTransferOrderLineData) String() string {
 }
 
 // Response for updating a transfer order
+var (
+	updateTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
+	updateTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
+)
+
 type UpdateTransferOrderResponse struct {
 	// The updated transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1555,6 +2751,27 @@ func (u *UpdateTransferOrderResponse) GetExtraProperties() map[string]interface{
 	return u.extraProperties
 }
 
+func (u *UpdateTransferOrderResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderResponse) SetTransferOrder(transferOrder *TransferOrder) {
+	u.TransferOrder = transferOrder
+	u.require(updateTransferOrderResponseFieldTransferOrder)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateTransferOrderResponseFieldErrors)
+}
+
 func (u *UpdateTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateTransferOrderResponse
 	var value unmarshaler
@@ -1571,6 +2788,17 @@ func (u *UpdateTransferOrderResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateTransferOrderResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateTransferOrderResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateTransferOrderResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1583,6 +2811,13 @@ func (u *UpdateTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateTransferOrderRequestFieldTransferOrderID = big.NewInt(1 << 0)
+	updateTransferOrderRequestFieldIdempotencyKey  = big.NewInt(1 << 1)
+	updateTransferOrderRequestFieldTransferOrder   = big.NewInt(1 << 2)
+	updateTransferOrderRequestFieldVersion         = big.NewInt(1 << 3)
+)
+
 type UpdateTransferOrderRequest struct {
 	// The ID of the transfer order to update
 	TransferOrderID string `json:"-" url:"-"`
@@ -1592,4 +2827,42 @@ type UpdateTransferOrderRequest struct {
 	TransferOrder *UpdateTransferOrderData `json:"transfer_order,omitempty" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateTransferOrderRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderRequest) SetTransferOrderID(transferOrderID string) {
+	u.TransferOrderID = transferOrderID
+	u.require(updateTransferOrderRequestFieldTransferOrderID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateTransferOrderRequestFieldIdempotencyKey)
+}
+
+// SetTransferOrder sets the TransferOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderRequest) SetTransferOrder(transferOrder *UpdateTransferOrderData) {
+	u.TransferOrder = transferOrder
+	u.require(updateTransferOrderRequestFieldTransferOrder)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTransferOrderRequest) SetVersion(version *int64) {
+	u.Version = version
+	u.require(updateTransferOrderRequestFieldVersion)
 }

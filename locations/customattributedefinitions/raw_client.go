@@ -4,7 +4,7 @@ package customattributedefinitions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	locations "github.com/square/square-go-sdk/v2/locations"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *locations.CreateLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateLocationCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.CreateLocationCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateLocationCustomAttributeDefinitionResponse
+	var response *square.CreateLocationCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateLocationCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.CreateLocationCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *locations.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveLocationCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.RetrieveLocationCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveLocationCustomAttributeDefinitionResponse
+	var response *square.RetrieveLocationCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -116,7 +116,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveLocationCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.RetrieveLocationCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -127,7 +127,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *locations.UpdateLocationCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateLocationCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.UpdateLocationCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,11 +139,11 @@ func (r *RawClient) Update(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateLocationCustomAttributeDefinitionResponse
+	var response *square.UpdateLocationCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -161,7 +161,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateLocationCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.UpdateLocationCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -172,7 +172,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *locations.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteLocationCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.DeleteLocationCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -184,10 +184,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteLocationCustomAttributeDefinitionResponse
+	var response *square.DeleteLocationCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -204,7 +204,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteLocationCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.DeleteLocationCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

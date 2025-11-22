@@ -6,17 +6,65 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	cancelPaymentsRequestFieldPaymentID = big.NewInt(1 << 0)
 )
 
 type CancelPaymentsRequest struct {
 	// The ID of the payment to cancel.
 	PaymentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelPaymentsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPaymentsRequest) SetPaymentID(paymentID string) {
+	c.PaymentID = paymentID
+	c.require(cancelPaymentsRequestFieldPaymentID)
+}
+
+var (
+	cancelPaymentByIdempotencyKeyRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+)
 
 type CancelPaymentByIdempotencyKeyRequest struct {
 	// The `idempotency_key` identifying the payment to be canceled.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelPaymentByIdempotencyKeyRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPaymentByIdempotencyKeyRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(cancelPaymentByIdempotencyKeyRequestFieldIdempotencyKey)
+}
+
+var (
+	completePaymentRequestFieldPaymentID    = big.NewInt(1 << 0)
+	completePaymentRequestFieldVersionToken = big.NewInt(1 << 1)
+)
 
 type CompletePaymentRequest struct {
 	// The unique ID identifying the payment to be completed.
@@ -25,7 +73,59 @@ type CompletePaymentRequest struct {
 	// version that the caller expects. If the server has a different version of the Payment,
 	// the update fails and a response with a VERSION_MISMATCH error is returned.
 	VersionToken *string `json:"version_token,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CompletePaymentRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CompletePaymentRequest) SetPaymentID(paymentID string) {
+	c.PaymentID = paymentID
+	c.require(completePaymentRequestFieldPaymentID)
+}
+
+// SetVersionToken sets the VersionToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CompletePaymentRequest) SetVersionToken(versionToken *string) {
+	c.VersionToken = versionToken
+	c.require(completePaymentRequestFieldVersionToken)
+}
+
+var (
+	createPaymentRequestFieldSourceID                       = big.NewInt(1 << 0)
+	createPaymentRequestFieldIdempotencyKey                 = big.NewInt(1 << 1)
+	createPaymentRequestFieldAmountMoney                    = big.NewInt(1 << 2)
+	createPaymentRequestFieldTipMoney                       = big.NewInt(1 << 3)
+	createPaymentRequestFieldAppFeeMoney                    = big.NewInt(1 << 4)
+	createPaymentRequestFieldDelayDuration                  = big.NewInt(1 << 5)
+	createPaymentRequestFieldDelayAction                    = big.NewInt(1 << 6)
+	createPaymentRequestFieldAutocomplete                   = big.NewInt(1 << 7)
+	createPaymentRequestFieldOrderID                        = big.NewInt(1 << 8)
+	createPaymentRequestFieldCustomerID                     = big.NewInt(1 << 9)
+	createPaymentRequestFieldLocationID                     = big.NewInt(1 << 10)
+	createPaymentRequestFieldTeamMemberID                   = big.NewInt(1 << 11)
+	createPaymentRequestFieldReferenceID                    = big.NewInt(1 << 12)
+	createPaymentRequestFieldVerificationToken              = big.NewInt(1 << 13)
+	createPaymentRequestFieldAcceptPartialAuthorization     = big.NewInt(1 << 14)
+	createPaymentRequestFieldBuyerEmailAddress              = big.NewInt(1 << 15)
+	createPaymentRequestFieldBuyerPhoneNumber               = big.NewInt(1 << 16)
+	createPaymentRequestFieldBillingAddress                 = big.NewInt(1 << 17)
+	createPaymentRequestFieldShippingAddress                = big.NewInt(1 << 18)
+	createPaymentRequestFieldNote                           = big.NewInt(1 << 19)
+	createPaymentRequestFieldStatementDescriptionIdentifier = big.NewInt(1 << 20)
+	createPaymentRequestFieldCashDetails                    = big.NewInt(1 << 21)
+	createPaymentRequestFieldExternalDetails                = big.NewInt(1 << 22)
+	createPaymentRequestFieldCustomerDetails                = big.NewInt(1 << 23)
+	createPaymentRequestFieldOfflinePaymentDetails          = big.NewInt(1 << 24)
+)
 
 type CreatePaymentRequest struct {
 	// The ID for the source of funds for this payment.
@@ -175,12 +275,236 @@ type CreatePaymentRequest struct {
 	// An optional field for specifying the offline payment details. This is intended for
 	// internal 1st-party callers only.
 	OfflinePaymentDetails *OfflinePaymentDetails `json:"offline_payment_details,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreatePaymentRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetSourceID sets the SourceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetSourceID(sourceID string) {
+	c.SourceID = sourceID
+	c.require(createPaymentRequestFieldSourceID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createPaymentRequestFieldIdempotencyKey)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetAmountMoney(amountMoney *Money) {
+	c.AmountMoney = amountMoney
+	c.require(createPaymentRequestFieldAmountMoney)
+}
+
+// SetTipMoney sets the TipMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetTipMoney(tipMoney *Money) {
+	c.TipMoney = tipMoney
+	c.require(createPaymentRequestFieldTipMoney)
+}
+
+// SetAppFeeMoney sets the AppFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetAppFeeMoney(appFeeMoney *Money) {
+	c.AppFeeMoney = appFeeMoney
+	c.require(createPaymentRequestFieldAppFeeMoney)
+}
+
+// SetDelayDuration sets the DelayDuration field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetDelayDuration(delayDuration *string) {
+	c.DelayDuration = delayDuration
+	c.require(createPaymentRequestFieldDelayDuration)
+}
+
+// SetDelayAction sets the DelayAction field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetDelayAction(delayAction *string) {
+	c.DelayAction = delayAction
+	c.require(createPaymentRequestFieldDelayAction)
+}
+
+// SetAutocomplete sets the Autocomplete field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetAutocomplete(autocomplete *bool) {
+	c.Autocomplete = autocomplete
+	c.require(createPaymentRequestFieldAutocomplete)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetOrderID(orderID *string) {
+	c.OrderID = orderID
+	c.require(createPaymentRequestFieldOrderID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetCustomerID(customerID *string) {
+	c.CustomerID = customerID
+	c.require(createPaymentRequestFieldCustomerID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetLocationID(locationID *string) {
+	c.LocationID = locationID
+	c.require(createPaymentRequestFieldLocationID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetTeamMemberID(teamMemberID *string) {
+	c.TeamMemberID = teamMemberID
+	c.require(createPaymentRequestFieldTeamMemberID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetReferenceID(referenceID *string) {
+	c.ReferenceID = referenceID
+	c.require(createPaymentRequestFieldReferenceID)
+}
+
+// SetVerificationToken sets the VerificationToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetVerificationToken(verificationToken *string) {
+	c.VerificationToken = verificationToken
+	c.require(createPaymentRequestFieldVerificationToken)
+}
+
+// SetAcceptPartialAuthorization sets the AcceptPartialAuthorization field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetAcceptPartialAuthorization(acceptPartialAuthorization *bool) {
+	c.AcceptPartialAuthorization = acceptPartialAuthorization
+	c.require(createPaymentRequestFieldAcceptPartialAuthorization)
+}
+
+// SetBuyerEmailAddress sets the BuyerEmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetBuyerEmailAddress(buyerEmailAddress *string) {
+	c.BuyerEmailAddress = buyerEmailAddress
+	c.require(createPaymentRequestFieldBuyerEmailAddress)
+}
+
+// SetBuyerPhoneNumber sets the BuyerPhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetBuyerPhoneNumber(buyerPhoneNumber *string) {
+	c.BuyerPhoneNumber = buyerPhoneNumber
+	c.require(createPaymentRequestFieldBuyerPhoneNumber)
+}
+
+// SetBillingAddress sets the BillingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetBillingAddress(billingAddress *Address) {
+	c.BillingAddress = billingAddress
+	c.require(createPaymentRequestFieldBillingAddress)
+}
+
+// SetShippingAddress sets the ShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetShippingAddress(shippingAddress *Address) {
+	c.ShippingAddress = shippingAddress
+	c.require(createPaymentRequestFieldShippingAddress)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetNote(note *string) {
+	c.Note = note
+	c.require(createPaymentRequestFieldNote)
+}
+
+// SetStatementDescriptionIdentifier sets the StatementDescriptionIdentifier field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetStatementDescriptionIdentifier(statementDescriptionIdentifier *string) {
+	c.StatementDescriptionIdentifier = statementDescriptionIdentifier
+	c.require(createPaymentRequestFieldStatementDescriptionIdentifier)
+}
+
+// SetCashDetails sets the CashDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetCashDetails(cashDetails *CashPaymentDetails) {
+	c.CashDetails = cashDetails
+	c.require(createPaymentRequestFieldCashDetails)
+}
+
+// SetExternalDetails sets the ExternalDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetExternalDetails(externalDetails *ExternalPaymentDetails) {
+	c.ExternalDetails = externalDetails
+	c.require(createPaymentRequestFieldExternalDetails)
+}
+
+// SetCustomerDetails sets the CustomerDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetCustomerDetails(customerDetails *CustomerDetails) {
+	c.CustomerDetails = customerDetails
+	c.require(createPaymentRequestFieldCustomerDetails)
+}
+
+// SetOfflinePaymentDetails sets the OfflinePaymentDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetOfflinePaymentDetails(offlinePaymentDetails *OfflinePaymentDetails) {
+	c.OfflinePaymentDetails = offlinePaymentDetails
+	c.require(createPaymentRequestFieldOfflinePaymentDetails)
+}
+
+var (
+	getPaymentsRequestFieldPaymentID = big.NewInt(1 << 0)
+)
 
 type GetPaymentsRequest struct {
 	// A unique ID for the desired payment.
 	PaymentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetPaymentsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentsRequest) SetPaymentID(paymentID string) {
+	g.PaymentID = paymentID
+	g.require(getPaymentsRequestFieldPaymentID)
+}
+
+var (
+	listPaymentsRequestFieldBeginTime          = big.NewInt(1 << 0)
+	listPaymentsRequestFieldEndTime            = big.NewInt(1 << 1)
+	listPaymentsRequestFieldSortOrder          = big.NewInt(1 << 2)
+	listPaymentsRequestFieldCursor             = big.NewInt(1 << 3)
+	listPaymentsRequestFieldLocationID         = big.NewInt(1 << 4)
+	listPaymentsRequestFieldTotal              = big.NewInt(1 << 5)
+	listPaymentsRequestFieldLast4              = big.NewInt(1 << 6)
+	listPaymentsRequestFieldCardBrand          = big.NewInt(1 << 7)
+	listPaymentsRequestFieldLimit              = big.NewInt(1 << 8)
+	listPaymentsRequestFieldIsOfflinePayment   = big.NewInt(1 << 9)
+	listPaymentsRequestFieldOfflineBeginTime   = big.NewInt(1 << 10)
+	listPaymentsRequestFieldOfflineEndTime     = big.NewInt(1 << 11)
+	listPaymentsRequestFieldUpdatedAtBeginTime = big.NewInt(1 << 12)
+	listPaymentsRequestFieldUpdatedAtEndTime   = big.NewInt(1 << 13)
+	listPaymentsRequestFieldSortField          = big.NewInt(1 << 14)
+)
 
 type ListPaymentsRequest struct {
 	// Indicates the start of the time range to retrieve payments for, in RFC 3339 format.
@@ -242,9 +566,130 @@ type ListPaymentsRequest struct {
 	UpdatedAtEndTime *string `json:"-" url:"updated_at_end_time,omitempty"`
 	// The field used to sort results by. The default is `CREATED_AT`.
 	SortField *ListPaymentsRequestSortField `json:"-" url:"sort_field,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListPaymentsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetBeginTime(beginTime *string) {
+	l.BeginTime = beginTime
+	l.require(listPaymentsRequestFieldBeginTime)
+}
+
+// SetEndTime sets the EndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetEndTime(endTime *string) {
+	l.EndTime = endTime
+	l.require(listPaymentsRequestFieldEndTime)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetSortOrder(sortOrder *string) {
+	l.SortOrder = sortOrder
+	l.require(listPaymentsRequestFieldSortOrder)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listPaymentsRequestFieldCursor)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listPaymentsRequestFieldLocationID)
+}
+
+// SetTotal sets the Total field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetTotal(total *int64) {
+	l.Total = total
+	l.require(listPaymentsRequestFieldTotal)
+}
+
+// SetLast4 sets the Last4 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetLast4(last4 *string) {
+	l.Last4 = last4
+	l.require(listPaymentsRequestFieldLast4)
+}
+
+// SetCardBrand sets the CardBrand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetCardBrand(cardBrand *string) {
+	l.CardBrand = cardBrand
+	l.require(listPaymentsRequestFieldCardBrand)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listPaymentsRequestFieldLimit)
+}
+
+// SetIsOfflinePayment sets the IsOfflinePayment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetIsOfflinePayment(isOfflinePayment *bool) {
+	l.IsOfflinePayment = isOfflinePayment
+	l.require(listPaymentsRequestFieldIsOfflinePayment)
+}
+
+// SetOfflineBeginTime sets the OfflineBeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetOfflineBeginTime(offlineBeginTime *string) {
+	l.OfflineBeginTime = offlineBeginTime
+	l.require(listPaymentsRequestFieldOfflineBeginTime)
+}
+
+// SetOfflineEndTime sets the OfflineEndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetOfflineEndTime(offlineEndTime *string) {
+	l.OfflineEndTime = offlineEndTime
+	l.require(listPaymentsRequestFieldOfflineEndTime)
+}
+
+// SetUpdatedAtBeginTime sets the UpdatedAtBeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetUpdatedAtBeginTime(updatedAtBeginTime *string) {
+	l.UpdatedAtBeginTime = updatedAtBeginTime
+	l.require(listPaymentsRequestFieldUpdatedAtBeginTime)
+}
+
+// SetUpdatedAtEndTime sets the UpdatedAtEndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetUpdatedAtEndTime(updatedAtEndTime *string) {
+	l.UpdatedAtEndTime = updatedAtEndTime
+	l.require(listPaymentsRequestFieldUpdatedAtEndTime)
+}
+
+// SetSortField sets the SortField field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsRequest) SetSortField(sortField *ListPaymentsRequestSortField) {
+	l.SortField = sortField
+	l.require(listPaymentsRequestFieldSortField)
 }
 
 // ACH-specific details about `BANK_ACCOUNT` type payments with the `transfer_type` of `ACH`.
+var (
+	achDetailsFieldRoutingNumber       = big.NewInt(1 << 0)
+	achDetailsFieldAccountNumberSuffix = big.NewInt(1 << 1)
+	achDetailsFieldAccountType         = big.NewInt(1 << 2)
+)
+
 type AchDetails struct {
 	// The routing number for the bank account.
 	RoutingNumber *string `json:"routing_number,omitempty" url:"routing_number,omitempty"`
@@ -253,6 +698,9 @@ type AchDetails struct {
 	// The type of the bank account performing the transfer. The account type can be `CHECKING`,
 	// `SAVINGS`, or `UNKNOWN`.
 	AccountType *string `json:"account_type,omitempty" url:"account_type,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -283,6 +731,34 @@ func (a *AchDetails) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
+func (a *AchDetails) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetRoutingNumber sets the RoutingNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AchDetails) SetRoutingNumber(routingNumber *string) {
+	a.RoutingNumber = routingNumber
+	a.require(achDetailsFieldRoutingNumber)
+}
+
+// SetAccountNumberSuffix sets the AccountNumberSuffix field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AchDetails) SetAccountNumberSuffix(accountNumberSuffix *string) {
+	a.AccountNumberSuffix = accountNumberSuffix
+	a.require(achDetailsFieldAccountNumberSuffix)
+}
+
+// SetAccountType sets the AccountType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AchDetails) SetAccountType(accountType *string) {
+	a.AccountType = accountType
+	a.require(achDetailsFieldAccountType)
+}
+
 func (a *AchDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler AchDetails
 	var value unmarshaler
@@ -299,6 +775,17 @@ func (a *AchDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AchDetails) MarshalJSON() ([]byte, error) {
+	type embed AchDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (a *AchDetails) String() string {
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
@@ -312,9 +799,16 @@ func (a *AchDetails) String() string {
 }
 
 // Additional details about Afterpay payments.
+var (
+	afterpayDetailsFieldEmailAddress = big.NewInt(1 << 0)
+)
+
 type AfterpayDetails struct {
 	// Email address on the buyer's Afterpay account.
 	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -329,6 +823,20 @@ func (a *AfterpayDetails) GetEmailAddress() *string {
 
 func (a *AfterpayDetails) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
+}
+
+func (a *AfterpayDetails) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AfterpayDetails) SetEmailAddress(emailAddress *string) {
+	a.EmailAddress = emailAddress
+	a.require(afterpayDetailsFieldEmailAddress)
 }
 
 func (a *AfterpayDetails) UnmarshalJSON(data []byte) error {
@@ -347,6 +855,17 @@ func (a *AfterpayDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AfterpayDetails) MarshalJSON() ([]byte, error) {
+	type embed AfterpayDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (a *AfterpayDetails) String() string {
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
@@ -360,6 +879,11 @@ func (a *AfterpayDetails) String() string {
 }
 
 // Details about the application that took the payment.
+var (
+	applicationDetailsFieldSquareProduct = big.NewInt(1 << 0)
+	applicationDetailsFieldApplicationID = big.NewInt(1 << 1)
+)
+
 type ApplicationDetails struct {
 	// The Square product, such as Square Point of Sale (POS),
 	// Square Invoices, or Square Virtual Terminal.
@@ -373,6 +897,9 @@ type ApplicationDetails struct {
 	// If a seller uses a [Square App Marketplace](https://developer.squareup.com/docs/app-marketplace)
 	// application to process payments, the field contains the corresponding application ID.
 	ApplicationID *string `json:"application_id,omitempty" url:"application_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -396,6 +923,27 @@ func (a *ApplicationDetails) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
+func (a *ApplicationDetails) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetSquareProduct sets the SquareProduct field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ApplicationDetails) SetSquareProduct(squareProduct *ApplicationDetailsExternalSquareProduct) {
+	a.SquareProduct = squareProduct
+	a.require(applicationDetailsFieldSquareProduct)
+}
+
+// SetApplicationID sets the ApplicationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *ApplicationDetails) SetApplicationID(applicationID *string) {
+	a.ApplicationID = applicationID
+	a.require(applicationDetailsFieldApplicationID)
+}
+
 func (a *ApplicationDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler ApplicationDetails
 	var value unmarshaler
@@ -410,6 +958,17 @@ func (a *ApplicationDetails) UnmarshalJSON(data []byte) error {
 	a.extraProperties = extraProperties
 	a.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (a *ApplicationDetails) MarshalJSON() ([]byte, error) {
+	type embed ApplicationDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (a *ApplicationDetails) String() string {
@@ -472,6 +1031,17 @@ func (a ApplicationDetailsExternalSquareProduct) Ptr() *ApplicationDetailsExtern
 }
 
 // Additional details about BANK_ACCOUNT type payments.
+var (
+	bankAccountPaymentDetailsFieldBankName             = big.NewInt(1 << 0)
+	bankAccountPaymentDetailsFieldTransferType         = big.NewInt(1 << 1)
+	bankAccountPaymentDetailsFieldAccountOwnershipType = big.NewInt(1 << 2)
+	bankAccountPaymentDetailsFieldFingerprint          = big.NewInt(1 << 3)
+	bankAccountPaymentDetailsFieldCountry              = big.NewInt(1 << 4)
+	bankAccountPaymentDetailsFieldStatementDescription = big.NewInt(1 << 5)
+	bankAccountPaymentDetailsFieldAchDetails           = big.NewInt(1 << 6)
+	bankAccountPaymentDetailsFieldErrors               = big.NewInt(1 << 7)
+)
+
 type BankAccountPaymentDetails struct {
 	// The name of the bank associated with the bank account.
 	BankName *string `json:"bank_name,omitempty" url:"bank_name,omitempty"`
@@ -492,6 +1062,9 @@ type BankAccountPaymentDetails struct {
 	AchDetails *AchDetails `json:"ach_details,omitempty" url:"ach_details,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -557,6 +1130,69 @@ func (b *BankAccountPaymentDetails) GetExtraProperties() map[string]interface{} 
 	return b.extraProperties
 }
 
+func (b *BankAccountPaymentDetails) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetBankName sets the BankName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetBankName(bankName *string) {
+	b.BankName = bankName
+	b.require(bankAccountPaymentDetailsFieldBankName)
+}
+
+// SetTransferType sets the TransferType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetTransferType(transferType *string) {
+	b.TransferType = transferType
+	b.require(bankAccountPaymentDetailsFieldTransferType)
+}
+
+// SetAccountOwnershipType sets the AccountOwnershipType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetAccountOwnershipType(accountOwnershipType *string) {
+	b.AccountOwnershipType = accountOwnershipType
+	b.require(bankAccountPaymentDetailsFieldAccountOwnershipType)
+}
+
+// SetFingerprint sets the Fingerprint field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetFingerprint(fingerprint *string) {
+	b.Fingerprint = fingerprint
+	b.require(bankAccountPaymentDetailsFieldFingerprint)
+}
+
+// SetCountry sets the Country field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetCountry(country *string) {
+	b.Country = country
+	b.require(bankAccountPaymentDetailsFieldCountry)
+}
+
+// SetStatementDescription sets the StatementDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetStatementDescription(statementDescription *string) {
+	b.StatementDescription = statementDescription
+	b.require(bankAccountPaymentDetailsFieldStatementDescription)
+}
+
+// SetAchDetails sets the AchDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetAchDetails(achDetails *AchDetails) {
+	b.AchDetails = achDetails
+	b.require(bankAccountPaymentDetailsFieldAchDetails)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccountPaymentDetails) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bankAccountPaymentDetailsFieldErrors)
+}
+
 func (b *BankAccountPaymentDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler BankAccountPaymentDetails
 	var value unmarshaler
@@ -573,6 +1209,17 @@ func (b *BankAccountPaymentDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BankAccountPaymentDetails) MarshalJSON() ([]byte, error) {
+	type embed BankAccountPaymentDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BankAccountPaymentDetails) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -586,6 +1233,12 @@ func (b *BankAccountPaymentDetails) String() string {
 }
 
 // Additional details about a Buy Now Pay Later payment type.
+var (
+	buyNowPayLaterDetailsFieldBrand           = big.NewInt(1 << 0)
+	buyNowPayLaterDetailsFieldAfterpayDetails = big.NewInt(1 << 1)
+	buyNowPayLaterDetailsFieldClearpayDetails = big.NewInt(1 << 2)
+)
+
 type BuyNowPayLaterDetails struct {
 	// The brand used for the Buy Now Pay Later payment.
 	// The brand can be `AFTERPAY`, `CLEARPAY` or `UNKNOWN`.
@@ -596,6 +1249,9 @@ type BuyNowPayLaterDetails struct {
 	// Details about a Clearpay payment. These details are only populated if the `brand` is
 	// `CLEARPAY`.
 	ClearpayDetails *ClearpayDetails `json:"clearpay_details,omitempty" url:"clearpay_details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -626,6 +1282,34 @@ func (b *BuyNowPayLaterDetails) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BuyNowPayLaterDetails) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetBrand sets the Brand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BuyNowPayLaterDetails) SetBrand(brand *string) {
+	b.Brand = brand
+	b.require(buyNowPayLaterDetailsFieldBrand)
+}
+
+// SetAfterpayDetails sets the AfterpayDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BuyNowPayLaterDetails) SetAfterpayDetails(afterpayDetails *AfterpayDetails) {
+	b.AfterpayDetails = afterpayDetails
+	b.require(buyNowPayLaterDetailsFieldAfterpayDetails)
+}
+
+// SetClearpayDetails sets the ClearpayDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BuyNowPayLaterDetails) SetClearpayDetails(clearpayDetails *ClearpayDetails) {
+	b.ClearpayDetails = clearpayDetails
+	b.require(buyNowPayLaterDetailsFieldClearpayDetails)
+}
+
 func (b *BuyNowPayLaterDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler BuyNowPayLaterDetails
 	var value unmarshaler
@@ -640,6 +1324,17 @@ func (b *BuyNowPayLaterDetails) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *BuyNowPayLaterDetails) MarshalJSON() ([]byte, error) {
+	type embed BuyNowPayLaterDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *BuyNowPayLaterDetails) String() string {
@@ -657,9 +1352,16 @@ func (b *BuyNowPayLaterDetails) String() string {
 // Defines the response returned by
 // [CancelPaymentByIdempotencyKey](api-endpoint:Payments-CancelPaymentByIdempotencyKey).
 // On success, `errors` is empty.
+var (
+	cancelPaymentByIdempotencyKeyResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type CancelPaymentByIdempotencyKeyResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -674,6 +1376,20 @@ func (c *CancelPaymentByIdempotencyKeyResponse) GetErrors() []*Error {
 
 func (c *CancelPaymentByIdempotencyKeyResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CancelPaymentByIdempotencyKeyResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPaymentByIdempotencyKeyResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelPaymentByIdempotencyKeyResponseFieldErrors)
 }
 
 func (c *CancelPaymentByIdempotencyKeyResponse) UnmarshalJSON(data []byte) error {
@@ -692,6 +1408,17 @@ func (c *CancelPaymentByIdempotencyKeyResponse) UnmarshalJSON(data []byte) error
 	return nil
 }
 
+func (c *CancelPaymentByIdempotencyKeyResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelPaymentByIdempotencyKeyResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -705,11 +1432,19 @@ func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
 }
 
 // Defines the response returned by [CancelPayment](api-endpoint:Payments-CancelPayment).
+var (
+	cancelPaymentResponseFieldErrors  = big.NewInt(1 << 0)
+	cancelPaymentResponseFieldPayment = big.NewInt(1 << 1)
+)
+
 type CancelPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The successfully canceled `Payment` object.
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -733,6 +1468,27 @@ func (c *CancelPaymentResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CancelPaymentResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPaymentResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelPaymentResponseFieldErrors)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPaymentResponse) SetPayment(payment *Payment) {
+	c.Payment = payment
+	c.require(cancelPaymentResponseFieldPayment)
+}
+
 func (c *CancelPaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CancelPaymentResponse
 	var value unmarshaler
@@ -749,6 +1505,17 @@ func (c *CancelPaymentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CancelPaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelPaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CancelPaymentResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -762,6 +1529,25 @@ func (c *CancelPaymentResponse) String() string {
 }
 
 // Reflects the current status of a card payment. Contains only non-confidential information.
+var (
+	cardPaymentDetailsFieldStatus                     = big.NewInt(1 << 0)
+	cardPaymentDetailsFieldCard                       = big.NewInt(1 << 1)
+	cardPaymentDetailsFieldEntryMethod                = big.NewInt(1 << 2)
+	cardPaymentDetailsFieldCvvStatus                  = big.NewInt(1 << 3)
+	cardPaymentDetailsFieldAvsStatus                  = big.NewInt(1 << 4)
+	cardPaymentDetailsFieldAuthResultCode             = big.NewInt(1 << 5)
+	cardPaymentDetailsFieldApplicationIdentifier      = big.NewInt(1 << 6)
+	cardPaymentDetailsFieldApplicationName            = big.NewInt(1 << 7)
+	cardPaymentDetailsFieldApplicationCryptogram      = big.NewInt(1 << 8)
+	cardPaymentDetailsFieldVerificationMethod         = big.NewInt(1 << 9)
+	cardPaymentDetailsFieldVerificationResults        = big.NewInt(1 << 10)
+	cardPaymentDetailsFieldStatementDescription       = big.NewInt(1 << 11)
+	cardPaymentDetailsFieldDeviceDetails              = big.NewInt(1 << 12)
+	cardPaymentDetailsFieldCardPaymentTimeline        = big.NewInt(1 << 13)
+	cardPaymentDetailsFieldRefundRequiresCardPresence = big.NewInt(1 << 14)
+	cardPaymentDetailsFieldErrors                     = big.NewInt(1 << 15)
+)
+
 type CardPaymentDetails struct {
 	// The card payment's current state. The state can be AUTHORIZED, CAPTURED, VOIDED, or
 	// FAILED.
@@ -808,6 +1594,9 @@ type CardPaymentDetails struct {
 	RefundRequiresCardPresence *bool `json:"refund_requires_card_presence,omitempty" url:"refund_requires_card_presence,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -929,6 +1718,125 @@ func (c *CardPaymentDetails) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CardPaymentDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetStatus(status *string) {
+	c.Status = status
+	c.require(cardPaymentDetailsFieldStatus)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetCard(card *Card) {
+	c.Card = card
+	c.require(cardPaymentDetailsFieldCard)
+}
+
+// SetEntryMethod sets the EntryMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetEntryMethod(entryMethod *string) {
+	c.EntryMethod = entryMethod
+	c.require(cardPaymentDetailsFieldEntryMethod)
+}
+
+// SetCvvStatus sets the CvvStatus field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetCvvStatus(cvvStatus *string) {
+	c.CvvStatus = cvvStatus
+	c.require(cardPaymentDetailsFieldCvvStatus)
+}
+
+// SetAvsStatus sets the AvsStatus field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetAvsStatus(avsStatus *string) {
+	c.AvsStatus = avsStatus
+	c.require(cardPaymentDetailsFieldAvsStatus)
+}
+
+// SetAuthResultCode sets the AuthResultCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetAuthResultCode(authResultCode *string) {
+	c.AuthResultCode = authResultCode
+	c.require(cardPaymentDetailsFieldAuthResultCode)
+}
+
+// SetApplicationIdentifier sets the ApplicationIdentifier field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetApplicationIdentifier(applicationIdentifier *string) {
+	c.ApplicationIdentifier = applicationIdentifier
+	c.require(cardPaymentDetailsFieldApplicationIdentifier)
+}
+
+// SetApplicationName sets the ApplicationName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetApplicationName(applicationName *string) {
+	c.ApplicationName = applicationName
+	c.require(cardPaymentDetailsFieldApplicationName)
+}
+
+// SetApplicationCryptogram sets the ApplicationCryptogram field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetApplicationCryptogram(applicationCryptogram *string) {
+	c.ApplicationCryptogram = applicationCryptogram
+	c.require(cardPaymentDetailsFieldApplicationCryptogram)
+}
+
+// SetVerificationMethod sets the VerificationMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetVerificationMethod(verificationMethod *string) {
+	c.VerificationMethod = verificationMethod
+	c.require(cardPaymentDetailsFieldVerificationMethod)
+}
+
+// SetVerificationResults sets the VerificationResults field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetVerificationResults(verificationResults *string) {
+	c.VerificationResults = verificationResults
+	c.require(cardPaymentDetailsFieldVerificationResults)
+}
+
+// SetStatementDescription sets the StatementDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetStatementDescription(statementDescription *string) {
+	c.StatementDescription = statementDescription
+	c.require(cardPaymentDetailsFieldStatementDescription)
+}
+
+// SetDeviceDetails sets the DeviceDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetDeviceDetails(deviceDetails *DeviceDetails) {
+	c.DeviceDetails = deviceDetails
+	c.require(cardPaymentDetailsFieldDeviceDetails)
+}
+
+// SetCardPaymentTimeline sets the CardPaymentTimeline field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetCardPaymentTimeline(cardPaymentTimeline *CardPaymentTimeline) {
+	c.CardPaymentTimeline = cardPaymentTimeline
+	c.require(cardPaymentDetailsFieldCardPaymentTimeline)
+}
+
+// SetRefundRequiresCardPresence sets the RefundRequiresCardPresence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetRefundRequiresCardPresence(refundRequiresCardPresence *bool) {
+	c.RefundRequiresCardPresence = refundRequiresCardPresence
+	c.require(cardPaymentDetailsFieldRefundRequiresCardPresence)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cardPaymentDetailsFieldErrors)
+}
+
 func (c *CardPaymentDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler CardPaymentDetails
 	var value unmarshaler
@@ -945,6 +1853,17 @@ func (c *CardPaymentDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CardPaymentDetails) MarshalJSON() ([]byte, error) {
+	type embed CardPaymentDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CardPaymentDetails) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -958,6 +1877,12 @@ func (c *CardPaymentDetails) String() string {
 }
 
 // The timeline for card payments.
+var (
+	cardPaymentTimelineFieldAuthorizedAt = big.NewInt(1 << 0)
+	cardPaymentTimelineFieldCapturedAt   = big.NewInt(1 << 1)
+	cardPaymentTimelineFieldVoidedAt     = big.NewInt(1 << 2)
+)
+
 type CardPaymentTimeline struct {
 	// The timestamp when the payment was authorized, in RFC 3339 format.
 	AuthorizedAt *string `json:"authorized_at,omitempty" url:"authorized_at,omitempty"`
@@ -965,6 +1890,9 @@ type CardPaymentTimeline struct {
 	CapturedAt *string `json:"captured_at,omitempty" url:"captured_at,omitempty"`
 	// The timestamp when the payment was voided, in RFC 3339 format.
 	VoidedAt *string `json:"voided_at,omitempty" url:"voided_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -995,6 +1923,34 @@ func (c *CardPaymentTimeline) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CardPaymentTimeline) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAuthorizedAt sets the AuthorizedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentTimeline) SetAuthorizedAt(authorizedAt *string) {
+	c.AuthorizedAt = authorizedAt
+	c.require(cardPaymentTimelineFieldAuthorizedAt)
+}
+
+// SetCapturedAt sets the CapturedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentTimeline) SetCapturedAt(capturedAt *string) {
+	c.CapturedAt = capturedAt
+	c.require(cardPaymentTimelineFieldCapturedAt)
+}
+
+// SetVoidedAt sets the VoidedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentTimeline) SetVoidedAt(voidedAt *string) {
+	c.VoidedAt = voidedAt
+	c.require(cardPaymentTimelineFieldVoidedAt)
+}
+
 func (c *CardPaymentTimeline) UnmarshalJSON(data []byte) error {
 	type unmarshaler CardPaymentTimeline
 	var value unmarshaler
@@ -1011,6 +1967,17 @@ func (c *CardPaymentTimeline) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CardPaymentTimeline) MarshalJSON() ([]byte, error) {
+	type embed CardPaymentTimeline
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CardPaymentTimeline) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1024,6 +1991,12 @@ func (c *CardPaymentTimeline) String() string {
 }
 
 // Additional details about `WALLET` type payments with the `brand` of `CASH_APP`.
+var (
+	cashAppDetailsFieldBuyerFullName    = big.NewInt(1 << 0)
+	cashAppDetailsFieldBuyerCountryCode = big.NewInt(1 << 1)
+	cashAppDetailsFieldBuyerCashtag     = big.NewInt(1 << 2)
+)
+
 type CashAppDetails struct {
 	// The name of the Cash App account holder.
 	BuyerFullName *string `json:"buyer_full_name,omitempty" url:"buyer_full_name,omitempty"`
@@ -1033,6 +2006,9 @@ type CashAppDetails struct {
 	BuyerCountryCode *string `json:"buyer_country_code,omitempty" url:"buyer_country_code,omitempty"`
 	// $Cashtag of the Cash App account holder.
 	BuyerCashtag *string `json:"buyer_cashtag,omitempty" url:"buyer_cashtag,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1063,6 +2039,34 @@ func (c *CashAppDetails) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CashAppDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBuyerFullName sets the BuyerFullName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CashAppDetails) SetBuyerFullName(buyerFullName *string) {
+	c.BuyerFullName = buyerFullName
+	c.require(cashAppDetailsFieldBuyerFullName)
+}
+
+// SetBuyerCountryCode sets the BuyerCountryCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CashAppDetails) SetBuyerCountryCode(buyerCountryCode *string) {
+	c.BuyerCountryCode = buyerCountryCode
+	c.require(cashAppDetailsFieldBuyerCountryCode)
+}
+
+// SetBuyerCashtag sets the BuyerCashtag field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CashAppDetails) SetBuyerCashtag(buyerCashtag *string) {
+	c.BuyerCashtag = buyerCashtag
+	c.require(cashAppDetailsFieldBuyerCashtag)
+}
+
 func (c *CashAppDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler CashAppDetails
 	var value unmarshaler
@@ -1079,6 +2083,17 @@ func (c *CashAppDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CashAppDetails) MarshalJSON() ([]byte, error) {
+	type embed CashAppDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CashAppDetails) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1093,6 +2108,11 @@ func (c *CashAppDetails) String() string {
 
 // Stores details about a cash payment. Contains only non-confidential information. For more information, see
 // [Take Cash Payments](https://developer.squareup.com/docs/payments-api/take-payments/cash-payments).
+var (
+	cashPaymentDetailsFieldBuyerSuppliedMoney = big.NewInt(1 << 0)
+	cashPaymentDetailsFieldChangeBackMoney    = big.NewInt(1 << 1)
+)
+
 type CashPaymentDetails struct {
 	// The amount and currency of the money supplied by the buyer.
 	BuyerSuppliedMoney *Money `json:"buyer_supplied_money" url:"buyer_supplied_money"`
@@ -1100,6 +2120,9 @@ type CashPaymentDetails struct {
 	// This read-only field is calculated
 	// from the `amount_money` and `buyer_supplied_money` fields.
 	ChangeBackMoney *Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1123,6 +2146,27 @@ func (c *CashPaymentDetails) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CashPaymentDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBuyerSuppliedMoney sets the BuyerSuppliedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CashPaymentDetails) SetBuyerSuppliedMoney(buyerSuppliedMoney *Money) {
+	c.BuyerSuppliedMoney = buyerSuppliedMoney
+	c.require(cashPaymentDetailsFieldBuyerSuppliedMoney)
+}
+
+// SetChangeBackMoney sets the ChangeBackMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CashPaymentDetails) SetChangeBackMoney(changeBackMoney *Money) {
+	c.ChangeBackMoney = changeBackMoney
+	c.require(cashPaymentDetailsFieldChangeBackMoney)
+}
+
 func (c *CashPaymentDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler CashPaymentDetails
 	var value unmarshaler
@@ -1139,6 +2183,17 @@ func (c *CashPaymentDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CashPaymentDetails) MarshalJSON() ([]byte, error) {
+	type embed CashPaymentDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CashPaymentDetails) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1152,9 +2207,16 @@ func (c *CashPaymentDetails) String() string {
 }
 
 // Additional details about Clearpay payments.
+var (
+	clearpayDetailsFieldEmailAddress = big.NewInt(1 << 0)
+)
+
 type ClearpayDetails struct {
 	// Email address on the buyer's Clearpay account.
 	EmailAddress *string `json:"email_address,omitempty" url:"email_address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1169,6 +2231,20 @@ func (c *ClearpayDetails) GetEmailAddress() *string {
 
 func (c *ClearpayDetails) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *ClearpayDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ClearpayDetails) SetEmailAddress(emailAddress *string) {
+	c.EmailAddress = emailAddress
+	c.require(clearpayDetailsFieldEmailAddress)
 }
 
 func (c *ClearpayDetails) UnmarshalJSON(data []byte) error {
@@ -1187,6 +2263,17 @@ func (c *ClearpayDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *ClearpayDetails) MarshalJSON() ([]byte, error) {
+	type embed ClearpayDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *ClearpayDetails) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1200,11 +2287,19 @@ func (c *ClearpayDetails) String() string {
 }
 
 // Defines the response returned by[CompletePayment](api-endpoint:Payments-CompletePayment).
+var (
+	completePaymentResponseFieldErrors  = big.NewInt(1 << 0)
+	completePaymentResponseFieldPayment = big.NewInt(1 << 1)
+)
+
 type CompletePaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The successfully completed payment.
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1228,6 +2323,27 @@ func (c *CompletePaymentResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CompletePaymentResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CompletePaymentResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(completePaymentResponseFieldErrors)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CompletePaymentResponse) SetPayment(payment *Payment) {
+	c.Payment = payment
+	c.require(completePaymentResponseFieldPayment)
+}
+
 func (c *CompletePaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CompletePaymentResponse
 	var value unmarshaler
@@ -1242,6 +2358,17 @@ func (c *CompletePaymentResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CompletePaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed CompletePaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CompletePaymentResponse) String() string {
@@ -1260,11 +2387,19 @@ func (c *CompletePaymentResponse) String() string {
 //
 // If there are errors processing the request, the `payment` field might not be
 // present, or it might be present with a status of `FAILED`.
+var (
+	createPaymentResponseFieldErrors  = big.NewInt(1 << 0)
+	createPaymentResponseFieldPayment = big.NewInt(1 << 1)
+)
+
 type CreatePaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The newly created payment.
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1288,6 +2423,27 @@ func (c *CreatePaymentResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreatePaymentResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createPaymentResponseFieldErrors)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentResponse) SetPayment(payment *Payment) {
+	c.Payment = payment
+	c.require(createPaymentResponseFieldPayment)
+}
+
 func (c *CreatePaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreatePaymentResponse
 	var value unmarshaler
@@ -1304,6 +2460,17 @@ func (c *CreatePaymentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreatePaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed CreatePaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreatePaymentResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1317,12 +2484,20 @@ func (c *CreatePaymentResponse) String() string {
 }
 
 // Details about the customer making the payment.
+var (
+	customerDetailsFieldCustomerInitiated = big.NewInt(1 << 0)
+	customerDetailsFieldSellerKeyedIn     = big.NewInt(1 << 1)
+)
+
 type CustomerDetails struct {
 	// Indicates whether the customer initiated the payment.
 	CustomerInitiated *bool `json:"customer_initiated,omitempty" url:"customer_initiated,omitempty"`
 	// Indicates that the seller keyed in payment details on behalf of the customer.
 	// This is used to flag a payment as Mail Order / Telephone Order (MOTO).
 	SellerKeyedIn *bool `json:"seller_keyed_in,omitempty" url:"seller_keyed_in,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1346,6 +2521,27 @@ func (c *CustomerDetails) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCustomerInitiated sets the CustomerInitiated field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerDetails) SetCustomerInitiated(customerInitiated *bool) {
+	c.CustomerInitiated = customerInitiated
+	c.require(customerDetailsFieldCustomerInitiated)
+}
+
+// SetSellerKeyedIn sets the SellerKeyedIn field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerDetails) SetSellerKeyedIn(sellerKeyedIn *bool) {
+	c.SellerKeyedIn = sellerKeyedIn
+	c.require(customerDetailsFieldSellerKeyedIn)
+}
+
 func (c *CustomerDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerDetails
 	var value unmarshaler
@@ -1362,6 +2558,17 @@ func (c *CustomerDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerDetails) MarshalJSON() ([]byte, error) {
+	type embed CustomerDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerDetails) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1375,6 +2582,12 @@ func (c *CustomerDetails) String() string {
 }
 
 // Details about the device that took the payment.
+var (
+	deviceDetailsFieldDeviceID             = big.NewInt(1 << 0)
+	deviceDetailsFieldDeviceInstallationID = big.NewInt(1 << 1)
+	deviceDetailsFieldDeviceName           = big.NewInt(1 << 2)
+)
+
 type DeviceDetails struct {
 	// The Square-issued ID of the device.
 	DeviceID *string `json:"device_id,omitempty" url:"device_id,omitempty"`
@@ -1382,6 +2595,9 @@ type DeviceDetails struct {
 	DeviceInstallationID *string `json:"device_installation_id,omitempty" url:"device_installation_id,omitempty"`
 	// The name of the device set by the seller.
 	DeviceName *string `json:"device_name,omitempty" url:"device_name,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1412,6 +2628,34 @@ func (d *DeviceDetails) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DeviceDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetDeviceID sets the DeviceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceDetails) SetDeviceID(deviceID *string) {
+	d.DeviceID = deviceID
+	d.require(deviceDetailsFieldDeviceID)
+}
+
+// SetDeviceInstallationID sets the DeviceInstallationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceDetails) SetDeviceInstallationID(deviceInstallationID *string) {
+	d.DeviceInstallationID = deviceInstallationID
+	d.require(deviceDetailsFieldDeviceInstallationID)
+}
+
+// SetDeviceName sets the DeviceName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceDetails) SetDeviceName(deviceName *string) {
+	d.DeviceName = deviceName
+	d.require(deviceDetailsFieldDeviceName)
+}
+
 func (d *DeviceDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeviceDetails
 	var value unmarshaler
@@ -1428,6 +2672,17 @@ func (d *DeviceDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeviceDetails) MarshalJSON() ([]byte, error) {
+	type embed DeviceDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeviceDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -1441,6 +2696,12 @@ func (d *DeviceDetails) String() string {
 }
 
 // Additional details about `WALLET` type payments. Contains only non-confidential information.
+var (
+	digitalWalletDetailsFieldStatus         = big.NewInt(1 << 0)
+	digitalWalletDetailsFieldBrand          = big.NewInt(1 << 1)
+	digitalWalletDetailsFieldCashAppDetails = big.NewInt(1 << 2)
+)
+
 type DigitalWalletDetails struct {
 	// The status of the `WALLET` payment. The status can be `AUTHORIZED`, `CAPTURED`, `VOIDED`, or
 	// `FAILED`.
@@ -1450,6 +2711,9 @@ type DigitalWalletDetails struct {
 	Brand *string `json:"brand,omitempty" url:"brand,omitempty"`
 	// Brand-specific details for payments with the `brand` of `CASH_APP`.
 	CashAppDetails *CashAppDetails `json:"cash_app_details,omitempty" url:"cash_app_details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1480,6 +2744,34 @@ func (d *DigitalWalletDetails) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DigitalWalletDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DigitalWalletDetails) SetStatus(status *string) {
+	d.Status = status
+	d.require(digitalWalletDetailsFieldStatus)
+}
+
+// SetBrand sets the Brand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DigitalWalletDetails) SetBrand(brand *string) {
+	d.Brand = brand
+	d.require(digitalWalletDetailsFieldBrand)
+}
+
+// SetCashAppDetails sets the CashAppDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DigitalWalletDetails) SetCashAppDetails(cashAppDetails *CashAppDetails) {
+	d.CashAppDetails = cashAppDetails
+	d.require(digitalWalletDetailsFieldCashAppDetails)
+}
+
 func (d *DigitalWalletDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DigitalWalletDetails
 	var value unmarshaler
@@ -1494,6 +2786,17 @@ func (d *DigitalWalletDetails) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DigitalWalletDetails) MarshalJSON() ([]byte, error) {
+	type embed DigitalWalletDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DigitalWalletDetails) String() string {
@@ -1511,6 +2814,13 @@ func (d *DigitalWalletDetails) String() string {
 // Stores details about an external payment. Contains only non-confidential information.
 // For more information, see
 // [Take External Payments](https://developer.squareup.com/docs/payments-api/take-payments/external-payments).
+var (
+	externalPaymentDetailsFieldType           = big.NewInt(1 << 0)
+	externalPaymentDetailsFieldSource         = big.NewInt(1 << 1)
+	externalPaymentDetailsFieldSourceID       = big.NewInt(1 << 2)
+	externalPaymentDetailsFieldSourceFeeMoney = big.NewInt(1 << 3)
+)
+
 type ExternalPaymentDetails struct {
 	// The type of external payment the seller received. It can be one of the following:
 	// - CHECK - Paid using a physical check.
@@ -1534,6 +2844,9 @@ type ExternalPaymentDetails struct {
 	// The fees paid to the source. The `amount_money` minus this field is
 	// the net amount seller receives.
 	SourceFeeMoney *Money `json:"source_fee_money,omitempty" url:"source_fee_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1571,6 +2884,41 @@ func (e *ExternalPaymentDetails) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
+func (e *ExternalPaymentDetails) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *ExternalPaymentDetails) SetType(type_ string) {
+	e.Type = type_
+	e.require(externalPaymentDetailsFieldType)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *ExternalPaymentDetails) SetSource(source string) {
+	e.Source = source
+	e.require(externalPaymentDetailsFieldSource)
+}
+
+// SetSourceID sets the SourceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *ExternalPaymentDetails) SetSourceID(sourceID *string) {
+	e.SourceID = sourceID
+	e.require(externalPaymentDetailsFieldSourceID)
+}
+
+// SetSourceFeeMoney sets the SourceFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *ExternalPaymentDetails) SetSourceFeeMoney(sourceFeeMoney *Money) {
+	e.SourceFeeMoney = sourceFeeMoney
+	e.require(externalPaymentDetailsFieldSourceFeeMoney)
+}
+
 func (e *ExternalPaymentDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler ExternalPaymentDetails
 	var value unmarshaler
@@ -1587,6 +2935,17 @@ func (e *ExternalPaymentDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (e *ExternalPaymentDetails) MarshalJSON() ([]byte, error) {
+	type embed ExternalPaymentDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (e *ExternalPaymentDetails) String() string {
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
@@ -1600,11 +2959,19 @@ func (e *ExternalPaymentDetails) String() string {
 }
 
 // Defines the response returned by [GetPayment](api-endpoint:Payments-GetPayment).
+var (
+	getPaymentResponseFieldErrors  = big.NewInt(1 << 0)
+	getPaymentResponseFieldPayment = big.NewInt(1 << 1)
+)
+
 type GetPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested `Payment`.
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1628,6 +2995,27 @@ func (g *GetPaymentResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetPaymentResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getPaymentResponseFieldErrors)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentResponse) SetPayment(payment *Payment) {
+	g.Payment = payment
+	g.require(getPaymentResponseFieldPayment)
+}
+
 func (g *GetPaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetPaymentResponse
 	var value unmarshaler
@@ -1642,6 +3030,17 @@ func (g *GetPaymentResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetPaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed GetPaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetPaymentResponse) String() string {
@@ -1682,6 +3081,12 @@ func (l ListPaymentsRequestSortField) Ptr() *ListPaymentsRequestSortField {
 }
 
 // Defines the response returned by [ListPayments](api-endpoint:Payments-ListPayments).
+var (
+	listPaymentsResponseFieldErrors   = big.NewInt(1 << 0)
+	listPaymentsResponseFieldPayments = big.NewInt(1 << 1)
+	listPaymentsResponseFieldCursor   = big.NewInt(1 << 2)
+)
+
 type ListPaymentsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1692,6 +3097,9 @@ type ListPaymentsResponse struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1722,6 +3130,34 @@ func (l *ListPaymentsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListPaymentsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listPaymentsResponseFieldErrors)
+}
+
+// SetPayments sets the Payments field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsResponse) SetPayments(payments []*Payment) {
+	l.Payments = payments
+	l.require(listPaymentsResponseFieldPayments)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listPaymentsResponseFieldCursor)
+}
+
 func (l *ListPaymentsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListPaymentsResponse
 	var value unmarshaler
@@ -1738,6 +3174,17 @@ func (l *ListPaymentsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListPaymentsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListPaymentsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListPaymentsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -1751,9 +3198,16 @@ func (l *ListPaymentsResponse) String() string {
 }
 
 // Details specific to offline payments.
+var (
+	offlinePaymentDetailsFieldClientCreatedAt = big.NewInt(1 << 0)
+)
+
 type OfflinePaymentDetails struct {
 	// The client-side timestamp of when the offline payment was created, in RFC 3339 format.
 	ClientCreatedAt *string `json:"client_created_at,omitempty" url:"client_created_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1768,6 +3222,20 @@ func (o *OfflinePaymentDetails) GetClientCreatedAt() *string {
 
 func (o *OfflinePaymentDetails) GetExtraProperties() map[string]interface{} {
 	return o.extraProperties
+}
+
+func (o *OfflinePaymentDetails) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetClientCreatedAt sets the ClientCreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OfflinePaymentDetails) SetClientCreatedAt(clientCreatedAt *string) {
+	o.ClientCreatedAt = clientCreatedAt
+	o.require(offlinePaymentDetailsFieldClientCreatedAt)
 }
 
 func (o *OfflinePaymentDetails) UnmarshalJSON(data []byte) error {
@@ -1786,6 +3254,17 @@ func (o *OfflinePaymentDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (o *OfflinePaymentDetails) MarshalJSON() ([]byte, error) {
+	type embed OfflinePaymentDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (o *OfflinePaymentDetails) String() string {
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
@@ -1799,6 +3278,53 @@ func (o *OfflinePaymentDetails) String() string {
 }
 
 // Represents a payment processed by the Square API.
+var (
+	paymentFieldID                             = big.NewInt(1 << 0)
+	paymentFieldCreatedAt                      = big.NewInt(1 << 1)
+	paymentFieldUpdatedAt                      = big.NewInt(1 << 2)
+	paymentFieldAmountMoney                    = big.NewInt(1 << 3)
+	paymentFieldTipMoney                       = big.NewInt(1 << 4)
+	paymentFieldTotalMoney                     = big.NewInt(1 << 5)
+	paymentFieldAppFeeMoney                    = big.NewInt(1 << 6)
+	paymentFieldApprovedMoney                  = big.NewInt(1 << 7)
+	paymentFieldProcessingFee                  = big.NewInt(1 << 8)
+	paymentFieldRefundedMoney                  = big.NewInt(1 << 9)
+	paymentFieldStatus                         = big.NewInt(1 << 10)
+	paymentFieldDelayDuration                  = big.NewInt(1 << 11)
+	paymentFieldDelayAction                    = big.NewInt(1 << 12)
+	paymentFieldDelayedUntil                   = big.NewInt(1 << 13)
+	paymentFieldSourceType                     = big.NewInt(1 << 14)
+	paymentFieldCardDetails                    = big.NewInt(1 << 15)
+	paymentFieldCashDetails                    = big.NewInt(1 << 16)
+	paymentFieldBankAccountDetails             = big.NewInt(1 << 17)
+	paymentFieldExternalDetails                = big.NewInt(1 << 18)
+	paymentFieldWalletDetails                  = big.NewInt(1 << 19)
+	paymentFieldBuyNowPayLaterDetails          = big.NewInt(1 << 20)
+	paymentFieldSquareAccountDetails           = big.NewInt(1 << 21)
+	paymentFieldLocationID                     = big.NewInt(1 << 22)
+	paymentFieldOrderID                        = big.NewInt(1 << 23)
+	paymentFieldReferenceID                    = big.NewInt(1 << 24)
+	paymentFieldCustomerID                     = big.NewInt(1 << 25)
+	paymentFieldEmployeeID                     = big.NewInt(1 << 26)
+	paymentFieldTeamMemberID                   = big.NewInt(1 << 27)
+	paymentFieldRefundIDs                      = big.NewInt(1 << 28)
+	paymentFieldRiskEvaluation                 = big.NewInt(1 << 29)
+	paymentFieldTerminalCheckoutID             = big.NewInt(1 << 30)
+	paymentFieldBuyerEmailAddress              = big.NewInt(1 << 31)
+	paymentFieldBillingAddress                 = big.NewInt(1 << 32)
+	paymentFieldShippingAddress                = big.NewInt(1 << 33)
+	paymentFieldNote                           = big.NewInt(1 << 34)
+	paymentFieldStatementDescriptionIdentifier = big.NewInt(1 << 35)
+	paymentFieldCapabilities                   = big.NewInt(1 << 36)
+	paymentFieldReceiptNumber                  = big.NewInt(1 << 37)
+	paymentFieldReceiptURL                     = big.NewInt(1 << 38)
+	paymentFieldDeviceDetails                  = big.NewInt(1 << 39)
+	paymentFieldApplicationDetails             = big.NewInt(1 << 40)
+	paymentFieldIsOfflinePayment               = big.NewInt(1 << 41)
+	paymentFieldOfflinePaymentDetails          = big.NewInt(1 << 42)
+	paymentFieldVersionToken                   = big.NewInt(1 << 43)
+)
+
 type Payment struct {
 	// A unique ID for the payment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1972,6 +3498,9 @@ type Payment struct {
 	// Used for optimistic concurrency. This opaque token identifies a specific version of the
 	// `Payment` object.
 	VersionToken *string `json:"version_token,omitempty" url:"version_token,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2289,6 +3818,321 @@ func (p *Payment) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *Payment) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetID(id *string) {
+	p.ID = id
+	p.require(paymentFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetCreatedAt(createdAt *string) {
+	p.CreatedAt = createdAt
+	p.require(paymentFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetUpdatedAt(updatedAt *string) {
+	p.UpdatedAt = updatedAt
+	p.require(paymentFieldUpdatedAt)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetAmountMoney(amountMoney *Money) {
+	p.AmountMoney = amountMoney
+	p.require(paymentFieldAmountMoney)
+}
+
+// SetTipMoney sets the TipMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetTipMoney(tipMoney *Money) {
+	p.TipMoney = tipMoney
+	p.require(paymentFieldTipMoney)
+}
+
+// SetTotalMoney sets the TotalMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetTotalMoney(totalMoney *Money) {
+	p.TotalMoney = totalMoney
+	p.require(paymentFieldTotalMoney)
+}
+
+// SetAppFeeMoney sets the AppFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetAppFeeMoney(appFeeMoney *Money) {
+	p.AppFeeMoney = appFeeMoney
+	p.require(paymentFieldAppFeeMoney)
+}
+
+// SetApprovedMoney sets the ApprovedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetApprovedMoney(approvedMoney *Money) {
+	p.ApprovedMoney = approvedMoney
+	p.require(paymentFieldApprovedMoney)
+}
+
+// SetProcessingFee sets the ProcessingFee field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetProcessingFee(processingFee []*ProcessingFee) {
+	p.ProcessingFee = processingFee
+	p.require(paymentFieldProcessingFee)
+}
+
+// SetRefundedMoney sets the RefundedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetRefundedMoney(refundedMoney *Money) {
+	p.RefundedMoney = refundedMoney
+	p.require(paymentFieldRefundedMoney)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetStatus(status *string) {
+	p.Status = status
+	p.require(paymentFieldStatus)
+}
+
+// SetDelayDuration sets the DelayDuration field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetDelayDuration(delayDuration *string) {
+	p.DelayDuration = delayDuration
+	p.require(paymentFieldDelayDuration)
+}
+
+// SetDelayAction sets the DelayAction field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetDelayAction(delayAction *string) {
+	p.DelayAction = delayAction
+	p.require(paymentFieldDelayAction)
+}
+
+// SetDelayedUntil sets the DelayedUntil field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetDelayedUntil(delayedUntil *string) {
+	p.DelayedUntil = delayedUntil
+	p.require(paymentFieldDelayedUntil)
+}
+
+// SetSourceType sets the SourceType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetSourceType(sourceType *string) {
+	p.SourceType = sourceType
+	p.require(paymentFieldSourceType)
+}
+
+// SetCardDetails sets the CardDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetCardDetails(cardDetails *CardPaymentDetails) {
+	p.CardDetails = cardDetails
+	p.require(paymentFieldCardDetails)
+}
+
+// SetCashDetails sets the CashDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetCashDetails(cashDetails *CashPaymentDetails) {
+	p.CashDetails = cashDetails
+	p.require(paymentFieldCashDetails)
+}
+
+// SetBankAccountDetails sets the BankAccountDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetBankAccountDetails(bankAccountDetails *BankAccountPaymentDetails) {
+	p.BankAccountDetails = bankAccountDetails
+	p.require(paymentFieldBankAccountDetails)
+}
+
+// SetExternalDetails sets the ExternalDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetExternalDetails(externalDetails *ExternalPaymentDetails) {
+	p.ExternalDetails = externalDetails
+	p.require(paymentFieldExternalDetails)
+}
+
+// SetWalletDetails sets the WalletDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetWalletDetails(walletDetails *DigitalWalletDetails) {
+	p.WalletDetails = walletDetails
+	p.require(paymentFieldWalletDetails)
+}
+
+// SetBuyNowPayLaterDetails sets the BuyNowPayLaterDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetBuyNowPayLaterDetails(buyNowPayLaterDetails *BuyNowPayLaterDetails) {
+	p.BuyNowPayLaterDetails = buyNowPayLaterDetails
+	p.require(paymentFieldBuyNowPayLaterDetails)
+}
+
+// SetSquareAccountDetails sets the SquareAccountDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetSquareAccountDetails(squareAccountDetails *SquareAccountDetails) {
+	p.SquareAccountDetails = squareAccountDetails
+	p.require(paymentFieldSquareAccountDetails)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetLocationID(locationID *string) {
+	p.LocationID = locationID
+	p.require(paymentFieldLocationID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetOrderID(orderID *string) {
+	p.OrderID = orderID
+	p.require(paymentFieldOrderID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetReferenceID(referenceID *string) {
+	p.ReferenceID = referenceID
+	p.require(paymentFieldReferenceID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetCustomerID(customerID *string) {
+	p.CustomerID = customerID
+	p.require(paymentFieldCustomerID)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetEmployeeID(employeeID *string) {
+	p.EmployeeID = employeeID
+	p.require(paymentFieldEmployeeID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetTeamMemberID(teamMemberID *string) {
+	p.TeamMemberID = teamMemberID
+	p.require(paymentFieldTeamMemberID)
+}
+
+// SetRefundIDs sets the RefundIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetRefundIDs(refundIDs []string) {
+	p.RefundIDs = refundIDs
+	p.require(paymentFieldRefundIDs)
+}
+
+// SetRiskEvaluation sets the RiskEvaluation field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetRiskEvaluation(riskEvaluation *RiskEvaluation) {
+	p.RiskEvaluation = riskEvaluation
+	p.require(paymentFieldRiskEvaluation)
+}
+
+// SetTerminalCheckoutID sets the TerminalCheckoutID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetTerminalCheckoutID(terminalCheckoutID *string) {
+	p.TerminalCheckoutID = terminalCheckoutID
+	p.require(paymentFieldTerminalCheckoutID)
+}
+
+// SetBuyerEmailAddress sets the BuyerEmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetBuyerEmailAddress(buyerEmailAddress *string) {
+	p.BuyerEmailAddress = buyerEmailAddress
+	p.require(paymentFieldBuyerEmailAddress)
+}
+
+// SetBillingAddress sets the BillingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetBillingAddress(billingAddress *Address) {
+	p.BillingAddress = billingAddress
+	p.require(paymentFieldBillingAddress)
+}
+
+// SetShippingAddress sets the ShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetShippingAddress(shippingAddress *Address) {
+	p.ShippingAddress = shippingAddress
+	p.require(paymentFieldShippingAddress)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetNote(note *string) {
+	p.Note = note
+	p.require(paymentFieldNote)
+}
+
+// SetStatementDescriptionIdentifier sets the StatementDescriptionIdentifier field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetStatementDescriptionIdentifier(statementDescriptionIdentifier *string) {
+	p.StatementDescriptionIdentifier = statementDescriptionIdentifier
+	p.require(paymentFieldStatementDescriptionIdentifier)
+}
+
+// SetCapabilities sets the Capabilities field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetCapabilities(capabilities []string) {
+	p.Capabilities = capabilities
+	p.require(paymentFieldCapabilities)
+}
+
+// SetReceiptNumber sets the ReceiptNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetReceiptNumber(receiptNumber *string) {
+	p.ReceiptNumber = receiptNumber
+	p.require(paymentFieldReceiptNumber)
+}
+
+// SetReceiptURL sets the ReceiptURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetReceiptURL(receiptURL *string) {
+	p.ReceiptURL = receiptURL
+	p.require(paymentFieldReceiptURL)
+}
+
+// SetDeviceDetails sets the DeviceDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetDeviceDetails(deviceDetails *DeviceDetails) {
+	p.DeviceDetails = deviceDetails
+	p.require(paymentFieldDeviceDetails)
+}
+
+// SetApplicationDetails sets the ApplicationDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetApplicationDetails(applicationDetails *ApplicationDetails) {
+	p.ApplicationDetails = applicationDetails
+	p.require(paymentFieldApplicationDetails)
+}
+
+// SetIsOfflinePayment sets the IsOfflinePayment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetIsOfflinePayment(isOfflinePayment *bool) {
+	p.IsOfflinePayment = isOfflinePayment
+	p.require(paymentFieldIsOfflinePayment)
+}
+
+// SetOfflinePaymentDetails sets the OfflinePaymentDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetOfflinePaymentDetails(offlinePaymentDetails *OfflinePaymentDetails) {
+	p.OfflinePaymentDetails = offlinePaymentDetails
+	p.require(paymentFieldOfflinePaymentDetails)
+}
+
+// SetVersionToken sets the VersionToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetVersionToken(versionToken *string) {
+	p.VersionToken = versionToken
+	p.require(paymentFieldVersionToken)
+}
+
 func (p *Payment) UnmarshalJSON(data []byte) error {
 	type unmarshaler Payment
 	var value unmarshaler
@@ -2303,6 +4147,17 @@ func (p *Payment) UnmarshalJSON(data []byte) error {
 	p.extraProperties = extraProperties
 	p.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (p *Payment) MarshalJSON() ([]byte, error) {
+	type embed Payment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (p *Payment) String() string {
@@ -2323,12 +4178,20 @@ func (p *Payment) String() string {
 // endpoint), Square evaluates it and assigns a risk level to the payment. Sellers
 // can use this information to determine the course of action (for example,
 // provide the goods/services or refund the payment).
+var (
+	riskEvaluationFieldCreatedAt = big.NewInt(1 << 0)
+	riskEvaluationFieldRiskLevel = big.NewInt(1 << 1)
+)
+
 type RiskEvaluation struct {
 	// The timestamp when payment risk was evaluated, in RFC 3339 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The risk level associated with the payment
 	// See [RiskEvaluationRiskLevel](#type-riskevaluationrisklevel) for possible values
 	RiskLevel *RiskEvaluationRiskLevel `json:"risk_level,omitempty" url:"risk_level,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2352,6 +4215,27 @@ func (r *RiskEvaluation) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RiskEvaluation) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RiskEvaluation) SetCreatedAt(createdAt *string) {
+	r.CreatedAt = createdAt
+	r.require(riskEvaluationFieldCreatedAt)
+}
+
+// SetRiskLevel sets the RiskLevel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RiskEvaluation) SetRiskLevel(riskLevel *RiskEvaluationRiskLevel) {
+	r.RiskLevel = riskLevel
+	r.require(riskEvaluationFieldRiskLevel)
+}
+
 func (r *RiskEvaluation) UnmarshalJSON(data []byte) error {
 	type unmarshaler RiskEvaluation
 	var value unmarshaler
@@ -2366,6 +4250,17 @@ func (r *RiskEvaluation) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RiskEvaluation) MarshalJSON() ([]byte, error) {
+	type embed RiskEvaluation
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RiskEvaluation) String() string {
@@ -2409,11 +4304,19 @@ func (r RiskEvaluationRiskLevel) Ptr() *RiskEvaluationRiskLevel {
 }
 
 // Additional details about Square Account payments.
+var (
+	squareAccountDetailsFieldPaymentSourceToken = big.NewInt(1 << 0)
+	squareAccountDetailsFieldErrors             = big.NewInt(1 << 1)
+)
+
 type SquareAccountDetails struct {
 	// Unique identifier for the payment source used for this payment.
 	PaymentSourceToken *string `json:"payment_source_token,omitempty" url:"payment_source_token,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2437,6 +4340,27 @@ func (s *SquareAccountDetails) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SquareAccountDetails) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetPaymentSourceToken sets the PaymentSourceToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SquareAccountDetails) SetPaymentSourceToken(paymentSourceToken *string) {
+	s.PaymentSourceToken = paymentSourceToken
+	s.require(squareAccountDetailsFieldPaymentSourceToken)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SquareAccountDetails) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(squareAccountDetailsFieldErrors)
+}
+
 func (s *SquareAccountDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler SquareAccountDetails
 	var value unmarshaler
@@ -2453,6 +4377,17 @@ func (s *SquareAccountDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SquareAccountDetails) MarshalJSON() ([]byte, error) {
+	type embed SquareAccountDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SquareAccountDetails) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -2467,11 +4402,19 @@ func (s *SquareAccountDetails) String() string {
 
 // Defines the response returned by
 // [UpdatePayment](api-endpoint:Payments-UpdatePayment).
+var (
+	updatePaymentResponseFieldErrors  = big.NewInt(1 << 0)
+	updatePaymentResponseFieldPayment = big.NewInt(1 << 1)
+)
+
 type UpdatePaymentResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated payment.
 	Payment *Payment `json:"payment,omitempty" url:"payment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2495,6 +4438,27 @@ func (u *UpdatePaymentResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdatePaymentResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updatePaymentResponseFieldErrors)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentResponse) SetPayment(payment *Payment) {
+	u.Payment = payment
+	u.require(updatePaymentResponseFieldPayment)
+}
+
 func (u *UpdatePaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdatePaymentResponse
 	var value unmarshaler
@@ -2511,6 +4475,17 @@ func (u *UpdatePaymentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdatePaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdatePaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdatePaymentResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -2523,6 +4498,12 @@ func (u *UpdatePaymentResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updatePaymentRequestFieldPaymentID      = big.NewInt(1 << 0)
+	updatePaymentRequestFieldPayment        = big.NewInt(1 << 1)
+	updatePaymentRequestFieldIdempotencyKey = big.NewInt(1 << 2)
+)
+
 type UpdatePaymentRequest struct {
 	// The ID of the payment to update.
 	PaymentID string `json:"-" url:"-"`
@@ -2533,4 +4514,35 @@ type UpdatePaymentRequest struct {
 	//
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdatePaymentRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentRequest) SetPaymentID(paymentID string) {
+	u.PaymentID = paymentID
+	u.require(updatePaymentRequestFieldPaymentID)
+}
+
+// SetPayment sets the Payment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentRequest) SetPayment(payment *Payment) {
+	u.Payment = payment
+	u.require(updatePaymentRequestFieldPayment)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentRequest) SetIdempotencyKey(idempotencyKey string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updatePaymentRequestFieldIdempotencyKey)
 }

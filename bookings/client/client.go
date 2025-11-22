@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	customattributedefinitions "github.com/square/square-go-sdk/v2/bookings/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v2/bookings/customattributes"
 	locationprofiles "github.com/square/square-go-sdk/v2/bookings/locationprofiles"
@@ -23,13 +23,12 @@ type Client struct {
 	LocationProfiles           *locationprofiles.Client
 	TeamMemberProfiles         *teammemberprofiles.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -37,11 +36,12 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
-		CustomAttributes:           customattributes.NewClient(opts...),
-		LocationProfiles:           locationprofiles.NewClient(opts...),
-		TeamMemberProfiles:         teammemberprofiles.NewClient(opts...),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(options),
+		CustomAttributes:           customattributes.NewClient(options),
+		LocationProfiles:           locationprofiles.NewClient(options),
+		TeamMemberProfiles:         teammemberprofiles.NewClient(options),
 		WithRawResponse:            NewRawClient(options),
+		options:                    options,
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -49,7 +49,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -59,9 +58,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListBookingsRequest,
+	request *square.ListBookingsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Booking], error) {
+) (*core.Page[*string, *square.Booking, *square.ListBookingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -74,10 +73,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -96,14 +95,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListBookingsResponse) *internal.PageResponse[*string, *v2.Booking] {
+	readPageResponse := func(response *square.ListBookingsResponse) *core.PageResponse[*string, *square.Booking, *square.ListBookingsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetBookings()
-		return &internal.PageResponse[*string, *v2.Booking]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Booking, *square.ListBookingsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -130,9 +130,9 @@ func (c *Client) List(
 // or *Appointments Premium*.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateBookingRequest,
+	request *square.CreateBookingRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateBookingResponse, error) {
+) (*square.CreateBookingResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -150,9 +150,9 @@ func (c *Client) Create(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) SearchAvailability(
 	ctx context.Context,
-	request *v2.SearchAvailabilityRequest,
+	request *square.SearchAvailabilityRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchAvailabilityResponse, error) {
+) (*square.SearchAvailabilityResponse, error) {
 	response, err := c.WithRawResponse.SearchAvailability(
 		ctx,
 		request,
@@ -170,9 +170,9 @@ func (c *Client) SearchAvailability(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) BulkRetrieveBookings(
 	ctx context.Context,
-	request *v2.BulkRetrieveBookingsRequest,
+	request *square.BulkRetrieveBookingsRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkRetrieveBookingsResponse, error) {
+) (*square.BulkRetrieveBookingsResponse, error) {
 	response, err := c.WithRawResponse.BulkRetrieveBookings(
 		ctx,
 		request,
@@ -188,7 +188,7 @@ func (c *Client) BulkRetrieveBookings(
 func (c *Client) GetBusinessProfile(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.GetBusinessBookingProfileResponse, error) {
+) (*square.GetBusinessBookingProfileResponse, error) {
 	response, err := c.WithRawResponse.GetBusinessProfile(
 		ctx,
 		opts...,
@@ -202,9 +202,9 @@ func (c *Client) GetBusinessProfile(
 // Retrieves a seller's location booking profile.
 func (c *Client) RetrieveLocationBookingProfile(
 	ctx context.Context,
-	request *v2.RetrieveLocationBookingProfileRequest,
+	request *square.RetrieveLocationBookingProfileRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveLocationBookingProfileResponse, error) {
+) (*square.RetrieveLocationBookingProfileResponse, error) {
 	response, err := c.WithRawResponse.RetrieveLocationBookingProfile(
 		ctx,
 		request,
@@ -219,9 +219,9 @@ func (c *Client) RetrieveLocationBookingProfile(
 // Retrieves one or more team members' booking profiles.
 func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 	ctx context.Context,
-	request *v2.BulkRetrieveTeamMemberBookingProfilesRequest,
+	request *square.BulkRetrieveTeamMemberBookingProfilesRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkRetrieveTeamMemberBookingProfilesResponse, error) {
+) (*square.BulkRetrieveTeamMemberBookingProfilesResponse, error) {
 	response, err := c.WithRawResponse.BulkRetrieveTeamMemberBookingProfiles(
 		ctx,
 		request,
@@ -239,9 +239,9 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetBookingsRequest,
+	request *square.GetBookingsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetBookingResponse, error) {
+) (*square.GetBookingResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -262,9 +262,9 @@ func (c *Client) Get(
 // or *Appointments Premium*.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateBookingRequest,
+	request *square.UpdateBookingRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateBookingResponse, error) {
+) (*square.UpdateBookingResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -285,9 +285,9 @@ func (c *Client) Update(
 // or *Appointments Premium*.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *v2.CancelBookingRequest,
+	request *square.CancelBookingRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelBookingResponse, error) {
+) (*square.CancelBookingResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,

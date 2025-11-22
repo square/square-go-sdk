@@ -4,7 +4,7 @@ package subscriptions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -51,9 +50,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // For more information, see [Create a subscription](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions#create-a-subscription).
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateSubscriptionRequest,
+	request *square.CreateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateSubscriptionResponse, error) {
+) (*square.CreateSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -69,9 +68,9 @@ func (c *Client) Create(
 // variation. For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
 func (c *Client) BulkSwapPlan(
 	ctx context.Context,
-	request *v2.BulkSwapPlanRequest,
+	request *square.BulkSwapPlanRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkSwapPlanResponse, error) {
+) (*square.BulkSwapPlanResponse, error) {
 	response, err := c.WithRawResponse.BulkSwapPlan(
 		ctx,
 		request,
@@ -99,9 +98,9 @@ func (c *Client) BulkSwapPlan(
 // customer by subscription creation date.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchSubscriptionsRequest,
+	request *square.SearchSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchSubscriptionsResponse, error) {
+) (*square.SearchSubscriptionsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -116,9 +115,9 @@ func (c *Client) Search(
 // Retrieves a specific subscription.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetSubscriptionsRequest,
+	request *square.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetSubscriptionResponse, error) {
+) (*square.GetSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -134,9 +133,9 @@ func (c *Client) Get(
 // To clear a field, set its value to `null`.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateSubscriptionRequest,
+	request *square.UpdateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateSubscriptionResponse, error) {
+) (*square.UpdateSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -151,9 +150,9 @@ func (c *Client) Update(
 // Deletes a scheduled action for a subscription.
 func (c *Client) DeleteAction(
 	ctx context.Context,
-	request *v2.DeleteActionSubscriptionsRequest,
+	request *square.DeleteActionSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteSubscriptionActionResponse, error) {
+) (*square.DeleteSubscriptionActionResponse, error) {
 	response, err := c.WithRawResponse.DeleteAction(
 		ctx,
 		request,
@@ -169,9 +168,9 @@ func (c *Client) DeleteAction(
 // for a subscription.
 func (c *Client) ChangeBillingAnchorDate(
 	ctx context.Context,
-	request *v2.ChangeBillingAnchorDateRequest,
+	request *square.ChangeBillingAnchorDateRequest,
 	opts ...option.RequestOption,
-) (*v2.ChangeBillingAnchorDateResponse, error) {
+) (*square.ChangeBillingAnchorDateResponse, error) {
 	response, err := c.WithRawResponse.ChangeBillingAnchorDate(
 		ctx,
 		request,
@@ -188,9 +187,9 @@ func (c *Client) ChangeBillingAnchorDate(
 // the subscription status changes from ACTIVE to CANCELED.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *v2.CancelSubscriptionsRequest,
+	request *square.CancelSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelSubscriptionResponse, error) {
+) (*square.CancelSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,
@@ -205,9 +204,9 @@ func (c *Client) Cancel(
 // Lists all [events](https://developer.squareup.com/docs/subscriptions-api/actions-events) for a specific subscription.
 func (c *Client) ListEvents(
 	ctx context.Context,
-	request *v2.ListEventsSubscriptionsRequest,
+	request *square.ListEventsSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.SubscriptionEvent], error) {
+) (*core.Page[*string, *square.SubscriptionEvent, *square.ListSubscriptionEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -223,10 +222,10 @@ func (c *Client) ListEvents(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -245,14 +244,15 @@ func (c *Client) ListEvents(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListSubscriptionEventsResponse) *internal.PageResponse[*string, *v2.SubscriptionEvent] {
+	readPageResponse := func(response *square.ListSubscriptionEventsResponse) *core.PageResponse[*string, *square.SubscriptionEvent, *square.ListSubscriptionEventsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetSubscriptionEvents()
-		return &internal.PageResponse[*string, *v2.SubscriptionEvent]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.SubscriptionEvent, *square.ListSubscriptionEventsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -266,9 +266,9 @@ func (c *Client) ListEvents(
 // Schedules a `PAUSE` action to pause an active subscription.
 func (c *Client) Pause(
 	ctx context.Context,
-	request *v2.PauseSubscriptionRequest,
+	request *square.PauseSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*v2.PauseSubscriptionResponse, error) {
+) (*square.PauseSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Pause(
 		ctx,
 		request,
@@ -283,9 +283,9 @@ func (c *Client) Pause(
 // Schedules a `RESUME` action to resume a paused or a deactivated subscription.
 func (c *Client) Resume(
 	ctx context.Context,
-	request *v2.ResumeSubscriptionRequest,
+	request *square.ResumeSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*v2.ResumeSubscriptionResponse, error) {
+) (*square.ResumeSubscriptionResponse, error) {
 	response, err := c.WithRawResponse.Resume(
 		ctx,
 		request,
@@ -301,9 +301,9 @@ func (c *Client) Resume(
 // For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
 func (c *Client) SwapPlan(
 	ctx context.Context,
-	request *v2.SwapPlanRequest,
+	request *square.SwapPlanRequest,
 	opts ...option.RequestOption,
-) (*v2.SwapPlanResponse, error) {
+) (*square.SwapPlanResponse, error) {
 	response, err := c.WithRawResponse.SwapPlan(
 		ctx,
 		request,

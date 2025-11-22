@@ -4,24 +4,22 @@ package transferorders
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +36,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -63,9 +61,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Creates a [transfer_order.created](webhook:transfer_order.created) webhook event.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateTransferOrderRequest,
+	request *square.CreateTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateTransferOrderResponse, error) {
+) (*square.CreateTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -86,9 +84,9 @@ func (c *Client) Create(
 // - Find orders in a particular [TransferOrderStatus](entity:TransferOrderStatus)
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchTransferOrdersRequest,
+	request *square.SearchTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchTransferOrdersResponse, error) {
+) (*square.SearchTransferOrdersResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -109,9 +107,9 @@ func (c *Client) Search(
 // - Tracking information (if available)
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetTransferOrdersRequest,
+	request *square.GetTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveTransferOrderResponse, error) {
+) (*square.RetrieveTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -129,9 +127,9 @@ func (c *Client) Get(
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateTransferOrderRequest,
+	request *square.UpdateTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateTransferOrderResponse, error) {
+) (*square.UpdateTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -150,9 +148,9 @@ func (c *Client) Update(
 // Creates a [transfer_order.deleted](webhook:transfer_order.deleted) webhook event.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *v2.DeleteTransferOrdersRequest,
+	request *square.DeleteTransferOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteTransferOrderResponse, error) {
+) (*square.DeleteTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,
@@ -176,9 +174,9 @@ func (c *Client) Delete(
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *v2.CancelTransferOrderRequest,
+	request *square.CancelTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelTransferOrderResponse, error) {
+) (*square.CancelTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,
@@ -208,9 +206,9 @@ func (c *Client) Cancel(
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
 func (c *Client) Receive(
 	ctx context.Context,
-	request *v2.ReceiveTransferOrderRequest,
+	request *square.ReceiveTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.ReceiveTransferOrderResponse, error) {
+) (*square.ReceiveTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Receive(
 		ctx,
 		request,
@@ -232,9 +230,9 @@ func (c *Client) Receive(
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
 func (c *Client) Start(
 	ctx context.Context,
-	request *v2.StartTransferOrderRequest,
+	request *square.StartTransferOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.StartTransferOrderResponse, error) {
+) (*square.StartTransferOrderResponse, error) {
 	response, err := c.WithRawResponse.Start(
 		ctx,
 		request,

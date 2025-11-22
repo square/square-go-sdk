@@ -4,6 +4,15 @@ package customers
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createCustomerCardRequestFieldCustomerID        = big.NewInt(1 << 0)
+	createCustomerCardRequestFieldCardNonce         = big.NewInt(1 << 1)
+	createCustomerCardRequestFieldBillingAddress    = big.NewInt(1 << 2)
+	createCustomerCardRequestFieldCardholderName    = big.NewInt(1 << 3)
+	createCustomerCardRequestFieldVerificationToken = big.NewInt(1 << 4)
 )
 
 type CreateCustomerCardRequest struct {
@@ -30,11 +39,85 @@ type CreateCustomerCardRequest struct {
 	// Verification tokens encapsulate customer device information and 3-D Secure
 	// challenge results to indicate that Square has verified the buyer identity.
 	VerificationToken *string `json:"verification_token,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateCustomerCardRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerCardRequest) SetCustomerID(customerID string) {
+	c.CustomerID = customerID
+	c.require(createCustomerCardRequestFieldCustomerID)
+}
+
+// SetCardNonce sets the CardNonce field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerCardRequest) SetCardNonce(cardNonce string) {
+	c.CardNonce = cardNonce
+	c.require(createCustomerCardRequestFieldCardNonce)
+}
+
+// SetBillingAddress sets the BillingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerCardRequest) SetBillingAddress(billingAddress *v2.Address) {
+	c.BillingAddress = billingAddress
+	c.require(createCustomerCardRequestFieldBillingAddress)
+}
+
+// SetCardholderName sets the CardholderName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerCardRequest) SetCardholderName(cardholderName *string) {
+	c.CardholderName = cardholderName
+	c.require(createCustomerCardRequestFieldCardholderName)
+}
+
+// SetVerificationToken sets the VerificationToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerCardRequest) SetVerificationToken(verificationToken *string) {
+	c.VerificationToken = verificationToken
+	c.require(createCustomerCardRequestFieldVerificationToken)
+}
+
+var (
+	deleteCardsRequestFieldCustomerID = big.NewInt(1 << 0)
+	deleteCardsRequestFieldCardID     = big.NewInt(1 << 1)
+)
 
 type DeleteCardsRequest struct {
 	// The ID of the customer that the card on file belongs to.
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the card on file to delete.
 	CardID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (d *DeleteCardsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCardsRequest) SetCustomerID(customerID string) {
+	d.CustomerID = customerID
+	d.require(deleteCardsRequestFieldCustomerID)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCardsRequest) SetCardID(cardID string) {
+	d.CardID = cardID
+	d.require(deleteCardsRequestFieldCardID)
 }

@@ -4,7 +4,7 @@ package snippets
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetSnippetsRequest,
+	request *square.GetSnippetsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetSnippetResponse], error) {
+) (*core.Response[*square.GetSnippetResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) Get(
 		request.SiteID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetSnippetResponse
+	var response *square.GetSnippetResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetSnippetResponse]{
+	return &core.Response[*square.GetSnippetResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Upsert(
 	ctx context.Context,
-	request *v2.UpsertSnippetRequest,
+	request *square.UpsertSnippetRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertSnippetResponse], error) {
+) (*core.Response[*square.UpsertSnippetResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,11 +89,11 @@ func (r *RawClient) Upsert(
 		request.SiteID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertSnippetResponse
+	var response *square.UpsertSnippetResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -111,7 +111,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertSnippetResponse]{
+	return &core.Response[*square.UpsertSnippetResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -120,9 +120,9 @@ func (r *RawClient) Upsert(
 
 func (r *RawClient) Delete(
 	ctx context.Context,
-	request *v2.DeleteSnippetsRequest,
+	request *square.DeleteSnippetsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteSnippetResponse], error) {
+) (*core.Response[*square.DeleteSnippetResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -134,10 +134,10 @@ func (r *RawClient) Delete(
 		request.SiteID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteSnippetResponse
+	var response *square.DeleteSnippetResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteSnippetResponse]{
+	return &core.Response[*square.DeleteSnippetResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

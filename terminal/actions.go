@@ -4,12 +4,39 @@ package terminal
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	cancelActionsRequestFieldActionID = big.NewInt(1 << 0)
 )
 
 type CancelActionsRequest struct {
 	// Unique ID for the desired `TerminalAction`.
 	ActionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelActionsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetActionID sets the ActionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelActionsRequest) SetActionID(actionID string) {
+	c.ActionID = actionID
+	c.require(cancelActionsRequestFieldActionID)
+}
+
+var (
+	createTerminalActionRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTerminalActionRequestFieldAction         = big.NewInt(1 << 1)
+)
 
 type CreateTerminalActionRequest struct {
 	// A unique string that identifies this `CreateAction` request. Keys can be any valid string
@@ -20,12 +47,63 @@ type CreateTerminalActionRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
 	Action *v2.TerminalAction `json:"action,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateTerminalActionRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalActionRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTerminalActionRequestFieldIdempotencyKey)
+}
+
+// SetAction sets the Action field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalActionRequest) SetAction(action *v2.TerminalAction) {
+	c.Action = action
+	c.require(createTerminalActionRequestFieldAction)
+}
+
+var (
+	getActionsRequestFieldActionID = big.NewInt(1 << 0)
+)
 
 type GetActionsRequest struct {
 	// Unique ID for the desired `TerminalAction`.
 	ActionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetActionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetActionID sets the ActionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetActionsRequest) SetActionID(actionID string) {
+	g.ActionID = actionID
+	g.require(getActionsRequestFieldActionID)
+}
+
+var (
+	searchTerminalActionsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTerminalActionsRequestFieldCursor = big.NewInt(1 << 1)
+	searchTerminalActionsRequestFieldLimit  = big.NewInt(1 << 2)
+)
 
 type SearchTerminalActionsRequest struct {
 	// Queries terminal actions based on given conditions and sort order.
@@ -38,4 +116,35 @@ type SearchTerminalActionsRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"-"`
 	// Limit the number of results returned for a single request.
 	Limit *int `json:"limit,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchTerminalActionsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalActionsRequest) SetQuery(query *v2.TerminalActionQuery) {
+	s.Query = query
+	s.require(searchTerminalActionsRequestFieldQuery)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalActionsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTerminalActionsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalActionsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTerminalActionsRequestFieldLimit)
 }

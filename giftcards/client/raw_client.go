@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateGiftCardRequest,
+	request *square.CreateGiftCardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateGiftCardResponse], error) {
+) (*core.Response[*square.CreateGiftCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/gift-cards"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateGiftCardResponse
+	var response *square.CreateGiftCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateGiftCardResponse]{
+	return &core.Response[*square.CreateGiftCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) GetFromGan(
 	ctx context.Context,
-	request *v2.GetGiftCardFromGanRequest,
+	request *square.GetGiftCardFromGanRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetGiftCardFromGanResponse], error) {
+) (*core.Response[*square.GetGiftCardFromGanResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) GetFromGan(
 	)
 	endpointURL := baseURL + "/v2/gift-cards/from-gan"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.GetGiftCardFromGanResponse
+	var response *square.GetGiftCardFromGanResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) GetFromGan(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetGiftCardFromGanResponse]{
+	return &core.Response[*square.GetGiftCardFromGanResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) GetFromGan(
 
 func (r *RawClient) GetFromNonce(
 	ctx context.Context,
-	request *v2.GetGiftCardFromNonceRequest,
+	request *square.GetGiftCardFromNonceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetGiftCardFromNonceResponse], error) {
+) (*core.Response[*square.GetGiftCardFromNonceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,11 +127,11 @@ func (r *RawClient) GetFromNonce(
 	)
 	endpointURL := baseURL + "/v2/gift-cards/from-nonce"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.GetGiftCardFromNonceResponse
+	var response *square.GetGiftCardFromNonceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (r *RawClient) GetFromNonce(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetGiftCardFromNonceResponse]{
+	return &core.Response[*square.GetGiftCardFromNonceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -158,9 +158,9 @@ func (r *RawClient) GetFromNonce(
 
 func (r *RawClient) LinkCustomer(
 	ctx context.Context,
-	request *v2.LinkCustomerToGiftCardRequest,
+	request *square.LinkCustomerToGiftCardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.LinkCustomerToGiftCardResponse], error) {
+) (*core.Response[*square.LinkCustomerToGiftCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -172,11 +172,11 @@ func (r *RawClient) LinkCustomer(
 		request.GiftCardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.LinkCustomerToGiftCardResponse
+	var response *square.LinkCustomerToGiftCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -194,7 +194,7 @@ func (r *RawClient) LinkCustomer(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.LinkCustomerToGiftCardResponse]{
+	return &core.Response[*square.LinkCustomerToGiftCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -203,9 +203,9 @@ func (r *RawClient) LinkCustomer(
 
 func (r *RawClient) UnlinkCustomer(
 	ctx context.Context,
-	request *v2.UnlinkCustomerFromGiftCardRequest,
+	request *square.UnlinkCustomerFromGiftCardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UnlinkCustomerFromGiftCardResponse], error) {
+) (*core.Response[*square.UnlinkCustomerFromGiftCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -217,11 +217,11 @@ func (r *RawClient) UnlinkCustomer(
 		request.GiftCardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UnlinkCustomerFromGiftCardResponse
+	var response *square.UnlinkCustomerFromGiftCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -239,7 +239,7 @@ func (r *RawClient) UnlinkCustomer(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UnlinkCustomerFromGiftCardResponse]{
+	return &core.Response[*square.UnlinkCustomerFromGiftCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -248,9 +248,9 @@ func (r *RawClient) UnlinkCustomer(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetGiftCardsRequest,
+	request *square.GetGiftCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetGiftCardResponse], error) {
+) (*core.Response[*square.GetGiftCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -262,10 +262,10 @@ func (r *RawClient) Get(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetGiftCardResponse
+	var response *square.GetGiftCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -282,7 +282,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetGiftCardResponse]{
+	return &core.Response[*square.GetGiftCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

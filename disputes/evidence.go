@@ -2,19 +2,86 @@
 
 package disputes
 
+import (
+	big "math/big"
+)
+
+var (
+	deleteEvidenceRequestFieldDisputeID  = big.NewInt(1 << 0)
+	deleteEvidenceRequestFieldEvidenceID = big.NewInt(1 << 1)
+)
+
 type DeleteEvidenceRequest struct {
 	// The ID of the dispute from which you want to remove evidence.
 	DisputeID string `json:"-" url:"-"`
 	// The ID of the evidence you want to remove.
 	EvidenceID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteEvidenceRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteEvidenceRequest) SetDisputeID(disputeID string) {
+	d.DisputeID = disputeID
+	d.require(deleteEvidenceRequestFieldDisputeID)
+}
+
+// SetEvidenceID sets the EvidenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteEvidenceRequest) SetEvidenceID(evidenceID string) {
+	d.EvidenceID = evidenceID
+	d.require(deleteEvidenceRequestFieldEvidenceID)
+}
+
+var (
+	getEvidenceRequestFieldDisputeID  = big.NewInt(1 << 0)
+	getEvidenceRequestFieldEvidenceID = big.NewInt(1 << 1)
+)
 
 type GetEvidenceRequest struct {
 	// The ID of the dispute from which you want to retrieve evidence metadata.
 	DisputeID string `json:"-" url:"-"`
 	// The ID of the evidence to retrieve.
 	EvidenceID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetEvidenceRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEvidenceRequest) SetDisputeID(disputeID string) {
+	g.DisputeID = disputeID
+	g.require(getEvidenceRequestFieldDisputeID)
+}
+
+// SetEvidenceID sets the EvidenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEvidenceRequest) SetEvidenceID(evidenceID string) {
+	g.EvidenceID = evidenceID
+	g.require(getEvidenceRequestFieldEvidenceID)
+}
+
+var (
+	listEvidenceRequestFieldDisputeID = big.NewInt(1 << 0)
+	listEvidenceRequestFieldCursor    = big.NewInt(1 << 1)
+)
 
 type ListEvidenceRequest struct {
 	// The ID of the dispute.
@@ -23,4 +90,28 @@ type ListEvidenceRequest struct {
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListEvidenceRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetDisputeID sets the DisputeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEvidenceRequest) SetDisputeID(disputeID string) {
+	l.DisputeID = disputeID
+	l.require(listEvidenceRequestFieldDisputeID)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEvidenceRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEvidenceRequestFieldCursor)
 }

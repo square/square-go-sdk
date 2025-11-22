@@ -4,6 +4,12 @@ package labor
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createBreakTypeRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createBreakTypeRequestFieldBreakType      = big.NewInt(1 << 1)
 )
 
 type CreateBreakTypeRequest struct {
@@ -11,17 +17,89 @@ type CreateBreakTypeRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `BreakType` to be created.
 	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateBreakTypeRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBreakTypeRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createBreakTypeRequestFieldIdempotencyKey)
+}
+
+// SetBreakType sets the BreakType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBreakTypeRequest) SetBreakType(breakType *v2.BreakType) {
+	c.BreakType = breakType
+	c.require(createBreakTypeRequestFieldBreakType)
+}
+
+var (
+	deleteBreakTypesRequestFieldID = big.NewInt(1 << 0)
+)
 
 type DeleteBreakTypesRequest struct {
 	// The UUID for the `BreakType` being deleted.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteBreakTypesRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteBreakTypesRequest) SetID(id string) {
+	d.ID = id
+	d.require(deleteBreakTypesRequestFieldID)
+}
+
+var (
+	getBreakTypesRequestFieldID = big.NewInt(1 << 0)
+)
 
 type GetBreakTypesRequest struct {
 	// The UUID for the `BreakType` being retrieved.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetBreakTypesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBreakTypesRequest) SetID(id string) {
+	g.ID = id
+	g.require(getBreakTypesRequestFieldID)
+}
+
+var (
+	listBreakTypesRequestFieldLocationID = big.NewInt(1 << 0)
+	listBreakTypesRequestFieldLimit      = big.NewInt(1 << 1)
+	listBreakTypesRequestFieldCursor     = big.NewInt(1 << 2)
+)
 
 type ListBreakTypesRequest struct {
 	// Filter the returned `BreakType` results to only those that are associated with the
@@ -32,11 +110,71 @@ type ListBreakTypesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// A pointer to the next page of `BreakType` results to fetch.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListBreakTypesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBreakTypesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listBreakTypesRequestFieldLocationID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBreakTypesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listBreakTypesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBreakTypesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listBreakTypesRequestFieldCursor)
+}
+
+var (
+	updateBreakTypeRequestFieldID        = big.NewInt(1 << 0)
+	updateBreakTypeRequestFieldBreakType = big.NewInt(1 << 1)
+)
 
 type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
 	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateBreakTypeRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBreakTypeRequest) SetID(id string) {
+	u.ID = id
+	u.require(updateBreakTypeRequestFieldID)
+}
+
+// SetBreakType sets the BreakType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v2.BreakType) {
+	u.BreakType = breakType
+	u.require(updateBreakTypeRequestFieldBreakType)
 }

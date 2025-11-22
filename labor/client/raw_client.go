@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) CreateScheduledShift(
 	ctx context.Context,
-	request *v2.CreateScheduledShiftRequest,
+	request *square.CreateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateScheduledShiftResponse], error) {
+) (*core.Response[*square.CreateScheduledShiftResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) CreateScheduledShift(
 	)
 	endpointURL := baseURL + "/v2/labor/scheduled-shifts"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateScheduledShiftResponse
+	var response *square.CreateScheduledShiftResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) CreateScheduledShift(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateScheduledShiftResponse]{
+	return &core.Response[*square.CreateScheduledShiftResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) CreateScheduledShift(
 
 func (r *RawClient) BulkPublishScheduledShifts(
 	ctx context.Context,
-	request *v2.BulkPublishScheduledShiftsRequest,
+	request *square.BulkPublishScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkPublishScheduledShiftsResponse], error) {
+) (*core.Response[*square.BulkPublishScheduledShiftsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) BulkPublishScheduledShifts(
 	)
 	endpointURL := baseURL + "/v2/labor/scheduled-shifts/bulk-publish"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkPublishScheduledShiftsResponse
+	var response *square.BulkPublishScheduledShiftsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) BulkPublishScheduledShifts(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkPublishScheduledShiftsResponse]{
+	return &core.Response[*square.BulkPublishScheduledShiftsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) BulkPublishScheduledShifts(
 
 func (r *RawClient) SearchScheduledShifts(
 	ctx context.Context,
-	request *v2.SearchScheduledShiftsRequest,
+	request *square.SearchScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchScheduledShiftsResponse], error) {
+) (*core.Response[*square.SearchScheduledShiftsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,11 +127,11 @@ func (r *RawClient) SearchScheduledShifts(
 	)
 	endpointURL := baseURL + "/v2/labor/scheduled-shifts/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchScheduledShiftsResponse
+	var response *square.SearchScheduledShiftsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (r *RawClient) SearchScheduledShifts(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchScheduledShiftsResponse]{
+	return &core.Response[*square.SearchScheduledShiftsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -158,9 +158,9 @@ func (r *RawClient) SearchScheduledShifts(
 
 func (r *RawClient) RetrieveScheduledShift(
 	ctx context.Context,
-	request *v2.RetrieveScheduledShiftRequest,
+	request *square.RetrieveScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveScheduledShiftResponse], error) {
+) (*core.Response[*square.RetrieveScheduledShiftResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -172,10 +172,10 @@ func (r *RawClient) RetrieveScheduledShift(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveScheduledShiftResponse
+	var response *square.RetrieveScheduledShiftResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -192,7 +192,7 @@ func (r *RawClient) RetrieveScheduledShift(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveScheduledShiftResponse]{
+	return &core.Response[*square.RetrieveScheduledShiftResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -201,9 +201,9 @@ func (r *RawClient) RetrieveScheduledShift(
 
 func (r *RawClient) UpdateScheduledShift(
 	ctx context.Context,
-	request *v2.UpdateScheduledShiftRequest,
+	request *square.UpdateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateScheduledShiftResponse], error) {
+) (*core.Response[*square.UpdateScheduledShiftResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -215,11 +215,11 @@ func (r *RawClient) UpdateScheduledShift(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateScheduledShiftResponse
+	var response *square.UpdateScheduledShiftResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -237,7 +237,7 @@ func (r *RawClient) UpdateScheduledShift(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateScheduledShiftResponse]{
+	return &core.Response[*square.UpdateScheduledShiftResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -246,9 +246,9 @@ func (r *RawClient) UpdateScheduledShift(
 
 func (r *RawClient) PublishScheduledShift(
 	ctx context.Context,
-	request *v2.PublishScheduledShiftRequest,
+	request *square.PublishScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.PublishScheduledShiftResponse], error) {
+) (*core.Response[*square.PublishScheduledShiftResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -260,11 +260,11 @@ func (r *RawClient) PublishScheduledShift(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.PublishScheduledShiftResponse
+	var response *square.PublishScheduledShiftResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -282,7 +282,7 @@ func (r *RawClient) PublishScheduledShift(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.PublishScheduledShiftResponse]{
+	return &core.Response[*square.PublishScheduledShiftResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -291,9 +291,9 @@ func (r *RawClient) PublishScheduledShift(
 
 func (r *RawClient) CreateTimecard(
 	ctx context.Context,
-	request *v2.CreateTimecardRequest,
+	request *square.CreateTimecardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTimecardResponse], error) {
+) (*core.Response[*square.CreateTimecardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -302,11 +302,11 @@ func (r *RawClient) CreateTimecard(
 	)
 	endpointURL := baseURL + "/v2/labor/timecards"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateTimecardResponse
+	var response *square.CreateTimecardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -324,7 +324,7 @@ func (r *RawClient) CreateTimecard(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTimecardResponse]{
+	return &core.Response[*square.CreateTimecardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -333,9 +333,9 @@ func (r *RawClient) CreateTimecard(
 
 func (r *RawClient) SearchTimecards(
 	ctx context.Context,
-	request *v2.SearchTimecardsRequest,
+	request *square.SearchTimecardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTimecardsResponse], error) {
+) (*core.Response[*square.SearchTimecardsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -344,11 +344,11 @@ func (r *RawClient) SearchTimecards(
 	)
 	endpointURL := baseURL + "/v2/labor/timecards/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTimecardsResponse
+	var response *square.SearchTimecardsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -366,7 +366,7 @@ func (r *RawClient) SearchTimecards(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTimecardsResponse]{
+	return &core.Response[*square.SearchTimecardsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -375,9 +375,9 @@ func (r *RawClient) SearchTimecards(
 
 func (r *RawClient) RetrieveTimecard(
 	ctx context.Context,
-	request *v2.RetrieveTimecardRequest,
+	request *square.RetrieveTimecardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveTimecardResponse], error) {
+) (*core.Response[*square.RetrieveTimecardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -389,10 +389,10 @@ func (r *RawClient) RetrieveTimecard(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveTimecardResponse
+	var response *square.RetrieveTimecardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -409,7 +409,7 @@ func (r *RawClient) RetrieveTimecard(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveTimecardResponse]{
+	return &core.Response[*square.RetrieveTimecardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -418,9 +418,9 @@ func (r *RawClient) RetrieveTimecard(
 
 func (r *RawClient) UpdateTimecard(
 	ctx context.Context,
-	request *v2.UpdateTimecardRequest,
+	request *square.UpdateTimecardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateTimecardResponse], error) {
+) (*core.Response[*square.UpdateTimecardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -432,11 +432,11 @@ func (r *RawClient) UpdateTimecard(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateTimecardResponse
+	var response *square.UpdateTimecardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -454,7 +454,7 @@ func (r *RawClient) UpdateTimecard(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateTimecardResponse]{
+	return &core.Response[*square.UpdateTimecardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -463,9 +463,9 @@ func (r *RawClient) UpdateTimecard(
 
 func (r *RawClient) DeleteTimecard(
 	ctx context.Context,
-	request *v2.DeleteTimecardRequest,
+	request *square.DeleteTimecardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteTimecardResponse], error) {
+) (*core.Response[*square.DeleteTimecardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -477,10 +477,10 @@ func (r *RawClient) DeleteTimecard(
 		request.ID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteTimecardResponse
+	var response *square.DeleteTimecardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -497,7 +497,7 @@ func (r *RawClient) DeleteTimecard(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteTimecardResponse]{
+	return &core.Response[*square.DeleteTimecardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

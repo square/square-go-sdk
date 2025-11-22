@@ -4,7 +4,7 @@ package accounts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	loyalty "github.com/square/square-go-sdk/v2/loyalty"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyAccountRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateLoyaltyAccountResponse], error) {
+) (*core.Response[*square.CreateLoyaltyAccountResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/loyalty/accounts"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateLoyaltyAccountResponse
+	var response *square.CreateLoyaltyAccountResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateLoyaltyAccountResponse]{
+	return &core.Response[*square.CreateLoyaltyAccountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyAccountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchLoyaltyAccountsResponse], error) {
+) (*core.Response[*square.SearchLoyaltyAccountsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/loyalty/accounts/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchLoyaltyAccountsResponse
+	var response *square.SearchLoyaltyAccountsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchLoyaltyAccountsResponse]{
+	return &core.Response[*square.SearchLoyaltyAccountsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *loyalty.GetAccountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetLoyaltyAccountResponse], error) {
+) (*core.Response[*square.GetLoyaltyAccountResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Get(
 		request.AccountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetLoyaltyAccountResponse
+	var response *square.GetLoyaltyAccountResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetLoyaltyAccountResponse]{
+	return &core.Response[*square.GetLoyaltyAccountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -162,7 +162,7 @@ func (r *RawClient) AccumulatePoints(
 	ctx context.Context,
 	request *loyalty.AccumulateLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.AccumulateLoyaltyPointsResponse], error) {
+) (*core.Response[*square.AccumulateLoyaltyPointsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,11 +174,11 @@ func (r *RawClient) AccumulatePoints(
 		request.AccountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.AccumulateLoyaltyPointsResponse
+	var response *square.AccumulateLoyaltyPointsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -196,7 +196,7 @@ func (r *RawClient) AccumulatePoints(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.AccumulateLoyaltyPointsResponse]{
+	return &core.Response[*square.AccumulateLoyaltyPointsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -207,7 +207,7 @@ func (r *RawClient) Adjust(
 	ctx context.Context,
 	request *loyalty.AdjustLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.AdjustLoyaltyPointsResponse], error) {
+) (*core.Response[*square.AdjustLoyaltyPointsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -219,11 +219,11 @@ func (r *RawClient) Adjust(
 		request.AccountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.AdjustLoyaltyPointsResponse
+	var response *square.AdjustLoyaltyPointsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -241,7 +241,7 @@ func (r *RawClient) Adjust(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.AdjustLoyaltyPointsResponse]{
+	return &core.Response[*square.AdjustLoyaltyPointsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

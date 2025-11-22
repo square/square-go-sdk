@@ -6,16 +6,67 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	bulkRetrieveChannelsRequestFieldChannelIDs = big.NewInt(1 << 0)
 )
 
 type BulkRetrieveChannelsRequest struct {
 	ChannelIDs []string `json:"channel_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkRetrieveChannelsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetChannelIDs sets the ChannelIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveChannelsRequest) SetChannelIDs(channelIDs []string) {
+	b.ChannelIDs = channelIDs
+	b.require(bulkRetrieveChannelsRequestFieldChannelIDs)
+}
+
+var (
+	getChannelsRequestFieldChannelID = big.NewInt(1 << 0)
+)
 
 type GetChannelsRequest struct {
 	// A channel id
 	ChannelID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetChannelsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetChannelID sets the ChannelID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetChannelsRequest) SetChannelID(channelID string) {
+	g.ChannelID = channelID
+	g.require(getChannelsRequestFieldChannelID)
+}
+
+var (
+	listChannelsRequestFieldReferenceType = big.NewInt(1 << 0)
+	listChannelsRequestFieldReferenceID   = big.NewInt(1 << 1)
+	listChannelsRequestFieldStatus        = big.NewInt(1 << 2)
+	listChannelsRequestFieldCursor        = big.NewInt(1 << 3)
+	listChannelsRequestFieldLimit         = big.NewInt(1 << 4)
+)
 
 type ListChannelsRequest struct {
 	// Type of reference associated to channel
@@ -29,10 +80,60 @@ type ListChannelsRequest struct {
 	// Maximum number of results to return.
 	// When not provided the returned results will be cap at 100 channels.
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListChannelsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetReferenceType sets the ReferenceType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsRequest) SetReferenceType(referenceType *ReferenceType) {
+	l.ReferenceType = referenceType
+	l.require(listChannelsRequestFieldReferenceType)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsRequest) SetReferenceID(referenceID *string) {
+	l.ReferenceID = referenceID
+	l.require(listChannelsRequestFieldReferenceID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsRequest) SetStatus(status *ChannelStatus) {
+	l.Status = status
+	l.require(listChannelsRequestFieldStatus)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listChannelsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listChannelsRequestFieldLimit)
 }
 
 // Defines the fields that are included in the request body for the
 // [BulkRetrieveChannels](api-endpoint:Channels-BulkRetrieveChannels) endpoint.
+var (
+	bulkRetrieveChannelsResponseFieldErrors    = big.NewInt(1 << 0)
+	bulkRetrieveChannelsResponseFieldResponses = big.NewInt(1 << 1)
+)
+
 type BulkRetrieveChannelsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -41,6 +142,9 @@ type BulkRetrieveChannelsResponse struct {
 	// Channel response of a success retrieval would contain channel info
 	// whereas channel response of a failed retrieval would have error info.
 	Responses map[string]*RetrieveChannelResponse `json:"responses,omitempty" url:"responses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -64,6 +168,27 @@ func (b *BulkRetrieveChannelsResponse) GetExtraProperties() map[string]interface
 	return b.extraProperties
 }
 
+func (b *BulkRetrieveChannelsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveChannelsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkRetrieveChannelsResponseFieldErrors)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveChannelsResponse) SetResponses(responses map[string]*RetrieveChannelResponse) {
+	b.Responses = responses
+	b.require(bulkRetrieveChannelsResponseFieldResponses)
+}
+
 func (b *BulkRetrieveChannelsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkRetrieveChannelsResponse
 	var value unmarshaler
@@ -80,6 +205,17 @@ func (b *BulkRetrieveChannelsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkRetrieveChannelsResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveChannelsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkRetrieveChannelsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -91,6 +227,17 @@ func (b *BulkRetrieveChannelsResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", b)
 }
+
+var (
+	channelFieldID         = big.NewInt(1 << 0)
+	channelFieldMerchantID = big.NewInt(1 << 1)
+	channelFieldName       = big.NewInt(1 << 2)
+	channelFieldVersion    = big.NewInt(1 << 3)
+	channelFieldReference  = big.NewInt(1 << 4)
+	channelFieldStatus     = big.NewInt(1 << 5)
+	channelFieldCreatedAt  = big.NewInt(1 << 6)
+	channelFieldUpdatedAt  = big.NewInt(1 << 7)
+)
 
 type Channel struct {
 	// The channel's unique ID.
@@ -112,6 +259,9 @@ type Channel struct {
 	// The timestamp for when the channel was last updated, in RFC 3339 format (for example, "2016-09-04T23:59:33.123Z").
 	// For more information, see [Working with Dates](https://developer.squareup.com/docs/build-basics/working-with-dates).
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -177,6 +327,69 @@ func (c *Channel) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *Channel) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetID(id *string) {
+	c.ID = id
+	c.require(channelFieldID)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetMerchantID(merchantID *string) {
+	c.MerchantID = merchantID
+	c.require(channelFieldMerchantID)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetName(name *string) {
+	c.Name = name
+	c.require(channelFieldName)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetVersion(version *int) {
+	c.Version = version
+	c.require(channelFieldVersion)
+}
+
+// SetReference sets the Reference field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetReference(reference *Reference) {
+	c.Reference = reference
+	c.require(channelFieldReference)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetStatus(status *ChannelStatus) {
+	c.Status = status
+	c.require(channelFieldStatus)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetCreatedAt(createdAt *string) {
+	c.CreatedAt = createdAt
+	c.require(channelFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Channel) SetUpdatedAt(updatedAt *string) {
+	c.UpdatedAt = updatedAt
+	c.require(channelFieldUpdatedAt)
+}
+
 func (c *Channel) UnmarshalJSON(data []byte) error {
 	type unmarshaler Channel
 	var value unmarshaler
@@ -191,6 +404,17 @@ func (c *Channel) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *Channel) MarshalJSON() ([]byte, error) {
+	type embed Channel
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *Channel) String() string {
@@ -227,6 +451,12 @@ func (c ChannelStatus) Ptr() *ChannelStatus {
 	return &c
 }
 
+var (
+	listChannelsResponseFieldErrors   = big.NewInt(1 << 0)
+	listChannelsResponseFieldChannels = big.NewInt(1 << 1)
+	listChannelsResponseFieldCursor   = big.NewInt(1 << 2)
+)
+
 type ListChannelsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -234,6 +464,9 @@ type ListChannelsResponse struct {
 	Channels []*Channel `json:"channels,omitempty" url:"channels,omitempty"`
 	// The token required to retrieve the next page of results.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -264,6 +497,34 @@ func (l *ListChannelsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListChannelsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listChannelsResponseFieldErrors)
+}
+
+// SetChannels sets the Channels field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsResponse) SetChannels(channels []*Channel) {
+	l.Channels = channels
+	l.require(listChannelsResponseFieldChannels)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListChannelsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listChannelsResponseFieldCursor)
+}
+
 func (l *ListChannelsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListChannelsResponse
 	var value unmarshaler
@@ -280,6 +541,17 @@ func (l *ListChannelsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListChannelsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListChannelsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListChannelsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -292,12 +564,20 @@ func (l *ListChannelsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+var (
+	referenceFieldType = big.NewInt(1 << 0)
+	referenceFieldID   = big.NewInt(1 << 1)
+)
+
 type Reference struct {
 	// The type of entity a channel is associated with.
 	// See [Type](#type-type) for possible values
 	Type *ReferenceType `json:"type,omitempty" url:"type,omitempty"`
 	// The id of the entity a channel is associated with.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -321,6 +601,27 @@ func (r *Reference) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *Reference) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *Reference) SetType(type_ *ReferenceType) {
+	r.Type = type_
+	r.require(referenceFieldType)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *Reference) SetID(id *string) {
+	r.ID = id
+	r.require(referenceFieldID)
+}
+
 func (r *Reference) UnmarshalJSON(data []byte) error {
 	type unmarshaler Reference
 	var value unmarshaler
@@ -335,6 +636,17 @@ func (r *Reference) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *Reference) MarshalJSON() ([]byte, error) {
+	type embed Reference
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *Reference) String() string {
@@ -411,11 +723,19 @@ func (r ReferenceType) Ptr() *ReferenceType {
 	return &r
 }
 
+var (
+	retrieveChannelResponseFieldErrors  = big.NewInt(1 << 0)
+	retrieveChannelResponseFieldChannel = big.NewInt(1 << 1)
+)
+
 type RetrieveChannelResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested Channel.
 	Channel *Channel `json:"channel,omitempty" url:"channel,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -439,6 +759,27 @@ func (r *RetrieveChannelResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RetrieveChannelResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveChannelResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveChannelResponseFieldErrors)
+}
+
+// SetChannel sets the Channel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveChannelResponse) SetChannel(channel *Channel) {
+	r.Channel = channel
+	r.require(retrieveChannelResponseFieldChannel)
+}
+
 func (r *RetrieveChannelResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveChannelResponse
 	var value unmarshaler
@@ -453,6 +794,17 @@ func (r *RetrieveChannelResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RetrieveChannelResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveChannelResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RetrieveChannelResponse) String() string {

@@ -4,12 +4,39 @@ package terminal
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	cancelRefundsRequestFieldTerminalRefundID = big.NewInt(1 << 0)
 )
 
 type CancelRefundsRequest struct {
 	// The unique ID for the desired `TerminalRefund`.
 	TerminalRefundID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelRefundsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTerminalRefundID sets the TerminalRefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelRefundsRequest) SetTerminalRefundID(terminalRefundID string) {
+	c.TerminalRefundID = terminalRefundID
+	c.require(cancelRefundsRequestFieldTerminalRefundID)
+}
+
+var (
+	createTerminalRefundRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTerminalRefundRequestFieldRefund         = big.NewInt(1 << 1)
+)
 
 type CreateTerminalRefundRequest struct {
 	// A unique string that identifies this `CreateRefund` request. Keys can be any valid string but
@@ -19,12 +46,63 @@ type CreateTerminalRefundRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The refund to create.
 	Refund *v2.TerminalRefund `json:"refund,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateTerminalRefundRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalRefundRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTerminalRefundRequestFieldIdempotencyKey)
+}
+
+// SetRefund sets the Refund field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalRefundRequest) SetRefund(refund *v2.TerminalRefund) {
+	c.Refund = refund
+	c.require(createTerminalRefundRequestFieldRefund)
+}
+
+var (
+	getRefundsRequestFieldTerminalRefundID = big.NewInt(1 << 0)
+)
 
 type GetRefundsRequest struct {
 	// The unique ID for the desired `TerminalRefund`.
 	TerminalRefundID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetRefundsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTerminalRefundID sets the TerminalRefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetRefundsRequest) SetTerminalRefundID(terminalRefundID string) {
+	g.TerminalRefundID = terminalRefundID
+	g.require(getRefundsRequestFieldTerminalRefundID)
+}
+
+var (
+	searchTerminalRefundsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTerminalRefundsRequestFieldCursor = big.NewInt(1 << 1)
+	searchTerminalRefundsRequestFieldLimit  = big.NewInt(1 << 2)
+)
 
 type SearchTerminalRefundsRequest struct {
 	// Queries the Terminal refunds based on given conditions and the sort order. Calling
@@ -36,4 +114,35 @@ type SearchTerminalRefundsRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"-"`
 	// Limits the number of results returned for a single request.
 	Limit *int `json:"limit,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchTerminalRefundsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalRefundsRequest) SetQuery(query *v2.TerminalRefundQuery) {
+	s.Query = query
+	s.require(searchTerminalRefundsRequestFieldQuery)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalRefundsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTerminalRefundsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalRefundsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTerminalRefundsRequestFieldLimit)
 }

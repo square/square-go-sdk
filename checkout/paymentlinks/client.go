@@ -4,7 +4,7 @@ package paymentlinks
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	checkout "github.com/square/square-go-sdk/v2/checkout"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -47,7 +46,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *checkout.ListPaymentLinksRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.PaymentLink], error) {
+) (*core.Page[*string, *square.PaymentLink, *square.ListPaymentLinksResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -60,10 +59,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -82,14 +81,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListPaymentLinksResponse) *internal.PageResponse[*string, *v2.PaymentLink] {
+	readPageResponse := func(response *square.ListPaymentLinksResponse) *core.PageResponse[*string, *square.PaymentLink, *square.ListPaymentLinksResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetPaymentLinks()
-		return &internal.PageResponse[*string, *v2.PaymentLink]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.PaymentLink, *square.ListPaymentLinksResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -105,7 +105,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *checkout.CreatePaymentLinkRequest,
 	opts ...option.RequestOption,
-) (*v2.CreatePaymentLinkResponse, error) {
+) (*square.CreatePaymentLinkResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -122,7 +122,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *checkout.GetPaymentLinksRequest,
 	opts ...option.RequestOption,
-) (*v2.GetPaymentLinkResponse, error) {
+) (*square.GetPaymentLinkResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -141,7 +141,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *checkout.UpdatePaymentLinkRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdatePaymentLinkResponse, error) {
+) (*square.UpdatePaymentLinkResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -158,7 +158,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *checkout.DeletePaymentLinksRequest,
 	opts ...option.RequestOption,
-) (*v2.DeletePaymentLinkResponse, error) {
+) (*square.DeletePaymentLinkResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

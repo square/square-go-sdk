@@ -4,25 +4,23 @@ package transactions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	locations "github.com/square/square-go-sdk/v2/locations"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -52,7 +50,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *locations.ListTransactionsRequest,
 	opts ...option.RequestOption,
-) (*v2.ListTransactionsResponse, error) {
+) (*square.ListTransactionsResponse, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
 		request,
@@ -69,7 +67,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *locations.GetTransactionsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetTransactionResponse, error) {
+) (*square.GetTransactionResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -90,7 +88,7 @@ func (c *Client) Capture(
 	ctx context.Context,
 	request *locations.CaptureTransactionsRequest,
 	opts ...option.RequestOption,
-) (*v2.CaptureTransactionResponse, error) {
+) (*square.CaptureTransactionResponse, error) {
 	response, err := c.WithRawResponse.Capture(
 		ctx,
 		request,
@@ -111,7 +109,7 @@ func (c *Client) Void(
 	ctx context.Context,
 	request *locations.VoidTransactionsRequest,
 	opts ...option.RequestOption,
-) (*v2.VoidTransactionResponse, error) {
+) (*square.VoidTransactionResponse, error) {
 	response, err := c.WithRawResponse.Void(
 		ctx,
 		request,

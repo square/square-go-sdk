@@ -4,7 +4,7 @@ package customattributes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	customers "github.com/square/square-go-sdk/v2/customers"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *customers.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetCustomerCustomAttributeResponse], error) {
+) (*core.Response[*square.GetCustomerCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -55,10 +55,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetCustomerCustomAttributeResponse
+	var response *square.GetCustomerCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -75,7 +75,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetCustomerCustomAttributeResponse]{
+	return &core.Response[*square.GetCustomerCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -86,7 +86,7 @@ func (r *RawClient) Upsert(
 	ctx context.Context,
 	request *customers.UpsertCustomerCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertCustomerCustomAttributeResponse], error) {
+) (*core.Response[*square.UpsertCustomerCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -99,11 +99,11 @@ func (r *RawClient) Upsert(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertCustomerCustomAttributeResponse
+	var response *square.UpsertCustomerCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -121,7 +121,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertCustomerCustomAttributeResponse]{
+	return &core.Response[*square.UpsertCustomerCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -132,7 +132,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *customers.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteCustomerCustomAttributeResponse], error) {
+) (*core.Response[*square.DeleteCustomerCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -145,10 +145,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteCustomerCustomAttributeResponse
+	var response *square.DeleteCustomerCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -165,7 +165,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteCustomerCustomAttributeResponse]{
+	return &core.Response[*square.DeleteCustomerCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -4,25 +4,23 @@ package object
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	catalog "github.com/square/square-go-sdk/v2/catalog"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -51,7 +49,7 @@ func (c *Client) Upsert(
 	ctx context.Context,
 	request *catalog.UpsertCatalogObjectRequest,
 	opts ...option.RequestOption,
-) (*v2.UpsertCatalogObjectResponse, error) {
+) (*square.UpsertCatalogObjectResponse, error) {
 	response, err := c.WithRawResponse.Upsert(
 		ctx,
 		request,
@@ -74,7 +72,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *catalog.GetObjectRequest,
 	opts ...option.RequestOption,
-) (*v2.GetCatalogObjectResponse, error) {
+) (*square.GetCatalogObjectResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -100,7 +98,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *catalog.DeleteObjectRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteCatalogObjectResponse, error) {
+) (*square.DeleteCatalogObjectResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

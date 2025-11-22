@@ -4,7 +4,7 @@ package actions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalActionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTerminalActionResponse], error) {
+) (*core.Response[*square.CreateTerminalActionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/terminals/actions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateTerminalActionResponse
+	var response *square.CreateTerminalActionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTerminalActionResponse]{
+	return &core.Response[*square.CreateTerminalActionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalActionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTerminalActionsResponse], error) {
+) (*core.Response[*square.SearchTerminalActionsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/terminals/actions/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTerminalActionsResponse
+	var response *square.SearchTerminalActionsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTerminalActionsResponse]{
+	return &core.Response[*square.SearchTerminalActionsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *terminal.GetActionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetTerminalActionResponse], error) {
+) (*core.Response[*square.GetTerminalActionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Get(
 		request.ActionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetTerminalActionResponse
+	var response *square.GetTerminalActionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetTerminalActionResponse]{
+	return &core.Response[*square.GetTerminalActionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -162,7 +162,7 @@ func (r *RawClient) Cancel(
 	ctx context.Context,
 	request *terminal.CancelActionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelTerminalActionResponse], error) {
+) (*core.Response[*square.CancelTerminalActionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,10 +174,10 @@ func (r *RawClient) Cancel(
 		request.ActionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelTerminalActionResponse
+	var response *square.CancelTerminalActionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -194,7 +194,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelTerminalActionResponse]{
+	return &core.Response[*square.CancelTerminalActionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

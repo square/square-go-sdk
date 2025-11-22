@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateTeamMemberRequest,
+	request *square.CreateTeamMemberRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTeamMemberResponse], error) {
+) (*core.Response[*square.CreateTeamMemberResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,10 +43,10 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/team-members"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CreateTeamMemberResponse
+	var response *square.CreateTeamMemberResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -64,7 +64,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTeamMemberResponse]{
+	return &core.Response[*square.CreateTeamMemberResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -73,9 +73,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) BatchCreate(
 	ctx context.Context,
-	request *v2.BatchCreateTeamMembersRequest,
+	request *square.BatchCreateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchCreateTeamMembersResponse], error) {
+) (*core.Response[*square.BatchCreateTeamMembersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,11 +84,11 @@ func (r *RawClient) BatchCreate(
 	)
 	endpointURL := baseURL + "/v2/team-members/bulk-create"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchCreateTeamMembersResponse
+	var response *square.BatchCreateTeamMembersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -106,7 +106,7 @@ func (r *RawClient) BatchCreate(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchCreateTeamMembersResponse]{
+	return &core.Response[*square.BatchCreateTeamMembersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -115,9 +115,9 @@ func (r *RawClient) BatchCreate(
 
 func (r *RawClient) BatchUpdate(
 	ctx context.Context,
-	request *v2.BatchUpdateTeamMembersRequest,
+	request *square.BatchUpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchUpdateTeamMembersResponse], error) {
+) (*core.Response[*square.BatchUpdateTeamMembersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -126,11 +126,11 @@ func (r *RawClient) BatchUpdate(
 	)
 	endpointURL := baseURL + "/v2/team-members/bulk-update"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchUpdateTeamMembersResponse
+	var response *square.BatchUpdateTeamMembersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -148,7 +148,7 @@ func (r *RawClient) BatchUpdate(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchUpdateTeamMembersResponse]{
+	return &core.Response[*square.BatchUpdateTeamMembersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -157,9 +157,9 @@ func (r *RawClient) BatchUpdate(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchTeamMembersRequest,
+	request *square.SearchTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTeamMembersResponse], error) {
+) (*core.Response[*square.SearchTeamMembersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,11 +168,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/team-members/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTeamMembersResponse
+	var response *square.SearchTeamMembersResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -190,7 +190,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTeamMembersResponse]{
+	return &core.Response[*square.SearchTeamMembersResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -199,9 +199,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetTeamMembersRequest,
+	request *square.GetTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetTeamMemberResponse], error) {
+) (*core.Response[*square.GetTeamMemberResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -213,10 +213,10 @@ func (r *RawClient) Get(
 		request.TeamMemberID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetTeamMemberResponse
+	var response *square.GetTeamMemberResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -233,7 +233,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetTeamMemberResponse]{
+	return &core.Response[*square.GetTeamMemberResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -242,9 +242,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateTeamMembersRequest,
+	request *square.UpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateTeamMemberResponse], error) {
+) (*core.Response[*square.UpdateTeamMemberResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -256,11 +256,11 @@ func (r *RawClient) Update(
 		request.TeamMemberID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateTeamMemberResponse
+	var response *square.UpdateTeamMemberResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -278,7 +278,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateTeamMemberResponse]{
+	return &core.Response[*square.UpdateTeamMemberResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

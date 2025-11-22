@@ -4,7 +4,7 @@ package refunds
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -49,9 +48,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // The maximum results per page is 100.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListRefundsRequest,
+	request *square.ListRefundsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.PaymentRefund], error) {
+) (*core.Page[*string, *square.PaymentRefund, *square.ListPaymentRefundsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -64,10 +63,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -86,14 +85,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListPaymentRefundsResponse) *internal.PageResponse[*string, *v2.PaymentRefund] {
+	readPageResponse := func(response *square.ListPaymentRefundsResponse) *core.PageResponse[*string, *square.PaymentRefund, *square.ListPaymentRefundsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetRefunds()
-		return &internal.PageResponse[*string, *v2.PaymentRefund]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.PaymentRefund, *square.ListPaymentRefundsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,9 +110,9 @@ func (c *Client) List(
 // [Refund Payment](https://developer.squareup.com/docs/payments-api/refund-payments).
 func (c *Client) RefundPayment(
 	ctx context.Context,
-	request *v2.RefundPaymentRequest,
+	request *square.RefundPaymentRequest,
 	opts ...option.RequestOption,
-) (*v2.RefundPaymentResponse, error) {
+) (*square.RefundPaymentResponse, error) {
 	response, err := c.WithRawResponse.RefundPayment(
 		ctx,
 		request,
@@ -127,9 +127,9 @@ func (c *Client) RefundPayment(
 // Retrieves a specific refund using the `refund_id`.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetRefundsRequest,
+	request *square.GetRefundsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetPaymentRefundResponse, error) {
+) (*square.GetPaymentRefundResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,

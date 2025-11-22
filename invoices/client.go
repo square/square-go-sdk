@@ -4,7 +4,7 @@ package invoices
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -46,9 +45,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // use in a subsequent request to retrieve the next set of invoices.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListInvoicesRequest,
+	request *square.ListInvoicesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Invoice], error) {
+) (*core.Page[*string, *square.Invoice, *square.ListInvoicesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -61,10 +60,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -83,14 +82,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListInvoicesResponse) *internal.PageResponse[*string, *v2.Invoice] {
+	readPageResponse := func(response *square.ListInvoicesResponse) *core.PageResponse[*string, *square.Invoice, *square.ListInvoicesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetInvoices()
-		return &internal.PageResponse[*string, *v2.Invoice]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Invoice, *square.ListInvoicesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -108,9 +108,9 @@ func (c *Client) List(
 // You must publish the invoice before Square can process it (send it to the customer's email address or charge the customer’s card on file).
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateInvoiceRequest,
+	request *square.CreateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateInvoiceResponse, error) {
+) (*square.CreateInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -131,9 +131,9 @@ func (c *Client) Create(
 // that you use in a subsequent request to retrieve the next set of invoices.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchInvoicesRequest,
+	request *square.SearchInvoicesRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchInvoicesResponse, error) {
+) (*square.SearchInvoicesResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -148,9 +148,9 @@ func (c *Client) Search(
 // Retrieves an invoice by invoice ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetInvoicesRequest,
+	request *square.GetInvoicesRequest,
 	opts ...option.RequestOption,
-) (*v2.GetInvoiceResponse, error) {
+) (*square.GetInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -168,9 +168,9 @@ func (c *Client) Get(
 // `order_id` or `location_id` field.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateInvoiceRequest,
+	request *square.UpdateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateInvoiceResponse, error) {
+) (*square.UpdateInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -187,9 +187,9 @@ func (c *Client) Update(
 // invoice (you cannot delete a published invoice, including one that is scheduled for processing).
 func (c *Client) Delete(
 	ctx context.Context,
-	request *v2.DeleteInvoicesRequest,
+	request *square.DeleteInvoicesRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteInvoiceResponse, error) {
+) (*square.DeleteInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,
@@ -211,9 +211,9 @@ func (c *Client) Delete(
 // __NOTE:__ When testing in the Sandbox environment, the total file size is limited to 1 KB.
 func (c *Client) CreateInvoiceAttachment(
 	ctx context.Context,
-	request *v2.CreateInvoiceAttachmentRequest,
+	request *square.CreateInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateInvoiceAttachmentResponse, error) {
+) (*square.CreateInvoiceAttachmentResponse, error) {
 	response, err := c.WithRawResponse.CreateInvoiceAttachment(
 		ctx,
 		request,
@@ -229,9 +229,9 @@ func (c *Client) CreateInvoiceAttachment(
 // from invoices in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
 func (c *Client) DeleteInvoiceAttachment(
 	ctx context.Context,
-	request *v2.DeleteInvoiceAttachmentRequest,
+	request *square.DeleteInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteInvoiceAttachmentResponse, error) {
+) (*square.DeleteInvoiceAttachmentResponse, error) {
 	response, err := c.WithRawResponse.DeleteInvoiceAttachment(
 		ctx,
 		request,
@@ -249,9 +249,9 @@ func (c *Client) DeleteInvoiceAttachment(
 // You cannot cancel an invoice in the `DRAFT` state or in a terminal state: `PAID`, `REFUNDED`, `CANCELED`, or `FAILED`.
 func (c *Client) Cancel(
 	ctx context.Context,
-	request *v2.CancelInvoiceRequest,
+	request *square.CancelInvoiceRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelInvoiceResponse, error) {
+) (*square.CancelInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,
@@ -279,9 +279,9 @@ func (c *Client) Cancel(
 // and `PAYMENTS_WRITE` are required when publishing invoices configured for card-on-file payments.
 func (c *Client) Publish(
 	ctx context.Context,
-	request *v2.PublishInvoiceRequest,
+	request *square.PublishInvoiceRequest,
 	opts ...option.RequestOption,
-) (*v2.PublishInvoiceResponse, error) {
+) (*square.PublishInvoiceResponse, error) {
 	response, err := c.WithRawResponse.Publish(
 		ctx,
 		request,

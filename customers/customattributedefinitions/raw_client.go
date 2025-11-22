@@ -4,7 +4,7 @@ package customattributedefinitions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	customers "github.com/square/square-go-sdk/v2/customers"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateCustomerCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.CreateCustomerCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/customers/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateCustomerCustomAttributeDefinitionResponse
+	var response *square.CreateCustomerCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateCustomerCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.CreateCustomerCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *customers.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetCustomerCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.GetCustomerCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetCustomerCustomAttributeDefinitionResponse
+	var response *square.GetCustomerCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -116,7 +116,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetCustomerCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.GetCustomerCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -127,7 +127,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *customers.UpdateCustomerCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateCustomerCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.UpdateCustomerCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,11 +139,11 @@ func (r *RawClient) Update(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateCustomerCustomAttributeDefinitionResponse
+	var response *square.UpdateCustomerCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -161,7 +161,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateCustomerCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.UpdateCustomerCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -172,7 +172,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *customers.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteCustomerCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.DeleteCustomerCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -184,10 +184,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteCustomerCustomAttributeDefinitionResponse
+	var response *square.DeleteCustomerCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -204,7 +204,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteCustomerCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.DeleteCustomerCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -215,7 +215,7 @@ func (r *RawClient) BatchUpsert(
 	ctx context.Context,
 	request *customers.BatchUpsertCustomerCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchUpsertCustomerCustomAttributesResponse], error) {
+) (*core.Response[*square.BatchUpsertCustomerCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -224,11 +224,11 @@ func (r *RawClient) BatchUpsert(
 	)
 	endpointURL := baseURL + "/v2/customers/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchUpsertCustomerCustomAttributesResponse
+	var response *square.BatchUpsertCustomerCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -246,7 +246,7 @@ func (r *RawClient) BatchUpsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchUpsertCustomerCustomAttributesResponse]{
+	return &core.Response[*square.BatchUpsertCustomerCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

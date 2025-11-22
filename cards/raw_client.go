@@ -4,7 +4,7 @@ package cards
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateCardRequest,
+	request *square.CreateCardRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateCardResponse], error) {
+) (*core.Response[*square.CreateCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/cards"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateCardResponse
+	var response *square.CreateCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateCardResponse]{
+	return &core.Response[*square.CreateCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetCardsRequest,
+	request *square.GetCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetCardResponse], error) {
+) (*core.Response[*square.GetCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -88,10 +88,10 @@ func (r *RawClient) Get(
 		request.CardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetCardResponse
+	var response *square.GetCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetCardResponse]{
+	return &core.Response[*square.GetCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -117,9 +117,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Disable(
 	ctx context.Context,
-	request *v2.DisableCardsRequest,
+	request *square.DisableCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DisableCardResponse], error) {
+) (*core.Response[*square.DisableCardResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Disable(
 		request.CardID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DisableCardResponse
+	var response *square.DisableCardResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Disable(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DisableCardResponse]{
+	return &core.Response[*square.DisableCardResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -4,7 +4,7 @@ package codes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	devices "github.com/square/square-go-sdk/v2/devices"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -47,7 +46,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *devices.ListCodesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.DeviceCode], error) {
+) (*core.Page[*string, *square.DeviceCode, *square.ListDeviceCodesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -60,10 +59,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -82,14 +81,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListDeviceCodesResponse) *internal.PageResponse[*string, *v2.DeviceCode] {
+	readPageResponse := func(response *square.ListDeviceCodesResponse) *core.PageResponse[*string, *square.DeviceCode, *square.ListDeviceCodesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetDeviceCodes()
-		return &internal.PageResponse[*string, *v2.DeviceCode]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.DeviceCode, *square.ListDeviceCodesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,7 +106,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *devices.CreateDeviceCodeRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateDeviceCodeResponse, error) {
+) (*square.CreateDeviceCodeResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -123,7 +123,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *devices.GetCodesRequest,
 	opts ...option.RequestOption,
-) (*v2.GetDeviceCodeResponse, error) {
+) (*square.GetDeviceCodeResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,

@@ -4,7 +4,7 @@ package customattributedefinitions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	bookings "github.com/square/square-go-sdk/v2/bookings"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *bookings.CreateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateBookingCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.CreateBookingCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attribute-definitions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateBookingCustomAttributeDefinitionResponse
+	var response *square.CreateBookingCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateBookingCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.CreateBookingCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *bookings.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveBookingCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.RetrieveBookingCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveBookingCustomAttributeDefinitionResponse
+	var response *square.RetrieveBookingCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -116,7 +116,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveBookingCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.RetrieveBookingCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -127,7 +127,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *bookings.UpdateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateBookingCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.UpdateBookingCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,11 +139,11 @@ func (r *RawClient) Update(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateBookingCustomAttributeDefinitionResponse
+	var response *square.UpdateBookingCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -161,7 +161,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateBookingCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.UpdateBookingCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -172,7 +172,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *bookings.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteBookingCustomAttributeDefinitionResponse], error) {
+) (*core.Response[*square.DeleteBookingCustomAttributeDefinitionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -184,10 +184,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteBookingCustomAttributeDefinitionResponse
+	var response *square.DeleteBookingCustomAttributeDefinitionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -204,7 +204,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteBookingCustomAttributeDefinitionResponse]{
+	return &core.Response[*square.DeleteBookingCustomAttributeDefinitionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

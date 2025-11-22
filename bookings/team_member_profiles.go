@@ -2,10 +2,42 @@
 
 package bookings
 
+import (
+	big "math/big"
+)
+
+var (
+	getTeamMemberProfilesRequestFieldTeamMemberID = big.NewInt(1 << 0)
+)
+
 type GetTeamMemberProfilesRequest struct {
 	// The ID of the team member to retrieve.
 	TeamMemberID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTeamMemberProfilesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTeamMemberProfilesRequest) SetTeamMemberID(teamMemberID string) {
+	g.TeamMemberID = teamMemberID
+	g.require(getTeamMemberProfilesRequestFieldTeamMemberID)
+}
+
+var (
+	listTeamMemberProfilesRequestFieldBookableOnly = big.NewInt(1 << 0)
+	listTeamMemberProfilesRequestFieldLimit        = big.NewInt(1 << 1)
+	listTeamMemberProfilesRequestFieldCursor       = big.NewInt(1 << 2)
+	listTeamMemberProfilesRequestFieldLocationID   = big.NewInt(1 << 3)
+)
 
 type ListTeamMemberProfilesRequest struct {
 	// Indicates whether to include only bookable team members in the returned result (`true`) or not (`false`).
@@ -16,4 +48,42 @@ type ListTeamMemberProfilesRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 	// Indicates whether to include only team members enabled at the given location in the returned result.
 	LocationID *string `json:"-" url:"location_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListTeamMemberProfilesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBookableOnly sets the BookableOnly field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberProfilesRequest) SetBookableOnly(bookableOnly *bool) {
+	l.BookableOnly = bookableOnly
+	l.require(listTeamMemberProfilesRequestFieldBookableOnly)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberProfilesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listTeamMemberProfilesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberProfilesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listTeamMemberProfilesRequestFieldCursor)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberProfilesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listTeamMemberProfilesRequestFieldLocationID)
 }

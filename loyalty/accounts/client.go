@@ -4,25 +4,23 @@ package accounts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	loyalty "github.com/square/square-go-sdk/v2/loyalty"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -47,7 +45,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyAccountRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateLoyaltyAccountResponse, error) {
+) (*square.CreateLoyaltyAccountResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -68,7 +66,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyAccountsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchLoyaltyAccountsResponse, error) {
+) (*square.SearchLoyaltyAccountsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -85,7 +83,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.GetAccountsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetLoyaltyAccountResponse, error) {
+) (*square.GetLoyaltyAccountResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -115,7 +113,7 @@ func (c *Client) AccumulatePoints(
 	ctx context.Context,
 	request *loyalty.AccumulateLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*v2.AccumulateLoyaltyPointsResponse, error) {
+) (*square.AccumulateLoyaltyPointsResponse, error) {
 	response, err := c.WithRawResponse.AccumulatePoints(
 		ctx,
 		request,
@@ -136,7 +134,7 @@ func (c *Client) Adjust(
 	ctx context.Context,
 	request *loyalty.AdjustLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*v2.AdjustLoyaltyPointsResponse, error) {
+) (*square.AdjustLoyaltyPointsResponse, error) {
 	response, err := c.WithRawResponse.Adjust(
 		ctx,
 		request,

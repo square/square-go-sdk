@@ -6,12 +6,40 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	deprecatedGetAdjustmentInventoryRequestFieldAdjustmentID = big.NewInt(1 << 0)
 )
 
 type DeprecatedGetAdjustmentInventoryRequest struct {
 	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
 	AdjustmentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeprecatedGetAdjustmentInventoryRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetAdjustmentID sets the AdjustmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeprecatedGetAdjustmentInventoryRequest) SetAdjustmentID(adjustmentID string) {
+	d.AdjustmentID = adjustmentID
+	d.require(deprecatedGetAdjustmentInventoryRequestFieldAdjustmentID)
+}
+
+var (
+	changesInventoryRequestFieldCatalogObjectID = big.NewInt(1 << 0)
+	changesInventoryRequestFieldLocationIDs     = big.NewInt(1 << 1)
+	changesInventoryRequestFieldCursor          = big.NewInt(1 << 2)
+)
 
 type ChangesInventoryRequest struct {
 	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
@@ -24,13 +52,71 @@ type ChangesInventoryRequest struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *ChangesInventoryRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangesInventoryRequest) SetCatalogObjectID(catalogObjectID string) {
+	c.CatalogObjectID = catalogObjectID
+	c.require(changesInventoryRequestFieldCatalogObjectID)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangesInventoryRequest) SetLocationIDs(locationIDs *string) {
+	c.LocationIDs = locationIDs
+	c.require(changesInventoryRequestFieldLocationIDs)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangesInventoryRequest) SetCursor(cursor *string) {
+	c.Cursor = cursor
+	c.require(changesInventoryRequestFieldCursor)
+}
+
+var (
+	deprecatedGetPhysicalCountInventoryRequestFieldPhysicalCountID = big.NewInt(1 << 0)
+)
 
 type DeprecatedGetPhysicalCountInventoryRequest struct {
 	// ID of the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
 	PhysicalCountID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeprecatedGetPhysicalCountInventoryRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetPhysicalCountID sets the PhysicalCountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeprecatedGetPhysicalCountInventoryRequest) SetPhysicalCountID(physicalCountID string) {
+	d.PhysicalCountID = physicalCountID
+	d.require(deprecatedGetPhysicalCountInventoryRequestFieldPhysicalCountID)
+}
+
+var (
+	getInventoryRequestFieldCatalogObjectID = big.NewInt(1 << 0)
+	getInventoryRequestFieldLocationIDs     = big.NewInt(1 << 1)
+	getInventoryRequestFieldCursor          = big.NewInt(1 << 2)
+)
 
 type GetInventoryRequest struct {
 	// ID of the [CatalogObject](entity:CatalogObject) to retrieve.
@@ -43,23 +129,123 @@ type GetInventoryRequest struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetInventoryRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryRequest) SetCatalogObjectID(catalogObjectID string) {
+	g.CatalogObjectID = catalogObjectID
+	g.require(getInventoryRequestFieldCatalogObjectID)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryRequest) SetLocationIDs(locationIDs *string) {
+	g.LocationIDs = locationIDs
+	g.require(getInventoryRequestFieldLocationIDs)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryRequest) SetCursor(cursor *string) {
+	g.Cursor = cursor
+	g.require(getInventoryRequestFieldCursor)
+}
+
+var (
+	getAdjustmentInventoryRequestFieldAdjustmentID = big.NewInt(1 << 0)
+)
 
 type GetAdjustmentInventoryRequest struct {
 	// ID of the [InventoryAdjustment](entity:InventoryAdjustment) to retrieve.
 	AdjustmentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetAdjustmentInventoryRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetAdjustmentID sets the AdjustmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetAdjustmentInventoryRequest) SetAdjustmentID(adjustmentID string) {
+	g.AdjustmentID = adjustmentID
+	g.require(getAdjustmentInventoryRequestFieldAdjustmentID)
+}
+
+var (
+	getPhysicalCountInventoryRequestFieldPhysicalCountID = big.NewInt(1 << 0)
+)
 
 type GetPhysicalCountInventoryRequest struct {
 	// ID of the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount) to retrieve.
 	PhysicalCountID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetPhysicalCountInventoryRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetPhysicalCountID sets the PhysicalCountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPhysicalCountInventoryRequest) SetPhysicalCountID(physicalCountID string) {
+	g.PhysicalCountID = physicalCountID
+	g.require(getPhysicalCountInventoryRequestFieldPhysicalCountID)
+}
+
+var (
+	getTransferInventoryRequestFieldTransferID = big.NewInt(1 << 0)
+)
 
 type GetTransferInventoryRequest struct {
 	// ID of the [InventoryTransfer](entity:InventoryTransfer) to retrieve.
 	TransferID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTransferInventoryRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTransferID sets the TransferID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTransferInventoryRequest) SetTransferID(transferID string) {
+	g.TransferID = transferID
+	g.require(getTransferInventoryRequestFieldTransferID)
+}
+
+var (
+	batchChangeInventoryRequestFieldIdempotencyKey        = big.NewInt(1 << 0)
+	batchChangeInventoryRequestFieldChanges               = big.NewInt(1 << 1)
+	batchChangeInventoryRequestFieldIgnoreUnchangedCounts = big.NewInt(1 << 2)
+)
 
 type BatchChangeInventoryRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
@@ -76,6 +262,9 @@ type BatchChangeInventoryRequest struct {
 	// Indicates whether the current physical count should be ignored if
 	// the quantity is unchanged since the last physical count. Default: `true`.
 	IgnoreUnchangedCounts *bool `json:"ignore_unchanged_counts,omitempty" url:"ignore_unchanged_counts,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -106,6 +295,34 @@ func (b *BatchChangeInventoryRequest) GetExtraProperties() map[string]interface{
 	return b.extraProperties
 }
 
+func (b *BatchChangeInventoryRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryRequest) SetIdempotencyKey(idempotencyKey string) {
+	b.IdempotencyKey = idempotencyKey
+	b.require(batchChangeInventoryRequestFieldIdempotencyKey)
+}
+
+// SetChanges sets the Changes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryRequest) SetChanges(changes []*InventoryChange) {
+	b.Changes = changes
+	b.require(batchChangeInventoryRequestFieldChanges)
+}
+
+// SetIgnoreUnchangedCounts sets the IgnoreUnchangedCounts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryRequest) SetIgnoreUnchangedCounts(ignoreUnchangedCounts *bool) {
+	b.IgnoreUnchangedCounts = ignoreUnchangedCounts
+	b.require(batchChangeInventoryRequestFieldIgnoreUnchangedCounts)
+}
+
 func (b *BatchChangeInventoryRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchChangeInventoryRequest
 	var value unmarshaler
@@ -122,6 +339,17 @@ func (b *BatchChangeInventoryRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchChangeInventoryRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchChangeInventoryRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchChangeInventoryRequest) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -134,6 +362,12 @@ func (b *BatchChangeInventoryRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	batchChangeInventoryResponseFieldErrors  = big.NewInt(1 << 0)
+	batchChangeInventoryResponseFieldCounts  = big.NewInt(1 << 1)
+	batchChangeInventoryResponseFieldChanges = big.NewInt(1 << 2)
+)
+
 type BatchChangeInventoryResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -141,6 +375,9 @@ type BatchChangeInventoryResponse struct {
 	Counts []*InventoryCount `json:"counts,omitempty" url:"counts,omitempty"`
 	// Changes created for the request.
 	Changes []*InventoryChange `json:"changes,omitempty" url:"changes,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -171,6 +408,34 @@ func (b *BatchChangeInventoryResponse) GetExtraProperties() map[string]interface
 	return b.extraProperties
 }
 
+func (b *BatchChangeInventoryResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchChangeInventoryResponseFieldErrors)
+}
+
+// SetCounts sets the Counts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryResponse) SetCounts(counts []*InventoryCount) {
+	b.Counts = counts
+	b.require(batchChangeInventoryResponseFieldCounts)
+}
+
+// SetChanges sets the Changes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchChangeInventoryResponse) SetChanges(changes []*InventoryChange) {
+	b.Changes = changes
+	b.require(batchChangeInventoryResponseFieldChanges)
+}
+
 func (b *BatchChangeInventoryResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchChangeInventoryResponse
 	var value unmarshaler
@@ -187,6 +452,17 @@ func (b *BatchChangeInventoryResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchChangeInventoryResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchChangeInventoryResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchChangeInventoryResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -199,6 +475,12 @@ func (b *BatchChangeInventoryResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	batchGetInventoryChangesResponseFieldErrors  = big.NewInt(1 << 0)
+	batchGetInventoryChangesResponseFieldChanges = big.NewInt(1 << 1)
+	batchGetInventoryChangesResponseFieldCursor  = big.NewInt(1 << 2)
+)
+
 type BatchGetInventoryChangesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -209,6 +491,9 @@ type BatchGetInventoryChangesResponse struct {
 	// this is the final response.
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -239,6 +524,34 @@ func (b *BatchGetInventoryChangesResponse) GetExtraProperties() map[string]inter
 	return b.extraProperties
 }
 
+func (b *BatchGetInventoryChangesResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryChangesResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchGetInventoryChangesResponseFieldErrors)
+}
+
+// SetChanges sets the Changes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryChangesResponse) SetChanges(changes []*InventoryChange) {
+	b.Changes = changes
+	b.require(batchGetInventoryChangesResponseFieldChanges)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryChangesResponse) SetCursor(cursor *string) {
+	b.Cursor = cursor
+	b.require(batchGetInventoryChangesResponseFieldCursor)
+}
+
 func (b *BatchGetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetInventoryChangesResponse
 	var value unmarshaler
@@ -255,6 +568,17 @@ func (b *BatchGetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetInventoryChangesResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchGetInventoryChangesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetInventoryChangesResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -266,6 +590,15 @@ func (b *BatchGetInventoryChangesResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", b)
 }
+
+var (
+	batchGetInventoryCountsRequestFieldCatalogObjectIDs = big.NewInt(1 << 0)
+	batchGetInventoryCountsRequestFieldLocationIDs      = big.NewInt(1 << 1)
+	batchGetInventoryCountsRequestFieldUpdatedAfter     = big.NewInt(1 << 2)
+	batchGetInventoryCountsRequestFieldCursor           = big.NewInt(1 << 3)
+	batchGetInventoryCountsRequestFieldStates           = big.NewInt(1 << 4)
+	batchGetInventoryCountsRequestFieldLimit            = big.NewInt(1 << 5)
+)
 
 type BatchGetInventoryCountsRequest struct {
 	// The filter to return results by `CatalogObject` ID.
@@ -289,6 +622,9 @@ type BatchGetInventoryCountsRequest struct {
 	States []InventoryState `json:"states,omitempty" url:"states,omitempty"`
 	// The number of [records](entity:InventoryCount) to return.
 	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -340,6 +676,55 @@ func (b *BatchGetInventoryCountsRequest) GetExtraProperties() map[string]interfa
 	return b.extraProperties
 }
 
+func (b *BatchGetInventoryCountsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCatalogObjectIDs sets the CatalogObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetCatalogObjectIDs(catalogObjectIDs []string) {
+	b.CatalogObjectIDs = catalogObjectIDs
+	b.require(batchGetInventoryCountsRequestFieldCatalogObjectIDs)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetLocationIDs(locationIDs []string) {
+	b.LocationIDs = locationIDs
+	b.require(batchGetInventoryCountsRequestFieldLocationIDs)
+}
+
+// SetUpdatedAfter sets the UpdatedAfter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetUpdatedAfter(updatedAfter *string) {
+	b.UpdatedAfter = updatedAfter
+	b.require(batchGetInventoryCountsRequestFieldUpdatedAfter)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetCursor(cursor *string) {
+	b.Cursor = cursor
+	b.require(batchGetInventoryCountsRequestFieldCursor)
+}
+
+// SetStates sets the States field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetStates(states []InventoryState) {
+	b.States = states
+	b.require(batchGetInventoryCountsRequestFieldStates)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsRequest) SetLimit(limit *int) {
+	b.Limit = limit
+	b.require(batchGetInventoryCountsRequestFieldLimit)
+}
+
 func (b *BatchGetInventoryCountsRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetInventoryCountsRequest
 	var value unmarshaler
@@ -356,6 +741,17 @@ func (b *BatchGetInventoryCountsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetInventoryCountsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchGetInventoryCountsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetInventoryCountsRequest) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -368,6 +764,12 @@ func (b *BatchGetInventoryCountsRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	batchGetInventoryCountsResponseFieldErrors = big.NewInt(1 << 0)
+	batchGetInventoryCountsResponseFieldCounts = big.NewInt(1 << 1)
+	batchGetInventoryCountsResponseFieldCursor = big.NewInt(1 << 2)
+)
+
 type BatchGetInventoryCountsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -379,6 +781,9 @@ type BatchGetInventoryCountsResponse struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -409,6 +814,34 @@ func (b *BatchGetInventoryCountsResponse) GetExtraProperties() map[string]interf
 	return b.extraProperties
 }
 
+func (b *BatchGetInventoryCountsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchGetInventoryCountsResponseFieldErrors)
+}
+
+// SetCounts sets the Counts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsResponse) SetCounts(counts []*InventoryCount) {
+	b.Counts = counts
+	b.require(batchGetInventoryCountsResponseFieldCounts)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetInventoryCountsResponse) SetCursor(cursor *string) {
+	b.Cursor = cursor
+	b.require(batchGetInventoryCountsResponseFieldCursor)
+}
+
 func (b *BatchGetInventoryCountsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetInventoryCountsResponse
 	var value unmarshaler
@@ -425,6 +858,17 @@ func (b *BatchGetInventoryCountsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetInventoryCountsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchGetInventoryCountsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetInventoryCountsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -436,6 +880,17 @@ func (b *BatchGetInventoryCountsResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", b)
 }
+
+var (
+	batchRetrieveInventoryChangesRequestFieldCatalogObjectIDs = big.NewInt(1 << 0)
+	batchRetrieveInventoryChangesRequestFieldLocationIDs      = big.NewInt(1 << 1)
+	batchRetrieveInventoryChangesRequestFieldTypes            = big.NewInt(1 << 2)
+	batchRetrieveInventoryChangesRequestFieldStates           = big.NewInt(1 << 3)
+	batchRetrieveInventoryChangesRequestFieldUpdatedAfter     = big.NewInt(1 << 4)
+	batchRetrieveInventoryChangesRequestFieldUpdatedBefore    = big.NewInt(1 << 5)
+	batchRetrieveInventoryChangesRequestFieldCursor           = big.NewInt(1 << 6)
+	batchRetrieveInventoryChangesRequestFieldLimit            = big.NewInt(1 << 7)
+)
 
 type BatchRetrieveInventoryChangesRequest struct {
 	// The filter to return results by `CatalogObject` ID.
@@ -466,6 +921,9 @@ type BatchRetrieveInventoryChangesRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// The number of [records](entity:InventoryChange) to return.
 	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -531,6 +989,69 @@ func (b *BatchRetrieveInventoryChangesRequest) GetExtraProperties() map[string]i
 	return b.extraProperties
 }
 
+func (b *BatchRetrieveInventoryChangesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCatalogObjectIDs sets the CatalogObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetCatalogObjectIDs(catalogObjectIDs []string) {
+	b.CatalogObjectIDs = catalogObjectIDs
+	b.require(batchRetrieveInventoryChangesRequestFieldCatalogObjectIDs)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetLocationIDs(locationIDs []string) {
+	b.LocationIDs = locationIDs
+	b.require(batchRetrieveInventoryChangesRequestFieldLocationIDs)
+}
+
+// SetTypes sets the Types field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetTypes(types []InventoryChangeType) {
+	b.Types = types
+	b.require(batchRetrieveInventoryChangesRequestFieldTypes)
+}
+
+// SetStates sets the States field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetStates(states []InventoryState) {
+	b.States = states
+	b.require(batchRetrieveInventoryChangesRequestFieldStates)
+}
+
+// SetUpdatedAfter sets the UpdatedAfter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetUpdatedAfter(updatedAfter *string) {
+	b.UpdatedAfter = updatedAfter
+	b.require(batchRetrieveInventoryChangesRequestFieldUpdatedAfter)
+}
+
+// SetUpdatedBefore sets the UpdatedBefore field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetUpdatedBefore(updatedBefore *string) {
+	b.UpdatedBefore = updatedBefore
+	b.require(batchRetrieveInventoryChangesRequestFieldUpdatedBefore)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetCursor(cursor *string) {
+	b.Cursor = cursor
+	b.require(batchRetrieveInventoryChangesRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetLimit(limit *int) {
+	b.Limit = limit
+	b.require(batchRetrieveInventoryChangesRequestFieldLimit)
+}
+
 func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchRetrieveInventoryChangesRequest
 	var value unmarshaler
@@ -547,6 +1068,17 @@ func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
+func (b *BatchRetrieveInventoryChangesRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchRetrieveInventoryChangesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchRetrieveInventoryChangesRequest) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -559,11 +1091,19 @@ func (b *BatchRetrieveInventoryChangesRequest) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	getInventoryAdjustmentResponseFieldErrors     = big.NewInt(1 << 0)
+	getInventoryAdjustmentResponseFieldAdjustment = big.NewInt(1 << 1)
+)
+
 type GetInventoryAdjustmentResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested [InventoryAdjustment](entity:InventoryAdjustment).
 	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -587,6 +1127,27 @@ func (g *GetInventoryAdjustmentResponse) GetExtraProperties() map[string]interfa
 	return g.extraProperties
 }
 
+func (g *GetInventoryAdjustmentResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryAdjustmentResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInventoryAdjustmentResponseFieldErrors)
+}
+
+// SetAdjustment sets the Adjustment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryAdjustmentResponse) SetAdjustment(adjustment *InventoryAdjustment) {
+	g.Adjustment = adjustment
+	g.require(getInventoryAdjustmentResponseFieldAdjustment)
+}
+
 func (g *GetInventoryAdjustmentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInventoryAdjustmentResponse
 	var value unmarshaler
@@ -603,6 +1164,17 @@ func (g *GetInventoryAdjustmentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInventoryAdjustmentResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInventoryAdjustmentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInventoryAdjustmentResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -615,6 +1187,12 @@ func (g *GetInventoryAdjustmentResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	getInventoryChangesResponseFieldErrors  = big.NewInt(1 << 0)
+	getInventoryChangesResponseFieldChanges = big.NewInt(1 << 1)
+	getInventoryChangesResponseFieldCursor  = big.NewInt(1 << 2)
+)
+
 type GetInventoryChangesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -625,6 +1203,9 @@ type GetInventoryChangesResponse struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -655,6 +1236,34 @@ func (g *GetInventoryChangesResponse) GetExtraProperties() map[string]interface{
 	return g.extraProperties
 }
 
+func (g *GetInventoryChangesResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryChangesResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInventoryChangesResponseFieldErrors)
+}
+
+// SetChanges sets the Changes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryChangesResponse) SetChanges(changes []*InventoryChange) {
+	g.Changes = changes
+	g.require(getInventoryChangesResponseFieldChanges)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryChangesResponse) SetCursor(cursor *string) {
+	g.Cursor = cursor
+	g.require(getInventoryChangesResponseFieldCursor)
+}
+
 func (g *GetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInventoryChangesResponse
 	var value unmarshaler
@@ -671,6 +1280,17 @@ func (g *GetInventoryChangesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInventoryChangesResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInventoryChangesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInventoryChangesResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -683,6 +1303,12 @@ func (g *GetInventoryChangesResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	getInventoryCountResponseFieldErrors = big.NewInt(1 << 0)
+	getInventoryCountResponseFieldCounts = big.NewInt(1 << 1)
+	getInventoryCountResponseFieldCursor = big.NewInt(1 << 2)
+)
+
 type GetInventoryCountResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -694,6 +1320,9 @@ type GetInventoryCountResponse struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -724,6 +1353,34 @@ func (g *GetInventoryCountResponse) GetExtraProperties() map[string]interface{} 
 	return g.extraProperties
 }
 
+func (g *GetInventoryCountResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryCountResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInventoryCountResponseFieldErrors)
+}
+
+// SetCounts sets the Counts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryCountResponse) SetCounts(counts []*InventoryCount) {
+	g.Counts = counts
+	g.require(getInventoryCountResponseFieldCounts)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryCountResponse) SetCursor(cursor *string) {
+	g.Cursor = cursor
+	g.require(getInventoryCountResponseFieldCursor)
+}
+
 func (g *GetInventoryCountResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInventoryCountResponse
 	var value unmarshaler
@@ -740,6 +1397,17 @@ func (g *GetInventoryCountResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInventoryCountResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInventoryCountResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInventoryCountResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -752,11 +1420,19 @@ func (g *GetInventoryCountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	getInventoryPhysicalCountResponseFieldErrors = big.NewInt(1 << 0)
+	getInventoryPhysicalCountResponseFieldCount  = big.NewInt(1 << 1)
+)
+
 type GetInventoryPhysicalCountResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested [InventoryPhysicalCount](entity:InventoryPhysicalCount).
 	Count *InventoryPhysicalCount `json:"count,omitempty" url:"count,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -780,6 +1456,27 @@ func (g *GetInventoryPhysicalCountResponse) GetExtraProperties() map[string]inte
 	return g.extraProperties
 }
 
+func (g *GetInventoryPhysicalCountResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryPhysicalCountResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInventoryPhysicalCountResponseFieldErrors)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryPhysicalCountResponse) SetCount(count *InventoryPhysicalCount) {
+	g.Count = count
+	g.require(getInventoryPhysicalCountResponseFieldCount)
+}
+
 func (g *GetInventoryPhysicalCountResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInventoryPhysicalCountResponse
 	var value unmarshaler
@@ -796,6 +1493,17 @@ func (g *GetInventoryPhysicalCountResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInventoryPhysicalCountResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInventoryPhysicalCountResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInventoryPhysicalCountResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -808,11 +1516,19 @@ func (g *GetInventoryPhysicalCountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	getInventoryTransferResponseFieldErrors   = big.NewInt(1 << 0)
+	getInventoryTransferResponseFieldTransfer = big.NewInt(1 << 1)
+)
+
 type GetInventoryTransferResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested [InventoryTransfer](entity:InventoryTransfer).
 	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -836,6 +1552,27 @@ func (g *GetInventoryTransferResponse) GetExtraProperties() map[string]interface
 	return g.extraProperties
 }
 
+func (g *GetInventoryTransferResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryTransferResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInventoryTransferResponseFieldErrors)
+}
+
+// SetTransfer sets the Transfer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInventoryTransferResponse) SetTransfer(transfer *InventoryTransfer) {
+	g.Transfer = transfer
+	g.require(getInventoryTransferResponseFieldTransfer)
+}
+
 func (g *GetInventoryTransferResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInventoryTransferResponse
 	var value unmarshaler
@@ -852,6 +1589,17 @@ func (g *GetInventoryTransferResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInventoryTransferResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInventoryTransferResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInventoryTransferResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -866,6 +1614,28 @@ func (g *GetInventoryTransferResponse) String() string {
 
 // Represents a change in state or quantity of product inventory at a
 // particular time and location.
+var (
+	inventoryAdjustmentFieldID                = big.NewInt(1 << 0)
+	inventoryAdjustmentFieldReferenceID       = big.NewInt(1 << 1)
+	inventoryAdjustmentFieldFromState         = big.NewInt(1 << 2)
+	inventoryAdjustmentFieldToState           = big.NewInt(1 << 3)
+	inventoryAdjustmentFieldLocationID        = big.NewInt(1 << 4)
+	inventoryAdjustmentFieldCatalogObjectID   = big.NewInt(1 << 5)
+	inventoryAdjustmentFieldCatalogObjectType = big.NewInt(1 << 6)
+	inventoryAdjustmentFieldQuantity          = big.NewInt(1 << 7)
+	inventoryAdjustmentFieldTotalPriceMoney   = big.NewInt(1 << 8)
+	inventoryAdjustmentFieldOccurredAt        = big.NewInt(1 << 9)
+	inventoryAdjustmentFieldCreatedAt         = big.NewInt(1 << 10)
+	inventoryAdjustmentFieldSource            = big.NewInt(1 << 11)
+	inventoryAdjustmentFieldEmployeeID        = big.NewInt(1 << 12)
+	inventoryAdjustmentFieldTeamMemberID      = big.NewInt(1 << 13)
+	inventoryAdjustmentFieldTransactionID     = big.NewInt(1 << 14)
+	inventoryAdjustmentFieldRefundID          = big.NewInt(1 << 15)
+	inventoryAdjustmentFieldPurchaseOrderID   = big.NewInt(1 << 16)
+	inventoryAdjustmentFieldGoodsReceiptID    = big.NewInt(1 << 17)
+	inventoryAdjustmentFieldAdjustmentGroup   = big.NewInt(1 << 18)
+)
+
 type InventoryAdjustment struct {
 	// A unique ID generated by Square for the
 	// `InventoryAdjustment`.
@@ -934,6 +1704,9 @@ type InventoryAdjustment struct {
 	GoodsReceiptID *string `json:"goods_receipt_id,omitempty" url:"goods_receipt_id,omitempty"`
 	// An adjustment group bundling the related adjustments of item variations through stock conversions in a single inventory event.
 	AdjustmentGroup *InventoryAdjustmentGroup `json:"adjustment_group,omitempty" url:"adjustment_group,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1076,6 +1849,146 @@ func (i *InventoryAdjustment) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryAdjustment) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetID(id *string) {
+	i.ID = id
+	i.require(inventoryAdjustmentFieldID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetReferenceID(referenceID *string) {
+	i.ReferenceID = referenceID
+	i.require(inventoryAdjustmentFieldReferenceID)
+}
+
+// SetFromState sets the FromState field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetFromState(fromState *InventoryState) {
+	i.FromState = fromState
+	i.require(inventoryAdjustmentFieldFromState)
+}
+
+// SetToState sets the ToState field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetToState(toState *InventoryState) {
+	i.ToState = toState
+	i.require(inventoryAdjustmentFieldToState)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetLocationID(locationID *string) {
+	i.LocationID = locationID
+	i.require(inventoryAdjustmentFieldLocationID)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetCatalogObjectID(catalogObjectID *string) {
+	i.CatalogObjectID = catalogObjectID
+	i.require(inventoryAdjustmentFieldCatalogObjectID)
+}
+
+// SetCatalogObjectType sets the CatalogObjectType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetCatalogObjectType(catalogObjectType *string) {
+	i.CatalogObjectType = catalogObjectType
+	i.require(inventoryAdjustmentFieldCatalogObjectType)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetQuantity(quantity *string) {
+	i.Quantity = quantity
+	i.require(inventoryAdjustmentFieldQuantity)
+}
+
+// SetTotalPriceMoney sets the TotalPriceMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetTotalPriceMoney(totalPriceMoney *Money) {
+	i.TotalPriceMoney = totalPriceMoney
+	i.require(inventoryAdjustmentFieldTotalPriceMoney)
+}
+
+// SetOccurredAt sets the OccurredAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetOccurredAt(occurredAt *string) {
+	i.OccurredAt = occurredAt
+	i.require(inventoryAdjustmentFieldOccurredAt)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetCreatedAt(createdAt *string) {
+	i.CreatedAt = createdAt
+	i.require(inventoryAdjustmentFieldCreatedAt)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetSource(source *SourceApplication) {
+	i.Source = source
+	i.require(inventoryAdjustmentFieldSource)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetEmployeeID(employeeID *string) {
+	i.EmployeeID = employeeID
+	i.require(inventoryAdjustmentFieldEmployeeID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetTeamMemberID(teamMemberID *string) {
+	i.TeamMemberID = teamMemberID
+	i.require(inventoryAdjustmentFieldTeamMemberID)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetTransactionID(transactionID *string) {
+	i.TransactionID = transactionID
+	i.require(inventoryAdjustmentFieldTransactionID)
+}
+
+// SetRefundID sets the RefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetRefundID(refundID *string) {
+	i.RefundID = refundID
+	i.require(inventoryAdjustmentFieldRefundID)
+}
+
+// SetPurchaseOrderID sets the PurchaseOrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetPurchaseOrderID(purchaseOrderID *string) {
+	i.PurchaseOrderID = purchaseOrderID
+	i.require(inventoryAdjustmentFieldPurchaseOrderID)
+}
+
+// SetGoodsReceiptID sets the GoodsReceiptID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetGoodsReceiptID(goodsReceiptID *string) {
+	i.GoodsReceiptID = goodsReceiptID
+	i.require(inventoryAdjustmentFieldGoodsReceiptID)
+}
+
+// SetAdjustmentGroup sets the AdjustmentGroup field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetAdjustmentGroup(adjustmentGroup *InventoryAdjustmentGroup) {
+	i.AdjustmentGroup = adjustmentGroup
+	i.require(inventoryAdjustmentFieldAdjustmentGroup)
+}
+
 func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryAdjustment
 	var value unmarshaler
@@ -1092,6 +2005,17 @@ func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (i *InventoryAdjustment) MarshalJSON() ([]byte, error) {
+	type embed InventoryAdjustment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (i *InventoryAdjustment) String() string {
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
@@ -1103,6 +2027,13 @@ func (i *InventoryAdjustment) String() string {
 	}
 	return fmt.Sprintf("%#v", i)
 }
+
+var (
+	inventoryAdjustmentGroupFieldID               = big.NewInt(1 << 0)
+	inventoryAdjustmentGroupFieldRootAdjustmentID = big.NewInt(1 << 1)
+	inventoryAdjustmentGroupFieldFromState        = big.NewInt(1 << 2)
+	inventoryAdjustmentGroupFieldToState          = big.NewInt(1 << 3)
+)
 
 type InventoryAdjustmentGroup struct {
 	// A unique ID generated by Square for the
@@ -1120,6 +2051,9 @@ type InventoryAdjustmentGroup struct {
 	// Here, the representative `to_state` of the `InventoryAdjustmentGroup` is `SOLD`.
 	// See [InventoryState](#type-inventorystate) for possible values
 	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1157,6 +2091,41 @@ func (i *InventoryAdjustmentGroup) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryAdjustmentGroup) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentGroup) SetID(id *string) {
+	i.ID = id
+	i.require(inventoryAdjustmentGroupFieldID)
+}
+
+// SetRootAdjustmentID sets the RootAdjustmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentGroup) SetRootAdjustmentID(rootAdjustmentID *string) {
+	i.RootAdjustmentID = rootAdjustmentID
+	i.require(inventoryAdjustmentGroupFieldRootAdjustmentID)
+}
+
+// SetFromState sets the FromState field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentGroup) SetFromState(fromState *InventoryState) {
+	i.FromState = fromState
+	i.require(inventoryAdjustmentGroupFieldFromState)
+}
+
+// SetToState sets the ToState field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentGroup) SetToState(toState *InventoryState) {
+	i.ToState = toState
+	i.require(inventoryAdjustmentGroupFieldToState)
+}
+
 func (i *InventoryAdjustmentGroup) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryAdjustmentGroup
 	var value unmarshaler
@@ -1171,6 +2140,17 @@ func (i *InventoryAdjustmentGroup) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InventoryAdjustmentGroup) MarshalJSON() ([]byte, error) {
+	type embed InventoryAdjustmentGroup
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InventoryAdjustmentGroup) String() string {
@@ -1188,6 +2168,15 @@ func (i *InventoryAdjustmentGroup) String() string {
 // Represents a single physical count, inventory, adjustment, or transfer
 // that is part of the history of inventory changes for a particular
 // [CatalogObject](entity:CatalogObject) instance.
+var (
+	inventoryChangeFieldType              = big.NewInt(1 << 0)
+	inventoryChangeFieldPhysicalCount     = big.NewInt(1 << 1)
+	inventoryChangeFieldAdjustment        = big.NewInt(1 << 2)
+	inventoryChangeFieldTransfer          = big.NewInt(1 << 3)
+	inventoryChangeFieldMeasurementUnit   = big.NewInt(1 << 4)
+	inventoryChangeFieldMeasurementUnitID = big.NewInt(1 << 5)
+)
+
 type InventoryChange struct {
 	// Indicates how the inventory change is applied. See
 	// [InventoryChangeType](entity:InventoryChangeType) for all possible values.
@@ -1209,6 +2198,9 @@ type InventoryChange struct {
 	MeasurementUnit *CatalogMeasurementUnit `json:"measurement_unit,omitempty" url:"measurement_unit,omitempty"`
 	// The ID of the [CatalogMeasurementUnit](entity:CatalogMeasurementUnit) object representing the catalog measurement unit associated with the inventory change.
 	MeasurementUnitID *string `json:"measurement_unit_id,omitempty" url:"measurement_unit_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1260,6 +2252,55 @@ func (i *InventoryChange) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryChange) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetType(type_ *InventoryChangeType) {
+	i.Type = type_
+	i.require(inventoryChangeFieldType)
+}
+
+// SetPhysicalCount sets the PhysicalCount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetPhysicalCount(physicalCount *InventoryPhysicalCount) {
+	i.PhysicalCount = physicalCount
+	i.require(inventoryChangeFieldPhysicalCount)
+}
+
+// SetAdjustment sets the Adjustment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetAdjustment(adjustment *InventoryAdjustment) {
+	i.Adjustment = adjustment
+	i.require(inventoryChangeFieldAdjustment)
+}
+
+// SetTransfer sets the Transfer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetTransfer(transfer *InventoryTransfer) {
+	i.Transfer = transfer
+	i.require(inventoryChangeFieldTransfer)
+}
+
+// SetMeasurementUnit sets the MeasurementUnit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetMeasurementUnit(measurementUnit *CatalogMeasurementUnit) {
+	i.MeasurementUnit = measurementUnit
+	i.require(inventoryChangeFieldMeasurementUnit)
+}
+
+// SetMeasurementUnitID sets the MeasurementUnitID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryChange) SetMeasurementUnitID(measurementUnitID *string) {
+	i.MeasurementUnitID = measurementUnitID
+	i.require(inventoryChangeFieldMeasurementUnitID)
+}
+
 func (i *InventoryChange) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryChange
 	var value unmarshaler
@@ -1274,6 +2315,17 @@ func (i *InventoryChange) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InventoryChange) MarshalJSON() ([]byte, error) {
+	type embed InventoryChange
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InventoryChange) String() string {
@@ -1317,6 +2369,16 @@ func (i InventoryChangeType) Ptr() *InventoryChangeType {
 // Represents Square-estimated quantity of items in a particular state at a
 // particular seller location based on the known history of physical counts and
 // inventory adjustments.
+var (
+	inventoryCountFieldCatalogObjectID   = big.NewInt(1 << 0)
+	inventoryCountFieldCatalogObjectType = big.NewInt(1 << 1)
+	inventoryCountFieldState             = big.NewInt(1 << 2)
+	inventoryCountFieldLocationID        = big.NewInt(1 << 3)
+	inventoryCountFieldQuantity          = big.NewInt(1 << 4)
+	inventoryCountFieldCalculatedAt      = big.NewInt(1 << 5)
+	inventoryCountFieldIsEstimated       = big.NewInt(1 << 6)
+)
+
 type InventoryCount struct {
 	// The Square-generated ID of the
 	// [CatalogObject](entity:CatalogObject) being tracked.
@@ -1345,6 +2407,9 @@ type InventoryCount struct {
 	// [BatchRetrieveInventoryCounts](api-endpoint:Inventory-BatchRetrieveInventoryCounts), and
 	// [RetrieveInventoryChanges](api-endpoint:Inventory-RetrieveInventoryChanges).
 	IsEstimated *bool `json:"is_estimated,omitempty" url:"is_estimated,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1403,6 +2468,62 @@ func (i *InventoryCount) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryCount) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetCatalogObjectID(catalogObjectID *string) {
+	i.CatalogObjectID = catalogObjectID
+	i.require(inventoryCountFieldCatalogObjectID)
+}
+
+// SetCatalogObjectType sets the CatalogObjectType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetCatalogObjectType(catalogObjectType *string) {
+	i.CatalogObjectType = catalogObjectType
+	i.require(inventoryCountFieldCatalogObjectType)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetState(state *InventoryState) {
+	i.State = state
+	i.require(inventoryCountFieldState)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetLocationID(locationID *string) {
+	i.LocationID = locationID
+	i.require(inventoryCountFieldLocationID)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetQuantity(quantity *string) {
+	i.Quantity = quantity
+	i.require(inventoryCountFieldQuantity)
+}
+
+// SetCalculatedAt sets the CalculatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetCalculatedAt(calculatedAt *string) {
+	i.CalculatedAt = calculatedAt
+	i.require(inventoryCountFieldCalculatedAt)
+}
+
+// SetIsEstimated sets the IsEstimated field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryCount) SetIsEstimated(isEstimated *bool) {
+	i.IsEstimated = isEstimated
+	i.require(inventoryCountFieldIsEstimated)
+}
+
 func (i *InventoryCount) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryCount
 	var value unmarshaler
@@ -1417,6 +2538,17 @@ func (i *InventoryCount) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InventoryCount) MarshalJSON() ([]byte, error) {
+	type embed InventoryCount
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InventoryCount) String() string {
@@ -1435,6 +2567,21 @@ func (i *InventoryCount) String() string {
 // at a specific location, verified by a seller or a seller's employee. For example,
 // a physical count might come from an employee counting the item variations on
 // hand or from syncing with an external system.
+var (
+	inventoryPhysicalCountFieldID                = big.NewInt(1 << 0)
+	inventoryPhysicalCountFieldReferenceID       = big.NewInt(1 << 1)
+	inventoryPhysicalCountFieldCatalogObjectID   = big.NewInt(1 << 2)
+	inventoryPhysicalCountFieldCatalogObjectType = big.NewInt(1 << 3)
+	inventoryPhysicalCountFieldState             = big.NewInt(1 << 4)
+	inventoryPhysicalCountFieldLocationID        = big.NewInt(1 << 5)
+	inventoryPhysicalCountFieldQuantity          = big.NewInt(1 << 6)
+	inventoryPhysicalCountFieldSource            = big.NewInt(1 << 7)
+	inventoryPhysicalCountFieldEmployeeID        = big.NewInt(1 << 8)
+	inventoryPhysicalCountFieldTeamMemberID      = big.NewInt(1 << 9)
+	inventoryPhysicalCountFieldOccurredAt        = big.NewInt(1 << 10)
+	inventoryPhysicalCountFieldCreatedAt         = big.NewInt(1 << 11)
+)
+
 type InventoryPhysicalCount struct {
 	// A unique Square-generated ID for the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount).
@@ -1477,6 +2624,9 @@ type InventoryPhysicalCount struct {
 	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
 	// An RFC 3339-formatted timestamp that indicates when the physical count is received.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1570,6 +2720,97 @@ func (i *InventoryPhysicalCount) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryPhysicalCount) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetID(id *string) {
+	i.ID = id
+	i.require(inventoryPhysicalCountFieldID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetReferenceID(referenceID *string) {
+	i.ReferenceID = referenceID
+	i.require(inventoryPhysicalCountFieldReferenceID)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetCatalogObjectID(catalogObjectID *string) {
+	i.CatalogObjectID = catalogObjectID
+	i.require(inventoryPhysicalCountFieldCatalogObjectID)
+}
+
+// SetCatalogObjectType sets the CatalogObjectType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetCatalogObjectType(catalogObjectType *string) {
+	i.CatalogObjectType = catalogObjectType
+	i.require(inventoryPhysicalCountFieldCatalogObjectType)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetState(state *InventoryState) {
+	i.State = state
+	i.require(inventoryPhysicalCountFieldState)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetLocationID(locationID *string) {
+	i.LocationID = locationID
+	i.require(inventoryPhysicalCountFieldLocationID)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetQuantity(quantity *string) {
+	i.Quantity = quantity
+	i.require(inventoryPhysicalCountFieldQuantity)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetSource(source *SourceApplication) {
+	i.Source = source
+	i.require(inventoryPhysicalCountFieldSource)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetEmployeeID(employeeID *string) {
+	i.EmployeeID = employeeID
+	i.require(inventoryPhysicalCountFieldEmployeeID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetTeamMemberID(teamMemberID *string) {
+	i.TeamMemberID = teamMemberID
+	i.require(inventoryPhysicalCountFieldTeamMemberID)
+}
+
+// SetOccurredAt sets the OccurredAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetOccurredAt(occurredAt *string) {
+	i.OccurredAt = occurredAt
+	i.require(inventoryPhysicalCountFieldOccurredAt)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetCreatedAt(createdAt *string) {
+	i.CreatedAt = createdAt
+	i.require(inventoryPhysicalCountFieldCreatedAt)
+}
+
 func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryPhysicalCount
 	var value unmarshaler
@@ -1584,6 +2825,17 @@ func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InventoryPhysicalCount) MarshalJSON() ([]byte, error) {
+	type embed InventoryPhysicalCount
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InventoryPhysicalCount) String() string {
@@ -1665,6 +2917,22 @@ func (i InventoryState) Ptr() *InventoryState {
 
 // Represents the transfer of a quantity of product inventory at a
 // particular time from one location to another.
+var (
+	inventoryTransferFieldID                = big.NewInt(1 << 0)
+	inventoryTransferFieldReferenceID       = big.NewInt(1 << 1)
+	inventoryTransferFieldState             = big.NewInt(1 << 2)
+	inventoryTransferFieldFromLocationID    = big.NewInt(1 << 3)
+	inventoryTransferFieldToLocationID      = big.NewInt(1 << 4)
+	inventoryTransferFieldCatalogObjectID   = big.NewInt(1 << 5)
+	inventoryTransferFieldCatalogObjectType = big.NewInt(1 << 6)
+	inventoryTransferFieldQuantity          = big.NewInt(1 << 7)
+	inventoryTransferFieldOccurredAt        = big.NewInt(1 << 8)
+	inventoryTransferFieldCreatedAt         = big.NewInt(1 << 9)
+	inventoryTransferFieldSource            = big.NewInt(1 << 10)
+	inventoryTransferFieldEmployeeID        = big.NewInt(1 << 11)
+	inventoryTransferFieldTeamMemberID      = big.NewInt(1 << 12)
+)
+
 type InventoryTransfer struct {
 	// A unique ID generated by Square for the
 	// `InventoryTransfer`.
@@ -1710,6 +2978,9 @@ type InventoryTransfer struct {
 	// The Square-generated ID of the [Team Member](entity:TeamMember) responsible for the
 	// inventory transfer.
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1810,6 +3081,104 @@ func (i *InventoryTransfer) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InventoryTransfer) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetID(id *string) {
+	i.ID = id
+	i.require(inventoryTransferFieldID)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetReferenceID(referenceID *string) {
+	i.ReferenceID = referenceID
+	i.require(inventoryTransferFieldReferenceID)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetState(state *InventoryState) {
+	i.State = state
+	i.require(inventoryTransferFieldState)
+}
+
+// SetFromLocationID sets the FromLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetFromLocationID(fromLocationID *string) {
+	i.FromLocationID = fromLocationID
+	i.require(inventoryTransferFieldFromLocationID)
+}
+
+// SetToLocationID sets the ToLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetToLocationID(toLocationID *string) {
+	i.ToLocationID = toLocationID
+	i.require(inventoryTransferFieldToLocationID)
+}
+
+// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetCatalogObjectID(catalogObjectID *string) {
+	i.CatalogObjectID = catalogObjectID
+	i.require(inventoryTransferFieldCatalogObjectID)
+}
+
+// SetCatalogObjectType sets the CatalogObjectType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetCatalogObjectType(catalogObjectType *string) {
+	i.CatalogObjectType = catalogObjectType
+	i.require(inventoryTransferFieldCatalogObjectType)
+}
+
+// SetQuantity sets the Quantity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetQuantity(quantity *string) {
+	i.Quantity = quantity
+	i.require(inventoryTransferFieldQuantity)
+}
+
+// SetOccurredAt sets the OccurredAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetOccurredAt(occurredAt *string) {
+	i.OccurredAt = occurredAt
+	i.require(inventoryTransferFieldOccurredAt)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetCreatedAt(createdAt *string) {
+	i.CreatedAt = createdAt
+	i.require(inventoryTransferFieldCreatedAt)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetSource(source *SourceApplication) {
+	i.Source = source
+	i.require(inventoryTransferFieldSource)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetEmployeeID(employeeID *string) {
+	i.EmployeeID = employeeID
+	i.require(inventoryTransferFieldEmployeeID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryTransfer) SetTeamMemberID(teamMemberID *string) {
+	i.TeamMemberID = teamMemberID
+	i.require(inventoryTransferFieldTeamMemberID)
+}
+
 func (i *InventoryTransfer) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryTransfer
 	var value unmarshaler
@@ -1824,6 +3193,17 @@ func (i *InventoryTransfer) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InventoryTransfer) MarshalJSON() ([]byte, error) {
+	type embed InventoryTransfer
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InventoryTransfer) String() string {

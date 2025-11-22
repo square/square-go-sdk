@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	breaktypes "github.com/square/square-go-sdk/v2/labor/breaktypes"
@@ -13,7 +13,6 @@ import (
 	teammemberwages "github.com/square/square-go-sdk/v2/labor/teammemberwages"
 	workweekconfigs "github.com/square/square-go-sdk/v2/labor/workweekconfigs"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
@@ -25,13 +24,12 @@ type Client struct {
 	TeamMemberWages *teammemberwages.Client
 	WorkweekConfigs *workweekconfigs.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -39,12 +37,13 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		BreakTypes:      breaktypes.NewClient(opts...),
-		EmployeeWages:   employeewages.NewClient(opts...),
-		Shifts:          shifts.NewClient(opts...),
-		TeamMemberWages: teammemberwages.NewClient(opts...),
-		WorkweekConfigs: workweekconfigs.NewClient(opts...),
+		BreakTypes:      breaktypes.NewClient(options),
+		EmployeeWages:   employeewages.NewClient(options),
+		Shifts:          shifts.NewClient(options),
+		TeamMemberWages: teammemberwages.NewClient(options),
+		WorkweekConfigs: workweekconfigs.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -52,7 +51,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -66,9 +64,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // - `end_at`
 func (c *Client) CreateScheduledShift(
 	ctx context.Context,
-	request *v2.CreateScheduledShiftRequest,
+	request *square.CreateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateScheduledShiftResponse, error) {
+) (*square.CreateScheduledShiftResponse, error) {
 	response, err := c.WithRawResponse.CreateScheduledShift(
 		ctx,
 		request,
@@ -88,9 +86,9 @@ func (c *Client) CreateScheduledShift(
 // `BulkPublishScheduledShifts` request must fall within a two-week period.
 func (c *Client) BulkPublishScheduledShifts(
 	ctx context.Context,
-	request *v2.BulkPublishScheduledShiftsRequest,
+	request *square.BulkPublishScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkPublishScheduledShiftsResponse, error) {
+) (*square.BulkPublishScheduledShiftsResponse, error) {
 	response, err := c.WithRawResponse.BulkPublishScheduledShifts(
 		ctx,
 		request,
@@ -106,9 +104,9 @@ func (c *Client) BulkPublishScheduledShifts(
 // By default, results are sorted by `start_at` in ascending order.
 func (c *Client) SearchScheduledShifts(
 	ctx context.Context,
-	request *v2.SearchScheduledShiftsRequest,
+	request *square.SearchScheduledShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchScheduledShiftsResponse, error) {
+) (*square.SearchScheduledShiftsResponse, error) {
 	response, err := c.WithRawResponse.SearchScheduledShifts(
 		ctx,
 		request,
@@ -123,9 +121,9 @@ func (c *Client) SearchScheduledShifts(
 // Retrieves a scheduled shift by ID.
 func (c *Client) RetrieveScheduledShift(
 	ctx context.Context,
-	request *v2.RetrieveScheduledShiftRequest,
+	request *square.RetrieveScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveScheduledShiftResponse, error) {
+) (*square.RetrieveScheduledShiftResponse, error) {
 	response, err := c.WithRawResponse.RetrieveScheduledShift(
 		ctx,
 		request,
@@ -149,9 +147,9 @@ func (c *Client) RetrieveScheduledShift(
 // and then publish the shift.
 func (c *Client) UpdateScheduledShift(
 	ctx context.Context,
-	request *v2.UpdateScheduledShiftRequest,
+	request *square.UpdateScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateScheduledShiftResponse, error) {
+) (*square.UpdateScheduledShiftResponse, error) {
 	response, err := c.WithRawResponse.UpdateScheduledShift(
 		ctx,
 		request,
@@ -167,9 +165,9 @@ func (c *Client) UpdateScheduledShift(
 // `draft_shift_details` field as is and copies it to the `published_shift_details` field.
 func (c *Client) PublishScheduledShift(
 	ctx context.Context,
-	request *v2.PublishScheduledShiftRequest,
+	request *square.PublishScheduledShiftRequest,
 	opts ...option.RequestOption,
-) (*v2.PublishScheduledShiftResponse, error) {
+) (*square.PublishScheduledShiftResponse, error) {
 	response, err := c.WithRawResponse.PublishScheduledShift(
 		ctx,
 		request,
@@ -201,9 +199,9 @@ func (c *Client) PublishScheduledShift(
 // the `Timecard.end_at`, or both.
 func (c *Client) CreateTimecard(
 	ctx context.Context,
-	request *v2.CreateTimecardRequest,
+	request *square.CreateTimecardRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateTimecardResponse, error) {
+) (*square.CreateTimecardResponse, error) {
 	response, err := c.WithRawResponse.CreateTimecard(
 		ctx,
 		request,
@@ -231,9 +229,9 @@ func (c *Client) CreateTimecard(
 // - `UPDATED_AT`
 func (c *Client) SearchTimecards(
 	ctx context.Context,
-	request *v2.SearchTimecardsRequest,
+	request *square.SearchTimecardsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchTimecardsResponse, error) {
+) (*square.SearchTimecardsResponse, error) {
 	response, err := c.WithRawResponse.SearchTimecards(
 		ctx,
 		request,
@@ -248,9 +246,9 @@ func (c *Client) SearchTimecards(
 // Returns a single `Timecard` specified by `id`.
 func (c *Client) RetrieveTimecard(
 	ctx context.Context,
-	request *v2.RetrieveTimecardRequest,
+	request *square.RetrieveTimecardRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveTimecardResponse, error) {
+) (*square.RetrieveTimecardResponse, error) {
 	response, err := c.WithRawResponse.RetrieveTimecard(
 		ctx,
 		request,
@@ -271,9 +269,9 @@ func (c *Client) RetrieveTimecard(
 // set on each `Break`.
 func (c *Client) UpdateTimecard(
 	ctx context.Context,
-	request *v2.UpdateTimecardRequest,
+	request *square.UpdateTimecardRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateTimecardResponse, error) {
+) (*square.UpdateTimecardResponse, error) {
 	response, err := c.WithRawResponse.UpdateTimecard(
 		ctx,
 		request,
@@ -288,9 +286,9 @@ func (c *Client) UpdateTimecard(
 // Deletes a `Timecard`.
 func (c *Client) DeleteTimecard(
 	ctx context.Context,
-	request *v2.DeleteTimecardRequest,
+	request *square.DeleteTimecardRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteTimecardResponse, error) {
+) (*square.DeleteTimecardResponse, error) {
 	response, err := c.WithRawResponse.DeleteTimecard(
 		ctx,
 		request,

@@ -6,6 +6,13 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	bulkSwapPlanRequestFieldNewPlanVariationID = big.NewInt(1 << 0)
+	bulkSwapPlanRequestFieldOldPlanVariationID = big.NewInt(1 << 1)
+	bulkSwapPlanRequestFieldLocationID         = big.NewInt(1 << 2)
 )
 
 type BulkSwapPlanRequest struct {
@@ -19,7 +26,44 @@ type BulkSwapPlanRequest struct {
 	OldPlanVariationID string `json:"old_plan_variation_id" url:"-"`
 	// The ID of the location to associate with the swapped subscriptions.
 	LocationID string `json:"location_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkSwapPlanRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetNewPlanVariationID sets the NewPlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkSwapPlanRequest) SetNewPlanVariationID(newPlanVariationID string) {
+	b.NewPlanVariationID = newPlanVariationID
+	b.require(bulkSwapPlanRequestFieldNewPlanVariationID)
+}
+
+// SetOldPlanVariationID sets the OldPlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkSwapPlanRequest) SetOldPlanVariationID(oldPlanVariationID string) {
+	b.OldPlanVariationID = oldPlanVariationID
+	b.require(bulkSwapPlanRequestFieldOldPlanVariationID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkSwapPlanRequest) SetLocationID(locationID string) {
+	b.LocationID = locationID
+	b.require(bulkSwapPlanRequestFieldLocationID)
+}
+
+var (
+	changeBillingAnchorDateRequestFieldSubscriptionID           = big.NewInt(1 << 0)
+	changeBillingAnchorDateRequestFieldMonthlyBillingAnchorDate = big.NewInt(1 << 1)
+	changeBillingAnchorDateRequestFieldEffectiveDate            = big.NewInt(1 << 2)
+)
 
 type ChangeBillingAnchorDateRequest struct {
 	// The ID of the subscription to update the billing anchor date.
@@ -32,14 +76,80 @@ type ChangeBillingAnchorDateRequest struct {
 	// When this date is unspecified or falls within the current billing cycle, the billing anchor date
 	// is changed immediately.
 	EffectiveDate *string `json:"effective_date,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *ChangeBillingAnchorDateRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateRequest) SetSubscriptionID(subscriptionID string) {
+	c.SubscriptionID = subscriptionID
+	c.require(changeBillingAnchorDateRequestFieldSubscriptionID)
+}
+
+// SetMonthlyBillingAnchorDate sets the MonthlyBillingAnchorDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateRequest) SetMonthlyBillingAnchorDate(monthlyBillingAnchorDate *int) {
+	c.MonthlyBillingAnchorDate = monthlyBillingAnchorDate
+	c.require(changeBillingAnchorDateRequestFieldMonthlyBillingAnchorDate)
+}
+
+// SetEffectiveDate sets the EffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateRequest) SetEffectiveDate(effectiveDate *string) {
+	c.EffectiveDate = effectiveDate
+	c.require(changeBillingAnchorDateRequestFieldEffectiveDate)
+}
+
+var (
+	deleteActionSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	deleteActionSubscriptionsRequestFieldActionID       = big.NewInt(1 << 1)
+)
 
 type DeleteActionSubscriptionsRequest struct {
 	// The ID of the subscription the targeted action is to act upon.
 	SubscriptionID string `json:"-" url:"-"`
 	// The ID of the targeted action to be deleted.
 	ActionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteActionSubscriptionsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteActionSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	d.SubscriptionID = subscriptionID
+	d.require(deleteActionSubscriptionsRequestFieldSubscriptionID)
+}
+
+// SetActionID sets the ActionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteActionSubscriptionsRequest) SetActionID(actionID string) {
+	d.ActionID = actionID
+	d.require(deleteActionSubscriptionsRequestFieldActionID)
+}
+
+var (
+	swapPlanRequestFieldSubscriptionID     = big.NewInt(1 << 0)
+	swapPlanRequestFieldNewPlanVariationID = big.NewInt(1 << 1)
+	swapPlanRequestFieldPhases             = big.NewInt(1 << 2)
+)
 
 type SwapPlanRequest struct {
 	// The ID of the subscription to swap the subscription plan for.
@@ -50,12 +160,80 @@ type SwapPlanRequest struct {
 	NewPlanVariationID *string `json:"new_plan_variation_id,omitempty" url:"-"`
 	// A list of PhaseInputs, to pass phase-specific information used in the swap.
 	Phases []*PhaseInput `json:"phases,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SwapPlanRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanRequest) SetSubscriptionID(subscriptionID string) {
+	s.SubscriptionID = subscriptionID
+	s.require(swapPlanRequestFieldSubscriptionID)
+}
+
+// SetNewPlanVariationID sets the NewPlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanRequest) SetNewPlanVariationID(newPlanVariationID *string) {
+	s.NewPlanVariationID = newPlanVariationID
+	s.require(swapPlanRequestFieldNewPlanVariationID)
+}
+
+// SetPhases sets the Phases field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanRequest) SetPhases(phases []*PhaseInput) {
+	s.Phases = phases
+	s.require(swapPlanRequestFieldPhases)
+}
+
+var (
+	cancelSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+)
 
 type CancelSubscriptionsRequest struct {
 	// The ID of the subscription to cancel.
 	SubscriptionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelSubscriptionsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	c.SubscriptionID = subscriptionID
+	c.require(cancelSubscriptionsRequestFieldSubscriptionID)
+}
+
+var (
+	createSubscriptionRequestFieldIdempotencyKey           = big.NewInt(1 << 0)
+	createSubscriptionRequestFieldLocationID               = big.NewInt(1 << 1)
+	createSubscriptionRequestFieldPlanVariationID          = big.NewInt(1 << 2)
+	createSubscriptionRequestFieldCustomerID               = big.NewInt(1 << 3)
+	createSubscriptionRequestFieldStartDate                = big.NewInt(1 << 4)
+	createSubscriptionRequestFieldCanceledDate             = big.NewInt(1 << 5)
+	createSubscriptionRequestFieldTaxPercentage            = big.NewInt(1 << 6)
+	createSubscriptionRequestFieldPriceOverrideMoney       = big.NewInt(1 << 7)
+	createSubscriptionRequestFieldCardID                   = big.NewInt(1 << 8)
+	createSubscriptionRequestFieldTimezone                 = big.NewInt(1 << 9)
+	createSubscriptionRequestFieldSource                   = big.NewInt(1 << 10)
+	createSubscriptionRequestFieldMonthlyBillingAnchorDate = big.NewInt(1 << 11)
+	createSubscriptionRequestFieldPhases                   = big.NewInt(1 << 12)
+)
 
 type CreateSubscriptionRequest struct {
 	// A unique string that identifies this `CreateSubscription` request.
@@ -106,7 +284,113 @@ type CreateSubscriptionRequest struct {
 	MonthlyBillingAnchorDate *int `json:"monthly_billing_anchor_date,omitempty" url:"-"`
 	// array of phases for this subscription
 	Phases []*Phase `json:"phases,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateSubscriptionRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createSubscriptionRequestFieldIdempotencyKey)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetLocationID(locationID string) {
+	c.LocationID = locationID
+	c.require(createSubscriptionRequestFieldLocationID)
+}
+
+// SetPlanVariationID sets the PlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetPlanVariationID(planVariationID *string) {
+	c.PlanVariationID = planVariationID
+	c.require(createSubscriptionRequestFieldPlanVariationID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetCustomerID(customerID string) {
+	c.CustomerID = customerID
+	c.require(createSubscriptionRequestFieldCustomerID)
+}
+
+// SetStartDate sets the StartDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetStartDate(startDate *string) {
+	c.StartDate = startDate
+	c.require(createSubscriptionRequestFieldStartDate)
+}
+
+// SetCanceledDate sets the CanceledDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetCanceledDate(canceledDate *string) {
+	c.CanceledDate = canceledDate
+	c.require(createSubscriptionRequestFieldCanceledDate)
+}
+
+// SetTaxPercentage sets the TaxPercentage field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetTaxPercentage(taxPercentage *string) {
+	c.TaxPercentage = taxPercentage
+	c.require(createSubscriptionRequestFieldTaxPercentage)
+}
+
+// SetPriceOverrideMoney sets the PriceOverrideMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetPriceOverrideMoney(priceOverrideMoney *Money) {
+	c.PriceOverrideMoney = priceOverrideMoney
+	c.require(createSubscriptionRequestFieldPriceOverrideMoney)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetCardID(cardID *string) {
+	c.CardID = cardID
+	c.require(createSubscriptionRequestFieldCardID)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetTimezone(timezone *string) {
+	c.Timezone = timezone
+	c.require(createSubscriptionRequestFieldTimezone)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetSource(source *SubscriptionSource) {
+	c.Source = source
+	c.require(createSubscriptionRequestFieldSource)
+}
+
+// SetMonthlyBillingAnchorDate sets the MonthlyBillingAnchorDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetMonthlyBillingAnchorDate(monthlyBillingAnchorDate *int) {
+	c.MonthlyBillingAnchorDate = monthlyBillingAnchorDate
+	c.require(createSubscriptionRequestFieldMonthlyBillingAnchorDate)
+}
+
+// SetPhases sets the Phases field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionRequest) SetPhases(phases []*Phase) {
+	c.Phases = phases
+	c.require(createSubscriptionRequestFieldPhases)
+}
+
+var (
+	getSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	getSubscriptionsRequestFieldInclude        = big.NewInt(1 << 1)
+)
 
 type GetSubscriptionsRequest struct {
 	// The ID of the subscription to retrieve.
@@ -117,7 +401,37 @@ type GetSubscriptionsRequest struct {
 	//
 	// - `actions`: to include scheduled actions on the targeted subscription.
 	Include *string `json:"-" url:"include,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetSubscriptionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	g.SubscriptionID = subscriptionID
+	g.require(getSubscriptionsRequestFieldSubscriptionID)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSubscriptionsRequest) SetInclude(include *string) {
+	g.Include = include
+	g.require(getSubscriptionsRequestFieldInclude)
+}
+
+var (
+	listEventsSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	listEventsSubscriptionsRequestFieldCursor         = big.NewInt(1 << 1)
+	listEventsSubscriptionsRequestFieldLimit          = big.NewInt(1 << 2)
+)
 
 type ListEventsSubscriptionsRequest struct {
 	// The ID of the subscription to retrieve the events for.
@@ -131,7 +445,47 @@ type ListEventsSubscriptionsRequest struct {
 	// The upper limit on the number of subscription events to return
 	// in a paged response.
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListEventsSubscriptionsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	l.SubscriptionID = subscriptionID
+	l.require(listEventsSubscriptionsRequestFieldSubscriptionID)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsSubscriptionsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEventsSubscriptionsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventsSubscriptionsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listEventsSubscriptionsRequestFieldLimit)
+}
+
+var (
+	pauseSubscriptionRequestFieldSubscriptionID      = big.NewInt(1 << 0)
+	pauseSubscriptionRequestFieldPauseEffectiveDate  = big.NewInt(1 << 1)
+	pauseSubscriptionRequestFieldPauseCycleDuration  = big.NewInt(1 << 2)
+	pauseSubscriptionRequestFieldResumeEffectiveDate = big.NewInt(1 << 3)
+	pauseSubscriptionRequestFieldResumeChangeTiming  = big.NewInt(1 << 4)
+	pauseSubscriptionRequestFieldPauseReason         = big.NewInt(1 << 5)
+)
 
 type PauseSubscriptionRequest struct {
 	// The ID of the subscription to pause.
@@ -156,7 +510,65 @@ type PauseSubscriptionRequest struct {
 	ResumeChangeTiming *ChangeTiming `json:"resume_change_timing,omitempty" url:"-"`
 	// The user-provided reason to pause the subscription.
 	PauseReason *string `json:"pause_reason,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (p *PauseSubscriptionRequest) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
+	p.SubscriptionID = subscriptionID
+	p.require(pauseSubscriptionRequestFieldSubscriptionID)
+}
+
+// SetPauseEffectiveDate sets the PauseEffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetPauseEffectiveDate(pauseEffectiveDate *string) {
+	p.PauseEffectiveDate = pauseEffectiveDate
+	p.require(pauseSubscriptionRequestFieldPauseEffectiveDate)
+}
+
+// SetPauseCycleDuration sets the PauseCycleDuration field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetPauseCycleDuration(pauseCycleDuration *int64) {
+	p.PauseCycleDuration = pauseCycleDuration
+	p.require(pauseSubscriptionRequestFieldPauseCycleDuration)
+}
+
+// SetResumeEffectiveDate sets the ResumeEffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetResumeEffectiveDate(resumeEffectiveDate *string) {
+	p.ResumeEffectiveDate = resumeEffectiveDate
+	p.require(pauseSubscriptionRequestFieldResumeEffectiveDate)
+}
+
+// SetResumeChangeTiming sets the ResumeChangeTiming field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetResumeChangeTiming(resumeChangeTiming *ChangeTiming) {
+	p.ResumeChangeTiming = resumeChangeTiming
+	p.require(pauseSubscriptionRequestFieldResumeChangeTiming)
+}
+
+// SetPauseReason sets the PauseReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionRequest) SetPauseReason(pauseReason *string) {
+	p.PauseReason = pauseReason
+	p.require(pauseSubscriptionRequestFieldPauseReason)
+}
+
+var (
+	resumeSubscriptionRequestFieldSubscriptionID      = big.NewInt(1 << 0)
+	resumeSubscriptionRequestFieldResumeEffectiveDate = big.NewInt(1 << 1)
+	resumeSubscriptionRequestFieldResumeChangeTiming  = big.NewInt(1 << 2)
+)
 
 type ResumeSubscriptionRequest struct {
 	// The ID of the subscription to resume.
@@ -167,7 +579,45 @@ type ResumeSubscriptionRequest struct {
 	// `resume_effective_date` attribute value.
 	// See [ChangeTiming](#type-changetiming) for possible values
 	ResumeChangeTiming *ChangeTiming `json:"resume_change_timing,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *ResumeSubscriptionRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
+	r.SubscriptionID = subscriptionID
+	r.require(resumeSubscriptionRequestFieldSubscriptionID)
+}
+
+// SetResumeEffectiveDate sets the ResumeEffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionRequest) SetResumeEffectiveDate(resumeEffectiveDate *string) {
+	r.ResumeEffectiveDate = resumeEffectiveDate
+	r.require(resumeSubscriptionRequestFieldResumeEffectiveDate)
+}
+
+// SetResumeChangeTiming sets the ResumeChangeTiming field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionRequest) SetResumeChangeTiming(resumeChangeTiming *ChangeTiming) {
+	r.ResumeChangeTiming = resumeChangeTiming
+	r.require(resumeSubscriptionRequestFieldResumeChangeTiming)
+}
+
+var (
+	searchSubscriptionsRequestFieldCursor  = big.NewInt(1 << 0)
+	searchSubscriptionsRequestFieldLimit   = big.NewInt(1 << 1)
+	searchSubscriptionsRequestFieldQuery   = big.NewInt(1 << 2)
+	searchSubscriptionsRequestFieldInclude = big.NewInt(1 << 3)
+)
 
 type SearchSubscriptionsRequest struct {
 	// When the total number of resulting subscriptions exceeds the limit of a paged response,
@@ -189,15 +639,61 @@ type SearchSubscriptionsRequest struct {
 	//
 	// - `actions`: to include scheduled actions on the targeted subscriptions.
 	Include []string `json:"include,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchSubscriptionsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchSubscriptionsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchSubscriptionsRequestFieldLimit)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsRequest) SetQuery(query *SearchSubscriptionsQuery) {
+	s.Query = query
+	s.require(searchSubscriptionsRequestFieldQuery)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsRequest) SetInclude(include []string) {
+	s.Include = include
+	s.require(searchSubscriptionsRequestFieldInclude)
 }
 
 // Defines output parameters in a response of the
 // [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
+var (
+	bulkSwapPlanResponseFieldErrors                = big.NewInt(1 << 0)
+	bulkSwapPlanResponseFieldAffectedSubscriptions = big.NewInt(1 << 1)
+)
+
 type BulkSwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The number of affected subscriptions.
 	AffectedSubscriptions *int `json:"affected_subscriptions,omitempty" url:"affected_subscriptions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -221,6 +717,27 @@ func (b *BulkSwapPlanResponse) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BulkSwapPlanResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkSwapPlanResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkSwapPlanResponseFieldErrors)
+}
+
+// SetAffectedSubscriptions sets the AffectedSubscriptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkSwapPlanResponse) SetAffectedSubscriptions(affectedSubscriptions *int) {
+	b.AffectedSubscriptions = affectedSubscriptions
+	b.require(bulkSwapPlanResponseFieldAffectedSubscriptions)
+}
+
 func (b *BulkSwapPlanResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkSwapPlanResponse
 	var value unmarshaler
@@ -237,6 +754,17 @@ func (b *BulkSwapPlanResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkSwapPlanResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkSwapPlanResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkSwapPlanResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -251,6 +779,12 @@ func (b *BulkSwapPlanResponse) String() string {
 
 // Defines output parameters in a response from the
 // [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
+var (
+	cancelSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	cancelSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+	cancelSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
+)
+
 type CancelSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -258,6 +792,9 @@ type CancelSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 	// A list of a single `CANCEL` action scheduled for the subscription.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -288,6 +825,34 @@ func (c *CancelSubscriptionResponse) GetExtraProperties() map[string]interface{}
 	return c.extraProperties
 }
 
+func (c *CancelSubscriptionResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelSubscriptionResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	c.Subscription = subscription
+	c.require(cancelSubscriptionResponseFieldSubscription)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelSubscriptionResponse) SetActions(actions []*SubscriptionAction) {
+	c.Actions = actions
+	c.require(cancelSubscriptionResponseFieldActions)
+}
+
 func (c *CancelSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CancelSubscriptionResponse
 	var value unmarshaler
@@ -304,6 +869,17 @@ func (c *CancelSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CancelSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CancelSubscriptionResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -318,6 +894,12 @@ func (c *CancelSubscriptionResponse) String() string {
 
 // Defines output parameters in a request to the
 // [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
+var (
+	changeBillingAnchorDateResponseFieldErrors       = big.NewInt(1 << 0)
+	changeBillingAnchorDateResponseFieldSubscription = big.NewInt(1 << 1)
+	changeBillingAnchorDateResponseFieldActions      = big.NewInt(1 << 2)
+)
+
 type ChangeBillingAnchorDateResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -325,6 +907,9 @@ type ChangeBillingAnchorDateResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 	// A list of a single billing anchor date change for the subscription.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -355,6 +940,34 @@ func (c *ChangeBillingAnchorDateResponse) GetExtraProperties() map[string]interf
 	return c.extraProperties
 }
 
+func (c *ChangeBillingAnchorDateResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(changeBillingAnchorDateResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateResponse) SetSubscription(subscription *Subscription) {
+	c.Subscription = subscription
+	c.require(changeBillingAnchorDateResponseFieldSubscription)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChangeBillingAnchorDateResponse) SetActions(actions []*SubscriptionAction) {
+	c.Actions = actions
+	c.require(changeBillingAnchorDateResponseFieldActions)
+}
+
 func (c *ChangeBillingAnchorDateResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ChangeBillingAnchorDateResponse
 	var value unmarshaler
@@ -369,6 +982,17 @@ func (c *ChangeBillingAnchorDateResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *ChangeBillingAnchorDateResponse) MarshalJSON() ([]byte, error) {
+	type embed ChangeBillingAnchorDateResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *ChangeBillingAnchorDateResponse) String() string {
@@ -408,6 +1032,11 @@ func (c ChangeTiming) Ptr() *ChangeTiming {
 
 // Defines output parameters in a response from the
 // [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
+var (
+	createSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	createSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+)
+
 type CreateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -416,6 +1045,9 @@ type CreateSubscriptionResponse struct {
 	// For more information, see
 	// [Subscription object](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions#subscription-object).
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -439,6 +1071,27 @@ func (c *CreateSubscriptionResponse) GetExtraProperties() map[string]interface{}
 	return c.extraProperties
 }
 
+func (c *CreateSubscriptionResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	c.Subscription = subscription
+	c.require(createSubscriptionResponseFieldSubscription)
+}
+
 func (c *CreateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateSubscriptionResponse
 	var value unmarshaler
@@ -455,6 +1108,17 @@ func (c *CreateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateSubscriptionResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -469,11 +1133,19 @@ func (c *CreateSubscriptionResponse) String() string {
 
 // Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
 // endpoint.
+var (
+	deleteSubscriptionActionResponseFieldErrors       = big.NewInt(1 << 0)
+	deleteSubscriptionActionResponseFieldSubscription = big.NewInt(1 << 1)
+)
+
 type DeleteSubscriptionActionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The subscription that has the specified action deleted.
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -497,6 +1169,27 @@ func (d *DeleteSubscriptionActionResponse) GetExtraProperties() map[string]inter
 	return d.extraProperties
 }
 
+func (d *DeleteSubscriptionActionResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteSubscriptionActionResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteSubscriptionActionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteSubscriptionActionResponse) SetSubscription(subscription *Subscription) {
+	d.Subscription = subscription
+	d.require(deleteSubscriptionActionResponseFieldSubscription)
+}
+
 func (d *DeleteSubscriptionActionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DeleteSubscriptionActionResponse
 	var value unmarshaler
@@ -513,6 +1206,17 @@ func (d *DeleteSubscriptionActionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteSubscriptionActionResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteSubscriptionActionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteSubscriptionActionResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -527,11 +1231,19 @@ func (d *DeleteSubscriptionActionResponse) String() string {
 
 // Defines output parameters in a response from the
 // [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
+var (
+	getSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	getSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+)
+
 type GetSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The subscription retrieved.
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -555,6 +1267,27 @@ func (g *GetSubscriptionResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetSubscriptionResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSubscriptionResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	g.Subscription = subscription
+	g.require(getSubscriptionResponseFieldSubscription)
+}
+
 func (g *GetSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetSubscriptionResponse
 	var value unmarshaler
@@ -571,6 +1304,17 @@ func (g *GetSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed GetSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetSubscriptionResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -585,6 +1329,12 @@ func (g *GetSubscriptionResponse) String() string {
 
 // Defines output parameters in a response from the
 // [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
+var (
+	listSubscriptionEventsResponseFieldErrors             = big.NewInt(1 << 0)
+	listSubscriptionEventsResponseFieldSubscriptionEvents = big.NewInt(1 << 1)
+	listSubscriptionEventsResponseFieldCursor             = big.NewInt(1 << 2)
+)
+
 type ListSubscriptionEventsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -596,6 +1346,9 @@ type ListSubscriptionEventsResponse struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -626,6 +1379,34 @@ func (l *ListSubscriptionEventsResponse) GetExtraProperties() map[string]interfa
 	return l.extraProperties
 }
 
+func (l *ListSubscriptionEventsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionEventsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listSubscriptionEventsResponseFieldErrors)
+}
+
+// SetSubscriptionEvents sets the SubscriptionEvents field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionEventsResponse) SetSubscriptionEvents(subscriptionEvents []*SubscriptionEvent) {
+	l.SubscriptionEvents = subscriptionEvents
+	l.require(listSubscriptionEventsResponseFieldSubscriptionEvents)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionEventsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listSubscriptionEventsResponseFieldCursor)
+}
+
 func (l *ListSubscriptionEventsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListSubscriptionEventsResponse
 	var value unmarshaler
@@ -642,6 +1423,17 @@ func (l *ListSubscriptionEventsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListSubscriptionEventsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListSubscriptionEventsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListSubscriptionEventsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -656,6 +1448,12 @@ func (l *ListSubscriptionEventsResponse) String() string {
 
 // Defines output parameters in a response from the
 // [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
+var (
+	pauseSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	pauseSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+	pauseSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
+)
+
 type PauseSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -663,6 +1461,9 @@ type PauseSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 	// The list of a `PAUSE` action and a possible `RESUME` action created by the request.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -693,6 +1494,34 @@ func (p *PauseSubscriptionResponse) GetExtraProperties() map[string]interface{} 
 	return p.extraProperties
 }
 
+func (p *PauseSubscriptionResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionResponse) SetErrors(errors []*Error) {
+	p.Errors = errors
+	p.require(pauseSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	p.Subscription = subscription
+	p.require(pauseSubscriptionResponseFieldSubscription)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PauseSubscriptionResponse) SetActions(actions []*SubscriptionAction) {
+	p.Actions = actions
+	p.require(pauseSubscriptionResponseFieldActions)
+}
+
 func (p *PauseSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler PauseSubscriptionResponse
 	var value unmarshaler
@@ -709,6 +1538,17 @@ func (p *PauseSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PauseSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed PauseSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (p *PauseSubscriptionResponse) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
@@ -722,6 +1562,13 @@ func (p *PauseSubscriptionResponse) String() string {
 }
 
 // Represents a phase, which can override subscription phases as defined by plan_id
+var (
+	phaseFieldUID             = big.NewInt(1 << 0)
+	phaseFieldOrdinal         = big.NewInt(1 << 1)
+	phaseFieldOrderTemplateID = big.NewInt(1 << 2)
+	phaseFieldPlanPhaseUID    = big.NewInt(1 << 3)
+)
+
 type Phase struct {
 	// id of subscription phase
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -731,6 +1578,9 @@ type Phase struct {
 	OrderTemplateID *string `json:"order_template_id,omitempty" url:"order_template_id,omitempty"`
 	// the uid from the plan's phase in catalog
 	PlanPhaseUID *string `json:"plan_phase_uid,omitempty" url:"plan_phase_uid,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -768,6 +1618,41 @@ func (p *Phase) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *Phase) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Phase) SetUID(uid *string) {
+	p.UID = uid
+	p.require(phaseFieldUID)
+}
+
+// SetOrdinal sets the Ordinal field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Phase) SetOrdinal(ordinal *int64) {
+	p.Ordinal = ordinal
+	p.require(phaseFieldOrdinal)
+}
+
+// SetOrderTemplateID sets the OrderTemplateID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Phase) SetOrderTemplateID(orderTemplateID *string) {
+	p.OrderTemplateID = orderTemplateID
+	p.require(phaseFieldOrderTemplateID)
+}
+
+// SetPlanPhaseUID sets the PlanPhaseUID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Phase) SetPlanPhaseUID(planPhaseUID *string) {
+	p.PlanPhaseUID = planPhaseUID
+	p.require(phaseFieldPlanPhaseUID)
+}
+
 func (p *Phase) UnmarshalJSON(data []byte) error {
 	type unmarshaler Phase
 	var value unmarshaler
@@ -784,6 +1669,17 @@ func (p *Phase) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *Phase) MarshalJSON() ([]byte, error) {
+	type embed Phase
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (p *Phase) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
@@ -797,11 +1693,19 @@ func (p *Phase) String() string {
 }
 
 // Represents the arguments used to construct a new phase.
+var (
+	phaseInputFieldOrdinal         = big.NewInt(1 << 0)
+	phaseInputFieldOrderTemplateID = big.NewInt(1 << 1)
+)
+
 type PhaseInput struct {
 	// index of phase in total subscription plan
 	Ordinal int64 `json:"ordinal" url:"ordinal"`
 	// id of order to be used in billing
 	OrderTemplateID *string `json:"order_template_id,omitempty" url:"order_template_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -825,6 +1729,27 @@ func (p *PhaseInput) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *PhaseInput) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetOrdinal sets the Ordinal field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PhaseInput) SetOrdinal(ordinal int64) {
+	p.Ordinal = ordinal
+	p.require(phaseInputFieldOrdinal)
+}
+
+// SetOrderTemplateID sets the OrderTemplateID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PhaseInput) SetOrderTemplateID(orderTemplateID *string) {
+	p.OrderTemplateID = orderTemplateID
+	p.require(phaseInputFieldOrderTemplateID)
+}
+
 func (p *PhaseInput) UnmarshalJSON(data []byte) error {
 	type unmarshaler PhaseInput
 	var value unmarshaler
@@ -841,6 +1766,17 @@ func (p *PhaseInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PhaseInput) MarshalJSON() ([]byte, error) {
+	type embed PhaseInput
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (p *PhaseInput) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
@@ -855,6 +1791,12 @@ func (p *PhaseInput) String() string {
 
 // Defines output parameters in a response from the
 // [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
+var (
+	resumeSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	resumeSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+	resumeSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
+)
+
 type ResumeSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -862,6 +1804,9 @@ type ResumeSubscriptionResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 	// A list of `RESUME` actions created by the request and scheduled for the subscription.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -892,6 +1837,34 @@ func (r *ResumeSubscriptionResponse) GetExtraProperties() map[string]interface{}
 	return r.extraProperties
 }
 
+func (r *ResumeSubscriptionResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(resumeSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	r.Subscription = subscription
+	r.require(resumeSubscriptionResponseFieldSubscription)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ResumeSubscriptionResponse) SetActions(actions []*SubscriptionAction) {
+	r.Actions = actions
+	r.require(resumeSubscriptionResponseFieldActions)
+}
+
 func (r *ResumeSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ResumeSubscriptionResponse
 	var value unmarshaler
@@ -908,6 +1881,17 @@ func (r *ResumeSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *ResumeSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed ResumeSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *ResumeSubscriptionResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -922,6 +1906,12 @@ func (r *ResumeSubscriptionResponse) String() string {
 
 // Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
 // the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+var (
+	searchSubscriptionsFilterFieldCustomerIDs = big.NewInt(1 << 0)
+	searchSubscriptionsFilterFieldLocationIDs = big.NewInt(1 << 1)
+	searchSubscriptionsFilterFieldSourceNames = big.NewInt(1 << 2)
+)
+
 type SearchSubscriptionsFilter struct {
 	// A filter to select subscriptions based on the subscribing customer IDs.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
@@ -929,6 +1919,9 @@ type SearchSubscriptionsFilter struct {
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
 	// A filter to select subscriptions based on the source application.
 	SourceNames []string `json:"source_names,omitempty" url:"source_names,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -959,6 +1952,34 @@ func (s *SearchSubscriptionsFilter) GetExtraProperties() map[string]interface{} 
 	return s.extraProperties
 }
 
+func (s *SearchSubscriptionsFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsFilter) SetCustomerIDs(customerIDs []string) {
+	s.CustomerIDs = customerIDs
+	s.require(searchSubscriptionsFilterFieldCustomerIDs)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsFilter) SetLocationIDs(locationIDs []string) {
+	s.LocationIDs = locationIDs
+	s.require(searchSubscriptionsFilterFieldLocationIDs)
+}
+
+// SetSourceNames sets the SourceNames field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsFilter) SetSourceNames(sourceNames []string) {
+	s.SourceNames = sourceNames
+	s.require(searchSubscriptionsFilterFieldSourceNames)
+}
+
 func (s *SearchSubscriptionsFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchSubscriptionsFilter
 	var value unmarshaler
@@ -975,6 +1996,17 @@ func (s *SearchSubscriptionsFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchSubscriptionsFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchSubscriptionsFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchSubscriptionsFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -988,9 +2020,16 @@ func (s *SearchSubscriptionsFilter) String() string {
 }
 
 // Represents a query, consisting of specified query expressions, used to search for subscriptions.
+var (
+	searchSubscriptionsQueryFieldFilter = big.NewInt(1 << 0)
+)
+
 type SearchSubscriptionsQuery struct {
 	// A list of query expressions.
 	Filter *SearchSubscriptionsFilter `json:"filter,omitempty" url:"filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1005,6 +2044,20 @@ func (s *SearchSubscriptionsQuery) GetFilter() *SearchSubscriptionsFilter {
 
 func (s *SearchSubscriptionsQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
+}
+
+func (s *SearchSubscriptionsQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsQuery) SetFilter(filter *SearchSubscriptionsFilter) {
+	s.Filter = filter
+	s.require(searchSubscriptionsQueryFieldFilter)
 }
 
 func (s *SearchSubscriptionsQuery) UnmarshalJSON(data []byte) error {
@@ -1023,6 +2076,17 @@ func (s *SearchSubscriptionsQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchSubscriptionsQuery) MarshalJSON() ([]byte, error) {
+	type embed SearchSubscriptionsQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchSubscriptionsQuery) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1037,6 +2101,12 @@ func (s *SearchSubscriptionsQuery) String() string {
 
 // Defines output parameters in a response from the
 // [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
+var (
+	searchSubscriptionsResponseFieldErrors        = big.NewInt(1 << 0)
+	searchSubscriptionsResponseFieldSubscriptions = big.NewInt(1 << 1)
+	searchSubscriptionsResponseFieldCursor        = big.NewInt(1 << 2)
+)
+
 type SearchSubscriptionsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1048,6 +2118,9 @@ type SearchSubscriptionsResponse struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1078,6 +2151,34 @@ func (s *SearchSubscriptionsResponse) GetExtraProperties() map[string]interface{
 	return s.extraProperties
 }
 
+func (s *SearchSubscriptionsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchSubscriptionsResponseFieldErrors)
+}
+
+// SetSubscriptions sets the Subscriptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsResponse) SetSubscriptions(subscriptions []*Subscription) {
+	s.Subscriptions = subscriptions
+	s.require(searchSubscriptionsResponseFieldSubscriptions)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchSubscriptionsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchSubscriptionsResponseFieldCursor)
+}
+
 func (s *SearchSubscriptionsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchSubscriptionsResponse
 	var value unmarshaler
@@ -1092,6 +2193,17 @@ func (s *SearchSubscriptionsResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchSubscriptionsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchSubscriptionsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchSubscriptionsResponse) String() string {
@@ -1110,6 +2222,29 @@ func (s *SearchSubscriptionsResponse) String() string {
 //
 // For more information, see
 // [Manage Subscriptions](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions).
+var (
+	subscriptionFieldID                       = big.NewInt(1 << 0)
+	subscriptionFieldLocationID               = big.NewInt(1 << 1)
+	subscriptionFieldPlanVariationID          = big.NewInt(1 << 2)
+	subscriptionFieldCustomerID               = big.NewInt(1 << 3)
+	subscriptionFieldStartDate                = big.NewInt(1 << 4)
+	subscriptionFieldCanceledDate             = big.NewInt(1 << 5)
+	subscriptionFieldChargedThroughDate       = big.NewInt(1 << 6)
+	subscriptionFieldStatus                   = big.NewInt(1 << 7)
+	subscriptionFieldTaxPercentage            = big.NewInt(1 << 8)
+	subscriptionFieldInvoiceIDs               = big.NewInt(1 << 9)
+	subscriptionFieldPriceOverrideMoney       = big.NewInt(1 << 10)
+	subscriptionFieldVersion                  = big.NewInt(1 << 11)
+	subscriptionFieldCreatedAt                = big.NewInt(1 << 12)
+	subscriptionFieldCardID                   = big.NewInt(1 << 13)
+	subscriptionFieldTimezone                 = big.NewInt(1 << 14)
+	subscriptionFieldSource                   = big.NewInt(1 << 15)
+	subscriptionFieldActions                  = big.NewInt(1 << 16)
+	subscriptionFieldMonthlyBillingAnchorDate = big.NewInt(1 << 17)
+	subscriptionFieldPhases                   = big.NewInt(1 << 18)
+	subscriptionFieldCompletedDate            = big.NewInt(1 << 19)
+)
+
 type Subscription struct {
 	// The Square-assigned ID of the subscription.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1181,6 +2316,9 @@ type Subscription struct {
 	Phases []*Phase `json:"phases,omitempty" url:"phases,omitempty"`
 	// The `YYYY-MM-DD`-formatted date when the subscription enters a terminal state.
 	CompletedDate *string `json:"completed_date,omitempty" url:"completed_date,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1330,6 +2468,153 @@ func (s *Subscription) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *Subscription) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetID(id *string) {
+	s.ID = id
+	s.require(subscriptionFieldID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetLocationID(locationID *string) {
+	s.LocationID = locationID
+	s.require(subscriptionFieldLocationID)
+}
+
+// SetPlanVariationID sets the PlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetPlanVariationID(planVariationID *string) {
+	s.PlanVariationID = planVariationID
+	s.require(subscriptionFieldPlanVariationID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetCustomerID(customerID *string) {
+	s.CustomerID = customerID
+	s.require(subscriptionFieldCustomerID)
+}
+
+// SetStartDate sets the StartDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetStartDate(startDate *string) {
+	s.StartDate = startDate
+	s.require(subscriptionFieldStartDate)
+}
+
+// SetCanceledDate sets the CanceledDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetCanceledDate(canceledDate *string) {
+	s.CanceledDate = canceledDate
+	s.require(subscriptionFieldCanceledDate)
+}
+
+// SetChargedThroughDate sets the ChargedThroughDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetChargedThroughDate(chargedThroughDate *string) {
+	s.ChargedThroughDate = chargedThroughDate
+	s.require(subscriptionFieldChargedThroughDate)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetStatus(status *SubscriptionStatus) {
+	s.Status = status
+	s.require(subscriptionFieldStatus)
+}
+
+// SetTaxPercentage sets the TaxPercentage field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetTaxPercentage(taxPercentage *string) {
+	s.TaxPercentage = taxPercentage
+	s.require(subscriptionFieldTaxPercentage)
+}
+
+// SetInvoiceIDs sets the InvoiceIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetInvoiceIDs(invoiceIDs []string) {
+	s.InvoiceIDs = invoiceIDs
+	s.require(subscriptionFieldInvoiceIDs)
+}
+
+// SetPriceOverrideMoney sets the PriceOverrideMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetPriceOverrideMoney(priceOverrideMoney *Money) {
+	s.PriceOverrideMoney = priceOverrideMoney
+	s.require(subscriptionFieldPriceOverrideMoney)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetVersion(version *int64) {
+	s.Version = version
+	s.require(subscriptionFieldVersion)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetCreatedAt(createdAt *string) {
+	s.CreatedAt = createdAt
+	s.require(subscriptionFieldCreatedAt)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetCardID(cardID *string) {
+	s.CardID = cardID
+	s.require(subscriptionFieldCardID)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetTimezone(timezone *string) {
+	s.Timezone = timezone
+	s.require(subscriptionFieldTimezone)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetSource(source *SubscriptionSource) {
+	s.Source = source
+	s.require(subscriptionFieldSource)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetActions(actions []*SubscriptionAction) {
+	s.Actions = actions
+	s.require(subscriptionFieldActions)
+}
+
+// SetMonthlyBillingAnchorDate sets the MonthlyBillingAnchorDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetMonthlyBillingAnchorDate(monthlyBillingAnchorDate *int) {
+	s.MonthlyBillingAnchorDate = monthlyBillingAnchorDate
+	s.require(subscriptionFieldMonthlyBillingAnchorDate)
+}
+
+// SetPhases sets the Phases field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetPhases(phases []*Phase) {
+	s.Phases = phases
+	s.require(subscriptionFieldPhases)
+}
+
+// SetCompletedDate sets the CompletedDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Subscription) SetCompletedDate(completedDate *string) {
+	s.CompletedDate = completedDate
+	s.require(subscriptionFieldCompletedDate)
+}
+
 func (s *Subscription) UnmarshalJSON(data []byte) error {
 	type unmarshaler Subscription
 	var value unmarshaler
@@ -1346,6 +2631,17 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *Subscription) MarshalJSON() ([]byte, error) {
+	type embed Subscription
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *Subscription) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1359,6 +2655,15 @@ func (s *Subscription) String() string {
 }
 
 // Represents an action as a pending change to a subscription.
+var (
+	subscriptionActionFieldID                       = big.NewInt(1 << 0)
+	subscriptionActionFieldType                     = big.NewInt(1 << 1)
+	subscriptionActionFieldEffectiveDate            = big.NewInt(1 << 2)
+	subscriptionActionFieldMonthlyBillingAnchorDate = big.NewInt(1 << 3)
+	subscriptionActionFieldPhases                   = big.NewInt(1 << 4)
+	subscriptionActionFieldNewPlanVariationID       = big.NewInt(1 << 5)
+)
+
 type SubscriptionAction struct {
 	// The ID of an action scoped to a subscription.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1373,6 +2678,9 @@ type SubscriptionAction struct {
 	Phases []*Phase `json:"phases,omitempty" url:"phases,omitempty"`
 	// The target subscription plan variation that a subscription switches to, for a `SWAP_PLAN` action.
 	NewPlanVariationID *string `json:"new_plan_variation_id,omitempty" url:"new_plan_variation_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1424,6 +2732,55 @@ func (s *SubscriptionAction) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SubscriptionAction) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetID(id *string) {
+	s.ID = id
+	s.require(subscriptionActionFieldID)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetType(type_ *SubscriptionActionType) {
+	s.Type = type_
+	s.require(subscriptionActionFieldType)
+}
+
+// SetEffectiveDate sets the EffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetEffectiveDate(effectiveDate *string) {
+	s.EffectiveDate = effectiveDate
+	s.require(subscriptionActionFieldEffectiveDate)
+}
+
+// SetMonthlyBillingAnchorDate sets the MonthlyBillingAnchorDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetMonthlyBillingAnchorDate(monthlyBillingAnchorDate *int) {
+	s.MonthlyBillingAnchorDate = monthlyBillingAnchorDate
+	s.require(subscriptionActionFieldMonthlyBillingAnchorDate)
+}
+
+// SetPhases sets the Phases field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetPhases(phases []*Phase) {
+	s.Phases = phases
+	s.require(subscriptionActionFieldPhases)
+}
+
+// SetNewPlanVariationID sets the NewPlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionAction) SetNewPlanVariationID(newPlanVariationID *string) {
+	s.NewPlanVariationID = newPlanVariationID
+	s.require(subscriptionActionFieldNewPlanVariationID)
+}
+
 func (s *SubscriptionAction) UnmarshalJSON(data []byte) error {
 	type unmarshaler SubscriptionAction
 	var value unmarshaler
@@ -1438,6 +2795,17 @@ func (s *SubscriptionAction) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SubscriptionAction) MarshalJSON() ([]byte, error) {
+	type embed SubscriptionAction
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SubscriptionAction) String() string {
@@ -1488,6 +2856,16 @@ func (s SubscriptionActionType) Ptr() *SubscriptionActionType {
 }
 
 // Describes changes to a subscription and the subscription status.
+var (
+	subscriptionEventFieldID                       = big.NewInt(1 << 0)
+	subscriptionEventFieldSubscriptionEventType    = big.NewInt(1 << 1)
+	subscriptionEventFieldEffectiveDate            = big.NewInt(1 << 2)
+	subscriptionEventFieldMonthlyBillingAnchorDate = big.NewInt(1 << 3)
+	subscriptionEventFieldInfo                     = big.NewInt(1 << 4)
+	subscriptionEventFieldPhases                   = big.NewInt(1 << 5)
+	subscriptionEventFieldPlanVariationID          = big.NewInt(1 << 6)
+)
+
 type SubscriptionEvent struct {
 	// The ID of the subscription event.
 	ID string `json:"id" url:"id"`
@@ -1504,6 +2882,9 @@ type SubscriptionEvent struct {
 	Phases []*Phase `json:"phases,omitempty" url:"phases,omitempty"`
 	// The ID of the subscription plan variation associated with the subscription.
 	PlanVariationID string `json:"plan_variation_id" url:"plan_variation_id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1562,6 +2943,62 @@ func (s *SubscriptionEvent) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SubscriptionEvent) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetID(id string) {
+	s.ID = id
+	s.require(subscriptionEventFieldID)
+}
+
+// SetSubscriptionEventType sets the SubscriptionEventType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetSubscriptionEventType(subscriptionEventType SubscriptionEventSubscriptionEventType) {
+	s.SubscriptionEventType = subscriptionEventType
+	s.require(subscriptionEventFieldSubscriptionEventType)
+}
+
+// SetEffectiveDate sets the EffectiveDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetEffectiveDate(effectiveDate string) {
+	s.EffectiveDate = effectiveDate
+	s.require(subscriptionEventFieldEffectiveDate)
+}
+
+// SetMonthlyBillingAnchorDate sets the MonthlyBillingAnchorDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetMonthlyBillingAnchorDate(monthlyBillingAnchorDate *int) {
+	s.MonthlyBillingAnchorDate = monthlyBillingAnchorDate
+	s.require(subscriptionEventFieldMonthlyBillingAnchorDate)
+}
+
+// SetInfo sets the Info field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetInfo(info *SubscriptionEventInfo) {
+	s.Info = info
+	s.require(subscriptionEventFieldInfo)
+}
+
+// SetPhases sets the Phases field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetPhases(phases []*Phase) {
+	s.Phases = phases
+	s.require(subscriptionEventFieldPhases)
+}
+
+// SetPlanVariationID sets the PlanVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEvent) SetPlanVariationID(planVariationID string) {
+	s.PlanVariationID = planVariationID
+	s.require(subscriptionEventFieldPlanVariationID)
+}
+
 func (s *SubscriptionEvent) UnmarshalJSON(data []byte) error {
 	type unmarshaler SubscriptionEvent
 	var value unmarshaler
@@ -1578,6 +3015,17 @@ func (s *SubscriptionEvent) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SubscriptionEvent) MarshalJSON() ([]byte, error) {
+	type embed SubscriptionEvent
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SubscriptionEvent) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1591,12 +3039,20 @@ func (s *SubscriptionEvent) String() string {
 }
 
 // Provides information about the subscription event.
+var (
+	subscriptionEventInfoFieldDetail = big.NewInt(1 << 0)
+	subscriptionEventInfoFieldCode   = big.NewInt(1 << 1)
+)
+
 type SubscriptionEventInfo struct {
 	// A human-readable explanation for the event.
 	Detail *string `json:"detail,omitempty" url:"detail,omitempty"`
 	// An info code indicating the subscription event that occurred.
 	// See [InfoCode](#type-infocode) for possible values
 	Code *SubscriptionEventInfoCode `json:"code,omitempty" url:"code,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1620,6 +3076,27 @@ func (s *SubscriptionEventInfo) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SubscriptionEventInfo) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetDetail sets the Detail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEventInfo) SetDetail(detail *string) {
+	s.Detail = detail
+	s.require(subscriptionEventInfoFieldDetail)
+}
+
+// SetCode sets the Code field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionEventInfo) SetCode(code *SubscriptionEventInfoCode) {
+	s.Code = code
+	s.require(subscriptionEventInfoFieldCode)
+}
+
 func (s *SubscriptionEventInfo) UnmarshalJSON(data []byte) error {
 	type unmarshaler SubscriptionEventInfo
 	var value unmarshaler
@@ -1634,6 +3111,17 @@ func (s *SubscriptionEventInfo) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SubscriptionEventInfo) MarshalJSON() ([]byte, error) {
+	type embed SubscriptionEventInfo
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SubscriptionEventInfo) String() string {
@@ -1722,11 +3210,18 @@ func (s SubscriptionEventSubscriptionEventType) Ptr() *SubscriptionEventSubscrip
 }
 
 // The origination details of the subscription.
+var (
+	subscriptionSourceFieldName = big.NewInt(1 << 0)
+)
+
 type SubscriptionSource struct {
 	// The name used to identify the place (physical or digital) that
 	// a subscription originates. If unset, the name defaults to the name
 	// of the application that created the subscription.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1743,6 +3238,20 @@ func (s *SubscriptionSource) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SubscriptionSource) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionSource) SetName(name *string) {
+	s.Name = name
+	s.require(subscriptionSourceFieldName)
+}
+
 func (s *SubscriptionSource) UnmarshalJSON(data []byte) error {
 	type unmarshaler SubscriptionSource
 	var value unmarshaler
@@ -1757,6 +3266,17 @@ func (s *SubscriptionSource) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SubscriptionSource) MarshalJSON() ([]byte, error) {
+	type embed SubscriptionSource
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SubscriptionSource) String() string {
@@ -1808,6 +3328,12 @@ func (s SubscriptionStatus) Ptr() *SubscriptionStatus {
 
 // Defines output parameters in a response of the
 // [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
+var (
+	swapPlanResponseFieldErrors       = big.NewInt(1 << 0)
+	swapPlanResponseFieldSubscription = big.NewInt(1 << 1)
+	swapPlanResponseFieldActions      = big.NewInt(1 << 2)
+)
+
 type SwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1815,6 +3341,9 @@ type SwapPlanResponse struct {
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
 	// A list of a `SWAP_PLAN` action created by the request.
 	Actions []*SubscriptionAction `json:"actions,omitempty" url:"actions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1845,6 +3374,34 @@ func (s *SwapPlanResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SwapPlanResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(swapPlanResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanResponse) SetSubscription(subscription *Subscription) {
+	s.Subscription = subscription
+	s.require(swapPlanResponseFieldSubscription)
+}
+
+// SetActions sets the Actions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SwapPlanResponse) SetActions(actions []*SubscriptionAction) {
+	s.Actions = actions
+	s.require(swapPlanResponseFieldActions)
+}
+
 func (s *SwapPlanResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SwapPlanResponse
 	var value unmarshaler
@@ -1861,6 +3418,17 @@ func (s *SwapPlanResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SwapPlanResponse) MarshalJSON() ([]byte, error) {
+	type embed SwapPlanResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SwapPlanResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1875,11 +3443,19 @@ func (s *SwapPlanResponse) String() string {
 
 // Defines output parameters in a response from the
 // [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
+var (
+	updateSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
+	updateSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
+)
+
 type UpdateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated subscription.
 	Subscription *Subscription `json:"subscription,omitempty" url:"subscription,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1903,6 +3479,27 @@ func (u *UpdateSubscriptionResponse) GetExtraProperties() map[string]interface{}
 	return u.extraProperties
 }
 
+func (u *UpdateSubscriptionResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateSubscriptionResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateSubscriptionResponseFieldErrors)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateSubscriptionResponse) SetSubscription(subscription *Subscription) {
+	u.Subscription = subscription
+	u.require(updateSubscriptionResponseFieldSubscription)
+}
+
 func (u *UpdateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateSubscriptionResponse
 	var value unmarshaler
@@ -1919,6 +3516,17 @@ func (u *UpdateSubscriptionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateSubscriptionResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateSubscriptionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateSubscriptionResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1931,6 +3539,11 @@ func (u *UpdateSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateSubscriptionRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	updateSubscriptionRequestFieldSubscription   = big.NewInt(1 << 1)
+)
+
 type UpdateSubscriptionRequest struct {
 	// The ID of the subscription to update.
 	SubscriptionID string `json:"-" url:"-"`
@@ -1938,4 +3551,28 @@ type UpdateSubscriptionRequest struct {
 	// Unset fields will be left at their current server values, and JSON `null` values will
 	// be treated as a request to clear the relevant data.
 	Subscription *Subscription `json:"subscription,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateSubscriptionRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
+	u.SubscriptionID = subscriptionID
+	u.require(updateSubscriptionRequestFieldSubscriptionID)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateSubscriptionRequest) SetSubscription(subscription *Subscription) {
+	u.Subscription = subscription
+	u.require(updateSubscriptionRequestFieldSubscription)
 }

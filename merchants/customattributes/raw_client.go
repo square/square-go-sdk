@@ -4,7 +4,7 @@ package customattributes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	merchants "github.com/square/square-go-sdk/v2/merchants"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) BatchDelete(
 	ctx context.Context,
 	request *merchants.BulkDeleteMerchantCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkDeleteMerchantCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkDeleteMerchantCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) BatchDelete(
 	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkDeleteMerchantCustomAttributesResponse
+	var response *square.BulkDeleteMerchantCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) BatchDelete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkDeleteMerchantCustomAttributesResponse]{
+	return &core.Response[*square.BulkDeleteMerchantCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) BatchUpsert(
 	ctx context.Context,
 	request *merchants.BulkUpsertMerchantCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkUpsertMerchantCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkUpsertMerchantCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) BatchUpsert(
 	)
 	endpointURL := baseURL + "/v2/merchants/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkUpsertMerchantCustomAttributesResponse
+	var response *square.BulkUpsertMerchantCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) BatchUpsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkUpsertMerchantCustomAttributesResponse]{
+	return &core.Response[*square.BulkUpsertMerchantCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *merchants.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveMerchantCustomAttributeResponse], error) {
+) (*core.Response[*square.RetrieveMerchantCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,10 +139,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveMerchantCustomAttributeResponse
+	var response *square.RetrieveMerchantCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -159,7 +159,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveMerchantCustomAttributeResponse]{
+	return &core.Response[*square.RetrieveMerchantCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -170,7 +170,7 @@ func (r *RawClient) Upsert(
 	ctx context.Context,
 	request *merchants.UpsertMerchantCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertMerchantCustomAttributeResponse], error) {
+) (*core.Response[*square.UpsertMerchantCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -183,11 +183,11 @@ func (r *RawClient) Upsert(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertMerchantCustomAttributeResponse
+	var response *square.UpsertMerchantCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -205,7 +205,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertMerchantCustomAttributeResponse]{
+	return &core.Response[*square.UpsertMerchantCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -216,7 +216,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *merchants.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteMerchantCustomAttributeResponse], error) {
+) (*core.Response[*square.DeleteMerchantCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -229,10 +229,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteMerchantCustomAttributeResponse
+	var response *square.DeleteMerchantCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -249,7 +249,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteMerchantCustomAttributeResponse]{
+	return &core.Response[*square.DeleteMerchantCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

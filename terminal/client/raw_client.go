@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) DismissTerminalAction(
 	ctx context.Context,
-	request *v2.DismissTerminalActionRequest,
+	request *square.DismissTerminalActionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DismissTerminalActionResponse], error) {
+) (*core.Response[*square.DismissTerminalActionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) DismissTerminalAction(
 		request.ActionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DismissTerminalActionResponse
+	var response *square.DismissTerminalActionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) DismissTerminalAction(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DismissTerminalActionResponse]{
+	return &core.Response[*square.DismissTerminalActionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) DismissTerminalAction(
 
 func (r *RawClient) DismissTerminalCheckout(
 	ctx context.Context,
-	request *v2.DismissTerminalCheckoutRequest,
+	request *square.DismissTerminalCheckoutRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DismissTerminalCheckoutResponse], error) {
+) (*core.Response[*square.DismissTerminalCheckoutResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) DismissTerminalCheckout(
 		request.CheckoutID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DismissTerminalCheckoutResponse
+	var response *square.DismissTerminalCheckoutResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) DismissTerminalCheckout(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DismissTerminalCheckoutResponse]{
+	return &core.Response[*square.DismissTerminalCheckoutResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -118,9 +118,9 @@ func (r *RawClient) DismissTerminalCheckout(
 
 func (r *RawClient) DismissTerminalRefund(
 	ctx context.Context,
-	request *v2.DismissTerminalRefundRequest,
+	request *square.DismissTerminalRefundRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DismissTerminalRefundResponse], error) {
+) (*core.Response[*square.DismissTerminalRefundResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,10 +132,10 @@ func (r *RawClient) DismissTerminalRefund(
 		request.TerminalRefundID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DismissTerminalRefundResponse
+	var response *square.DismissTerminalRefundResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -152,7 +152,7 @@ func (r *RawClient) DismissTerminalRefund(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DismissTerminalRefundResponse]{
+	return &core.Response[*square.DismissTerminalRefundResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

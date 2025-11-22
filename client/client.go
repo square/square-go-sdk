@@ -42,7 +42,6 @@ import (
 	v1transactions "github.com/square/square-go-sdk/v2/v1transactions"
 	vendors "github.com/square/square-go-sdk/v2/vendors"
 	webhooksclient "github.com/square/square-go-sdk/v2/webhooks/client"
-	http "net/http"
 	os "os"
 )
 
@@ -84,9 +83,9 @@ type Client struct {
 	CashDrawers    *cashdrawersclient.Client
 	Webhooks       *webhooksclient.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -98,42 +97,43 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Mobile:         mobile.NewClient(opts...),
-		OAuth:          oauth.NewClient(opts...),
-		V1Transactions: v1transactions.NewClient(opts...),
-		ApplePay:       applepay.NewClient(opts...),
-		BankAccounts:   bankaccounts.NewClient(opts...),
-		Bookings:       client.NewClient(opts...),
-		Cards:          cards.NewClient(opts...),
-		Catalog:        catalogclient.NewClient(opts...),
-		Channels:       channels.NewClient(opts...),
-		Customers:      customersclient.NewClient(opts...),
-		Devices:        devicesclient.NewClient(opts...),
-		Disputes:       disputesclient.NewClient(opts...),
-		Employees:      employees.NewClient(opts...),
-		Events:         events.NewClient(opts...),
-		GiftCards:      giftcardsclient.NewClient(opts...),
-		Inventory:      inventory.NewClient(opts...),
-		Invoices:       invoices.NewClient(opts...),
-		Labor:          laborclient.NewClient(opts...),
-		Locations:      locationsclient.NewClient(opts...),
-		Loyalty:        loyaltyclient.NewClient(opts...),
-		Merchants:      merchantsclient.NewClient(opts...),
-		Checkout:       checkoutclient.NewClient(opts...),
-		Orders:         ordersclient.NewClient(opts...),
-		Payments:       payments.NewClient(opts...),
-		Payouts:        payouts.NewClient(opts...),
-		Refunds:        refunds.NewClient(opts...),
-		Sites:          sites.NewClient(opts...),
-		Snippets:       snippets.NewClient(opts...),
-		Subscriptions:  subscriptions.NewClient(opts...),
-		TeamMembers:    teammembersclient.NewClient(opts...),
-		Team:           team.NewClient(opts...),
-		Terminal:       terminalclient.NewClient(opts...),
-		TransferOrders: transferorders.NewClient(opts...),
-		Vendors:        vendors.NewClient(opts...),
-		CashDrawers:    cashdrawersclient.NewClient(opts...),
-		Webhooks:       webhooksclient.NewClient(opts...),
+		Mobile:         mobile.NewClient(options),
+		OAuth:          oauth.NewClient(options),
+		V1Transactions: v1transactions.NewClient(options),
+		ApplePay:       applepay.NewClient(options),
+		BankAccounts:   bankaccounts.NewClient(options),
+		Bookings:       client.NewClient(options),
+		Cards:          cards.NewClient(options),
+		Catalog:        catalogclient.NewClient(options),
+		Channels:       channels.NewClient(options),
+		Customers:      customersclient.NewClient(options),
+		Devices:        devicesclient.NewClient(options),
+		Disputes:       disputesclient.NewClient(options),
+		Employees:      employees.NewClient(options),
+		Events:         events.NewClient(options),
+		GiftCards:      giftcardsclient.NewClient(options),
+		Inventory:      inventory.NewClient(options),
+		Invoices:       invoices.NewClient(options),
+		Labor:          laborclient.NewClient(options),
+		Locations:      locationsclient.NewClient(options),
+		Loyalty:        loyaltyclient.NewClient(options),
+		Merchants:      merchantsclient.NewClient(options),
+		Checkout:       checkoutclient.NewClient(options),
+		Orders:         ordersclient.NewClient(options),
+		Payments:       payments.NewClient(options),
+		Payouts:        payouts.NewClient(options),
+		Refunds:        refunds.NewClient(options),
+		Sites:          sites.NewClient(options),
+		Snippets:       snippets.NewClient(options),
+		Subscriptions:  subscriptions.NewClient(options),
+		TeamMembers:    teammembersclient.NewClient(options),
+		Team:           team.NewClient(options),
+		Terminal:       terminalclient.NewClient(options),
+		TransferOrders: transferorders.NewClient(options),
+		Vendors:        vendors.NewClient(options),
+		CashDrawers:    cashdrawersclient.NewClient(options),
+		Webhooks:       webhooksclient.NewClient(options),
+		options:        options,
 		baseURL:        options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -141,6 +141,5 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }

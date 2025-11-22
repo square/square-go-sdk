@@ -6,28 +6,100 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	dismissTerminalActionRequestFieldActionID = big.NewInt(1 << 0)
 )
 
 type DismissTerminalActionRequest struct {
 	// Unique ID for the `TerminalAction` associated with the action to be dismissed.
 	ActionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DismissTerminalActionRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetActionID sets the ActionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalActionRequest) SetActionID(actionID string) {
+	d.ActionID = actionID
+	d.require(dismissTerminalActionRequestFieldActionID)
+}
+
+var (
+	dismissTerminalCheckoutRequestFieldCheckoutID = big.NewInt(1 << 0)
+)
 
 type DismissTerminalCheckoutRequest struct {
 	// Unique ID for the `TerminalCheckout` associated with the checkout to be dismissed.
 	CheckoutID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DismissTerminalCheckoutRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCheckoutID sets the CheckoutID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalCheckoutRequest) SetCheckoutID(checkoutID string) {
+	d.CheckoutID = checkoutID
+	d.require(dismissTerminalCheckoutRequestFieldCheckoutID)
+}
+
+var (
+	dismissTerminalRefundRequestFieldTerminalRefundID = big.NewInt(1 << 0)
+)
 
 type DismissTerminalRefundRequest struct {
 	// Unique ID for the `TerminalRefund` associated with the refund to be dismissed.
 	TerminalRefundID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DismissTerminalRefundRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetTerminalRefundID sets the TerminalRefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalRefundRequest) SetTerminalRefundID(terminalRefundID string) {
+	d.TerminalRefundID = terminalRefundID
+	d.require(dismissTerminalRefundRequestFieldTerminalRefundID)
+}
+
+var (
+	dismissTerminalActionResponseFieldErrors = big.NewInt(1 << 0)
+	dismissTerminalActionResponseFieldAction = big.NewInt(1 << 1)
+)
 
 type DismissTerminalActionResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// Current state of the action to be dismissed.
 	Action *TerminalAction `json:"action,omitempty" url:"action,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -51,6 +123,27 @@ func (d *DismissTerminalActionResponse) GetExtraProperties() map[string]interfac
 	return d.extraProperties
 }
 
+func (d *DismissTerminalActionResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalActionResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(dismissTerminalActionResponseFieldErrors)
+}
+
+// SetAction sets the Action field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalActionResponse) SetAction(action *TerminalAction) {
+	d.Action = action
+	d.require(dismissTerminalActionResponseFieldAction)
+}
+
 func (d *DismissTerminalActionResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DismissTerminalActionResponse
 	var value unmarshaler
@@ -67,6 +160,17 @@ func (d *DismissTerminalActionResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DismissTerminalActionResponse) MarshalJSON() ([]byte, error) {
+	type embed DismissTerminalActionResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DismissTerminalActionResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -79,11 +183,19 @@ func (d *DismissTerminalActionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	dismissTerminalCheckoutResponseFieldErrors   = big.NewInt(1 << 0)
+	dismissTerminalCheckoutResponseFieldCheckout = big.NewInt(1 << 1)
+)
+
 type DismissTerminalCheckoutResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// Current state of the checkout to be dismissed.
 	Checkout *TerminalCheckout `json:"checkout,omitempty" url:"checkout,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -107,6 +219,27 @@ func (d *DismissTerminalCheckoutResponse) GetExtraProperties() map[string]interf
 	return d.extraProperties
 }
 
+func (d *DismissTerminalCheckoutResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalCheckoutResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(dismissTerminalCheckoutResponseFieldErrors)
+}
+
+// SetCheckout sets the Checkout field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalCheckoutResponse) SetCheckout(checkout *TerminalCheckout) {
+	d.Checkout = checkout
+	d.require(dismissTerminalCheckoutResponseFieldCheckout)
+}
+
 func (d *DismissTerminalCheckoutResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DismissTerminalCheckoutResponse
 	var value unmarshaler
@@ -123,6 +256,17 @@ func (d *DismissTerminalCheckoutResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DismissTerminalCheckoutResponse) MarshalJSON() ([]byte, error) {
+	type embed DismissTerminalCheckoutResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DismissTerminalCheckoutResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -135,11 +279,19 @@ func (d *DismissTerminalCheckoutResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	dismissTerminalRefundResponseFieldErrors = big.NewInt(1 << 0)
+	dismissTerminalRefundResponseFieldRefund = big.NewInt(1 << 1)
+)
+
 type DismissTerminalRefundResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// Current state of the refund to be dismissed.
 	Refund *TerminalRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -163,6 +315,27 @@ func (d *DismissTerminalRefundResponse) GetExtraProperties() map[string]interfac
 	return d.extraProperties
 }
 
+func (d *DismissTerminalRefundResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalRefundResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(dismissTerminalRefundResponseFieldErrors)
+}
+
+// SetRefund sets the Refund field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DismissTerminalRefundResponse) SetRefund(refund *TerminalRefund) {
+	d.Refund = refund
+	d.require(dismissTerminalRefundResponseFieldRefund)
+}
+
 func (d *DismissTerminalRefundResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DismissTerminalRefundResponse
 	var value unmarshaler
@@ -177,6 +350,17 @@ func (d *DismissTerminalRefundResponse) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DismissTerminalRefundResponse) MarshalJSON() ([]byte, error) {
+	type embed DismissTerminalRefundResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DismissTerminalRefundResponse) String() string {

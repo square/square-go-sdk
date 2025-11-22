@@ -4,7 +4,7 @@ package inventory
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) DeprecatedGetAdjustment(
 	ctx context.Context,
-	request *v2.DeprecatedGetAdjustmentInventoryRequest,
+	request *square.DeprecatedGetAdjustmentInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInventoryAdjustmentResponse], error) {
+) (*core.Response[*square.GetInventoryAdjustmentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) DeprecatedGetAdjustment(
 		request.AdjustmentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInventoryAdjustmentResponse
+	var response *square.GetInventoryAdjustmentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) DeprecatedGetAdjustment(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInventoryAdjustmentResponse]{
+	return &core.Response[*square.GetInventoryAdjustmentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) DeprecatedGetAdjustment(
 
 func (r *RawClient) GetAdjustment(
 	ctx context.Context,
-	request *v2.GetAdjustmentInventoryRequest,
+	request *square.GetAdjustmentInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInventoryAdjustmentResponse], error) {
+) (*core.Response[*square.GetInventoryAdjustmentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) GetAdjustment(
 		request.AdjustmentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInventoryAdjustmentResponse
+	var response *square.GetInventoryAdjustmentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) GetAdjustment(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInventoryAdjustmentResponse]{
+	return &core.Response[*square.GetInventoryAdjustmentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -118,9 +118,9 @@ func (r *RawClient) GetAdjustment(
 
 func (r *RawClient) DeprecatedBatchChange(
 	ctx context.Context,
-	request *v2.BatchChangeInventoryRequest,
+	request *square.BatchChangeInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchChangeInventoryResponse], error) {
+) (*core.Response[*square.BatchChangeInventoryResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -129,10 +129,10 @@ func (r *RawClient) DeprecatedBatchChange(
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-change"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchChangeInventoryResponse
+	var response *square.BatchChangeInventoryResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,7 +150,7 @@ func (r *RawClient) DeprecatedBatchChange(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchChangeInventoryResponse]{
+	return &core.Response[*square.BatchChangeInventoryResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,9 +159,9 @@ func (r *RawClient) DeprecatedBatchChange(
 
 func (r *RawClient) DeprecatedBatchGetChanges(
 	ctx context.Context,
-	request *v2.BatchRetrieveInventoryChangesRequest,
+	request *square.BatchRetrieveInventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetInventoryChangesResponse], error) {
+) (*core.Response[*square.BatchGetInventoryChangesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -170,10 +170,10 @@ func (r *RawClient) DeprecatedBatchGetChanges(
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-changes"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchGetInventoryChangesResponse
+	var response *square.BatchGetInventoryChangesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -191,7 +191,7 @@ func (r *RawClient) DeprecatedBatchGetChanges(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetInventoryChangesResponse]{
+	return &core.Response[*square.BatchGetInventoryChangesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -200,9 +200,9 @@ func (r *RawClient) DeprecatedBatchGetChanges(
 
 func (r *RawClient) DeprecatedBatchGetCounts(
 	ctx context.Context,
-	request *v2.BatchGetInventoryCountsRequest,
+	request *square.BatchGetInventoryCountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetInventoryCountsResponse], error) {
+) (*core.Response[*square.BatchGetInventoryCountsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -211,10 +211,10 @@ func (r *RawClient) DeprecatedBatchGetCounts(
 	)
 	endpointURL := baseURL + "/v2/inventory/batch-retrieve-counts"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchGetInventoryCountsResponse
+	var response *square.BatchGetInventoryCountsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -232,7 +232,7 @@ func (r *RawClient) DeprecatedBatchGetCounts(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetInventoryCountsResponse]{
+	return &core.Response[*square.BatchGetInventoryCountsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -241,9 +241,9 @@ func (r *RawClient) DeprecatedBatchGetCounts(
 
 func (r *RawClient) BatchCreateChanges(
 	ctx context.Context,
-	request *v2.BatchChangeInventoryRequest,
+	request *square.BatchChangeInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchChangeInventoryResponse], error) {
+) (*core.Response[*square.BatchChangeInventoryResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -252,10 +252,10 @@ func (r *RawClient) BatchCreateChanges(
 	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-create"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchChangeInventoryResponse
+	var response *square.BatchChangeInventoryResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -273,7 +273,7 @@ func (r *RawClient) BatchCreateChanges(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchChangeInventoryResponse]{
+	return &core.Response[*square.BatchChangeInventoryResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -282,9 +282,9 @@ func (r *RawClient) BatchCreateChanges(
 
 func (r *RawClient) BatchGetChanges(
 	ctx context.Context,
-	request *v2.BatchRetrieveInventoryChangesRequest,
+	request *square.BatchRetrieveInventoryChangesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetInventoryChangesResponse], error) {
+) (*core.Response[*square.BatchGetInventoryChangesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -293,10 +293,10 @@ func (r *RawClient) BatchGetChanges(
 	)
 	endpointURL := baseURL + "/v2/inventory/changes/batch-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchGetInventoryChangesResponse
+	var response *square.BatchGetInventoryChangesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -314,7 +314,7 @@ func (r *RawClient) BatchGetChanges(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetInventoryChangesResponse]{
+	return &core.Response[*square.BatchGetInventoryChangesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -323,9 +323,9 @@ func (r *RawClient) BatchGetChanges(
 
 func (r *RawClient) BatchGetCounts(
 	ctx context.Context,
-	request *v2.BatchGetInventoryCountsRequest,
+	request *square.BatchGetInventoryCountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetInventoryCountsResponse], error) {
+) (*core.Response[*square.BatchGetInventoryCountsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -334,10 +334,10 @@ func (r *RawClient) BatchGetCounts(
 	)
 	endpointURL := baseURL + "/v2/inventory/counts/batch-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.BatchGetInventoryCountsResponse
+	var response *square.BatchGetInventoryCountsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -355,7 +355,7 @@ func (r *RawClient) BatchGetCounts(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetInventoryCountsResponse]{
+	return &core.Response[*square.BatchGetInventoryCountsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -364,9 +364,9 @@ func (r *RawClient) BatchGetCounts(
 
 func (r *RawClient) DeprecatedGetPhysicalCount(
 	ctx context.Context,
-	request *v2.DeprecatedGetPhysicalCountInventoryRequest,
+	request *square.DeprecatedGetPhysicalCountInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInventoryPhysicalCountResponse], error) {
+) (*core.Response[*square.GetInventoryPhysicalCountResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -378,10 +378,10 @@ func (r *RawClient) DeprecatedGetPhysicalCount(
 		request.PhysicalCountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInventoryPhysicalCountResponse
+	var response *square.GetInventoryPhysicalCountResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -398,7 +398,7 @@ func (r *RawClient) DeprecatedGetPhysicalCount(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInventoryPhysicalCountResponse]{
+	return &core.Response[*square.GetInventoryPhysicalCountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -407,9 +407,9 @@ func (r *RawClient) DeprecatedGetPhysicalCount(
 
 func (r *RawClient) GetPhysicalCount(
 	ctx context.Context,
-	request *v2.GetPhysicalCountInventoryRequest,
+	request *square.GetPhysicalCountInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInventoryPhysicalCountResponse], error) {
+) (*core.Response[*square.GetInventoryPhysicalCountResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -421,10 +421,10 @@ func (r *RawClient) GetPhysicalCount(
 		request.PhysicalCountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInventoryPhysicalCountResponse
+	var response *square.GetInventoryPhysicalCountResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -441,7 +441,7 @@ func (r *RawClient) GetPhysicalCount(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInventoryPhysicalCountResponse]{
+	return &core.Response[*square.GetInventoryPhysicalCountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -450,9 +450,9 @@ func (r *RawClient) GetPhysicalCount(
 
 func (r *RawClient) GetTransfer(
 	ctx context.Context,
-	request *v2.GetTransferInventoryRequest,
+	request *square.GetTransferInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInventoryTransferResponse], error) {
+) (*core.Response[*square.GetInventoryTransferResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -464,10 +464,10 @@ func (r *RawClient) GetTransfer(
 		request.TransferID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInventoryTransferResponse
+	var response *square.GetInventoryTransferResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -484,7 +484,7 @@ func (r *RawClient) GetTransfer(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInventoryTransferResponse]{
+	return &core.Response[*square.GetInventoryTransferResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

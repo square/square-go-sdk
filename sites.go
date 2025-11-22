@@ -6,14 +6,23 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
 )
 
 // Represents a `ListSites` response. The response can include either `sites` or `errors`.
+var (
+	listSitesResponseFieldErrors = big.NewInt(1 << 0)
+	listSitesResponseFieldSites  = big.NewInt(1 << 1)
+)
+
 type ListSitesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The sites that belong to the seller.
 	Sites []*Site `json:"sites,omitempty" url:"sites,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -37,6 +46,27 @@ func (l *ListSitesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListSitesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSitesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listSitesResponseFieldErrors)
+}
+
+// SetSites sets the Sites field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSitesResponse) SetSites(sites []*Site) {
+	l.Sites = sites
+	l.require(listSitesResponseFieldSites)
+}
+
 func (l *ListSitesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListSitesResponse
 	var value unmarshaler
@@ -53,6 +83,17 @@ func (l *ListSitesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListSitesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListSitesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListSitesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -66,6 +107,15 @@ func (l *ListSitesResponse) String() string {
 }
 
 // Represents a Square Online site, which is an online store for a Square seller.
+var (
+	siteFieldID          = big.NewInt(1 << 0)
+	siteFieldSiteTitle   = big.NewInt(1 << 1)
+	siteFieldDomain      = big.NewInt(1 << 2)
+	siteFieldIsPublished = big.NewInt(1 << 3)
+	siteFieldCreatedAt   = big.NewInt(1 << 4)
+	siteFieldUpdatedAt   = big.NewInt(1 << 5)
+)
+
 type Site struct {
 	// The Square-assigned ID of the site.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -79,6 +129,9 @@ type Site struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The timestamp of when the site was last updated, in RFC 3339 format.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -130,6 +183,55 @@ func (s *Site) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *Site) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetID(id *string) {
+	s.ID = id
+	s.require(siteFieldID)
+}
+
+// SetSiteTitle sets the SiteTitle field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetSiteTitle(siteTitle *string) {
+	s.SiteTitle = siteTitle
+	s.require(siteFieldSiteTitle)
+}
+
+// SetDomain sets the Domain field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetDomain(domain *string) {
+	s.Domain = domain
+	s.require(siteFieldDomain)
+}
+
+// SetIsPublished sets the IsPublished field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetIsPublished(isPublished *bool) {
+	s.IsPublished = isPublished
+	s.require(siteFieldIsPublished)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetCreatedAt(createdAt *string) {
+	s.CreatedAt = createdAt
+	s.require(siteFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *Site) SetUpdatedAt(updatedAt *string) {
+	s.UpdatedAt = updatedAt
+	s.require(siteFieldUpdatedAt)
+}
+
 func (s *Site) UnmarshalJSON(data []byte) error {
 	type unmarshaler Site
 	var value unmarshaler
@@ -144,6 +246,17 @@ func (s *Site) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *Site) MarshalJSON() ([]byte, error) {
+	type embed Site
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *Site) String() string {

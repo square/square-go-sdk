@@ -4,7 +4,7 @@ package cards
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -45,9 +44,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // A max of 25 cards will be returned.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListCardsRequest,
+	request *square.ListCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Card], error) {
+) (*core.Page[*string, *square.Card, *square.ListCardsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -60,10 +59,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -82,14 +81,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListCardsResponse) *internal.PageResponse[*string, *v2.Card] {
+	readPageResponse := func(response *square.ListCardsResponse) *core.PageResponse[*string, *square.Card, *square.ListCardsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCards()
-		return &internal.PageResponse[*string, *v2.Card]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Card, *square.ListCardsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -103,9 +103,9 @@ func (c *Client) List(
 // Adds a card on file to an existing merchant.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateCardRequest,
+	request *square.CreateCardRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateCardResponse, error) {
+) (*square.CreateCardResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -120,9 +120,9 @@ func (c *Client) Create(
 // Retrieves details for a specific Card.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetCardsRequest,
+	request *square.GetCardsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetCardResponse, error) {
+) (*square.GetCardResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -138,9 +138,9 @@ func (c *Client) Get(
 // Disabling an already disabled card is allowed but has no effect.
 func (c *Client) Disable(
 	ctx context.Context,
-	request *v2.DisableCardsRequest,
+	request *square.DisableCardsRequest,
 	opts ...option.RequestOption,
-) (*v2.DisableCardResponse, error) {
+) (*square.DisableCardResponse, error) {
 	response, err := c.WithRawResponse.Disable(
 		ctx,
 		request,

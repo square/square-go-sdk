@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	cards "github.com/square/square-go-sdk/v2/customers/cards"
 	customattributedefinitions "github.com/square/square-go-sdk/v2/customers/customattributedefinitions"
@@ -25,13 +25,12 @@ type Client struct {
 	Cards                      *cards.Client
 	CustomAttributes           *customattributes.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -39,12 +38,13 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
-		Groups:                     groups.NewClient(opts...),
-		Segments:                   segments.NewClient(opts...),
-		Cards:                      cards.NewClient(opts...),
-		CustomAttributes:           customattributes.NewClient(opts...),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(options),
+		Groups:                     groups.NewClient(options),
+		Segments:                   segments.NewClient(options),
+		Cards:                      cards.NewClient(options),
+		CustomAttributes:           customattributes.NewClient(options),
 		WithRawResponse:            NewRawClient(options),
+		options:                    options,
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -52,7 +52,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -63,9 +62,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListCustomersRequest,
+	request *square.ListCustomersRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Customer], error) {
+) (*core.Page[*string, *square.Customer, *square.ListCustomersResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -78,10 +77,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -100,14 +99,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListCustomersResponse) *internal.PageResponse[*string, *v2.Customer] {
+	readPageResponse := func(response *square.ListCustomersResponse) *core.PageResponse[*string, *square.Customer, *square.ListCustomersResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCustomers()
-		return &internal.PageResponse[*string, *v2.Customer]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Customer, *square.ListCustomersResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -130,9 +130,9 @@ func (c *Client) List(
 // - `phone_number`
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateCustomerRequest,
+	request *square.CreateCustomerRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateCustomerResponse, error) {
+) (*square.CreateCustomerResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -157,9 +157,9 @@ func (c *Client) Create(
 // - `phone_number`
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *v2.BulkCreateCustomersRequest,
+	request *square.BulkCreateCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkCreateCustomersResponse, error) {
+) (*square.BulkCreateCustomersResponse, error) {
 	response, err := c.WithRawResponse.BatchCreate(
 		ctx,
 		request,
@@ -176,9 +176,9 @@ func (c *Client) BatchCreate(
 // The endpoint takes a list of customer IDs and returns a map of responses.
 func (c *Client) BulkDeleteCustomers(
 	ctx context.Context,
-	request *v2.BulkDeleteCustomersRequest,
+	request *square.BulkDeleteCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkDeleteCustomersResponse, error) {
+) (*square.BulkDeleteCustomersResponse, error) {
 	response, err := c.WithRawResponse.BulkDeleteCustomers(
 		ctx,
 		request,
@@ -195,9 +195,9 @@ func (c *Client) BulkDeleteCustomers(
 // This endpoint takes a list of customer IDs and returns a map of responses.
 func (c *Client) BulkRetrieveCustomers(
 	ctx context.Context,
-	request *v2.BulkRetrieveCustomersRequest,
+	request *square.BulkRetrieveCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkRetrieveCustomersResponse, error) {
+) (*square.BulkRetrieveCustomersResponse, error) {
 	response, err := c.WithRawResponse.BulkRetrieveCustomers(
 		ctx,
 		request,
@@ -214,9 +214,9 @@ func (c *Client) BulkRetrieveCustomers(
 // This endpoint takes a map of individual update requests and returns a map of responses.
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
-	request *v2.BulkUpdateCustomersRequest,
+	request *square.BulkUpdateCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.BulkUpdateCustomersResponse, error) {
+) (*square.BulkUpdateCustomersResponse, error) {
 	response, err := c.WithRawResponse.BulkUpdateCustomers(
 		ctx,
 		request,
@@ -239,9 +239,9 @@ func (c *Client) BulkUpdateCustomers(
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchCustomersRequest,
+	request *square.SearchCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchCustomersResponse, error) {
+) (*square.SearchCustomersResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -256,9 +256,9 @@ func (c *Client) Search(
 // Returns details for a single customer.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetCustomersRequest,
+	request *square.GetCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.GetCustomerResponse, error) {
+) (*square.GetCustomerResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -276,9 +276,9 @@ func (c *Client) Get(
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateCustomerRequest,
+	request *square.UpdateCustomerRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateCustomerResponse, error) {
+) (*square.UpdateCustomerResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -295,9 +295,9 @@ func (c *Client) Update(
 // To delete a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
 func (c *Client) Delete(
 	ctx context.Context,
-	request *v2.DeleteCustomersRequest,
+	request *square.DeleteCustomersRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteCustomerResponse, error) {
+) (*square.DeleteCustomerResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

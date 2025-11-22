@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	activities "github.com/square/square-go-sdk/v2/giftcards/activities"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -17,13 +17,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	Activities      *activities.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,8 +30,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Activities:      activities.NewClient(opts...),
+		Activities:      activities.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -40,7 +40,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -48,9 +47,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // a subset of the gift cards. Results are sorted by `created_at` in ascending order.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListGiftCardsRequest,
+	request *square.ListGiftCardsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.GiftCard], error) {
+) (*core.Page[*string, *square.GiftCard, *square.ListGiftCardsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,10 +62,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -85,14 +84,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListGiftCardsResponse) *internal.PageResponse[*string, *v2.GiftCard] {
+	readPageResponse := func(response *square.ListGiftCardsResponse) *core.PageResponse[*string, *square.GiftCard, *square.ListGiftCardsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetGiftCards()
-		return &internal.PageResponse[*string, *v2.GiftCard]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.GiftCard, *square.ListGiftCardsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,9 +110,9 @@ func (c *Client) List(
 // to refund a payment to the new gift card.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateGiftCardRequest,
+	request *square.CreateGiftCardRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateGiftCardResponse, error) {
+) (*square.CreateGiftCardResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -127,9 +127,9 @@ func (c *Client) Create(
 // Retrieves a gift card using the gift card account number (GAN).
 func (c *Client) GetFromGan(
 	ctx context.Context,
-	request *v2.GetGiftCardFromGanRequest,
+	request *square.GetGiftCardFromGanRequest,
 	opts ...option.RequestOption,
-) (*v2.GetGiftCardFromGanResponse, error) {
+) (*square.GetGiftCardFromGanResponse, error) {
 	response, err := c.WithRawResponse.GetFromGan(
 		ctx,
 		request,
@@ -144,9 +144,9 @@ func (c *Client) GetFromGan(
 // Retrieves a gift card using a secure payment token that represents the gift card.
 func (c *Client) GetFromNonce(
 	ctx context.Context,
-	request *v2.GetGiftCardFromNonceRequest,
+	request *square.GetGiftCardFromNonceRequest,
 	opts ...option.RequestOption,
-) (*v2.GetGiftCardFromNonceResponse, error) {
+) (*square.GetGiftCardFromNonceResponse, error) {
 	response, err := c.WithRawResponse.GetFromNonce(
 		ctx,
 		request,
@@ -161,9 +161,9 @@ func (c *Client) GetFromNonce(
 // Links a customer to a gift card, which is also referred to as adding a card on file.
 func (c *Client) LinkCustomer(
 	ctx context.Context,
-	request *v2.LinkCustomerToGiftCardRequest,
+	request *square.LinkCustomerToGiftCardRequest,
 	opts ...option.RequestOption,
-) (*v2.LinkCustomerToGiftCardResponse, error) {
+) (*square.LinkCustomerToGiftCardResponse, error) {
 	response, err := c.WithRawResponse.LinkCustomer(
 		ctx,
 		request,
@@ -178,9 +178,9 @@ func (c *Client) LinkCustomer(
 // Unlinks a customer from a gift card, which is also referred to as removing a card on file.
 func (c *Client) UnlinkCustomer(
 	ctx context.Context,
-	request *v2.UnlinkCustomerFromGiftCardRequest,
+	request *square.UnlinkCustomerFromGiftCardRequest,
 	opts ...option.RequestOption,
-) (*v2.UnlinkCustomerFromGiftCardResponse, error) {
+) (*square.UnlinkCustomerFromGiftCardResponse, error) {
 	response, err := c.WithRawResponse.UnlinkCustomer(
 		ctx,
 		request,
@@ -195,9 +195,9 @@ func (c *Client) UnlinkCustomer(
 // Retrieves a gift card using the gift card ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetGiftCardsRequest,
+	request *square.GetGiftCardsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetGiftCardResponse, error) {
+) (*square.GetGiftCardResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,

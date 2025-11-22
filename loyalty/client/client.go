@@ -4,14 +4,13 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	accounts "github.com/square/square-go-sdk/v2/loyalty/accounts"
 	client "github.com/square/square-go-sdk/v2/loyalty/programs/client"
 	rewards "github.com/square/square-go-sdk/v2/loyalty/rewards"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
@@ -21,13 +20,12 @@ type Client struct {
 	Programs        *client.Client
 	Rewards         *rewards.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -35,10 +33,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Accounts:        accounts.NewClient(opts...),
-		Programs:        client.NewClient(opts...),
-		Rewards:         rewards.NewClient(opts...),
+		Accounts:        accounts.NewClient(options),
+		Programs:        client.NewClient(options),
+		Rewards:         rewards.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -46,7 +45,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -60,9 +58,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Search results are sorted by `created_at` in descending order.
 func (c *Client) SearchEvents(
 	ctx context.Context,
-	request *v2.SearchLoyaltyEventsRequest,
+	request *square.SearchLoyaltyEventsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchLoyaltyEventsResponse, error) {
+) (*square.SearchLoyaltyEventsResponse, error) {
 	response, err := c.WithRawResponse.SearchEvents(
 		ctx,
 		request,

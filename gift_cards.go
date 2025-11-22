@@ -6,6 +6,12 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	linkCustomerToGiftCardRequestFieldGiftCardID = big.NewInt(1 << 0)
+	linkCustomerToGiftCardRequestFieldCustomerID = big.NewInt(1 << 1)
 )
 
 type LinkCustomerToGiftCardRequest struct {
@@ -13,14 +19,73 @@ type LinkCustomerToGiftCardRequest struct {
 	GiftCardID string `json:"-" url:"-"`
 	// The ID of the customer to link to the gift card.
 	CustomerID string `json:"customer_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *LinkCustomerToGiftCardRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetGiftCardID sets the GiftCardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LinkCustomerToGiftCardRequest) SetGiftCardID(giftCardID string) {
+	l.GiftCardID = giftCardID
+	l.require(linkCustomerToGiftCardRequestFieldGiftCardID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LinkCustomerToGiftCardRequest) SetCustomerID(customerID string) {
+	l.CustomerID = customerID
+	l.require(linkCustomerToGiftCardRequestFieldCustomerID)
+}
+
+var (
+	unlinkCustomerFromGiftCardRequestFieldGiftCardID = big.NewInt(1 << 0)
+	unlinkCustomerFromGiftCardRequestFieldCustomerID = big.NewInt(1 << 1)
+)
 
 type UnlinkCustomerFromGiftCardRequest struct {
 	// The ID of the gift card to be unlinked.
 	GiftCardID string `json:"-" url:"-"`
 	// The ID of the customer to unlink from the gift card.
 	CustomerID string `json:"customer_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UnlinkCustomerFromGiftCardRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetGiftCardID sets the GiftCardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UnlinkCustomerFromGiftCardRequest) SetGiftCardID(giftCardID string) {
+	u.GiftCardID = giftCardID
+	u.require(unlinkCustomerFromGiftCardRequestFieldGiftCardID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UnlinkCustomerFromGiftCardRequest) SetCustomerID(customerID string) {
+	u.CustomerID = customerID
+	u.require(unlinkCustomerFromGiftCardRequestFieldCustomerID)
+}
+
+var (
+	createGiftCardRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createGiftCardRequestFieldLocationID     = big.NewInt(1 << 1)
+	createGiftCardRequestFieldGiftCard       = big.NewInt(1 << 2)
+)
 
 type CreateGiftCardRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
@@ -46,25 +111,127 @@ type CreateGiftCardRequest struct {
 	// To register an unused, physical gift card that the seller previously ordered from Square,
 	// include `gan` and provide the GAN that is printed on the gift card.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateGiftCardRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createGiftCardRequestFieldIdempotencyKey)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardRequest) SetLocationID(locationID string) {
+	c.LocationID = locationID
+	c.require(createGiftCardRequestFieldLocationID)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardRequest) SetGiftCard(giftCard *GiftCard) {
+	c.GiftCard = giftCard
+	c.require(createGiftCardRequestFieldGiftCard)
+}
+
+var (
+	getGiftCardsRequestFieldID = big.NewInt(1 << 0)
+)
 
 type GetGiftCardsRequest struct {
 	// The ID of the gift card to retrieve.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetGiftCardsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardsRequest) SetID(id string) {
+	g.ID = id
+	g.require(getGiftCardsRequestFieldID)
+}
+
+var (
+	getGiftCardFromGanRequestFieldGan = big.NewInt(1 << 0)
+)
 
 type GetGiftCardFromGanRequest struct {
 	// The gift card account number (GAN) of the gift card to retrieve.
 	// The maximum length of a GAN is 255 digits to account for third-party GANs that have been imported.
 	// Square-issued gift cards have 16-digit GANs.
 	Gan string `json:"gan" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetGiftCardFromGanRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetGan sets the Gan field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromGanRequest) SetGan(gan string) {
+	g.Gan = gan
+	g.require(getGiftCardFromGanRequestFieldGan)
+}
+
+var (
+	getGiftCardFromNonceRequestFieldNonce = big.NewInt(1 << 0)
+)
 
 type GetGiftCardFromNonceRequest struct {
 	// The payment token of the gift card to retrieve. Payment tokens are generated by the
 	// Web Payments SDK or In-App Payments SDK.
 	Nonce string `json:"nonce" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetGiftCardFromNonceRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetNonce sets the Nonce field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromNonceRequest) SetNonce(nonce string) {
+	g.Nonce = nonce
+	g.require(getGiftCardFromNonceRequestFieldNonce)
+}
+
+var (
+	listGiftCardsRequestFieldType       = big.NewInt(1 << 0)
+	listGiftCardsRequestFieldState      = big.NewInt(1 << 1)
+	listGiftCardsRequestFieldLimit      = big.NewInt(1 << 2)
+	listGiftCardsRequestFieldCursor     = big.NewInt(1 << 3)
+	listGiftCardsRequestFieldCustomerID = big.NewInt(1 << 4)
+)
 
 type ListGiftCardsRequest struct {
 	// If a [type](entity:GiftCardType) is provided, the endpoint returns gift cards of the specified type.
@@ -84,15 +251,68 @@ type ListGiftCardsRequest struct {
 	Cursor *string `json:"-" url:"cursor,omitempty"`
 	// If a customer ID is provided, the endpoint returns only the gift cards linked to the specified customer.
 	CustomerID *string `json:"-" url:"customer_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListGiftCardsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsRequest) SetType(type_ *string) {
+	l.Type = type_
+	l.require(listGiftCardsRequestFieldType)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsRequest) SetState(state *string) {
+	l.State = state
+	l.require(listGiftCardsRequestFieldState)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listGiftCardsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listGiftCardsRequestFieldCursor)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsRequest) SetCustomerID(customerID *string) {
+	l.CustomerID = customerID
+	l.require(listGiftCardsRequestFieldCustomerID)
 }
 
 // A response that contains a `GiftCard`. The response might contain a set of `Error` objects if the request
 // resulted in errors.
+var (
+	createGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
+	createGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type CreateGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The new gift card.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -116,6 +336,27 @@ func (c *CreateGiftCardResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateGiftCardResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createGiftCardResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardResponse) SetGiftCard(giftCard *GiftCard) {
+	c.GiftCard = giftCard
+	c.require(createGiftCardResponseFieldGiftCard)
+}
+
 func (c *CreateGiftCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateGiftCardResponse
 	var value unmarshaler
@@ -132,6 +373,17 @@ func (c *CreateGiftCardResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateGiftCardResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateGiftCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateGiftCardResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -146,11 +398,19 @@ func (c *CreateGiftCardResponse) String() string {
 
 // A response that contains a `GiftCard`. This response might contain a set of `Error` objects
 // if the request resulted in errors.
+var (
+	getGiftCardFromGanResponseFieldErrors   = big.NewInt(1 << 0)
+	getGiftCardFromGanResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type GetGiftCardFromGanResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// A gift card that was fetched, if present. It returns empty if an error occurred.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -174,6 +434,27 @@ func (g *GetGiftCardFromGanResponse) GetExtraProperties() map[string]interface{}
 	return g.extraProperties
 }
 
+func (g *GetGiftCardFromGanResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromGanResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getGiftCardFromGanResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromGanResponse) SetGiftCard(giftCard *GiftCard) {
+	g.GiftCard = giftCard
+	g.require(getGiftCardFromGanResponseFieldGiftCard)
+}
+
 func (g *GetGiftCardFromGanResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetGiftCardFromGanResponse
 	var value unmarshaler
@@ -190,6 +471,17 @@ func (g *GetGiftCardFromGanResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetGiftCardFromGanResponse) MarshalJSON() ([]byte, error) {
+	type embed GetGiftCardFromGanResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetGiftCardFromGanResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -204,11 +496,19 @@ func (g *GetGiftCardFromGanResponse) String() string {
 
 // A response that contains a `GiftCard` object. If the request resulted in errors,
 // the response contains a set of `Error` objects.
+var (
+	getGiftCardFromNonceResponseFieldErrors   = big.NewInt(1 << 0)
+	getGiftCardFromNonceResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type GetGiftCardFromNonceResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The retrieved gift card.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -232,6 +532,27 @@ func (g *GetGiftCardFromNonceResponse) GetExtraProperties() map[string]interface
 	return g.extraProperties
 }
 
+func (g *GetGiftCardFromNonceResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromNonceResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getGiftCardFromNonceResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardFromNonceResponse) SetGiftCard(giftCard *GiftCard) {
+	g.GiftCard = giftCard
+	g.require(getGiftCardFromNonceResponseFieldGiftCard)
+}
+
 func (g *GetGiftCardFromNonceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetGiftCardFromNonceResponse
 	var value unmarshaler
@@ -248,6 +569,17 @@ func (g *GetGiftCardFromNonceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetGiftCardFromNonceResponse) MarshalJSON() ([]byte, error) {
+	type embed GetGiftCardFromNonceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetGiftCardFromNonceResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -262,11 +594,19 @@ func (g *GetGiftCardFromNonceResponse) String() string {
 
 // A response that contains a `GiftCard`. The response might contain a set of `Error` objects
 // if the request resulted in errors.
+var (
+	getGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
+	getGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type GetGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The gift card retrieved.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -290,6 +630,27 @@ func (g *GetGiftCardResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetGiftCardResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getGiftCardResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGiftCardResponse) SetGiftCard(giftCard *GiftCard) {
+	g.GiftCard = giftCard
+	g.require(getGiftCardResponseFieldGiftCard)
+}
+
 func (g *GetGiftCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetGiftCardResponse
 	var value unmarshaler
@@ -306,6 +667,17 @@ func (g *GetGiftCardResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetGiftCardResponse) MarshalJSON() ([]byte, error) {
+	type embed GetGiftCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetGiftCardResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -319,6 +691,17 @@ func (g *GetGiftCardResponse) String() string {
 }
 
 // Represents a Square gift card.
+var (
+	giftCardFieldID           = big.NewInt(1 << 0)
+	giftCardFieldType         = big.NewInt(1 << 1)
+	giftCardFieldGanSource    = big.NewInt(1 << 2)
+	giftCardFieldState        = big.NewInt(1 << 3)
+	giftCardFieldBalanceMoney = big.NewInt(1 << 4)
+	giftCardFieldGan          = big.NewInt(1 << 5)
+	giftCardFieldCreatedAt    = big.NewInt(1 << 6)
+	giftCardFieldCustomerIDs  = big.NewInt(1 << 7)
+)
+
 type GiftCard struct {
 	// The Square-assigned ID of the gift card.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -344,6 +727,9 @@ type GiftCard struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The IDs of the [customer profiles](entity:Customer) to whom this gift card is linked.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -409,6 +795,69 @@ func (g *GiftCard) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GiftCard) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetID(id *string) {
+	g.ID = id
+	g.require(giftCardFieldID)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetType(type_ GiftCardType) {
+	g.Type = type_
+	g.require(giftCardFieldType)
+}
+
+// SetGanSource sets the GanSource field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetGanSource(ganSource *GiftCardGanSource) {
+	g.GanSource = ganSource
+	g.require(giftCardFieldGanSource)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetState(state *GiftCardStatus) {
+	g.State = state
+	g.require(giftCardFieldState)
+}
+
+// SetBalanceMoney sets the BalanceMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetBalanceMoney(balanceMoney *Money) {
+	g.BalanceMoney = balanceMoney
+	g.require(giftCardFieldBalanceMoney)
+}
+
+// SetGan sets the Gan field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetGan(gan *string) {
+	g.Gan = gan
+	g.require(giftCardFieldGan)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetCreatedAt(createdAt *string) {
+	g.CreatedAt = createdAt
+	g.require(giftCardFieldCreatedAt)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GiftCard) SetCustomerIDs(customerIDs []string) {
+	g.CustomerIDs = customerIDs
+	g.require(giftCardFieldCustomerIDs)
+}
+
 func (g *GiftCard) UnmarshalJSON(data []byte) error {
 	type unmarshaler GiftCard
 	var value unmarshaler
@@ -423,6 +872,17 @@ func (g *GiftCard) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GiftCard) MarshalJSON() ([]byte, error) {
+	type embed GiftCard
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GiftCard) String() string {
@@ -515,11 +975,19 @@ func (g GiftCardType) Ptr() *GiftCardType {
 
 // A response that contains the linked `GiftCard` object. If the request resulted in errors,
 // the response contains a set of `Error` objects.
+var (
+	linkCustomerToGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
+	linkCustomerToGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type LinkCustomerToGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The gift card with the ID of the linked customer listed in the `customer_ids` field.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -543,6 +1011,27 @@ func (l *LinkCustomerToGiftCardResponse) GetExtraProperties() map[string]interfa
 	return l.extraProperties
 }
 
+func (l *LinkCustomerToGiftCardResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LinkCustomerToGiftCardResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(linkCustomerToGiftCardResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LinkCustomerToGiftCardResponse) SetGiftCard(giftCard *GiftCard) {
+	l.GiftCard = giftCard
+	l.require(linkCustomerToGiftCardResponseFieldGiftCard)
+}
+
 func (l *LinkCustomerToGiftCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler LinkCustomerToGiftCardResponse
 	var value unmarshaler
@@ -559,6 +1048,17 @@ func (l *LinkCustomerToGiftCardResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LinkCustomerToGiftCardResponse) MarshalJSON() ([]byte, error) {
+	type embed LinkCustomerToGiftCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LinkCustomerToGiftCardResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -573,6 +1073,12 @@ func (l *LinkCustomerToGiftCardResponse) String() string {
 
 // A response that contains a list of `GiftCard` objects. If the request resulted in errors,
 // the response contains a set of `Error` objects.
+var (
+	listGiftCardsResponseFieldErrors    = big.NewInt(1 << 0)
+	listGiftCardsResponseFieldGiftCards = big.NewInt(1 << 1)
+	listGiftCardsResponseFieldCursor    = big.NewInt(1 << 2)
+)
+
 type ListGiftCardsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -583,6 +1089,9 @@ type ListGiftCardsResponse struct {
 	// the final response.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -613,6 +1122,34 @@ func (l *ListGiftCardsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListGiftCardsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listGiftCardsResponseFieldErrors)
+}
+
+// SetGiftCards sets the GiftCards field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsResponse) SetGiftCards(giftCards []*GiftCard) {
+	l.GiftCards = giftCards
+	l.require(listGiftCardsResponseFieldGiftCards)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGiftCardsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listGiftCardsResponseFieldCursor)
+}
+
 func (l *ListGiftCardsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListGiftCardsResponse
 	var value unmarshaler
@@ -629,6 +1166,17 @@ func (l *ListGiftCardsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListGiftCardsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListGiftCardsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListGiftCardsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -643,12 +1191,20 @@ func (l *ListGiftCardsResponse) String() string {
 
 // A response that contains the unlinked `GiftCard` object. If the request resulted in errors,
 // the response contains a set of `Error` objects.
+var (
+	unlinkCustomerFromGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
+	unlinkCustomerFromGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
+)
+
 type UnlinkCustomerFromGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The gift card with the ID of the unlinked customer removed from the `customer_ids` field.
 	// If no other customers are linked, the `customer_ids` field is also removed.
 	GiftCard *GiftCard `json:"gift_card,omitempty" url:"gift_card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -672,6 +1228,27 @@ func (u *UnlinkCustomerFromGiftCardResponse) GetExtraProperties() map[string]int
 	return u.extraProperties
 }
 
+func (u *UnlinkCustomerFromGiftCardResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UnlinkCustomerFromGiftCardResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(unlinkCustomerFromGiftCardResponseFieldErrors)
+}
+
+// SetGiftCard sets the GiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UnlinkCustomerFromGiftCardResponse) SetGiftCard(giftCard *GiftCard) {
+	u.GiftCard = giftCard
+	u.require(unlinkCustomerFromGiftCardResponseFieldGiftCard)
+}
+
 func (u *UnlinkCustomerFromGiftCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UnlinkCustomerFromGiftCardResponse
 	var value unmarshaler
@@ -686,6 +1263,17 @@ func (u *UnlinkCustomerFromGiftCardResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UnlinkCustomerFromGiftCardResponse) MarshalJSON() ([]byte, error) {
+	type embed UnlinkCustomerFromGiftCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) String() string {

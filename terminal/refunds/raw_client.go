@@ -4,7 +4,7 @@ package refunds
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalRefundRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateTerminalRefundResponse], error) {
+) (*core.Response[*square.CreateTerminalRefundResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/terminals/refunds"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateTerminalRefundResponse
+	var response *square.CreateTerminalRefundResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateTerminalRefundResponse]{
+	return &core.Response[*square.CreateTerminalRefundResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalRefundsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchTerminalRefundsResponse], error) {
+) (*core.Response[*square.SearchTerminalRefundsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/terminals/refunds/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchTerminalRefundsResponse
+	var response *square.SearchTerminalRefundsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchTerminalRefundsResponse]{
+	return &core.Response[*square.SearchTerminalRefundsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *terminal.GetRefundsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetTerminalRefundResponse], error) {
+) (*core.Response[*square.GetTerminalRefundResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -131,10 +131,10 @@ func (r *RawClient) Get(
 		request.TerminalRefundID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetTerminalRefundResponse
+	var response *square.GetTerminalRefundResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetTerminalRefundResponse]{
+	return &core.Response[*square.GetTerminalRefundResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -162,7 +162,7 @@ func (r *RawClient) Cancel(
 	ctx context.Context,
 	request *terminal.CancelRefundsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelTerminalRefundResponse], error) {
+) (*core.Response[*square.CancelTerminalRefundResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -174,10 +174,10 @@ func (r *RawClient) Cancel(
 		request.TerminalRefundID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelTerminalRefundResponse
+	var response *square.CancelTerminalRefundResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -194,7 +194,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelTerminalRefundResponse]{
+	return &core.Response[*square.CancelTerminalRefundResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

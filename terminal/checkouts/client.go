@@ -4,25 +4,23 @@ package checkouts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
 	terminal "github.com/square/square-go-sdk/v2/terminal"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -48,7 +46,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalCheckoutRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateTerminalCheckoutResponse, error) {
+) (*square.CreateTerminalCheckoutResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -65,7 +63,7 @@ func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchTerminalCheckoutsResponse, error) {
+) (*square.SearchTerminalCheckoutsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -82,7 +80,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.GetCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetTerminalCheckoutResponse, error) {
+) (*square.GetTerminalCheckoutResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -99,7 +97,7 @@ func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.CancelCheckoutsRequest,
 	opts ...option.RequestOption,
-) (*v2.CancelTerminalCheckoutResponse, error) {
+) (*square.CancelTerminalCheckoutResponse, error) {
 	response, err := c.WithRawResponse.Cancel(
 		ctx,
 		request,

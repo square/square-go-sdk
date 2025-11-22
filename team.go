@@ -6,6 +6,12 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	createJobRequestFieldJob            = big.NewInt(1 << 0)
+	createJobRequestFieldIdempotencyKey = big.NewInt(1 << 1)
 )
 
 type CreateJobRequest struct {
@@ -15,19 +21,90 @@ type CreateJobRequest struct {
 	// but must be unique for each request. For more information, see
 	// [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateJobRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetJob sets the Job field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateJobRequest) SetJob(job *Job) {
+	c.Job = job
+	c.require(createJobRequestFieldJob)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateJobRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createJobRequestFieldIdempotencyKey)
+}
+
+var (
+	listJobsRequestFieldCursor = big.NewInt(1 << 0)
+)
 
 type ListJobsRequest struct {
 	// The pagination cursor returned by the previous call to this endpoint. Provide this
 	// cursor to retrieve the next page of results for your original request. For more information,
 	// see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListJobsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListJobsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listJobsRequestFieldCursor)
+}
+
+var (
+	retrieveJobRequestFieldJobID = big.NewInt(1 << 0)
+)
 
 type RetrieveJobRequest struct {
 	// The ID of the job to retrieve.
 	JobID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RetrieveJobRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetJobID sets the JobID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveJobRequest) SetJobID(jobID string) {
+	r.JobID = jobID
+	r.require(retrieveJobRequestFieldJobID)
+}
+
+var (
+	updateJobRequestFieldJobID = big.NewInt(1 << 0)
+	updateJobRequestFieldJob   = big.NewInt(1 << 1)
+)
 
 type UpdateJobRequest struct {
 	// The ID of the job to update.
@@ -35,15 +112,47 @@ type UpdateJobRequest struct {
 	// The job with the updated fields, either `title`, `is_tip_eligible`, or both. Only changed fields need
 	// to be included in the request. Optionally include `version` to enable optimistic concurrency control.
 	Job *Job `json:"job,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateJobRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetJobID sets the JobID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateJobRequest) SetJobID(jobID string) {
+	u.JobID = jobID
+	u.require(updateJobRequestFieldJobID)
+}
+
+// SetJob sets the Job field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateJobRequest) SetJob(job *Job) {
+	u.Job = job
+	u.require(updateJobRequestFieldJob)
 }
 
 // Represents a [CreateJob](api-endpoint:Team-CreateJob) response. Either `job` or `errors`
 // is present in the response.
+var (
+	createJobResponseFieldJob    = big.NewInt(1 << 0)
+	createJobResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type CreateJobResponse struct {
 	// The new job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -67,6 +176,27 @@ func (c *CreateJobResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateJobResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetJob sets the Job field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateJobResponse) SetJob(job *Job) {
+	c.Job = job
+	c.require(createJobResponseFieldJob)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateJobResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createJobResponseFieldErrors)
+}
+
 func (c *CreateJobResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateJobResponse
 	var value unmarshaler
@@ -81,6 +211,17 @@ func (c *CreateJobResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CreateJobResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateJobResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CreateJobResponse) String() string {
@@ -98,6 +239,15 @@ func (c *CreateJobResponse) String() string {
 // Represents a job that can be assigned to [team members](entity:TeamMember). This object defines the
 // job's title and tip eligibility. Compensation is defined in a [job assignment](entity:JobAssignment)
 // in a team member's wage setting.
+var (
+	jobFieldID            = big.NewInt(1 << 0)
+	jobFieldTitle         = big.NewInt(1 << 1)
+	jobFieldIsTipEligible = big.NewInt(1 << 2)
+	jobFieldCreatedAt     = big.NewInt(1 << 3)
+	jobFieldUpdatedAt     = big.NewInt(1 << 4)
+	jobFieldVersion       = big.NewInt(1 << 5)
+)
+
 type Job struct {
 	// **Read only** The unique Square-assigned ID of the job. If you need a job ID for an API request,
 	// call [ListJobs](api-endpoint:Team-ListJobs) or use the ID returned when you created the job.
@@ -116,6 +266,9 @@ type Job struct {
 	// control and avoid overwrites from concurrent requests. Requests fail if the provided version doesn't
 	// match the server version at the time of the request.
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -167,6 +320,55 @@ func (j *Job) GetExtraProperties() map[string]interface{} {
 	return j.extraProperties
 }
 
+func (j *Job) require(field *big.Int) {
+	if j.explicitFields == nil {
+		j.explicitFields = big.NewInt(0)
+	}
+	j.explicitFields.Or(j.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetID(id *string) {
+	j.ID = id
+	j.require(jobFieldID)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetTitle(title *string) {
+	j.Title = title
+	j.require(jobFieldTitle)
+}
+
+// SetIsTipEligible sets the IsTipEligible field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetIsTipEligible(isTipEligible *bool) {
+	j.IsTipEligible = isTipEligible
+	j.require(jobFieldIsTipEligible)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetCreatedAt(createdAt *string) {
+	j.CreatedAt = createdAt
+	j.require(jobFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetUpdatedAt(updatedAt *string) {
+	j.UpdatedAt = updatedAt
+	j.require(jobFieldUpdatedAt)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (j *Job) SetVersion(version *int) {
+	j.Version = version
+	j.require(jobFieldVersion)
+}
+
 func (j *Job) UnmarshalJSON(data []byte) error {
 	type unmarshaler Job
 	var value unmarshaler
@@ -183,6 +385,17 @@ func (j *Job) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (j *Job) MarshalJSON() ([]byte, error) {
+	type embed Job
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*j),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, j.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (j *Job) String() string {
 	if len(j.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
@@ -197,6 +410,12 @@ func (j *Job) String() string {
 
 // Represents a [ListJobs](api-endpoint:Team-ListJobs) response. Either `jobs` or `errors`
 // is present in the response. If additional results are available, the `cursor` field is also present.
+var (
+	listJobsResponseFieldJobs   = big.NewInt(1 << 0)
+	listJobsResponseFieldCursor = big.NewInt(1 << 1)
+	listJobsResponseFieldErrors = big.NewInt(1 << 2)
+)
+
 type ListJobsResponse struct {
 	// The retrieved jobs. A single paged response contains up to 100 jobs.
 	Jobs []*Job `json:"jobs,omitempty" url:"jobs,omitempty"`
@@ -206,6 +425,9 @@ type ListJobsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -236,6 +458,34 @@ func (l *ListJobsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListJobsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetJobs sets the Jobs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListJobsResponse) SetJobs(jobs []*Job) {
+	l.Jobs = jobs
+	l.require(listJobsResponseFieldJobs)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListJobsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listJobsResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListJobsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listJobsResponseFieldErrors)
+}
+
 func (l *ListJobsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListJobsResponse
 	var value unmarshaler
@@ -252,6 +502,17 @@ func (l *ListJobsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListJobsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListJobsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListJobsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -266,11 +527,19 @@ func (l *ListJobsResponse) String() string {
 
 // Represents a [RetrieveJob](api-endpoint:Team-RetrieveJob) response. Either `job` or `errors`
 // is present in the response.
+var (
+	retrieveJobResponseFieldJob    = big.NewInt(1 << 0)
+	retrieveJobResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type RetrieveJobResponse struct {
 	// The retrieved job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -294,6 +563,27 @@ func (r *RetrieveJobResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RetrieveJobResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetJob sets the Job field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveJobResponse) SetJob(job *Job) {
+	r.Job = job
+	r.require(retrieveJobResponseFieldJob)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveJobResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveJobResponseFieldErrors)
+}
+
 func (r *RetrieveJobResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveJobResponse
 	var value unmarshaler
@@ -310,6 +600,17 @@ func (r *RetrieveJobResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *RetrieveJobResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveJobResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveJobResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -324,11 +625,19 @@ func (r *RetrieveJobResponse) String() string {
 
 // Represents an [UpdateJob](api-endpoint:Team-UpdateJob) response. Either `job` or `errors`
 // is present in the response.
+var (
+	updateJobResponseFieldJob    = big.NewInt(1 << 0)
+	updateJobResponseFieldErrors = big.NewInt(1 << 1)
+)
+
 type UpdateJobResponse struct {
 	// The updated job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
 	// The errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -352,6 +661,27 @@ func (u *UpdateJobResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateJobResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetJob sets the Job field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateJobResponse) SetJob(job *Job) {
+	u.Job = job
+	u.require(updateJobResponseFieldJob)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateJobResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateJobResponseFieldErrors)
+}
+
 func (u *UpdateJobResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateJobResponse
 	var value unmarshaler
@@ -366,6 +696,17 @@ func (u *UpdateJobResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UpdateJobResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateJobResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UpdateJobResponse) String() string {

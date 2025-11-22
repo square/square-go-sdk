@@ -4,12 +4,11 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
 	wagesetting "github.com/square/square-go-sdk/v2/teammembers/wagesetting"
-	http "net/http"
 	os "os"
 )
 
@@ -17,13 +16,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	WageSetting     *wagesetting.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,8 +29,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		WageSetting:     wagesetting.NewClient(opts...),
+		WageSetting:     wagesetting.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -40,7 +39,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -52,9 +50,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#createteammember).
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateTeamMemberRequest,
+	request *square.CreateTeamMemberRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateTeamMemberResponse, error) {
+) (*square.CreateTeamMemberResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -74,9 +72,9 @@ func (c *Client) Create(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-create-team-members).
 func (c *Client) BatchCreate(
 	ctx context.Context,
-	request *v2.BatchCreateTeamMembersRequest,
+	request *square.BatchCreateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchCreateTeamMembersResponse, error) {
+) (*square.BatchCreateTeamMembersResponse, error) {
 	response, err := c.WithRawResponse.BatchCreate(
 		ctx,
 		request,
@@ -95,9 +93,9 @@ func (c *Client) BatchCreate(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-update-team-members).
 func (c *Client) BatchUpdate(
 	ctx context.Context,
-	request *v2.BatchUpdateTeamMembersRequest,
+	request *square.BatchUpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchUpdateTeamMembersResponse, error) {
+) (*square.BatchUpdateTeamMembersResponse, error) {
 	response, err := c.WithRawResponse.BatchUpdate(
 		ctx,
 		request,
@@ -114,9 +112,9 @@ func (c *Client) BatchUpdate(
 // the team member is the Square account owner.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchTeamMembersRequest,
+	request *square.SearchTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchTeamMembersResponse, error) {
+) (*square.SearchTeamMembersResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -132,9 +130,9 @@ func (c *Client) Search(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrieve-a-team-member).
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetTeamMembersRequest,
+	request *square.GetTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*v2.GetTeamMemberResponse, error) {
+) (*square.GetTeamMemberResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -150,9 +148,9 @@ func (c *Client) Get(
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#update-a-team-member).
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateTeamMembersRequest,
+	request *square.UpdateTeamMembersRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateTeamMemberResponse, error) {
+) (*square.UpdateTeamMemberResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,

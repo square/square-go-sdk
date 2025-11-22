@@ -4,6 +4,11 @@ package catalog
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	deleteObjectRequestFieldObjectID = big.NewInt(1 << 0)
 )
 
 type DeleteObjectRequest struct {
@@ -11,7 +16,31 @@ type DeleteObjectRequest struct {
 	// objects in the graph that depend on that object will be deleted as well (for example, deleting a
 	// catalog item will delete its catalog item variations).
 	ObjectID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteObjectRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetObjectID sets the ObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteObjectRequest) SetObjectID(objectID string) {
+	d.ObjectID = objectID
+	d.require(deleteObjectRequestFieldObjectID)
+}
+
+var (
+	getObjectRequestFieldObjectID                  = big.NewInt(1 << 0)
+	getObjectRequestFieldIncludeRelatedObjects     = big.NewInt(1 << 1)
+	getObjectRequestFieldCatalogVersion            = big.NewInt(1 << 2)
+	getObjectRequestFieldIncludeCategoryPathToRoot = big.NewInt(1 << 3)
+)
 
 type GetObjectRequest struct {
 	// The object ID of any type of catalog objects to be retrieved.
@@ -41,7 +70,50 @@ type GetObjectRequest struct {
 	// and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned
 	// in the response payload.
 	IncludeCategoryPathToRoot *bool `json:"-" url:"include_category_path_to_root,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetObjectRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetObjectID sets the ObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetObjectRequest) SetObjectID(objectID string) {
+	g.ObjectID = objectID
+	g.require(getObjectRequestFieldObjectID)
+}
+
+// SetIncludeRelatedObjects sets the IncludeRelatedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetObjectRequest) SetIncludeRelatedObjects(includeRelatedObjects *bool) {
+	g.IncludeRelatedObjects = includeRelatedObjects
+	g.require(getObjectRequestFieldIncludeRelatedObjects)
+}
+
+// SetCatalogVersion sets the CatalogVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetObjectRequest) SetCatalogVersion(catalogVersion *int64) {
+	g.CatalogVersion = catalogVersion
+	g.require(getObjectRequestFieldCatalogVersion)
+}
+
+// SetIncludeCategoryPathToRoot sets the IncludeCategoryPathToRoot field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetObjectRequest) SetIncludeCategoryPathToRoot(includeCategoryPathToRoot *bool) {
+	g.IncludeCategoryPathToRoot = includeCategoryPathToRoot
+	g.require(getObjectRequestFieldIncludeCategoryPathToRoot)
+}
+
+var (
+	upsertCatalogObjectRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	upsertCatalogObjectRequestFieldObject         = big.NewInt(1 << 1)
+)
 
 type UpsertCatalogObjectRequest struct {
 	// A value you specify that uniquely identifies this
@@ -60,4 +132,28 @@ type UpsertCatalogObjectRequest struct {
 	// - For updates, the object must be active (the `is_deleted` field is not `true`).
 	// - For creates, the object ID must start with `#`. The provided ID is replaced with a server-generated ID.
 	Object *v2.CatalogObject `json:"object,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpsertCatalogObjectRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCatalogObjectRequest) SetIdempotencyKey(idempotencyKey string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(upsertCatalogObjectRequestFieldIdempotencyKey)
+}
+
+// SetObject sets the Object field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCatalogObjectRequest) SetObject(object *v2.CatalogObject) {
+	u.Object = object
+	u.require(upsertCatalogObjectRequestFieldObject)
 }

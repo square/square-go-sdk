@@ -4,24 +4,22 @@ package oauth
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +36,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -57,9 +55,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // page for your application in the Developer Dashboard.
 func (c *Client) RevokeToken(
 	ctx context.Context,
-	request *v2.RevokeTokenRequest,
+	request *square.RevokeTokenRequest,
 	opts ...option.RequestOption,
-) (*v2.RevokeTokenResponse, error) {
+) (*square.RevokeTokenResponse, error) {
 	response, err := c.WithRawResponse.RevokeToken(
 		ctx,
 		request,
@@ -94,9 +92,9 @@ func (c *Client) RevokeToken(
 // Application clients should never interact directly with OAuth tokens.
 func (c *Client) ObtainToken(
 	ctx context.Context,
-	request *v2.ObtainTokenRequest,
+	request *square.ObtainTokenRequest,
 	opts ...option.RequestOption,
-) (*v2.ObtainTokenResponse, error) {
+) (*square.ObtainTokenResponse, error) {
 	response, err := c.WithRawResponse.ObtainToken(
 		ctx,
 		request,
@@ -125,7 +123,7 @@ func (c *Client) ObtainToken(
 func (c *Client) RetrieveTokenStatus(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.RetrieveTokenStatusResponse, error) {
+) (*square.RetrieveTokenStatusResponse, error) {
 	response, err := c.WithRawResponse.RetrieveTokenStatus(
 		ctx,
 		opts...,

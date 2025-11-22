@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetDisputesRequest,
+	request *square.GetDisputesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetDisputeResponse], error) {
+) (*core.Response[*square.GetDisputeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) Get(
 		request.DisputeID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetDisputeResponse
+	var response *square.GetDisputeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetDisputeResponse]{
+	return &core.Response[*square.GetDisputeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Accept(
 	ctx context.Context,
-	request *v2.AcceptDisputesRequest,
+	request *square.AcceptDisputesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.AcceptDisputeResponse], error) {
+) (*core.Response[*square.AcceptDisputeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Accept(
 		request.DisputeID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.AcceptDisputeResponse
+	var response *square.AcceptDisputeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Accept(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.AcceptDisputeResponse]{
+	return &core.Response[*square.AcceptDisputeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -118,9 +118,9 @@ func (r *RawClient) Accept(
 
 func (r *RawClient) CreateEvidenceFile(
 	ctx context.Context,
-	request *v2.CreateEvidenceFileDisputesRequest,
+	request *square.CreateEvidenceFileDisputesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateDisputeEvidenceFileResponse], error) {
+) (*core.Response[*square.CreateDisputeEvidenceFileResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,7 +132,7 @@ func (r *RawClient) CreateEvidenceFile(
 		request.DisputeID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	writer := internal.NewMultipartWriter()
@@ -149,7 +149,7 @@ func (r *RawClient) CreateEvidenceFile(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *v2.CreateDisputeEvidenceFileResponse
+	var response *square.CreateDisputeEvidenceFileResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -167,7 +167,7 @@ func (r *RawClient) CreateEvidenceFile(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateDisputeEvidenceFileResponse]{
+	return &core.Response[*square.CreateDisputeEvidenceFileResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -176,9 +176,9 @@ func (r *RawClient) CreateEvidenceFile(
 
 func (r *RawClient) CreateEvidenceText(
 	ctx context.Context,
-	request *v2.CreateDisputeEvidenceTextRequest,
+	request *square.CreateDisputeEvidenceTextRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateDisputeEvidenceTextResponse], error) {
+) (*core.Response[*square.CreateDisputeEvidenceTextResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -190,11 +190,11 @@ func (r *RawClient) CreateEvidenceText(
 		request.DisputeID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateDisputeEvidenceTextResponse
+	var response *square.CreateDisputeEvidenceTextResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -212,7 +212,7 @@ func (r *RawClient) CreateEvidenceText(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateDisputeEvidenceTextResponse]{
+	return &core.Response[*square.CreateDisputeEvidenceTextResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -221,9 +221,9 @@ func (r *RawClient) CreateEvidenceText(
 
 func (r *RawClient) SubmitEvidence(
 	ctx context.Context,
-	request *v2.SubmitEvidenceDisputesRequest,
+	request *square.SubmitEvidenceDisputesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SubmitEvidenceResponse], error) {
+) (*core.Response[*square.SubmitEvidenceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -235,10 +235,10 @@ func (r *RawClient) SubmitEvidence(
 		request.DisputeID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.SubmitEvidenceResponse
+	var response *square.SubmitEvidenceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -255,7 +255,7 @@ func (r *RawClient) SubmitEvidence(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SubmitEvidenceResponse]{
+	return &core.Response[*square.SubmitEvidenceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

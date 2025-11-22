@@ -4,6 +4,12 @@ package customers
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	deleteCustomAttributesRequestFieldCustomerID = big.NewInt(1 << 0)
+	deleteCustomAttributesRequestFieldKey        = big.NewInt(1 << 1)
 )
 
 type DeleteCustomAttributesRequest struct {
@@ -13,7 +19,38 @@ type DeleteCustomAttributesRequest struct {
 	// attribute definition in the Square seller account. If the requesting application is not the
 	// definition owner, you must use the qualified key.
 	Key string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteCustomAttributesRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetCustomerID(customerID string) {
+	d.CustomerID = customerID
+	d.require(deleteCustomAttributesRequestFieldCustomerID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetKey(key string) {
+	d.Key = key
+	d.require(deleteCustomAttributesRequestFieldKey)
+}
+
+var (
+	getCustomAttributesRequestFieldCustomerID     = big.NewInt(1 << 0)
+	getCustomAttributesRequestFieldKey            = big.NewInt(1 << 1)
+	getCustomAttributesRequestFieldWithDefinition = big.NewInt(1 << 2)
+	getCustomAttributesRequestFieldVersion        = big.NewInt(1 << 3)
+)
 
 type GetCustomAttributesRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
@@ -31,7 +68,52 @@ type GetCustomAttributesRequest struct {
 	// returns the specified version or a higher version if one exists. If the specified version is
 	// higher than the current version, Square returns a `BAD_REQUEST` error.
 	Version *int `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCustomAttributesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetCustomerID(customerID string) {
+	g.CustomerID = customerID
+	g.require(getCustomAttributesRequestFieldCustomerID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetKey(key string) {
+	g.Key = key
+	g.require(getCustomAttributesRequestFieldKey)
+}
+
+// SetWithDefinition sets the WithDefinition field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetWithDefinition(withDefinition *bool) {
+	g.WithDefinition = withDefinition
+	g.require(getCustomAttributesRequestFieldWithDefinition)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetVersion(version *int) {
+	g.Version = version
+	g.require(getCustomAttributesRequestFieldVersion)
+}
+
+var (
+	listCustomAttributesRequestFieldCustomerID      = big.NewInt(1 << 0)
+	listCustomAttributesRequestFieldLimit           = big.NewInt(1 << 1)
+	listCustomAttributesRequestFieldCursor          = big.NewInt(1 << 2)
+	listCustomAttributesRequestFieldWithDefinitions = big.NewInt(1 << 3)
+)
 
 type ListCustomAttributesRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
@@ -48,7 +130,52 @@ type ListCustomAttributesRequest struct {
 	// custom attribute. Set this parameter to `true` to get the name and description of each custom
 	// attribute, information about the data type, or other definition details. The default value is `false`.
 	WithDefinitions *bool `json:"-" url:"with_definitions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCustomAttributesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetCustomerID(customerID string) {
+	l.CustomerID = customerID
+	l.require(listCustomAttributesRequestFieldCustomerID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listCustomAttributesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomAttributesRequestFieldCursor)
+}
+
+// SetWithDefinitions sets the WithDefinitions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetWithDefinitions(withDefinitions *bool) {
+	l.WithDefinitions = withDefinitions
+	l.require(listCustomAttributesRequestFieldWithDefinitions)
+}
+
+var (
+	upsertCustomerCustomAttributeRequestFieldCustomerID      = big.NewInt(1 << 0)
+	upsertCustomerCustomAttributeRequestFieldKey             = big.NewInt(1 << 1)
+	upsertCustomerCustomAttributeRequestFieldCustomAttribute = big.NewInt(1 << 2)
+	upsertCustomerCustomAttributeRequestFieldIdempotencyKey  = big.NewInt(1 << 3)
+)
 
 type UpsertCustomerCustomAttributeRequest struct {
 	// The ID of the target [customer profile](entity:Customer).
@@ -69,4 +196,42 @@ type UpsertCustomerCustomAttributeRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpsertCustomerCustomAttributeRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCustomerCustomAttributeRequest) SetCustomerID(customerID string) {
+	u.CustomerID = customerID
+	u.require(upsertCustomerCustomAttributeRequestFieldCustomerID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCustomerCustomAttributeRequest) SetKey(key string) {
+	u.Key = key
+	u.require(upsertCustomerCustomAttributeRequestFieldKey)
+}
+
+// SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCustomerCustomAttributeRequest) SetCustomAttribute(customAttribute *v2.CustomAttribute) {
+	u.CustomAttribute = customAttribute
+	u.require(upsertCustomerCustomAttributeRequestFieldCustomAttribute)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertCustomerCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(upsertCustomerCustomAttributeRequestFieldIdempotencyKey)
 }

@@ -4,7 +4,7 @@ package images
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	catalog "github.com/square/square-go-sdk/v2/catalog"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *catalog.CreateImagesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateCatalogImageResponse], error) {
+) (*core.Response[*square.CreateCatalogImageResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,7 +44,7 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/catalog/images"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	writer := internal.NewMultipartWriter()
@@ -61,7 +61,7 @@ func (r *RawClient) Create(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *v2.CreateCatalogImageResponse
+	var response *square.CreateCatalogImageResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -79,7 +79,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateCatalogImageResponse]{
+	return &core.Response[*square.CreateCatalogImageResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -90,7 +90,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *catalog.UpdateImagesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateCatalogImageResponse], error) {
+) (*core.Response[*square.UpdateCatalogImageResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -102,7 +102,7 @@ func (r *RawClient) Update(
 		request.ImageID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	writer := internal.NewMultipartWriter()
@@ -119,7 +119,7 @@ func (r *RawClient) Update(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *v2.UpdateCatalogImageResponse
+	var response *square.UpdateCatalogImageResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -137,7 +137,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateCatalogImageResponse]{
+	return &core.Response[*square.UpdateCatalogImageResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
