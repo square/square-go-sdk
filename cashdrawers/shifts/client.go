@@ -4,7 +4,7 @@ package shifts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	cashdrawers "github.com/square/square-go-sdk/v2/cashdrawers"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -48,7 +47,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *cashdrawers.ListShiftsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.CashDrawerShiftSummary], error) {
+) (*core.Page[*string, *square.CashDrawerShiftSummary, *square.ListCashDrawerShiftsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -61,10 +60,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -83,14 +82,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListCashDrawerShiftsResponse) *internal.PageResponse[*string, *v2.CashDrawerShiftSummary] {
+	readPageResponse := func(response *square.ListCashDrawerShiftsResponse) *core.PageResponse[*string, *square.CashDrawerShiftSummary, *square.ListCashDrawerShiftsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCashDrawerShifts()
-		return &internal.PageResponse[*string, *v2.CashDrawerShiftSummary]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.CashDrawerShiftSummary, *square.ListCashDrawerShiftsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -107,7 +107,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *cashdrawers.GetShiftsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetCashDrawerShiftResponse, error) {
+) (*square.GetCashDrawerShiftResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -124,7 +124,7 @@ func (c *Client) ListEvents(
 	ctx context.Context,
 	request *cashdrawers.ListEventsShiftsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.CashDrawerShiftEvent], error) {
+) (*core.Page[*string, *square.CashDrawerShiftEvent, *square.ListCashDrawerShiftEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -140,10 +140,10 @@ func (c *Client) ListEvents(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -162,14 +162,15 @@ func (c *Client) ListEvents(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListCashDrawerShiftEventsResponse) *internal.PageResponse[*string, *v2.CashDrawerShiftEvent] {
+	readPageResponse := func(response *square.ListCashDrawerShiftEventsResponse) *core.PageResponse[*string, *square.CashDrawerShiftEvent, *square.ListCashDrawerShiftEventsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCashDrawerShiftEvents()
-		return &internal.PageResponse[*string, *v2.CashDrawerShiftEvent]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.CashDrawerShiftEvent, *square.ListCashDrawerShiftEventsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

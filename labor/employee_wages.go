@@ -2,10 +2,41 @@
 
 package labor
 
+import (
+	big "math/big"
+)
+
+var (
+	getEmployeeWagesRequestFieldID = big.NewInt(1 << 0)
+)
+
 type GetEmployeeWagesRequest struct {
 	// The UUID for the `EmployeeWage` being retrieved.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetEmployeeWagesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetEmployeeWagesRequest) SetID(id string) {
+	g.ID = id
+	g.require(getEmployeeWagesRequestFieldID)
+}
+
+var (
+	listEmployeeWagesRequestFieldEmployeeID = big.NewInt(1 << 0)
+	listEmployeeWagesRequestFieldLimit      = big.NewInt(1 << 1)
+	listEmployeeWagesRequestFieldCursor     = big.NewInt(1 << 2)
+)
 
 type ListEmployeeWagesRequest struct {
 	// Filter the returned wages to only those that are associated with the specified employee.
@@ -15,4 +46,35 @@ type ListEmployeeWagesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// A pointer to the next page of `EmployeeWage` results to fetch.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListEmployeeWagesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeeWagesRequest) SetEmployeeID(employeeID *string) {
+	l.EmployeeID = employeeID
+	l.require(listEmployeeWagesRequestFieldEmployeeID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeeWagesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listEmployeeWagesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEmployeeWagesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listEmployeeWagesRequestFieldCursor)
 }

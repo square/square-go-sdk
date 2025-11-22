@@ -6,6 +6,20 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	createCheckoutRequestFieldLocationID                 = big.NewInt(1 << 0)
+	createCheckoutRequestFieldIdempotencyKey             = big.NewInt(1 << 1)
+	createCheckoutRequestFieldOrder                      = big.NewInt(1 << 2)
+	createCheckoutRequestFieldAskForShippingAddress      = big.NewInt(1 << 3)
+	createCheckoutRequestFieldMerchantSupportEmail       = big.NewInt(1 << 4)
+	createCheckoutRequestFieldPrePopulateBuyerEmail      = big.NewInt(1 << 5)
+	createCheckoutRequestFieldPrePopulateShippingAddress = big.NewInt(1 << 6)
+	createCheckoutRequestFieldRedirectURL                = big.NewInt(1 << 7)
+	createCheckoutRequestFieldAdditionalRecipients       = big.NewInt(1 << 8)
+	createCheckoutRequestFieldNote                       = big.NewInt(1 << 9)
 )
 
 type CreateCheckoutRequest struct {
@@ -77,25 +91,154 @@ type CreateCheckoutRequest struct {
 	//
 	// This value cannot exceed 60 characters.
 	Note *string `json:"note,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateCheckoutRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetLocationID(locationID string) {
+	c.LocationID = locationID
+	c.require(createCheckoutRequestFieldLocationID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createCheckoutRequestFieldIdempotencyKey)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetOrder(order *CreateOrderRequest) {
+	c.Order = order
+	c.require(createCheckoutRequestFieldOrder)
+}
+
+// SetAskForShippingAddress sets the AskForShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetAskForShippingAddress(askForShippingAddress *bool) {
+	c.AskForShippingAddress = askForShippingAddress
+	c.require(createCheckoutRequestFieldAskForShippingAddress)
+}
+
+// SetMerchantSupportEmail sets the MerchantSupportEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetMerchantSupportEmail(merchantSupportEmail *string) {
+	c.MerchantSupportEmail = merchantSupportEmail
+	c.require(createCheckoutRequestFieldMerchantSupportEmail)
+}
+
+// SetPrePopulateBuyerEmail sets the PrePopulateBuyerEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetPrePopulateBuyerEmail(prePopulateBuyerEmail *string) {
+	c.PrePopulateBuyerEmail = prePopulateBuyerEmail
+	c.require(createCheckoutRequestFieldPrePopulateBuyerEmail)
+}
+
+// SetPrePopulateShippingAddress sets the PrePopulateShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetPrePopulateShippingAddress(prePopulateShippingAddress *Address) {
+	c.PrePopulateShippingAddress = prePopulateShippingAddress
+	c.require(createCheckoutRequestFieldPrePopulateShippingAddress)
+}
+
+// SetRedirectURL sets the RedirectURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetRedirectURL(redirectURL *string) {
+	c.RedirectURL = redirectURL
+	c.require(createCheckoutRequestFieldRedirectURL)
+}
+
+// SetAdditionalRecipients sets the AdditionalRecipients field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetAdditionalRecipients(additionalRecipients []*ChargeRequestAdditionalRecipient) {
+	c.AdditionalRecipients = additionalRecipients
+	c.require(createCheckoutRequestFieldAdditionalRecipients)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutRequest) SetNote(note *string) {
+	c.Note = note
+	c.require(createCheckoutRequestFieldNote)
+}
+
+var (
+	createLocationRequestFieldLocation = big.NewInt(1 << 0)
+)
 
 type CreateLocationRequest struct {
 	// The initial values of the location being created. The `name` field is required and must be unique within a seller account.
 	// All other fields are optional, but any information you care about for the location should be included.
 	// The remaining fields are automatically added based on the data from the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
 	Location *Location `json:"location,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateLocationRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocation sets the Location field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLocationRequest) SetLocation(location *Location) {
+	c.Location = location
+	c.require(createLocationRequestFieldLocation)
+}
+
+var (
+	getLocationsRequestFieldLocationID = big.NewInt(1 << 0)
+)
 
 type GetLocationsRequest struct {
 	// The ID of the location to retrieve. Specify the string
 	// "main" to return the main location.
 	LocationID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetLocationsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetLocationsRequest) SetLocationID(locationID string) {
+	g.LocationID = locationID
+	g.require(getLocationsRequestFieldLocationID)
 }
 
 // The hours of operation for a location.
+var (
+	businessHoursFieldPeriods = big.NewInt(1 << 0)
+)
+
 type BusinessHours struct {
 	// The list of time periods during which the business is open. There can be at most 10 periods per day.
 	Periods []*BusinessHoursPeriod `json:"periods,omitempty" url:"periods,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -110,6 +253,20 @@ func (b *BusinessHours) GetPeriods() []*BusinessHoursPeriod {
 
 func (b *BusinessHours) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
+}
+
+func (b *BusinessHours) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetPeriods sets the Periods field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessHours) SetPeriods(periods []*BusinessHoursPeriod) {
+	b.Periods = periods
+	b.require(businessHoursFieldPeriods)
 }
 
 func (b *BusinessHours) UnmarshalJSON(data []byte) error {
@@ -128,6 +285,17 @@ func (b *BusinessHours) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BusinessHours) MarshalJSON() ([]byte, error) {
+	type embed BusinessHours
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BusinessHours) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -141,6 +309,12 @@ func (b *BusinessHours) String() string {
 }
 
 // Represents a period of time during which a business location is open.
+var (
+	businessHoursPeriodFieldDayOfWeek      = big.NewInt(1 << 0)
+	businessHoursPeriodFieldStartLocalTime = big.NewInt(1 << 1)
+	businessHoursPeriodFieldEndLocalTime   = big.NewInt(1 << 2)
+)
+
 type BusinessHoursPeriod struct {
 	// The day of the week for this time period.
 	// See [DayOfWeek](#type-dayofweek) for possible values
@@ -153,6 +327,9 @@ type BusinessHoursPeriod struct {
 	// RFC 3339 format. For example, `21:00:00` for a period ending at 9:00 in the evening.
 	// Note that the seconds value is always :00, but it is appended for conformance to the RFC.
 	EndLocalTime *string `json:"end_local_time,omitempty" url:"end_local_time,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -183,6 +360,34 @@ func (b *BusinessHoursPeriod) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BusinessHoursPeriod) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetDayOfWeek sets the DayOfWeek field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessHoursPeriod) SetDayOfWeek(dayOfWeek *DayOfWeek) {
+	b.DayOfWeek = dayOfWeek
+	b.require(businessHoursPeriodFieldDayOfWeek)
+}
+
+// SetStartLocalTime sets the StartLocalTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessHoursPeriod) SetStartLocalTime(startLocalTime *string) {
+	b.StartLocalTime = startLocalTime
+	b.require(businessHoursPeriodFieldStartLocalTime)
+}
+
+// SetEndLocalTime sets the EndLocalTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessHoursPeriod) SetEndLocalTime(endLocalTime *string) {
+	b.EndLocalTime = endLocalTime
+	b.require(businessHoursPeriodFieldEndLocalTime)
+}
+
 func (b *BusinessHoursPeriod) UnmarshalJSON(data []byte) error {
 	type unmarshaler BusinessHoursPeriod
 	var value unmarshaler
@@ -199,6 +404,17 @@ func (b *BusinessHoursPeriod) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BusinessHoursPeriod) MarshalJSON() ([]byte, error) {
+	type embed BusinessHoursPeriod
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BusinessHoursPeriod) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -213,6 +429,12 @@ func (b *BusinessHoursPeriod) String() string {
 
 // Represents an additional recipient (other than the merchant) entitled to a portion of the tender.
 // Support is currently limited to USD, CAD and GBP currencies
+var (
+	chargeRequestAdditionalRecipientFieldLocationID  = big.NewInt(1 << 0)
+	chargeRequestAdditionalRecipientFieldDescription = big.NewInt(1 << 1)
+	chargeRequestAdditionalRecipientFieldAmountMoney = big.NewInt(1 << 2)
+)
+
 type ChargeRequestAdditionalRecipient struct {
 	// The location ID for a recipient (other than the merchant) receiving a portion of the tender.
 	LocationID string `json:"location_id" url:"location_id"`
@@ -220,6 +442,9 @@ type ChargeRequestAdditionalRecipient struct {
 	Description string `json:"description" url:"description"`
 	// The amount of money distributed to the recipient.
 	AmountMoney *Money `json:"amount_money" url:"amount_money"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -250,6 +475,34 @@ func (c *ChargeRequestAdditionalRecipient) GetExtraProperties() map[string]inter
 	return c.extraProperties
 }
 
+func (c *ChargeRequestAdditionalRecipient) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChargeRequestAdditionalRecipient) SetLocationID(locationID string) {
+	c.LocationID = locationID
+	c.require(chargeRequestAdditionalRecipientFieldLocationID)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChargeRequestAdditionalRecipient) SetDescription(description string) {
+	c.Description = description
+	c.require(chargeRequestAdditionalRecipientFieldDescription)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ChargeRequestAdditionalRecipient) SetAmountMoney(amountMoney *Money) {
+	c.AmountMoney = amountMoney
+	c.require(chargeRequestAdditionalRecipientFieldAmountMoney)
+}
+
 func (c *ChargeRequestAdditionalRecipient) UnmarshalJSON(data []byte) error {
 	type unmarshaler ChargeRequestAdditionalRecipient
 	var value unmarshaler
@@ -266,6 +519,17 @@ func (c *ChargeRequestAdditionalRecipient) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *ChargeRequestAdditionalRecipient) MarshalJSON() ([]byte, error) {
+	type embed ChargeRequestAdditionalRecipient
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *ChargeRequestAdditionalRecipient) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -280,6 +544,19 @@ func (c *ChargeRequestAdditionalRecipient) String() string {
 
 // Square Checkout lets merchants accept online payments for supported
 // payment types using a checkout workflow hosted on squareup.com.
+var (
+	checkoutFieldID                         = big.NewInt(1 << 0)
+	checkoutFieldCheckoutPageURL            = big.NewInt(1 << 1)
+	checkoutFieldAskForShippingAddress      = big.NewInt(1 << 2)
+	checkoutFieldMerchantSupportEmail       = big.NewInt(1 << 3)
+	checkoutFieldPrePopulateBuyerEmail      = big.NewInt(1 << 4)
+	checkoutFieldPrePopulateShippingAddress = big.NewInt(1 << 5)
+	checkoutFieldRedirectURL                = big.NewInt(1 << 6)
+	checkoutFieldOrder                      = big.NewInt(1 << 7)
+	checkoutFieldCreatedAt                  = big.NewInt(1 << 8)
+	checkoutFieldAdditionalRecipients       = big.NewInt(1 << 9)
+)
+
 type Checkout struct {
 	// ID generated by Square Checkout when a new checkout is requested.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -330,6 +607,9 @@ type Checkout struct {
 	// Additional recipients (other than the merchant) receiving a portion of this checkout.
 	// For example, fees assessed on the purchase by a third party integration.
 	AdditionalRecipients []*AdditionalRecipient `json:"additional_recipients,omitempty" url:"additional_recipients,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -409,6 +689,83 @@ func (c *Checkout) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *Checkout) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetID(id *string) {
+	c.ID = id
+	c.require(checkoutFieldID)
+}
+
+// SetCheckoutPageURL sets the CheckoutPageURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetCheckoutPageURL(checkoutPageURL *string) {
+	c.CheckoutPageURL = checkoutPageURL
+	c.require(checkoutFieldCheckoutPageURL)
+}
+
+// SetAskForShippingAddress sets the AskForShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetAskForShippingAddress(askForShippingAddress *bool) {
+	c.AskForShippingAddress = askForShippingAddress
+	c.require(checkoutFieldAskForShippingAddress)
+}
+
+// SetMerchantSupportEmail sets the MerchantSupportEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetMerchantSupportEmail(merchantSupportEmail *string) {
+	c.MerchantSupportEmail = merchantSupportEmail
+	c.require(checkoutFieldMerchantSupportEmail)
+}
+
+// SetPrePopulateBuyerEmail sets the PrePopulateBuyerEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetPrePopulateBuyerEmail(prePopulateBuyerEmail *string) {
+	c.PrePopulateBuyerEmail = prePopulateBuyerEmail
+	c.require(checkoutFieldPrePopulateBuyerEmail)
+}
+
+// SetPrePopulateShippingAddress sets the PrePopulateShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetPrePopulateShippingAddress(prePopulateShippingAddress *Address) {
+	c.PrePopulateShippingAddress = prePopulateShippingAddress
+	c.require(checkoutFieldPrePopulateShippingAddress)
+}
+
+// SetRedirectURL sets the RedirectURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetRedirectURL(redirectURL *string) {
+	c.RedirectURL = redirectURL
+	c.require(checkoutFieldRedirectURL)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetOrder(order *Order) {
+	c.Order = order
+	c.require(checkoutFieldOrder)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetCreatedAt(createdAt *string) {
+	c.CreatedAt = createdAt
+	c.require(checkoutFieldCreatedAt)
+}
+
+// SetAdditionalRecipients sets the AdditionalRecipients field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Checkout) SetAdditionalRecipients(additionalRecipients []*AdditionalRecipient) {
+	c.AdditionalRecipients = additionalRecipients
+	c.require(checkoutFieldAdditionalRecipients)
+}
+
 func (c *Checkout) UnmarshalJSON(data []byte) error {
 	type unmarshaler Checkout
 	var value unmarshaler
@@ -425,6 +782,17 @@ func (c *Checkout) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *Checkout) MarshalJSON() ([]byte, error) {
+	type embed Checkout
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *Checkout) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -438,11 +806,19 @@ func (c *Checkout) String() string {
 }
 
 // Latitude and longitude coordinates.
+var (
+	coordinatesFieldLatitude  = big.NewInt(1 << 0)
+	coordinatesFieldLongitude = big.NewInt(1 << 1)
+)
+
 type Coordinates struct {
 	// The latitude of the coordinate expressed in degrees.
 	Latitude *float64 `json:"latitude,omitempty" url:"latitude,omitempty"`
 	// The longitude of the coordinate expressed in degrees.
 	Longitude *float64 `json:"longitude,omitempty" url:"longitude,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -466,6 +842,27 @@ func (c *Coordinates) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *Coordinates) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLatitude sets the Latitude field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Coordinates) SetLatitude(latitude *float64) {
+	c.Latitude = latitude
+	c.require(coordinatesFieldLatitude)
+}
+
+// SetLongitude sets the Longitude field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Coordinates) SetLongitude(longitude *float64) {
+	c.Longitude = longitude
+	c.require(coordinatesFieldLongitude)
+}
+
 func (c *Coordinates) UnmarshalJSON(data []byte) error {
 	type unmarshaler Coordinates
 	var value unmarshaler
@@ -482,6 +879,17 @@ func (c *Coordinates) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *Coordinates) MarshalJSON() ([]byte, error) {
+	type embed Coordinates
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *Coordinates) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -496,11 +904,19 @@ func (c *Coordinates) String() string {
 
 // Defines the fields that are included in the response body of
 // a request to the `CreateCheckout` endpoint.
+var (
+	createCheckoutResponseFieldCheckout = big.NewInt(1 << 0)
+	createCheckoutResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type CreateCheckoutResponse struct {
 	// The newly created `checkout` object associated with the provided idempotency key.
 	Checkout *Checkout `json:"checkout,omitempty" url:"checkout,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -524,6 +940,27 @@ func (c *CreateCheckoutResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateCheckoutResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCheckout sets the Checkout field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutResponse) SetCheckout(checkout *Checkout) {
+	c.Checkout = checkout
+	c.require(createCheckoutResponseFieldCheckout)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCheckoutResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createCheckoutResponseFieldErrors)
+}
+
 func (c *CreateCheckoutResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateCheckoutResponse
 	var value unmarshaler
@@ -540,6 +977,17 @@ func (c *CreateCheckoutResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateCheckoutResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateCheckoutResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateCheckoutResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -553,11 +1001,19 @@ func (c *CreateCheckoutResponse) String() string {
 }
 
 // The response object returned by the [CreateLocation](api-endpoint:Locations-CreateLocation) endpoint.
+var (
+	createLocationResponseFieldErrors   = big.NewInt(1 << 0)
+	createLocationResponseFieldLocation = big.NewInt(1 << 1)
+)
+
 type CreateLocationResponse struct {
 	// Information about [errors](https://developer.squareup.com/docs/build-basics/handling-errors) encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The newly created `Location` object.
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -581,6 +1037,27 @@ func (c *CreateLocationResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateLocationResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLocationResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createLocationResponseFieldErrors)
+}
+
+// SetLocation sets the Location field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLocationResponse) SetLocation(location *Location) {
+	c.Location = location
+	c.require(createLocationResponseFieldLocation)
+}
+
 func (c *CreateLocationResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateLocationResponse
 	var value unmarshaler
@@ -597,6 +1074,17 @@ func (c *CreateLocationResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateLocationResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateLocationResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateLocationResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -611,11 +1099,19 @@ func (c *CreateLocationResponse) String() string {
 
 // Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
 // endpoint returns in a response.
+var (
+	getLocationResponseFieldErrors   = big.NewInt(1 << 0)
+	getLocationResponseFieldLocation = big.NewInt(1 << 1)
+)
+
 type GetLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested location.
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -639,6 +1135,27 @@ func (g *GetLocationResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetLocationResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetLocationResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getLocationResponseFieldErrors)
+}
+
+// SetLocation sets the Location field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetLocationResponse) SetLocation(location *Location) {
+	g.Location = location
+	g.require(getLocationResponseFieldLocation)
+}
+
 func (g *GetLocationResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetLocationResponse
 	var value unmarshaler
@@ -653,6 +1170,17 @@ func (g *GetLocationResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetLocationResponse) MarshalJSON() ([]byte, error) {
+	type embed GetLocationResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetLocationResponse) String() string {
@@ -671,11 +1199,19 @@ func (g *GetLocationResponse) String() string {
 // to the [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
 //
 // Either `errors` or `locations` is present in a given response (never both).
+var (
+	listLocationsResponseFieldErrors    = big.NewInt(1 << 0)
+	listLocationsResponseFieldLocations = big.NewInt(1 << 1)
+)
+
 type ListLocationsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The business locations.
 	Locations []*Location `json:"locations,omitempty" url:"locations,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -699,6 +1235,27 @@ func (l *ListLocationsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListLocationsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListLocationsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listLocationsResponseFieldErrors)
+}
+
+// SetLocations sets the Locations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListLocationsResponse) SetLocations(locations []*Location) {
+	l.Locations = locations
+	l.require(listLocationsResponseFieldLocations)
+}
+
 func (l *ListLocationsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListLocationsResponse
 	var value unmarshaler
@@ -715,6 +1272,17 @@ func (l *ListLocationsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListLocationsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListLocationsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListLocationsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -728,6 +1296,36 @@ func (l *ListLocationsResponse) String() string {
 }
 
 // Represents one of a business' [locations](https://developer.squareup.com/docs/locations-api).
+var (
+	locationFieldID                = big.NewInt(1 << 0)
+	locationFieldName              = big.NewInt(1 << 1)
+	locationFieldAddress           = big.NewInt(1 << 2)
+	locationFieldTimezone          = big.NewInt(1 << 3)
+	locationFieldCapabilities      = big.NewInt(1 << 4)
+	locationFieldStatus            = big.NewInt(1 << 5)
+	locationFieldCreatedAt         = big.NewInt(1 << 6)
+	locationFieldMerchantID        = big.NewInt(1 << 7)
+	locationFieldCountry           = big.NewInt(1 << 8)
+	locationFieldLanguageCode      = big.NewInt(1 << 9)
+	locationFieldCurrency          = big.NewInt(1 << 10)
+	locationFieldPhoneNumber       = big.NewInt(1 << 11)
+	locationFieldBusinessName      = big.NewInt(1 << 12)
+	locationFieldType              = big.NewInt(1 << 13)
+	locationFieldWebsiteURL        = big.NewInt(1 << 14)
+	locationFieldBusinessHours     = big.NewInt(1 << 15)
+	locationFieldBusinessEmail     = big.NewInt(1 << 16)
+	locationFieldDescription       = big.NewInt(1 << 17)
+	locationFieldTwitterUsername   = big.NewInt(1 << 18)
+	locationFieldInstagramUsername = big.NewInt(1 << 19)
+	locationFieldFacebookURL       = big.NewInt(1 << 20)
+	locationFieldCoordinates       = big.NewInt(1 << 21)
+	locationFieldLogoURL           = big.NewInt(1 << 22)
+	locationFieldPosBackgroundURL  = big.NewInt(1 << 23)
+	locationFieldMcc               = big.NewInt(1 << 24)
+	locationFieldFullFormatLogoURL = big.NewInt(1 << 25)
+	locationFieldTaxIDs            = big.NewInt(1 << 26)
+)
+
 type Location struct {
 	// A short generated string of letters and numbers that uniquely identifies this location instance.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -805,6 +1403,9 @@ type Location struct {
 	FullFormatLogoURL *string `json:"full_format_logo_url,omitempty" url:"full_format_logo_url,omitempty"`
 	// The tax IDs for this location.
 	TaxIDs *TaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1003,6 +1604,202 @@ func (l *Location) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *Location) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetID(id *string) {
+	l.ID = id
+	l.require(locationFieldID)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetName(name *string) {
+	l.Name = name
+	l.require(locationFieldName)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetAddress(address *Address) {
+	l.Address = address
+	l.require(locationFieldAddress)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetTimezone(timezone *string) {
+	l.Timezone = timezone
+	l.require(locationFieldTimezone)
+}
+
+// SetCapabilities sets the Capabilities field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCapabilities(capabilities []LocationCapability) {
+	l.Capabilities = capabilities
+	l.require(locationFieldCapabilities)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetStatus(status *LocationStatus) {
+	l.Status = status
+	l.require(locationFieldStatus)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCreatedAt(createdAt *string) {
+	l.CreatedAt = createdAt
+	l.require(locationFieldCreatedAt)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetMerchantID(merchantID *string) {
+	l.MerchantID = merchantID
+	l.require(locationFieldMerchantID)
+}
+
+// SetCountry sets the Country field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCountry(country *Country) {
+	l.Country = country
+	l.require(locationFieldCountry)
+}
+
+// SetLanguageCode sets the LanguageCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetLanguageCode(languageCode *string) {
+	l.LanguageCode = languageCode
+	l.require(locationFieldLanguageCode)
+}
+
+// SetCurrency sets the Currency field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCurrency(currency *Currency) {
+	l.Currency = currency
+	l.require(locationFieldCurrency)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetPhoneNumber(phoneNumber *string) {
+	l.PhoneNumber = phoneNumber
+	l.require(locationFieldPhoneNumber)
+}
+
+// SetBusinessName sets the BusinessName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetBusinessName(businessName *string) {
+	l.BusinessName = businessName
+	l.require(locationFieldBusinessName)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetType(type_ *LocationType) {
+	l.Type = type_
+	l.require(locationFieldType)
+}
+
+// SetWebsiteURL sets the WebsiteURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetWebsiteURL(websiteURL *string) {
+	l.WebsiteURL = websiteURL
+	l.require(locationFieldWebsiteURL)
+}
+
+// SetBusinessHours sets the BusinessHours field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetBusinessHours(businessHours *BusinessHours) {
+	l.BusinessHours = businessHours
+	l.require(locationFieldBusinessHours)
+}
+
+// SetBusinessEmail sets the BusinessEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetBusinessEmail(businessEmail *string) {
+	l.BusinessEmail = businessEmail
+	l.require(locationFieldBusinessEmail)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetDescription(description *string) {
+	l.Description = description
+	l.require(locationFieldDescription)
+}
+
+// SetTwitterUsername sets the TwitterUsername field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetTwitterUsername(twitterUsername *string) {
+	l.TwitterUsername = twitterUsername
+	l.require(locationFieldTwitterUsername)
+}
+
+// SetInstagramUsername sets the InstagramUsername field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetInstagramUsername(instagramUsername *string) {
+	l.InstagramUsername = instagramUsername
+	l.require(locationFieldInstagramUsername)
+}
+
+// SetFacebookURL sets the FacebookURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetFacebookURL(facebookURL *string) {
+	l.FacebookURL = facebookURL
+	l.require(locationFieldFacebookURL)
+}
+
+// SetCoordinates sets the Coordinates field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCoordinates(coordinates *Coordinates) {
+	l.Coordinates = coordinates
+	l.require(locationFieldCoordinates)
+}
+
+// SetLogoURL sets the LogoURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetLogoURL(logoURL *string) {
+	l.LogoURL = logoURL
+	l.require(locationFieldLogoURL)
+}
+
+// SetPosBackgroundURL sets the PosBackgroundURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetPosBackgroundURL(posBackgroundURL *string) {
+	l.PosBackgroundURL = posBackgroundURL
+	l.require(locationFieldPosBackgroundURL)
+}
+
+// SetMcc sets the Mcc field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetMcc(mcc *string) {
+	l.Mcc = mcc
+	l.require(locationFieldMcc)
+}
+
+// SetFullFormatLogoURL sets the FullFormatLogoURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetFullFormatLogoURL(fullFormatLogoURL *string) {
+	l.FullFormatLogoURL = fullFormatLogoURL
+	l.require(locationFieldFullFormatLogoURL)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetTaxIDs(taxIDs *TaxIDs) {
+	l.TaxIDs = taxIDs
+	l.require(locationFieldTaxIDs)
+}
+
 func (l *Location) UnmarshalJSON(data []byte) error {
 	type unmarshaler Location
 	var value unmarshaler
@@ -1017,6 +1814,17 @@ func (l *Location) UnmarshalJSON(data []byte) error {
 	l.extraProperties = extraProperties
 	l.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (l *Location) MarshalJSON() ([]byte, error) {
+	type embed Location
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (l *Location) String() string {
@@ -1104,6 +1912,14 @@ func (l LocationType) Ptr() *LocationType {
 }
 
 // Identifiers for the location used by various governments for tax purposes.
+var (
+	taxIDsFieldEuVat   = big.NewInt(1 << 0)
+	taxIDsFieldFrSiret = big.NewInt(1 << 1)
+	taxIDsFieldFrNaf   = big.NewInt(1 << 2)
+	taxIDsFieldEsNif   = big.NewInt(1 << 3)
+	taxIDsFieldJpQii   = big.NewInt(1 << 4)
+)
+
 type TaxIDs struct {
 	// The EU VAT number for this location. For example, `IE3426675K`.
 	// If the EU VAT number is present, it is well-formed and has been
@@ -1122,6 +1938,9 @@ type TaxIDs struct {
 	// The QII (Qualified Invoice Issuer) number is a 14-character tax identifier used in Japan.
 	// For example, `T1234567890123`.
 	JpQii *string `json:"jp_qii,omitempty" url:"jp_qii,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1166,6 +1985,48 @@ func (t *TaxIDs) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TaxIDs) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetEuVat sets the EuVat field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TaxIDs) SetEuVat(euVat *string) {
+	t.EuVat = euVat
+	t.require(taxIDsFieldEuVat)
+}
+
+// SetFrSiret sets the FrSiret field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TaxIDs) SetFrSiret(frSiret *string) {
+	t.FrSiret = frSiret
+	t.require(taxIDsFieldFrSiret)
+}
+
+// SetFrNaf sets the FrNaf field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TaxIDs) SetFrNaf(frNaf *string) {
+	t.FrNaf = frNaf
+	t.require(taxIDsFieldFrNaf)
+}
+
+// SetEsNif sets the EsNif field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TaxIDs) SetEsNif(esNif *string) {
+	t.EsNif = esNif
+	t.require(taxIDsFieldEsNif)
+}
+
+// SetJpQii sets the JpQii field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TaxIDs) SetJpQii(jpQii *string) {
+	t.JpQii = jpQii
+	t.require(taxIDsFieldJpQii)
+}
+
 func (t *TaxIDs) UnmarshalJSON(data []byte) error {
 	type unmarshaler TaxIDs
 	var value unmarshaler
@@ -1182,6 +2043,17 @@ func (t *TaxIDs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TaxIDs) MarshalJSON() ([]byte, error) {
+	type embed TaxIDs
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TaxIDs) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1195,11 +2067,19 @@ func (t *TaxIDs) String() string {
 }
 
 // The response object returned by the [UpdateLocation](api-endpoint:Locations-UpdateLocation) endpoint.
+var (
+	updateLocationResponseFieldErrors   = big.NewInt(1 << 0)
+	updateLocationResponseFieldLocation = big.NewInt(1 << 1)
+)
+
 type UpdateLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated `Location` object.
 	Location *Location `json:"location,omitempty" url:"location,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1223,6 +2103,27 @@ func (u *UpdateLocationResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateLocationResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateLocationResponseFieldErrors)
+}
+
+// SetLocation sets the Location field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationResponse) SetLocation(location *Location) {
+	u.Location = location
+	u.require(updateLocationResponseFieldLocation)
+}
+
 func (u *UpdateLocationResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateLocationResponse
 	var value unmarshaler
@@ -1239,6 +2140,17 @@ func (u *UpdateLocationResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateLocationResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateLocationResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1251,9 +2163,38 @@ func (u *UpdateLocationResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateLocationRequestFieldLocationID = big.NewInt(1 << 0)
+	updateLocationRequestFieldLocation   = big.NewInt(1 << 1)
+)
+
 type UpdateLocationRequest struct {
 	// The ID of the location to update.
 	LocationID string `json:"-" url:"-"`
 	// The `Location` object with only the fields to update.
 	Location *Location `json:"location,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateLocationRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationRequest) SetLocationID(locationID string) {
+	u.LocationID = locationID
+	u.require(updateLocationRequestFieldLocationID)
+}
+
+// SetLocation sets the Location field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationRequest) SetLocation(location *Location) {
+	u.Location = location
+	u.require(updateLocationRequestFieldLocation)
 }

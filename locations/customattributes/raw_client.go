@@ -4,7 +4,7 @@ package customattributes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	locations "github.com/square/square-go-sdk/v2/locations"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) BatchDelete(
 	ctx context.Context,
 	request *locations.BulkDeleteLocationCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkDeleteLocationCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkDeleteLocationCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) BatchDelete(
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkDeleteLocationCustomAttributesResponse
+	var response *square.BulkDeleteLocationCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) BatchDelete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkDeleteLocationCustomAttributesResponse]{
+	return &core.Response[*square.BulkDeleteLocationCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) BatchUpsert(
 	ctx context.Context,
 	request *locations.BulkUpsertLocationCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkUpsertLocationCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkUpsertLocationCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) BatchUpsert(
 	)
 	endpointURL := baseURL + "/v2/locations/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkUpsertLocationCustomAttributesResponse
+	var response *square.BulkUpsertLocationCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) BatchUpsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkUpsertLocationCustomAttributesResponse]{
+	return &core.Response[*square.BulkUpsertLocationCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *locations.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveLocationCustomAttributeResponse], error) {
+) (*core.Response[*square.RetrieveLocationCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,10 +139,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveLocationCustomAttributeResponse
+	var response *square.RetrieveLocationCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -159,7 +159,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveLocationCustomAttributeResponse]{
+	return &core.Response[*square.RetrieveLocationCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -170,7 +170,7 @@ func (r *RawClient) Upsert(
 	ctx context.Context,
 	request *locations.UpsertLocationCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertLocationCustomAttributeResponse], error) {
+) (*core.Response[*square.UpsertLocationCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -183,11 +183,11 @@ func (r *RawClient) Upsert(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertLocationCustomAttributeResponse
+	var response *square.UpsertLocationCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -205,7 +205,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertLocationCustomAttributeResponse]{
+	return &core.Response[*square.UpsertLocationCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -216,7 +216,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *locations.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteLocationCustomAttributeResponse], error) {
+) (*core.Response[*square.DeleteLocationCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -229,10 +229,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteLocationCustomAttributeResponse
+	var response *square.DeleteLocationCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -249,7 +249,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteLocationCustomAttributeResponse]{
+	return &core.Response[*square.DeleteLocationCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

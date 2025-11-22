@@ -6,6 +6,14 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	createCardRequestFieldIdempotencyKey    = big.NewInt(1 << 0)
+	createCardRequestFieldSourceID          = big.NewInt(1 << 1)
+	createCardRequestFieldVerificationToken = big.NewInt(1 << 2)
+	createCardRequestFieldCard              = big.NewInt(1 << 3)
 )
 
 type CreateCardRequest struct {
@@ -26,17 +34,105 @@ type CreateCardRequest struct {
 	VerificationToken *string `json:"verification_token,omitempty" url:"-"`
 	// Payment details associated with the card to be stored.
 	Card *Card `json:"card,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateCardRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createCardRequestFieldIdempotencyKey)
+}
+
+// SetSourceID sets the SourceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardRequest) SetSourceID(sourceID string) {
+	c.SourceID = sourceID
+	c.require(createCardRequestFieldSourceID)
+}
+
+// SetVerificationToken sets the VerificationToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardRequest) SetVerificationToken(verificationToken *string) {
+	c.VerificationToken = verificationToken
+	c.require(createCardRequestFieldVerificationToken)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardRequest) SetCard(card *Card) {
+	c.Card = card
+	c.require(createCardRequestFieldCard)
+}
+
+var (
+	disableCardsRequestFieldCardID = big.NewInt(1 << 0)
+)
 
 type DisableCardsRequest struct {
 	// Unique ID for the desired Card.
 	CardID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DisableCardsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableCardsRequest) SetCardID(cardID string) {
+	d.CardID = cardID
+	d.require(disableCardsRequestFieldCardID)
+}
+
+var (
+	getCardsRequestFieldCardID = big.NewInt(1 << 0)
+)
 
 type GetCardsRequest struct {
 	// Unique ID for the desired Card.
 	CardID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCardsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCardsRequest) SetCardID(cardID string) {
+	g.CardID = cardID
+	g.require(getCardsRequestFieldCardID)
+}
+
+var (
+	listCardsRequestFieldCursor          = big.NewInt(1 << 0)
+	listCardsRequestFieldCustomerID      = big.NewInt(1 << 1)
+	listCardsRequestFieldIncludeDisabled = big.NewInt(1 << 2)
+	listCardsRequestFieldReferenceID     = big.NewInt(1 << 3)
+	listCardsRequestFieldSortOrder       = big.NewInt(1 << 4)
+)
 
 type ListCardsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -55,6 +151,51 @@ type ListCardsRequest struct {
 	// Sorts the returned list by when the card was created with the specified order.
 	// This field defaults to ASC.
 	SortOrder *SortOrder `json:"-" url:"sort_order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListCardsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCardsRequestFieldCursor)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsRequest) SetCustomerID(customerID *string) {
+	l.CustomerID = customerID
+	l.require(listCardsRequestFieldCustomerID)
+}
+
+// SetIncludeDisabled sets the IncludeDisabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsRequest) SetIncludeDisabled(includeDisabled *bool) {
+	l.IncludeDisabled = includeDisabled
+	l.require(listCardsRequestFieldIncludeDisabled)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsRequest) SetReferenceID(referenceID *string) {
+	l.ReferenceID = referenceID
+	l.require(listCardsRequestFieldReferenceID)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsRequest) SetSortOrder(sortOrder *SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listCardsRequestFieldSortOrder)
 }
 
 // Defines the fields that are included in the response body of
@@ -62,11 +203,19 @@ type ListCardsRequest struct {
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
+var (
+	createCardResponseFieldErrors = big.NewInt(1 << 0)
+	createCardResponseFieldCard   = big.NewInt(1 << 1)
+)
+
 type CreateCardResponse struct {
 	// Errors resulting from the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The card created by the request.
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -90,6 +239,27 @@ func (c *CreateCardResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateCardResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createCardResponseFieldErrors)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCardResponse) SetCard(card *Card) {
+	c.Card = card
+	c.require(createCardResponseFieldCard)
+}
+
 func (c *CreateCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateCardResponse
 	var value unmarshaler
@@ -104,6 +274,17 @@ func (c *CreateCardResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CreateCardResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CreateCardResponse) String() string {
@@ -123,11 +304,19 @@ func (c *CreateCardResponse) String() string {
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
+var (
+	disableCardResponseFieldErrors = big.NewInt(1 << 0)
+	disableCardResponseFieldCard   = big.NewInt(1 << 1)
+)
+
 type DisableCardResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The retrieved card.
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -151,6 +340,27 @@ func (d *DisableCardResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DisableCardResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableCardResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(disableCardResponseFieldErrors)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableCardResponse) SetCard(card *Card) {
+	d.Card = card
+	d.require(disableCardResponseFieldCard)
+}
+
 func (d *DisableCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler DisableCardResponse
 	var value unmarshaler
@@ -165,6 +375,17 @@ func (d *DisableCardResponse) UnmarshalJSON(data []byte) error {
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DisableCardResponse) MarshalJSON() ([]byte, error) {
+	type embed DisableCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DisableCardResponse) String() string {
@@ -184,11 +405,19 @@ func (d *DisableCardResponse) String() string {
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
+var (
+	getCardResponseFieldErrors = big.NewInt(1 << 0)
+	getCardResponseFieldCard   = big.NewInt(1 << 1)
+)
+
 type GetCardResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The retrieved card.
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -212,6 +441,27 @@ func (g *GetCardResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetCardResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCardResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getCardResponseFieldErrors)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCardResponse) SetCard(card *Card) {
+	g.Card = card
+	g.require(getCardResponseFieldCard)
+}
+
 func (g *GetCardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetCardResponse
 	var value unmarshaler
@@ -226,6 +476,17 @@ func (g *GetCardResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetCardResponse) MarshalJSON() ([]byte, error) {
+	type embed GetCardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetCardResponse) String() string {
@@ -245,6 +506,12 @@ func (g *GetCardResponse) String() string {
 //
 // Note: if there are errors processing the request, the card field will not be
 // present.
+var (
+	listCardsResponseFieldErrors = big.NewInt(1 << 0)
+	listCardsResponseFieldCards  = big.NewInt(1 << 1)
+	listCardsResponseFieldCursor = big.NewInt(1 << 2)
+)
+
 type ListCardsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -255,6 +522,9 @@ type ListCardsResponse struct {
 	//
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -285,6 +555,34 @@ func (l *ListCardsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListCardsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listCardsResponseFieldErrors)
+}
+
+// SetCards sets the Cards field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsResponse) SetCards(cards []*Card) {
+	l.Cards = cards
+	l.require(listCardsResponseFieldCards)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCardsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCardsResponseFieldCursor)
+}
+
 func (l *ListCardsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListCardsResponse
 	var value unmarshaler
@@ -299,6 +597,17 @@ func (l *ListCardsResponse) UnmarshalJSON(data []byte) error {
 	l.extraProperties = extraProperties
 	l.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (l *ListCardsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListCardsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (l *ListCardsResponse) String() string {

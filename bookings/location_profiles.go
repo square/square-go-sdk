@@ -2,9 +2,42 @@
 
 package bookings
 
+import (
+	big "math/big"
+)
+
+var (
+	listLocationProfilesRequestFieldLimit  = big.NewInt(1 << 0)
+	listLocationProfilesRequestFieldCursor = big.NewInt(1 << 1)
+)
+
 type ListLocationProfilesRequest struct {
 	// The maximum number of results to return in a paged response.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The pagination cursor from the preceding response to return the next page of the results. Do not set this when retrieving the first page of the results.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListLocationProfilesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListLocationProfilesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listLocationProfilesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListLocationProfilesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listLocationProfilesRequestFieldCursor)
 }

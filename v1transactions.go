@@ -6,6 +6,14 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	v1ListOrdersRequestFieldLocationID = big.NewInt(1 << 0)
+	v1ListOrdersRequestFieldOrder      = big.NewInt(1 << 1)
+	v1ListOrdersRequestFieldLimit      = big.NewInt(1 << 2)
+	v1ListOrdersRequestFieldBatchToken = big.NewInt(1 << 3)
 )
 
 type V1ListOrdersRequest struct {
@@ -18,14 +26,91 @@ type V1ListOrdersRequest struct {
 	// A pagination cursor to retrieve the next set of results for your
 	// original query to the endpoint.
 	BatchToken *string `json:"-" url:"batch_token,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (v *V1ListOrdersRequest) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1ListOrdersRequest) SetLocationID(locationID string) {
+	v.LocationID = locationID
+	v.require(v1ListOrdersRequestFieldLocationID)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1ListOrdersRequest) SetOrder(order *SortOrder) {
+	v.Order = order
+	v.require(v1ListOrdersRequestFieldOrder)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1ListOrdersRequest) SetLimit(limit *int) {
+	v.Limit = limit
+	v.require(v1ListOrdersRequestFieldLimit)
+}
+
+// SetBatchToken sets the BatchToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1ListOrdersRequest) SetBatchToken(batchToken *string) {
+	v.BatchToken = batchToken
+	v.require(v1ListOrdersRequestFieldBatchToken)
+}
+
+var (
+	v1RetrieveOrderRequestFieldLocationID = big.NewInt(1 << 0)
+	v1RetrieveOrderRequestFieldOrderID    = big.NewInt(1 << 1)
+)
 
 type V1RetrieveOrderRequest struct {
 	// The ID of the order's associated location.
 	LocationID string `json:"-" url:"-"`
 	// The order's Square-issued ID. You obtain this value from Order objects returned by the List Orders endpoint
 	OrderID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (v *V1RetrieveOrderRequest) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1RetrieveOrderRequest) SetLocationID(locationID string) {
+	v.LocationID = locationID
+	v.require(v1RetrieveOrderRequestFieldLocationID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1RetrieveOrderRequest) SetOrderID(orderID string) {
+	v.OrderID = orderID
+	v.require(v1RetrieveOrderRequestFieldOrderID)
+}
+
+var (
+	v1UpdateOrderRequestFieldLocationID            = big.NewInt(1 << 0)
+	v1UpdateOrderRequestFieldOrderID               = big.NewInt(1 << 1)
+	v1UpdateOrderRequestFieldAction                = big.NewInt(1 << 2)
+	v1UpdateOrderRequestFieldShippedTrackingNumber = big.NewInt(1 << 3)
+	v1UpdateOrderRequestFieldCompletedNote         = big.NewInt(1 << 4)
+	v1UpdateOrderRequestFieldRefundedNote          = big.NewInt(1 << 5)
+	v1UpdateOrderRequestFieldCanceledNote          = big.NewInt(1 << 6)
+)
 
 type V1UpdateOrderRequest struct {
 	// The ID of the order's associated location.
@@ -43,7 +128,71 @@ type V1UpdateOrderRequest struct {
 	RefundedNote *string `json:"refunded_note,omitempty" url:"-"`
 	// A merchant-specified note about the canceling of the order. Only valid if action is CANCEL.
 	CanceledNote *string `json:"canceled_note,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (v *V1UpdateOrderRequest) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetLocationID(locationID string) {
+	v.LocationID = locationID
+	v.require(v1UpdateOrderRequestFieldLocationID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetOrderID(orderID string) {
+	v.OrderID = orderID
+	v.require(v1UpdateOrderRequestFieldOrderID)
+}
+
+// SetAction sets the Action field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetAction(action V1UpdateOrderRequestAction) {
+	v.Action = action
+	v.require(v1UpdateOrderRequestFieldAction)
+}
+
+// SetShippedTrackingNumber sets the ShippedTrackingNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetShippedTrackingNumber(shippedTrackingNumber *string) {
+	v.ShippedTrackingNumber = shippedTrackingNumber
+	v.require(v1UpdateOrderRequestFieldShippedTrackingNumber)
+}
+
+// SetCompletedNote sets the CompletedNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetCompletedNote(completedNote *string) {
+	v.CompletedNote = completedNote
+	v.require(v1UpdateOrderRequestFieldCompletedNote)
+}
+
+// SetRefundedNote sets the RefundedNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetRefundedNote(refundedNote *string) {
+	v.RefundedNote = refundedNote
+	v.require(v1UpdateOrderRequestFieldRefundedNote)
+}
+
+// SetCanceledNote sets the CanceledNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1UpdateOrderRequest) SetCanceledNote(canceledNote *string) {
+	v.CanceledNote = canceledNote
+	v.require(v1UpdateOrderRequestFieldCanceledNote)
+}
+
+var (
+	v1MoneyFieldAmount       = big.NewInt(1 << 0)
+	v1MoneyFieldCurrencyCode = big.NewInt(1 << 1)
+)
 
 type V1Money struct {
 	// Amount in the lowest denominated value of this Currency. E.g. in USD
@@ -51,6 +200,9 @@ type V1Money struct {
 	Amount *int `json:"amount,omitempty" url:"amount,omitempty"`
 	// See [Currency](#type-currency) for possible values
 	CurrencyCode *Currency `json:"currency_code,omitempty" url:"currency_code,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -74,6 +226,27 @@ func (v *V1Money) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *V1Money) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetAmount sets the Amount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Money) SetAmount(amount *int) {
+	v.Amount = amount
+	v.require(v1MoneyFieldAmount)
+}
+
+// SetCurrencyCode sets the CurrencyCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Money) SetCurrencyCode(currencyCode *Currency) {
+	v.CurrencyCode = currencyCode
+	v.require(v1MoneyFieldCurrencyCode)
+}
+
 func (v *V1Money) UnmarshalJSON(data []byte) error {
 	type unmarshaler V1Money
 	var value unmarshaler
@@ -90,6 +263,17 @@ func (v *V1Money) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (v *V1Money) MarshalJSON() ([]byte, error) {
+	type embed V1Money
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (v *V1Money) String() string {
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
@@ -103,6 +287,34 @@ func (v *V1Money) String() string {
 }
 
 // V1Order
+var (
+	v1OrderFieldErrors               = big.NewInt(1 << 0)
+	v1OrderFieldID                   = big.NewInt(1 << 1)
+	v1OrderFieldBuyerEmail           = big.NewInt(1 << 2)
+	v1OrderFieldRecipientName        = big.NewInt(1 << 3)
+	v1OrderFieldRecipientPhoneNumber = big.NewInt(1 << 4)
+	v1OrderFieldState                = big.NewInt(1 << 5)
+	v1OrderFieldShippingAddress      = big.NewInt(1 << 6)
+	v1OrderFieldSubtotalMoney        = big.NewInt(1 << 7)
+	v1OrderFieldTotalShippingMoney   = big.NewInt(1 << 8)
+	v1OrderFieldTotalTaxMoney        = big.NewInt(1 << 9)
+	v1OrderFieldTotalPriceMoney      = big.NewInt(1 << 10)
+	v1OrderFieldTotalDiscountMoney   = big.NewInt(1 << 11)
+	v1OrderFieldCreatedAt            = big.NewInt(1 << 12)
+	v1OrderFieldUpdatedAt            = big.NewInt(1 << 13)
+	v1OrderFieldExpiresAt            = big.NewInt(1 << 14)
+	v1OrderFieldPaymentID            = big.NewInt(1 << 15)
+	v1OrderFieldBuyerNote            = big.NewInt(1 << 16)
+	v1OrderFieldCompletedNote        = big.NewInt(1 << 17)
+	v1OrderFieldRefundedNote         = big.NewInt(1 << 18)
+	v1OrderFieldCanceledNote         = big.NewInt(1 << 19)
+	v1OrderFieldTender               = big.NewInt(1 << 20)
+	v1OrderFieldOrderHistory         = big.NewInt(1 << 21)
+	v1OrderFieldPromoCode            = big.NewInt(1 << 22)
+	v1OrderFieldBtcReceiveAddress    = big.NewInt(1 << 23)
+	v1OrderFieldBtcPriceSatoshi      = big.NewInt(1 << 24)
+)
+
 type V1Order struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -155,6 +367,9 @@ type V1Order struct {
 	BtcReceiveAddress *string `json:"btc_receive_address,omitempty" url:"btc_receive_address,omitempty"`
 	// For Bitcoin transactions, the price of the buyer's order in satoshi (100 million satoshi equals 1 BTC).
 	BtcPriceSatoshi *float64 `json:"btc_price_satoshi,omitempty" url:"btc_price_satoshi,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -339,6 +554,188 @@ func (v *V1Order) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *V1Order) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetErrors(errors []*Error) {
+	v.Errors = errors
+	v.require(v1OrderFieldErrors)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetID(id *string) {
+	v.ID = id
+	v.require(v1OrderFieldID)
+}
+
+// SetBuyerEmail sets the BuyerEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetBuyerEmail(buyerEmail *string) {
+	v.BuyerEmail = buyerEmail
+	v.require(v1OrderFieldBuyerEmail)
+}
+
+// SetRecipientName sets the RecipientName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetRecipientName(recipientName *string) {
+	v.RecipientName = recipientName
+	v.require(v1OrderFieldRecipientName)
+}
+
+// SetRecipientPhoneNumber sets the RecipientPhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetRecipientPhoneNumber(recipientPhoneNumber *string) {
+	v.RecipientPhoneNumber = recipientPhoneNumber
+	v.require(v1OrderFieldRecipientPhoneNumber)
+}
+
+// SetState sets the State field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetState(state *V1OrderState) {
+	v.State = state
+	v.require(v1OrderFieldState)
+}
+
+// SetShippingAddress sets the ShippingAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetShippingAddress(shippingAddress *Address) {
+	v.ShippingAddress = shippingAddress
+	v.require(v1OrderFieldShippingAddress)
+}
+
+// SetSubtotalMoney sets the SubtotalMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetSubtotalMoney(subtotalMoney *V1Money) {
+	v.SubtotalMoney = subtotalMoney
+	v.require(v1OrderFieldSubtotalMoney)
+}
+
+// SetTotalShippingMoney sets the TotalShippingMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetTotalShippingMoney(totalShippingMoney *V1Money) {
+	v.TotalShippingMoney = totalShippingMoney
+	v.require(v1OrderFieldTotalShippingMoney)
+}
+
+// SetTotalTaxMoney sets the TotalTaxMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetTotalTaxMoney(totalTaxMoney *V1Money) {
+	v.TotalTaxMoney = totalTaxMoney
+	v.require(v1OrderFieldTotalTaxMoney)
+}
+
+// SetTotalPriceMoney sets the TotalPriceMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetTotalPriceMoney(totalPriceMoney *V1Money) {
+	v.TotalPriceMoney = totalPriceMoney
+	v.require(v1OrderFieldTotalPriceMoney)
+}
+
+// SetTotalDiscountMoney sets the TotalDiscountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetTotalDiscountMoney(totalDiscountMoney *V1Money) {
+	v.TotalDiscountMoney = totalDiscountMoney
+	v.require(v1OrderFieldTotalDiscountMoney)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetCreatedAt(createdAt *string) {
+	v.CreatedAt = createdAt
+	v.require(v1OrderFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetUpdatedAt(updatedAt *string) {
+	v.UpdatedAt = updatedAt
+	v.require(v1OrderFieldUpdatedAt)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetExpiresAt(expiresAt *string) {
+	v.ExpiresAt = expiresAt
+	v.require(v1OrderFieldExpiresAt)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetPaymentID(paymentID *string) {
+	v.PaymentID = paymentID
+	v.require(v1OrderFieldPaymentID)
+}
+
+// SetBuyerNote sets the BuyerNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetBuyerNote(buyerNote *string) {
+	v.BuyerNote = buyerNote
+	v.require(v1OrderFieldBuyerNote)
+}
+
+// SetCompletedNote sets the CompletedNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetCompletedNote(completedNote *string) {
+	v.CompletedNote = completedNote
+	v.require(v1OrderFieldCompletedNote)
+}
+
+// SetRefundedNote sets the RefundedNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetRefundedNote(refundedNote *string) {
+	v.RefundedNote = refundedNote
+	v.require(v1OrderFieldRefundedNote)
+}
+
+// SetCanceledNote sets the CanceledNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetCanceledNote(canceledNote *string) {
+	v.CanceledNote = canceledNote
+	v.require(v1OrderFieldCanceledNote)
+}
+
+// SetTender sets the Tender field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetTender(tender *V1Tender) {
+	v.Tender = tender
+	v.require(v1OrderFieldTender)
+}
+
+// SetOrderHistory sets the OrderHistory field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetOrderHistory(orderHistory []*V1OrderHistoryEntry) {
+	v.OrderHistory = orderHistory
+	v.require(v1OrderFieldOrderHistory)
+}
+
+// SetPromoCode sets the PromoCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetPromoCode(promoCode *string) {
+	v.PromoCode = promoCode
+	v.require(v1OrderFieldPromoCode)
+}
+
+// SetBtcReceiveAddress sets the BtcReceiveAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetBtcReceiveAddress(btcReceiveAddress *string) {
+	v.BtcReceiveAddress = btcReceiveAddress
+	v.require(v1OrderFieldBtcReceiveAddress)
+}
+
+// SetBtcPriceSatoshi sets the BtcPriceSatoshi field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Order) SetBtcPriceSatoshi(btcPriceSatoshi *float64) {
+	v.BtcPriceSatoshi = btcPriceSatoshi
+	v.require(v1OrderFieldBtcPriceSatoshi)
+}
+
 func (v *V1Order) UnmarshalJSON(data []byte) error {
 	type unmarshaler V1Order
 	var value unmarshaler
@@ -355,6 +752,17 @@ func (v *V1Order) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (v *V1Order) MarshalJSON() ([]byte, error) {
+	type embed V1Order
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (v *V1Order) String() string {
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
@@ -368,12 +776,20 @@ func (v *V1Order) String() string {
 }
 
 // V1OrderHistoryEntry
+var (
+	v1OrderHistoryEntryFieldAction    = big.NewInt(1 << 0)
+	v1OrderHistoryEntryFieldCreatedAt = big.NewInt(1 << 1)
+)
+
 type V1OrderHistoryEntry struct {
 	// The type of action performed on the order.
 	// See [V1OrderHistoryEntryAction](#type-v1orderhistoryentryaction) for possible values
 	Action *V1OrderHistoryEntryAction `json:"action,omitempty" url:"action,omitempty"`
 	// The time when the action was performed, in ISO 8601 format.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -397,6 +813,27 @@ func (v *V1OrderHistoryEntry) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *V1OrderHistoryEntry) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetAction sets the Action field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1OrderHistoryEntry) SetAction(action *V1OrderHistoryEntryAction) {
+	v.Action = action
+	v.require(v1OrderHistoryEntryFieldAction)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1OrderHistoryEntry) SetCreatedAt(createdAt *string) {
+	v.CreatedAt = createdAt
+	v.require(v1OrderHistoryEntryFieldCreatedAt)
+}
+
 func (v *V1OrderHistoryEntry) UnmarshalJSON(data []byte) error {
 	type unmarshaler V1OrderHistoryEntry
 	var value unmarshaler
@@ -411,6 +848,17 @@ func (v *V1OrderHistoryEntry) UnmarshalJSON(data []byte) error {
 	v.extraProperties = extraProperties
 	v.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (v *V1OrderHistoryEntry) MarshalJSON() ([]byte, error) {
+	type embed V1OrderHistoryEntry
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (v *V1OrderHistoryEntry) String() string {
@@ -518,6 +966,25 @@ func (v V1OrderState) Ptr() *V1OrderState {
 // reduced and the merchant receives no funds. A `Tender` object with a type of
 // `SQUARE_GIFT_CARD` indicates a gift card was used for some or all of the
 // associated payment.
+var (
+	v1TenderFieldID              = big.NewInt(1 << 0)
+	v1TenderFieldType            = big.NewInt(1 << 1)
+	v1TenderFieldName            = big.NewInt(1 << 2)
+	v1TenderFieldEmployeeID      = big.NewInt(1 << 3)
+	v1TenderFieldReceiptURL      = big.NewInt(1 << 4)
+	v1TenderFieldCardBrand       = big.NewInt(1 << 5)
+	v1TenderFieldPanSuffix       = big.NewInt(1 << 6)
+	v1TenderFieldEntryMethod     = big.NewInt(1 << 7)
+	v1TenderFieldPaymentNote     = big.NewInt(1 << 8)
+	v1TenderFieldTotalMoney      = big.NewInt(1 << 9)
+	v1TenderFieldTenderedMoney   = big.NewInt(1 << 10)
+	v1TenderFieldTenderedAt      = big.NewInt(1 << 11)
+	v1TenderFieldSettledAt       = big.NewInt(1 << 12)
+	v1TenderFieldChangeBackMoney = big.NewInt(1 << 13)
+	v1TenderFieldRefundedMoney   = big.NewInt(1 << 14)
+	v1TenderFieldIsExchange      = big.NewInt(1 << 15)
+)
+
 type V1Tender struct {
 	// The tender's unique ID.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -554,6 +1021,9 @@ type V1Tender struct {
 	RefundedMoney *V1Money `json:"refunded_money,omitempty" url:"refunded_money,omitempty"`
 	// Indicates whether or not the tender is associated with an exchange. If is_exchange is true, the tender represents the value of goods returned in an exchange not the actual money paid. The exchange value reduces the tender amounts needed to pay for items purchased in the exchange.
 	IsExchange *bool `json:"is_exchange,omitempty" url:"is_exchange,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -675,6 +1145,125 @@ func (v *V1Tender) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *V1Tender) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetID(id *string) {
+	v.ID = id
+	v.require(v1TenderFieldID)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetType(type_ *V1TenderType) {
+	v.Type = type_
+	v.require(v1TenderFieldType)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetName(name *string) {
+	v.Name = name
+	v.require(v1TenderFieldName)
+}
+
+// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetEmployeeID(employeeID *string) {
+	v.EmployeeID = employeeID
+	v.require(v1TenderFieldEmployeeID)
+}
+
+// SetReceiptURL sets the ReceiptURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetReceiptURL(receiptURL *string) {
+	v.ReceiptURL = receiptURL
+	v.require(v1TenderFieldReceiptURL)
+}
+
+// SetCardBrand sets the CardBrand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetCardBrand(cardBrand *V1TenderCardBrand) {
+	v.CardBrand = cardBrand
+	v.require(v1TenderFieldCardBrand)
+}
+
+// SetPanSuffix sets the PanSuffix field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetPanSuffix(panSuffix *string) {
+	v.PanSuffix = panSuffix
+	v.require(v1TenderFieldPanSuffix)
+}
+
+// SetEntryMethod sets the EntryMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetEntryMethod(entryMethod *V1TenderEntryMethod) {
+	v.EntryMethod = entryMethod
+	v.require(v1TenderFieldEntryMethod)
+}
+
+// SetPaymentNote sets the PaymentNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetPaymentNote(paymentNote *string) {
+	v.PaymentNote = paymentNote
+	v.require(v1TenderFieldPaymentNote)
+}
+
+// SetTotalMoney sets the TotalMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetTotalMoney(totalMoney *V1Money) {
+	v.TotalMoney = totalMoney
+	v.require(v1TenderFieldTotalMoney)
+}
+
+// SetTenderedMoney sets the TenderedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetTenderedMoney(tenderedMoney *V1Money) {
+	v.TenderedMoney = tenderedMoney
+	v.require(v1TenderFieldTenderedMoney)
+}
+
+// SetTenderedAt sets the TenderedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetTenderedAt(tenderedAt *string) {
+	v.TenderedAt = tenderedAt
+	v.require(v1TenderFieldTenderedAt)
+}
+
+// SetSettledAt sets the SettledAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetSettledAt(settledAt *string) {
+	v.SettledAt = settledAt
+	v.require(v1TenderFieldSettledAt)
+}
+
+// SetChangeBackMoney sets the ChangeBackMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetChangeBackMoney(changeBackMoney *V1Money) {
+	v.ChangeBackMoney = changeBackMoney
+	v.require(v1TenderFieldChangeBackMoney)
+}
+
+// SetRefundedMoney sets the RefundedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetRefundedMoney(refundedMoney *V1Money) {
+	v.RefundedMoney = refundedMoney
+	v.require(v1TenderFieldRefundedMoney)
+}
+
+// SetIsExchange sets the IsExchange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *V1Tender) SetIsExchange(isExchange *bool) {
+	v.IsExchange = isExchange
+	v.require(v1TenderFieldIsExchange)
+}
+
 func (v *V1Tender) UnmarshalJSON(data []byte) error {
 	type unmarshaler V1Tender
 	var value unmarshaler
@@ -689,6 +1278,17 @@ func (v *V1Tender) UnmarshalJSON(data []byte) error {
 	v.extraProperties = extraProperties
 	v.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (v *V1Tender) MarshalJSON() ([]byte, error) {
+	type embed V1Tender
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (v *V1Tender) String() string {

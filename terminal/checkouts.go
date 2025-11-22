@@ -4,12 +4,39 @@ package terminal
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	cancelCheckoutsRequestFieldCheckoutID = big.NewInt(1 << 0)
 )
 
 type CancelCheckoutsRequest struct {
 	// The unique ID for the desired `TerminalCheckout`.
 	CheckoutID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelCheckoutsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCheckoutID sets the CheckoutID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelCheckoutsRequest) SetCheckoutID(checkoutID string) {
+	c.CheckoutID = checkoutID
+	c.require(cancelCheckoutsRequestFieldCheckoutID)
+}
+
+var (
+	createTerminalCheckoutRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTerminalCheckoutRequestFieldCheckout       = big.NewInt(1 << 1)
+)
 
 type CreateTerminalCheckoutRequest struct {
 	// A unique string that identifies this `CreateCheckout` request. Keys can be any valid string but
@@ -19,12 +46,63 @@ type CreateTerminalCheckoutRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The checkout to create.
 	Checkout *v2.TerminalCheckout `json:"checkout,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateTerminalCheckoutRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalCheckoutRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTerminalCheckoutRequestFieldIdempotencyKey)
+}
+
+// SetCheckout sets the Checkout field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v2.TerminalCheckout) {
+	c.Checkout = checkout
+	c.require(createTerminalCheckoutRequestFieldCheckout)
+}
+
+var (
+	getCheckoutsRequestFieldCheckoutID = big.NewInt(1 << 0)
+)
 
 type GetCheckoutsRequest struct {
 	// The unique ID for the desired `TerminalCheckout`.
 	CheckoutID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCheckoutsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetCheckoutID sets the CheckoutID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCheckoutsRequest) SetCheckoutID(checkoutID string) {
+	g.CheckoutID = checkoutID
+	g.require(getCheckoutsRequestFieldCheckoutID)
+}
+
+var (
+	searchTerminalCheckoutsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTerminalCheckoutsRequestFieldCursor = big.NewInt(1 << 1)
+	searchTerminalCheckoutsRequestFieldLimit  = big.NewInt(1 << 2)
+)
 
 type SearchTerminalCheckoutsRequest struct {
 	// Queries Terminal checkouts based on given conditions and the sort order.
@@ -36,4 +114,35 @@ type SearchTerminalCheckoutsRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"-"`
 	// Limits the number of results returned for a single request.
 	Limit *int `json:"limit,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchTerminalCheckoutsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalCheckoutsRequest) SetQuery(query *v2.TerminalCheckoutQuery) {
+	s.Query = query
+	s.require(searchTerminalCheckoutsRequestFieldQuery)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalCheckoutsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTerminalCheckoutsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTerminalCheckoutsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTerminalCheckoutsRequestFieldLimit)
 }

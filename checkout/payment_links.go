@@ -4,6 +4,17 @@ package checkout
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createPaymentLinkRequestFieldIdempotencyKey   = big.NewInt(1 << 0)
+	createPaymentLinkRequestFieldDescription      = big.NewInt(1 << 1)
+	createPaymentLinkRequestFieldQuickPay         = big.NewInt(1 << 2)
+	createPaymentLinkRequestFieldOrder            = big.NewInt(1 << 3)
+	createPaymentLinkRequestFieldCheckoutOptions  = big.NewInt(1 << 4)
+	createPaymentLinkRequestFieldPrePopulatedData = big.NewInt(1 << 5)
+	createPaymentLinkRequestFieldPaymentNote      = big.NewInt(1 << 6)
 )
 
 type CreatePaymentLinkRequest struct {
@@ -33,17 +44,123 @@ type CreatePaymentLinkRequest struct {
 	PrePopulatedData *v2.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
 	// A note for the payment. After processing the payment, Square adds this note to the resulting `Payment`.
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreatePaymentLinkRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createPaymentLinkRequestFieldIdempotencyKey)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetDescription(description *string) {
+	c.Description = description
+	c.require(createPaymentLinkRequestFieldDescription)
+}
+
+// SetQuickPay sets the QuickPay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetQuickPay(quickPay *v2.QuickPay) {
+	c.QuickPay = quickPay
+	c.require(createPaymentLinkRequestFieldQuickPay)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetOrder(order *v2.Order) {
+	c.Order = order
+	c.require(createPaymentLinkRequestFieldOrder)
+}
+
+// SetCheckoutOptions sets the CheckoutOptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetCheckoutOptions(checkoutOptions *v2.CheckoutOptions) {
+	c.CheckoutOptions = checkoutOptions
+	c.require(createPaymentLinkRequestFieldCheckoutOptions)
+}
+
+// SetPrePopulatedData sets the PrePopulatedData field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetPrePopulatedData(prePopulatedData *v2.PrePopulatedData) {
+	c.PrePopulatedData = prePopulatedData
+	c.require(createPaymentLinkRequestFieldPrePopulatedData)
+}
+
+// SetPaymentNote sets the PaymentNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentLinkRequest) SetPaymentNote(paymentNote *string) {
+	c.PaymentNote = paymentNote
+	c.require(createPaymentLinkRequestFieldPaymentNote)
+}
+
+var (
+	deletePaymentLinksRequestFieldID = big.NewInt(1 << 0)
+)
 
 type DeletePaymentLinksRequest struct {
 	// The ID of the payment link to delete.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeletePaymentLinksRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeletePaymentLinksRequest) SetID(id string) {
+	d.ID = id
+	d.require(deletePaymentLinksRequestFieldID)
+}
+
+var (
+	getPaymentLinksRequestFieldID = big.NewInt(1 << 0)
+)
 
 type GetPaymentLinksRequest struct {
 	// The ID of link to retrieve.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetPaymentLinksRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentLinksRequest) SetID(id string) {
+	g.ID = id
+	g.require(getPaymentLinksRequestFieldID)
+}
+
+var (
+	listPaymentLinksRequestFieldCursor = big.NewInt(1 << 0)
+	listPaymentLinksRequestFieldLimit  = big.NewInt(1 << 1)
+)
 
 type ListPaymentLinksRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -57,7 +174,36 @@ type ListPaymentLinksRequest struct {
 	//
 	// Default value: `100`
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListPaymentLinksRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentLinksRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listPaymentLinksRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentLinksRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listPaymentLinksRequestFieldLimit)
+}
+
+var (
+	updatePaymentLinkRequestFieldID          = big.NewInt(1 << 0)
+	updatePaymentLinkRequestFieldPaymentLink = big.NewInt(1 << 1)
+)
 
 type UpdatePaymentLinkRequest struct {
 	// The ID of the payment link to update.
@@ -65,4 +211,28 @@ type UpdatePaymentLinkRequest struct {
 	// The `payment_link` object describing the updates to apply.
 	// For more information, see [Update a payment link](https://developer.squareup.com/docs/checkout-api/manage-checkout#update-a-payment-link).
 	PaymentLink *v2.PaymentLink `json:"payment_link,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdatePaymentLinkRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentLinkRequest) SetID(id string) {
+	u.ID = id
+	u.require(updatePaymentLinkRequestFieldID)
+}
+
+// SetPaymentLink sets the PaymentLink field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdatePaymentLinkRequest) SetPaymentLink(paymentLink *v2.PaymentLink) {
+	u.PaymentLink = paymentLink
+	u.require(updatePaymentLinkRequestFieldPaymentLink)
 }

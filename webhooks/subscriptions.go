@@ -4,6 +4,12 @@ package webhooks
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createWebhookSubscriptionRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createWebhookSubscriptionRequestFieldSubscription   = big.NewInt(1 << 1)
 )
 
 type CreateWebhookSubscriptionRequest struct {
@@ -11,17 +17,90 @@ type CreateWebhookSubscriptionRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The [Subscription](entity:WebhookSubscription) to create.
 	Subscription *v2.WebhookSubscription `json:"subscription,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateWebhookSubscriptionRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateWebhookSubscriptionRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createWebhookSubscriptionRequestFieldIdempotencyKey)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateWebhookSubscriptionRequest) SetSubscription(subscription *v2.WebhookSubscription) {
+	c.Subscription = subscription
+	c.require(createWebhookSubscriptionRequestFieldSubscription)
+}
+
+var (
+	deleteSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+)
 
 type DeleteSubscriptionsRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to delete.
 	SubscriptionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteSubscriptionsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	d.SubscriptionID = subscriptionID
+	d.require(deleteSubscriptionsRequestFieldSubscriptionID)
+}
+
+var (
+	getSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
+)
 
 type GetSubscriptionsRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to retrieve.
 	SubscriptionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetSubscriptionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetSubscriptionsRequest) SetSubscriptionID(subscriptionID string) {
+	g.SubscriptionID = subscriptionID
+	g.require(getSubscriptionsRequestFieldSubscriptionID)
+}
+
+var (
+	listSubscriptionsRequestFieldCursor          = big.NewInt(1 << 0)
+	listSubscriptionsRequestFieldIncludeDisabled = big.NewInt(1 << 1)
+	listSubscriptionsRequestFieldSortOrder       = big.NewInt(1 << 2)
+	listSubscriptionsRequestFieldLimit           = big.NewInt(1 << 3)
+)
 
 type ListSubscriptionsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -41,7 +120,50 @@ type ListSubscriptionsRequest struct {
 	//
 	// Default: 100
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListSubscriptionsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listSubscriptionsRequestFieldCursor)
+}
+
+// SetIncludeDisabled sets the IncludeDisabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionsRequest) SetIncludeDisabled(includeDisabled *bool) {
+	l.IncludeDisabled = includeDisabled
+	l.require(listSubscriptionsRequestFieldIncludeDisabled)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionsRequest) SetSortOrder(sortOrder *v2.SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listSubscriptionsRequestFieldSortOrder)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListSubscriptionsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listSubscriptionsRequestFieldLimit)
+}
+
+var (
+	testWebhookSubscriptionRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	testWebhookSubscriptionRequestFieldEventType      = big.NewInt(1 << 1)
+)
 
 type TestWebhookSubscriptionRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to test.
@@ -49,18 +171,100 @@ type TestWebhookSubscriptionRequest struct {
 	// The event type that will be used to test the [Subscription](entity:WebhookSubscription). The event type must be
 	// contained in the list of event types in the [Subscription](entity:WebhookSubscription).
 	EventType *string `json:"event_type,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (t *TestWebhookSubscriptionRequest) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
+	t.SubscriptionID = subscriptionID
+	t.require(testWebhookSubscriptionRequestFieldSubscriptionID)
+}
+
+// SetEventType sets the EventType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionRequest) SetEventType(eventType *string) {
+	t.EventType = eventType
+	t.require(testWebhookSubscriptionRequestFieldEventType)
+}
+
+var (
+	updateWebhookSubscriptionRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	updateWebhookSubscriptionRequestFieldSubscription   = big.NewInt(1 << 1)
+)
 
 type UpdateWebhookSubscriptionRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to update.
 	SubscriptionID string `json:"-" url:"-"`
 	// The [Subscription](entity:WebhookSubscription) to update.
 	Subscription *v2.WebhookSubscription `json:"subscription,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateWebhookSubscriptionRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWebhookSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
+	u.SubscriptionID = subscriptionID
+	u.require(updateWebhookSubscriptionRequestFieldSubscriptionID)
+}
+
+// SetSubscription sets the Subscription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWebhookSubscriptionRequest) SetSubscription(subscription *v2.WebhookSubscription) {
+	u.Subscription = subscription
+	u.require(updateWebhookSubscriptionRequestFieldSubscription)
+}
+
+var (
+	updateWebhookSubscriptionSignatureKeyRequestFieldSubscriptionID = big.NewInt(1 << 0)
+	updateWebhookSubscriptionSignatureKeyRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+)
 
 type UpdateWebhookSubscriptionSignatureKeyRequest struct {
 	// [REQUIRED] The ID of the [Subscription](entity:WebhookSubscription) to update.
 	SubscriptionID string `json:"-" url:"-"`
 	// A unique string that identifies the [UpdateWebhookSubscriptionSignatureKey](api-endpoint:WebhookSubscriptions-UpdateWebhookSubscriptionSignatureKey) request.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateWebhookSubscriptionSignatureKeyRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWebhookSubscriptionSignatureKeyRequest) SetSubscriptionID(subscriptionID string) {
+	u.SubscriptionID = subscriptionID
+	u.require(updateWebhookSubscriptionSignatureKeyRequestFieldSubscriptionID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWebhookSubscriptionSignatureKeyRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateWebhookSubscriptionSignatureKeyRequestFieldIdempotencyKey)
 }

@@ -2,10 +2,41 @@
 
 package labor
 
+import (
+	big "math/big"
+)
+
+var (
+	getTeamMemberWagesRequestFieldID = big.NewInt(1 << 0)
+)
+
 type GetTeamMemberWagesRequest struct {
 	// The UUID for the `TeamMemberWage` being retrieved.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTeamMemberWagesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTeamMemberWagesRequest) SetID(id string) {
+	g.ID = id
+	g.require(getTeamMemberWagesRequestFieldID)
+}
+
+var (
+	listTeamMemberWagesRequestFieldTeamMemberID = big.NewInt(1 << 0)
+	listTeamMemberWagesRequestFieldLimit        = big.NewInt(1 << 1)
+	listTeamMemberWagesRequestFieldCursor       = big.NewInt(1 << 2)
+)
 
 type ListTeamMemberWagesRequest struct {
 	// Filter the returned wages to only those that are associated with the
@@ -16,4 +47,35 @@ type ListTeamMemberWagesRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// A pointer to the next page of `EmployeeWage` results to fetch.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListTeamMemberWagesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberWagesRequest) SetTeamMemberID(teamMemberID *string) {
+	l.TeamMemberID = teamMemberID
+	l.require(listTeamMemberWagesRequestFieldTeamMemberID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberWagesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listTeamMemberWagesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTeamMemberWagesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listTeamMemberWagesRequestFieldCursor)
 }

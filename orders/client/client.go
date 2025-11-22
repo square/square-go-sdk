@@ -4,13 +4,12 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
 	customattributedefinitions "github.com/square/square-go-sdk/v2/orders/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v2/orders/customattributes"
-	http "net/http"
 	os "os"
 )
 
@@ -19,13 +18,12 @@ type Client struct {
 	CustomAttributeDefinitions *customattributedefinitions.Client
 	CustomAttributes           *customattributes.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -33,9 +31,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		CustomAttributeDefinitions: customattributedefinitions.NewClient(opts...),
-		CustomAttributes:           customattributes.NewClient(opts...),
+		CustomAttributeDefinitions: customattributedefinitions.NewClient(options),
+		CustomAttributes:           customattributes.NewClient(options),
 		WithRawResponse:            NewRawClient(options),
+		options:                    options,
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -43,7 +42,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -56,9 +54,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // You can modify open orders using the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 func (c *Client) Create(
 	ctx context.Context,
-	request *v2.CreateOrderRequest,
+	request *square.CreateOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateOrderResponse, error) {
+) (*square.CreateOrderResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -75,9 +73,9 @@ func (c *Client) Create(
 // If a given order ID does not exist, the ID is ignored instead of generating an error.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *v2.BatchGetOrdersRequest,
+	request *square.BatchGetOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchGetOrdersResponse, error) {
+) (*square.BatchGetOrdersResponse, error) {
 	response, err := c.WithRawResponse.BatchGet(
 		ctx,
 		request,
@@ -92,9 +90,9 @@ func (c *Client) BatchGet(
 // Enables applications to preview order pricing without creating an order.
 func (c *Client) Calculate(
 	ctx context.Context,
-	request *v2.CalculateOrderRequest,
+	request *square.CalculateOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.CalculateOrderResponse, error) {
+) (*square.CalculateOrderResponse, error) {
 	response, err := c.WithRawResponse.Calculate(
 		ctx,
 		request,
@@ -110,9 +108,9 @@ func (c *Client) Calculate(
 // only the core fields (such as line items, taxes, and discounts) copied from the original order.
 func (c *Client) Clone(
 	ctx context.Context,
-	request *v2.CloneOrderRequest,
+	request *square.CloneOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.CloneOrderResponse, error) {
+) (*square.CloneOrderResponse, error) {
 	response, err := c.WithRawResponse.Clone(
 		ctx,
 		request,
@@ -144,9 +142,9 @@ func (c *Client) Clone(
 // not the time it was subsequently transmitted to Square.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchOrdersRequest,
+	request *square.SearchOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchOrdersResponse, error) {
+) (*square.SearchOrdersResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -161,9 +159,9 @@ func (c *Client) Search(
 // Retrieves an [Order](entity:Order) by ID.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetOrdersRequest,
+	request *square.GetOrdersRequest,
 	opts ...option.RequestOption,
-) (*v2.GetOrderResponse, error) {
+) (*square.GetOrderResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -192,9 +190,9 @@ func (c *Client) Get(
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
 func (c *Client) Update(
 	ctx context.Context,
-	request *v2.UpdateOrderRequest,
+	request *square.UpdateOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateOrderResponse, error) {
+) (*square.UpdateOrderResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -222,9 +220,9 @@ func (c *Client) Update(
 // Using a delayed capture payment with `PayOrder` completes the approved payment.
 func (c *Client) Pay(
 	ctx context.Context,
-	request *v2.PayOrderRequest,
+	request *square.PayOrderRequest,
 	opts ...option.RequestOption,
-) (*v2.PayOrderResponse, error) {
+) (*square.PayOrderResponse, error) {
 	response, err := c.WithRawResponse.Pay(
 		ctx,
 		request,

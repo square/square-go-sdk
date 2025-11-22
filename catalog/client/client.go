@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	images "github.com/square/square-go-sdk/v2/catalog/images"
 	object "github.com/square/square-go-sdk/v2/catalog/object"
 	core "github.com/square/square-go-sdk/v2/core"
@@ -19,13 +19,12 @@ type Client struct {
 	Images          *images.Client
 	Object          *object.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -33,9 +32,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Images:          images.NewClient(opts...),
-		Object:          object.NewClient(opts...),
+		Images:          images.NewClient(options),
+		Object:          object.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -43,7 +43,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -63,9 +62,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // delete requests are rejected with the `429` error code.
 func (c *Client) BatchDelete(
 	ctx context.Context,
-	request *v2.BatchDeleteCatalogObjectsRequest,
+	request *square.BatchDeleteCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchDeleteCatalogObjectsResponse, error) {
+) (*square.BatchDeleteCatalogObjectsResponse, error) {
 	response, err := c.WithRawResponse.BatchDelete(
 		ctx,
 		request,
@@ -85,9 +84,9 @@ func (c *Client) BatchDelete(
 // any [CatalogTax](entity:CatalogTax) objects that apply to it.
 func (c *Client) BatchGet(
 	ctx context.Context,
-	request *v2.BatchGetCatalogObjectsRequest,
+	request *square.BatchGetCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchGetCatalogObjectsResponse, error) {
+) (*square.BatchGetCatalogObjectsResponse, error) {
 	response, err := c.WithRawResponse.BatchGet(
 		ctx,
 		request,
@@ -114,9 +113,9 @@ func (c *Client) BatchGet(
 // update requests are rejected with the `429` error code.
 func (c *Client) BatchUpsert(
 	ctx context.Context,
-	request *v2.BatchUpsertCatalogObjectsRequest,
+	request *square.BatchUpsertCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*v2.BatchUpsertCatalogObjectsResponse, error) {
+) (*square.BatchUpsertCatalogObjectsResponse, error) {
 	response, err := c.WithRawResponse.BatchUpsert(
 		ctx,
 		request,
@@ -133,7 +132,7 @@ func (c *Client) BatchUpsert(
 func (c *Client) Info(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.CatalogInfoResponse, error) {
+) (*square.CatalogInfoResponse, error) {
 	response, err := c.WithRawResponse.Info(
 		ctx,
 		opts...,
@@ -154,9 +153,9 @@ func (c *Client) Info(
 // and set the `include_deleted_objects` attribute value to `true`.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListCatalogRequest,
+	request *square.ListCatalogRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.CatalogObject], error) {
+) (*core.Page[*string, *square.CatalogObject, *square.ListCatalogResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -169,10 +168,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -191,14 +190,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListCatalogResponse) *internal.PageResponse[*string, *v2.CatalogObject] {
+	readPageResponse := func(response *square.ListCatalogResponse) *core.PageResponse[*string, *square.CatalogObject, *square.ListCatalogResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetObjects()
-		return &internal.PageResponse[*string, *v2.CatalogObject]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.CatalogObject, *square.ListCatalogResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -221,9 +221,9 @@ func (c *Client) List(
 // - The both endpoints have different call conventions, including the query filter formats.
 func (c *Client) Search(
 	ctx context.Context,
-	request *v2.SearchCatalogObjectsRequest,
+	request *square.SearchCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchCatalogObjectsResponse, error) {
+) (*square.SearchCatalogObjectsResponse, error) {
 	response, err := c.WithRawResponse.Search(
 		ctx,
 		request,
@@ -247,9 +247,9 @@ func (c *Client) Search(
 // - The both endpoints use different call conventions, including the query filter formats.
 func (c *Client) SearchItems(
 	ctx context.Context,
-	request *v2.SearchCatalogItemsRequest,
+	request *square.SearchCatalogItemsRequest,
 	opts ...option.RequestOption,
-) (*v2.SearchCatalogItemsResponse, error) {
+) (*square.SearchCatalogItemsResponse, error) {
 	response, err := c.WithRawResponse.SearchItems(
 		ctx,
 		request,
@@ -266,9 +266,9 @@ func (c *Client) SearchItems(
 // to perform an upsert on the entire item.
 func (c *Client) UpdateItemModifierLists(
 	ctx context.Context,
-	request *v2.UpdateItemModifierListsRequest,
+	request *square.UpdateItemModifierListsRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateItemModifierListsResponse, error) {
+) (*square.UpdateItemModifierListsResponse, error) {
 	response, err := c.WithRawResponse.UpdateItemModifierLists(
 		ctx,
 		request,
@@ -285,9 +285,9 @@ func (c *Client) UpdateItemModifierLists(
 // upsert on the entire item.
 func (c *Client) UpdateItemTaxes(
 	ctx context.Context,
-	request *v2.UpdateItemTaxesRequest,
+	request *square.UpdateItemTaxesRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateItemTaxesResponse, error) {
+) (*square.UpdateItemTaxesResponse, error) {
 	response, err := c.WithRawResponse.UpdateItemTaxes(
 		ctx,
 		request,

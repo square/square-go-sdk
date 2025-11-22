@@ -6,6 +6,12 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	bulkPublishScheduledShiftsRequestFieldScheduledShifts                    = big.NewInt(1 << 0)
+	bulkPublishScheduledShiftsRequestFieldScheduledShiftNotificationAudience = big.NewInt(1 << 1)
 )
 
 type BulkPublishScheduledShiftsRequest struct {
@@ -20,7 +26,36 @@ type BulkPublishScheduledShiftsRequest struct {
 	// specified in the bulk operation. The default value is `AFFECTED`.
 	// See [ScheduledShiftNotificationAudience](#type-scheduledshiftnotificationaudience) for possible values
 	ScheduledShiftNotificationAudience *ScheduledShiftNotificationAudience `json:"scheduled_shift_notification_audience,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkPublishScheduledShiftsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetScheduledShifts sets the ScheduledShifts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkPublishScheduledShiftsRequest) SetScheduledShifts(scheduledShifts map[string]*BulkPublishScheduledShiftsData) {
+	b.ScheduledShifts = scheduledShifts
+	b.require(bulkPublishScheduledShiftsRequestFieldScheduledShifts)
+}
+
+// SetScheduledShiftNotificationAudience sets the ScheduledShiftNotificationAudience field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkPublishScheduledShiftsRequest) SetScheduledShiftNotificationAudience(scheduledShiftNotificationAudience *ScheduledShiftNotificationAudience) {
+	b.ScheduledShiftNotificationAudience = scheduledShiftNotificationAudience
+	b.require(bulkPublishScheduledShiftsRequestFieldScheduledShiftNotificationAudience)
+}
+
+var (
+	createScheduledShiftRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createScheduledShiftRequestFieldScheduledShift = big.NewInt(1 << 1)
+)
 
 type CreateScheduledShiftRequest struct {
 	// A unique identifier for the `CreateScheduledShift` request, used to ensure the
@@ -35,19 +70,100 @@ type CreateScheduledShiftRequest struct {
 	// The `start_at` and `end_at` timestamps must be provided in the time zone + offset of the
 	// shift location specified in `location_id`. Example for Pacific Standard Time: 2024-10-31T12:30:00-08:00
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateScheduledShiftRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateScheduledShiftRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createScheduledShiftRequestFieldIdempotencyKey)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateScheduledShiftRequest) SetScheduledShift(scheduledShift *ScheduledShift) {
+	c.ScheduledShift = scheduledShift
+	c.require(createScheduledShiftRequestFieldScheduledShift)
+}
+
+var (
+	createTimecardRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createTimecardRequestFieldTimecard       = big.NewInt(1 << 1)
+)
 
 type CreateTimecardRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Timecard` to be created.
 	Timecard *Timecard `json:"timecard,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateTimecardRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTimecardRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createTimecardRequestFieldIdempotencyKey)
+}
+
+// SetTimecard sets the Timecard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTimecardRequest) SetTimecard(timecard *Timecard) {
+	c.Timecard = timecard
+	c.require(createTimecardRequestFieldTimecard)
+}
+
+var (
+	deleteTimecardRequestFieldID = big.NewInt(1 << 0)
+)
 
 type DeleteTimecardRequest struct {
 	// The UUID for the `Timecard` being deleted.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteTimecardRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteTimecardRequest) SetID(id string) {
+	d.ID = id
+	d.require(deleteTimecardRequestFieldID)
+}
+
+var (
+	publishScheduledShiftRequestFieldID                                 = big.NewInt(1 << 0)
+	publishScheduledShiftRequestFieldIdempotencyKey                     = big.NewInt(1 << 1)
+	publishScheduledShiftRequestFieldVersion                            = big.NewInt(1 << 2)
+	publishScheduledShiftRequestFieldScheduledShiftNotificationAudience = big.NewInt(1 << 3)
+)
 
 type PublishScheduledShiftRequest struct {
 	// The ID of the scheduled shift to publish.
@@ -64,17 +180,103 @@ type PublishScheduledShiftRequest struct {
 	// which team members should receive the notification. The default value is `AFFECTED`.
 	// See [ScheduledShiftNotificationAudience](#type-scheduledshiftnotificationaudience) for possible values
 	ScheduledShiftNotificationAudience *ScheduledShiftNotificationAudience `json:"scheduled_shift_notification_audience,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (p *PublishScheduledShiftRequest) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftRequest) SetID(id string) {
+	p.ID = id
+	p.require(publishScheduledShiftRequestFieldID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftRequest) SetIdempotencyKey(idempotencyKey string) {
+	p.IdempotencyKey = idempotencyKey
+	p.require(publishScheduledShiftRequestFieldIdempotencyKey)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftRequest) SetVersion(version *int) {
+	p.Version = version
+	p.require(publishScheduledShiftRequestFieldVersion)
+}
+
+// SetScheduledShiftNotificationAudience sets the ScheduledShiftNotificationAudience field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftRequest) SetScheduledShiftNotificationAudience(scheduledShiftNotificationAudience *ScheduledShiftNotificationAudience) {
+	p.ScheduledShiftNotificationAudience = scheduledShiftNotificationAudience
+	p.require(publishScheduledShiftRequestFieldScheduledShiftNotificationAudience)
+}
+
+var (
+	retrieveScheduledShiftRequestFieldID = big.NewInt(1 << 0)
+)
 
 type RetrieveScheduledShiftRequest struct {
 	// The ID of the scheduled shift to retrieve.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RetrieveScheduledShiftRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveScheduledShiftRequest) SetID(id string) {
+	r.ID = id
+	r.require(retrieveScheduledShiftRequestFieldID)
+}
+
+var (
+	retrieveTimecardRequestFieldID = big.NewInt(1 << 0)
+)
 
 type RetrieveTimecardRequest struct {
 	// The UUID for the `Timecard` being retrieved.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RetrieveTimecardRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTimecardRequest) SetID(id string) {
+	r.ID = id
+	r.require(retrieveTimecardRequestFieldID)
+}
+
+var (
+	searchScheduledShiftsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchScheduledShiftsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchScheduledShiftsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchScheduledShiftsRequest struct {
 	// Query conditions used to filter and sort the results.
@@ -85,7 +287,44 @@ type SearchScheduledShiftsRequest struct {
 	// this cursor to retrieve the next page of results for your original request. For more
 	// information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchScheduledShiftsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsRequest) SetQuery(query *ScheduledShiftQuery) {
+	s.Query = query
+	s.require(searchScheduledShiftsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchScheduledShiftsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchScheduledShiftsRequestFieldCursor)
+}
+
+var (
+	searchTimecardsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchTimecardsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchTimecardsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchTimecardsRequest struct {
 	// Query filters.
@@ -94,7 +333,43 @@ type SearchTimecardsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// An opaque cursor for fetching the next page.
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchTimecardsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsRequest) SetQuery(query *TimecardQuery) {
+	s.Query = query
+	s.require(searchTimecardsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchTimecardsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTimecardsRequestFieldCursor)
+}
+
+var (
+	updateScheduledShiftRequestFieldID             = big.NewInt(1 << 0)
+	updateScheduledShiftRequestFieldScheduledShift = big.NewInt(1 << 1)
+)
 
 type UpdateScheduledShiftRequest struct {
 	// The ID of the scheduled shift to update.
@@ -113,23 +388,83 @@ type UpdateScheduledShiftRequest struct {
 	// If the provided version doesn't match the server version, the request fails. If `version` is
 	// omitted, Square executes a blind write, potentially overwriting data from another publish request.
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateScheduledShiftRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateScheduledShiftRequest) SetID(id string) {
+	u.ID = id
+	u.require(updateScheduledShiftRequestFieldID)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateScheduledShiftRequest) SetScheduledShift(scheduledShift *ScheduledShift) {
+	u.ScheduledShift = scheduledShift
+	u.require(updateScheduledShiftRequestFieldScheduledShift)
+}
+
+var (
+	updateTimecardRequestFieldID       = big.NewInt(1 << 0)
+	updateTimecardRequestFieldTimecard = big.NewInt(1 << 1)
+)
 
 type UpdateTimecardRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Timecard` object.
 	Timecard *Timecard `json:"timecard,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateTimecardRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTimecardRequest) SetID(id string) {
+	u.ID = id
+	u.require(updateTimecardRequestFieldID)
+}
+
+// SetTimecard sets the Timecard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTimecardRequest) SetTimecard(timecard *Timecard) {
+	u.Timecard = timecard
+	u.require(updateTimecardRequestFieldTimecard)
 }
 
 // Represents options for an individual publish request in a
 // [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts)
 // operation, provided as the value in a key-value pair.
+var (
+	bulkPublishScheduledShiftsDataFieldVersion = big.NewInt(1 << 0)
+)
+
 type BulkPublishScheduledShiftsData struct {
 	// The current version of the scheduled shift, used to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control. If the provided version doesn't match the server version, the request fails.
 	// If omitted, Square executes a blind write, potentially overwriting data from another publish request.
 	Version *int `json:"version,omitempty" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -144,6 +479,20 @@ func (b *BulkPublishScheduledShiftsData) GetVersion() *int {
 
 func (b *BulkPublishScheduledShiftsData) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
+}
+
+func (b *BulkPublishScheduledShiftsData) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkPublishScheduledShiftsData) SetVersion(version *int) {
+	b.Version = version
+	b.require(bulkPublishScheduledShiftsDataFieldVersion)
 }
 
 func (b *BulkPublishScheduledShiftsData) UnmarshalJSON(data []byte) error {
@@ -162,6 +511,17 @@ func (b *BulkPublishScheduledShiftsData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkPublishScheduledShiftsData) MarshalJSON() ([]byte, error) {
+	type embed BulkPublishScheduledShiftsData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkPublishScheduledShiftsData) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -176,6 +536,11 @@ func (b *BulkPublishScheduledShiftsData) String() string {
 
 // Represents a [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts) response.
 // Either `scheduled_shifts` or `errors` is present in the response.
+var (
+	bulkPublishScheduledShiftsResponseFieldResponses = big.NewInt(1 << 0)
+	bulkPublishScheduledShiftsResponseFieldErrors    = big.NewInt(1 << 1)
+)
+
 type BulkPublishScheduledShiftsResponse struct {
 	// A map of key-value pairs that represent responses for individual publish requests.
 	// The order of responses might differ from the order in which the requests were provided.
@@ -187,6 +552,9 @@ type BulkPublishScheduledShiftsResponse struct {
 	Responses map[string]*PublishScheduledShiftResponse `json:"responses,omitempty" url:"responses,omitempty"`
 	// Any top-level errors that prevented the bulk operation from succeeding.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -210,6 +578,27 @@ func (b *BulkPublishScheduledShiftsResponse) GetExtraProperties() map[string]int
 	return b.extraProperties
 }
 
+func (b *BulkPublishScheduledShiftsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkPublishScheduledShiftsResponse) SetResponses(responses map[string]*PublishScheduledShiftResponse) {
+	b.Responses = responses
+	b.require(bulkPublishScheduledShiftsResponseFieldResponses)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkPublishScheduledShiftsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkPublishScheduledShiftsResponseFieldErrors)
+}
+
 func (b *BulkPublishScheduledShiftsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkPublishScheduledShiftsResponse
 	var value unmarshaler
@@ -226,6 +615,17 @@ func (b *BulkPublishScheduledShiftsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkPublishScheduledShiftsResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkPublishScheduledShiftsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkPublishScheduledShiftsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -240,6 +640,11 @@ func (b *BulkPublishScheduledShiftsResponse) String() string {
 
 // Represents a [CreateScheduledShift](api-endpoint:Labor-CreateScheduledShift) response.
 // Either `scheduled_shift` or `errors` is present in the response.
+var (
+	createScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
+	createScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
+)
+
 type CreateScheduledShiftResponse struct {
 	// The new scheduled shift. To make the shift public, call
 	// [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) or
@@ -247,6 +652,9 @@ type CreateScheduledShiftResponse struct {
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -270,6 +678,27 @@ func (c *CreateScheduledShiftResponse) GetExtraProperties() map[string]interface
 	return c.extraProperties
 }
 
+func (c *CreateScheduledShiftResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateScheduledShiftResponse) SetScheduledShift(scheduledShift *ScheduledShift) {
+	c.ScheduledShift = scheduledShift
+	c.require(createScheduledShiftResponseFieldScheduledShift)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateScheduledShiftResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createScheduledShiftResponseFieldErrors)
+}
+
 func (c *CreateScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateScheduledShiftResponse
 	var value unmarshaler
@@ -284,6 +713,17 @@ func (c *CreateScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CreateScheduledShiftResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateScheduledShiftResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CreateScheduledShiftResponse) String() string {
@@ -301,11 +741,19 @@ func (c *CreateScheduledShiftResponse) String() string {
 // The response to a request to create a `Timecard`. The response contains
 // the created `Timecard` object and might contain a set of `Error` objects if
 // the request resulted in errors.
+var (
+	createTimecardResponseFieldTimecard = big.NewInt(1 << 0)
+	createTimecardResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type CreateTimecardResponse struct {
 	// The `Timecard` that was created on the request.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -329,6 +777,27 @@ func (c *CreateTimecardResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateTimecardResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTimecard sets the Timecard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTimecardResponse) SetTimecard(timecard *Timecard) {
+	c.Timecard = timecard
+	c.require(createTimecardResponseFieldTimecard)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTimecardResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createTimecardResponseFieldErrors)
+}
+
 func (c *CreateTimecardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateTimecardResponse
 	var value unmarshaler
@@ -345,6 +814,17 @@ func (c *CreateTimecardResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateTimecardResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateTimecardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateTimecardResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -359,9 +839,16 @@ func (c *CreateTimecardResponse) String() string {
 
 // The response to a request to delete a `Timecard`. The response might contain a set of
 // `Error` objects if the request resulted in errors.
+var (
+	deleteTimecardResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteTimecardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -376,6 +863,20 @@ func (d *DeleteTimecardResponse) GetErrors() []*Error {
 
 func (d *DeleteTimecardResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteTimecardResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteTimecardResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteTimecardResponseFieldErrors)
 }
 
 func (d *DeleteTimecardResponse) UnmarshalJSON(data []byte) error {
@@ -394,6 +895,17 @@ func (d *DeleteTimecardResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteTimecardResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteTimecardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteTimecardResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -408,11 +920,19 @@ func (d *DeleteTimecardResponse) String() string {
 
 // Represents a [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) response.
 // Either `scheduled_shift` or `errors` is present in the response.
+var (
+	publishScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
+	publishScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
+)
+
 type PublishScheduledShiftResponse struct {
 	// The published scheduled shift.
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -436,6 +956,27 @@ func (p *PublishScheduledShiftResponse) GetExtraProperties() map[string]interfac
 	return p.extraProperties
 }
 
+func (p *PublishScheduledShiftResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftResponse) SetScheduledShift(scheduledShift *ScheduledShift) {
+	p.ScheduledShift = scheduledShift
+	p.require(publishScheduledShiftResponseFieldScheduledShift)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishScheduledShiftResponse) SetErrors(errors []*Error) {
+	p.Errors = errors
+	p.require(publishScheduledShiftResponseFieldErrors)
+}
+
 func (p *PublishScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler PublishScheduledShiftResponse
 	var value unmarshaler
@@ -452,6 +993,17 @@ func (p *PublishScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PublishScheduledShiftResponse) MarshalJSON() ([]byte, error) {
+	type embed PublishScheduledShiftResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (p *PublishScheduledShiftResponse) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
@@ -466,11 +1018,19 @@ func (p *PublishScheduledShiftResponse) String() string {
 
 // Represents a [RetrieveScheduledShift](api-endpoint:Labor-RetrieveScheduledShift) response.
 // Either `scheduled_shift` or `errors` is present in the response.
+var (
+	retrieveScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
+	retrieveScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
+)
+
 type RetrieveScheduledShiftResponse struct {
 	// The requested scheduled shift.
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -494,6 +1054,27 @@ func (r *RetrieveScheduledShiftResponse) GetExtraProperties() map[string]interfa
 	return r.extraProperties
 }
 
+func (r *RetrieveScheduledShiftResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveScheduledShiftResponse) SetScheduledShift(scheduledShift *ScheduledShift) {
+	r.ScheduledShift = scheduledShift
+	r.require(retrieveScheduledShiftResponseFieldScheduledShift)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveScheduledShiftResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveScheduledShiftResponseFieldErrors)
+}
+
 func (r *RetrieveScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveScheduledShiftResponse
 	var value unmarshaler
@@ -508,6 +1089,17 @@ func (r *RetrieveScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RetrieveScheduledShiftResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveScheduledShiftResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RetrieveScheduledShiftResponse) String() string {
@@ -525,11 +1117,19 @@ func (r *RetrieveScheduledShiftResponse) String() string {
 // A response to a request to get a `Timecard`. The response contains
 // the requested `Timecard` object and might contain a set of `Error` objects if
 // the request resulted in errors.
+var (
+	retrieveTimecardResponseFieldTimecard = big.NewInt(1 << 0)
+	retrieveTimecardResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type RetrieveTimecardResponse struct {
 	// The requested `Timecard`.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -553,6 +1153,27 @@ func (r *RetrieveTimecardResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RetrieveTimecardResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetTimecard sets the Timecard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTimecardResponse) SetTimecard(timecard *Timecard) {
+	r.Timecard = timecard
+	r.require(retrieveTimecardResponseFieldTimecard)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTimecardResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveTimecardResponseFieldErrors)
+}
+
 func (r *RetrieveTimecardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveTimecardResponse
 	var value unmarshaler
@@ -567,6 +1188,17 @@ func (r *RetrieveTimecardResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RetrieveTimecardResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveTimecardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RetrieveTimecardResponse) String() string {
@@ -584,6 +1216,15 @@ func (r *RetrieveTimecardResponse) String() string {
 // Represents a specific time slot in a work schedule. This object is used to manage the
 // lifecycle of a scheduled shift from the draft to published state. A scheduled shift contains
 // the latest draft shift details and current published shift details.
+var (
+	scheduledShiftFieldID                    = big.NewInt(1 << 0)
+	scheduledShiftFieldDraftShiftDetails     = big.NewInt(1 << 1)
+	scheduledShiftFieldPublishedShiftDetails = big.NewInt(1 << 2)
+	scheduledShiftFieldVersion               = big.NewInt(1 << 3)
+	scheduledShiftFieldCreatedAt             = big.NewInt(1 << 4)
+	scheduledShiftFieldUpdatedAt             = big.NewInt(1 << 5)
+)
+
 type ScheduledShift struct {
 	// **Read only** The Square-issued ID of the scheduled shift.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -601,6 +1242,9 @@ type ScheduledShift struct {
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The timestamp of when the scheduled shift was last updated, in RFC 3339 format presented as UTC.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -652,6 +1296,55 @@ func (s *ScheduledShift) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShift) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetID(id *string) {
+	s.ID = id
+	s.require(scheduledShiftFieldID)
+}
+
+// SetDraftShiftDetails sets the DraftShiftDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetDraftShiftDetails(draftShiftDetails *ScheduledShiftDetails) {
+	s.DraftShiftDetails = draftShiftDetails
+	s.require(scheduledShiftFieldDraftShiftDetails)
+}
+
+// SetPublishedShiftDetails sets the PublishedShiftDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetPublishedShiftDetails(publishedShiftDetails *ScheduledShiftDetails) {
+	s.PublishedShiftDetails = publishedShiftDetails
+	s.require(scheduledShiftFieldPublishedShiftDetails)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetVersion(version *int) {
+	s.Version = version
+	s.require(scheduledShiftFieldVersion)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetCreatedAt(createdAt *string) {
+	s.CreatedAt = createdAt
+	s.require(scheduledShiftFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShift) SetUpdatedAt(updatedAt *string) {
+	s.UpdatedAt = updatedAt
+	s.require(scheduledShiftFieldUpdatedAt)
+}
+
 func (s *ScheduledShift) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShift
 	var value unmarshaler
@@ -668,6 +1361,17 @@ func (s *ScheduledShift) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *ScheduledShift) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShift
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *ScheduledShift) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -682,6 +1386,17 @@ func (s *ScheduledShift) String() string {
 
 // Represents shift details for draft and published versions of a [scheduled shift](entity:ScheduledShift),
 // such as job ID, team member assignment, and start and end times.
+var (
+	scheduledShiftDetailsFieldTeamMemberID = big.NewInt(1 << 0)
+	scheduledShiftDetailsFieldLocationID   = big.NewInt(1 << 1)
+	scheduledShiftDetailsFieldJobID        = big.NewInt(1 << 2)
+	scheduledShiftDetailsFieldStartAt      = big.NewInt(1 << 3)
+	scheduledShiftDetailsFieldEndAt        = big.NewInt(1 << 4)
+	scheduledShiftDetailsFieldNotes        = big.NewInt(1 << 5)
+	scheduledShiftDetailsFieldIsDeleted    = big.NewInt(1 << 6)
+	scheduledShiftDetailsFieldTimezone     = big.NewInt(1 << 7)
+)
+
 type ScheduledShiftDetails struct {
 	// The ID of the [team member](entity:TeamMember) scheduled for the shift.
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
@@ -706,6 +1421,9 @@ type ScheduledShiftDetails struct {
 	// The time zone of the shift location, calculated based on the `location_id`. This field
 	// is provided for convenience.
 	Timezone *string `json:"timezone,omitempty" url:"timezone,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -771,6 +1489,69 @@ func (s *ScheduledShiftDetails) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShiftDetails) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetTeamMemberID(teamMemberID *string) {
+	s.TeamMemberID = teamMemberID
+	s.require(scheduledShiftDetailsFieldTeamMemberID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetLocationID(locationID *string) {
+	s.LocationID = locationID
+	s.require(scheduledShiftDetailsFieldLocationID)
+}
+
+// SetJobID sets the JobID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetJobID(jobID *string) {
+	s.JobID = jobID
+	s.require(scheduledShiftDetailsFieldJobID)
+}
+
+// SetStartAt sets the StartAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetStartAt(startAt *string) {
+	s.StartAt = startAt
+	s.require(scheduledShiftDetailsFieldStartAt)
+}
+
+// SetEndAt sets the EndAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetEndAt(endAt *string) {
+	s.EndAt = endAt
+	s.require(scheduledShiftDetailsFieldEndAt)
+}
+
+// SetNotes sets the Notes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetNotes(notes *string) {
+	s.Notes = notes
+	s.require(scheduledShiftDetailsFieldNotes)
+}
+
+// SetIsDeleted sets the IsDeleted field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetIsDeleted(isDeleted *bool) {
+	s.IsDeleted = isDeleted
+	s.require(scheduledShiftDetailsFieldIsDeleted)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftDetails) SetTimezone(timezone *string) {
+	s.Timezone = timezone
+	s.require(scheduledShiftDetailsFieldTimezone)
+}
+
 func (s *ScheduledShiftDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShiftDetails
 	var value unmarshaler
@@ -787,6 +1568,17 @@ func (s *ScheduledShiftDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *ScheduledShiftDetails) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShiftDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *ScheduledShiftDetails) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -801,6 +1593,16 @@ func (s *ScheduledShiftDetails) String() string {
 
 // Defines filter criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
 // request. Multiple filters in a query are combined as an `AND` operation.
+var (
+	scheduledShiftFilterFieldLocationIDs            = big.NewInt(1 << 0)
+	scheduledShiftFilterFieldStart                  = big.NewInt(1 << 1)
+	scheduledShiftFilterFieldEnd                    = big.NewInt(1 << 2)
+	scheduledShiftFilterFieldWorkday                = big.NewInt(1 << 3)
+	scheduledShiftFilterFieldTeamMemberIDs          = big.NewInt(1 << 4)
+	scheduledShiftFilterFieldAssignmentStatus       = big.NewInt(1 << 5)
+	scheduledShiftFilterFieldScheduledShiftStatuses = big.NewInt(1 << 6)
+)
+
 type ScheduledShiftFilter struct {
 	// Return shifts for the specified locations. When omitted, shifts for all
 	// locations are returned. If needed, call [ListLocations](api-endpoint:Locations-ListLocations)
@@ -836,6 +1638,9 @@ type ScheduledShiftFilter struct {
 	// with the `DRAFT` filter.
 	// See [ScheduledShiftFilterScheduledShiftStatus](#type-scheduledshiftfilterscheduledshiftstatus) for possible values
 	ScheduledShiftStatuses []ScheduledShiftFilterScheduledShiftStatus `json:"scheduled_shift_statuses,omitempty" url:"scheduled_shift_statuses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -894,6 +1699,62 @@ func (s *ScheduledShiftFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShiftFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetLocationIDs(locationIDs []string) {
+	s.LocationIDs = locationIDs
+	s.require(scheduledShiftFilterFieldLocationIDs)
+}
+
+// SetStart sets the Start field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetStart(start *TimeRange) {
+	s.Start = start
+	s.require(scheduledShiftFilterFieldStart)
+}
+
+// SetEnd sets the End field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetEnd(end *TimeRange) {
+	s.End = end
+	s.require(scheduledShiftFilterFieldEnd)
+}
+
+// SetWorkday sets the Workday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetWorkday(workday *ScheduledShiftWorkday) {
+	s.Workday = workday
+	s.require(scheduledShiftFilterFieldWorkday)
+}
+
+// SetTeamMemberIDs sets the TeamMemberIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetTeamMemberIDs(teamMemberIDs []string) {
+	s.TeamMemberIDs = teamMemberIDs
+	s.require(scheduledShiftFilterFieldTeamMemberIDs)
+}
+
+// SetAssignmentStatus sets the AssignmentStatus field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetAssignmentStatus(assignmentStatus *ScheduledShiftFilterAssignmentStatus) {
+	s.AssignmentStatus = assignmentStatus
+	s.require(scheduledShiftFilterFieldAssignmentStatus)
+}
+
+// SetScheduledShiftStatuses sets the ScheduledShiftStatuses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftFilter) SetScheduledShiftStatuses(scheduledShiftStatuses []ScheduledShiftFilterScheduledShiftStatus) {
+	s.ScheduledShiftStatuses = scheduledShiftStatuses
+	s.require(scheduledShiftFilterFieldScheduledShiftStatuses)
+}
+
 func (s *ScheduledShiftFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShiftFilter
 	var value unmarshaler
@@ -908,6 +1769,17 @@ func (s *ScheduledShiftFilter) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *ScheduledShiftFilter) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShiftFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *ScheduledShiftFilter) String() string {
@@ -1001,11 +1873,19 @@ func (s ScheduledShiftNotificationAudience) Ptr() *ScheduledShiftNotificationAud
 
 // Represents filter and sort criteria for the `query` field in a
 // [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) request.
+var (
+	scheduledShiftQueryFieldFilter = big.NewInt(1 << 0)
+	scheduledShiftQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type ScheduledShiftQuery struct {
 	// Filtering options for the query.
 	Filter *ScheduledShiftFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Sorting options for the query.
 	Sort *ScheduledShiftSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1029,6 +1909,27 @@ func (s *ScheduledShiftQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShiftQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftQuery) SetFilter(filter *ScheduledShiftFilter) {
+	s.Filter = filter
+	s.require(scheduledShiftQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftQuery) SetSort(sort *ScheduledShiftSort) {
+	s.Sort = sort
+	s.require(scheduledShiftQueryFieldSort)
+}
+
 func (s *ScheduledShiftQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShiftQuery
 	var value unmarshaler
@@ -1045,6 +1946,17 @@ func (s *ScheduledShiftQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *ScheduledShiftQuery) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShiftQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *ScheduledShiftQuery) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1059,6 +1971,11 @@ func (s *ScheduledShiftQuery) String() string {
 
 // Defines sort criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
 // request.
+var (
+	scheduledShiftSortFieldField = big.NewInt(1 << 0)
+	scheduledShiftSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type ScheduledShiftSort struct {
 	// The field to sort on. The default value is `START_AT`.
 	// See [ScheduledShiftSortField](#type-scheduledshiftsortfield) for possible values
@@ -1066,6 +1983,9 @@ type ScheduledShiftSort struct {
 	// The order in which results are returned. The default value is `ASC`.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1089,6 +2009,27 @@ func (s *ScheduledShiftSort) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShiftSort) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftSort) SetField(field *ScheduledShiftSortField) {
+	s.Field = field
+	s.require(scheduledShiftSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftSort) SetOrder(order *SortOrder) {
+	s.Order = order
+	s.require(scheduledShiftSortFieldOrder)
+}
+
 func (s *ScheduledShiftSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShiftSort
 	var value unmarshaler
@@ -1103,6 +2044,17 @@ func (s *ScheduledShiftSort) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *ScheduledShiftSort) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShiftSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *ScheduledShiftSort) String() string {
@@ -1149,6 +2101,12 @@ func (s ScheduledShiftSortField) Ptr() *ScheduledShiftSortField {
 
 // A `ScheduledShift` search query filter parameter that sets a range of days that
 // a `Shift` must start or end in before passing the filter condition.
+var (
+	scheduledShiftWorkdayFieldDateRange              = big.NewInt(1 << 0)
+	scheduledShiftWorkdayFieldMatchScheduledShiftsBy = big.NewInt(1 << 1)
+	scheduledShiftWorkdayFieldDefaultTimezone        = big.NewInt(1 << 2)
+)
+
 type ScheduledShiftWorkday struct {
 	// Dates for fetching the scheduled shifts.
 	DateRange *DateRange `json:"date_range,omitempty" url:"date_range,omitempty"`
@@ -1160,6 +2118,9 @@ type ScheduledShiftWorkday struct {
 	// must be provided as a fallback. Format: the IANA timezone database
 	// identifier for the relevant timezone.
 	DefaultTimezone *string `json:"default_timezone,omitempty" url:"default_timezone,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1190,6 +2151,34 @@ func (s *ScheduledShiftWorkday) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *ScheduledShiftWorkday) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetDateRange sets the DateRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftWorkday) SetDateRange(dateRange *DateRange) {
+	s.DateRange = dateRange
+	s.require(scheduledShiftWorkdayFieldDateRange)
+}
+
+// SetMatchScheduledShiftsBy sets the MatchScheduledShiftsBy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftWorkday) SetMatchScheduledShiftsBy(matchScheduledShiftsBy *ScheduledShiftWorkdayMatcher) {
+	s.MatchScheduledShiftsBy = matchScheduledShiftsBy
+	s.require(scheduledShiftWorkdayFieldMatchScheduledShiftsBy)
+}
+
+// SetDefaultTimezone sets the DefaultTimezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ScheduledShiftWorkday) SetDefaultTimezone(defaultTimezone *string) {
+	s.DefaultTimezone = defaultTimezone
+	s.require(scheduledShiftWorkdayFieldDefaultTimezone)
+}
+
 func (s *ScheduledShiftWorkday) UnmarshalJSON(data []byte) error {
 	type unmarshaler ScheduledShiftWorkday
 	var value unmarshaler
@@ -1204,6 +2193,17 @@ func (s *ScheduledShiftWorkday) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *ScheduledShiftWorkday) MarshalJSON() ([]byte, error) {
+	type embed ScheduledShiftWorkday
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *ScheduledShiftWorkday) String() string {
@@ -1246,6 +2246,12 @@ func (s ScheduledShiftWorkdayMatcher) Ptr() *ScheduledShiftWorkdayMatcher {
 
 // Represents a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) response.
 // Either `scheduled_shifts` or `errors` is present in the response.
+var (
+	searchScheduledShiftsResponseFieldScheduledShifts = big.NewInt(1 << 0)
+	searchScheduledShiftsResponseFieldCursor          = big.NewInt(1 << 1)
+	searchScheduledShiftsResponseFieldErrors          = big.NewInt(1 << 2)
+)
+
 type SearchScheduledShiftsResponse struct {
 	// A paginated list of scheduled shifts that match the query conditions.
 	ScheduledShifts []*ScheduledShift `json:"scheduled_shifts,omitempty" url:"scheduled_shifts,omitempty"`
@@ -1254,6 +2260,9 @@ type SearchScheduledShiftsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1284,6 +2293,34 @@ func (s *SearchScheduledShiftsResponse) GetExtraProperties() map[string]interfac
 	return s.extraProperties
 }
 
+func (s *SearchScheduledShiftsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetScheduledShifts sets the ScheduledShifts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsResponse) SetScheduledShifts(scheduledShifts []*ScheduledShift) {
+	s.ScheduledShifts = scheduledShifts
+	s.require(searchScheduledShiftsResponseFieldScheduledShifts)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchScheduledShiftsResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchScheduledShiftsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchScheduledShiftsResponseFieldErrors)
+}
+
 func (s *SearchScheduledShiftsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchScheduledShiftsResponse
 	var value unmarshaler
@@ -1298,6 +2335,17 @@ func (s *SearchScheduledShiftsResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchScheduledShiftsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchScheduledShiftsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchScheduledShiftsResponse) String() string {
@@ -1315,6 +2363,12 @@ func (s *SearchScheduledShiftsResponse) String() string {
 // The response to a request for `Timecard` objects. The response contains
 // the requested `Timecard` objects and might contain a set of `Error` objects if
 // the request resulted in errors.
+var (
+	searchTimecardsResponseFieldTimecards = big.NewInt(1 << 0)
+	searchTimecardsResponseFieldCursor    = big.NewInt(1 << 1)
+	searchTimecardsResponseFieldErrors    = big.NewInt(1 << 2)
+)
+
 type SearchTimecardsResponse struct {
 	// Timecards.
 	Timecards []*Timecard `json:"timecards,omitempty" url:"timecards,omitempty"`
@@ -1322,6 +2376,9 @@ type SearchTimecardsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1352,6 +2409,34 @@ func (s *SearchTimecardsResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchTimecardsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTimecards sets the Timecards field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsResponse) SetTimecards(timecards []*Timecard) {
+	s.Timecards = timecards
+	s.require(searchTimecardsResponseFieldTimecards)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchTimecardsResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchTimecardsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchTimecardsResponseFieldErrors)
+}
+
 func (s *SearchTimecardsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchTimecardsResponse
 	var value unmarshaler
@@ -1366,6 +2451,17 @@ func (s *SearchTimecardsResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchTimecardsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchTimecardsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchTimecardsResponse) String() string {
@@ -1383,6 +2479,22 @@ func (s *SearchTimecardsResponse) String() string {
 // A record of the hourly rate, start time, and end time of a single timecard (shift)
 // for a team member. This might include a record of the start and end times of breaks
 // taken during the shift.
+var (
+	timecardFieldID                   = big.NewInt(1 << 0)
+	timecardFieldLocationID           = big.NewInt(1 << 1)
+	timecardFieldTimezone             = big.NewInt(1 << 2)
+	timecardFieldStartAt              = big.NewInt(1 << 3)
+	timecardFieldEndAt                = big.NewInt(1 << 4)
+	timecardFieldWage                 = big.NewInt(1 << 5)
+	timecardFieldBreaks               = big.NewInt(1 << 6)
+	timecardFieldStatus               = big.NewInt(1 << 7)
+	timecardFieldVersion              = big.NewInt(1 << 8)
+	timecardFieldCreatedAt            = big.NewInt(1 << 9)
+	timecardFieldUpdatedAt            = big.NewInt(1 << 10)
+	timecardFieldTeamMemberID         = big.NewInt(1 << 11)
+	timecardFieldDeclaredCashTipMoney = big.NewInt(1 << 12)
+)
+
 type Timecard struct {
 	// **Read only** The Square-issued UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1420,6 +2532,9 @@ type Timecard struct {
 	TeamMemberID string `json:"team_member_id" url:"team_member_id"`
 	// The cash tips declared by the team member for this timecard.
 	DeclaredCashTipMoney *Money `json:"declared_cash_tip_money,omitempty" url:"declared_cash_tip_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1520,6 +2635,104 @@ func (t *Timecard) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *Timecard) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetID(id *string) {
+	t.ID = id
+	t.require(timecardFieldID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetLocationID(locationID string) {
+	t.LocationID = locationID
+	t.require(timecardFieldLocationID)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetTimezone(timezone *string) {
+	t.Timezone = timezone
+	t.require(timecardFieldTimezone)
+}
+
+// SetStartAt sets the StartAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetStartAt(startAt string) {
+	t.StartAt = startAt
+	t.require(timecardFieldStartAt)
+}
+
+// SetEndAt sets the EndAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetEndAt(endAt *string) {
+	t.EndAt = endAt
+	t.require(timecardFieldEndAt)
+}
+
+// SetWage sets the Wage field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetWage(wage *TimecardWage) {
+	t.Wage = wage
+	t.require(timecardFieldWage)
+}
+
+// SetBreaks sets the Breaks field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetBreaks(breaks []*Break) {
+	t.Breaks = breaks
+	t.require(timecardFieldBreaks)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetStatus(status *TimecardStatus) {
+	t.Status = status
+	t.require(timecardFieldStatus)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetVersion(version *int) {
+	t.Version = version
+	t.require(timecardFieldVersion)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetCreatedAt(createdAt *string) {
+	t.CreatedAt = createdAt
+	t.require(timecardFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetUpdatedAt(updatedAt *string) {
+	t.UpdatedAt = updatedAt
+	t.require(timecardFieldUpdatedAt)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetTeamMemberID(teamMemberID string) {
+	t.TeamMemberID = teamMemberID
+	t.require(timecardFieldTeamMemberID)
+}
+
+// SetDeclaredCashTipMoney sets the DeclaredCashTipMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *Timecard) SetDeclaredCashTipMoney(declaredCashTipMoney *Money) {
+	t.DeclaredCashTipMoney = declaredCashTipMoney
+	t.require(timecardFieldDeclaredCashTipMoney)
+}
+
 func (t *Timecard) UnmarshalJSON(data []byte) error {
 	type unmarshaler Timecard
 	var value unmarshaler
@@ -1536,6 +2749,17 @@ func (t *Timecard) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *Timecard) MarshalJSON() ([]byte, error) {
+	type embed Timecard
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *Timecard) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1550,6 +2774,15 @@ func (t *Timecard) String() string {
 
 // Defines a filter used in a search for `Timecard` records. `AND` logic is
 // used by Square's servers to apply each filter property specified.
+var (
+	timecardFilterFieldLocationIDs   = big.NewInt(1 << 0)
+	timecardFilterFieldStatus        = big.NewInt(1 << 1)
+	timecardFilterFieldStart         = big.NewInt(1 << 2)
+	timecardFilterFieldEnd           = big.NewInt(1 << 3)
+	timecardFilterFieldWorkday       = big.NewInt(1 << 4)
+	timecardFilterFieldTeamMemberIDs = big.NewInt(1 << 5)
+)
+
 type TimecardFilter struct {
 	// Fetch timecards for the specified location.
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
@@ -1564,6 +2797,9 @@ type TimecardFilter struct {
 	Workday *TimecardWorkday `json:"workday,omitempty" url:"workday,omitempty"`
 	// Fetch timecards for the specified team members.
 	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"team_member_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1615,6 +2851,55 @@ func (t *TimecardFilter) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TimecardFilter) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetLocationIDs(locationIDs []string) {
+	t.LocationIDs = locationIDs
+	t.require(timecardFilterFieldLocationIDs)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetStatus(status *TimecardFilterStatus) {
+	t.Status = status
+	t.require(timecardFilterFieldStatus)
+}
+
+// SetStart sets the Start field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetStart(start *TimeRange) {
+	t.Start = start
+	t.require(timecardFilterFieldStart)
+}
+
+// SetEnd sets the End field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetEnd(end *TimeRange) {
+	t.End = end
+	t.require(timecardFilterFieldEnd)
+}
+
+// SetWorkday sets the Workday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetWorkday(workday *TimecardWorkday) {
+	t.Workday = workday
+	t.require(timecardFilterFieldWorkday)
+}
+
+// SetTeamMemberIDs sets the TeamMemberIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardFilter) SetTeamMemberIDs(teamMemberIDs []string) {
+	t.TeamMemberIDs = teamMemberIDs
+	t.require(timecardFilterFieldTeamMemberIDs)
+}
+
 func (t *TimecardFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler TimecardFilter
 	var value unmarshaler
@@ -1629,6 +2914,17 @@ func (t *TimecardFilter) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TimecardFilter) MarshalJSON() ([]byte, error) {
+	type embed TimecardFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TimecardFilter) String() string {
@@ -1667,11 +2963,19 @@ func (t TimecardFilterStatus) Ptr() *TimecardFilterStatus {
 }
 
 // The parameters of a `Timecard` search query, which includes filter and sort options.
+var (
+	timecardQueryFieldFilter = big.NewInt(1 << 0)
+	timecardQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type TimecardQuery struct {
 	// Query filter options.
 	Filter *TimecardFilter `json:"filter,omitempty" url:"filter,omitempty"`
 	// Sort order details.
 	Sort *TimecardSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1695,6 +2999,27 @@ func (t *TimecardQuery) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TimecardQuery) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardQuery) SetFilter(filter *TimecardFilter) {
+	t.Filter = filter
+	t.require(timecardQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardQuery) SetSort(sort *TimecardSort) {
+	t.Sort = sort
+	t.require(timecardQueryFieldSort)
+}
+
 func (t *TimecardQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler TimecardQuery
 	var value unmarshaler
@@ -1711,6 +3036,17 @@ func (t *TimecardQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TimecardQuery) MarshalJSON() ([]byte, error) {
+	type embed TimecardQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TimecardQuery) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1724,6 +3060,11 @@ func (t *TimecardQuery) String() string {
 }
 
 // Sets the sort order of search results.
+var (
+	timecardSortFieldField = big.NewInt(1 << 0)
+	timecardSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type TimecardSort struct {
 	// The field to sort on.
 	// See [TimecardSortField](#type-timecardsortfield) for possible values
@@ -1731,6 +3072,9 @@ type TimecardSort struct {
 	// The order in which results are returned. Defaults to DESC.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1754,6 +3098,27 @@ func (t *TimecardSort) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TimecardSort) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardSort) SetField(field *TimecardSortField) {
+	t.Field = field
+	t.require(timecardSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardSort) SetOrder(order *SortOrder) {
+	t.Order = order
+	t.require(timecardSortFieldOrder)
+}
+
 func (t *TimecardSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler TimecardSort
 	var value unmarshaler
@@ -1768,6 +3133,17 @@ func (t *TimecardSort) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TimecardSort) MarshalJSON() ([]byte, error) {
+	type embed TimecardSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TimecardSort) String() string {
@@ -1835,6 +3211,13 @@ func (t TimecardStatus) Ptr() *TimecardStatus {
 }
 
 // The hourly wage rate used to compensate a team member for a [timecard](entity:Timecard).
+var (
+	timecardWageFieldTitle       = big.NewInt(1 << 0)
+	timecardWageFieldHourlyRate  = big.NewInt(1 << 1)
+	timecardWageFieldJobID       = big.NewInt(1 << 2)
+	timecardWageFieldTipEligible = big.NewInt(1 << 3)
+)
+
 type TimecardWage struct {
 	// The name of the job performed during this timecard.
 	Title *string `json:"title,omitempty" url:"title,omitempty"`
@@ -1846,6 +3229,9 @@ type TimecardWage struct {
 	JobID *string `json:"job_id,omitempty" url:"job_id,omitempty"`
 	// Whether team members are eligible for tips when working this job.
 	TipEligible *bool `json:"tip_eligible,omitempty" url:"tip_eligible,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1883,6 +3269,41 @@ func (t *TimecardWage) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TimecardWage) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWage) SetTitle(title *string) {
+	t.Title = title
+	t.require(timecardWageFieldTitle)
+}
+
+// SetHourlyRate sets the HourlyRate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWage) SetHourlyRate(hourlyRate *Money) {
+	t.HourlyRate = hourlyRate
+	t.require(timecardWageFieldHourlyRate)
+}
+
+// SetJobID sets the JobID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWage) SetJobID(jobID *string) {
+	t.JobID = jobID
+	t.require(timecardWageFieldJobID)
+}
+
+// SetTipEligible sets the TipEligible field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWage) SetTipEligible(tipEligible *bool) {
+	t.TipEligible = tipEligible
+	t.require(timecardWageFieldTipEligible)
+}
+
 func (t *TimecardWage) UnmarshalJSON(data []byte) error {
 	type unmarshaler TimecardWage
 	var value unmarshaler
@@ -1899,6 +3320,17 @@ func (t *TimecardWage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t *TimecardWage) MarshalJSON() ([]byte, error) {
+	type embed TimecardWage
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (t *TimecardWage) String() string {
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
@@ -1913,6 +3345,12 @@ func (t *TimecardWage) String() string {
 
 // A `Timecard` search query filter parameter that sets a range of days that
 // a `Timecard` must start or end in before passing the filter condition.
+var (
+	timecardWorkdayFieldDateRange        = big.NewInt(1 << 0)
+	timecardWorkdayFieldMatchTimecardsBy = big.NewInt(1 << 1)
+	timecardWorkdayFieldDefaultTimezone  = big.NewInt(1 << 2)
+)
+
 type TimecardWorkday struct {
 	// Dates for fetching the timecards.
 	DateRange *DateRange `json:"date_range,omitempty" url:"date_range,omitempty"`
@@ -1924,6 +3362,9 @@ type TimecardWorkday struct {
 	// must be provided as a fallback. Format: the IANA timezone database
 	// identifier for the relevant timezone.
 	DefaultTimezone *string `json:"default_timezone,omitempty" url:"default_timezone,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1954,6 +3395,34 @@ func (t *TimecardWorkday) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
+func (t *TimecardWorkday) require(field *big.Int) {
+	if t.explicitFields == nil {
+		t.explicitFields = big.NewInt(0)
+	}
+	t.explicitFields.Or(t.explicitFields, field)
+}
+
+// SetDateRange sets the DateRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWorkday) SetDateRange(dateRange *DateRange) {
+	t.DateRange = dateRange
+	t.require(timecardWorkdayFieldDateRange)
+}
+
+// SetMatchTimecardsBy sets the MatchTimecardsBy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWorkday) SetMatchTimecardsBy(matchTimecardsBy *TimecardWorkdayMatcher) {
+	t.MatchTimecardsBy = matchTimecardsBy
+	t.require(timecardWorkdayFieldMatchTimecardsBy)
+}
+
+// SetDefaultTimezone sets the DefaultTimezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TimecardWorkday) SetDefaultTimezone(defaultTimezone *string) {
+	t.DefaultTimezone = defaultTimezone
+	t.require(timecardWorkdayFieldDefaultTimezone)
+}
+
 func (t *TimecardWorkday) UnmarshalJSON(data []byte) error {
 	type unmarshaler TimecardWorkday
 	var value unmarshaler
@@ -1968,6 +3437,17 @@ func (t *TimecardWorkday) UnmarshalJSON(data []byte) error {
 	t.extraProperties = extraProperties
 	t.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TimecardWorkday) MarshalJSON() ([]byte, error) {
+	type embed TimecardWorkday
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (t *TimecardWorkday) String() string {
@@ -2010,6 +3490,11 @@ func (t TimecardWorkdayMatcher) Ptr() *TimecardWorkdayMatcher {
 
 // Represents an [UpdateScheduledShift](api-endpoint:Labor-UpdateScheduledShift) response.
 // Either `scheduled_shift` or `errors` is present in the response.
+var (
+	updateScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
+	updateScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
+)
+
 type UpdateScheduledShiftResponse struct {
 	// The updated scheduled shift. To make the changes public, call
 	// [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) or
@@ -2017,6 +3502,9 @@ type UpdateScheduledShiftResponse struct {
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2040,6 +3528,27 @@ func (u *UpdateScheduledShiftResponse) GetExtraProperties() map[string]interface
 	return u.extraProperties
 }
 
+func (u *UpdateScheduledShiftResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateScheduledShiftResponse) SetScheduledShift(scheduledShift *ScheduledShift) {
+	u.ScheduledShift = scheduledShift
+	u.require(updateScheduledShiftResponseFieldScheduledShift)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateScheduledShiftResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateScheduledShiftResponseFieldErrors)
+}
+
 func (u *UpdateScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateScheduledShiftResponse
 	var value unmarshaler
@@ -2054,6 +3563,17 @@ func (u *UpdateScheduledShiftResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UpdateScheduledShiftResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateScheduledShiftResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UpdateScheduledShiftResponse) String() string {
@@ -2071,11 +3591,19 @@ func (u *UpdateScheduledShiftResponse) String() string {
 // The response to a request to update a `Timecard`. The response contains
 // the updated `Timecard` object and might contain a set of `Error` objects if
 // the request resulted in errors.
+var (
+	updateTimecardResponseFieldTimecard = big.NewInt(1 << 0)
+	updateTimecardResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type UpdateTimecardResponse struct {
 	// The updated `Timecard`.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2099,6 +3627,27 @@ func (u *UpdateTimecardResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateTimecardResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetTimecard sets the Timecard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTimecardResponse) SetTimecard(timecard *Timecard) {
+	u.Timecard = timecard
+	u.require(updateTimecardResponseFieldTimecard)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateTimecardResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateTimecardResponseFieldErrors)
+}
+
 func (u *UpdateTimecardResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateTimecardResponse
 	var value unmarshaler
@@ -2113,6 +3662,17 @@ func (u *UpdateTimecardResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UpdateTimecardResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateTimecardResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UpdateTimecardResponse) String() string {

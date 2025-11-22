@@ -5,10 +5,8 @@ package client
 import (
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
 	eventtypes "github.com/square/square-go-sdk/v2/webhooks/eventtypes"
 	subscriptions "github.com/square/square-go-sdk/v2/webhooks/subscriptions"
-	http "net/http"
 	os "os"
 )
 
@@ -16,13 +14,12 @@ type Client struct {
 	EventTypes    *eventtypes.Client
 	Subscriptions *subscriptions.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,8 +27,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		EventTypes:    eventtypes.NewClient(opts...),
-		Subscriptions: subscriptions.NewClient(opts...),
+		EventTypes:    eventtypes.NewClient(options),
+		Subscriptions: subscriptions.NewClient(options),
+		options:       options,
 		baseURL:       options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -39,6 +37,5 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }

@@ -7,6 +7,11 @@ import (
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	io "io"
+	big "math/big"
+)
+
+var (
+	createInvoiceAttachmentRequestFieldInvoiceID = big.NewInt(1 << 0)
 )
 
 type CreateInvoiceAttachmentRequest struct {
@@ -14,14 +19,65 @@ type CreateInvoiceAttachmentRequest struct {
 	InvoiceID string                              `json:"-" url:"-"`
 	ImageFile io.Reader                           `json:"-" url:"-"`
 	Request   *CreateInvoiceAttachmentRequestData `json:"request,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateInvoiceAttachmentRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceAttachmentRequest) SetInvoiceID(invoiceID string) {
+	c.InvoiceID = invoiceID
+	c.require(createInvoiceAttachmentRequestFieldInvoiceID)
+}
+
+var (
+	deleteInvoiceAttachmentRequestFieldInvoiceID    = big.NewInt(1 << 0)
+	deleteInvoiceAttachmentRequestFieldAttachmentID = big.NewInt(1 << 1)
+)
 
 type DeleteInvoiceAttachmentRequest struct {
 	// The ID of the [invoice](entity:Invoice) to delete the attachment from.
 	InvoiceID string `json:"-" url:"-"`
 	// The ID of the [attachment](entity:InvoiceAttachment) to delete.
 	AttachmentID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteInvoiceAttachmentRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoiceAttachmentRequest) SetInvoiceID(invoiceID string) {
+	d.InvoiceID = invoiceID
+	d.require(deleteInvoiceAttachmentRequestFieldInvoiceID)
+}
+
+// SetAttachmentID sets the AttachmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoiceAttachmentRequest) SetAttachmentID(attachmentID string) {
+	d.AttachmentID = attachmentID
+	d.require(deleteInvoiceAttachmentRequestFieldAttachmentID)
+}
+
+var (
+	cancelInvoiceRequestFieldInvoiceID = big.NewInt(1 << 0)
+	cancelInvoiceRequestFieldVersion   = big.NewInt(1 << 1)
+)
 
 type CancelInvoiceRequest struct {
 	// The ID of the [invoice](entity:Invoice) to cancel.
@@ -30,7 +86,36 @@ type CancelInvoiceRequest struct {
 	// If you do not know the version, you can call
 	// [GetInvoice](api-endpoint:Invoices-GetInvoice) or [ListInvoices](api-endpoint:Invoices-ListInvoices).
 	Version int `json:"version" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelInvoiceRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelInvoiceRequest) SetInvoiceID(invoiceID string) {
+	c.InvoiceID = invoiceID
+	c.require(cancelInvoiceRequestFieldInvoiceID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelInvoiceRequest) SetVersion(version int) {
+	c.Version = version
+	c.require(cancelInvoiceRequestFieldVersion)
+}
+
+var (
+	createInvoiceRequestFieldInvoice        = big.NewInt(1 << 0)
+	createInvoiceRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+)
 
 type CreateInvoiceRequest struct {
 	// The invoice to create.
@@ -41,7 +126,36 @@ type CreateInvoiceRequest struct {
 	//
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateInvoiceRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceRequest) SetInvoice(invoice *Invoice) {
+	c.Invoice = invoice
+	c.require(createInvoiceRequestFieldInvoice)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createInvoiceRequestFieldIdempotencyKey)
+}
+
+var (
+	deleteInvoicesRequestFieldInvoiceID = big.NewInt(1 << 0)
+	deleteInvoicesRequestFieldVersion   = big.NewInt(1 << 1)
+)
 
 type DeleteInvoicesRequest struct {
 	// The ID of the invoice to delete.
@@ -50,12 +164,63 @@ type DeleteInvoicesRequest struct {
 	// If you do not know the version, you can call [GetInvoice](api-endpoint:Invoices-GetInvoice) or
 	// [ListInvoices](api-endpoint:Invoices-ListInvoices).
 	Version *int `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteInvoicesRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoicesRequest) SetInvoiceID(invoiceID string) {
+	d.InvoiceID = invoiceID
+	d.require(deleteInvoicesRequestFieldInvoiceID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoicesRequest) SetVersion(version *int) {
+	d.Version = version
+	d.require(deleteInvoicesRequestFieldVersion)
+}
+
+var (
+	getInvoicesRequestFieldInvoiceID = big.NewInt(1 << 0)
+)
 
 type GetInvoicesRequest struct {
 	// The ID of the invoice to retrieve.
 	InvoiceID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetInvoicesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInvoicesRequest) SetInvoiceID(invoiceID string) {
+	g.InvoiceID = invoiceID
+	g.require(getInvoicesRequestFieldInvoiceID)
+}
+
+var (
+	listInvoicesRequestFieldLocationID = big.NewInt(1 << 0)
+	listInvoicesRequestFieldCursor     = big.NewInt(1 << 1)
+	listInvoicesRequestFieldLimit      = big.NewInt(1 << 2)
+)
 
 type ListInvoicesRequest struct {
 	// The ID of the location for which to list invoices.
@@ -68,7 +233,44 @@ type ListInvoicesRequest struct {
 	// The maximum number of invoices to return (200 is the maximum `limit`).
 	// If not provided, the server uses a default limit of 100 invoices.
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListInvoicesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesRequest) SetLocationID(locationID string) {
+	l.LocationID = locationID
+	l.require(listInvoicesRequestFieldLocationID)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listInvoicesRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listInvoicesRequestFieldLimit)
+}
+
+var (
+	publishInvoiceRequestFieldInvoiceID      = big.NewInt(1 << 0)
+	publishInvoiceRequestFieldVersion        = big.NewInt(1 << 1)
+	publishInvoiceRequestFieldIdempotencyKey = big.NewInt(1 << 2)
+)
 
 type PublishInvoiceRequest struct {
 	// The ID of the invoice to publish.
@@ -82,7 +284,44 @@ type PublishInvoiceRequest struct {
 	//
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (p *PublishInvoiceRequest) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishInvoiceRequest) SetInvoiceID(invoiceID string) {
+	p.InvoiceID = invoiceID
+	p.require(publishInvoiceRequestFieldInvoiceID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishInvoiceRequest) SetVersion(version int) {
+	p.Version = version
+	p.require(publishInvoiceRequestFieldVersion)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
+	p.IdempotencyKey = idempotencyKey
+	p.require(publishInvoiceRequestFieldIdempotencyKey)
+}
+
+var (
+	searchInvoicesRequestFieldQuery  = big.NewInt(1 << 0)
+	searchInvoicesRequestFieldLimit  = big.NewInt(1 << 1)
+	searchInvoicesRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchInvoicesRequest struct {
 	// Describes the query criteria for searching invoices.
@@ -95,14 +334,53 @@ type SearchInvoicesRequest struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchInvoicesRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesRequest) SetQuery(query *InvoiceQuery) {
+	s.Query = query
+	s.require(searchInvoicesRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchInvoicesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchInvoicesRequestFieldCursor)
 }
 
 // The response returned by the `CancelInvoice` request.
+var (
+	cancelInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
+	cancelInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type CancelInvoiceResponse struct {
 	// The canceled invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -126,6 +404,27 @@ func (c *CancelInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CancelInvoiceResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelInvoiceResponse) SetInvoice(invoice *Invoice) {
+	c.Invoice = invoice
+	c.require(cancelInvoiceResponseFieldInvoice)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelInvoiceResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelInvoiceResponseFieldErrors)
+}
+
 func (c *CancelInvoiceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CancelInvoiceResponse
 	var value unmarshaler
@@ -142,6 +441,17 @@ func (c *CancelInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CancelInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CancelInvoiceResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -155,12 +465,20 @@ func (c *CancelInvoiceResponse) String() string {
 }
 
 // Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) request.
+var (
+	createInvoiceAttachmentRequestDataFieldIdempotencyKey = big.NewInt(1 << 0)
+	createInvoiceAttachmentRequestDataFieldDescription    = big.NewInt(1 << 1)
+)
+
 type CreateInvoiceAttachmentRequestData struct {
 	// A unique string that identifies the `CreateInvoiceAttachment` request.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
 	// The description of the attachment to display on the invoice.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -184,6 +502,27 @@ func (c *CreateInvoiceAttachmentRequestData) GetExtraProperties() map[string]int
 	return c.extraProperties
 }
 
+func (c *CreateInvoiceAttachmentRequestData) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceAttachmentRequestData) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createInvoiceAttachmentRequestDataFieldIdempotencyKey)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceAttachmentRequestData) SetDescription(description *string) {
+	c.Description = description
+	c.require(createInvoiceAttachmentRequestDataFieldDescription)
+}
+
 func (c *CreateInvoiceAttachmentRequestData) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateInvoiceAttachmentRequestData
 	var value unmarshaler
@@ -200,6 +539,17 @@ func (c *CreateInvoiceAttachmentRequestData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateInvoiceAttachmentRequestData) MarshalJSON() ([]byte, error) {
+	type embed CreateInvoiceAttachmentRequestData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateInvoiceAttachmentRequestData) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -213,11 +563,19 @@ func (c *CreateInvoiceAttachmentRequestData) String() string {
 }
 
 // Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
+var (
+	createInvoiceAttachmentResponseFieldAttachment = big.NewInt(1 << 0)
+	createInvoiceAttachmentResponseFieldErrors     = big.NewInt(1 << 1)
+)
+
 type CreateInvoiceAttachmentResponse struct {
 	// Metadata about the attachment that was added to the invoice.
 	Attachment *InvoiceAttachment `json:"attachment,omitempty" url:"attachment,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -241,6 +599,27 @@ func (c *CreateInvoiceAttachmentResponse) GetExtraProperties() map[string]interf
 	return c.extraProperties
 }
 
+func (c *CreateInvoiceAttachmentResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttachment sets the Attachment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceAttachmentResponse) SetAttachment(attachment *InvoiceAttachment) {
+	c.Attachment = attachment
+	c.require(createInvoiceAttachmentResponseFieldAttachment)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceAttachmentResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createInvoiceAttachmentResponseFieldErrors)
+}
+
 func (c *CreateInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateInvoiceAttachmentResponse
 	var value unmarshaler
@@ -257,6 +636,17 @@ func (c *CreateInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateInvoiceAttachmentResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateInvoiceAttachmentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateInvoiceAttachmentResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -270,11 +660,19 @@ func (c *CreateInvoiceAttachmentResponse) String() string {
 }
 
 // The response returned by the `CreateInvoice` request.
+var (
+	createInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
+	createInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type CreateInvoiceResponse struct {
 	// The newly created invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -298,6 +696,27 @@ func (c *CreateInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateInvoiceResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceResponse) SetInvoice(invoice *Invoice) {
+	c.Invoice = invoice
+	c.require(createInvoiceResponseFieldInvoice)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInvoiceResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createInvoiceResponseFieldErrors)
+}
+
 func (c *CreateInvoiceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateInvoiceResponse
 	var value unmarshaler
@@ -314,6 +733,17 @@ func (c *CreateInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateInvoiceResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -327,9 +757,16 @@ func (c *CreateInvoiceResponse) String() string {
 }
 
 // Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
+var (
+	deleteInvoiceAttachmentResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteInvoiceAttachmentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -344,6 +781,20 @@ func (d *DeleteInvoiceAttachmentResponse) GetErrors() []*Error {
 
 func (d *DeleteInvoiceAttachmentResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteInvoiceAttachmentResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoiceAttachmentResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteInvoiceAttachmentResponseFieldErrors)
 }
 
 func (d *DeleteInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
@@ -362,6 +813,17 @@ func (d *DeleteInvoiceAttachmentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteInvoiceAttachmentResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteInvoiceAttachmentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteInvoiceAttachmentResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -375,9 +837,16 @@ func (d *DeleteInvoiceAttachmentResponse) String() string {
 }
 
 // Describes a `DeleteInvoice` response.
+var (
+	deleteInvoiceResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteInvoiceResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -392,6 +861,20 @@ func (d *DeleteInvoiceResponse) GetErrors() []*Error {
 
 func (d *DeleteInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteInvoiceResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInvoiceResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteInvoiceResponseFieldErrors)
 }
 
 func (d *DeleteInvoiceResponse) UnmarshalJSON(data []byte) error {
@@ -410,6 +893,17 @@ func (d *DeleteInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteInvoiceResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -423,11 +917,19 @@ func (d *DeleteInvoiceResponse) String() string {
 }
 
 // Describes a `GetInvoice` response.
+var (
+	getInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
+	getInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type GetInvoiceResponse struct {
 	// The invoice requested.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -451,6 +953,27 @@ func (g *GetInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetInvoiceResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInvoiceResponse) SetInvoice(invoice *Invoice) {
+	g.Invoice = invoice
+	g.require(getInvoiceResponseFieldInvoice)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetInvoiceResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getInvoiceResponseFieldErrors)
+}
+
 func (g *GetInvoiceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetInvoiceResponse
 	var value unmarshaler
@@ -467,6 +990,17 @@ func (g *GetInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed GetInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetInvoiceResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -481,6 +1015,34 @@ func (g *GetInvoiceResponse) String() string {
 
 // Stores information about an invoice. You use the Invoices API to create and manage
 // invoices. For more information, see [Invoices API Overview](https://developer.squareup.com/docs/invoices-api/overview).
+var (
+	invoiceFieldID                        = big.NewInt(1 << 0)
+	invoiceFieldVersion                   = big.NewInt(1 << 1)
+	invoiceFieldLocationID                = big.NewInt(1 << 2)
+	invoiceFieldOrderID                   = big.NewInt(1 << 3)
+	invoiceFieldPrimaryRecipient          = big.NewInt(1 << 4)
+	invoiceFieldPaymentRequests           = big.NewInt(1 << 5)
+	invoiceFieldDeliveryMethod            = big.NewInt(1 << 6)
+	invoiceFieldInvoiceNumber             = big.NewInt(1 << 7)
+	invoiceFieldTitle                     = big.NewInt(1 << 8)
+	invoiceFieldDescription               = big.NewInt(1 << 9)
+	invoiceFieldScheduledAt               = big.NewInt(1 << 10)
+	invoiceFieldPublicURL                 = big.NewInt(1 << 11)
+	invoiceFieldNextPaymentAmountMoney    = big.NewInt(1 << 12)
+	invoiceFieldStatus                    = big.NewInt(1 << 13)
+	invoiceFieldTimezone                  = big.NewInt(1 << 14)
+	invoiceFieldCreatedAt                 = big.NewInt(1 << 15)
+	invoiceFieldUpdatedAt                 = big.NewInt(1 << 16)
+	invoiceFieldAcceptedPaymentMethods    = big.NewInt(1 << 17)
+	invoiceFieldCustomFields              = big.NewInt(1 << 18)
+	invoiceFieldSubscriptionID            = big.NewInt(1 << 19)
+	invoiceFieldSaleOrServiceDate         = big.NewInt(1 << 20)
+	invoiceFieldPaymentConditions         = big.NewInt(1 << 21)
+	invoiceFieldStorePaymentMethodEnabled = big.NewInt(1 << 22)
+	invoiceFieldAttachments               = big.NewInt(1 << 23)
+	invoiceFieldCreatorTeamMemberID       = big.NewInt(1 << 24)
+)
+
 type Invoice struct {
 	// The Square-assigned ID of the invoice.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -602,6 +1164,9 @@ type Invoice struct {
 	// The ID of the [team member](entity:TeamMember) who created the invoice.
 	// This field is present only on invoices created in the Square Dashboard or Square Invoices app by a logged-in team member.
 	CreatorTeamMemberID *string `json:"creator_team_member_id,omitempty" url:"creator_team_member_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -786,6 +1351,188 @@ func (i *Invoice) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *Invoice) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetID(id *string) {
+	i.ID = id
+	i.require(invoiceFieldID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetVersion(version *int) {
+	i.Version = version
+	i.require(invoiceFieldVersion)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetLocationID(locationID *string) {
+	i.LocationID = locationID
+	i.require(invoiceFieldLocationID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetOrderID(orderID *string) {
+	i.OrderID = orderID
+	i.require(invoiceFieldOrderID)
+}
+
+// SetPrimaryRecipient sets the PrimaryRecipient field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetPrimaryRecipient(primaryRecipient *InvoiceRecipient) {
+	i.PrimaryRecipient = primaryRecipient
+	i.require(invoiceFieldPrimaryRecipient)
+}
+
+// SetPaymentRequests sets the PaymentRequests field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetPaymentRequests(paymentRequests []*InvoicePaymentRequest) {
+	i.PaymentRequests = paymentRequests
+	i.require(invoiceFieldPaymentRequests)
+}
+
+// SetDeliveryMethod sets the DeliveryMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetDeliveryMethod(deliveryMethod *InvoiceDeliveryMethod) {
+	i.DeliveryMethod = deliveryMethod
+	i.require(invoiceFieldDeliveryMethod)
+}
+
+// SetInvoiceNumber sets the InvoiceNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetInvoiceNumber(invoiceNumber *string) {
+	i.InvoiceNumber = invoiceNumber
+	i.require(invoiceFieldInvoiceNumber)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetTitle(title *string) {
+	i.Title = title
+	i.require(invoiceFieldTitle)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetDescription(description *string) {
+	i.Description = description
+	i.require(invoiceFieldDescription)
+}
+
+// SetScheduledAt sets the ScheduledAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetScheduledAt(scheduledAt *string) {
+	i.ScheduledAt = scheduledAt
+	i.require(invoiceFieldScheduledAt)
+}
+
+// SetPublicURL sets the PublicURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetPublicURL(publicURL *string) {
+	i.PublicURL = publicURL
+	i.require(invoiceFieldPublicURL)
+}
+
+// SetNextPaymentAmountMoney sets the NextPaymentAmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetNextPaymentAmountMoney(nextPaymentAmountMoney *Money) {
+	i.NextPaymentAmountMoney = nextPaymentAmountMoney
+	i.require(invoiceFieldNextPaymentAmountMoney)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetStatus(status *InvoiceStatus) {
+	i.Status = status
+	i.require(invoiceFieldStatus)
+}
+
+// SetTimezone sets the Timezone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetTimezone(timezone *string) {
+	i.Timezone = timezone
+	i.require(invoiceFieldTimezone)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetCreatedAt(createdAt *string) {
+	i.CreatedAt = createdAt
+	i.require(invoiceFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetUpdatedAt(updatedAt *string) {
+	i.UpdatedAt = updatedAt
+	i.require(invoiceFieldUpdatedAt)
+}
+
+// SetAcceptedPaymentMethods sets the AcceptedPaymentMethods field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetAcceptedPaymentMethods(acceptedPaymentMethods *InvoiceAcceptedPaymentMethods) {
+	i.AcceptedPaymentMethods = acceptedPaymentMethods
+	i.require(invoiceFieldAcceptedPaymentMethods)
+}
+
+// SetCustomFields sets the CustomFields field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetCustomFields(customFields []*InvoiceCustomField) {
+	i.CustomFields = customFields
+	i.require(invoiceFieldCustomFields)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetSubscriptionID(subscriptionID *string) {
+	i.SubscriptionID = subscriptionID
+	i.require(invoiceFieldSubscriptionID)
+}
+
+// SetSaleOrServiceDate sets the SaleOrServiceDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetSaleOrServiceDate(saleOrServiceDate *string) {
+	i.SaleOrServiceDate = saleOrServiceDate
+	i.require(invoiceFieldSaleOrServiceDate)
+}
+
+// SetPaymentConditions sets the PaymentConditions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetPaymentConditions(paymentConditions *string) {
+	i.PaymentConditions = paymentConditions
+	i.require(invoiceFieldPaymentConditions)
+}
+
+// SetStorePaymentMethodEnabled sets the StorePaymentMethodEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetStorePaymentMethodEnabled(storePaymentMethodEnabled *bool) {
+	i.StorePaymentMethodEnabled = storePaymentMethodEnabled
+	i.require(invoiceFieldStorePaymentMethodEnabled)
+}
+
+// SetAttachments sets the Attachments field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetAttachments(attachments []*InvoiceAttachment) {
+	i.Attachments = attachments
+	i.require(invoiceFieldAttachments)
+}
+
+// SetCreatorTeamMemberID sets the CreatorTeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *Invoice) SetCreatorTeamMemberID(creatorTeamMemberID *string) {
+	i.CreatorTeamMemberID = creatorTeamMemberID
+	i.require(invoiceFieldCreatorTeamMemberID)
+}
+
 func (i *Invoice) UnmarshalJSON(data []byte) error {
 	type unmarshaler Invoice
 	var value unmarshaler
@@ -802,6 +1549,17 @@ func (i *Invoice) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (i *Invoice) MarshalJSON() ([]byte, error) {
+	type embed Invoice
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (i *Invoice) String() string {
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
@@ -815,6 +1573,14 @@ func (i *Invoice) String() string {
 }
 
 // The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
+var (
+	invoiceAcceptedPaymentMethodsFieldCard           = big.NewInt(1 << 0)
+	invoiceAcceptedPaymentMethodsFieldSquareGiftCard = big.NewInt(1 << 1)
+	invoiceAcceptedPaymentMethodsFieldBankAccount    = big.NewInt(1 << 2)
+	invoiceAcceptedPaymentMethodsFieldBuyNowPayLater = big.NewInt(1 << 3)
+	invoiceAcceptedPaymentMethodsFieldCashAppPay     = big.NewInt(1 << 4)
+)
+
 type InvoiceAcceptedPaymentMethods struct {
 	// Indicates whether credit card or debit card payments are accepted. The default value is `false`.
 	Card *bool `json:"card,omitempty" url:"card,omitempty"`
@@ -834,6 +1600,9 @@ type InvoiceAcceptedPaymentMethods struct {
 	//
 	// This payment method is supported only for seller [locations](entity:Location) in the United States.
 	CashAppPay *bool `json:"cash_app_pay,omitempty" url:"cash_app_pay,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -878,6 +1647,48 @@ func (i *InvoiceAcceptedPaymentMethods) GetExtraProperties() map[string]interfac
 	return i.extraProperties
 }
 
+func (i *InvoiceAcceptedPaymentMethods) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAcceptedPaymentMethods) SetCard(card *bool) {
+	i.Card = card
+	i.require(invoiceAcceptedPaymentMethodsFieldCard)
+}
+
+// SetSquareGiftCard sets the SquareGiftCard field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAcceptedPaymentMethods) SetSquareGiftCard(squareGiftCard *bool) {
+	i.SquareGiftCard = squareGiftCard
+	i.require(invoiceAcceptedPaymentMethodsFieldSquareGiftCard)
+}
+
+// SetBankAccount sets the BankAccount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAcceptedPaymentMethods) SetBankAccount(bankAccount *bool) {
+	i.BankAccount = bankAccount
+	i.require(invoiceAcceptedPaymentMethodsFieldBankAccount)
+}
+
+// SetBuyNowPayLater sets the BuyNowPayLater field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAcceptedPaymentMethods) SetBuyNowPayLater(buyNowPayLater *bool) {
+	i.BuyNowPayLater = buyNowPayLater
+	i.require(invoiceAcceptedPaymentMethodsFieldBuyNowPayLater)
+}
+
+// SetCashAppPay sets the CashAppPay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAcceptedPaymentMethods) SetCashAppPay(cashAppPay *bool) {
+	i.CashAppPay = cashAppPay
+	i.require(invoiceAcceptedPaymentMethodsFieldCashAppPay)
+}
+
 func (i *InvoiceAcceptedPaymentMethods) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceAcceptedPaymentMethods
 	var value unmarshaler
@@ -894,6 +1705,17 @@ func (i *InvoiceAcceptedPaymentMethods) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (i *InvoiceAcceptedPaymentMethods) MarshalJSON() ([]byte, error) {
+	type embed InvoiceAcceptedPaymentMethods
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (i *InvoiceAcceptedPaymentMethods) String() string {
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
@@ -907,6 +1729,16 @@ func (i *InvoiceAcceptedPaymentMethods) String() string {
 }
 
 // Represents a file attached to an [invoice](entity:Invoice).
+var (
+	invoiceAttachmentFieldID          = big.NewInt(1 << 0)
+	invoiceAttachmentFieldFilename    = big.NewInt(1 << 1)
+	invoiceAttachmentFieldDescription = big.NewInt(1 << 2)
+	invoiceAttachmentFieldFilesize    = big.NewInt(1 << 3)
+	invoiceAttachmentFieldHash        = big.NewInt(1 << 4)
+	invoiceAttachmentFieldMimeType    = big.NewInt(1 << 5)
+	invoiceAttachmentFieldUploadedAt  = big.NewInt(1 << 6)
+)
+
 type InvoiceAttachment struct {
 	// The Square-assigned ID of the attachment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -925,6 +1757,9 @@ type InvoiceAttachment struct {
 	MimeType *string `json:"mime_type,omitempty" url:"mime_type,omitempty"`
 	// The timestamp when the attachment was uploaded, in RFC 3339 format.
 	UploadedAt *string `json:"uploaded_at,omitempty" url:"uploaded_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -983,6 +1818,62 @@ func (i *InvoiceAttachment) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceAttachment) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetID(id *string) {
+	i.ID = id
+	i.require(invoiceAttachmentFieldID)
+}
+
+// SetFilename sets the Filename field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetFilename(filename *string) {
+	i.Filename = filename
+	i.require(invoiceAttachmentFieldFilename)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetDescription(description *string) {
+	i.Description = description
+	i.require(invoiceAttachmentFieldDescription)
+}
+
+// SetFilesize sets the Filesize field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetFilesize(filesize *int) {
+	i.Filesize = filesize
+	i.require(invoiceAttachmentFieldFilesize)
+}
+
+// SetHash sets the Hash field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetHash(hash *string) {
+	i.Hash = hash
+	i.require(invoiceAttachmentFieldHash)
+}
+
+// SetMimeType sets the MimeType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetMimeType(mimeType *string) {
+	i.MimeType = mimeType
+	i.require(invoiceAttachmentFieldMimeType)
+}
+
+// SetUploadedAt sets the UploadedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceAttachment) SetUploadedAt(uploadedAt *string) {
+	i.UploadedAt = uploadedAt
+	i.require(invoiceAttachmentFieldUploadedAt)
+}
+
 func (i *InvoiceAttachment) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceAttachment
 	var value unmarshaler
@@ -997,6 +1888,17 @@ func (i *InvoiceAttachment) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceAttachment) MarshalJSON() ([]byte, error) {
+	type embed InvoiceAttachment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceAttachment) String() string {
@@ -1042,6 +1944,12 @@ func (i InvoiceAutomaticPaymentSource) Ptr() *InvoiceAutomaticPaymentSource {
 //
 // Adding custom fields to an invoice requires an
 // [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
+var (
+	invoiceCustomFieldFieldLabel     = big.NewInt(1 << 0)
+	invoiceCustomFieldFieldValue     = big.NewInt(1 << 1)
+	invoiceCustomFieldFieldPlacement = big.NewInt(1 << 2)
+)
+
 type InvoiceCustomField struct {
 	// The label or title of the custom field. This field is required for a custom field.
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
@@ -1050,6 +1958,9 @@ type InvoiceCustomField struct {
 	// The location of the custom field on the invoice. This field is required for a custom field.
 	// See [InvoiceCustomFieldPlacement](#type-invoicecustomfieldplacement) for possible values
 	Placement *InvoiceCustomFieldPlacement `json:"placement,omitempty" url:"placement,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1080,6 +1991,34 @@ func (i *InvoiceCustomField) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceCustomField) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetLabel sets the Label field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceCustomField) SetLabel(label *string) {
+	i.Label = label
+	i.require(invoiceCustomFieldFieldLabel)
+}
+
+// SetValue sets the Value field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceCustomField) SetValue(value *string) {
+	i.Value = value
+	i.require(invoiceCustomFieldFieldValue)
+}
+
+// SetPlacement sets the Placement field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceCustomField) SetPlacement(placement *InvoiceCustomFieldPlacement) {
+	i.Placement = placement
+	i.require(invoiceCustomFieldFieldPlacement)
+}
+
 func (i *InvoiceCustomField) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceCustomField
 	var value unmarshaler
@@ -1094,6 +2033,17 @@ func (i *InvoiceCustomField) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceCustomField) MarshalJSON() ([]byte, error) {
+	type embed InvoiceCustomField
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceCustomField) String() string {
@@ -1159,6 +2109,11 @@ func (i InvoiceDeliveryMethod) Ptr() *InvoiceDeliveryMethod {
 }
 
 // Describes query filters to apply.
+var (
+	invoiceFilterFieldLocationIDs = big.NewInt(1 << 0)
+	invoiceFilterFieldCustomerIDs = big.NewInt(1 << 1)
+)
+
 type InvoiceFilter struct {
 	// Limits the search to the specified locations. A location is required.
 	// In the current implementation, only one location can be specified.
@@ -1167,6 +2122,9 @@ type InvoiceFilter struct {
 	// Specifying a customer is optional. In the current implementation,
 	// a maximum of one customer can be specified.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1190,6 +2148,27 @@ func (i *InvoiceFilter) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceFilter) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceFilter) SetLocationIDs(locationIDs []string) {
+	i.LocationIDs = locationIDs
+	i.require(invoiceFilterFieldLocationIDs)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceFilter) SetCustomerIDs(customerIDs []string) {
+	i.CustomerIDs = customerIDs
+	i.require(invoiceFilterFieldCustomerIDs)
+}
+
 func (i *InvoiceFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceFilter
 	var value unmarshaler
@@ -1204,6 +2183,17 @@ func (i *InvoiceFilter) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceFilter) MarshalJSON() ([]byte, error) {
+	type embed InvoiceFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceFilter) String() string {
@@ -1221,6 +2211,14 @@ func (i *InvoiceFilter) String() string {
 // Describes a payment request reminder (automatic notification) that Square sends
 // to the customer. You configure a reminder relative to the payment request
 // `due_date`.
+var (
+	invoicePaymentReminderFieldUID                   = big.NewInt(1 << 0)
+	invoicePaymentReminderFieldRelativeScheduledDays = big.NewInt(1 << 1)
+	invoicePaymentReminderFieldMessage               = big.NewInt(1 << 2)
+	invoicePaymentReminderFieldStatus                = big.NewInt(1 << 3)
+	invoicePaymentReminderFieldSentAt                = big.NewInt(1 << 4)
+)
+
 type InvoicePaymentReminder struct {
 	// A Square-assigned ID that uniquely identifies the reminder within the
 	// `InvoicePaymentRequest`.
@@ -1236,6 +2234,9 @@ type InvoicePaymentReminder struct {
 	Status *InvoicePaymentReminderStatus `json:"status,omitempty" url:"status,omitempty"`
 	// If sent, the timestamp when the reminder was sent, in RFC 3339 format.
 	SentAt *string `json:"sent_at,omitempty" url:"sent_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1280,6 +2281,48 @@ func (i *InvoicePaymentReminder) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoicePaymentReminder) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentReminder) SetUID(uid *string) {
+	i.UID = uid
+	i.require(invoicePaymentReminderFieldUID)
+}
+
+// SetRelativeScheduledDays sets the RelativeScheduledDays field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentReminder) SetRelativeScheduledDays(relativeScheduledDays *int) {
+	i.RelativeScheduledDays = relativeScheduledDays
+	i.require(invoicePaymentReminderFieldRelativeScheduledDays)
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentReminder) SetMessage(message *string) {
+	i.Message = message
+	i.require(invoicePaymentReminderFieldMessage)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentReminder) SetStatus(status *InvoicePaymentReminderStatus) {
+	i.Status = status
+	i.require(invoicePaymentReminderFieldStatus)
+}
+
+// SetSentAt sets the SentAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentReminder) SetSentAt(sentAt *string) {
+	i.SentAt = sentAt
+	i.require(invoicePaymentReminderFieldSentAt)
+}
+
 func (i *InvoicePaymentReminder) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoicePaymentReminder
 	var value unmarshaler
@@ -1294,6 +2337,17 @@ func (i *InvoicePaymentReminder) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoicePaymentReminder) MarshalJSON() ([]byte, error) {
+	type embed InvoicePaymentReminder
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoicePaymentReminder) String() string {
@@ -1340,6 +2394,22 @@ func (i InvoicePaymentReminderStatus) Ptr() *InvoicePaymentReminderStatus {
 //
 // Adding `INSTALLMENT` payment requests to an invoice requires an
 // [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
+var (
+	invoicePaymentRequestFieldUID                             = big.NewInt(1 << 0)
+	invoicePaymentRequestFieldRequestMethod                   = big.NewInt(1 << 1)
+	invoicePaymentRequestFieldRequestType                     = big.NewInt(1 << 2)
+	invoicePaymentRequestFieldDueDate                         = big.NewInt(1 << 3)
+	invoicePaymentRequestFieldFixedAmountRequestedMoney       = big.NewInt(1 << 4)
+	invoicePaymentRequestFieldPercentageRequested             = big.NewInt(1 << 5)
+	invoicePaymentRequestFieldTippingEnabled                  = big.NewInt(1 << 6)
+	invoicePaymentRequestFieldAutomaticPaymentSource          = big.NewInt(1 << 7)
+	invoicePaymentRequestFieldCardID                          = big.NewInt(1 << 8)
+	invoicePaymentRequestFieldReminders                       = big.NewInt(1 << 9)
+	invoicePaymentRequestFieldComputedAmountMoney             = big.NewInt(1 << 10)
+	invoicePaymentRequestFieldTotalCompletedAmountMoney       = big.NewInt(1 << 11)
+	invoicePaymentRequestFieldRoundingAdjustmentIncludedMoney = big.NewInt(1 << 12)
+)
+
 type InvoicePaymentRequest struct {
 	// The Square-generated ID of the payment request in an [invoice](entity:Invoice).
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -1408,6 +2478,9 @@ type InvoicePaymentRequest struct {
 	// field specifies the rounding adjustment applied. This amount
 	// might be negative.
 	RoundingAdjustmentIncludedMoney *Money `json:"rounding_adjustment_included_money,omitempty" url:"rounding_adjustment_included_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1508,6 +2581,104 @@ func (i *InvoicePaymentRequest) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoicePaymentRequest) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetUID(uid *string) {
+	i.UID = uid
+	i.require(invoicePaymentRequestFieldUID)
+}
+
+// SetRequestMethod sets the RequestMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetRequestMethod(requestMethod *InvoiceRequestMethod) {
+	i.RequestMethod = requestMethod
+	i.require(invoicePaymentRequestFieldRequestMethod)
+}
+
+// SetRequestType sets the RequestType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetRequestType(requestType *InvoiceRequestType) {
+	i.RequestType = requestType
+	i.require(invoicePaymentRequestFieldRequestType)
+}
+
+// SetDueDate sets the DueDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetDueDate(dueDate *string) {
+	i.DueDate = dueDate
+	i.require(invoicePaymentRequestFieldDueDate)
+}
+
+// SetFixedAmountRequestedMoney sets the FixedAmountRequestedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetFixedAmountRequestedMoney(fixedAmountRequestedMoney *Money) {
+	i.FixedAmountRequestedMoney = fixedAmountRequestedMoney
+	i.require(invoicePaymentRequestFieldFixedAmountRequestedMoney)
+}
+
+// SetPercentageRequested sets the PercentageRequested field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetPercentageRequested(percentageRequested *string) {
+	i.PercentageRequested = percentageRequested
+	i.require(invoicePaymentRequestFieldPercentageRequested)
+}
+
+// SetTippingEnabled sets the TippingEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetTippingEnabled(tippingEnabled *bool) {
+	i.TippingEnabled = tippingEnabled
+	i.require(invoicePaymentRequestFieldTippingEnabled)
+}
+
+// SetAutomaticPaymentSource sets the AutomaticPaymentSource field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetAutomaticPaymentSource(automaticPaymentSource *InvoiceAutomaticPaymentSource) {
+	i.AutomaticPaymentSource = automaticPaymentSource
+	i.require(invoicePaymentRequestFieldAutomaticPaymentSource)
+}
+
+// SetCardID sets the CardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetCardID(cardID *string) {
+	i.CardID = cardID
+	i.require(invoicePaymentRequestFieldCardID)
+}
+
+// SetReminders sets the Reminders field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetReminders(reminders []*InvoicePaymentReminder) {
+	i.Reminders = reminders
+	i.require(invoicePaymentRequestFieldReminders)
+}
+
+// SetComputedAmountMoney sets the ComputedAmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetComputedAmountMoney(computedAmountMoney *Money) {
+	i.ComputedAmountMoney = computedAmountMoney
+	i.require(invoicePaymentRequestFieldComputedAmountMoney)
+}
+
+// SetTotalCompletedAmountMoney sets the TotalCompletedAmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetTotalCompletedAmountMoney(totalCompletedAmountMoney *Money) {
+	i.TotalCompletedAmountMoney = totalCompletedAmountMoney
+	i.require(invoicePaymentRequestFieldTotalCompletedAmountMoney)
+}
+
+// SetRoundingAdjustmentIncludedMoney sets the RoundingAdjustmentIncludedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoicePaymentRequest) SetRoundingAdjustmentIncludedMoney(roundingAdjustmentIncludedMoney *Money) {
+	i.RoundingAdjustmentIncludedMoney = roundingAdjustmentIncludedMoney
+	i.require(invoicePaymentRequestFieldRoundingAdjustmentIncludedMoney)
+}
+
 func (i *InvoicePaymentRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoicePaymentRequest
 	var value unmarshaler
@@ -1524,6 +2695,17 @@ func (i *InvoicePaymentRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (i *InvoicePaymentRequest) MarshalJSON() ([]byte, error) {
+	type embed InvoicePaymentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (i *InvoicePaymentRequest) String() string {
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
@@ -1537,12 +2719,20 @@ func (i *InvoicePaymentRequest) String() string {
 }
 
 // Describes query criteria for searching invoices.
+var (
+	invoiceQueryFieldFilter = big.NewInt(1 << 0)
+	invoiceQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type InvoiceQuery struct {
 	// Query filters to apply in searching invoices.
 	// For more information, see [Search for invoices](https://developer.squareup.com/docs/invoices-api/retrieve-list-search-invoices#search-invoices).
 	Filter *InvoiceFilter `json:"filter" url:"filter"`
 	// Describes the sort order for the search result.
 	Sort *InvoiceSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1566,6 +2756,27 @@ func (i *InvoiceQuery) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceQuery) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceQuery) SetFilter(filter *InvoiceFilter) {
+	i.Filter = filter
+	i.require(invoiceQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceQuery) SetSort(sort *InvoiceSort) {
+	i.Sort = sort
+	i.require(invoiceQueryFieldSort)
+}
+
 func (i *InvoiceQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceQuery
 	var value unmarshaler
@@ -1580,6 +2791,17 @@ func (i *InvoiceQuery) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceQuery) MarshalJSON() ([]byte, error) {
+	type embed InvoiceQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceQuery) String() string {
@@ -1600,6 +2822,17 @@ func (i *InvoiceQuery) String() string {
 // When you provide a customer ID for a draft invoice, Square retrieves the associated customer profile and populates
 // the remaining `InvoiceRecipient` fields. You cannot update these fields after the invoice is published.
 // Square updates the customer ID in response to a merge operation, but does not update other fields.
+var (
+	invoiceRecipientFieldCustomerID   = big.NewInt(1 << 0)
+	invoiceRecipientFieldGivenName    = big.NewInt(1 << 1)
+	invoiceRecipientFieldFamilyName   = big.NewInt(1 << 2)
+	invoiceRecipientFieldEmailAddress = big.NewInt(1 << 3)
+	invoiceRecipientFieldAddress      = big.NewInt(1 << 4)
+	invoiceRecipientFieldPhoneNumber  = big.NewInt(1 << 5)
+	invoiceRecipientFieldCompanyName  = big.NewInt(1 << 6)
+	invoiceRecipientFieldTaxIDs       = big.NewInt(1 << 7)
+)
+
 type InvoiceRecipient struct {
 	// The ID of the customer. This is the customer profile ID that
 	// you provide when creating a draft invoice.
@@ -1619,6 +2852,9 @@ type InvoiceRecipient struct {
 	// The recipient's tax IDs. The country of the seller account determines whether this field
 	// is available for the customer. For more information, see [Invoice recipient tax IDs](https://developer.squareup.com/docs/invoices-api/overview#recipient-tax-ids).
 	TaxIDs *InvoiceRecipientTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1684,6 +2920,69 @@ func (i *InvoiceRecipient) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceRecipient) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetCustomerID(customerID *string) {
+	i.CustomerID = customerID
+	i.require(invoiceRecipientFieldCustomerID)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetGivenName(givenName *string) {
+	i.GivenName = givenName
+	i.require(invoiceRecipientFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetFamilyName(familyName *string) {
+	i.FamilyName = familyName
+	i.require(invoiceRecipientFieldFamilyName)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetEmailAddress(emailAddress *string) {
+	i.EmailAddress = emailAddress
+	i.require(invoiceRecipientFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetAddress(address *Address) {
+	i.Address = address
+	i.require(invoiceRecipientFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetPhoneNumber(phoneNumber *string) {
+	i.PhoneNumber = phoneNumber
+	i.require(invoiceRecipientFieldPhoneNumber)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetCompanyName(companyName *string) {
+	i.CompanyName = companyName
+	i.require(invoiceRecipientFieldCompanyName)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipient) SetTaxIDs(taxIDs *InvoiceRecipientTaxIDs) {
+	i.TaxIDs = taxIDs
+	i.require(invoiceRecipientFieldTaxIDs)
+}
+
 func (i *InvoiceRecipient) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceRecipient
 	var value unmarshaler
@@ -1698,6 +2997,17 @@ func (i *InvoiceRecipient) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceRecipient) MarshalJSON() ([]byte, error) {
+	type embed InvoiceRecipient
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceRecipient) String() string {
@@ -1715,9 +3025,16 @@ func (i *InvoiceRecipient) String() string {
 // Represents the tax IDs for an invoice recipient. The country of the seller account determines
 // whether the corresponding `tax_ids` field is available for the customer. For more information,
 // see [Invoice recipient tax IDs](https://developer.squareup.com/docs/invoices-api/overview#recipient-tax-ids).
+var (
+	invoiceRecipientTaxIDsFieldEuVat = big.NewInt(1 << 0)
+)
+
 type InvoiceRecipientTaxIDs struct {
 	// The EU VAT identification number for the invoice recipient. For example, `IE3426675K`.
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1734,6 +3051,20 @@ func (i *InvoiceRecipientTaxIDs) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceRecipientTaxIDs) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetEuVat sets the EuVat field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceRecipientTaxIDs) SetEuVat(euVat *string) {
+	i.EuVat = euVat
+	i.require(invoiceRecipientTaxIDsFieldEuVat)
+}
+
 func (i *InvoiceRecipientTaxIDs) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceRecipientTaxIDs
 	var value unmarshaler
@@ -1748,6 +3079,17 @@ func (i *InvoiceRecipientTaxIDs) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceRecipientTaxIDs) MarshalJSON() ([]byte, error) {
+	type embed InvoiceRecipientTaxIDs
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceRecipientTaxIDs) String() string {
@@ -1831,6 +3173,11 @@ func (i InvoiceRequestType) Ptr() *InvoiceRequestType {
 }
 
 // Identifies the sort field and sort order.
+var (
+	invoiceSortFieldField = big.NewInt(1 << 0)
+	invoiceSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type InvoiceSort struct {
 	// The field to use for sorting.
 	// See [InvoiceSortField](#type-invoicesortfield) for possible values
@@ -1838,6 +3185,9 @@ type InvoiceSort struct {
 	// The order to use for sorting the results.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1854,6 +3204,27 @@ func (i *InvoiceSort) GetExtraProperties() map[string]interface{} {
 	return i.extraProperties
 }
 
+func (i *InvoiceSort) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceSort) SetField(field InvoiceSortField) {
+	i.Field = field
+	i.require(invoiceSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InvoiceSort) SetOrder(order *SortOrder) {
+	i.Order = order
+	i.require(invoiceSortFieldOrder)
+}
+
 func (i *InvoiceSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler InvoiceSort
 	var value unmarshaler
@@ -1868,6 +3239,17 @@ func (i *InvoiceSort) UnmarshalJSON(data []byte) error {
 	i.extraProperties = extraProperties
 	i.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InvoiceSort) MarshalJSON() ([]byte, error) {
+	type embed InvoiceSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (i *InvoiceSort) String() string {
@@ -1933,6 +3315,12 @@ func (i InvoiceStatus) Ptr() *InvoiceStatus {
 }
 
 // Describes a `ListInvoice` response.
+var (
+	listInvoicesResponseFieldInvoices = big.NewInt(1 << 0)
+	listInvoicesResponseFieldCursor   = big.NewInt(1 << 1)
+	listInvoicesResponseFieldErrors   = big.NewInt(1 << 2)
+)
+
 type ListInvoicesResponse struct {
 	// The invoices retrieved.
 	Invoices []*Invoice `json:"invoices,omitempty" url:"invoices,omitempty"`
@@ -1943,6 +3331,9 @@ type ListInvoicesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1973,6 +3364,34 @@ func (l *ListInvoicesResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListInvoicesResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetInvoices sets the Invoices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesResponse) SetInvoices(invoices []*Invoice) {
+	l.Invoices = invoices
+	l.require(listInvoicesResponseFieldInvoices)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listInvoicesResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInvoicesResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listInvoicesResponseFieldErrors)
+}
+
 func (l *ListInvoicesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListInvoicesResponse
 	var value unmarshaler
@@ -1989,6 +3408,17 @@ func (l *ListInvoicesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListInvoicesResponse) MarshalJSON() ([]byte, error) {
+	type embed ListInvoicesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListInvoicesResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -2002,11 +3432,19 @@ func (l *ListInvoicesResponse) String() string {
 }
 
 // Describes a `PublishInvoice` response.
+var (
+	publishInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
+	publishInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type PublishInvoiceResponse struct {
 	// The published invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2030,6 +3468,27 @@ func (p *PublishInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *PublishInvoiceResponse) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishInvoiceResponse) SetInvoice(invoice *Invoice) {
+	p.Invoice = invoice
+	p.require(publishInvoiceResponseFieldInvoice)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PublishInvoiceResponse) SetErrors(errors []*Error) {
+	p.Errors = errors
+	p.require(publishInvoiceResponseFieldErrors)
+}
+
 func (p *PublishInvoiceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler PublishInvoiceResponse
 	var value unmarshaler
@@ -2046,6 +3505,17 @@ func (p *PublishInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PublishInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed PublishInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (p *PublishInvoiceResponse) String() string {
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
@@ -2059,6 +3529,12 @@ func (p *PublishInvoiceResponse) String() string {
 }
 
 // Describes a `SearchInvoices` response.
+var (
+	searchInvoicesResponseFieldInvoices = big.NewInt(1 << 0)
+	searchInvoicesResponseFieldCursor   = big.NewInt(1 << 1)
+	searchInvoicesResponseFieldErrors   = big.NewInt(1 << 2)
+)
+
 type SearchInvoicesResponse struct {
 	// The list of invoices returned by the search.
 	Invoices []*Invoice `json:"invoices,omitempty" url:"invoices,omitempty"`
@@ -2069,6 +3545,9 @@ type SearchInvoicesResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2099,6 +3578,34 @@ func (s *SearchInvoicesResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchInvoicesResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetInvoices sets the Invoices field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesResponse) SetInvoices(invoices []*Invoice) {
+	s.Invoices = invoices
+	s.require(searchInvoicesResponseFieldInvoices)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchInvoicesResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchInvoicesResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchInvoicesResponseFieldErrors)
+}
+
 func (s *SearchInvoicesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchInvoicesResponse
 	var value unmarshaler
@@ -2115,6 +3622,17 @@ func (s *SearchInvoicesResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchInvoicesResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchInvoicesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchInvoicesResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -2128,11 +3646,19 @@ func (s *SearchInvoicesResponse) String() string {
 }
 
 // Describes a `UpdateInvoice` response.
+var (
+	updateInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
+	updateInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type UpdateInvoiceResponse struct {
 	// The updated invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2156,6 +3682,27 @@ func (u *UpdateInvoiceResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateInvoiceResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceResponse) SetInvoice(invoice *Invoice) {
+	u.Invoice = invoice
+	u.require(updateInvoiceResponseFieldInvoice)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateInvoiceResponseFieldErrors)
+}
+
 func (u *UpdateInvoiceResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateInvoiceResponse
 	var value unmarshaler
@@ -2172,6 +3719,17 @@ func (u *UpdateInvoiceResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateInvoiceResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateInvoiceResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateInvoiceResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -2183,6 +3741,13 @@ func (u *UpdateInvoiceResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", u)
 }
+
+var (
+	updateInvoiceRequestFieldInvoiceID      = big.NewInt(1 << 0)
+	updateInvoiceRequestFieldInvoice        = big.NewInt(1 << 1)
+	updateInvoiceRequestFieldIdempotencyKey = big.NewInt(1 << 2)
+	updateInvoiceRequestFieldFieldsToClear  = big.NewInt(1 << 3)
+)
 
 type UpdateInvoiceRequest struct {
 	// The ID of the invoice to update.
@@ -2202,4 +3767,42 @@ type UpdateInvoiceRequest struct {
 	// recommend using null values or the `remove` field when possible. For examples, see
 	// [Update an Invoice](https://developer.squareup.com/docs/invoices-api/update-invoices).
 	FieldsToClear []string `json:"fields_to_clear,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateInvoiceRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetInvoiceID sets the InvoiceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceRequest) SetInvoiceID(invoiceID string) {
+	u.InvoiceID = invoiceID
+	u.require(updateInvoiceRequestFieldInvoiceID)
+}
+
+// SetInvoice sets the Invoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceRequest) SetInvoice(invoice *Invoice) {
+	u.Invoice = invoice
+	u.require(updateInvoiceRequestFieldInvoice)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateInvoiceRequestFieldIdempotencyKey)
+}
+
+// SetFieldsToClear sets the FieldsToClear field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInvoiceRequest) SetFieldsToClear(fieldsToClear []string) {
+	u.FieldsToClear = fieldsToClear
+	u.require(updateInvoiceRequestFieldFieldsToClear)
 }

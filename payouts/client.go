@@ -4,7 +4,7 @@ package payouts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -15,13 +15,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +29,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,7 +37,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -46,9 +45,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListPayoutsRequest,
+	request *square.ListPayoutsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Payout], error) {
+) (*core.Page[*string, *square.Payout, *square.ListPayoutsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -61,10 +60,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -83,14 +82,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListPayoutsResponse) *internal.PageResponse[*string, *v2.Payout] {
+	readPageResponse := func(response *square.ListPayoutsResponse) *core.PageResponse[*string, *square.Payout, *square.ListPayoutsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetPayouts()
-		return &internal.PageResponse[*string, *v2.Payout]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Payout, *square.ListPayoutsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -105,9 +105,9 @@ func (c *Client) List(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetPayoutsRequest,
+	request *square.GetPayoutsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetPayoutResponse, error) {
+) (*square.GetPayoutResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -123,9 +123,9 @@ func (c *Client) Get(
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 func (c *Client) ListEntries(
 	ctx context.Context,
-	request *v2.ListEntriesPayoutsRequest,
+	request *square.ListEntriesPayoutsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.PayoutEntry], error) {
+) (*core.Page[*string, *square.PayoutEntry, *square.ListPayoutEntriesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -141,10 +141,10 @@ func (c *Client) ListEntries(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -163,14 +163,15 @@ func (c *Client) ListEntries(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListPayoutEntriesResponse) *internal.PageResponse[*string, *v2.PayoutEntry] {
+	readPageResponse := func(response *square.ListPayoutEntriesResponse) *core.PageResponse[*string, *square.PayoutEntry, *square.ListPayoutEntriesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetPayoutEntries()
-		return &internal.PageResponse[*string, *v2.PayoutEntry]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.PayoutEntry, *square.ListPayoutEntriesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(

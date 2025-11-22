@@ -4,6 +4,12 @@ package programs
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	cancelPromotionsRequestFieldProgramID   = big.NewInt(1 << 0)
+	cancelPromotionsRequestFieldPromotionID = big.NewInt(1 << 1)
 )
 
 type CancelPromotionsRequest struct {
@@ -12,7 +18,37 @@ type CancelPromotionsRequest struct {
 	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to cancel. You can cancel a
 	// promotion that has an `ACTIVE` or `SCHEDULED` status.
 	PromotionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelPromotionsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPromotionsRequest) SetProgramID(programID string) {
+	c.ProgramID = programID
+	c.require(cancelPromotionsRequestFieldProgramID)
+}
+
+// SetPromotionID sets the PromotionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelPromotionsRequest) SetPromotionID(promotionID string) {
+	c.PromotionID = promotionID
+	c.require(cancelPromotionsRequestFieldPromotionID)
+}
+
+var (
+	createLoyaltyPromotionRequestFieldProgramID        = big.NewInt(1 << 0)
+	createLoyaltyPromotionRequestFieldLoyaltyPromotion = big.NewInt(1 << 1)
+	createLoyaltyPromotionRequestFieldIdempotencyKey   = big.NewInt(1 << 2)
+)
 
 type CreateLoyaltyPromotionRequest struct {
 	// The ID of the [loyalty program](entity:LoyaltyProgram) to associate with the promotion.
@@ -24,7 +60,43 @@ type CreateLoyaltyPromotionRequest struct {
 	// A unique identifier for this request, which is used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateLoyaltyPromotionRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyPromotionRequest) SetProgramID(programID string) {
+	c.ProgramID = programID
+	c.require(createLoyaltyPromotionRequestFieldProgramID)
+}
+
+// SetLoyaltyPromotion sets the LoyaltyPromotion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyPromotionRequest) SetLoyaltyPromotion(loyaltyPromotion *v2.LoyaltyPromotion) {
+	c.LoyaltyPromotion = loyaltyPromotion
+	c.require(createLoyaltyPromotionRequestFieldLoyaltyPromotion)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyPromotionRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createLoyaltyPromotionRequestFieldIdempotencyKey)
+}
+
+var (
+	getPromotionsRequestFieldProgramID   = big.NewInt(1 << 0)
+	getPromotionsRequestFieldPromotionID = big.NewInt(1 << 1)
+)
 
 type GetPromotionsRequest struct {
 	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
@@ -32,7 +104,38 @@ type GetPromotionsRequest struct {
 	ProgramID string `json:"-" url:"-"`
 	// The ID of the [loyalty promotion](entity:LoyaltyPromotion) to retrieve.
 	PromotionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetPromotionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPromotionsRequest) SetProgramID(programID string) {
+	g.ProgramID = programID
+	g.require(getPromotionsRequestFieldProgramID)
+}
+
+// SetPromotionID sets the PromotionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPromotionsRequest) SetPromotionID(promotionID string) {
+	g.PromotionID = promotionID
+	g.require(getPromotionsRequestFieldPromotionID)
+}
+
+var (
+	listPromotionsRequestFieldProgramID = big.NewInt(1 << 0)
+	listPromotionsRequestFieldStatus    = big.NewInt(1 << 1)
+	listPromotionsRequestFieldCursor    = big.NewInt(1 << 2)
+	listPromotionsRequestFieldLimit     = big.NewInt(1 << 3)
+)
 
 type ListPromotionsRequest struct {
 	// The ID of the base [loyalty program](entity:LoyaltyProgram). To get the program ID,
@@ -50,4 +153,42 @@ type ListPromotionsRequest struct {
 	// The minimum value is 1 and the maximum value is 30. The default value is 30.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListPromotionsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPromotionsRequest) SetProgramID(programID string) {
+	l.ProgramID = programID
+	l.require(listPromotionsRequestFieldProgramID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPromotionsRequest) SetStatus(status *v2.LoyaltyPromotionStatus) {
+	l.Status = status
+	l.require(listPromotionsRequestFieldStatus)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPromotionsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listPromotionsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPromotionsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listPromotionsRequestFieldLimit)
 }

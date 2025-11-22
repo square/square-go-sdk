@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	loyalty "github.com/square/square-go-sdk/v2/loyalty"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,14 +28,13 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ListLoyaltyProgramsResponse], error) {
+) (*core.Response[*square.ListLoyaltyProgramsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,10 +43,10 @@ func (r *RawClient) List(
 	)
 	endpointURL := baseURL + "/v2/loyalty/programs"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.ListLoyaltyProgramsResponse
+	var response *square.ListLoyaltyProgramsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -63,7 +63,7 @@ func (r *RawClient) List(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ListLoyaltyProgramsResponse]{
+	return &core.Response[*square.ListLoyaltyProgramsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,7 +74,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *loyalty.GetProgramsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetLoyaltyProgramResponse], error) {
+) (*core.Response[*square.GetLoyaltyProgramResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,10 +86,10 @@ func (r *RawClient) Get(
 		request.ProgramID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetLoyaltyProgramResponse
+	var response *square.GetLoyaltyProgramResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -106,7 +106,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetLoyaltyProgramResponse]{
+	return &core.Response[*square.GetLoyaltyProgramResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -117,7 +117,7 @@ func (r *RawClient) Calculate(
 	ctx context.Context,
 	request *loyalty.CalculateLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CalculateLoyaltyPointsResponse], error) {
+) (*core.Response[*square.CalculateLoyaltyPointsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -129,11 +129,11 @@ func (r *RawClient) Calculate(
 		request.ProgramID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CalculateLoyaltyPointsResponse
+	var response *square.CalculateLoyaltyPointsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -151,7 +151,7 @@ func (r *RawClient) Calculate(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CalculateLoyaltyPointsResponse]{
+	return &core.Response[*square.CalculateLoyaltyPointsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

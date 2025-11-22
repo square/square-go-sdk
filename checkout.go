@@ -6,24 +6,106 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	retrieveLocationSettingsRequestFieldLocationID = big.NewInt(1 << 0)
 )
 
 type RetrieveLocationSettingsRequest struct {
 	// The ID of the location for which to retrieve settings.
 	LocationID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RetrieveLocationSettingsRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationSettingsRequest) SetLocationID(locationID string) {
+	r.LocationID = locationID
+	r.require(retrieveLocationSettingsRequestFieldLocationID)
+}
+
+var (
+	updateLocationSettingsRequestFieldLocationID       = big.NewInt(1 << 0)
+	updateLocationSettingsRequestFieldLocationSettings = big.NewInt(1 << 1)
+)
 
 type UpdateLocationSettingsRequest struct {
 	// The ID of the location for which to retrieve settings.
 	LocationID string `json:"-" url:"-"`
 	// Describe your updates using the `location_settings` object. Make sure it contains only the fields that have changed.
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateLocationSettingsRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationSettingsRequest) SetLocationID(locationID string) {
+	u.LocationID = locationID
+	u.require(updateLocationSettingsRequestFieldLocationID)
+}
+
+// SetLocationSettings sets the LocationSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationSettingsRequest) SetLocationSettings(locationSettings *CheckoutLocationSettings) {
+	u.LocationSettings = locationSettings
+	u.require(updateLocationSettingsRequestFieldLocationSettings)
+}
+
+var (
+	updateMerchantSettingsRequestFieldMerchantSettings = big.NewInt(1 << 0)
+)
 
 type UpdateMerchantSettingsRequest struct {
 	// Describe your updates using the `merchant_settings` object. Make sure it contains only the fields that have changed.
 	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateMerchantSettingsRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetMerchantSettings sets the MerchantSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantSettingsRequest) SetMerchantSettings(merchantSettings *CheckoutMerchantSettings) {
+	u.MerchantSettings = merchantSettings
+	u.require(updateMerchantSettingsRequestFieldMerchantSettings)
+}
+
+var (
+	checkoutLocationSettingsFieldLocationID           = big.NewInt(1 << 0)
+	checkoutLocationSettingsFieldCustomerNotesEnabled = big.NewInt(1 << 1)
+	checkoutLocationSettingsFieldPolicies             = big.NewInt(1 << 2)
+	checkoutLocationSettingsFieldBranding             = big.NewInt(1 << 3)
+	checkoutLocationSettingsFieldTipping              = big.NewInt(1 << 4)
+	checkoutLocationSettingsFieldCoupons              = big.NewInt(1 << 5)
+	checkoutLocationSettingsFieldUpdatedAt            = big.NewInt(1 << 6)
+)
 
 type CheckoutLocationSettings struct {
 	// The ID of the location that these settings apply to.
@@ -44,6 +126,9 @@ type CheckoutLocationSettings struct {
 	// UTC: 2020-01-26T02:25:34Z
 	// Pacific Standard Time with UTC offset: 2020-01-25T18:25:34-08:00
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -102,6 +187,62 @@ func (c *CheckoutLocationSettings) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CheckoutLocationSettings) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetLocationID(locationID *string) {
+	c.LocationID = locationID
+	c.require(checkoutLocationSettingsFieldLocationID)
+}
+
+// SetCustomerNotesEnabled sets the CustomerNotesEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetCustomerNotesEnabled(customerNotesEnabled *bool) {
+	c.CustomerNotesEnabled = customerNotesEnabled
+	c.require(checkoutLocationSettingsFieldCustomerNotesEnabled)
+}
+
+// SetPolicies sets the Policies field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetPolicies(policies []*CheckoutLocationSettingsPolicy) {
+	c.Policies = policies
+	c.require(checkoutLocationSettingsFieldPolicies)
+}
+
+// SetBranding sets the Branding field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetBranding(branding *CheckoutLocationSettingsBranding) {
+	c.Branding = branding
+	c.require(checkoutLocationSettingsFieldBranding)
+}
+
+// SetTipping sets the Tipping field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetTipping(tipping *CheckoutLocationSettingsTipping) {
+	c.Tipping = tipping
+	c.require(checkoutLocationSettingsFieldTipping)
+}
+
+// SetCoupons sets the Coupons field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetCoupons(coupons *CheckoutLocationSettingsCoupons) {
+	c.Coupons = coupons
+	c.require(checkoutLocationSettingsFieldCoupons)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettings) SetUpdatedAt(updatedAt *string) {
+	c.UpdatedAt = updatedAt
+	c.require(checkoutLocationSettingsFieldUpdatedAt)
+}
+
 func (c *CheckoutLocationSettings) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutLocationSettings
 	var value unmarshaler
@@ -118,6 +259,17 @@ func (c *CheckoutLocationSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CheckoutLocationSettings) MarshalJSON() ([]byte, error) {
+	type embed CheckoutLocationSettings
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutLocationSettings) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -130,6 +282,12 @@ func (c *CheckoutLocationSettings) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	checkoutLocationSettingsBrandingFieldHeaderType  = big.NewInt(1 << 0)
+	checkoutLocationSettingsBrandingFieldButtonColor = big.NewInt(1 << 1)
+	checkoutLocationSettingsBrandingFieldButtonShape = big.NewInt(1 << 2)
+)
+
 type CheckoutLocationSettingsBranding struct {
 	// Show the location logo on the checkout page.
 	// See [HeaderType](#type-headertype) for possible values
@@ -139,6 +297,9 @@ type CheckoutLocationSettingsBranding struct {
 	// The shape of the button on the checkout page.
 	// See [ButtonShape](#type-buttonshape) for possible values
 	ButtonShape *CheckoutLocationSettingsBrandingButtonShape `json:"button_shape,omitempty" url:"button_shape,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -169,6 +330,34 @@ func (c *CheckoutLocationSettingsBranding) GetExtraProperties() map[string]inter
 	return c.extraProperties
 }
 
+func (c *CheckoutLocationSettingsBranding) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetHeaderType sets the HeaderType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsBranding) SetHeaderType(headerType *CheckoutLocationSettingsBrandingHeaderType) {
+	c.HeaderType = headerType
+	c.require(checkoutLocationSettingsBrandingFieldHeaderType)
+}
+
+// SetButtonColor sets the ButtonColor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsBranding) SetButtonColor(buttonColor *string) {
+	c.ButtonColor = buttonColor
+	c.require(checkoutLocationSettingsBrandingFieldButtonColor)
+}
+
+// SetButtonShape sets the ButtonShape field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsBranding) SetButtonShape(buttonShape *CheckoutLocationSettingsBrandingButtonShape) {
+	c.ButtonShape = buttonShape
+	c.require(checkoutLocationSettingsBrandingFieldButtonShape)
+}
+
 func (c *CheckoutLocationSettingsBranding) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutLocationSettingsBranding
 	var value unmarshaler
@@ -183,6 +372,17 @@ func (c *CheckoutLocationSettingsBranding) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CheckoutLocationSettingsBranding) MarshalJSON() ([]byte, error) {
+	type embed CheckoutLocationSettingsBranding
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CheckoutLocationSettingsBranding) String() string {
@@ -247,9 +447,16 @@ func (c CheckoutLocationSettingsBrandingHeaderType) Ptr() *CheckoutLocationSetti
 	return &c
 }
 
+var (
+	checkoutLocationSettingsCouponsFieldEnabled = big.NewInt(1 << 0)
+)
+
 type CheckoutLocationSettingsCoupons struct {
 	// Indicates whether coupons are enabled for this location.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -264,6 +471,20 @@ func (c *CheckoutLocationSettingsCoupons) GetEnabled() *bool {
 
 func (c *CheckoutLocationSettingsCoupons) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CheckoutLocationSettingsCoupons) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEnabled sets the Enabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsCoupons) SetEnabled(enabled *bool) {
+	c.Enabled = enabled
+	c.require(checkoutLocationSettingsCouponsFieldEnabled)
 }
 
 func (c *CheckoutLocationSettingsCoupons) UnmarshalJSON(data []byte) error {
@@ -282,6 +503,17 @@ func (c *CheckoutLocationSettingsCoupons) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CheckoutLocationSettingsCoupons) MarshalJSON() ([]byte, error) {
+	type embed CheckoutLocationSettingsCoupons
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutLocationSettingsCoupons) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -294,6 +526,12 @@ func (c *CheckoutLocationSettingsCoupons) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	checkoutLocationSettingsPolicyFieldUID         = big.NewInt(1 << 0)
+	checkoutLocationSettingsPolicyFieldTitle       = big.NewInt(1 << 1)
+	checkoutLocationSettingsPolicyFieldDescription = big.NewInt(1 << 2)
+)
+
 type CheckoutLocationSettingsPolicy struct {
 	// A unique ID to identify the policy when making changes. You must set the UID for policy updates, but it’s optional when setting new policies.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -301,6 +539,9 @@ type CheckoutLocationSettingsPolicy struct {
 	Title *string `json:"title,omitempty" url:"title,omitempty"`
 	// The description of the policy.
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -331,6 +572,34 @@ func (c *CheckoutLocationSettingsPolicy) GetExtraProperties() map[string]interfa
 	return c.extraProperties
 }
 
+func (c *CheckoutLocationSettingsPolicy) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsPolicy) SetUID(uid *string) {
+	c.UID = uid
+	c.require(checkoutLocationSettingsPolicyFieldUID)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsPolicy) SetTitle(title *string) {
+	c.Title = title
+	c.require(checkoutLocationSettingsPolicyFieldTitle)
+}
+
+// SetDescription sets the Description field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsPolicy) SetDescription(description *string) {
+	c.Description = description
+	c.require(checkoutLocationSettingsPolicyFieldDescription)
+}
+
 func (c *CheckoutLocationSettingsPolicy) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutLocationSettingsPolicy
 	var value unmarshaler
@@ -347,6 +616,17 @@ func (c *CheckoutLocationSettingsPolicy) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CheckoutLocationSettingsPolicy) MarshalJSON() ([]byte, error) {
+	type embed CheckoutLocationSettingsPolicy
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutLocationSettingsPolicy) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -358,6 +638,14 @@ func (c *CheckoutLocationSettingsPolicy) String() string {
 	}
 	return fmt.Sprintf("%#v", c)
 }
+
+var (
+	checkoutLocationSettingsTippingFieldPercentages         = big.NewInt(1 << 0)
+	checkoutLocationSettingsTippingFieldSmartTippingEnabled = big.NewInt(1 << 1)
+	checkoutLocationSettingsTippingFieldDefaultPercent      = big.NewInt(1 << 2)
+	checkoutLocationSettingsTippingFieldSmartTips           = big.NewInt(1 << 3)
+	checkoutLocationSettingsTippingFieldDefaultSmartTip     = big.NewInt(1 << 4)
+)
 
 type CheckoutLocationSettingsTipping struct {
 	// Set three custom percentage amounts that buyers can select at checkout. If Smart Tip is enabled, this only applies to transactions totaling $10 or more.
@@ -373,6 +661,9 @@ type CheckoutLocationSettingsTipping struct {
 	SmartTips []*Money `json:"smart_tips,omitempty" url:"smart_tips,omitempty"`
 	// Set the pre-selected whole amount that appears at checkout when Smart Tip is enabled and the transaction amount is less than $10.
 	DefaultSmartTip *Money `json:"default_smart_tip,omitempty" url:"default_smart_tip,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -417,6 +708,48 @@ func (c *CheckoutLocationSettingsTipping) GetExtraProperties() map[string]interf
 	return c.extraProperties
 }
 
+func (c *CheckoutLocationSettingsTipping) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetPercentages sets the Percentages field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsTipping) SetPercentages(percentages []int) {
+	c.Percentages = percentages
+	c.require(checkoutLocationSettingsTippingFieldPercentages)
+}
+
+// SetSmartTippingEnabled sets the SmartTippingEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsTipping) SetSmartTippingEnabled(smartTippingEnabled *bool) {
+	c.SmartTippingEnabled = smartTippingEnabled
+	c.require(checkoutLocationSettingsTippingFieldSmartTippingEnabled)
+}
+
+// SetDefaultPercent sets the DefaultPercent field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsTipping) SetDefaultPercent(defaultPercent *int) {
+	c.DefaultPercent = defaultPercent
+	c.require(checkoutLocationSettingsTippingFieldDefaultPercent)
+}
+
+// SetSmartTips sets the SmartTips field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsTipping) SetSmartTips(smartTips []*Money) {
+	c.SmartTips = smartTips
+	c.require(checkoutLocationSettingsTippingFieldSmartTips)
+}
+
+// SetDefaultSmartTip sets the DefaultSmartTip field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutLocationSettingsTipping) SetDefaultSmartTip(defaultSmartTip *Money) {
+	c.DefaultSmartTip = defaultSmartTip
+	c.require(checkoutLocationSettingsTippingFieldDefaultSmartTip)
+}
+
 func (c *CheckoutLocationSettingsTipping) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutLocationSettingsTipping
 	var value unmarshaler
@@ -433,6 +766,17 @@ func (c *CheckoutLocationSettingsTipping) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CheckoutLocationSettingsTipping) MarshalJSON() ([]byte, error) {
+	type embed CheckoutLocationSettingsTipping
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutLocationSettingsTipping) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -445,6 +789,11 @@ func (c *CheckoutLocationSettingsTipping) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	checkoutMerchantSettingsFieldPaymentMethods = big.NewInt(1 << 0)
+	checkoutMerchantSettingsFieldUpdatedAt      = big.NewInt(1 << 1)
+)
+
 type CheckoutMerchantSettings struct {
 	// The set of payment methods accepted for the merchant's account.
 	PaymentMethods *CheckoutMerchantSettingsPaymentMethods `json:"payment_methods,omitempty" url:"payment_methods,omitempty"`
@@ -453,6 +802,9 @@ type CheckoutMerchantSettings struct {
 	// UTC: 2020-01-26T02:25:34Z
 	// Pacific Standard Time with UTC offset: 2020-01-25T18:25:34-08:00
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -476,6 +828,27 @@ func (c *CheckoutMerchantSettings) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CheckoutMerchantSettings) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetPaymentMethods sets the PaymentMethods field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettings) SetPaymentMethods(paymentMethods *CheckoutMerchantSettingsPaymentMethods) {
+	c.PaymentMethods = paymentMethods
+	c.require(checkoutMerchantSettingsFieldPaymentMethods)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettings) SetUpdatedAt(updatedAt *string) {
+	c.UpdatedAt = updatedAt
+	c.require(checkoutMerchantSettingsFieldUpdatedAt)
+}
+
 func (c *CheckoutMerchantSettings) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutMerchantSettings
 	var value unmarshaler
@@ -492,6 +865,17 @@ func (c *CheckoutMerchantSettings) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CheckoutMerchantSettings) MarshalJSON() ([]byte, error) {
+	type embed CheckoutMerchantSettings
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutMerchantSettings) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -504,11 +888,21 @@ func (c *CheckoutMerchantSettings) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	checkoutMerchantSettingsPaymentMethodsFieldApplePay         = big.NewInt(1 << 0)
+	checkoutMerchantSettingsPaymentMethodsFieldGooglePay        = big.NewInt(1 << 1)
+	checkoutMerchantSettingsPaymentMethodsFieldCashApp          = big.NewInt(1 << 2)
+	checkoutMerchantSettingsPaymentMethodsFieldAfterpayClearpay = big.NewInt(1 << 3)
+)
+
 type CheckoutMerchantSettingsPaymentMethods struct {
 	ApplePay         *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"apple_pay,omitempty" url:"apple_pay,omitempty"`
 	GooglePay        *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"google_pay,omitempty" url:"google_pay,omitempty"`
 	CashApp          *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"cash_app,omitempty" url:"cash_app,omitempty"`
 	AfterpayClearpay *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay `json:"afterpay_clearpay,omitempty" url:"afterpay_clearpay,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -546,6 +940,41 @@ func (c *CheckoutMerchantSettingsPaymentMethods) GetExtraProperties() map[string
 	return c.extraProperties
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethods) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetApplePay sets the ApplePay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethods) SetApplePay(applePay *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) {
+	c.ApplePay = applePay
+	c.require(checkoutMerchantSettingsPaymentMethodsFieldApplePay)
+}
+
+// SetGooglePay sets the GooglePay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethods) SetGooglePay(googlePay *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) {
+	c.GooglePay = googlePay
+	c.require(checkoutMerchantSettingsPaymentMethodsFieldGooglePay)
+}
+
+// SetCashApp sets the CashApp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethods) SetCashApp(cashApp *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) {
+	c.CashApp = cashApp
+	c.require(checkoutMerchantSettingsPaymentMethodsFieldCashApp)
+}
+
+// SetAfterpayClearpay sets the AfterpayClearpay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethods) SetAfterpayClearpay(afterpayClearpay *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) {
+	c.AfterpayClearpay = afterpayClearpay
+	c.require(checkoutMerchantSettingsPaymentMethodsFieldAfterpayClearpay)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethods) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutMerchantSettingsPaymentMethods
 	var value unmarshaler
@@ -562,6 +991,17 @@ func (c *CheckoutMerchantSettingsPaymentMethods) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethods) MarshalJSON() ([]byte, error) {
+	type embed CheckoutMerchantSettingsPaymentMethods
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethods) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -575,6 +1015,12 @@ func (c *CheckoutMerchantSettingsPaymentMethods) String() string {
 }
 
 // The settings allowed for AfterpayClearpay.
+var (
+	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldOrderEligibilityRange = big.NewInt(1 << 0)
+	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldItemEligibilityRange  = big.NewInt(1 << 1)
+	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldEnabled               = big.NewInt(1 << 2)
+)
+
 type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay struct {
 	// Afterpay is shown as an option for order totals falling within the configured range.
 	OrderEligibilityRange *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange `json:"order_eligibility_range,omitempty" url:"order_eligibility_range,omitempty"`
@@ -582,6 +1028,9 @@ type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay struct {
 	ItemEligibilityRange *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange `json:"item_eligibility_range,omitempty" url:"item_eligibility_range,omitempty"`
 	// Indicates whether the payment method is enabled for the account.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -612,6 +1061,34 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) GetExtraPropert
 	return c.extraProperties
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetOrderEligibilityRange sets the OrderEligibilityRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) SetOrderEligibilityRange(orderEligibilityRange *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) {
+	c.OrderEligibilityRange = orderEligibilityRange
+	c.require(checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldOrderEligibilityRange)
+}
+
+// SetItemEligibilityRange sets the ItemEligibilityRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) SetItemEligibilityRange(itemEligibilityRange *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) {
+	c.ItemEligibilityRange = itemEligibilityRange
+	c.require(checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldItemEligibilityRange)
+}
+
+// SetEnabled sets the Enabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) SetEnabled(enabled *bool) {
+	c.Enabled = enabled
+	c.require(checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldEnabled)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay
 	var value unmarshaler
@@ -628,6 +1105,17 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) UnmarshalJSON(d
 	return nil
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) MarshalJSON() ([]byte, error) {
+	type embed CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -641,9 +1129,17 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) String() string
 }
 
 // A range of purchase price that qualifies.
+var (
+	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMin = big.NewInt(1 << 0)
+	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMax = big.NewInt(1 << 1)
+)
+
 type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange struct {
 	Min *Money `json:"min" url:"min"`
 	Max *Money `json:"max" url:"max"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -667,6 +1163,27 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 	return c.extraProperties
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetMin sets the Min field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) SetMin(min *Money) {
+	c.Min = min
+	c.require(checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMin)
+}
+
+// SetMax sets the Max field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) SetMax(max *Money) {
+	c.Max = max
+	c.require(checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMax)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) UnmarshalJSON(data []byte) error {
 	type unmarshaler CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange
 	var value unmarshaler
@@ -683,6 +1200,17 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 	return nil
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) MarshalJSON() ([]byte, error) {
+	type embed CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -696,9 +1224,16 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 }
 
 // The settings allowed for a payment method.
+var (
+	checkoutMerchantSettingsPaymentMethodsPaymentMethodFieldEnabled = big.NewInt(1 << 0)
+)
+
 type CheckoutMerchantSettingsPaymentMethodsPaymentMethod struct {
 	// Indicates whether the payment method is enabled for the account.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -713,6 +1248,20 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetEnabled() *bool
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEnabled sets the Enabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) SetEnabled(enabled *bool) {
+	c.Enabled = enabled
+	c.require(checkoutMerchantSettingsPaymentMethodsPaymentMethodFieldEnabled)
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) UnmarshalJSON(data []byte) error {
@@ -731,6 +1280,17 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) UnmarshalJSON(data
 	return nil
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) MarshalJSON() ([]byte, error) {
+	type embed CheckoutMerchantSettingsPaymentMethodsPaymentMethod
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -743,11 +1303,19 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	retrieveLocationSettingsResponseFieldErrors           = big.NewInt(1 << 0)
+	retrieveLocationSettingsResponseFieldLocationSettings = big.NewInt(1 << 1)
+)
+
 type RetrieveLocationSettingsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The location settings.
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -771,6 +1339,27 @@ func (r *RetrieveLocationSettingsResponse) GetExtraProperties() map[string]inter
 	return r.extraProperties
 }
 
+func (r *RetrieveLocationSettingsResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationSettingsResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveLocationSettingsResponseFieldErrors)
+}
+
+// SetLocationSettings sets the LocationSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationSettingsResponse) SetLocationSettings(locationSettings *CheckoutLocationSettings) {
+	r.LocationSettings = locationSettings
+	r.require(retrieveLocationSettingsResponseFieldLocationSettings)
+}
+
 func (r *RetrieveLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveLocationSettingsResponse
 	var value unmarshaler
@@ -787,6 +1376,17 @@ func (r *RetrieveLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *RetrieveLocationSettingsResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveLocationSettingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveLocationSettingsResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -799,11 +1399,19 @@ func (r *RetrieveLocationSettingsResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+var (
+	retrieveMerchantSettingsResponseFieldErrors           = big.NewInt(1 << 0)
+	retrieveMerchantSettingsResponseFieldMerchantSettings = big.NewInt(1 << 1)
+)
+
 type RetrieveMerchantSettingsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The merchant settings.
 	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -827,6 +1435,27 @@ func (r *RetrieveMerchantSettingsResponse) GetExtraProperties() map[string]inter
 	return r.extraProperties
 }
 
+func (r *RetrieveMerchantSettingsResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveMerchantSettingsResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveMerchantSettingsResponseFieldErrors)
+}
+
+// SetMerchantSettings sets the MerchantSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveMerchantSettingsResponse) SetMerchantSettings(merchantSettings *CheckoutMerchantSettings) {
+	r.MerchantSettings = merchantSettings
+	r.require(retrieveMerchantSettingsResponseFieldMerchantSettings)
+}
+
 func (r *RetrieveMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveMerchantSettingsResponse
 	var value unmarshaler
@@ -843,6 +1472,17 @@ func (r *RetrieveMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *RetrieveMerchantSettingsResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveMerchantSettingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveMerchantSettingsResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -855,11 +1495,19 @@ func (r *RetrieveMerchantSettingsResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+var (
+	updateLocationSettingsResponseFieldErrors           = big.NewInt(1 << 0)
+	updateLocationSettingsResponseFieldLocationSettings = big.NewInt(1 << 1)
+)
+
 type UpdateLocationSettingsResponse struct {
 	// Any errors that occurred when updating the location settings.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated location settings.
 	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"location_settings,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -883,6 +1531,27 @@ func (u *UpdateLocationSettingsResponse) GetExtraProperties() map[string]interfa
 	return u.extraProperties
 }
 
+func (u *UpdateLocationSettingsResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationSettingsResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateLocationSettingsResponseFieldErrors)
+}
+
+// SetLocationSettings sets the LocationSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateLocationSettingsResponse) SetLocationSettings(locationSettings *CheckoutLocationSettings) {
+	u.LocationSettings = locationSettings
+	u.require(updateLocationSettingsResponseFieldLocationSettings)
+}
+
 func (u *UpdateLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateLocationSettingsResponse
 	var value unmarshaler
@@ -899,6 +1568,17 @@ func (u *UpdateLocationSettingsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateLocationSettingsResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationSettingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateLocationSettingsResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -911,11 +1591,19 @@ func (u *UpdateLocationSettingsResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateMerchantSettingsResponseFieldErrors           = big.NewInt(1 << 0)
+	updateMerchantSettingsResponseFieldMerchantSettings = big.NewInt(1 << 1)
+)
+
 type UpdateMerchantSettingsResponse struct {
 	// Any errors that occurred when updating the merchant settings.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated merchant settings.
 	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"merchant_settings,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -939,6 +1627,27 @@ func (u *UpdateMerchantSettingsResponse) GetExtraProperties() map[string]interfa
 	return u.extraProperties
 }
 
+func (u *UpdateMerchantSettingsResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantSettingsResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateMerchantSettingsResponseFieldErrors)
+}
+
+// SetMerchantSettings sets the MerchantSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateMerchantSettingsResponse) SetMerchantSettings(merchantSettings *CheckoutMerchantSettings) {
+	u.MerchantSettings = merchantSettings
+	u.require(updateMerchantSettingsResponseFieldMerchantSettings)
+}
+
 func (u *UpdateMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateMerchantSettingsResponse
 	var value unmarshaler
@@ -953,6 +1662,17 @@ func (u *UpdateMerchantSettingsResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UpdateMerchantSettingsResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateMerchantSettingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UpdateMerchantSettingsResponse) String() string {

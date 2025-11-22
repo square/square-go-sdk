@@ -4,7 +4,7 @@ package events
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) SearchEvents(
 	ctx context.Context,
-	request *v2.SearchEventsRequest,
+	request *square.SearchEventsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchEventsResponse], error) {
+) (*core.Response[*square.SearchEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) SearchEvents(
 	)
 	endpointURL := baseURL + "/v2/events"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchEventsResponse
+	var response *square.SearchEventsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) SearchEvents(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchEventsResponse]{
+	return &core.Response[*square.SearchEventsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,7 +75,7 @@ func (r *RawClient) SearchEvents(
 func (r *RawClient) DisableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DisableEventsResponse], error) {
+) (*core.Response[*square.DisableEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -84,10 +84,10 @@ func (r *RawClient) DisableEvents(
 	)
 	endpointURL := baseURL + "/v2/events/disable"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DisableEventsResponse
+	var response *square.DisableEventsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -104,7 +104,7 @@ func (r *RawClient) DisableEvents(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DisableEventsResponse]{
+	return &core.Response[*square.DisableEventsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -114,7 +114,7 @@ func (r *RawClient) DisableEvents(
 func (r *RawClient) EnableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.EnableEventsResponse], error) {
+) (*core.Response[*square.EnableEventsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -123,10 +123,10 @@ func (r *RawClient) EnableEvents(
 	)
 	endpointURL := baseURL + "/v2/events/enable"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.EnableEventsResponse
+	var response *square.EnableEventsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -143,7 +143,7 @@ func (r *RawClient) EnableEvents(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.EnableEventsResponse]{
+	return &core.Response[*square.EnableEventsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -152,9 +152,9 @@ func (r *RawClient) EnableEvents(
 
 func (r *RawClient) ListEventTypes(
 	ctx context.Context,
-	request *v2.ListEventTypesRequest,
+	request *square.ListEventTypesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ListEventTypesResponse], error) {
+) (*core.Response[*square.ListEventTypesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -170,10 +170,10 @@ func (r *RawClient) ListEventTypes(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.ListEventTypesResponse
+	var response *square.ListEventTypesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -190,7 +190,7 @@ func (r *RawClient) ListEventTypes(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ListEventTypesResponse]{
+	return &core.Response[*square.ListEventTypesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -4,7 +4,7 @@ package refunds
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) RefundPayment(
 	ctx context.Context,
-	request *v2.RefundPaymentRequest,
+	request *square.RefundPaymentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RefundPaymentResponse], error) {
+) (*core.Response[*square.RefundPaymentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) RefundPayment(
 	)
 	endpointURL := baseURL + "/v2/refunds"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.RefundPaymentResponse
+	var response *square.RefundPaymentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) RefundPayment(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RefundPaymentResponse]{
+	return &core.Response[*square.RefundPaymentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) RefundPayment(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetRefundsRequest,
+	request *square.GetRefundsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetPaymentRefundResponse], error) {
+) (*core.Response[*square.GetPaymentRefundResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -88,10 +88,10 @@ func (r *RawClient) Get(
 		request.RefundID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetPaymentRefundResponse
+	var response *square.GetPaymentRefundResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetPaymentRefundResponse]{
+	return &core.Response[*square.GetPaymentRefundResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

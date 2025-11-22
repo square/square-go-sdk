@@ -4,6 +4,14 @@ package loyalty
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	calculateLoyaltyPointsRequestFieldProgramID              = big.NewInt(1 << 0)
+	calculateLoyaltyPointsRequestFieldOrderID                = big.NewInt(1 << 1)
+	calculateLoyaltyPointsRequestFieldTransactionAmountMoney = big.NewInt(1 << 2)
+	calculateLoyaltyPointsRequestFieldLoyaltyAccountID       = big.NewInt(1 << 3)
 )
 
 type CalculateLoyaltyPointsRequest struct {
@@ -26,9 +34,68 @@ type CalculateLoyaltyPointsRequest struct {
 	// If not specified, the `promotion_points` field shows the number of points the purchase qualifies
 	// for regardless of the trigger limit.
 	LoyaltyAccountID *string `json:"loyalty_account_id,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CalculateLoyaltyPointsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateLoyaltyPointsRequest) SetProgramID(programID string) {
+	c.ProgramID = programID
+	c.require(calculateLoyaltyPointsRequestFieldProgramID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateLoyaltyPointsRequest) SetOrderID(orderID *string) {
+	c.OrderID = orderID
+	c.require(calculateLoyaltyPointsRequestFieldOrderID)
+}
+
+// SetTransactionAmountMoney sets the TransactionAmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmountMoney *v2.Money) {
+	c.TransactionAmountMoney = transactionAmountMoney
+	c.require(calculateLoyaltyPointsRequestFieldTransactionAmountMoney)
+}
+
+// SetLoyaltyAccountID sets the LoyaltyAccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CalculateLoyaltyPointsRequest) SetLoyaltyAccountID(loyaltyAccountID *string) {
+	c.LoyaltyAccountID = loyaltyAccountID
+	c.require(calculateLoyaltyPointsRequestFieldLoyaltyAccountID)
+}
+
+var (
+	getProgramsRequestFieldProgramID = big.NewInt(1 << 0)
+)
 
 type GetProgramsRequest struct {
 	// The ID of the loyalty program or the keyword `main`. Either value can be used to retrieve the single loyalty program that belongs to the seller.
 	ProgramID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetProgramsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetProgramID sets the ProgramID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetProgramsRequest) SetProgramID(programID string) {
+	g.ProgramID = programID
+	g.require(getProgramsRequestFieldProgramID)
 }

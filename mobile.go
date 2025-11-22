@@ -6,15 +6,43 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	createMobileAuthorizationCodeRequestFieldLocationID = big.NewInt(1 << 0)
 )
 
 type CreateMobileAuthorizationCodeRequest struct {
 	// The Square location ID that the authorization code should be tied to.
 	LocationID *string `json:"location_id,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateMobileAuthorizationCodeRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMobileAuthorizationCodeRequest) SetLocationID(locationID *string) {
+	c.LocationID = locationID
+	c.require(createMobileAuthorizationCodeRequestFieldLocationID)
 }
 
 // Defines the fields that are included in the response body of
 // a request to the `CreateMobileAuthorizationCode` endpoint.
+var (
+	createMobileAuthorizationCodeResponseFieldAuthorizationCode = big.NewInt(1 << 0)
+	createMobileAuthorizationCodeResponseFieldExpiresAt         = big.NewInt(1 << 1)
+	createMobileAuthorizationCodeResponseFieldErrors            = big.NewInt(1 << 2)
+)
+
 type CreateMobileAuthorizationCodeResponse struct {
 	// The generated authorization code that connects a mobile application instance
 	// to a Square account.
@@ -24,6 +52,9 @@ type CreateMobileAuthorizationCodeResponse struct {
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -54,6 +85,34 @@ func (c *CreateMobileAuthorizationCodeResponse) GetExtraProperties() map[string]
 	return c.extraProperties
 }
 
+func (c *CreateMobileAuthorizationCodeResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAuthorizationCode sets the AuthorizationCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMobileAuthorizationCodeResponse) SetAuthorizationCode(authorizationCode *string) {
+	c.AuthorizationCode = authorizationCode
+	c.require(createMobileAuthorizationCodeResponseFieldAuthorizationCode)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMobileAuthorizationCodeResponse) SetExpiresAt(expiresAt *string) {
+	c.ExpiresAt = expiresAt
+	c.require(createMobileAuthorizationCodeResponseFieldExpiresAt)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateMobileAuthorizationCodeResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createMobileAuthorizationCodeResponseFieldErrors)
+}
+
 func (c *CreateMobileAuthorizationCodeResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateMobileAuthorizationCodeResponse
 	var value unmarshaler
@@ -68,6 +127,17 @@ func (c *CreateMobileAuthorizationCodeResponse) UnmarshalJSON(data []byte) error
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CreateMobileAuthorizationCodeResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateMobileAuthorizationCodeResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CreateMobileAuthorizationCodeResponse) String() string {

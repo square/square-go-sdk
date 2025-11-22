@@ -4,7 +4,7 @@ package groups
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	customers "github.com/square/square-go-sdk/v2/customers"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerGroupRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateCustomerGroupResponse], error) {
+) (*core.Response[*square.CreateCustomerGroupResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/customers/groups"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateCustomerGroupResponse
+	var response *square.CreateCustomerGroupResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateCustomerGroupResponse]{
+	return &core.Response[*square.CreateCustomerGroupResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *customers.GetGroupsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetCustomerGroupResponse], error) {
+) (*core.Response[*square.GetCustomerGroupResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Get(
 		request.GroupID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetCustomerGroupResponse
+	var response *square.GetCustomerGroupResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetCustomerGroupResponse]{
+	return &core.Response[*square.GetCustomerGroupResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -120,7 +120,7 @@ func (r *RawClient) Update(
 	ctx context.Context,
 	request *customers.UpdateCustomerGroupRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateCustomerGroupResponse], error) {
+) (*core.Response[*square.UpdateCustomerGroupResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -132,11 +132,11 @@ func (r *RawClient) Update(
 		request.GroupID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateCustomerGroupResponse
+	var response *square.UpdateCustomerGroupResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -154,7 +154,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateCustomerGroupResponse]{
+	return &core.Response[*square.UpdateCustomerGroupResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -165,7 +165,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *customers.DeleteGroupsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteCustomerGroupResponse], error) {
+) (*core.Response[*square.DeleteCustomerGroupResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -177,10 +177,10 @@ func (r *RawClient) Delete(
 		request.GroupID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteCustomerGroupResponse
+	var response *square.DeleteCustomerGroupResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -197,7 +197,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteCustomerGroupResponse]{
+	return &core.Response[*square.DeleteCustomerGroupResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -208,7 +208,7 @@ func (r *RawClient) Add(
 	ctx context.Context,
 	request *customers.AddGroupsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.AddGroupToCustomerResponse], error) {
+) (*core.Response[*square.AddGroupToCustomerResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -221,10 +221,10 @@ func (r *RawClient) Add(
 		request.GroupID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.AddGroupToCustomerResponse
+	var response *square.AddGroupToCustomerResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -241,7 +241,7 @@ func (r *RawClient) Add(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.AddGroupToCustomerResponse]{
+	return &core.Response[*square.AddGroupToCustomerResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -252,7 +252,7 @@ func (r *RawClient) Remove(
 	ctx context.Context,
 	request *customers.RemoveGroupsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RemoveGroupFromCustomerResponse], error) {
+) (*core.Response[*square.RemoveGroupFromCustomerResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -265,10 +265,10 @@ func (r *RawClient) Remove(
 		request.GroupID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RemoveGroupFromCustomerResponse
+	var response *square.RemoveGroupFromCustomerResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -285,7 +285,7 @@ func (r *RawClient) Remove(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RemoveGroupFromCustomerResponse]{
+	return &core.Response[*square.RemoveGroupFromCustomerResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

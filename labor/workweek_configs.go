@@ -4,6 +4,12 @@ package labor
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	updateWorkweekConfigRequestFieldID             = big.NewInt(1 << 0)
+	updateWorkweekConfigRequestFieldWorkweekConfig = big.NewInt(1 << 1)
 )
 
 type UpdateWorkweekConfigRequest struct {
@@ -11,11 +17,64 @@ type UpdateWorkweekConfigRequest struct {
 	ID string `json:"-" url:"-"`
 	// The updated `WorkweekConfig` object.
 	WorkweekConfig *v2.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateWorkweekConfigRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWorkweekConfigRequest) SetID(id string) {
+	u.ID = id
+	u.require(updateWorkweekConfigRequestFieldID)
+}
+
+// SetWorkweekConfig sets the WorkweekConfig field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateWorkweekConfigRequest) SetWorkweekConfig(workweekConfig *v2.WorkweekConfig) {
+	u.WorkweekConfig = workweekConfig
+	u.require(updateWorkweekConfigRequestFieldWorkweekConfig)
+}
+
+var (
+	listWorkweekConfigsRequestFieldLimit  = big.NewInt(1 << 0)
+	listWorkweekConfigsRequestFieldCursor = big.NewInt(1 << 1)
+)
 
 type ListWorkweekConfigsRequest struct {
 	// The maximum number of `WorkweekConfigs` results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// A pointer to the next page of `WorkweekConfig` results to fetch.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListWorkweekConfigsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListWorkweekConfigsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listWorkweekConfigsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListWorkweekConfigsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listWorkweekConfigsRequestFieldCursor)
 }

@@ -6,17 +6,64 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	bulkDeleteCustomersRequestFieldCustomerIDs = big.NewInt(1 << 0)
 )
 
 type BulkDeleteCustomersRequest struct {
 	// The IDs of the [customer profiles](entity:Customer) to delete.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkDeleteCustomersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkDeleteCustomersRequest) SetCustomerIDs(customerIDs []string) {
+	b.CustomerIDs = customerIDs
+	b.require(bulkDeleteCustomersRequestFieldCustomerIDs)
+}
+
+var (
+	bulkRetrieveCustomersRequestFieldCustomerIDs = big.NewInt(1 << 0)
+)
 
 type BulkRetrieveCustomersRequest struct {
 	// The IDs of the [customer profiles](entity:Customer) to retrieve.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkRetrieveCustomersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveCustomersRequest) SetCustomerIDs(customerIDs []string) {
+	b.CustomerIDs = customerIDs
+	b.require(bulkRetrieveCustomersRequestFieldCustomerIDs)
+}
+
+var (
+	bulkUpdateCustomersRequestFieldCustomers = big.NewInt(1 << 0)
+)
 
 type BulkUpdateCustomersRequest struct {
 	// A map of 1 to 100 individual update requests, represented by `customer ID: { customer data }`
@@ -28,7 +75,28 @@ type BulkUpdateCustomersRequest struct {
 	// Each value contains the updated customer data. Only new or changed fields are required. To add or
 	// update a field, specify the new value. To remove a field, specify `null`.
 	Customers map[string]*BulkUpdateCustomerData `json:"customers,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkUpdateCustomersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCustomers sets the Customers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomersRequest) SetCustomers(customers map[string]*BulkUpdateCustomerData) {
+	b.Customers = customers
+	b.require(bulkUpdateCustomersRequestFieldCustomers)
+}
+
+var (
+	bulkCreateCustomersRequestFieldCustomers = big.NewInt(1 << 0)
+)
 
 type BulkCreateCustomersRequest struct {
 	// A map of 1 to 100 individual create requests, represented by `idempotency key: { customer data }`
@@ -38,7 +106,39 @@ type BulkCreateCustomersRequest struct {
 	// that uniquely identifies the create request. Each value contains the customer data used to create the
 	// customer profile.
 	Customers map[string]*BulkCreateCustomerData `json:"customers,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkCreateCustomersRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCustomers sets the Customers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomersRequest) SetCustomers(customers map[string]*BulkCreateCustomerData) {
+	b.Customers = customers
+	b.require(bulkCreateCustomersRequestFieldCustomers)
+}
+
+var (
+	createCustomerRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createCustomerRequestFieldGivenName      = big.NewInt(1 << 1)
+	createCustomerRequestFieldFamilyName     = big.NewInt(1 << 2)
+	createCustomerRequestFieldCompanyName    = big.NewInt(1 << 3)
+	createCustomerRequestFieldNickname       = big.NewInt(1 << 4)
+	createCustomerRequestFieldEmailAddress   = big.NewInt(1 << 5)
+	createCustomerRequestFieldAddress        = big.NewInt(1 << 6)
+	createCustomerRequestFieldPhoneNumber    = big.NewInt(1 << 7)
+	createCustomerRequestFieldReferenceID    = big.NewInt(1 << 8)
+	createCustomerRequestFieldNote           = big.NewInt(1 << 9)
+	createCustomerRequestFieldBirthday       = big.NewInt(1 << 10)
+	createCustomerRequestFieldTaxIDs         = big.NewInt(1 << 11)
+)
 
 type CreateCustomerRequest struct {
 	// The idempotency key for the request.	For more information, see
@@ -87,7 +187,106 @@ type CreateCustomerRequest struct {
 	// in EU countries or the United Kingdom. For more information,
 	// see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateCustomerRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createCustomerRequestFieldIdempotencyKey)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetGivenName(givenName *string) {
+	c.GivenName = givenName
+	c.require(createCustomerRequestFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetFamilyName(familyName *string) {
+	c.FamilyName = familyName
+	c.require(createCustomerRequestFieldFamilyName)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetCompanyName(companyName *string) {
+	c.CompanyName = companyName
+	c.require(createCustomerRequestFieldCompanyName)
+}
+
+// SetNickname sets the Nickname field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetNickname(nickname *string) {
+	c.Nickname = nickname
+	c.require(createCustomerRequestFieldNickname)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetEmailAddress(emailAddress *string) {
+	c.EmailAddress = emailAddress
+	c.require(createCustomerRequestFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetAddress(address *Address) {
+	c.Address = address
+	c.require(createCustomerRequestFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetPhoneNumber(phoneNumber *string) {
+	c.PhoneNumber = phoneNumber
+	c.require(createCustomerRequestFieldPhoneNumber)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetReferenceID(referenceID *string) {
+	c.ReferenceID = referenceID
+	c.require(createCustomerRequestFieldReferenceID)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetNote(note *string) {
+	c.Note = note
+	c.require(createCustomerRequestFieldNote)
+}
+
+// SetBirthday sets the Birthday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetBirthday(birthday *string) {
+	c.Birthday = birthday
+	c.require(createCustomerRequestFieldBirthday)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerRequest) SetTaxIDs(taxIDs *CustomerTaxIDs) {
+	c.TaxIDs = taxIDs
+	c.require(createCustomerRequestFieldTaxIDs)
+}
+
+var (
+	deleteCustomersRequestFieldCustomerID = big.NewInt(1 << 0)
+	deleteCustomersRequestFieldVersion    = big.NewInt(1 << 1)
+)
 
 type DeleteCustomersRequest struct {
 	// The ID of the customer to delete.
@@ -96,12 +295,65 @@ type DeleteCustomersRequest struct {
 	//
 	// As a best practice, you should include this parameter to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control.  For more information, see [Delete a customer profile](https://developer.squareup.com/docs/customers-api/use-the-api/keep-records#delete-customer-profile).
 	Version *int64 `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteCustomersRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomersRequest) SetCustomerID(customerID string) {
+	d.CustomerID = customerID
+	d.require(deleteCustomersRequestFieldCustomerID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomersRequest) SetVersion(version *int64) {
+	d.Version = version
+	d.require(deleteCustomersRequestFieldVersion)
+}
+
+var (
+	getCustomersRequestFieldCustomerID = big.NewInt(1 << 0)
+)
 
 type GetCustomersRequest struct {
 	// The ID of the customer to retrieve.
 	CustomerID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCustomersRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomersRequest) SetCustomerID(customerID string) {
+	g.CustomerID = customerID
+	g.require(getCustomersRequestFieldCustomerID)
+}
+
+var (
+	listCustomersRequestFieldCursor    = big.NewInt(1 << 0)
+	listCustomersRequestFieldLimit     = big.NewInt(1 << 1)
+	listCustomersRequestFieldSortField = big.NewInt(1 << 2)
+	listCustomersRequestFieldSortOrder = big.NewInt(1 << 3)
+	listCustomersRequestFieldCount     = big.NewInt(1 << 4)
+)
 
 type ListCustomersRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -127,7 +379,59 @@ type ListCustomersRequest struct {
 	//
 	// The default value is `false`.
 	Count *bool `json:"-" url:"count,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCustomersRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomersRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listCustomersRequestFieldLimit)
+}
+
+// SetSortField sets the SortField field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersRequest) SetSortField(sortField *CustomerSortField) {
+	l.SortField = sortField
+	l.require(listCustomersRequestFieldSortField)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersRequest) SetSortOrder(sortOrder *SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listCustomersRequestFieldSortOrder)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersRequest) SetCount(count *bool) {
+	l.Count = count
+	l.require(listCustomersRequestFieldCount)
+}
+
+var (
+	searchCustomersRequestFieldCursor = big.NewInt(1 << 0)
+	searchCustomersRequestFieldLimit  = big.NewInt(1 << 1)
+	searchCustomersRequestFieldQuery  = big.NewInt(1 << 2)
+	searchCustomersRequestFieldCount  = big.NewInt(1 << 3)
+)
 
 type SearchCustomersRequest struct {
 	// Include the pagination cursor in subsequent calls to this endpoint to retrieve
@@ -147,10 +451,62 @@ type SearchCustomersRequest struct {
 	//
 	// The default value is `false`.
 	Count *bool `json:"count,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchCustomersRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCustomersRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersRequest) SetLimit(limit *int64) {
+	s.Limit = limit
+	s.require(searchCustomersRequestFieldLimit)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersRequest) SetQuery(query *CustomerQuery) {
+	s.Query = query
+	s.require(searchCustomersRequestFieldQuery)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersRequest) SetCount(count *bool) {
+	s.Count = count
+	s.require(searchCustomersRequestFieldCount)
 }
 
 // Defines the customer data provided in individual create requests for a
 // [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
+var (
+	bulkCreateCustomerDataFieldGivenName    = big.NewInt(1 << 0)
+	bulkCreateCustomerDataFieldFamilyName   = big.NewInt(1 << 1)
+	bulkCreateCustomerDataFieldCompanyName  = big.NewInt(1 << 2)
+	bulkCreateCustomerDataFieldNickname     = big.NewInt(1 << 3)
+	bulkCreateCustomerDataFieldEmailAddress = big.NewInt(1 << 4)
+	bulkCreateCustomerDataFieldAddress      = big.NewInt(1 << 5)
+	bulkCreateCustomerDataFieldPhoneNumber  = big.NewInt(1 << 6)
+	bulkCreateCustomerDataFieldReferenceID  = big.NewInt(1 << 7)
+	bulkCreateCustomerDataFieldNote         = big.NewInt(1 << 8)
+	bulkCreateCustomerDataFieldBirthday     = big.NewInt(1 << 9)
+	bulkCreateCustomerDataFieldTaxIDs       = big.NewInt(1 << 10)
+)
+
 type BulkCreateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -184,6 +540,9 @@ type BulkCreateCustomerData struct {
 	// customers of sellers in EU countries or the United Kingdom. For more information, see
 	// [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -270,6 +629,90 @@ func (b *BulkCreateCustomerData) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BulkCreateCustomerData) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetGivenName(givenName *string) {
+	b.GivenName = givenName
+	b.require(bulkCreateCustomerDataFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetFamilyName(familyName *string) {
+	b.FamilyName = familyName
+	b.require(bulkCreateCustomerDataFieldFamilyName)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetCompanyName(companyName *string) {
+	b.CompanyName = companyName
+	b.require(bulkCreateCustomerDataFieldCompanyName)
+}
+
+// SetNickname sets the Nickname field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetNickname(nickname *string) {
+	b.Nickname = nickname
+	b.require(bulkCreateCustomerDataFieldNickname)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetEmailAddress(emailAddress *string) {
+	b.EmailAddress = emailAddress
+	b.require(bulkCreateCustomerDataFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetAddress(address *Address) {
+	b.Address = address
+	b.require(bulkCreateCustomerDataFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetPhoneNumber(phoneNumber *string) {
+	b.PhoneNumber = phoneNumber
+	b.require(bulkCreateCustomerDataFieldPhoneNumber)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetReferenceID(referenceID *string) {
+	b.ReferenceID = referenceID
+	b.require(bulkCreateCustomerDataFieldReferenceID)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetNote(note *string) {
+	b.Note = note
+	b.require(bulkCreateCustomerDataFieldNote)
+}
+
+// SetBirthday sets the Birthday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetBirthday(birthday *string) {
+	b.Birthday = birthday
+	b.require(bulkCreateCustomerDataFieldBirthday)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomerData) SetTaxIDs(taxIDs *CustomerTaxIDs) {
+	b.TaxIDs = taxIDs
+	b.require(bulkCreateCustomerDataFieldTaxIDs)
+}
+
 func (b *BulkCreateCustomerData) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkCreateCustomerData
 	var value unmarshaler
@@ -286,6 +729,17 @@ func (b *BulkCreateCustomerData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkCreateCustomerData) MarshalJSON() ([]byte, error) {
+	type embed BulkCreateCustomerData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkCreateCustomerData) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -300,6 +754,11 @@ func (b *BulkCreateCustomerData) String() string {
 
 // Defines the fields included in the response body from the
 // [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+var (
+	bulkCreateCustomersResponseFieldResponses = big.NewInt(1 << 0)
+	bulkCreateCustomersResponseFieldErrors    = big.NewInt(1 << 1)
+)
+
 type BulkCreateCustomersResponse struct {
 	// A map of responses that correspond to individual create requests, represented by
 	// key-value pairs.
@@ -311,6 +770,9 @@ type BulkCreateCustomersResponse struct {
 	Responses map[string]*CreateCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
 	// Any top-level errors that prevented the bulk operation from running.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -334,6 +796,27 @@ func (b *BulkCreateCustomersResponse) GetExtraProperties() map[string]interface{
 	return b.extraProperties
 }
 
+func (b *BulkCreateCustomersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomersResponse) SetResponses(responses map[string]*CreateCustomerResponse) {
+	b.Responses = responses
+	b.require(bulkCreateCustomersResponseFieldResponses)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkCreateCustomersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkCreateCustomersResponseFieldErrors)
+}
+
 func (b *BulkCreateCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkCreateCustomersResponse
 	var value unmarshaler
@@ -350,6 +833,17 @@ func (b *BulkCreateCustomersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkCreateCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkCreateCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkCreateCustomersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -364,6 +858,11 @@ func (b *BulkCreateCustomersResponse) String() string {
 
 // Defines the fields included in the response body from the
 // [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
+var (
+	bulkDeleteCustomersResponseFieldResponses = big.NewInt(1 << 0)
+	bulkDeleteCustomersResponseFieldErrors    = big.NewInt(1 << 1)
+)
+
 type BulkDeleteCustomersResponse struct {
 	// A map of responses that correspond to individual delete requests, represented by
 	// key-value pairs.
@@ -375,6 +874,9 @@ type BulkDeleteCustomersResponse struct {
 	Responses map[string]*DeleteCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
 	// Any top-level errors that prevented the bulk operation from running.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -398,6 +900,27 @@ func (b *BulkDeleteCustomersResponse) GetExtraProperties() map[string]interface{
 	return b.extraProperties
 }
 
+func (b *BulkDeleteCustomersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkDeleteCustomersResponse) SetResponses(responses map[string]*DeleteCustomerResponse) {
+	b.Responses = responses
+	b.require(bulkDeleteCustomersResponseFieldResponses)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkDeleteCustomersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkDeleteCustomersResponseFieldErrors)
+}
+
 func (b *BulkDeleteCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkDeleteCustomersResponse
 	var value unmarshaler
@@ -414,6 +937,17 @@ func (b *BulkDeleteCustomersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkDeleteCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkDeleteCustomersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -428,6 +962,11 @@ func (b *BulkDeleteCustomersResponse) String() string {
 
 // Defines the fields included in the response body from the
 // [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
+var (
+	bulkRetrieveCustomersResponseFieldResponses = big.NewInt(1 << 0)
+	bulkRetrieveCustomersResponseFieldErrors    = big.NewInt(1 << 1)
+)
+
 type BulkRetrieveCustomersResponse struct {
 	// A map of responses that correspond to individual retrieve requests, represented by
 	// key-value pairs.
@@ -439,6 +978,9 @@ type BulkRetrieveCustomersResponse struct {
 	Responses map[string]*GetCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
 	// Any top-level errors that prevented the bulk operation from running.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -462,6 +1004,27 @@ func (b *BulkRetrieveCustomersResponse) GetExtraProperties() map[string]interfac
 	return b.extraProperties
 }
 
+func (b *BulkRetrieveCustomersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveCustomersResponse) SetResponses(responses map[string]*GetCustomerResponse) {
+	b.Responses = responses
+	b.require(bulkRetrieveCustomersResponseFieldResponses)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveCustomersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkRetrieveCustomersResponseFieldErrors)
+}
+
 func (b *BulkRetrieveCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkRetrieveCustomersResponse
 	var value unmarshaler
@@ -478,6 +1041,17 @@ func (b *BulkRetrieveCustomersResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkRetrieveCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkRetrieveCustomersResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -492,6 +1066,21 @@ func (b *BulkRetrieveCustomersResponse) String() string {
 
 // Defines the customer data provided in individual update requests for a
 // [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
+var (
+	bulkUpdateCustomerDataFieldGivenName    = big.NewInt(1 << 0)
+	bulkUpdateCustomerDataFieldFamilyName   = big.NewInt(1 << 1)
+	bulkUpdateCustomerDataFieldCompanyName  = big.NewInt(1 << 2)
+	bulkUpdateCustomerDataFieldNickname     = big.NewInt(1 << 3)
+	bulkUpdateCustomerDataFieldEmailAddress = big.NewInt(1 << 4)
+	bulkUpdateCustomerDataFieldAddress      = big.NewInt(1 << 5)
+	bulkUpdateCustomerDataFieldPhoneNumber  = big.NewInt(1 << 6)
+	bulkUpdateCustomerDataFieldReferenceID  = big.NewInt(1 << 7)
+	bulkUpdateCustomerDataFieldNote         = big.NewInt(1 << 8)
+	bulkUpdateCustomerDataFieldBirthday     = big.NewInt(1 << 9)
+	bulkUpdateCustomerDataFieldTaxIDs       = big.NewInt(1 << 10)
+	bulkUpdateCustomerDataFieldVersion      = big.NewInt(1 << 11)
+)
+
 type BulkUpdateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -531,6 +1120,9 @@ type BulkUpdateCustomerData struct {
 	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control.
 	Version *int64 `json:"version,omitempty" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -624,6 +1216,97 @@ func (b *BulkUpdateCustomerData) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BulkUpdateCustomerData) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetGivenName(givenName *string) {
+	b.GivenName = givenName
+	b.require(bulkUpdateCustomerDataFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetFamilyName(familyName *string) {
+	b.FamilyName = familyName
+	b.require(bulkUpdateCustomerDataFieldFamilyName)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetCompanyName(companyName *string) {
+	b.CompanyName = companyName
+	b.require(bulkUpdateCustomerDataFieldCompanyName)
+}
+
+// SetNickname sets the Nickname field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetNickname(nickname *string) {
+	b.Nickname = nickname
+	b.require(bulkUpdateCustomerDataFieldNickname)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetEmailAddress(emailAddress *string) {
+	b.EmailAddress = emailAddress
+	b.require(bulkUpdateCustomerDataFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetAddress(address *Address) {
+	b.Address = address
+	b.require(bulkUpdateCustomerDataFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetPhoneNumber(phoneNumber *string) {
+	b.PhoneNumber = phoneNumber
+	b.require(bulkUpdateCustomerDataFieldPhoneNumber)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetReferenceID(referenceID *string) {
+	b.ReferenceID = referenceID
+	b.require(bulkUpdateCustomerDataFieldReferenceID)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetNote(note *string) {
+	b.Note = note
+	b.require(bulkUpdateCustomerDataFieldNote)
+}
+
+// SetBirthday sets the Birthday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetBirthday(birthday *string) {
+	b.Birthday = birthday
+	b.require(bulkUpdateCustomerDataFieldBirthday)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetTaxIDs(taxIDs *CustomerTaxIDs) {
+	b.TaxIDs = taxIDs
+	b.require(bulkUpdateCustomerDataFieldTaxIDs)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomerData) SetVersion(version *int64) {
+	b.Version = version
+	b.require(bulkUpdateCustomerDataFieldVersion)
+}
+
 func (b *BulkUpdateCustomerData) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkUpdateCustomerData
 	var value unmarshaler
@@ -640,6 +1323,17 @@ func (b *BulkUpdateCustomerData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkUpdateCustomerData) MarshalJSON() ([]byte, error) {
+	type embed BulkUpdateCustomerData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkUpdateCustomerData) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -654,6 +1348,11 @@ func (b *BulkUpdateCustomerData) String() string {
 
 // Defines the fields included in the response body from the
 // [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+var (
+	bulkUpdateCustomersResponseFieldResponses = big.NewInt(1 << 0)
+	bulkUpdateCustomersResponseFieldErrors    = big.NewInt(1 << 1)
+)
+
 type BulkUpdateCustomersResponse struct {
 	// A map of responses that correspond to individual update requests, represented by
 	// key-value pairs.
@@ -665,6 +1364,9 @@ type BulkUpdateCustomersResponse struct {
 	Responses map[string]*UpdateCustomerResponse `json:"responses,omitempty" url:"responses,omitempty"`
 	// Any top-level errors that prevented the bulk operation from running.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -688,6 +1390,27 @@ func (b *BulkUpdateCustomersResponse) GetExtraProperties() map[string]interface{
 	return b.extraProperties
 }
 
+func (b *BulkUpdateCustomersResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomersResponse) SetResponses(responses map[string]*UpdateCustomerResponse) {
+	b.Responses = responses
+	b.require(bulkUpdateCustomersResponseFieldResponses)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpdateCustomersResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkUpdateCustomersResponseFieldErrors)
+}
+
 func (b *BulkUpdateCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkUpdateCustomersResponse
 	var value unmarshaler
@@ -702,6 +1425,17 @@ func (b *BulkUpdateCustomersResponse) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *BulkUpdateCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkUpdateCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *BulkUpdateCustomersResponse) String() string {
@@ -721,11 +1455,19 @@ func (b *BulkUpdateCustomersResponse) String() string {
 // [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
+var (
+	createCustomerResponseFieldErrors   = big.NewInt(1 << 0)
+	createCustomerResponseFieldCustomer = big.NewInt(1 << 1)
+)
+
 type CreateCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The created customer.
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -749,6 +1491,27 @@ func (c *CreateCustomerResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateCustomerResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createCustomerResponseFieldErrors)
+}
+
+// SetCustomer sets the Customer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerResponse) SetCustomer(customer *Customer) {
+	c.Customer = customer
+	c.require(createCustomerResponseFieldCustomer)
+}
+
 func (c *CreateCustomerResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateCustomerResponse
 	var value unmarshaler
@@ -765,6 +1528,17 @@ func (c *CreateCustomerResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateCustomerResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateCustomerResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateCustomerResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -778,6 +1552,28 @@ func (c *CreateCustomerResponse) String() string {
 }
 
 // Represents a Square customer profile in the Customer Directory of a Square seller.
+var (
+	customerFieldID             = big.NewInt(1 << 0)
+	customerFieldCreatedAt      = big.NewInt(1 << 1)
+	customerFieldUpdatedAt      = big.NewInt(1 << 2)
+	customerFieldGivenName      = big.NewInt(1 << 3)
+	customerFieldFamilyName     = big.NewInt(1 << 4)
+	customerFieldNickname       = big.NewInt(1 << 5)
+	customerFieldCompanyName    = big.NewInt(1 << 6)
+	customerFieldEmailAddress   = big.NewInt(1 << 7)
+	customerFieldAddress        = big.NewInt(1 << 8)
+	customerFieldPhoneNumber    = big.NewInt(1 << 9)
+	customerFieldBirthday       = big.NewInt(1 << 10)
+	customerFieldReferenceID    = big.NewInt(1 << 11)
+	customerFieldNote           = big.NewInt(1 << 12)
+	customerFieldPreferences    = big.NewInt(1 << 13)
+	customerFieldCreationSource = big.NewInt(1 << 14)
+	customerFieldGroupIDs       = big.NewInt(1 << 15)
+	customerFieldSegmentIDs     = big.NewInt(1 << 16)
+	customerFieldVersion        = big.NewInt(1 << 17)
+	customerFieldTaxIDs         = big.NewInt(1 << 18)
+)
+
 type Customer struct {
 	// A unique Square-assigned ID for the customer profile.
 	//
@@ -824,6 +1620,9 @@ type Customer struct {
 	// The tax ID associated with the customer profile. This field is present only for customers of sellers in EU countries or the United Kingdom.
 	// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -966,6 +1765,146 @@ func (c *Customer) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *Customer) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetID(id *string) {
+	c.ID = id
+	c.require(customerFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetCreatedAt(createdAt *string) {
+	c.CreatedAt = createdAt
+	c.require(customerFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetUpdatedAt(updatedAt *string) {
+	c.UpdatedAt = updatedAt
+	c.require(customerFieldUpdatedAt)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetGivenName(givenName *string) {
+	c.GivenName = givenName
+	c.require(customerFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetFamilyName(familyName *string) {
+	c.FamilyName = familyName
+	c.require(customerFieldFamilyName)
+}
+
+// SetNickname sets the Nickname field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetNickname(nickname *string) {
+	c.Nickname = nickname
+	c.require(customerFieldNickname)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetCompanyName(companyName *string) {
+	c.CompanyName = companyName
+	c.require(customerFieldCompanyName)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetEmailAddress(emailAddress *string) {
+	c.EmailAddress = emailAddress
+	c.require(customerFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetAddress(address *Address) {
+	c.Address = address
+	c.require(customerFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetPhoneNumber(phoneNumber *string) {
+	c.PhoneNumber = phoneNumber
+	c.require(customerFieldPhoneNumber)
+}
+
+// SetBirthday sets the Birthday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetBirthday(birthday *string) {
+	c.Birthday = birthday
+	c.require(customerFieldBirthday)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetReferenceID(referenceID *string) {
+	c.ReferenceID = referenceID
+	c.require(customerFieldReferenceID)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetNote(note *string) {
+	c.Note = note
+	c.require(customerFieldNote)
+}
+
+// SetPreferences sets the Preferences field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetPreferences(preferences *CustomerPreferences) {
+	c.Preferences = preferences
+	c.require(customerFieldPreferences)
+}
+
+// SetCreationSource sets the CreationSource field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetCreationSource(creationSource *CustomerCreationSource) {
+	c.CreationSource = creationSource
+	c.require(customerFieldCreationSource)
+}
+
+// SetGroupIDs sets the GroupIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetGroupIDs(groupIDs []string) {
+	c.GroupIDs = groupIDs
+	c.require(customerFieldGroupIDs)
+}
+
+// SetSegmentIDs sets the SegmentIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetSegmentIDs(segmentIDs []string) {
+	c.SegmentIDs = segmentIDs
+	c.require(customerFieldSegmentIDs)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetVersion(version *int64) {
+	c.Version = version
+	c.require(customerFieldVersion)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Customer) SetTaxIDs(taxIDs *CustomerTaxIDs) {
+	c.TaxIDs = taxIDs
+	c.require(customerFieldTaxIDs)
+}
+
 func (c *Customer) UnmarshalJSON(data []byte) error {
 	type unmarshaler Customer
 	var value unmarshaler
@@ -982,6 +1921,17 @@ func (c *Customer) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *Customer) MarshalJSON() ([]byte, error) {
+	type embed Customer
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *Customer) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -996,12 +1946,20 @@ func (c *Customer) String() string {
 
 // The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
 // searching by an `Address`-type custom attribute.
+var (
+	customerAddressFilterFieldPostalCode = big.NewInt(1 << 0)
+	customerAddressFilterFieldCountry    = big.NewInt(1 << 1)
+)
+
 type CustomerAddressFilter struct {
 	// The postal code to search for. Only an `exact` match is supported.
 	PostalCode *CustomerTextFilter `json:"postal_code,omitempty" url:"postal_code,omitempty"`
 	// The country code to search for.
 	// See [Country](#type-country) for possible values
 	Country *Country `json:"country,omitempty" url:"country,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1025,6 +1983,27 @@ func (c *CustomerAddressFilter) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerAddressFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetPostalCode sets the PostalCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerAddressFilter) SetPostalCode(postalCode *CustomerTextFilter) {
+	c.PostalCode = postalCode
+	c.require(customerAddressFilterFieldPostalCode)
+}
+
+// SetCountry sets the Country field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerAddressFilter) SetCountry(country *Country) {
+	c.Country = country
+	c.require(customerAddressFilterFieldCountry)
+}
+
 func (c *CustomerAddressFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerAddressFilter
 	var value unmarshaler
@@ -1039,6 +2018,17 @@ func (c *CustomerAddressFilter) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CustomerAddressFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomerAddressFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CustomerAddressFilter) String() string {
@@ -1131,6 +2121,11 @@ func (c CustomerCreationSource) Ptr() *CustomerCreationSource {
 //
 // If one or more creation sources are set, customer profiles are included in,
 // or excluded from, the result if they match at least one of the filter criteria.
+var (
+	customerCreationSourceFilterFieldValues = big.NewInt(1 << 0)
+	customerCreationSourceFilterFieldRule   = big.NewInt(1 << 1)
+)
+
 type CustomerCreationSourceFilter struct {
 	// The list of creation sources used as filtering criteria.
 	// See [CustomerCreationSource](#type-customercreationsource) for possible values
@@ -1141,6 +2136,9 @@ type CustomerCreationSourceFilter struct {
 	// Default: `INCLUDE`.
 	// See [CustomerInclusionExclusion](#type-customerinclusionexclusion) for possible values
 	Rule *CustomerInclusionExclusion `json:"rule,omitempty" url:"rule,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1164,6 +2162,27 @@ func (c *CustomerCreationSourceFilter) GetExtraProperties() map[string]interface
 	return c.extraProperties
 }
 
+func (c *CustomerCreationSourceFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetValues sets the Values field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCreationSourceFilter) SetValues(values []CustomerCreationSource) {
+	c.Values = values
+	c.require(customerCreationSourceFilterFieldValues)
+}
+
+// SetRule sets the Rule field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCreationSourceFilter) SetRule(rule *CustomerInclusionExclusion) {
+	c.Rule = rule
+	c.require(customerCreationSourceFilterFieldRule)
+}
+
 func (c *CustomerCreationSourceFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerCreationSourceFilter
 	var value unmarshaler
@@ -1180,6 +2199,17 @@ func (c *CustomerCreationSourceFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerCreationSourceFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomerCreationSourceFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerCreationSourceFilter) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1194,6 +2224,12 @@ func (c *CustomerCreationSourceFilter) String() string {
 
 // The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
 // based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
+var (
+	customerCustomAttributeFilterFieldKey       = big.NewInt(1 << 0)
+	customerCustomAttributeFilterFieldFilter    = big.NewInt(1 << 1)
+	customerCustomAttributeFilterFieldUpdatedAt = big.NewInt(1 << 2)
+)
+
 type CustomerCustomAttributeFilter struct {
 	// The `key` of the [custom attribute](entity:CustomAttribute) to filter by. The key is the identifier of the custom attribute
 	// (and the corresponding custom attribute definition) and can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
@@ -1209,6 +2245,9 @@ type CustomerCustomAttributeFilter struct {
 	//
 	// You must provide this `updated_at` field, the `filter` field, or both.
 	UpdatedAt *TimeRange `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1239,6 +2278,34 @@ func (c *CustomerCustomAttributeFilter) GetExtraProperties() map[string]interfac
 	return c.extraProperties
 }
 
+func (c *CustomerCustomAttributeFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilter) SetKey(key string) {
+	c.Key = key
+	c.require(customerCustomAttributeFilterFieldKey)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilter) SetFilter(filter *CustomerCustomAttributeFilterValue) {
+	c.Filter = filter
+	c.require(customerCustomAttributeFilterFieldFilter)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilter) SetUpdatedAt(updatedAt *TimeRange) {
+	c.UpdatedAt = updatedAt
+	c.require(customerCustomAttributeFilterFieldUpdatedAt)
+}
+
 func (c *CustomerCustomAttributeFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerCustomAttributeFilter
 	var value unmarshaler
@@ -1255,6 +2322,17 @@ func (c *CustomerCustomAttributeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerCustomAttributeFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomerCustomAttributeFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerCustomAttributeFilter) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1269,6 +2347,17 @@ func (c *CustomerCustomAttributeFilter) String() string {
 
 // A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
 // of a customer-related [custom attribute](entity:CustomAttribute).
+var (
+	customerCustomAttributeFilterValueFieldEmail     = big.NewInt(1 << 0)
+	customerCustomAttributeFilterValueFieldPhone     = big.NewInt(1 << 1)
+	customerCustomAttributeFilterValueFieldText      = big.NewInt(1 << 2)
+	customerCustomAttributeFilterValueFieldSelection = big.NewInt(1 << 3)
+	customerCustomAttributeFilterValueFieldDate      = big.NewInt(1 << 4)
+	customerCustomAttributeFilterValueFieldNumber    = big.NewInt(1 << 5)
+	customerCustomAttributeFilterValueFieldBoolean   = big.NewInt(1 << 6)
+	customerCustomAttributeFilterValueFieldAddress   = big.NewInt(1 << 7)
+)
+
 type CustomerCustomAttributeFilterValue struct {
 	// A filter for a query based on the value of an `Email`-type custom attribute. This filter is case-insensitive and can
 	// include `exact` or `fuzzy`, but not both.
@@ -1327,6 +2416,9 @@ type CustomerCustomAttributeFilterValue struct {
 	Boolean *bool `json:"boolean,omitempty" url:"boolean,omitempty"`
 	// A filter for a query based on the value of an `Address`-type custom attribute. The filter can include `postal_code`, `country`, or both.
 	Address *CustomerAddressFilter `json:"address,omitempty" url:"address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1392,6 +2484,69 @@ func (c *CustomerCustomAttributeFilterValue) GetExtraProperties() map[string]int
 	return c.extraProperties
 }
 
+func (c *CustomerCustomAttributeFilterValue) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEmail sets the Email field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetEmail(email *CustomerTextFilter) {
+	c.Email = email
+	c.require(customerCustomAttributeFilterValueFieldEmail)
+}
+
+// SetPhone sets the Phone field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetPhone(phone *CustomerTextFilter) {
+	c.Phone = phone
+	c.require(customerCustomAttributeFilterValueFieldPhone)
+}
+
+// SetText sets the Text field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetText(text *CustomerTextFilter) {
+	c.Text = text
+	c.require(customerCustomAttributeFilterValueFieldText)
+}
+
+// SetSelection sets the Selection field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetSelection(selection *FilterValue) {
+	c.Selection = selection
+	c.require(customerCustomAttributeFilterValueFieldSelection)
+}
+
+// SetDate sets the Date field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetDate(date *TimeRange) {
+	c.Date = date
+	c.require(customerCustomAttributeFilterValueFieldDate)
+}
+
+// SetNumber sets the Number field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetNumber(number *FloatNumberRange) {
+	c.Number = number
+	c.require(customerCustomAttributeFilterValueFieldNumber)
+}
+
+// SetBoolean sets the Boolean field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetBoolean(boolean *bool) {
+	c.Boolean = boolean
+	c.require(customerCustomAttributeFilterValueFieldBoolean)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilterValue) SetAddress(address *CustomerAddressFilter) {
+	c.Address = address
+	c.require(customerCustomAttributeFilterValueFieldAddress)
+}
+
 func (c *CustomerCustomAttributeFilterValue) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerCustomAttributeFilterValue
 	var value unmarshaler
@@ -1406,6 +2561,17 @@ func (c *CustomerCustomAttributeFilterValue) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CustomerCustomAttributeFilterValue) MarshalJSON() ([]byte, error) {
+	type embed CustomerCustomAttributeFilterValue
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CustomerCustomAttributeFilterValue) String() string {
@@ -1423,10 +2589,17 @@ func (c *CustomerCustomAttributeFilterValue) String() string {
 // The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
 // to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
 // [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
+var (
+	customerCustomAttributeFiltersFieldFilters = big.NewInt(1 << 0)
+)
+
 type CustomerCustomAttributeFilters struct {
 	// The custom attribute filters. Each filter must specify `key` and include the `filter` field with a type-specific filter,
 	// the `updated_at` field, or both. The provided keys must be unique within the list of custom attribute filters.
 	Filters []*CustomerCustomAttributeFilter `json:"filters,omitempty" url:"filters,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1441,6 +2614,20 @@ func (c *CustomerCustomAttributeFilters) GetFilters() []*CustomerCustomAttribute
 
 func (c *CustomerCustomAttributeFilters) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CustomerCustomAttributeFilters) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetFilters sets the Filters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerCustomAttributeFilters) SetFilters(filters []*CustomerCustomAttributeFilter) {
+	c.Filters = filters
+	c.require(customerCustomAttributeFiltersFieldFilters)
 }
 
 func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
@@ -1459,6 +2646,17 @@ func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerCustomAttributeFilters) MarshalJSON() ([]byte, error) {
+	type embed CustomerCustomAttributeFilters
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerCustomAttributeFilters) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1473,6 +2671,18 @@ func (c *CustomerCustomAttributeFilters) String() string {
 
 // Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
 // customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+var (
+	customerFilterFieldCreationSource  = big.NewInt(1 << 0)
+	customerFilterFieldCreatedAt       = big.NewInt(1 << 1)
+	customerFilterFieldUpdatedAt       = big.NewInt(1 << 2)
+	customerFilterFieldEmailAddress    = big.NewInt(1 << 3)
+	customerFilterFieldPhoneNumber     = big.NewInt(1 << 4)
+	customerFilterFieldReferenceID     = big.NewInt(1 << 5)
+	customerFilterFieldGroupIDs        = big.NewInt(1 << 6)
+	customerFilterFieldCustomAttribute = big.NewInt(1 << 7)
+	customerFilterFieldSegmentIDs      = big.NewInt(1 << 8)
+)
+
 type CustomerFilter struct {
 	// A filter to select customers based on their creation source.
 	CreationSource *CustomerCreationSourceFilter `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -1578,6 +2788,9 @@ type CustomerFilter struct {
 	// and returns a `400 BAD_REQUEST` error that includes the segment ID.
 	SegmentIDs *FilterValue `json:"segment_ids,omitempty" url:"segment_ids,omitempty"`
 
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
 }
@@ -1649,6 +2862,76 @@ func (c *CustomerFilter) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCreationSource sets the CreationSource field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetCreationSource(creationSource *CustomerCreationSourceFilter) {
+	c.CreationSource = creationSource
+	c.require(customerFilterFieldCreationSource)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetCreatedAt(createdAt *TimeRange) {
+	c.CreatedAt = createdAt
+	c.require(customerFilterFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetUpdatedAt(updatedAt *TimeRange) {
+	c.UpdatedAt = updatedAt
+	c.require(customerFilterFieldUpdatedAt)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetEmailAddress(emailAddress *CustomerTextFilter) {
+	c.EmailAddress = emailAddress
+	c.require(customerFilterFieldEmailAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetPhoneNumber(phoneNumber *CustomerTextFilter) {
+	c.PhoneNumber = phoneNumber
+	c.require(customerFilterFieldPhoneNumber)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetReferenceID(referenceID *CustomerTextFilter) {
+	c.ReferenceID = referenceID
+	c.require(customerFilterFieldReferenceID)
+}
+
+// SetGroupIDs sets the GroupIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetGroupIDs(groupIDs *FilterValue) {
+	c.GroupIDs = groupIDs
+	c.require(customerFilterFieldGroupIDs)
+}
+
+// SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetCustomAttribute(customAttribute *CustomerCustomAttributeFilters) {
+	c.CustomAttribute = customAttribute
+	c.require(customerFilterFieldCustomAttribute)
+}
+
+// SetSegmentIDs sets the SegmentIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerFilter) SetSegmentIDs(segmentIDs *FilterValue) {
+	c.SegmentIDs = segmentIDs
+	c.require(customerFilterFieldSegmentIDs)
+}
+
 func (c *CustomerFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerFilter
 	var value unmarshaler
@@ -1663,6 +2946,17 @@ func (c *CustomerFilter) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CustomerFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomerFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CustomerFilter) String() string {
@@ -1702,9 +2996,16 @@ func (c CustomerInclusionExclusion) Ptr() *CustomerInclusionExclusion {
 }
 
 // Represents communication preferences for the customer profile.
+var (
+	customerPreferencesFieldEmailUnsubscribed = big.NewInt(1 << 0)
+)
+
 type CustomerPreferences struct {
 	// Indicates whether the customer has unsubscribed from marketing campaign emails. A value of `true` means that the customer chose to opt out of email marketing from the current Square seller or from all Square sellers. This value is read-only from the Customers API.
 	EmailUnsubscribed *bool `json:"email_unsubscribed,omitempty" url:"email_unsubscribed,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1719,6 +3020,20 @@ func (c *CustomerPreferences) GetEmailUnsubscribed() *bool {
 
 func (c *CustomerPreferences) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CustomerPreferences) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEmailUnsubscribed sets the EmailUnsubscribed field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerPreferences) SetEmailUnsubscribed(emailUnsubscribed *bool) {
+	c.EmailUnsubscribed = emailUnsubscribed
+	c.require(customerPreferencesFieldEmailUnsubscribed)
 }
 
 func (c *CustomerPreferences) UnmarshalJSON(data []byte) error {
@@ -1737,6 +3052,17 @@ func (c *CustomerPreferences) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerPreferences) MarshalJSON() ([]byte, error) {
+	type embed CustomerPreferences
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerPreferences) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1750,6 +3076,11 @@ func (c *CustomerPreferences) String() string {
 }
 
 // Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
+var (
+	customerQueryFieldFilter = big.NewInt(1 << 0)
+	customerQueryFieldSort   = big.NewInt(1 << 1)
+)
+
 type CustomerQuery struct {
 	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
 	// Multiple filters are combined as `AND` statements.
@@ -1760,6 +3091,9 @@ type CustomerQuery struct {
 	// Sorting criteria for query results. The default behavior is to sort
 	// customers alphabetically by `given_name` and `family_name`.
 	Sort *CustomerSort `json:"sort,omitempty" url:"sort,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1783,6 +3117,27 @@ func (c *CustomerQuery) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerQuery) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerQuery) SetFilter(filter *CustomerFilter) {
+	c.Filter = filter
+	c.require(customerQueryFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerQuery) SetSort(sort *CustomerSort) {
+	c.Sort = sort
+	c.require(customerQueryFieldSort)
+}
+
 func (c *CustomerQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerQuery
 	var value unmarshaler
@@ -1799,6 +3154,17 @@ func (c *CustomerQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerQuery) MarshalJSON() ([]byte, error) {
+	type embed CustomerQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerQuery) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1813,6 +3179,11 @@ func (c *CustomerQuery) String() string {
 
 // Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
 // customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
+var (
+	customerSortFieldField = big.NewInt(1 << 0)
+	customerSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type CustomerSort struct {
 	// Indicates the fields to use as the sort key, which is either the default set of fields or `created_at`.
 	//
@@ -1826,6 +3197,9 @@ type CustomerSort struct {
 	// The default value is `ASC`.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1849,6 +3223,27 @@ func (c *CustomerSort) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerSort) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerSort) SetField(field *CustomerSortField) {
+	c.Field = field
+	c.require(customerSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerSort) SetOrder(order *SortOrder) {
+	c.Order = order
+	c.require(customerSortFieldOrder)
+}
+
 func (c *CustomerSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerSort
 	var value unmarshaler
@@ -1863,6 +3258,17 @@ func (c *CustomerSort) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CustomerSort) MarshalJSON() ([]byte, error) {
+	type embed CustomerSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CustomerSort) String() string {
@@ -1902,9 +3308,16 @@ func (c CustomerSortField) Ptr() *CustomerSortField {
 
 // Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
 // For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
+var (
+	customerTaxIDsFieldEuVat = big.NewInt(1 << 0)
+)
+
 type CustomerTaxIDs struct {
 	// The EU VAT identification number for the customer. For example, `IE3426675K`. The ID can contain alphanumeric characters only.
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1919,6 +3332,20 @@ func (c *CustomerTaxIDs) GetEuVat() *string {
 
 func (c *CustomerTaxIDs) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CustomerTaxIDs) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetEuVat sets the EuVat field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerTaxIDs) SetEuVat(euVat *string) {
+	c.EuVat = euVat
+	c.require(customerTaxIDsFieldEuVat)
 }
 
 func (c *CustomerTaxIDs) UnmarshalJSON(data []byte) error {
@@ -1937,6 +3364,17 @@ func (c *CustomerTaxIDs) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerTaxIDs) MarshalJSON() ([]byte, error) {
+	type embed CustomerTaxIDs
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerTaxIDs) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1952,6 +3390,11 @@ func (c *CustomerTaxIDs) String() string {
 // A filter to select customers based on exact or fuzzy matching of
 // customer attributes against a specified query. Depending on the customer attributes,
 // the filter can be case-sensitive. This filter can be exact or fuzzy, but it cannot be both.
+var (
+	customerTextFilterFieldExact = big.NewInt(1 << 0)
+	customerTextFilterFieldFuzzy = big.NewInt(1 << 1)
+)
+
 type CustomerTextFilter struct {
 	// Use the exact filter to select customers whose attributes match exactly the specified query.
 	Exact *string `json:"exact,omitempty" url:"exact,omitempty"`
@@ -1960,6 +3403,9 @@ type CustomerTextFilter struct {
 	// each query token must be matched somewhere in the searched attribute. For single token queries,
 	// this is effectively the same behavior as a partial match operation.
 	Fuzzy *string `json:"fuzzy,omitempty" url:"fuzzy,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1983,6 +3429,27 @@ func (c *CustomerTextFilter) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomerTextFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetExact sets the Exact field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerTextFilter) SetExact(exact *string) {
+	c.Exact = exact
+	c.require(customerTextFilterFieldExact)
+}
+
+// SetFuzzy sets the Fuzzy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomerTextFilter) SetFuzzy(fuzzy *string) {
+	c.Fuzzy = fuzzy
+	c.require(customerTextFilterFieldFuzzy)
+}
+
 func (c *CustomerTextFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomerTextFilter
 	var value unmarshaler
@@ -1999,6 +3466,17 @@ func (c *CustomerTextFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomerTextFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomerTextFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomerTextFilter) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -2013,9 +3491,16 @@ func (c *CustomerTextFilter) String() string {
 
 // Defines the fields that are included in the response body of
 // a request to the `DeleteCustomer` endpoint.
+var (
+	deleteCustomerResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 type DeleteCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2030,6 +3515,20 @@ func (d *DeleteCustomerResponse) GetErrors() []*Error {
 
 func (d *DeleteCustomerResponse) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
+}
+
+func (d *DeleteCustomerResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomerResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteCustomerResponseFieldErrors)
 }
 
 func (d *DeleteCustomerResponse) UnmarshalJSON(data []byte) error {
@@ -2048,6 +3547,17 @@ func (d *DeleteCustomerResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DeleteCustomerResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteCustomerResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DeleteCustomerResponse) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -2061,11 +3571,19 @@ func (d *DeleteCustomerResponse) String() string {
 }
 
 // Specifies a decimal number range.
+var (
+	floatNumberRangeFieldStartAt = big.NewInt(1 << 0)
+	floatNumberRangeFieldEndAt   = big.NewInt(1 << 1)
+)
+
 type FloatNumberRange struct {
 	// A decimal value indicating where the range starts.
 	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
 	// A decimal value indicating where the range ends.
 	EndAt *string `json:"end_at,omitempty" url:"end_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2089,6 +3607,27 @@ func (f *FloatNumberRange) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
+func (f *FloatNumberRange) require(field *big.Int) {
+	if f.explicitFields == nil {
+		f.explicitFields = big.NewInt(0)
+	}
+	f.explicitFields.Or(f.explicitFields, field)
+}
+
+// SetStartAt sets the StartAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FloatNumberRange) SetStartAt(startAt *string) {
+	f.StartAt = startAt
+	f.require(floatNumberRangeFieldStartAt)
+}
+
+// SetEndAt sets the EndAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FloatNumberRange) SetEndAt(endAt *string) {
+	f.EndAt = endAt
+	f.require(floatNumberRangeFieldEndAt)
+}
+
 func (f *FloatNumberRange) UnmarshalJSON(data []byte) error {
 	type unmarshaler FloatNumberRange
 	var value unmarshaler
@@ -2103,6 +3642,17 @@ func (f *FloatNumberRange) UnmarshalJSON(data []byte) error {
 	f.extraProperties = extraProperties
 	f.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (f *FloatNumberRange) MarshalJSON() ([]byte, error) {
+	type embed FloatNumberRange
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*f),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, f.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (f *FloatNumberRange) String() string {
@@ -2121,11 +3671,19 @@ func (f *FloatNumberRange) String() string {
 // a request to the `RetrieveCustomer` endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
+var (
+	getCustomerResponseFieldErrors   = big.NewInt(1 << 0)
+	getCustomerResponseFieldCustomer = big.NewInt(1 << 1)
+)
+
 type GetCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested customer.
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2149,6 +3707,27 @@ func (g *GetCustomerResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetCustomerResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomerResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getCustomerResponseFieldErrors)
+}
+
+// SetCustomer sets the Customer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomerResponse) SetCustomer(customer *Customer) {
+	g.Customer = customer
+	g.require(getCustomerResponseFieldCustomer)
+}
+
 func (g *GetCustomerResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetCustomerResponse
 	var value unmarshaler
@@ -2163,6 +3742,17 @@ func (g *GetCustomerResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetCustomerResponse) MarshalJSON() ([]byte, error) {
+	type embed GetCustomerResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetCustomerResponse) String() string {
@@ -2181,6 +3771,13 @@ func (g *GetCustomerResponse) String() string {
 // a request to the `ListCustomers` endpoint.
 //
 // Either `errors` or `customers` is present in a given response (never both).
+var (
+	listCustomersResponseFieldErrors    = big.NewInt(1 << 0)
+	listCustomersResponseFieldCustomers = big.NewInt(1 << 1)
+	listCustomersResponseFieldCursor    = big.NewInt(1 << 2)
+	listCustomersResponseFieldCount     = big.NewInt(1 << 3)
+)
+
 type ListCustomersResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2198,6 +3795,9 @@ type ListCustomersResponse struct {
 	// (`given_name`, `family_name`, `company_name`, `email_address`, or `phone_number`) are counted. This field is present
 	// only if `count` is set to `true` in the request.
 	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2235,6 +3835,41 @@ func (l *ListCustomersResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListCustomersResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listCustomersResponseFieldErrors)
+}
+
+// SetCustomers sets the Customers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersResponse) SetCustomers(customers []*Customer) {
+	l.Customers = customers
+	l.require(listCustomersResponseFieldCustomers)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomersResponseFieldCursor)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomersResponse) SetCount(count *int64) {
+	l.Count = count
+	l.require(listCustomersResponseFieldCount)
+}
+
 func (l *ListCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListCustomersResponse
 	var value unmarshaler
@@ -2249,6 +3884,17 @@ func (l *ListCustomersResponse) UnmarshalJSON(data []byte) error {
 	l.extraProperties = extraProperties
 	l.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (l *ListCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed ListCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (l *ListCustomersResponse) String() string {
@@ -2267,6 +3913,13 @@ func (l *ListCustomersResponse) String() string {
 // a request to the `SearchCustomers` endpoint.
 //
 // Either `errors` or `customers` is present in a given response (never both).
+var (
+	searchCustomersResponseFieldErrors    = big.NewInt(1 << 0)
+	searchCustomersResponseFieldCustomers = big.NewInt(1 << 1)
+	searchCustomersResponseFieldCursor    = big.NewInt(1 << 2)
+	searchCustomersResponseFieldCount     = big.NewInt(1 << 3)
+)
+
 type SearchCustomersResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2285,6 +3938,9 @@ type SearchCustomersResponse struct {
 	// public information (`given_name`, `family_name`, `company_name`, `email_address`, or `phone_number`) are counted. This field is
 	// present only if `count` is set to `true` in the request.
 	Count *int64 `json:"count,omitempty" url:"count,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2322,6 +3978,41 @@ func (s *SearchCustomersResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchCustomersResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchCustomersResponseFieldErrors)
+}
+
+// SetCustomers sets the Customers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersResponse) SetCustomers(customers []*Customer) {
+	s.Customers = customers
+	s.require(searchCustomersResponseFieldCustomers)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCustomersResponseFieldCursor)
+}
+
+// SetCount sets the Count field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCustomersResponse) SetCount(count *int64) {
+	s.Count = count
+	s.require(searchCustomersResponseFieldCount)
+}
+
 func (s *SearchCustomersResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchCustomersResponse
 	var value unmarshaler
@@ -2336,6 +4027,17 @@ func (s *SearchCustomersResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchCustomersResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchCustomersResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchCustomersResponse) String() string {
@@ -2355,11 +4057,19 @@ func (s *SearchCustomersResponse) String() string {
 // [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
 //
 // Either `errors` or `customer` is present in a given response (never both).
+var (
+	updateCustomerResponseFieldErrors   = big.NewInt(1 << 0)
+	updateCustomerResponseFieldCustomer = big.NewInt(1 << 1)
+)
+
 type UpdateCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The updated customer.
 	Customer *Customer `json:"customer,omitempty" url:"customer,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2383,6 +4093,27 @@ func (u *UpdateCustomerResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateCustomerResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateCustomerResponseFieldErrors)
+}
+
+// SetCustomer sets the Customer field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerResponse) SetCustomer(customer *Customer) {
+	u.Customer = customer
+	u.require(updateCustomerResponseFieldCustomer)
+}
+
 func (u *UpdateCustomerResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateCustomerResponse
 	var value unmarshaler
@@ -2399,6 +4130,17 @@ func (u *UpdateCustomerResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateCustomerResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateCustomerResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateCustomerResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -2410,6 +4152,22 @@ func (u *UpdateCustomerResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", u)
 }
+
+var (
+	updateCustomerRequestFieldCustomerID   = big.NewInt(1 << 0)
+	updateCustomerRequestFieldGivenName    = big.NewInt(1 << 1)
+	updateCustomerRequestFieldFamilyName   = big.NewInt(1 << 2)
+	updateCustomerRequestFieldCompanyName  = big.NewInt(1 << 3)
+	updateCustomerRequestFieldNickname     = big.NewInt(1 << 4)
+	updateCustomerRequestFieldEmailAddress = big.NewInt(1 << 5)
+	updateCustomerRequestFieldAddress      = big.NewInt(1 << 6)
+	updateCustomerRequestFieldPhoneNumber  = big.NewInt(1 << 7)
+	updateCustomerRequestFieldReferenceID  = big.NewInt(1 << 8)
+	updateCustomerRequestFieldNote         = big.NewInt(1 << 9)
+	updateCustomerRequestFieldBirthday     = big.NewInt(1 << 10)
+	updateCustomerRequestFieldVersion      = big.NewInt(1 << 11)
+	updateCustomerRequestFieldTaxIDs       = big.NewInt(1 << 12)
+)
 
 type UpdateCustomerRequest struct {
 	// The ID of the customer to update.
@@ -2462,4 +4220,105 @@ type UpdateCustomerRequest struct {
 	// in EU countries or the United Kingdom. For more information,
 	// see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 	TaxIDs *CustomerTaxIDs `json:"tax_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateCustomerRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetCustomerID(customerID string) {
+	u.CustomerID = customerID
+	u.require(updateCustomerRequestFieldCustomerID)
+}
+
+// SetGivenName sets the GivenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetGivenName(givenName *string) {
+	u.GivenName = givenName
+	u.require(updateCustomerRequestFieldGivenName)
+}
+
+// SetFamilyName sets the FamilyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetFamilyName(familyName *string) {
+	u.FamilyName = familyName
+	u.require(updateCustomerRequestFieldFamilyName)
+}
+
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetCompanyName(companyName *string) {
+	u.CompanyName = companyName
+	u.require(updateCustomerRequestFieldCompanyName)
+}
+
+// SetNickname sets the Nickname field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetNickname(nickname *string) {
+	u.Nickname = nickname
+	u.require(updateCustomerRequestFieldNickname)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetEmailAddress(emailAddress *string) {
+	u.EmailAddress = emailAddress
+	u.require(updateCustomerRequestFieldEmailAddress)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetAddress(address *Address) {
+	u.Address = address
+	u.require(updateCustomerRequestFieldAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetPhoneNumber(phoneNumber *string) {
+	u.PhoneNumber = phoneNumber
+	u.require(updateCustomerRequestFieldPhoneNumber)
+}
+
+// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetReferenceID(referenceID *string) {
+	u.ReferenceID = referenceID
+	u.require(updateCustomerRequestFieldReferenceID)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetNote(note *string) {
+	u.Note = note
+	u.require(updateCustomerRequestFieldNote)
+}
+
+// SetBirthday sets the Birthday field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetBirthday(birthday *string) {
+	u.Birthday = birthday
+	u.require(updateCustomerRequestFieldBirthday)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetVersion(version *int64) {
+	u.Version = version
+	u.require(updateCustomerRequestFieldVersion)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerRequest) SetTaxIDs(taxIDs *CustomerTaxIDs) {
+	u.TaxIDs = taxIDs
+	u.require(updateCustomerRequestFieldTaxIDs)
 }

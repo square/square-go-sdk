@@ -4,7 +4,7 @@ package promotions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	programs "github.com/square/square-go-sdk/v2/loyalty/programs"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Create(
 	ctx context.Context,
 	request *programs.CreateLoyaltyPromotionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateLoyaltyPromotionResponse], error) {
+) (*core.Response[*square.CreateLoyaltyPromotionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -47,11 +47,11 @@ func (r *RawClient) Create(
 		request.ProgramID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateLoyaltyPromotionResponse
+	var response *square.CreateLoyaltyPromotionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -69,7 +69,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateLoyaltyPromotionResponse]{
+	return &core.Response[*square.CreateLoyaltyPromotionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -80,7 +80,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *programs.GetPromotionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetLoyaltyPromotionResponse], error) {
+) (*core.Response[*square.GetLoyaltyPromotionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -93,10 +93,10 @@ func (r *RawClient) Get(
 		request.PromotionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetLoyaltyPromotionResponse
+	var response *square.GetLoyaltyPromotionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -113,7 +113,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetLoyaltyPromotionResponse]{
+	return &core.Response[*square.GetLoyaltyPromotionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -124,7 +124,7 @@ func (r *RawClient) Cancel(
 	ctx context.Context,
 	request *programs.CancelPromotionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelLoyaltyPromotionResponse], error) {
+) (*core.Response[*square.CancelLoyaltyPromotionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -137,10 +137,10 @@ func (r *RawClient) Cancel(
 		request.PromotionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelLoyaltyPromotionResponse
+	var response *square.CancelLoyaltyPromotionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -157,7 +157,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelLoyaltyPromotionResponse]{
+	return &core.Response[*square.CancelLoyaltyPromotionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

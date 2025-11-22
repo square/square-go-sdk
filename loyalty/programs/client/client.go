@@ -4,13 +4,12 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	loyalty "github.com/square/square-go-sdk/v2/loyalty"
 	promotions "github.com/square/square-go-sdk/v2/loyalty/programs/promotions"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
@@ -18,13 +17,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	Promotions      *promotions.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -32,8 +30,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Promotions:      promotions.NewClient(opts...),
+		Promotions:      promotions.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -41,7 +40,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -52,7 +50,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*v2.ListLoyaltyProgramsResponse, error) {
+) (*square.ListLoyaltyProgramsResponse, error) {
 	response, err := c.WithRawResponse.List(
 		ctx,
 		opts...,
@@ -70,7 +68,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.GetProgramsRequest,
 	opts ...option.RequestOption,
-) (*v2.GetLoyaltyProgramResponse, error) {
+) (*square.GetLoyaltyProgramResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -101,7 +99,7 @@ func (c *Client) Calculate(
 	ctx context.Context,
 	request *loyalty.CalculateLoyaltyPointsRequest,
 	opts ...option.RequestOption,
-) (*v2.CalculateLoyaltyPointsResponse, error) {
+) (*square.CalculateLoyaltyPointsResponse, error) {
 	response, err := c.WithRawResponse.Calculate(
 		ctx,
 		request,

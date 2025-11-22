@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	evidence "github.com/square/square-go-sdk/v2/disputes/evidence"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -17,13 +17,12 @@ type Client struct {
 	WithRawResponse *RawClient
 	Evidence        *evidence.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,8 +30,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Evidence:        evidence.NewClient(opts...),
+		Evidence:        evidence.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -40,16 +40,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 // Returns a list of disputes associated with a particular account.
 func (c *Client) List(
 	ctx context.Context,
-	request *v2.ListDisputesRequest,
+	request *square.ListDisputesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.Dispute], error) {
+) (*core.Page[*string, *square.Dispute, *square.ListDisputesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -62,10 +61,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -84,14 +83,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListDisputesResponse) *internal.PageResponse[*string, *v2.Dispute] {
+	readPageResponse := func(response *square.ListDisputesResponse) *core.PageResponse[*string, *square.Dispute, *square.ListDisputesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetDisputes()
-		return &internal.PageResponse[*string, *v2.Dispute]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.Dispute, *square.ListDisputesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -105,9 +105,9 @@ func (c *Client) List(
 // Returns details about a specific dispute.
 func (c *Client) Get(
 	ctx context.Context,
-	request *v2.GetDisputesRequest,
+	request *square.GetDisputesRequest,
 	opts ...option.RequestOption,
-) (*v2.GetDisputeResponse, error) {
+) (*square.GetDisputeResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -126,9 +126,9 @@ func (c *Client) Get(
 // does not have sufficient funds, Square debits the associated bank account.
 func (c *Client) Accept(
 	ctx context.Context,
-	request *v2.AcceptDisputesRequest,
+	request *square.AcceptDisputesRequest,
 	opts ...option.RequestOption,
-) (*v2.AcceptDisputeResponse, error) {
+) (*square.AcceptDisputeResponse, error) {
 	response, err := c.WithRawResponse.Accept(
 		ctx,
 		request,
@@ -144,9 +144,9 @@ func (c *Client) Accept(
 // multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats.
 func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
-	request *v2.CreateEvidenceFileDisputesRequest,
+	request *square.CreateEvidenceFileDisputesRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateDisputeEvidenceFileResponse, error) {
+) (*square.CreateDisputeEvidenceFileResponse, error) {
 	response, err := c.WithRawResponse.CreateEvidenceFile(
 		ctx,
 		request,
@@ -161,9 +161,9 @@ func (c *Client) CreateEvidenceFile(
 // Uploads text to use as evidence for a dispute challenge.
 func (c *Client) CreateEvidenceText(
 	ctx context.Context,
-	request *v2.CreateDisputeEvidenceTextRequest,
+	request *square.CreateDisputeEvidenceTextRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateDisputeEvidenceTextResponse, error) {
+) (*square.CreateDisputeEvidenceTextResponse, error) {
 	response, err := c.WithRawResponse.CreateEvidenceText(
 		ctx,
 		request,
@@ -184,9 +184,9 @@ func (c *Client) CreateEvidenceText(
 // a dispute after submission.
 func (c *Client) SubmitEvidence(
 	ctx context.Context,
-	request *v2.SubmitEvidenceDisputesRequest,
+	request *square.SubmitEvidenceDisputesRequest,
 	opts ...option.RequestOption,
-) (*v2.SubmitEvidenceResponse, error) {
+) (*square.SubmitEvidenceResponse, error) {
 	response, err := c.WithRawResponse.SubmitEvidence(
 		ctx,
 		request,

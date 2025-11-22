@@ -4,14 +4,13 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
 	actions "github.com/square/square-go-sdk/v2/terminal/actions"
 	checkouts "github.com/square/square-go-sdk/v2/terminal/checkouts"
 	refunds "github.com/square/square-go-sdk/v2/terminal/refunds"
-	http "net/http"
 	os "os"
 )
 
@@ -21,13 +20,12 @@ type Client struct {
 	Checkouts       *checkouts.Client
 	Refunds         *refunds.Client
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -35,10 +33,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 		options.Version = os.Getenv("VERSION")
 	}
 	return &Client{
-		Actions:         actions.NewClient(opts...),
-		Checkouts:       checkouts.NewClient(opts...),
-		Refunds:         refunds.NewClient(opts...),
+		Actions:         actions.NewClient(options),
+		Checkouts:       checkouts.NewClient(options),
+		Refunds:         refunds.NewClient(options),
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -46,7 +45,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -55,9 +53,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 // See [Link and Dismiss Actions](https://developer.squareup.com/docs/terminal-api/advanced-features/custom-workflows/link-and-dismiss-actions) for more details.
 func (c *Client) DismissTerminalAction(
 	ctx context.Context,
-	request *v2.DismissTerminalActionRequest,
+	request *square.DismissTerminalActionRequest,
 	opts ...option.RequestOption,
-) (*v2.DismissTerminalActionResponse, error) {
+) (*square.DismissTerminalActionResponse, error) {
 	response, err := c.WithRawResponse.DismissTerminalAction(
 		ctx,
 		request,
@@ -72,9 +70,9 @@ func (c *Client) DismissTerminalAction(
 // Dismisses a Terminal checkout request if the status and type of the request permits it.
 func (c *Client) DismissTerminalCheckout(
 	ctx context.Context,
-	request *v2.DismissTerminalCheckoutRequest,
+	request *square.DismissTerminalCheckoutRequest,
 	opts ...option.RequestOption,
-) (*v2.DismissTerminalCheckoutResponse, error) {
+) (*square.DismissTerminalCheckoutResponse, error) {
 	response, err := c.WithRawResponse.DismissTerminalCheckout(
 		ctx,
 		request,
@@ -89,9 +87,9 @@ func (c *Client) DismissTerminalCheckout(
 // Dismisses a Terminal refund request if the status and type of the request permits it.
 func (c *Client) DismissTerminalRefund(
 	ctx context.Context,
-	request *v2.DismissTerminalRefundRequest,
+	request *square.DismissTerminalRefundRequest,
 	opts ...option.RequestOption,
-) (*v2.DismissTerminalRefundResponse, error) {
+) (*square.DismissTerminalRefundResponse, error) {
 	response, err := c.WithRawResponse.DismissTerminalRefund(
 		ctx,
 		request,

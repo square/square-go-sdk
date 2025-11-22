@@ -6,6 +6,13 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	searchLoyaltyEventsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchLoyaltyEventsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchLoyaltyEventsRequestFieldCursor = big.NewInt(1 << 2)
 )
 
 type SearchLoyaltyEventsRequest struct {
@@ -22,12 +29,50 @@ type SearchLoyaltyEventsRequest struct {
 	// Provide this to retrieve the next set of results for your original query.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchLoyaltyEventsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsRequest) SetQuery(query *LoyaltyEventQuery) {
+	s.Query = query
+	s.require(searchLoyaltyEventsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchLoyaltyEventsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchLoyaltyEventsRequestFieldCursor)
 }
 
 // Filter events by date time range.
+var (
+	loyaltyEventDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventDateTimeFilter struct {
 	// The `created_at` date time range used to filter the result.
 	CreatedAt *TimeRange `json:"created_at" url:"created_at"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -42,6 +87,20 @@ func (l *LoyaltyEventDateTimeFilter) GetCreatedAt() *TimeRange {
 
 func (l *LoyaltyEventDateTimeFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventDateTimeFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventDateTimeFilter) SetCreatedAt(createdAt *TimeRange) {
+	l.CreatedAt = createdAt
+	l.require(loyaltyEventDateTimeFilterFieldCreatedAt)
 }
 
 func (l *LoyaltyEventDateTimeFilter) UnmarshalJSON(data []byte) error {
@@ -60,6 +119,17 @@ func (l *LoyaltyEventDateTimeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventDateTimeFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventDateTimeFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventDateTimeFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -74,6 +144,14 @@ func (l *LoyaltyEventDateTimeFilter) String() string {
 
 // The filtering criteria. If the request specifies multiple filters,
 // the endpoint uses a logical AND to evaluate them.
+var (
+	loyaltyEventFilterFieldLoyaltyAccountFilter = big.NewInt(1 << 0)
+	loyaltyEventFilterFieldTypeFilter           = big.NewInt(1 << 1)
+	loyaltyEventFilterFieldDateTimeFilter       = big.NewInt(1 << 2)
+	loyaltyEventFilterFieldLocationFilter       = big.NewInt(1 << 3)
+	loyaltyEventFilterFieldOrderFilter          = big.NewInt(1 << 4)
+)
+
 type LoyaltyEventFilter struct {
 	// Filter events by loyalty account.
 	LoyaltyAccountFilter *LoyaltyEventLoyaltyAccountFilter `json:"loyalty_account_filter,omitempty" url:"loyalty_account_filter,omitempty"`
@@ -87,6 +165,9 @@ type LoyaltyEventFilter struct {
 	LocationFilter *LoyaltyEventLocationFilter `json:"location_filter,omitempty" url:"location_filter,omitempty"`
 	// Filter events by the order associated with the event.
 	OrderFilter *LoyaltyEventOrderFilter `json:"order_filter,omitempty" url:"order_filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -131,6 +212,48 @@ func (l *LoyaltyEventFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *LoyaltyEventFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLoyaltyAccountFilter sets the LoyaltyAccountFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventFilter) SetLoyaltyAccountFilter(loyaltyAccountFilter *LoyaltyEventLoyaltyAccountFilter) {
+	l.LoyaltyAccountFilter = loyaltyAccountFilter
+	l.require(loyaltyEventFilterFieldLoyaltyAccountFilter)
+}
+
+// SetTypeFilter sets the TypeFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventFilter) SetTypeFilter(typeFilter *LoyaltyEventTypeFilter) {
+	l.TypeFilter = typeFilter
+	l.require(loyaltyEventFilterFieldTypeFilter)
+}
+
+// SetDateTimeFilter sets the DateTimeFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventFilter) SetDateTimeFilter(dateTimeFilter *LoyaltyEventDateTimeFilter) {
+	l.DateTimeFilter = dateTimeFilter
+	l.require(loyaltyEventFilterFieldDateTimeFilter)
+}
+
+// SetLocationFilter sets the LocationFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventFilter) SetLocationFilter(locationFilter *LoyaltyEventLocationFilter) {
+	l.LocationFilter = locationFilter
+	l.require(loyaltyEventFilterFieldLocationFilter)
+}
+
+// SetOrderFilter sets the OrderFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventFilter) SetOrderFilter(orderFilter *LoyaltyEventOrderFilter) {
+	l.OrderFilter = orderFilter
+	l.require(loyaltyEventFilterFieldOrderFilter)
+}
+
 func (l *LoyaltyEventFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler LoyaltyEventFilter
 	var value unmarshaler
@@ -147,6 +270,17 @@ func (l *LoyaltyEventFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -160,11 +294,18 @@ func (l *LoyaltyEventFilter) String() string {
 }
 
 // Filter events by location.
+var (
+	loyaltyEventLocationFilterFieldLocationIDs = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventLocationFilter struct {
 	// The [location](entity:Location) IDs for loyalty events to query.
 	// If multiple values are specified, the endpoint uses
 	// a logical OR to combine them.
 	LocationIDs []string `json:"location_ids" url:"location_ids"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -179,6 +320,20 @@ func (l *LoyaltyEventLocationFilter) GetLocationIDs() []string {
 
 func (l *LoyaltyEventLocationFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventLocationFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationIDs sets the LocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventLocationFilter) SetLocationIDs(locationIDs []string) {
+	l.LocationIDs = locationIDs
+	l.require(loyaltyEventLocationFilterFieldLocationIDs)
 }
 
 func (l *LoyaltyEventLocationFilter) UnmarshalJSON(data []byte) error {
@@ -197,6 +352,17 @@ func (l *LoyaltyEventLocationFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventLocationFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventLocationFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventLocationFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -210,9 +376,16 @@ func (l *LoyaltyEventLocationFilter) String() string {
 }
 
 // Filter events by loyalty account.
+var (
+	loyaltyEventLoyaltyAccountFilterFieldLoyaltyAccountID = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventLoyaltyAccountFilter struct {
 	// The ID of the [loyalty account](entity:LoyaltyAccount) associated with loyalty events.
 	LoyaltyAccountID string `json:"loyalty_account_id" url:"loyalty_account_id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -227,6 +400,20 @@ func (l *LoyaltyEventLoyaltyAccountFilter) GetLoyaltyAccountID() string {
 
 func (l *LoyaltyEventLoyaltyAccountFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventLoyaltyAccountFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLoyaltyAccountID sets the LoyaltyAccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventLoyaltyAccountFilter) SetLoyaltyAccountID(loyaltyAccountID string) {
+	l.LoyaltyAccountID = loyaltyAccountID
+	l.require(loyaltyEventLoyaltyAccountFilterFieldLoyaltyAccountID)
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) UnmarshalJSON(data []byte) error {
@@ -245,6 +432,17 @@ func (l *LoyaltyEventLoyaltyAccountFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventLoyaltyAccountFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventLoyaltyAccountFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventLoyaltyAccountFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -258,9 +456,16 @@ func (l *LoyaltyEventLoyaltyAccountFilter) String() string {
 }
 
 // Filter events by the order associated with the event.
+var (
+	loyaltyEventOrderFilterFieldOrderID = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventOrderFilter struct {
 	// The ID of the [order](entity:Order) associated with the event.
 	OrderID string `json:"order_id" url:"order_id"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -275,6 +480,20 @@ func (l *LoyaltyEventOrderFilter) GetOrderID() string {
 
 func (l *LoyaltyEventOrderFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventOrderFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventOrderFilter) SetOrderID(orderID string) {
+	l.OrderID = orderID
+	l.require(loyaltyEventOrderFilterFieldOrderID)
 }
 
 func (l *LoyaltyEventOrderFilter) UnmarshalJSON(data []byte) error {
@@ -293,6 +512,17 @@ func (l *LoyaltyEventOrderFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventOrderFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventOrderFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventOrderFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -306,9 +536,16 @@ func (l *LoyaltyEventOrderFilter) String() string {
 }
 
 // Represents a query used to search for loyalty events.
+var (
+	loyaltyEventQueryFieldFilter = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventQuery struct {
 	// The query filter criteria.
 	Filter *LoyaltyEventFilter `json:"filter,omitempty" url:"filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -323,6 +560,20 @@ func (l *LoyaltyEventQuery) GetFilter() *LoyaltyEventFilter {
 
 func (l *LoyaltyEventQuery) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventQuery) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventQuery) SetFilter(filter *LoyaltyEventFilter) {
+	l.Filter = filter
+	l.require(loyaltyEventQueryFieldFilter)
 }
 
 func (l *LoyaltyEventQuery) UnmarshalJSON(data []byte) error {
@@ -341,6 +592,17 @@ func (l *LoyaltyEventQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventQuery) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventQuery) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -354,12 +616,19 @@ func (l *LoyaltyEventQuery) String() string {
 }
 
 // Filter events by event type.
+var (
+	loyaltyEventTypeFilterFieldTypes = big.NewInt(1 << 0)
+)
+
 type LoyaltyEventTypeFilter struct {
 	// The loyalty event types used to filter the result.
 	// If multiple values are specified, the endpoint uses a
 	// logical OR to combine them.
 	// See [LoyaltyEventType](#type-loyaltyeventtype) for possible values
 	Types []LoyaltyEventType `json:"types" url:"types"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -374,6 +643,20 @@ func (l *LoyaltyEventTypeFilter) GetTypes() []LoyaltyEventType {
 
 func (l *LoyaltyEventTypeFilter) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
+}
+
+func (l *LoyaltyEventTypeFilter) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetTypes sets the Types field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LoyaltyEventTypeFilter) SetTypes(types []LoyaltyEventType) {
+	l.Types = types
+	l.require(loyaltyEventTypeFilterFieldTypes)
 }
 
 func (l *LoyaltyEventTypeFilter) UnmarshalJSON(data []byte) error {
@@ -392,6 +675,17 @@ func (l *LoyaltyEventTypeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LoyaltyEventTypeFilter) MarshalJSON() ([]byte, error) {
+	type embed LoyaltyEventTypeFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *LoyaltyEventTypeFilter) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -406,6 +700,12 @@ func (l *LoyaltyEventTypeFilter) String() string {
 
 // A response that contains loyalty events that satisfy the search
 // criteria, in order by the `created_at` date.
+var (
+	searchLoyaltyEventsResponseFieldErrors = big.NewInt(1 << 0)
+	searchLoyaltyEventsResponseFieldEvents = big.NewInt(1 << 1)
+	searchLoyaltyEventsResponseFieldCursor = big.NewInt(1 << 2)
+)
+
 type SearchLoyaltyEventsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -416,6 +716,9 @@ type SearchLoyaltyEventsResponse struct {
 	// For more information,
 	// see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -446,6 +749,34 @@ func (s *SearchLoyaltyEventsResponse) GetExtraProperties() map[string]interface{
 	return s.extraProperties
 }
 
+func (s *SearchLoyaltyEventsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchLoyaltyEventsResponseFieldErrors)
+}
+
+// SetEvents sets the Events field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsResponse) SetEvents(events []*LoyaltyEvent) {
+	s.Events = events
+	s.require(searchLoyaltyEventsResponseFieldEvents)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyEventsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchLoyaltyEventsResponseFieldCursor)
+}
+
 func (s *SearchLoyaltyEventsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchLoyaltyEventsResponse
 	var value unmarshaler
@@ -460,6 +791,17 @@ func (s *SearchLoyaltyEventsResponse) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchLoyaltyEventsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchLoyaltyEventsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchLoyaltyEventsResponse) String() string {

@@ -4,7 +4,7 @@ package object
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	catalog "github.com/square/square-go-sdk/v2/catalog"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Upsert(
 	ctx context.Context,
 	request *catalog.UpsertCatalogObjectRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertCatalogObjectResponse], error) {
+) (*core.Response[*square.UpsertCatalogObjectResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) Upsert(
 	)
 	endpointURL := baseURL + "/v2/catalog/object"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertCatalogObjectResponse
+	var response *square.UpsertCatalogObjectResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertCatalogObjectResponse]{
+	return &core.Response[*square.UpsertCatalogObjectResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *catalog.GetObjectRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetCatalogObjectResponse], error) {
+) (*core.Response[*square.GetCatalogObjectResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -96,10 +96,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetCatalogObjectResponse
+	var response *square.GetCatalogObjectResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -116,7 +116,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetCatalogObjectResponse]{
+	return &core.Response[*square.GetCatalogObjectResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -127,7 +127,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *catalog.DeleteObjectRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteCatalogObjectResponse], error) {
+) (*core.Response[*square.DeleteCatalogObjectResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,10 +139,10 @@ func (r *RawClient) Delete(
 		request.ObjectID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteCatalogObjectResponse
+	var response *square.DeleteCatalogObjectResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -159,7 +159,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteCatalogObjectResponse]{
+	return &core.Response[*square.DeleteCatalogObjectResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

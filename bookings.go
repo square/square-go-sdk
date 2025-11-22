@@ -6,27 +6,118 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	bulkRetrieveBookingsRequestFieldBookingIDs = big.NewInt(1 << 0)
 )
 
 type BulkRetrieveBookingsRequest struct {
 	// A non-empty list of [Booking](entity:Booking) IDs specifying bookings to retrieve.
 	BookingIDs []string `json:"booking_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkRetrieveBookingsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetBookingIDs sets the BookingIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveBookingsRequest) SetBookingIDs(bookingIDs []string) {
+	b.BookingIDs = bookingIDs
+	b.require(bulkRetrieveBookingsRequestFieldBookingIDs)
+}
+
+var (
+	bulkRetrieveTeamMemberBookingProfilesRequestFieldTeamMemberIDs = big.NewInt(1 << 0)
+)
 
 type BulkRetrieveTeamMemberBookingProfilesRequest struct {
 	// A non-empty list of IDs of team members whose booking profiles you want to retrieve.
 	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkRetrieveTeamMemberBookingProfilesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMemberIDs sets the TeamMemberIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveTeamMemberBookingProfilesRequest) SetTeamMemberIDs(teamMemberIDs []string) {
+	b.TeamMemberIDs = teamMemberIDs
+	b.require(bulkRetrieveTeamMemberBookingProfilesRequestFieldTeamMemberIDs)
+}
+
+var (
+	retrieveLocationBookingProfileRequestFieldLocationID = big.NewInt(1 << 0)
+)
 
 type RetrieveLocationBookingProfileRequest struct {
 	// The ID of the location to retrieve the booking profile.
 	LocationID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RetrieveLocationBookingProfileRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationBookingProfileRequest) SetLocationID(locationID string) {
+	r.LocationID = locationID
+	r.require(retrieveLocationBookingProfileRequestFieldLocationID)
+}
+
+var (
+	searchAvailabilityRequestFieldQuery = big.NewInt(1 << 0)
+)
 
 type SearchAvailabilityRequest struct {
 	// Query conditions used to filter buyer-accessible booking availabilities.
 	Query *SearchAvailabilityQuery `json:"query,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchAvailabilityRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityRequest) SetQuery(query *SearchAvailabilityQuery) {
+	s.Query = query
+	s.require(searchAvailabilityRequestFieldQuery)
+}
+
+var (
+	cancelBookingRequestFieldBookingID      = big.NewInt(1 << 0)
+	cancelBookingRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+	cancelBookingRequestFieldBookingVersion = big.NewInt(1 << 2)
+)
 
 type CancelBookingRequest struct {
 	// The ID of the [Booking](entity:Booking) object representing the to-be-cancelled booking.
@@ -35,19 +126,110 @@ type CancelBookingRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The revision number for the booking used for optimistic concurrency.
 	BookingVersion *int `json:"booking_version,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CancelBookingRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelBookingRequest) SetBookingID(bookingID string) {
+	c.BookingID = bookingID
+	c.require(cancelBookingRequestFieldBookingID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelBookingRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(cancelBookingRequestFieldIdempotencyKey)
+}
+
+// SetBookingVersion sets the BookingVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelBookingRequest) SetBookingVersion(bookingVersion *int) {
+	c.BookingVersion = bookingVersion
+	c.require(cancelBookingRequestFieldBookingVersion)
+}
+
+var (
+	createBookingRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createBookingRequestFieldBooking        = big.NewInt(1 << 1)
+)
 
 type CreateBookingRequest struct {
 	// A unique key to make this request an idempotent operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The details of the booking to be created.
 	Booking *Booking `json:"booking,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateBookingRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBookingRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createBookingRequestFieldIdempotencyKey)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBookingRequest) SetBooking(booking *Booking) {
+	c.Booking = booking
+	c.require(createBookingRequestFieldBooking)
+}
+
+var (
+	getBookingsRequestFieldBookingID = big.NewInt(1 << 0)
+)
 
 type GetBookingsRequest struct {
 	// The ID of the [Booking](entity:Booking) object representing the to-be-retrieved booking.
 	BookingID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetBookingsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBookingsRequest) SetBookingID(bookingID string) {
+	g.BookingID = bookingID
+	g.require(getBookingsRequestFieldBookingID)
+}
+
+var (
+	listBookingsRequestFieldLimit        = big.NewInt(1 << 0)
+	listBookingsRequestFieldCursor       = big.NewInt(1 << 1)
+	listBookingsRequestFieldCustomerID   = big.NewInt(1 << 2)
+	listBookingsRequestFieldTeamMemberID = big.NewInt(1 << 3)
+	listBookingsRequestFieldLocationID   = big.NewInt(1 << 4)
+	listBookingsRequestFieldStartAtMin   = big.NewInt(1 << 5)
+	listBookingsRequestFieldStartAtMax   = big.NewInt(1 << 6)
+)
 
 type ListBookingsRequest struct {
 	// The maximum number of results per page to return in a paged response.
@@ -64,9 +246,78 @@ type ListBookingsRequest struct {
 	StartAtMin *string `json:"-" url:"start_at_min,omitempty"`
 	// The RFC 3339 timestamp specifying the latest of the start time. If this is not set, the time of 31 days after `start_at_min` is used.
 	StartAtMax *string `json:"-" url:"start_at_max,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListBookingsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listBookingsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listBookingsRequestFieldCursor)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetCustomerID(customerID *string) {
+	l.CustomerID = customerID
+	l.require(listBookingsRequestFieldCustomerID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetTeamMemberID(teamMemberID *string) {
+	l.TeamMemberID = teamMemberID
+	l.require(listBookingsRequestFieldTeamMemberID)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listBookingsRequestFieldLocationID)
+}
+
+// SetStartAtMin sets the StartAtMin field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetStartAtMin(startAtMin *string) {
+	l.StartAtMin = startAtMin
+	l.require(listBookingsRequestFieldStartAtMin)
+}
+
+// SetStartAtMax sets the StartAtMax field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsRequest) SetStartAtMax(startAtMax *string) {
+	l.StartAtMax = startAtMax
+	l.require(listBookingsRequestFieldStartAtMax)
 }
 
 // Defines an appointment segment of a booking.
+var (
+	appointmentSegmentFieldDurationMinutes         = big.NewInt(1 << 0)
+	appointmentSegmentFieldServiceVariationID      = big.NewInt(1 << 1)
+	appointmentSegmentFieldTeamMemberID            = big.NewInt(1 << 2)
+	appointmentSegmentFieldServiceVariationVersion = big.NewInt(1 << 3)
+	appointmentSegmentFieldIntermissionMinutes     = big.NewInt(1 << 4)
+	appointmentSegmentFieldAnyTeamMember           = big.NewInt(1 << 5)
+	appointmentSegmentFieldResourceIDs             = big.NewInt(1 << 6)
+)
+
 type AppointmentSegment struct {
 	// The time span in minutes of an appointment segment.
 	DurationMinutes *int `json:"duration_minutes,omitempty" url:"duration_minutes,omitempty"`
@@ -82,6 +333,9 @@ type AppointmentSegment struct {
 	AnyTeamMember *bool `json:"any_team_member,omitempty" url:"any_team_member,omitempty"`
 	// The IDs of the seller-accessible resources used for this appointment segment.
 	ResourceIDs []string `json:"resource_ids,omitempty" url:"resource_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -140,6 +394,62 @@ func (a *AppointmentSegment) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
+func (a *AppointmentSegment) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetDurationMinutes sets the DurationMinutes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetDurationMinutes(durationMinutes *int) {
+	a.DurationMinutes = durationMinutes
+	a.require(appointmentSegmentFieldDurationMinutes)
+}
+
+// SetServiceVariationID sets the ServiceVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetServiceVariationID(serviceVariationID *string) {
+	a.ServiceVariationID = serviceVariationID
+	a.require(appointmentSegmentFieldServiceVariationID)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetTeamMemberID(teamMemberID string) {
+	a.TeamMemberID = teamMemberID
+	a.require(appointmentSegmentFieldTeamMemberID)
+}
+
+// SetServiceVariationVersion sets the ServiceVariationVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetServiceVariationVersion(serviceVariationVersion *int64) {
+	a.ServiceVariationVersion = serviceVariationVersion
+	a.require(appointmentSegmentFieldServiceVariationVersion)
+}
+
+// SetIntermissionMinutes sets the IntermissionMinutes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetIntermissionMinutes(intermissionMinutes *int) {
+	a.IntermissionMinutes = intermissionMinutes
+	a.require(appointmentSegmentFieldIntermissionMinutes)
+}
+
+// SetAnyTeamMember sets the AnyTeamMember field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetAnyTeamMember(anyTeamMember *bool) {
+	a.AnyTeamMember = anyTeamMember
+	a.require(appointmentSegmentFieldAnyTeamMember)
+}
+
+// SetResourceIDs sets the ResourceIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AppointmentSegment) SetResourceIDs(resourceIDs []string) {
+	a.ResourceIDs = resourceIDs
+	a.require(appointmentSegmentFieldResourceIDs)
+}
+
 func (a *AppointmentSegment) UnmarshalJSON(data []byte) error {
 	type unmarshaler AppointmentSegment
 	var value unmarshaler
@@ -156,6 +466,17 @@ func (a *AppointmentSegment) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AppointmentSegment) MarshalJSON() ([]byte, error) {
+	type embed AppointmentSegment
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (a *AppointmentSegment) String() string {
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
@@ -169,6 +490,12 @@ func (a *AppointmentSegment) String() string {
 }
 
 // Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
+var (
+	availabilityFieldStartAt             = big.NewInt(1 << 0)
+	availabilityFieldLocationID          = big.NewInt(1 << 1)
+	availabilityFieldAppointmentSegments = big.NewInt(1 << 2)
+)
+
 type Availability struct {
 	// The RFC 3339 timestamp specifying the beginning time of the slot available for booking.
 	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
@@ -176,6 +503,9 @@ type Availability struct {
 	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
 	// The list of appointment segments available for booking
 	AppointmentSegments []*AppointmentSegment `json:"appointment_segments,omitempty" url:"appointment_segments,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -206,6 +536,34 @@ func (a *Availability) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
+func (a *Availability) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetStartAt sets the StartAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Availability) SetStartAt(startAt *string) {
+	a.StartAt = startAt
+	a.require(availabilityFieldStartAt)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Availability) SetLocationID(locationID *string) {
+	a.LocationID = locationID
+	a.require(availabilityFieldLocationID)
+}
+
+// SetAppointmentSegments sets the AppointmentSegments field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *Availability) SetAppointmentSegments(appointmentSegments []*AppointmentSegment) {
+	a.AppointmentSegments = appointmentSegments
+	a.require(availabilityFieldAppointmentSegments)
+}
+
 func (a *Availability) UnmarshalJSON(data []byte) error {
 	type unmarshaler Availability
 	var value unmarshaler
@@ -222,6 +580,17 @@ func (a *Availability) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *Availability) MarshalJSON() ([]byte, error) {
+	type embed Availability
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (a *Availability) String() string {
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
@@ -236,6 +605,26 @@ func (a *Availability) String() string {
 
 // Represents a booking as a time-bound service contract for a seller's staff member to provide a specified service
 // at a given location to a requesting customer in one or more appointment segments.
+var (
+	bookingFieldID                    = big.NewInt(1 << 0)
+	bookingFieldVersion               = big.NewInt(1 << 1)
+	bookingFieldStatus                = big.NewInt(1 << 2)
+	bookingFieldCreatedAt             = big.NewInt(1 << 3)
+	bookingFieldUpdatedAt             = big.NewInt(1 << 4)
+	bookingFieldStartAt               = big.NewInt(1 << 5)
+	bookingFieldLocationID            = big.NewInt(1 << 6)
+	bookingFieldCustomerID            = big.NewInt(1 << 7)
+	bookingFieldCustomerNote          = big.NewInt(1 << 8)
+	bookingFieldSellerNote            = big.NewInt(1 << 9)
+	bookingFieldAppointmentSegments   = big.NewInt(1 << 10)
+	bookingFieldTransitionTimeMinutes = big.NewInt(1 << 11)
+	bookingFieldAllDay                = big.NewInt(1 << 12)
+	bookingFieldLocationType          = big.NewInt(1 << 13)
+	bookingFieldCreatorDetails        = big.NewInt(1 << 14)
+	bookingFieldSource                = big.NewInt(1 << 15)
+	bookingFieldAddress               = big.NewInt(1 << 16)
+)
+
 type Booking struct {
 	// A unique ID of this object representing a booking.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -277,6 +666,9 @@ type Booking struct {
 	Source *BookingBookingSource `json:"source,omitempty" url:"source,omitempty"`
 	// Stores a customer address if the location type is `CUSTOMER_LOCATION`.
 	Address *Address `json:"address,omitempty" url:"address,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -405,6 +797,132 @@ func (b *Booking) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *Booking) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetID(id *string) {
+	b.ID = id
+	b.require(bookingFieldID)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetVersion(version *int) {
+	b.Version = version
+	b.require(bookingFieldVersion)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetStatus(status *BookingStatus) {
+	b.Status = status
+	b.require(bookingFieldStatus)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetCreatedAt(createdAt *string) {
+	b.CreatedAt = createdAt
+	b.require(bookingFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetUpdatedAt(updatedAt *string) {
+	b.UpdatedAt = updatedAt
+	b.require(bookingFieldUpdatedAt)
+}
+
+// SetStartAt sets the StartAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetStartAt(startAt *string) {
+	b.StartAt = startAt
+	b.require(bookingFieldStartAt)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetLocationID(locationID *string) {
+	b.LocationID = locationID
+	b.require(bookingFieldLocationID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetCustomerID(customerID *string) {
+	b.CustomerID = customerID
+	b.require(bookingFieldCustomerID)
+}
+
+// SetCustomerNote sets the CustomerNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetCustomerNote(customerNote *string) {
+	b.CustomerNote = customerNote
+	b.require(bookingFieldCustomerNote)
+}
+
+// SetSellerNote sets the SellerNote field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetSellerNote(sellerNote *string) {
+	b.SellerNote = sellerNote
+	b.require(bookingFieldSellerNote)
+}
+
+// SetAppointmentSegments sets the AppointmentSegments field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetAppointmentSegments(appointmentSegments []*AppointmentSegment) {
+	b.AppointmentSegments = appointmentSegments
+	b.require(bookingFieldAppointmentSegments)
+}
+
+// SetTransitionTimeMinutes sets the TransitionTimeMinutes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetTransitionTimeMinutes(transitionTimeMinutes *int) {
+	b.TransitionTimeMinutes = transitionTimeMinutes
+	b.require(bookingFieldTransitionTimeMinutes)
+}
+
+// SetAllDay sets the AllDay field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetAllDay(allDay *bool) {
+	b.AllDay = allDay
+	b.require(bookingFieldAllDay)
+}
+
+// SetLocationType sets the LocationType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetLocationType(locationType *BusinessAppointmentSettingsBookingLocationType) {
+	b.LocationType = locationType
+	b.require(bookingFieldLocationType)
+}
+
+// SetCreatorDetails sets the CreatorDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetCreatorDetails(creatorDetails *BookingCreatorDetails) {
+	b.CreatorDetails = creatorDetails
+	b.require(bookingFieldCreatorDetails)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetSource(source *BookingBookingSource) {
+	b.Source = source
+	b.require(bookingFieldSource)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *Booking) SetAddress(address *Address) {
+	b.Address = address
+	b.require(bookingFieldAddress)
+}
+
 func (b *Booking) UnmarshalJSON(data []byte) error {
 	type unmarshaler Booking
 	var value unmarshaler
@@ -419,6 +937,17 @@ func (b *Booking) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *Booking) MarshalJSON() ([]byte, error) {
+	type embed Booking
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *Booking) String() string {
@@ -463,6 +992,12 @@ func (b BookingBookingSource) Ptr() *BookingBookingSource {
 }
 
 // Information about a booking creator.
+var (
+	bookingCreatorDetailsFieldCreatorType  = big.NewInt(1 << 0)
+	bookingCreatorDetailsFieldTeamMemberID = big.NewInt(1 << 1)
+	bookingCreatorDetailsFieldCustomerID   = big.NewInt(1 << 2)
+)
+
 type BookingCreatorDetails struct {
 	// The seller-accessible type of the creator of the booking.
 	// See [BookingCreatorDetailsCreatorType](#type-bookingcreatordetailscreatortype) for possible values
@@ -473,6 +1008,9 @@ type BookingCreatorDetails struct {
 	// The ID of the customer who created the booking, when the booking creator is of the `CUSTOMER` type.
 	// Access to this field requires seller-level permissions.
 	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -503,6 +1041,34 @@ func (b *BookingCreatorDetails) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BookingCreatorDetails) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetCreatorType sets the CreatorType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BookingCreatorDetails) SetCreatorType(creatorType *BookingCreatorDetailsCreatorType) {
+	b.CreatorType = creatorType
+	b.require(bookingCreatorDetailsFieldCreatorType)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BookingCreatorDetails) SetTeamMemberID(teamMemberID *string) {
+	b.TeamMemberID = teamMemberID
+	b.require(bookingCreatorDetailsFieldTeamMemberID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BookingCreatorDetails) SetCustomerID(customerID *string) {
+	b.CustomerID = customerID
+	b.require(bookingCreatorDetailsFieldCustomerID)
+}
+
 func (b *BookingCreatorDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler BookingCreatorDetails
 	var value unmarshaler
@@ -517,6 +1083,17 @@ func (b *BookingCreatorDetails) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *BookingCreatorDetails) MarshalJSON() ([]byte, error) {
+	type embed BookingCreatorDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *BookingCreatorDetails) String() string {
@@ -590,11 +1167,19 @@ func (b BookingStatus) Ptr() *BookingStatus {
 }
 
 // Response payload for bulk retrieval of bookings.
+var (
+	bulkRetrieveBookingsResponseFieldBookings = big.NewInt(1 << 0)
+	bulkRetrieveBookingsResponseFieldErrors   = big.NewInt(1 << 1)
+)
+
 type BulkRetrieveBookingsResponse struct {
 	// Requested bookings returned as a map containing `booking_id` as the key and `RetrieveBookingResponse` as the value.
 	Bookings map[string]*GetBookingResponse `json:"bookings,omitempty" url:"bookings,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -618,6 +1203,27 @@ func (b *BulkRetrieveBookingsResponse) GetExtraProperties() map[string]interface
 	return b.extraProperties
 }
 
+func (b *BulkRetrieveBookingsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetBookings sets the Bookings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveBookingsResponse) SetBookings(bookings map[string]*GetBookingResponse) {
+	b.Bookings = bookings
+	b.require(bulkRetrieveBookingsResponseFieldBookings)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveBookingsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkRetrieveBookingsResponseFieldErrors)
+}
+
 func (b *BulkRetrieveBookingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkRetrieveBookingsResponse
 	var value unmarshaler
@@ -634,6 +1240,17 @@ func (b *BulkRetrieveBookingsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BulkRetrieveBookingsResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveBookingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkRetrieveBookingsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -647,11 +1264,19 @@ func (b *BulkRetrieveBookingsResponse) String() string {
 }
 
 // Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
+var (
+	bulkRetrieveTeamMemberBookingProfilesResponseFieldTeamMemberBookingProfiles = big.NewInt(1 << 0)
+	bulkRetrieveTeamMemberBookingProfilesResponseFieldErrors                    = big.NewInt(1 << 1)
+)
+
 type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
 	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -675,6 +1300,27 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetExtraProperties() map
 	return b.extraProperties
 }
 
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetTeamMemberBookingProfiles sets the TeamMemberBookingProfiles field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) SetTeamMemberBookingProfiles(teamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse) {
+	b.TeamMemberBookingProfiles = teamMemberBookingProfiles
+	b.require(bulkRetrieveTeamMemberBookingProfilesResponseFieldTeamMemberBookingProfiles)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(bulkRetrieveTeamMemberBookingProfilesResponseFieldErrors)
+}
+
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BulkRetrieveTeamMemberBookingProfilesResponse
 	var value unmarshaler
@@ -691,6 +1337,17 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) UnmarshalJSON(data []byt
 	return nil
 }
 
+func (b *BulkRetrieveTeamMemberBookingProfilesResponse) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveTeamMemberBookingProfilesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -704,6 +1361,22 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
 }
 
 // The service appointment settings, including where and how the service is provided.
+var (
+	businessAppointmentSettingsFieldLocationTypes                  = big.NewInt(1 << 0)
+	businessAppointmentSettingsFieldAlignmentTime                  = big.NewInt(1 << 1)
+	businessAppointmentSettingsFieldMinBookingLeadTimeSeconds      = big.NewInt(1 << 2)
+	businessAppointmentSettingsFieldMaxBookingLeadTimeSeconds      = big.NewInt(1 << 3)
+	businessAppointmentSettingsFieldAnyTeamMemberBookingEnabled    = big.NewInt(1 << 4)
+	businessAppointmentSettingsFieldMultipleServiceBookingEnabled  = big.NewInt(1 << 5)
+	businessAppointmentSettingsFieldMaxAppointmentsPerDayLimitType = big.NewInt(1 << 6)
+	businessAppointmentSettingsFieldMaxAppointmentsPerDayLimit     = big.NewInt(1 << 7)
+	businessAppointmentSettingsFieldCancellationWindowSeconds      = big.NewInt(1 << 8)
+	businessAppointmentSettingsFieldCancellationFeeMoney           = big.NewInt(1 << 9)
+	businessAppointmentSettingsFieldCancellationPolicy             = big.NewInt(1 << 10)
+	businessAppointmentSettingsFieldCancellationPolicyText         = big.NewInt(1 << 11)
+	businessAppointmentSettingsFieldSkipBookingFlowStaffSelection  = big.NewInt(1 << 12)
+)
+
 type BusinessAppointmentSettings struct {
 	// Types of the location allowed for bookings.
 	// See [BusinessAppointmentSettingsBookingLocationType](#type-businessappointmentsettingsbookinglocationtype) for possible values
@@ -737,6 +1410,9 @@ type BusinessAppointmentSettings struct {
 	CancellationPolicyText *string `json:"cancellation_policy_text,omitempty" url:"cancellation_policy_text,omitempty"`
 	// Indicates whether customers has an assigned staff member (`true`) or can select s staff member of their choice (`false`).
 	SkipBookingFlowStaffSelection *bool `json:"skip_booking_flow_staff_selection,omitempty" url:"skip_booking_flow_staff_selection,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -837,6 +1513,104 @@ func (b *BusinessAppointmentSettings) GetExtraProperties() map[string]interface{
 	return b.extraProperties
 }
 
+func (b *BusinessAppointmentSettings) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetLocationTypes sets the LocationTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetLocationTypes(locationTypes []BusinessAppointmentSettingsBookingLocationType) {
+	b.LocationTypes = locationTypes
+	b.require(businessAppointmentSettingsFieldLocationTypes)
+}
+
+// SetAlignmentTime sets the AlignmentTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetAlignmentTime(alignmentTime *BusinessAppointmentSettingsAlignmentTime) {
+	b.AlignmentTime = alignmentTime
+	b.require(businessAppointmentSettingsFieldAlignmentTime)
+}
+
+// SetMinBookingLeadTimeSeconds sets the MinBookingLeadTimeSeconds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetMinBookingLeadTimeSeconds(minBookingLeadTimeSeconds *int) {
+	b.MinBookingLeadTimeSeconds = minBookingLeadTimeSeconds
+	b.require(businessAppointmentSettingsFieldMinBookingLeadTimeSeconds)
+}
+
+// SetMaxBookingLeadTimeSeconds sets the MaxBookingLeadTimeSeconds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetMaxBookingLeadTimeSeconds(maxBookingLeadTimeSeconds *int) {
+	b.MaxBookingLeadTimeSeconds = maxBookingLeadTimeSeconds
+	b.require(businessAppointmentSettingsFieldMaxBookingLeadTimeSeconds)
+}
+
+// SetAnyTeamMemberBookingEnabled sets the AnyTeamMemberBookingEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetAnyTeamMemberBookingEnabled(anyTeamMemberBookingEnabled *bool) {
+	b.AnyTeamMemberBookingEnabled = anyTeamMemberBookingEnabled
+	b.require(businessAppointmentSettingsFieldAnyTeamMemberBookingEnabled)
+}
+
+// SetMultipleServiceBookingEnabled sets the MultipleServiceBookingEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetMultipleServiceBookingEnabled(multipleServiceBookingEnabled *bool) {
+	b.MultipleServiceBookingEnabled = multipleServiceBookingEnabled
+	b.require(businessAppointmentSettingsFieldMultipleServiceBookingEnabled)
+}
+
+// SetMaxAppointmentsPerDayLimitType sets the MaxAppointmentsPerDayLimitType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetMaxAppointmentsPerDayLimitType(maxAppointmentsPerDayLimitType *BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType) {
+	b.MaxAppointmentsPerDayLimitType = maxAppointmentsPerDayLimitType
+	b.require(businessAppointmentSettingsFieldMaxAppointmentsPerDayLimitType)
+}
+
+// SetMaxAppointmentsPerDayLimit sets the MaxAppointmentsPerDayLimit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetMaxAppointmentsPerDayLimit(maxAppointmentsPerDayLimit *int) {
+	b.MaxAppointmentsPerDayLimit = maxAppointmentsPerDayLimit
+	b.require(businessAppointmentSettingsFieldMaxAppointmentsPerDayLimit)
+}
+
+// SetCancellationWindowSeconds sets the CancellationWindowSeconds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetCancellationWindowSeconds(cancellationWindowSeconds *int) {
+	b.CancellationWindowSeconds = cancellationWindowSeconds
+	b.require(businessAppointmentSettingsFieldCancellationWindowSeconds)
+}
+
+// SetCancellationFeeMoney sets the CancellationFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetCancellationFeeMoney(cancellationFeeMoney *Money) {
+	b.CancellationFeeMoney = cancellationFeeMoney
+	b.require(businessAppointmentSettingsFieldCancellationFeeMoney)
+}
+
+// SetCancellationPolicy sets the CancellationPolicy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetCancellationPolicy(cancellationPolicy *BusinessAppointmentSettingsCancellationPolicy) {
+	b.CancellationPolicy = cancellationPolicy
+	b.require(businessAppointmentSettingsFieldCancellationPolicy)
+}
+
+// SetCancellationPolicyText sets the CancellationPolicyText field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetCancellationPolicyText(cancellationPolicyText *string) {
+	b.CancellationPolicyText = cancellationPolicyText
+	b.require(businessAppointmentSettingsFieldCancellationPolicyText)
+}
+
+// SetSkipBookingFlowStaffSelection sets the SkipBookingFlowStaffSelection field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessAppointmentSettings) SetSkipBookingFlowStaffSelection(skipBookingFlowStaffSelection *bool) {
+	b.SkipBookingFlowStaffSelection = skipBookingFlowStaffSelection
+	b.require(businessAppointmentSettingsFieldSkipBookingFlowStaffSelection)
+}
+
 func (b *BusinessAppointmentSettings) UnmarshalJSON(data []byte) error {
 	type unmarshaler BusinessAppointmentSettings
 	var value unmarshaler
@@ -851,6 +1625,17 @@ func (b *BusinessAppointmentSettings) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *BusinessAppointmentSettings) MarshalJSON() ([]byte, error) {
+	type embed BusinessAppointmentSettings
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *BusinessAppointmentSettings) String() string {
@@ -967,6 +1752,17 @@ func (b BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType) Ptr() *Busine
 }
 
 // A seller's business booking profile, including booking policy, appointment settings, etc.
+var (
+	businessBookingProfileFieldSellerID                    = big.NewInt(1 << 0)
+	businessBookingProfileFieldCreatedAt                   = big.NewInt(1 << 1)
+	businessBookingProfileFieldBookingEnabled              = big.NewInt(1 << 2)
+	businessBookingProfileFieldCustomerTimezoneChoice      = big.NewInt(1 << 3)
+	businessBookingProfileFieldBookingPolicy               = big.NewInt(1 << 4)
+	businessBookingProfileFieldAllowUserCancel             = big.NewInt(1 << 5)
+	businessBookingProfileFieldBusinessAppointmentSettings = big.NewInt(1 << 6)
+	businessBookingProfileFieldSupportSellerLevelWrites    = big.NewInt(1 << 7)
+)
+
 type BusinessBookingProfile struct {
 	// The ID of the seller, obtainable using the Merchants API.
 	SellerID *string `json:"seller_id,omitempty" url:"seller_id,omitempty"`
@@ -988,6 +1784,9 @@ type BusinessBookingProfile struct {
 	BusinessAppointmentSettings *BusinessAppointmentSettings `json:"business_appointment_settings,omitempty" url:"business_appointment_settings,omitempty"`
 	// Indicates whether the seller's subscription to Square Appointments supports creating, updating or canceling an appointment through the API (`true`) or not (`false`) using seller permission.
 	SupportSellerLevelWrites *bool `json:"support_seller_level_writes,omitempty" url:"support_seller_level_writes,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1053,6 +1852,69 @@ func (b *BusinessBookingProfile) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BusinessBookingProfile) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetSellerID sets the SellerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetSellerID(sellerID *string) {
+	b.SellerID = sellerID
+	b.require(businessBookingProfileFieldSellerID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetCreatedAt(createdAt *string) {
+	b.CreatedAt = createdAt
+	b.require(businessBookingProfileFieldCreatedAt)
+}
+
+// SetBookingEnabled sets the BookingEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetBookingEnabled(bookingEnabled *bool) {
+	b.BookingEnabled = bookingEnabled
+	b.require(businessBookingProfileFieldBookingEnabled)
+}
+
+// SetCustomerTimezoneChoice sets the CustomerTimezoneChoice field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetCustomerTimezoneChoice(customerTimezoneChoice *BusinessBookingProfileCustomerTimezoneChoice) {
+	b.CustomerTimezoneChoice = customerTimezoneChoice
+	b.require(businessBookingProfileFieldCustomerTimezoneChoice)
+}
+
+// SetBookingPolicy sets the BookingPolicy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetBookingPolicy(bookingPolicy *BusinessBookingProfileBookingPolicy) {
+	b.BookingPolicy = bookingPolicy
+	b.require(businessBookingProfileFieldBookingPolicy)
+}
+
+// SetAllowUserCancel sets the AllowUserCancel field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetAllowUserCancel(allowUserCancel *bool) {
+	b.AllowUserCancel = allowUserCancel
+	b.require(businessBookingProfileFieldAllowUserCancel)
+}
+
+// SetBusinessAppointmentSettings sets the BusinessAppointmentSettings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetBusinessAppointmentSettings(businessAppointmentSettings *BusinessAppointmentSettings) {
+	b.BusinessAppointmentSettings = businessAppointmentSettings
+	b.require(businessBookingProfileFieldBusinessAppointmentSettings)
+}
+
+// SetSupportSellerLevelWrites sets the SupportSellerLevelWrites field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BusinessBookingProfile) SetSupportSellerLevelWrites(supportSellerLevelWrites *bool) {
+	b.SupportSellerLevelWrites = supportSellerLevelWrites
+	b.require(businessBookingProfileFieldSupportSellerLevelWrites)
+}
+
 func (b *BusinessBookingProfile) UnmarshalJSON(data []byte) error {
 	type unmarshaler BusinessBookingProfile
 	var value unmarshaler
@@ -1067,6 +1929,17 @@ func (b *BusinessBookingProfile) UnmarshalJSON(data []byte) error {
 	b.extraProperties = extraProperties
 	b.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (b *BusinessBookingProfile) MarshalJSON() ([]byte, error) {
+	type embed BusinessBookingProfile
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (b *BusinessBookingProfile) String() string {
@@ -1127,11 +2000,19 @@ func (b BusinessBookingProfileCustomerTimezoneChoice) Ptr() *BusinessBookingProf
 	return &b
 }
 
+var (
+	cancelBookingResponseFieldBooking = big.NewInt(1 << 0)
+	cancelBookingResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type CancelBookingResponse struct {
 	// The booking that was cancelled.
 	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1155,6 +2036,27 @@ func (c *CancelBookingResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CancelBookingResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelBookingResponse) SetBooking(booking *Booking) {
+	c.Booking = booking
+	c.require(cancelBookingResponseFieldBooking)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CancelBookingResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(cancelBookingResponseFieldErrors)
+}
+
 func (c *CancelBookingResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CancelBookingResponse
 	var value unmarshaler
@@ -1171,6 +2073,17 @@ func (c *CancelBookingResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CancelBookingResponse) MarshalJSON() ([]byte, error) {
+	type embed CancelBookingResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CancelBookingResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1183,11 +2096,19 @@ func (c *CancelBookingResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	createBookingResponseFieldBooking = big.NewInt(1 << 0)
+	createBookingResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type CreateBookingResponse struct {
 	// The booking that was created.
 	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1211,6 +2132,27 @@ func (c *CreateBookingResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateBookingResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBookingResponse) SetBooking(booking *Booking) {
+	c.Booking = booking
+	c.require(createBookingResponseFieldBooking)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBookingResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createBookingResponseFieldErrors)
+}
+
 func (c *CreateBookingResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateBookingResponse
 	var value unmarshaler
@@ -1227,6 +2169,17 @@ func (c *CreateBookingResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateBookingResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateBookingResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateBookingResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1239,11 +2192,19 @@ func (c *CreateBookingResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	getBookingResponseFieldBooking = big.NewInt(1 << 0)
+	getBookingResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type GetBookingResponse struct {
 	// The booking that was requested.
 	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1267,6 +2228,27 @@ func (g *GetBookingResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetBookingResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBookingResponse) SetBooking(booking *Booking) {
+	g.Booking = booking
+	g.require(getBookingResponseFieldBooking)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBookingResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getBookingResponseFieldErrors)
+}
+
 func (g *GetBookingResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetBookingResponse
 	var value unmarshaler
@@ -1283,6 +2265,17 @@ func (g *GetBookingResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetBookingResponse) MarshalJSON() ([]byte, error) {
+	type embed GetBookingResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetBookingResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -1295,11 +2288,19 @@ func (g *GetBookingResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	getBusinessBookingProfileResponseFieldBusinessBookingProfile = big.NewInt(1 << 0)
+	getBusinessBookingProfileResponseFieldErrors                 = big.NewInt(1 << 1)
+)
+
 type GetBusinessBookingProfileResponse struct {
 	// The seller's booking profile.
 	BusinessBookingProfile *BusinessBookingProfile `json:"business_booking_profile,omitempty" url:"business_booking_profile,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1323,6 +2324,27 @@ func (g *GetBusinessBookingProfileResponse) GetExtraProperties() map[string]inte
 	return g.extraProperties
 }
 
+func (g *GetBusinessBookingProfileResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetBusinessBookingProfile sets the BusinessBookingProfile field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBusinessBookingProfileResponse) SetBusinessBookingProfile(businessBookingProfile *BusinessBookingProfile) {
+	g.BusinessBookingProfile = businessBookingProfile
+	g.require(getBusinessBookingProfileResponseFieldBusinessBookingProfile)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBusinessBookingProfileResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getBusinessBookingProfileResponseFieldErrors)
+}
+
 func (g *GetBusinessBookingProfileResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetBusinessBookingProfileResponse
 	var value unmarshaler
@@ -1339,6 +2361,17 @@ func (g *GetBusinessBookingProfileResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetBusinessBookingProfileResponse) MarshalJSON() ([]byte, error) {
+	type embed GetBusinessBookingProfileResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetBusinessBookingProfileResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -1351,6 +2384,12 @@ func (g *GetBusinessBookingProfileResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	listBookingsResponseFieldBookings = big.NewInt(1 << 0)
+	listBookingsResponseFieldCursor   = big.NewInt(1 << 1)
+	listBookingsResponseFieldErrors   = big.NewInt(1 << 2)
+)
+
 type ListBookingsResponse struct {
 	// The list of targeted bookings.
 	Bookings []*Booking `json:"bookings,omitempty" url:"bookings,omitempty"`
@@ -1358,6 +2397,9 @@ type ListBookingsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1388,6 +2430,34 @@ func (l *ListBookingsResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListBookingsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBookings sets the Bookings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsResponse) SetBookings(bookings []*Booking) {
+	l.Bookings = bookings
+	l.require(listBookingsResponseFieldBookings)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listBookingsResponseFieldCursor)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBookingsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listBookingsResponseFieldErrors)
+}
+
 func (l *ListBookingsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListBookingsResponse
 	var value unmarshaler
@@ -1404,6 +2474,17 @@ func (l *ListBookingsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListBookingsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListBookingsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListBookingsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -1416,11 +2497,19 @@ func (l *ListBookingsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
+var (
+	retrieveLocationBookingProfileResponseFieldLocationBookingProfile = big.NewInt(1 << 0)
+	retrieveLocationBookingProfileResponseFieldErrors                 = big.NewInt(1 << 1)
+)
+
 type RetrieveLocationBookingProfileResponse struct {
 	// The requested location booking profile.
 	LocationBookingProfile *LocationBookingProfile `json:"location_booking_profile,omitempty" url:"location_booking_profile,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1444,6 +2533,27 @@ func (r *RetrieveLocationBookingProfileResponse) GetExtraProperties() map[string
 	return r.extraProperties
 }
 
+func (r *RetrieveLocationBookingProfileResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetLocationBookingProfile sets the LocationBookingProfile field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationBookingProfileResponse) SetLocationBookingProfile(locationBookingProfile *LocationBookingProfile) {
+	r.LocationBookingProfile = locationBookingProfile
+	r.require(retrieveLocationBookingProfileResponseFieldLocationBookingProfile)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveLocationBookingProfileResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveLocationBookingProfileResponseFieldErrors)
+}
+
 func (r *RetrieveLocationBookingProfileResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveLocationBookingProfileResponse
 	var value unmarshaler
@@ -1460,6 +2570,17 @@ func (r *RetrieveLocationBookingProfileResponse) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
+func (r *RetrieveLocationBookingProfileResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveLocationBookingProfileResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveLocationBookingProfileResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -1473,6 +2594,13 @@ func (r *RetrieveLocationBookingProfileResponse) String() string {
 }
 
 // A query filter to search for buyer-accessible availabilities by.
+var (
+	searchAvailabilityFilterFieldStartAtRange   = big.NewInt(1 << 0)
+	searchAvailabilityFilterFieldLocationID     = big.NewInt(1 << 1)
+	searchAvailabilityFilterFieldSegmentFilters = big.NewInt(1 << 2)
+	searchAvailabilityFilterFieldBookingID      = big.NewInt(1 << 3)
+)
+
 type SearchAvailabilityFilter struct {
 	// The query expression to search for buy-accessible availabilities with their starting times falling within the specified time range.
 	// The time range must be at least 24 hours and at most 32 days long.
@@ -1490,6 +2618,9 @@ type SearchAvailabilityFilter struct {
 	// This is commonly used to reschedule an appointment.
 	// If this expression is set, the `location_id` and `segment_filters` expressions cannot be set.
 	BookingID *string `json:"booking_id,omitempty" url:"booking_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1527,6 +2658,41 @@ func (s *SearchAvailabilityFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchAvailabilityFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetStartAtRange sets the StartAtRange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityFilter) SetStartAtRange(startAtRange *TimeRange) {
+	s.StartAtRange = startAtRange
+	s.require(searchAvailabilityFilterFieldStartAtRange)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityFilter) SetLocationID(locationID *string) {
+	s.LocationID = locationID
+	s.require(searchAvailabilityFilterFieldLocationID)
+}
+
+// SetSegmentFilters sets the SegmentFilters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityFilter) SetSegmentFilters(segmentFilters []*SegmentFilter) {
+	s.SegmentFilters = segmentFilters
+	s.require(searchAvailabilityFilterFieldSegmentFilters)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityFilter) SetBookingID(bookingID *string) {
+	s.BookingID = bookingID
+	s.require(searchAvailabilityFilterFieldBookingID)
+}
+
 func (s *SearchAvailabilityFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchAvailabilityFilter
 	var value unmarshaler
@@ -1543,6 +2709,17 @@ func (s *SearchAvailabilityFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchAvailabilityFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchAvailabilityFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchAvailabilityFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1556,9 +2733,16 @@ func (s *SearchAvailabilityFilter) String() string {
 }
 
 // The query used to search for buyer-accessible availabilities of bookings.
+var (
+	searchAvailabilityQueryFieldFilter = big.NewInt(1 << 0)
+)
+
 type SearchAvailabilityQuery struct {
 	// The query filter to search for buyer-accessible availabilities of existing bookings.
 	Filter *SearchAvailabilityFilter `json:"filter" url:"filter"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1573,6 +2757,20 @@ func (s *SearchAvailabilityQuery) GetFilter() *SearchAvailabilityFilter {
 
 func (s *SearchAvailabilityQuery) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
+}
+
+func (s *SearchAvailabilityQuery) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityQuery) SetFilter(filter *SearchAvailabilityFilter) {
+	s.Filter = filter
+	s.require(searchAvailabilityQueryFieldFilter)
 }
 
 func (s *SearchAvailabilityQuery) UnmarshalJSON(data []byte) error {
@@ -1591,6 +2789,17 @@ func (s *SearchAvailabilityQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchAvailabilityQuery) MarshalJSON() ([]byte, error) {
+	type embed SearchAvailabilityQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchAvailabilityQuery) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1603,11 +2812,19 @@ func (s *SearchAvailabilityQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+var (
+	searchAvailabilityResponseFieldAvailabilities = big.NewInt(1 << 0)
+	searchAvailabilityResponseFieldErrors         = big.NewInt(1 << 1)
+)
+
 type SearchAvailabilityResponse struct {
 	// List of appointment slots available for booking.
 	Availabilities []*Availability `json:"availabilities,omitempty" url:"availabilities,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1631,6 +2848,27 @@ func (s *SearchAvailabilityResponse) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *SearchAvailabilityResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetAvailabilities sets the Availabilities field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityResponse) SetAvailabilities(availabilities []*Availability) {
+	s.Availabilities = availabilities
+	s.require(searchAvailabilityResponseFieldAvailabilities)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchAvailabilityResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchAvailabilityResponseFieldErrors)
+}
+
 func (s *SearchAvailabilityResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchAvailabilityResponse
 	var value unmarshaler
@@ -1647,6 +2885,17 @@ func (s *SearchAvailabilityResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchAvailabilityResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchAvailabilityResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchAvailabilityResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1660,6 +2909,11 @@ func (s *SearchAvailabilityResponse) String() string {
 }
 
 // A query filter to search for buyer-accessible appointment segments by.
+var (
+	segmentFilterFieldServiceVariationID = big.NewInt(1 << 0)
+	segmentFilterFieldTeamMemberIDFilter = big.NewInt(1 << 1)
+)
+
 type SegmentFilter struct {
 	// The ID of the [CatalogItemVariation](entity:CatalogItemVariation) object representing the service booked in this segment.
 	ServiceVariationID string `json:"service_variation_id" url:"service_variation_id"`
@@ -1670,6 +2924,9 @@ type SegmentFilter struct {
 	//
 	// When no expression is specified, any service-providing team member is eligible to fulfill the Booking.
 	TeamMemberIDFilter *FilterValue `json:"team_member_id_filter,omitempty" url:"team_member_id_filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1693,6 +2950,27 @@ func (s *SegmentFilter) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SegmentFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetServiceVariationID sets the ServiceVariationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SegmentFilter) SetServiceVariationID(serviceVariationID string) {
+	s.ServiceVariationID = serviceVariationID
+	s.require(segmentFilterFieldServiceVariationID)
+}
+
+// SetTeamMemberIDFilter sets the TeamMemberIDFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SegmentFilter) SetTeamMemberIDFilter(teamMemberIDFilter *FilterValue) {
+	s.TeamMemberIDFilter = teamMemberIDFilter
+	s.require(segmentFilterFieldTeamMemberIDFilter)
+}
+
 func (s *SegmentFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SegmentFilter
 	var value unmarshaler
@@ -1709,6 +2987,17 @@ func (s *SegmentFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SegmentFilter) MarshalJSON() ([]byte, error) {
+	type embed SegmentFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SegmentFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1721,11 +3010,19 @@ func (s *SegmentFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+var (
+	updateBookingResponseFieldBooking = big.NewInt(1 << 0)
+	updateBookingResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type UpdateBookingResponse struct {
 	// The booking that was updated.
 	Booking *Booking `json:"booking,omitempty" url:"booking,omitempty"`
 	// Errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1749,6 +3046,27 @@ func (u *UpdateBookingResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateBookingResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBookingResponse) SetBooking(booking *Booking) {
+	u.Booking = booking
+	u.require(updateBookingResponseFieldBooking)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBookingResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateBookingResponseFieldErrors)
+}
+
 func (u *UpdateBookingResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateBookingResponse
 	var value unmarshaler
@@ -1765,6 +3083,17 @@ func (u *UpdateBookingResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateBookingResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateBookingResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateBookingResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -1777,6 +3106,12 @@ func (u *UpdateBookingResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateBookingRequestFieldBookingID      = big.NewInt(1 << 0)
+	updateBookingRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+	updateBookingRequestFieldBooking        = big.NewInt(1 << 2)
+)
+
 type UpdateBookingRequest struct {
 	// The ID of the [Booking](entity:Booking) object representing the to-be-updated booking.
 	BookingID string `json:"-" url:"-"`
@@ -1784,4 +3119,35 @@ type UpdateBookingRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The booking to be updated. Individual attributes explicitly specified here override the corresponding values of the existing booking.
 	Booking *Booking `json:"booking,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateBookingRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBookingRequest) SetBookingID(bookingID string) {
+	u.BookingID = bookingID
+	u.require(updateBookingRequestFieldBookingID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBookingRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateBookingRequestFieldIdempotencyKey)
+}
+
+// SetBooking sets the Booking field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateBookingRequest) SetBooking(booking *Booking) {
+	u.Booking = booking
+	u.require(updateBookingRequestFieldBooking)
 }

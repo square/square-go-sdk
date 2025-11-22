@@ -4,24 +4,22 @@ package team
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
-	http "net/http"
 	os "os"
 )
 
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -30,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -37,16 +36,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 // Lists jobs in a seller account. Results are sorted by title in ascending order.
 func (c *Client) ListJobs(
 	ctx context.Context,
-	request *v2.ListJobsRequest,
+	request *square.ListJobsRequest,
 	opts ...option.RequestOption,
-) (*v2.ListJobsResponse, error) {
+) (*square.ListJobsResponse, error) {
 	response, err := c.WithRawResponse.ListJobs(
 		ctx,
 		request,
@@ -62,9 +60,9 @@ func (c *Client) ListJobs(
 // compensation is defined in a [job assignment](entity:JobAssignment) in a team member's wage setting.
 func (c *Client) CreateJob(
 	ctx context.Context,
-	request *v2.CreateJobRequest,
+	request *square.CreateJobRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateJobResponse, error) {
+) (*square.CreateJobResponse, error) {
 	response, err := c.WithRawResponse.CreateJob(
 		ctx,
 		request,
@@ -79,9 +77,9 @@ func (c *Client) CreateJob(
 // Retrieves a specified job.
 func (c *Client) RetrieveJob(
 	ctx context.Context,
-	request *v2.RetrieveJobRequest,
+	request *square.RetrieveJobRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveJobResponse, error) {
+) (*square.RetrieveJobResponse, error) {
 	response, err := c.WithRawResponse.RetrieveJob(
 		ctx,
 		request,
@@ -98,9 +96,9 @@ func (c *Client) RetrieveJob(
 // tip eligibility propagate to all `TeamMemberWage` objects that reference the job ID.
 func (c *Client) UpdateJob(
 	ctx context.Context,
-	request *v2.UpdateJobRequest,
+	request *square.UpdateJobRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateJobResponse, error) {
+) (*square.UpdateJobResponse, error) {
 	response, err := c.WithRawResponse.UpdateJob(
 		ctx,
 		request,

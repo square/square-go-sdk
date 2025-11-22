@@ -4,19 +4,86 @@ package locations
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	captureTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
+	captureTransactionsRequestFieldTransactionID = big.NewInt(1 << 1)
 )
 
 type CaptureTransactionsRequest struct {
 	LocationID    string `json:"-" url:"-"`
 	TransactionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CaptureTransactionsRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CaptureTransactionsRequest) SetLocationID(locationID string) {
+	c.LocationID = locationID
+	c.require(captureTransactionsRequestFieldLocationID)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CaptureTransactionsRequest) SetTransactionID(transactionID string) {
+	c.TransactionID = transactionID
+	c.require(captureTransactionsRequestFieldTransactionID)
+}
+
+var (
+	getTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
+	getTransactionsRequestFieldTransactionID = big.NewInt(1 << 1)
+)
 
 type GetTransactionsRequest struct {
 	// The ID of the transaction's associated location.
 	LocationID string `json:"-" url:"-"`
 	// The ID of the transaction to retrieve.
 	TransactionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetTransactionsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTransactionsRequest) SetLocationID(locationID string) {
+	g.LocationID = locationID
+	g.require(getTransactionsRequestFieldLocationID)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetTransactionsRequest) SetTransactionID(transactionID string) {
+	g.TransactionID = transactionID
+	g.require(getTransactionsRequestFieldTransactionID)
+}
+
+var (
+	listTransactionsRequestFieldLocationID = big.NewInt(1 << 0)
+	listTransactionsRequestFieldBeginTime  = big.NewInt(1 << 1)
+	listTransactionsRequestFieldEndTime    = big.NewInt(1 << 2)
+	listTransactionsRequestFieldSortOrder  = big.NewInt(1 << 3)
+	listTransactionsRequestFieldCursor     = big.NewInt(1 << 4)
+)
 
 type ListTransactionsRequest struct {
 	// The ID of the location to list transactions for.
@@ -43,9 +110,83 @@ type ListTransactionsRequest struct {
 	//
 	// See [Paginating results](https://developer.squareup.com/docs/working-with-apis/pagination) for more information.
 	Cursor *string `json:"-" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListTransactionsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTransactionsRequest) SetLocationID(locationID string) {
+	l.LocationID = locationID
+	l.require(listTransactionsRequestFieldLocationID)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTransactionsRequest) SetBeginTime(beginTime *string) {
+	l.BeginTime = beginTime
+	l.require(listTransactionsRequestFieldBeginTime)
+}
+
+// SetEndTime sets the EndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTransactionsRequest) SetEndTime(endTime *string) {
+	l.EndTime = endTime
+	l.require(listTransactionsRequestFieldEndTime)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v2.SortOrder) {
+	l.SortOrder = sortOrder
+	l.require(listTransactionsRequestFieldSortOrder)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListTransactionsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listTransactionsRequestFieldCursor)
+}
+
+var (
+	voidTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
+	voidTransactionsRequestFieldTransactionID = big.NewInt(1 << 1)
+)
 
 type VoidTransactionsRequest struct {
 	LocationID    string `json:"-" url:"-"`
 	TransactionID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (v *VoidTransactionsRequest) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VoidTransactionsRequest) SetLocationID(locationID string) {
+	v.LocationID = locationID
+	v.require(voidTransactionsRequestFieldLocationID)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VoidTransactionsRequest) SetTransactionID(transactionID string) {
+	v.TransactionID = transactionID
+	v.require(voidTransactionsRequestFieldTransactionID)
 }

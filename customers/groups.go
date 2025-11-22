@@ -4,6 +4,12 @@ package customers
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	addGroupsRequestFieldCustomerID = big.NewInt(1 << 0)
+	addGroupsRequestFieldGroupID    = big.NewInt(1 << 1)
 )
 
 type AddGroupsRequest struct {
@@ -11,24 +17,124 @@ type AddGroupsRequest struct {
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the customer group to add the customer to.
 	GroupID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (a *AddGroupsRequest) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddGroupsRequest) SetCustomerID(customerID string) {
+	a.CustomerID = customerID
+	a.require(addGroupsRequestFieldCustomerID)
+}
+
+// SetGroupID sets the GroupID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AddGroupsRequest) SetGroupID(groupID string) {
+	a.GroupID = groupID
+	a.require(addGroupsRequestFieldGroupID)
+}
+
+var (
+	createCustomerGroupRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createCustomerGroupRequestFieldGroup          = big.NewInt(1 << 1)
+)
 
 type CreateCustomerGroupRequest struct {
 	// The idempotency key for the request. For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The customer group to create.
 	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateCustomerGroupRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerGroupRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createCustomerGroupRequestFieldIdempotencyKey)
+}
+
+// SetGroup sets the Group field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateCustomerGroupRequest) SetGroup(group *v2.CustomerGroup) {
+	c.Group = group
+	c.require(createCustomerGroupRequestFieldGroup)
+}
+
+var (
+	deleteGroupsRequestFieldGroupID = big.NewInt(1 << 0)
+)
 
 type DeleteGroupsRequest struct {
 	// The ID of the customer group to delete.
 	GroupID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteGroupsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetGroupID sets the GroupID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteGroupsRequest) SetGroupID(groupID string) {
+	d.GroupID = groupID
+	d.require(deleteGroupsRequestFieldGroupID)
+}
+
+var (
+	getGroupsRequestFieldGroupID = big.NewInt(1 << 0)
+)
 
 type GetGroupsRequest struct {
 	// The ID of the customer group to retrieve.
 	GroupID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetGroupsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetGroupID sets the GroupID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetGroupsRequest) SetGroupID(groupID string) {
+	g.GroupID = groupID
+	g.require(getGroupsRequestFieldGroupID)
+}
+
+var (
+	listGroupsRequestFieldCursor = big.NewInt(1 << 0)
+	listGroupsRequestFieldLimit  = big.NewInt(1 << 1)
+)
 
 type ListGroupsRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -41,18 +147,100 @@ type ListGroupsRequest struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Limit *int `json:"-" url:"limit,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListGroupsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGroupsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listGroupsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListGroupsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listGroupsRequestFieldLimit)
+}
+
+var (
+	removeGroupsRequestFieldCustomerID = big.NewInt(1 << 0)
+	removeGroupsRequestFieldGroupID    = big.NewInt(1 << 1)
+)
 
 type RemoveGroupsRequest struct {
 	// The ID of the customer to remove from the group.
 	CustomerID string `json:"-" url:"-"`
 	// The ID of the customer group to remove the customer from.
 	GroupID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RemoveGroupsRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RemoveGroupsRequest) SetCustomerID(customerID string) {
+	r.CustomerID = customerID
+	r.require(removeGroupsRequestFieldCustomerID)
+}
+
+// SetGroupID sets the GroupID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RemoveGroupsRequest) SetGroupID(groupID string) {
+	r.GroupID = groupID
+	r.require(removeGroupsRequestFieldGroupID)
+}
+
+var (
+	updateCustomerGroupRequestFieldGroupID = big.NewInt(1 << 0)
+	updateCustomerGroupRequestFieldGroup   = big.NewInt(1 << 1)
+)
 
 type UpdateCustomerGroupRequest struct {
 	// The ID of the customer group to update.
 	GroupID string `json:"-" url:"-"`
 	// The `CustomerGroup` object including all the updates you want to make.
 	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateCustomerGroupRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetGroupID sets the GroupID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerGroupRequest) SetGroupID(groupID string) {
+	u.GroupID = groupID
+	u.require(updateCustomerGroupRequestFieldGroupID)
+}
+
+// SetGroup sets the Group field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateCustomerGroupRequest) SetGroup(group *v2.CustomerGroup) {
+	u.Group = group
+	u.require(updateCustomerGroupRequestFieldGroup)
 }

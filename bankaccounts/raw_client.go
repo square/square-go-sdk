@@ -4,7 +4,7 @@ package bankaccounts
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) GetByV1ID(
 	ctx context.Context,
-	request *v2.GetByV1IDBankAccountsRequest,
+	request *square.GetByV1IDBankAccountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetBankAccountByV1IDResponse], error) {
+) (*core.Response[*square.GetBankAccountByV1IDResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,10 +46,10 @@ func (r *RawClient) GetByV1ID(
 		request.V1BankAccountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetBankAccountByV1IDResponse
+	var response *square.GetBankAccountByV1IDResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) GetByV1ID(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetBankAccountByV1IDResponse]{
+	return &core.Response[*square.GetBankAccountByV1IDResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -75,9 +75,9 @@ func (r *RawClient) GetByV1ID(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetBankAccountsRequest,
+	request *square.GetBankAccountsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetBankAccountResponse], error) {
+) (*core.Response[*square.GetBankAccountResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -89,10 +89,10 @@ func (r *RawClient) Get(
 		request.BankAccountID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetBankAccountResponse
+	var response *square.GetBankAccountResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -109,7 +109,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetBankAccountResponse]{
+	return &core.Response[*square.GetBankAccountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -6,23 +6,92 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	batchCreateVendorsRequestFieldVendors = big.NewInt(1 << 0)
 )
 
 type BatchCreateVendorsRequest struct {
 	// Specifies a set of new [Vendor](entity:Vendor) objects as represented by a collection of idempotency-key/`Vendor`-object pairs.
 	Vendors map[string]*Vendor `json:"vendors,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchCreateVendorsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetVendors sets the Vendors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateVendorsRequest) SetVendors(vendors map[string]*Vendor) {
+	b.Vendors = vendors
+	b.require(batchCreateVendorsRequestFieldVendors)
+}
+
+var (
+	batchGetVendorsRequestFieldVendorIDs = big.NewInt(1 << 0)
+)
 
 type BatchGetVendorsRequest struct {
 	// IDs of the [Vendor](entity:Vendor) objects to retrieve.
 	VendorIDs []string `json:"vendor_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchGetVendorsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetVendorIDs sets the VendorIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetVendorsRequest) SetVendorIDs(vendorIDs []string) {
+	b.VendorIDs = vendorIDs
+	b.require(batchGetVendorsRequestFieldVendorIDs)
+}
+
+var (
+	batchUpdateVendorsRequestFieldVendors = big.NewInt(1 << 0)
+)
 
 type BatchUpdateVendorsRequest struct {
 	// A set of [UpdateVendorRequest](entity:UpdateVendorRequest) objects encapsulating to-be-updated [Vendor](entity:Vendor)
 	// objects. The set is represented by  a collection of `Vendor`-ID/`UpdateVendorRequest`-object pairs.
 	Vendors map[string]*UpdateVendorRequest `json:"vendors,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchUpdateVendorsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetVendors sets the Vendors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateVendorsRequest) SetVendors(vendors map[string]*UpdateVendorRequest) {
+	b.Vendors = vendors
+	b.require(batchUpdateVendorsRequestFieldVendors)
+}
+
+var (
+	createVendorRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createVendorRequestFieldVendor         = big.NewInt(1 << 1)
+)
 
 type CreateVendorRequest struct {
 	// A client-supplied, universally unique identifier (UUID) to make this [CreateVendor](api-endpoint:Vendors-CreateVendor) call idempotent.
@@ -33,12 +102,63 @@ type CreateVendorRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The requested [Vendor](entity:Vendor) to be created.
 	Vendor *Vendor `json:"vendor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateVendorRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateVendorRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createVendorRequestFieldIdempotencyKey)
+}
+
+// SetVendor sets the Vendor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateVendorRequest) SetVendor(vendor_ *Vendor) {
+	c.Vendor = vendor_
+	c.require(createVendorRequestFieldVendor)
+}
+
+var (
+	getVendorsRequestFieldVendorID = big.NewInt(1 << 0)
+)
 
 type GetVendorsRequest struct {
 	// ID of the [Vendor](entity:Vendor) to retrieve.
 	VendorID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetVendorsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetVendorID sets the VendorID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetVendorsRequest) SetVendorID(vendorID string) {
+	g.VendorID = vendorID
+	g.require(getVendorsRequestFieldVendorID)
+}
+
+var (
+	searchVendorsRequestFieldFilter = big.NewInt(1 << 0)
+	searchVendorsRequestFieldSort   = big.NewInt(1 << 1)
+	searchVendorsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchVendorsRequest struct {
 	// Specifies a filter used to search for vendors.
@@ -50,9 +170,45 @@ type SearchVendorsRequest struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchVendorsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetFilter sets the Filter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequest) SetFilter(filter *SearchVendorsRequestFilter) {
+	s.Filter = filter
+	s.require(searchVendorsRequestFieldFilter)
+}
+
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequest) SetSort(sort *SearchVendorsRequestSort) {
+	s.Sort = sort
+	s.require(searchVendorsRequestFieldSort)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchVendorsRequestFieldCursor)
 }
 
 // Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
+var (
+	batchCreateVendorsResponseFieldErrors    = big.NewInt(1 << 0)
+	batchCreateVendorsResponseFieldResponses = big.NewInt(1 << 1)
+)
+
 type BatchCreateVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -61,6 +217,9 @@ type BatchCreateVendorsResponse struct {
 	// a collection of idempotency-key/`Vendor`-object or idempotency-key/error-object pairs. The idempotency keys correspond to those specified
 	// in the input.
 	Responses map[string]*CreateVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -84,6 +243,27 @@ func (b *BatchCreateVendorsResponse) GetExtraProperties() map[string]interface{}
 	return b.extraProperties
 }
 
+func (b *BatchCreateVendorsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateVendorsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchCreateVendorsResponseFieldErrors)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchCreateVendorsResponse) SetResponses(responses map[string]*CreateVendorResponse) {
+	b.Responses = responses
+	b.require(batchCreateVendorsResponseFieldResponses)
+}
+
 func (b *BatchCreateVendorsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchCreateVendorsResponse
 	var value unmarshaler
@@ -100,6 +280,17 @@ func (b *BatchCreateVendorsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchCreateVendorsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchCreateVendorsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchCreateVendorsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -113,6 +304,11 @@ func (b *BatchCreateVendorsResponse) String() string {
 }
 
 // Represents an output from a call to [BulkRetrieveVendors](api-endpoint:Vendors-BulkRetrieveVendors).
+var (
+	batchGetVendorsResponseFieldErrors    = big.NewInt(1 << 0)
+	batchGetVendorsResponseFieldResponses = big.NewInt(1 << 1)
+)
+
 type BatchGetVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -120,6 +316,9 @@ type BatchGetVendorsResponse struct {
 	// objects or error responses for failed attempts. The set is represented by
 	// a collection of `Vendor`-ID/`Vendor`-object or `Vendor`-ID/error-object pairs.
 	Responses map[string]*GetVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -143,6 +342,27 @@ func (b *BatchGetVendorsResponse) GetExtraProperties() map[string]interface{} {
 	return b.extraProperties
 }
 
+func (b *BatchGetVendorsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetVendorsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchGetVendorsResponseFieldErrors)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetVendorsResponse) SetResponses(responses map[string]*GetVendorResponse) {
+	b.Responses = responses
+	b.require(batchGetVendorsResponseFieldResponses)
+}
+
 func (b *BatchGetVendorsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetVendorsResponse
 	var value unmarshaler
@@ -159,6 +379,17 @@ func (b *BatchGetVendorsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetVendorsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchGetVendorsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetVendorsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -172,6 +403,11 @@ func (b *BatchGetVendorsResponse) String() string {
 }
 
 // Represents an output from a call to [BulkUpdateVendors](api-endpoint:Vendors-BulkUpdateVendors).
+var (
+	batchUpdateVendorsResponseFieldErrors    = big.NewInt(1 << 0)
+	batchUpdateVendorsResponseFieldResponses = big.NewInt(1 << 1)
+)
+
 type BatchUpdateVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -179,6 +415,9 @@ type BatchUpdateVendorsResponse struct {
 	// objects or error responses for failed attempts. The set is represented by a collection of `Vendor`-ID/`UpdateVendorResponse`-object or
 	// `Vendor`-ID/error-object pairs.
 	Responses map[string]*UpdateVendorResponse `json:"responses,omitempty" url:"responses,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -202,6 +441,27 @@ func (b *BatchUpdateVendorsResponse) GetExtraProperties() map[string]interface{}
 	return b.extraProperties
 }
 
+func (b *BatchUpdateVendorsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateVendorsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchUpdateVendorsResponseFieldErrors)
+}
+
+// SetResponses sets the Responses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpdateVendorsResponse) SetResponses(responses map[string]*UpdateVendorResponse) {
+	b.Responses = responses
+	b.require(batchUpdateVendorsResponseFieldResponses)
+}
+
 func (b *BatchUpdateVendorsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchUpdateVendorsResponse
 	var value unmarshaler
@@ -218,6 +478,17 @@ func (b *BatchUpdateVendorsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchUpdateVendorsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchUpdateVendorsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchUpdateVendorsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -231,11 +502,19 @@ func (b *BatchUpdateVendorsResponse) String() string {
 }
 
 // Represents an output from a call to [CreateVendor](api-endpoint:Vendors-CreateVendor).
+var (
+	createVendorResponseFieldErrors = big.NewInt(1 << 0)
+	createVendorResponseFieldVendor = big.NewInt(1 << 1)
+)
+
 type CreateVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The successfully created [Vendor](entity:Vendor) object.
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -259,6 +538,27 @@ func (c *CreateVendorResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CreateVendorResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateVendorResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createVendorResponseFieldErrors)
+}
+
+// SetVendor sets the Vendor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateVendorResponse) SetVendor(vendor_ *Vendor) {
+	c.Vendor = vendor_
+	c.require(createVendorResponseFieldVendor)
+}
+
 func (c *CreateVendorResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CreateVendorResponse
 	var value unmarshaler
@@ -275,6 +575,17 @@ func (c *CreateVendorResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CreateVendorResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateVendorResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CreateVendorResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -288,11 +599,19 @@ func (c *CreateVendorResponse) String() string {
 }
 
 // Represents an output from a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
+var (
+	getVendorResponseFieldErrors = big.NewInt(1 << 0)
+	getVendorResponseFieldVendor = big.NewInt(1 << 1)
+)
+
 type GetVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The successfully retrieved [Vendor](entity:Vendor) object.
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -316,6 +635,27 @@ func (g *GetVendorResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetVendorResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetVendorResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getVendorResponseFieldErrors)
+}
+
+// SetVendor sets the Vendor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetVendorResponse) SetVendor(vendor_ *Vendor) {
+	g.Vendor = vendor_
+	g.require(getVendorResponseFieldVendor)
+}
+
 func (g *GetVendorResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetVendorResponse
 	var value unmarshaler
@@ -332,6 +672,17 @@ func (g *GetVendorResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GetVendorResponse) MarshalJSON() ([]byte, error) {
+	type embed GetVendorResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (g *GetVendorResponse) String() string {
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
@@ -345,12 +696,20 @@ func (g *GetVendorResponse) String() string {
 }
 
 // Defines supported query expressions to search for vendors by.
+var (
+	searchVendorsRequestFilterFieldName   = big.NewInt(1 << 0)
+	searchVendorsRequestFilterFieldStatus = big.NewInt(1 << 1)
+)
+
 type SearchVendorsRequestFilter struct {
 	// The names of the [Vendor](entity:Vendor) objects to retrieve.
 	Name []string `json:"name,omitempty" url:"name,omitempty"`
 	// The statuses of the [Vendor](entity:Vendor) objects to retrieve.
 	// See [VendorStatus](#type-vendorstatus) for possible values
 	Status []VendorStatus `json:"status,omitempty" url:"status,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -374,6 +733,27 @@ func (s *SearchVendorsRequestFilter) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *SearchVendorsRequestFilter) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequestFilter) SetName(name []string) {
+	s.Name = name
+	s.require(searchVendorsRequestFilterFieldName)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequestFilter) SetStatus(status []VendorStatus) {
+	s.Status = status
+	s.require(searchVendorsRequestFilterFieldStatus)
+}
+
 func (s *SearchVendorsRequestFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchVendorsRequestFilter
 	var value unmarshaler
@@ -390,6 +770,17 @@ func (s *SearchVendorsRequestFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchVendorsRequestFilter) MarshalJSON() ([]byte, error) {
+	type embed SearchVendorsRequestFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchVendorsRequestFilter) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -403,6 +794,11 @@ func (s *SearchVendorsRequestFilter) String() string {
 }
 
 // Defines a sorter used to sort results from [SearchVendors](api-endpoint:Vendors-SearchVendors).
+var (
+	searchVendorsRequestSortFieldField = big.NewInt(1 << 0)
+	searchVendorsRequestSortFieldOrder = big.NewInt(1 << 1)
+)
+
 type SearchVendorsRequestSort struct {
 	// Specifies the sort key to sort the returned vendors.
 	// See [Field](#type-field) for possible values
@@ -410,6 +806,9 @@ type SearchVendorsRequestSort struct {
 	// Specifies the sort order for the returned vendors.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -433,6 +832,27 @@ func (s *SearchVendorsRequestSort) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchVendorsRequestSort) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequestSort) SetField(field *SearchVendorsRequestSortField) {
+	s.Field = field
+	s.require(searchVendorsRequestSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsRequestSort) SetOrder(order *SortOrder) {
+	s.Order = order
+	s.require(searchVendorsRequestSortFieldOrder)
+}
+
 func (s *SearchVendorsRequestSort) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchVendorsRequestSort
 	var value unmarshaler
@@ -447,6 +867,17 @@ func (s *SearchVendorsRequestSort) UnmarshalJSON(data []byte) error {
 	s.extraProperties = extraProperties
 	s.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SearchVendorsRequestSort) MarshalJSON() ([]byte, error) {
+	type embed SearchVendorsRequestSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (s *SearchVendorsRequestSort) String() string {
@@ -485,6 +916,12 @@ func (s SearchVendorsRequestSortField) Ptr() *SearchVendorsRequestSortField {
 }
 
 // Represents an output from a call to [SearchVendors](api-endpoint:Vendors-SearchVendors).
+var (
+	searchVendorsResponseFieldErrors  = big.NewInt(1 << 0)
+	searchVendorsResponseFieldVendors = big.NewInt(1 << 1)
+	searchVendorsResponseFieldCursor  = big.NewInt(1 << 2)
+)
+
 type SearchVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -495,6 +932,9 @@ type SearchVendorsResponse struct {
 	//
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -525,6 +965,34 @@ func (s *SearchVendorsResponse) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *SearchVendorsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchVendorsResponseFieldErrors)
+}
+
+// SetVendors sets the Vendors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsResponse) SetVendors(vendors []*Vendor) {
+	s.Vendors = vendors
+	s.require(searchVendorsResponseFieldVendors)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchVendorsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchVendorsResponseFieldCursor)
+}
+
 func (s *SearchVendorsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchVendorsResponse
 	var value unmarshaler
@@ -541,6 +1009,17 @@ func (s *SearchVendorsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchVendorsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchVendorsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchVendorsResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -554,6 +1033,11 @@ func (s *SearchVendorsResponse) String() string {
 }
 
 // Represents an input to a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
+var (
+	updateVendorRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	updateVendorRequestFieldVendor         = big.NewInt(1 << 1)
+)
+
 type UpdateVendorRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
 	// request.
@@ -564,6 +1048,9 @@ type UpdateVendorRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"idempotency_key,omitempty"`
 	// The specified [Vendor](entity:Vendor) to be updated.
 	Vendor *Vendor `json:"vendor" url:"vendor"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -587,6 +1074,27 @@ func (u *UpdateVendorRequest) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateVendorRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateVendorRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateVendorRequestFieldIdempotencyKey)
+}
+
+// SetVendor sets the Vendor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateVendorRequest) SetVendor(vendor_ *Vendor) {
+	u.Vendor = vendor_
+	u.require(updateVendorRequestFieldVendor)
+}
+
 func (u *UpdateVendorRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateVendorRequest
 	var value unmarshaler
@@ -603,6 +1111,17 @@ func (u *UpdateVendorRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateVendorRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateVendorRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateVendorRequest) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -616,11 +1135,19 @@ func (u *UpdateVendorRequest) String() string {
 }
 
 // Represents an output from a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
+var (
+	updateVendorResponseFieldErrors = big.NewInt(1 << 0)
+	updateVendorResponseFieldVendor = big.NewInt(1 << 1)
+)
+
 type UpdateVendorResponse struct {
 	// Errors occurred when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The [Vendor](entity:Vendor) that has been updated.
 	Vendor *Vendor `json:"vendor,omitempty" url:"vendor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -644,6 +1171,27 @@ func (u *UpdateVendorResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateVendorResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateVendorResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateVendorResponseFieldErrors)
+}
+
+// SetVendor sets the Vendor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateVendorResponse) SetVendor(vendor_ *Vendor) {
+	u.Vendor = vendor_
+	u.require(updateVendorResponseFieldVendor)
+}
+
 func (u *UpdateVendorResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateVendorResponse
 	var value unmarshaler
@@ -660,6 +1208,17 @@ func (u *UpdateVendorResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateVendorResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateVendorResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateVendorResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -673,6 +1232,19 @@ func (u *UpdateVendorResponse) String() string {
 }
 
 // Represents a supplier to a seller.
+var (
+	vendorFieldID            = big.NewInt(1 << 0)
+	vendorFieldCreatedAt     = big.NewInt(1 << 1)
+	vendorFieldUpdatedAt     = big.NewInt(1 << 2)
+	vendorFieldName          = big.NewInt(1 << 3)
+	vendorFieldAddress       = big.NewInt(1 << 4)
+	vendorFieldContacts      = big.NewInt(1 << 5)
+	vendorFieldAccountNumber = big.NewInt(1 << 6)
+	vendorFieldNote          = big.NewInt(1 << 7)
+	vendorFieldVersion       = big.NewInt(1 << 8)
+	vendorFieldStatus        = big.NewInt(1 << 9)
+)
+
 type Vendor struct {
 	// A unique Square-generated ID for the [Vendor](entity:Vendor).
 	// This field is required when attempting to update a [Vendor](entity:Vendor).
@@ -699,6 +1271,9 @@ type Vendor struct {
 	// The status of the [Vendor](entity:Vendor).
 	// See [Status](#type-status) for possible values
 	Status *VendorStatus `json:"status,omitempty" url:"status,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -778,6 +1353,83 @@ func (v *Vendor) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *Vendor) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetID(id *string) {
+	v.ID = id
+	v.require(vendorFieldID)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetCreatedAt(createdAt *string) {
+	v.CreatedAt = createdAt
+	v.require(vendorFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetUpdatedAt(updatedAt *string) {
+	v.UpdatedAt = updatedAt
+	v.require(vendorFieldUpdatedAt)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetName(name *string) {
+	v.Name = name
+	v.require(vendorFieldName)
+}
+
+// SetAddress sets the Address field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetAddress(address *Address) {
+	v.Address = address
+	v.require(vendorFieldAddress)
+}
+
+// SetContacts sets the Contacts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetContacts(contacts []*VendorContact) {
+	v.Contacts = contacts
+	v.require(vendorFieldContacts)
+}
+
+// SetAccountNumber sets the AccountNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetAccountNumber(accountNumber *string) {
+	v.AccountNumber = accountNumber
+	v.require(vendorFieldAccountNumber)
+}
+
+// SetNote sets the Note field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetNote(note *string) {
+	v.Note = note
+	v.require(vendorFieldNote)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetVersion(version *int) {
+	v.Version = version
+	v.require(vendorFieldVersion)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *Vendor) SetStatus(status *VendorStatus) {
+	v.Status = status
+	v.require(vendorFieldStatus)
+}
+
 func (v *Vendor) UnmarshalJSON(data []byte) error {
 	type unmarshaler Vendor
 	var value unmarshaler
@@ -794,6 +1446,17 @@ func (v *Vendor) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (v *Vendor) MarshalJSON() ([]byte, error) {
+	type embed Vendor
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (v *Vendor) String() string {
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
@@ -807,6 +1470,15 @@ func (v *Vendor) String() string {
 }
 
 // Represents a contact of a [Vendor](entity:Vendor).
+var (
+	vendorContactFieldID           = big.NewInt(1 << 0)
+	vendorContactFieldName         = big.NewInt(1 << 1)
+	vendorContactFieldEmailAddress = big.NewInt(1 << 2)
+	vendorContactFieldPhoneNumber  = big.NewInt(1 << 3)
+	vendorContactFieldRemoved      = big.NewInt(1 << 4)
+	vendorContactFieldOrdinal      = big.NewInt(1 << 5)
+)
+
 type VendorContact struct {
 	// A unique Square-generated ID for the [VendorContact](entity:VendorContact).
 	// This field is required when attempting to update a [VendorContact](entity:VendorContact).
@@ -822,6 +1494,9 @@ type VendorContact struct {
 	Removed *bool `json:"removed,omitempty" url:"removed,omitempty"`
 	// The ordinal of the [VendorContact](entity:VendorContact).
 	Ordinal int `json:"ordinal" url:"ordinal"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -873,6 +1548,55 @@ func (v *VendorContact) GetExtraProperties() map[string]interface{} {
 	return v.extraProperties
 }
 
+func (v *VendorContact) require(field *big.Int) {
+	if v.explicitFields == nil {
+		v.explicitFields = big.NewInt(0)
+	}
+	v.explicitFields.Or(v.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetID(id *string) {
+	v.ID = id
+	v.require(vendorContactFieldID)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetName(name *string) {
+	v.Name = name
+	v.require(vendorContactFieldName)
+}
+
+// SetEmailAddress sets the EmailAddress field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetEmailAddress(emailAddress *string) {
+	v.EmailAddress = emailAddress
+	v.require(vendorContactFieldEmailAddress)
+}
+
+// SetPhoneNumber sets the PhoneNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetPhoneNumber(phoneNumber *string) {
+	v.PhoneNumber = phoneNumber
+	v.require(vendorContactFieldPhoneNumber)
+}
+
+// SetRemoved sets the Removed field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetRemoved(removed *bool) {
+	v.Removed = removed
+	v.require(vendorContactFieldRemoved)
+}
+
+// SetOrdinal sets the Ordinal field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (v *VendorContact) SetOrdinal(ordinal int) {
+	v.Ordinal = ordinal
+	v.require(vendorContactFieldOrdinal)
+}
+
 func (v *VendorContact) UnmarshalJSON(data []byte) error {
 	type unmarshaler VendorContact
 	var value unmarshaler
@@ -887,6 +1611,17 @@ func (v *VendorContact) UnmarshalJSON(data []byte) error {
 	v.extraProperties = extraProperties
 	v.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (v *VendorContact) MarshalJSON() ([]byte, error) {
+	type embed VendorContact
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (v *VendorContact) String() string {
@@ -925,10 +1660,31 @@ func (v VendorStatus) Ptr() *VendorStatus {
 	return &v
 }
 
+var (
+	updateVendorsRequestFieldVendorID = big.NewInt(1 << 0)
+)
+
 type UpdateVendorsRequest struct {
 	// ID of the [Vendor](entity:Vendor) to retrieve.
 	VendorID string               `json:"-" url:"-"`
 	Body     *UpdateVendorRequest `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateVendorsRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetVendorID sets the VendorID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateVendorsRequest) SetVendorID(vendorID string) {
+	u.VendorID = vendorID
+	u.require(updateVendorsRequestFieldVendorID)
 }
 
 func (u *UpdateVendorsRequest) UnmarshalJSON(data []byte) error {

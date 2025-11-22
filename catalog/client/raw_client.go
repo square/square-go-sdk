@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) BatchDelete(
 	ctx context.Context,
-	request *v2.BatchDeleteCatalogObjectsRequest,
+	request *square.BatchDeleteCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchDeleteCatalogObjectsResponse], error) {
+) (*core.Response[*square.BatchDeleteCatalogObjectsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) BatchDelete(
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-delete"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchDeleteCatalogObjectsResponse
+	var response *square.BatchDeleteCatalogObjectsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) BatchDelete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchDeleteCatalogObjectsResponse]{
+	return &core.Response[*square.BatchDeleteCatalogObjectsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) BatchDelete(
 
 func (r *RawClient) BatchGet(
 	ctx context.Context,
-	request *v2.BatchGetCatalogObjectsRequest,
+	request *square.BatchGetCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchGetCatalogObjectsResponse], error) {
+) (*core.Response[*square.BatchGetCatalogObjectsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) BatchGet(
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchGetCatalogObjectsResponse
+	var response *square.BatchGetCatalogObjectsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) BatchGet(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchGetCatalogObjectsResponse]{
+	return &core.Response[*square.BatchGetCatalogObjectsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) BatchGet(
 
 func (r *RawClient) BatchUpsert(
 	ctx context.Context,
-	request *v2.BatchUpsertCatalogObjectsRequest,
+	request *square.BatchUpsertCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BatchUpsertCatalogObjectsResponse], error) {
+) (*core.Response[*square.BatchUpsertCatalogObjectsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,11 +127,11 @@ func (r *RawClient) BatchUpsert(
 	)
 	endpointURL := baseURL + "/v2/catalog/batch-upsert"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BatchUpsertCatalogObjectsResponse
+	var response *square.BatchUpsertCatalogObjectsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (r *RawClient) BatchUpsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BatchUpsertCatalogObjectsResponse]{
+	return &core.Response[*square.BatchUpsertCatalogObjectsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,7 +159,7 @@ func (r *RawClient) BatchUpsert(
 func (r *RawClient) Info(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CatalogInfoResponse], error) {
+) (*core.Response[*square.CatalogInfoResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,10 +168,10 @@ func (r *RawClient) Info(
 	)
 	endpointURL := baseURL + "/v2/catalog/info"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CatalogInfoResponse
+	var response *square.CatalogInfoResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -188,7 +188,7 @@ func (r *RawClient) Info(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CatalogInfoResponse]{
+	return &core.Response[*square.CatalogInfoResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -197,9 +197,9 @@ func (r *RawClient) Info(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchCatalogObjectsRequest,
+	request *square.SearchCatalogObjectsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchCatalogObjectsResponse], error) {
+) (*core.Response[*square.SearchCatalogObjectsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -208,11 +208,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/catalog/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchCatalogObjectsResponse
+	var response *square.SearchCatalogObjectsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -230,7 +230,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchCatalogObjectsResponse]{
+	return &core.Response[*square.SearchCatalogObjectsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -239,9 +239,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) SearchItems(
 	ctx context.Context,
-	request *v2.SearchCatalogItemsRequest,
+	request *square.SearchCatalogItemsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchCatalogItemsResponse], error) {
+) (*core.Response[*square.SearchCatalogItemsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -250,11 +250,11 @@ func (r *RawClient) SearchItems(
 	)
 	endpointURL := baseURL + "/v2/catalog/search-catalog-items"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchCatalogItemsResponse
+	var response *square.SearchCatalogItemsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -272,7 +272,7 @@ func (r *RawClient) SearchItems(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchCatalogItemsResponse]{
+	return &core.Response[*square.SearchCatalogItemsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -281,9 +281,9 @@ func (r *RawClient) SearchItems(
 
 func (r *RawClient) UpdateItemModifierLists(
 	ctx context.Context,
-	request *v2.UpdateItemModifierListsRequest,
+	request *square.UpdateItemModifierListsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateItemModifierListsResponse], error) {
+) (*core.Response[*square.UpdateItemModifierListsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -292,11 +292,11 @@ func (r *RawClient) UpdateItemModifierLists(
 	)
 	endpointURL := baseURL + "/v2/catalog/update-item-modifier-lists"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateItemModifierListsResponse
+	var response *square.UpdateItemModifierListsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -314,7 +314,7 @@ func (r *RawClient) UpdateItemModifierLists(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateItemModifierListsResponse]{
+	return &core.Response[*square.UpdateItemModifierListsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -323,9 +323,9 @@ func (r *RawClient) UpdateItemModifierLists(
 
 func (r *RawClient) UpdateItemTaxes(
 	ctx context.Context,
-	request *v2.UpdateItemTaxesRequest,
+	request *square.UpdateItemTaxesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateItemTaxesResponse], error) {
+) (*core.Response[*square.UpdateItemTaxesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -334,11 +334,11 @@ func (r *RawClient) UpdateItemTaxes(
 	)
 	endpointURL := baseURL + "/v2/catalog/update-item-taxes"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateItemTaxesResponse
+	var response *square.UpdateItemTaxesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -356,7 +356,7 @@ func (r *RawClient) UpdateItemTaxes(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateItemTaxesResponse]{
+	return &core.Response[*square.UpdateItemTaxesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

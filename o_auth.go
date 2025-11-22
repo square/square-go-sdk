@@ -6,6 +6,20 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	obtainTokenRequestFieldClientID       = big.NewInt(1 << 0)
+	obtainTokenRequestFieldClientSecret   = big.NewInt(1 << 1)
+	obtainTokenRequestFieldCode           = big.NewInt(1 << 2)
+	obtainTokenRequestFieldRedirectURI    = big.NewInt(1 << 3)
+	obtainTokenRequestFieldGrantType      = big.NewInt(1 << 4)
+	obtainTokenRequestFieldRefreshToken   = big.NewInt(1 << 5)
+	obtainTokenRequestFieldMigrationToken = big.NewInt(1 << 6)
+	obtainTokenRequestFieldScopes         = big.NewInt(1 << 7)
+	obtainTokenRequestFieldShortLived     = big.NewInt(1 << 8)
+	obtainTokenRequestFieldCodeVerifier   = big.NewInt(1 << 9)
 )
 
 type ObtainTokenRequest struct {
@@ -67,7 +81,94 @@ type ObtainTokenRequest struct {
 	//
 	// Required for the PKCE flow if `grant_type` is `authorization_code`.
 	CodeVerifier *string `json:"code_verifier,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (o *ObtainTokenRequest) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetClientID sets the ClientID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetClientID(clientID string) {
+	o.ClientID = clientID
+	o.require(obtainTokenRequestFieldClientID)
+}
+
+// SetClientSecret sets the ClientSecret field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetClientSecret(clientSecret *string) {
+	o.ClientSecret = clientSecret
+	o.require(obtainTokenRequestFieldClientSecret)
+}
+
+// SetCode sets the Code field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetCode(code *string) {
+	o.Code = code
+	o.require(obtainTokenRequestFieldCode)
+}
+
+// SetRedirectURI sets the RedirectURI field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetRedirectURI(redirectURI *string) {
+	o.RedirectURI = redirectURI
+	o.require(obtainTokenRequestFieldRedirectURI)
+}
+
+// SetGrantType sets the GrantType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetGrantType(grantType string) {
+	o.GrantType = grantType
+	o.require(obtainTokenRequestFieldGrantType)
+}
+
+// SetRefreshToken sets the RefreshToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetRefreshToken(refreshToken *string) {
+	o.RefreshToken = refreshToken
+	o.require(obtainTokenRequestFieldRefreshToken)
+}
+
+// SetMigrationToken sets the MigrationToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetMigrationToken(migrationToken *string) {
+	o.MigrationToken = migrationToken
+	o.require(obtainTokenRequestFieldMigrationToken)
+}
+
+// SetScopes sets the Scopes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetScopes(scopes []string) {
+	o.Scopes = scopes
+	o.require(obtainTokenRequestFieldScopes)
+}
+
+// SetShortLived sets the ShortLived field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetShortLived(shortLived *bool) {
+	o.ShortLived = shortLived
+	o.require(obtainTokenRequestFieldShortLived)
+}
+
+// SetCodeVerifier sets the CodeVerifier field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetCodeVerifier(codeVerifier *string) {
+	o.CodeVerifier = codeVerifier
+	o.require(obtainTokenRequestFieldCodeVerifier)
+}
+
+var (
+	revokeTokenRequestFieldClientID              = big.NewInt(1 << 0)
+	revokeTokenRequestFieldAccessToken           = big.NewInt(1 << 1)
+	revokeTokenRequestFieldMerchantID            = big.NewInt(1 << 2)
+	revokeTokenRequestFieldRevokeOnlyAccessToken = big.NewInt(1 << 3)
+)
 
 type RevokeTokenRequest struct {
 	// The Square-issued ID for your application, which is available on the **OAuth** page in the
@@ -83,9 +184,61 @@ type RevokeTokenRequest struct {
 	// terminate the entire authorization.
 	// Default: `false`
 	RevokeOnlyAccessToken *bool `json:"revoke_only_access_token,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (r *RevokeTokenRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetClientID sets the ClientID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenRequest) SetClientID(clientID *string) {
+	r.ClientID = clientID
+	r.require(revokeTokenRequestFieldClientID)
+}
+
+// SetAccessToken sets the AccessToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenRequest) SetAccessToken(accessToken *string) {
+	r.AccessToken = accessToken
+	r.require(revokeTokenRequestFieldAccessToken)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenRequest) SetMerchantID(merchantID *string) {
+	r.MerchantID = merchantID
+	r.require(revokeTokenRequestFieldMerchantID)
+}
+
+// SetRevokeOnlyAccessToken sets the RevokeOnlyAccessToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenRequest) SetRevokeOnlyAccessToken(revokeOnlyAccessToken *bool) {
+	r.RevokeOnlyAccessToken = revokeOnlyAccessToken
+	r.require(revokeTokenRequestFieldRevokeOnlyAccessToken)
 }
 
 // Represents an [ObtainToken](api-endpoint:OAuth-ObtainToken) response.
+var (
+	obtainTokenResponseFieldAccessToken           = big.NewInt(1 << 0)
+	obtainTokenResponseFieldTokenType             = big.NewInt(1 << 1)
+	obtainTokenResponseFieldExpiresAt             = big.NewInt(1 << 2)
+	obtainTokenResponseFieldMerchantID            = big.NewInt(1 << 3)
+	obtainTokenResponseFieldSubscriptionID        = big.NewInt(1 << 4)
+	obtainTokenResponseFieldPlanID                = big.NewInt(1 << 5)
+	obtainTokenResponseFieldIDToken               = big.NewInt(1 << 6)
+	obtainTokenResponseFieldRefreshToken          = big.NewInt(1 << 7)
+	obtainTokenResponseFieldShortLived            = big.NewInt(1 << 8)
+	obtainTokenResponseFieldErrors                = big.NewInt(1 << 9)
+	obtainTokenResponseFieldRefreshTokenExpiresAt = big.NewInt(1 << 10)
+)
+
 type ObtainTokenResponse struct {
 	// An OAuth access token used to authorize Square API requests on behalf of the seller.
 	// Include this token as a bearer token in the `Authorization` header of your API requests.
@@ -135,6 +288,9 @@ type ObtainTokenResponse struct {
 	//
 	// This field is only returned for the PKCE flow.
 	RefreshTokenExpiresAt *string `json:"refresh_token_expires_at,omitempty" url:"refresh_token_expires_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -221,6 +377,90 @@ func (o *ObtainTokenResponse) GetExtraProperties() map[string]interface{} {
 	return o.extraProperties
 }
 
+func (o *ObtainTokenResponse) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetAccessToken sets the AccessToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetAccessToken(accessToken *string) {
+	o.AccessToken = accessToken
+	o.require(obtainTokenResponseFieldAccessToken)
+}
+
+// SetTokenType sets the TokenType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetTokenType(tokenType *string) {
+	o.TokenType = tokenType
+	o.require(obtainTokenResponseFieldTokenType)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetExpiresAt(expiresAt *string) {
+	o.ExpiresAt = expiresAt
+	o.require(obtainTokenResponseFieldExpiresAt)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetMerchantID(merchantID *string) {
+	o.MerchantID = merchantID
+	o.require(obtainTokenResponseFieldMerchantID)
+}
+
+// SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetSubscriptionID(subscriptionID *string) {
+	o.SubscriptionID = subscriptionID
+	o.require(obtainTokenResponseFieldSubscriptionID)
+}
+
+// SetPlanID sets the PlanID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetPlanID(planID *string) {
+	o.PlanID = planID
+	o.require(obtainTokenResponseFieldPlanID)
+}
+
+// SetIDToken sets the IDToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetIDToken(idToken *string) {
+	o.IDToken = idToken
+	o.require(obtainTokenResponseFieldIDToken)
+}
+
+// SetRefreshToken sets the RefreshToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetRefreshToken(refreshToken *string) {
+	o.RefreshToken = refreshToken
+	o.require(obtainTokenResponseFieldRefreshToken)
+}
+
+// SetShortLived sets the ShortLived field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetShortLived(shortLived *bool) {
+	o.ShortLived = shortLived
+	o.require(obtainTokenResponseFieldShortLived)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetErrors(errors []*Error) {
+	o.Errors = errors
+	o.require(obtainTokenResponseFieldErrors)
+}
+
+// SetRefreshTokenExpiresAt sets the RefreshTokenExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenResponse) SetRefreshTokenExpiresAt(refreshTokenExpiresAt *string) {
+	o.RefreshTokenExpiresAt = refreshTokenExpiresAt
+	o.require(obtainTokenResponseFieldRefreshTokenExpiresAt)
+}
+
 func (o *ObtainTokenResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ObtainTokenResponse
 	var value unmarshaler
@@ -237,6 +477,17 @@ func (o *ObtainTokenResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (o *ObtainTokenResponse) MarshalJSON() ([]byte, error) {
+	type embed ObtainTokenResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (o *ObtainTokenResponse) String() string {
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
@@ -251,6 +502,14 @@ func (o *ObtainTokenResponse) String() string {
 
 // Defines the fields that are included in the response body of
 // a request to the `RetrieveTokenStatus` endpoint.
+var (
+	retrieveTokenStatusResponseFieldScopes     = big.NewInt(1 << 0)
+	retrieveTokenStatusResponseFieldExpiresAt  = big.NewInt(1 << 1)
+	retrieveTokenStatusResponseFieldClientID   = big.NewInt(1 << 2)
+	retrieveTokenStatusResponseFieldMerchantID = big.NewInt(1 << 3)
+	retrieveTokenStatusResponseFieldErrors     = big.NewInt(1 << 4)
+)
+
 type RetrieveTokenStatusResponse struct {
 	// The list of scopes associated with an access token.
 	Scopes []string `json:"scopes,omitempty" url:"scopes,omitempty"`
@@ -262,6 +521,9 @@ type RetrieveTokenStatusResponse struct {
 	MerchantID *string `json:"merchant_id,omitempty" url:"merchant_id,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -306,6 +568,48 @@ func (r *RetrieveTokenStatusResponse) GetExtraProperties() map[string]interface{
 	return r.extraProperties
 }
 
+func (r *RetrieveTokenStatusResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetScopes sets the Scopes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTokenStatusResponse) SetScopes(scopes []string) {
+	r.Scopes = scopes
+	r.require(retrieveTokenStatusResponseFieldScopes)
+}
+
+// SetExpiresAt sets the ExpiresAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTokenStatusResponse) SetExpiresAt(expiresAt *string) {
+	r.ExpiresAt = expiresAt
+	r.require(retrieveTokenStatusResponseFieldExpiresAt)
+}
+
+// SetClientID sets the ClientID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTokenStatusResponse) SetClientID(clientID *string) {
+	r.ClientID = clientID
+	r.require(retrieveTokenStatusResponseFieldClientID)
+}
+
+// SetMerchantID sets the MerchantID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTokenStatusResponse) SetMerchantID(merchantID *string) {
+	r.MerchantID = merchantID
+	r.require(retrieveTokenStatusResponseFieldMerchantID)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveTokenStatusResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveTokenStatusResponseFieldErrors)
+}
+
 func (r *RetrieveTokenStatusResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RetrieveTokenStatusResponse
 	var value unmarshaler
@@ -322,6 +626,17 @@ func (r *RetrieveTokenStatusResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (r *RetrieveTokenStatusResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveTokenStatusResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (r *RetrieveTokenStatusResponse) String() string {
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
@@ -334,11 +649,19 @@ func (r *RetrieveTokenStatusResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+var (
+	revokeTokenResponseFieldSuccess = big.NewInt(1 << 0)
+	revokeTokenResponseFieldErrors  = big.NewInt(1 << 1)
+)
+
 type RevokeTokenResponse struct {
 	// If the request is successful, this is `true`.
 	Success *bool `json:"success,omitempty" url:"success,omitempty"`
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -362,6 +685,27 @@ func (r *RevokeTokenResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RevokeTokenResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetSuccess sets the Success field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenResponse) SetSuccess(success *bool) {
+	r.Success = success
+	r.require(revokeTokenResponseFieldSuccess)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RevokeTokenResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(revokeTokenResponseFieldErrors)
+}
+
 func (r *RevokeTokenResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RevokeTokenResponse
 	var value unmarshaler
@@ -376,6 +720,17 @@ func (r *RevokeTokenResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RevokeTokenResponse) MarshalJSON() ([]byte, error) {
+	type embed RevokeTokenResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RevokeTokenResponse) String() string {

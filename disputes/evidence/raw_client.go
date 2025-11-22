@@ -4,7 +4,7 @@ package evidence
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	disputes "github.com/square/square-go-sdk/v2/disputes"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *disputes.GetEvidenceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetDisputeEvidenceResponse], error) {
+) (*core.Response[*square.GetDisputeEvidenceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -48,10 +48,10 @@ func (r *RawClient) Get(
 		request.EvidenceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetDisputeEvidenceResponse
+	var response *square.GetDisputeEvidenceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -68,7 +68,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetDisputeEvidenceResponse]{
+	return &core.Response[*square.GetDisputeEvidenceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -79,7 +79,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *disputes.DeleteEvidenceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteDisputeEvidenceResponse], error) {
+) (*core.Response[*square.DeleteDisputeEvidenceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -92,10 +92,10 @@ func (r *RawClient) Delete(
 		request.EvidenceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteDisputeEvidenceResponse
+	var response *square.DeleteDisputeEvidenceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -112,7 +112,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteDisputeEvidenceResponse]{
+	return &core.Response[*square.DeleteDisputeEvidenceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

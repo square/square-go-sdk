@@ -4,6 +4,14 @@ package loyalty
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	accumulateLoyaltyPointsRequestFieldAccountID        = big.NewInt(1 << 0)
+	accumulateLoyaltyPointsRequestFieldAccumulatePoints = big.NewInt(1 << 1)
+	accumulateLoyaltyPointsRequestFieldIdempotencyKey   = big.NewInt(1 << 2)
+	accumulateLoyaltyPointsRequestFieldLocationID       = big.NewInt(1 << 3)
 )
 
 type AccumulateLoyaltyPointsRequest struct {
@@ -18,7 +26,52 @@ type AccumulateLoyaltyPointsRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The [location](entity:Location) where the purchase was made.
 	LocationID string `json:"location_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (a *AccumulateLoyaltyPointsRequest) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetAccountID sets the AccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccumulateLoyaltyPointsRequest) SetAccountID(accountID string) {
+	a.AccountID = accountID
+	a.require(accumulateLoyaltyPointsRequestFieldAccountID)
+}
+
+// SetAccumulatePoints sets the AccumulatePoints field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccumulateLoyaltyPointsRequest) SetAccumulatePoints(accumulatePoints *v2.LoyaltyEventAccumulatePoints) {
+	a.AccumulatePoints = accumulatePoints
+	a.require(accumulateLoyaltyPointsRequestFieldAccumulatePoints)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccumulateLoyaltyPointsRequest) SetIdempotencyKey(idempotencyKey string) {
+	a.IdempotencyKey = idempotencyKey
+	a.require(accumulateLoyaltyPointsRequestFieldIdempotencyKey)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccumulateLoyaltyPointsRequest) SetLocationID(locationID string) {
+	a.LocationID = locationID
+	a.require(accumulateLoyaltyPointsRequestFieldLocationID)
+}
+
+var (
+	adjustLoyaltyPointsRequestFieldAccountID            = big.NewInt(1 << 0)
+	adjustLoyaltyPointsRequestFieldIdempotencyKey       = big.NewInt(1 << 1)
+	adjustLoyaltyPointsRequestFieldAdjustPoints         = big.NewInt(1 << 2)
+	adjustLoyaltyPointsRequestFieldAllowNegativeBalance = big.NewInt(1 << 3)
+)
 
 type AdjustLoyaltyPointsRequest struct {
 	// The ID of the target [loyalty account](entity:LoyaltyAccount).
@@ -33,7 +86,50 @@ type AdjustLoyaltyPointsRequest struct {
 	// balance is allowed when subtracting points. If `false`, Square returns a `BAD_REQUEST` error when subtracting
 	// the specified number of points would result in a negative balance. The default value is `false`.
 	AllowNegativeBalance *bool `json:"allow_negative_balance,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (a *AdjustLoyaltyPointsRequest) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetAccountID sets the AccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AdjustLoyaltyPointsRequest) SetAccountID(accountID string) {
+	a.AccountID = accountID
+	a.require(adjustLoyaltyPointsRequestFieldAccountID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AdjustLoyaltyPointsRequest) SetIdempotencyKey(idempotencyKey string) {
+	a.IdempotencyKey = idempotencyKey
+	a.require(adjustLoyaltyPointsRequestFieldIdempotencyKey)
+}
+
+// SetAdjustPoints sets the AdjustPoints field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AdjustLoyaltyPointsRequest) SetAdjustPoints(adjustPoints *v2.LoyaltyEventAdjustPoints) {
+	a.AdjustPoints = adjustPoints
+	a.require(adjustLoyaltyPointsRequestFieldAdjustPoints)
+}
+
+// SetAllowNegativeBalance sets the AllowNegativeBalance field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AdjustLoyaltyPointsRequest) SetAllowNegativeBalance(allowNegativeBalance *bool) {
+	a.AllowNegativeBalance = allowNegativeBalance
+	a.require(adjustLoyaltyPointsRequestFieldAllowNegativeBalance)
+}
+
+var (
+	createLoyaltyAccountRequestFieldLoyaltyAccount = big.NewInt(1 << 0)
+	createLoyaltyAccountRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+)
 
 type CreateLoyaltyAccountRequest struct {
 	// The loyalty account to create.
@@ -41,12 +137,63 @@ type CreateLoyaltyAccountRequest struct {
 	// A unique string that identifies this `CreateLoyaltyAccount` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateLoyaltyAccountRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetLoyaltyAccount sets the LoyaltyAccount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyAccountRequest) SetLoyaltyAccount(loyaltyAccount *v2.LoyaltyAccount) {
+	c.LoyaltyAccount = loyaltyAccount
+	c.require(createLoyaltyAccountRequestFieldLoyaltyAccount)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyAccountRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createLoyaltyAccountRequestFieldIdempotencyKey)
+}
+
+var (
+	getAccountsRequestFieldAccountID = big.NewInt(1 << 0)
+)
 
 type GetAccountsRequest struct {
 	// The ID of the [loyalty account](entity:LoyaltyAccount) to retrieve.
 	AccountID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetAccountsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetAccountID sets the AccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetAccountsRequest) SetAccountID(accountID string) {
+	g.AccountID = accountID
+	g.require(getAccountsRequestFieldAccountID)
+}
+
+var (
+	searchLoyaltyAccountsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchLoyaltyAccountsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchLoyaltyAccountsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchLoyaltyAccountsRequest struct {
 	// The search criteria for the request.
@@ -60,4 +207,35 @@ type SearchLoyaltyAccountsRequest struct {
 	// For more information,
 	// see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchLoyaltyAccountsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyAccountsRequest) SetQuery(query *v2.SearchLoyaltyAccountsRequestLoyaltyAccountQuery) {
+	s.Query = query
+	s.require(searchLoyaltyAccountsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyAccountsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchLoyaltyAccountsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyAccountsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchLoyaltyAccountsRequestFieldCursor)
 }

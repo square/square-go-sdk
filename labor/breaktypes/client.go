@@ -4,7 +4,7 @@ package breaktypes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	labor "github.com/square/square-go-sdk/v2/labor"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -47,7 +46,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *labor.ListBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.BreakType], error) {
+) (*core.Page[*string, *square.BreakType, *square.ListBreakTypesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -60,10 +59,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -82,14 +81,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListBreakTypesResponse) *internal.PageResponse[*string, *v2.BreakType] {
+	readPageResponse := func(response *square.ListBreakTypesResponse) *core.PageResponse[*string, *square.BreakType, *square.ListBreakTypesResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetBreakTypes()
-		return &internal.PageResponse[*string, *v2.BreakType]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.BreakType, *square.ListBreakTypesResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -118,7 +118,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateBreakTypeResponse, error) {
+) (*square.CreateBreakTypeResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -135,7 +135,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *labor.GetBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*v2.GetBreakTypeResponse, error) {
+) (*square.GetBreakTypeResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -152,7 +152,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateBreakTypeRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateBreakTypeResponse, error) {
+) (*square.UpdateBreakTypeResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -171,7 +171,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.DeleteBreakTypesRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteBreakTypeResponse, error) {
+) (*square.DeleteBreakTypeResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

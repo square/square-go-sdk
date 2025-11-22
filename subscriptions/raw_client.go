@@ -4,7 +4,7 @@ package subscriptions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateSubscriptionRequest,
+	request *square.CreateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateSubscriptionResponse], error) {
+) (*core.Response[*square.CreateSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/subscriptions"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateSubscriptionResponse
+	var response *square.CreateSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateSubscriptionResponse]{
+	return &core.Response[*square.CreateSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) BulkSwapPlan(
 	ctx context.Context,
-	request *v2.BulkSwapPlanRequest,
+	request *square.BulkSwapPlanRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkSwapPlanResponse], error) {
+) (*core.Response[*square.BulkSwapPlanResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) BulkSwapPlan(
 	)
 	endpointURL := baseURL + "/v2/subscriptions/bulk-swap-plan"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkSwapPlanResponse
+	var response *square.BulkSwapPlanResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) BulkSwapPlan(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkSwapPlanResponse]{
+	return &core.Response[*square.BulkSwapPlanResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) BulkSwapPlan(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchSubscriptionsRequest,
+	request *square.SearchSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchSubscriptionsResponse], error) {
+) (*core.Response[*square.SearchSubscriptionsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,11 +127,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/subscriptions/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchSubscriptionsResponse
+	var response *square.SearchSubscriptionsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchSubscriptionsResponse]{
+	return &core.Response[*square.SearchSubscriptionsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -158,9 +158,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetSubscriptionsRequest,
+	request *square.GetSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetSubscriptionResponse], error) {
+) (*core.Response[*square.GetSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -179,10 +179,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetSubscriptionResponse
+	var response *square.GetSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -199,7 +199,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetSubscriptionResponse]{
+	return &core.Response[*square.GetSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -208,9 +208,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateSubscriptionRequest,
+	request *square.UpdateSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateSubscriptionResponse], error) {
+) (*core.Response[*square.UpdateSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -222,11 +222,11 @@ func (r *RawClient) Update(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateSubscriptionResponse
+	var response *square.UpdateSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -244,7 +244,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateSubscriptionResponse]{
+	return &core.Response[*square.UpdateSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -253,9 +253,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) DeleteAction(
 	ctx context.Context,
-	request *v2.DeleteActionSubscriptionsRequest,
+	request *square.DeleteActionSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteSubscriptionActionResponse], error) {
+) (*core.Response[*square.DeleteSubscriptionActionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -268,10 +268,10 @@ func (r *RawClient) DeleteAction(
 		request.ActionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteSubscriptionActionResponse
+	var response *square.DeleteSubscriptionActionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -288,7 +288,7 @@ func (r *RawClient) DeleteAction(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteSubscriptionActionResponse]{
+	return &core.Response[*square.DeleteSubscriptionActionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -297,9 +297,9 @@ func (r *RawClient) DeleteAction(
 
 func (r *RawClient) ChangeBillingAnchorDate(
 	ctx context.Context,
-	request *v2.ChangeBillingAnchorDateRequest,
+	request *square.ChangeBillingAnchorDateRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ChangeBillingAnchorDateResponse], error) {
+) (*core.Response[*square.ChangeBillingAnchorDateResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -311,11 +311,11 @@ func (r *RawClient) ChangeBillingAnchorDate(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.ChangeBillingAnchorDateResponse
+	var response *square.ChangeBillingAnchorDateResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -333,7 +333,7 @@ func (r *RawClient) ChangeBillingAnchorDate(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ChangeBillingAnchorDateResponse]{
+	return &core.Response[*square.ChangeBillingAnchorDateResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -342,9 +342,9 @@ func (r *RawClient) ChangeBillingAnchorDate(
 
 func (r *RawClient) Cancel(
 	ctx context.Context,
-	request *v2.CancelSubscriptionsRequest,
+	request *square.CancelSubscriptionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelSubscriptionResponse], error) {
+) (*core.Response[*square.CancelSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -356,10 +356,10 @@ func (r *RawClient) Cancel(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.CancelSubscriptionResponse
+	var response *square.CancelSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -376,7 +376,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelSubscriptionResponse]{
+	return &core.Response[*square.CancelSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -385,9 +385,9 @@ func (r *RawClient) Cancel(
 
 func (r *RawClient) Pause(
 	ctx context.Context,
-	request *v2.PauseSubscriptionRequest,
+	request *square.PauseSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.PauseSubscriptionResponse], error) {
+) (*core.Response[*square.PauseSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -399,11 +399,11 @@ func (r *RawClient) Pause(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.PauseSubscriptionResponse
+	var response *square.PauseSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -421,7 +421,7 @@ func (r *RawClient) Pause(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.PauseSubscriptionResponse]{
+	return &core.Response[*square.PauseSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -430,9 +430,9 @@ func (r *RawClient) Pause(
 
 func (r *RawClient) Resume(
 	ctx context.Context,
-	request *v2.ResumeSubscriptionRequest,
+	request *square.ResumeSubscriptionRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ResumeSubscriptionResponse], error) {
+) (*core.Response[*square.ResumeSubscriptionResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -444,11 +444,11 @@ func (r *RawClient) Resume(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.ResumeSubscriptionResponse
+	var response *square.ResumeSubscriptionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -466,7 +466,7 @@ func (r *RawClient) Resume(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ResumeSubscriptionResponse]{
+	return &core.Response[*square.ResumeSubscriptionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -475,9 +475,9 @@ func (r *RawClient) Resume(
 
 func (r *RawClient) SwapPlan(
 	ctx context.Context,
-	request *v2.SwapPlanRequest,
+	request *square.SwapPlanRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SwapPlanResponse], error) {
+) (*core.Response[*square.SwapPlanResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -489,11 +489,11 @@ func (r *RawClient) SwapPlan(
 		request.SubscriptionID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SwapPlanResponse
+	var response *square.SwapPlanResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -511,7 +511,7 @@ func (r *RawClient) SwapPlan(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SwapPlanResponse]{
+	return &core.Response[*square.SwapPlanResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

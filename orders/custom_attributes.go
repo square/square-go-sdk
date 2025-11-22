@@ -4,17 +4,65 @@ package orders
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	bulkDeleteOrderCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
 )
 
 type BulkDeleteOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual delete operations for custom attributes.
 	Values map[string]*v2.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkDeleteOrderCustomAttributesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetValues sets the Values field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkDeleteOrderCustomAttributesRequest) SetValues(values map[string]*v2.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) {
+	b.Values = values
+	b.require(bulkDeleteOrderCustomAttributesRequestFieldValues)
+}
+
+var (
+	bulkUpsertOrderCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
+)
 
 type BulkUpsertOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual upsert operations for custom attributes.
 	Values map[string]*v2.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkUpsertOrderCustomAttributesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetValues sets the Values field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpsertOrderCustomAttributesRequest) SetValues(values map[string]*v2.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) {
+	b.Values = values
+	b.require(bulkUpsertOrderCustomAttributesRequestFieldValues)
+}
+
+var (
+	deleteCustomAttributesRequestFieldOrderID            = big.NewInt(1 << 0)
+	deleteCustomAttributesRequestFieldCustomAttributeKey = big.NewInt(1 << 1)
+)
 
 type DeleteCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
@@ -22,7 +70,38 @@ type DeleteCustomAttributesRequest struct {
 	// The key of the custom attribute to delete.  This key must match the key of an
 	// existing custom attribute definition.
 	CustomAttributeKey string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteCustomAttributesRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetOrderID(orderID string) {
+	d.OrderID = orderID
+	d.require(deleteCustomAttributesRequestFieldOrderID)
+}
+
+// SetCustomAttributeKey sets the CustomAttributeKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetCustomAttributeKey(customAttributeKey string) {
+	d.CustomAttributeKey = customAttributeKey
+	d.require(deleteCustomAttributesRequestFieldCustomAttributeKey)
+}
+
+var (
+	getCustomAttributesRequestFieldOrderID            = big.NewInt(1 << 0)
+	getCustomAttributesRequestFieldCustomAttributeKey = big.NewInt(1 << 1)
+	getCustomAttributesRequestFieldVersion            = big.NewInt(1 << 2)
+	getCustomAttributesRequestFieldWithDefinition     = big.NewInt(1 << 3)
+)
 
 type GetCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
@@ -37,7 +116,53 @@ type GetCustomAttributesRequest struct {
 	// custom attribute. Set this parameter to `true` to get the name and description of each custom attribute,
 	// information about the data type, or other definition details. The default value is `false`.
 	WithDefinition *bool `json:"-" url:"with_definition,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCustomAttributesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetOrderID(orderID string) {
+	g.OrderID = orderID
+	g.require(getCustomAttributesRequestFieldOrderID)
+}
+
+// SetCustomAttributeKey sets the CustomAttributeKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetCustomAttributeKey(customAttributeKey string) {
+	g.CustomAttributeKey = customAttributeKey
+	g.require(getCustomAttributesRequestFieldCustomAttributeKey)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetVersion(version *int) {
+	g.Version = version
+	g.require(getCustomAttributesRequestFieldVersion)
+}
+
+// SetWithDefinition sets the WithDefinition field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetWithDefinition(withDefinition *bool) {
+	g.WithDefinition = withDefinition
+	g.require(getCustomAttributesRequestFieldWithDefinition)
+}
+
+var (
+	listCustomAttributesRequestFieldOrderID          = big.NewInt(1 << 0)
+	listCustomAttributesRequestFieldVisibilityFilter = big.NewInt(1 << 1)
+	listCustomAttributesRequestFieldCursor           = big.NewInt(1 << 2)
+	listCustomAttributesRequestFieldLimit            = big.NewInt(1 << 3)
+	listCustomAttributesRequestFieldWithDefinitions  = big.NewInt(1 << 4)
+)
 
 type ListCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
@@ -57,7 +182,59 @@ type ListCustomAttributesRequest struct {
 	// custom attribute. Set this parameter to `true` to get the name and description of each custom attribute,
 	// information about the data type, or other definition details. The default value is `false`.
 	WithDefinitions *bool `json:"-" url:"with_definitions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCustomAttributesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetOrderID(orderID string) {
+	l.OrderID = orderID
+	l.require(listCustomAttributesRequestFieldOrderID)
+}
+
+// SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v2.VisibilityFilter) {
+	l.VisibilityFilter = visibilityFilter
+	l.require(listCustomAttributesRequestFieldVisibilityFilter)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomAttributesRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listCustomAttributesRequestFieldLimit)
+}
+
+// SetWithDefinitions sets the WithDefinitions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetWithDefinitions(withDefinitions *bool) {
+	l.WithDefinitions = withDefinitions
+	l.require(listCustomAttributesRequestFieldWithDefinitions)
+}
+
+var (
+	upsertOrderCustomAttributeRequestFieldOrderID            = big.NewInt(1 << 0)
+	upsertOrderCustomAttributeRequestFieldCustomAttributeKey = big.NewInt(1 << 1)
+	upsertOrderCustomAttributeRequestFieldCustomAttribute    = big.NewInt(1 << 2)
+	upsertOrderCustomAttributeRequestFieldIdempotencyKey     = big.NewInt(1 << 3)
+)
 
 type UpsertOrderCustomAttributeRequest struct {
 	// The ID of the target [order](entity:Order).
@@ -76,4 +253,42 @@ type UpsertOrderCustomAttributeRequest struct {
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpsertOrderCustomAttributeRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertOrderCustomAttributeRequest) SetOrderID(orderID string) {
+	u.OrderID = orderID
+	u.require(upsertOrderCustomAttributeRequestFieldOrderID)
+}
+
+// SetCustomAttributeKey sets the CustomAttributeKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertOrderCustomAttributeRequest) SetCustomAttributeKey(customAttributeKey string) {
+	u.CustomAttributeKey = customAttributeKey
+	u.require(upsertOrderCustomAttributeRequestFieldCustomAttributeKey)
+}
+
+// SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *v2.CustomAttribute) {
+	u.CustomAttribute = customAttribute
+	u.require(upsertOrderCustomAttributeRequestFieldCustomAttribute)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertOrderCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(upsertOrderCustomAttributeRequestFieldIdempotencyKey)
 }

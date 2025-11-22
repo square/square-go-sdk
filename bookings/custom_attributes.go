@@ -4,6 +4,11 @@ package bookings
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	bulkDeleteBookingCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
 )
 
 type BulkDeleteBookingCustomAttributesRequest struct {
@@ -11,14 +16,57 @@ type BulkDeleteBookingCustomAttributesRequest struct {
 	// arbitrary ID that is unique for this `BulkDeleteBookingCustomAttributes` request and the
 	// information needed to delete a custom attribute.
 	Values map[string]*v2.BookingCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkDeleteBookingCustomAttributesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetValues sets the Values field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkDeleteBookingCustomAttributesRequest) SetValues(values map[string]*v2.BookingCustomAttributeDeleteRequest) {
+	b.Values = values
+	b.require(bulkDeleteBookingCustomAttributesRequestFieldValues)
+}
+
+var (
+	bulkUpsertBookingCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
+)
 
 type BulkUpsertBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertBookingCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
 	Values map[string]*v2.BookingCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BulkUpsertBookingCustomAttributesRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetValues sets the Values field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BulkUpsertBookingCustomAttributesRequest) SetValues(values map[string]*v2.BookingCustomAttributeUpsertRequest) {
+	b.Values = values
+	b.require(bulkUpsertBookingCustomAttributesRequestFieldValues)
+}
+
+var (
+	deleteCustomAttributesRequestFieldBookingID = big.NewInt(1 << 0)
+	deleteCustomAttributesRequestFieldKey       = big.NewInt(1 << 1)
+)
 
 type DeleteCustomAttributesRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -27,7 +75,38 @@ type DeleteCustomAttributesRequest struct {
 	// attribute definition in the Square seller account. If the requesting application is not the
 	// definition owner, you must use the qualified key.
 	Key string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteCustomAttributesRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetBookingID(bookingID string) {
+	d.BookingID = bookingID
+	d.require(deleteCustomAttributesRequestFieldBookingID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteCustomAttributesRequest) SetKey(key string) {
+	d.Key = key
+	d.require(deleteCustomAttributesRequestFieldKey)
+}
+
+var (
+	getCustomAttributesRequestFieldBookingID      = big.NewInt(1 << 0)
+	getCustomAttributesRequestFieldKey            = big.NewInt(1 << 1)
+	getCustomAttributesRequestFieldWithDefinition = big.NewInt(1 << 2)
+	getCustomAttributesRequestFieldVersion        = big.NewInt(1 << 3)
+)
 
 type GetCustomAttributesRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -45,7 +124,52 @@ type GetCustomAttributesRequest struct {
 	// returns the specified version or a higher version if one exists. If the specified version is
 	// higher than the current version, Square returns a `BAD_REQUEST` error.
 	Version *int `json:"-" url:"version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCustomAttributesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetBookingID(bookingID string) {
+	g.BookingID = bookingID
+	g.require(getCustomAttributesRequestFieldBookingID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetKey(key string) {
+	g.Key = key
+	g.require(getCustomAttributesRequestFieldKey)
+}
+
+// SetWithDefinition sets the WithDefinition field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetWithDefinition(withDefinition *bool) {
+	g.WithDefinition = withDefinition
+	g.require(getCustomAttributesRequestFieldWithDefinition)
+}
+
+// SetVersion sets the Version field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCustomAttributesRequest) SetVersion(version *int) {
+	g.Version = version
+	g.require(getCustomAttributesRequestFieldVersion)
+}
+
+var (
+	listCustomAttributesRequestFieldBookingID       = big.NewInt(1 << 0)
+	listCustomAttributesRequestFieldLimit           = big.NewInt(1 << 1)
+	listCustomAttributesRequestFieldCursor          = big.NewInt(1 << 2)
+	listCustomAttributesRequestFieldWithDefinitions = big.NewInt(1 << 3)
+)
 
 type ListCustomAttributesRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -62,7 +186,52 @@ type ListCustomAttributesRequest struct {
 	// custom attribute. Set this parameter to `true` to get the name and description of each custom
 	// attribute, information about the data type, or other definition details. The default value is `false`.
 	WithDefinitions *bool `json:"-" url:"with_definitions,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCustomAttributesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetBookingID(bookingID string) {
+	l.BookingID = bookingID
+	l.require(listCustomAttributesRequestFieldBookingID)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listCustomAttributesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCustomAttributesRequestFieldCursor)
+}
+
+// SetWithDefinitions sets the WithDefinitions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCustomAttributesRequest) SetWithDefinitions(withDefinitions *bool) {
+	l.WithDefinitions = withDefinitions
+	l.require(listCustomAttributesRequestFieldWithDefinitions)
+}
+
+var (
+	upsertBookingCustomAttributeRequestFieldBookingID       = big.NewInt(1 << 0)
+	upsertBookingCustomAttributeRequestFieldKey             = big.NewInt(1 << 1)
+	upsertBookingCustomAttributeRequestFieldCustomAttribute = big.NewInt(1 << 2)
+	upsertBookingCustomAttributeRequestFieldIdempotencyKey  = big.NewInt(1 << 3)
+)
 
 type UpsertBookingCustomAttributeRequest struct {
 	// The ID of the target [booking](entity:Booking).
@@ -83,4 +252,42 @@ type UpsertBookingCustomAttributeRequest struct {
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpsertBookingCustomAttributeRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetBookingID sets the BookingID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertBookingCustomAttributeRequest) SetBookingID(bookingID string) {
+	u.BookingID = bookingID
+	u.require(upsertBookingCustomAttributeRequestFieldBookingID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertBookingCustomAttributeRequest) SetKey(key string) {
+	u.Key = key
+	u.require(upsertBookingCustomAttributeRequestFieldKey)
+}
+
+// SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertBookingCustomAttributeRequest) SetCustomAttribute(customAttribute *v2.CustomAttribute) {
+	u.CustomAttribute = customAttribute
+	u.require(upsertBookingCustomAttributeRequestFieldCustomAttribute)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpsertBookingCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(upsertBookingCustomAttributeRequestFieldIdempotencyKey)
 }

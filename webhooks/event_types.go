@@ -2,7 +2,32 @@
 
 package webhooks
 
+import (
+	big "math/big"
+)
+
+var (
+	listEventTypesRequestFieldAPIVersion = big.NewInt(1 << 0)
+)
+
 type ListEventTypesRequest struct {
 	// The API version for which to list event types. Setting this field overrides the default version used by the application.
 	APIVersion *string `json:"-" url:"api_version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListEventTypesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetAPIVersion sets the APIVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListEventTypesRequest) SetAPIVersion(apiVersion *string) {
+	l.APIVersion = apiVersion
+	l.require(listEventTypesRequestFieldAPIVersion)
 }

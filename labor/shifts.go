@@ -4,6 +4,12 @@ package labor
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createShiftRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createShiftRequestFieldShift          = big.NewInt(1 << 1)
 )
 
 type CreateShiftRequest struct {
@@ -11,17 +17,89 @@ type CreateShiftRequest struct {
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Shift` to be created.
 	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateShiftRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateShiftRequest) SetIdempotencyKey(idempotencyKey *string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createShiftRequestFieldIdempotencyKey)
+}
+
+// SetShift sets the Shift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateShiftRequest) SetShift(shift *v2.Shift) {
+	c.Shift = shift
+	c.require(createShiftRequestFieldShift)
+}
+
+var (
+	deleteShiftsRequestFieldID = big.NewInt(1 << 0)
+)
 
 type DeleteShiftsRequest struct {
 	// The UUID for the `Shift` being deleted.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteShiftsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteShiftsRequest) SetID(id string) {
+	d.ID = id
+	d.require(deleteShiftsRequestFieldID)
+}
+
+var (
+	getShiftsRequestFieldID = big.NewInt(1 << 0)
+)
 
 type GetShiftsRequest struct {
 	// The UUID for the `Shift` being retrieved.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetShiftsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetShiftsRequest) SetID(id string) {
+	g.ID = id
+	g.require(getShiftsRequestFieldID)
+}
+
+var (
+	searchShiftsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchShiftsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchShiftsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchShiftsRequest struct {
 	// Query filters.
@@ -30,11 +108,71 @@ type SearchShiftsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// An opaque cursor for fetching the next page.
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchShiftsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchShiftsRequest) SetQuery(query *v2.ShiftQuery) {
+	s.Query = query
+	s.require(searchShiftsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchShiftsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchShiftsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchShiftsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchShiftsRequestFieldCursor)
+}
+
+var (
+	updateShiftRequestFieldID    = big.NewInt(1 << 0)
+	updateShiftRequestFieldShift = big.NewInt(1 << 1)
+)
 
 type UpdateShiftRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Shift` object.
 	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateShiftRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateShiftRequest) SetID(id string) {
+	u.ID = id
+	u.require(updateShiftRequestFieldID)
+}
+
+// SetShift sets the Shift field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateShiftRequest) SetShift(shift *v2.Shift) {
+	u.Shift = shift
+	u.require(updateShiftRequestFieldShift)
 }

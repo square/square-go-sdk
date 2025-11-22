@@ -6,17 +6,44 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	registerDomainRequestFieldDomainName = big.NewInt(1 << 0)
 )
 
 type RegisterDomainRequest struct {
 	// A domain name as described in RFC-1034 that will be registered with ApplePay.
 	DomainName string `json:"domain_name" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (r *RegisterDomainRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetDomainName sets the DomainName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegisterDomainRequest) SetDomainName(domainName string) {
+	r.DomainName = domainName
+	r.require(registerDomainRequestFieldDomainName)
 }
 
 // Defines the fields that are included in the response body of
 // a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
 //
 // Either `errors` or `status` are present in a given response (never both).
+var (
+	registerDomainResponseFieldErrors = big.NewInt(1 << 0)
+	registerDomainResponseFieldStatus = big.NewInt(1 << 1)
+)
+
 type RegisterDomainResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -25,6 +52,9 @@ type RegisterDomainResponse struct {
 	// See [RegisterDomainResponseStatus](entity:RegisterDomainResponseStatus) for possible values.
 	// See [RegisterDomainResponseStatus](#type-registerdomainresponsestatus) for possible values
 	Status *RegisterDomainResponseStatus `json:"status,omitempty" url:"status,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -48,6 +78,27 @@ func (r *RegisterDomainResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RegisterDomainResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegisterDomainResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(registerDomainResponseFieldErrors)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegisterDomainResponse) SetStatus(status *RegisterDomainResponseStatus) {
+	r.Status = status
+	r.require(registerDomainResponseFieldStatus)
+}
+
 func (r *RegisterDomainResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RegisterDomainResponse
 	var value unmarshaler
@@ -62,6 +113,17 @@ func (r *RegisterDomainResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RegisterDomainResponse) MarshalJSON() ([]byte, error) {
+	type embed RegisterDomainResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RegisterDomainResponse) String() string {

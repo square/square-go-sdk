@@ -4,6 +4,12 @@ package loyalty
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createLoyaltyRewardRequestFieldReward         = big.NewInt(1 << 0)
+	createLoyaltyRewardRequestFieldIdempotencyKey = big.NewInt(1 << 1)
 )
 
 type CreateLoyaltyRewardRequest struct {
@@ -12,17 +18,89 @@ type CreateLoyaltyRewardRequest struct {
 	// A unique string that identifies this `CreateLoyaltyReward` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateLoyaltyRewardRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetReward sets the Reward field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyRewardRequest) SetReward(reward *v2.LoyaltyReward) {
+	c.Reward = reward
+	c.require(createLoyaltyRewardRequestFieldReward)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateLoyaltyRewardRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createLoyaltyRewardRequestFieldIdempotencyKey)
+}
+
+var (
+	deleteRewardsRequestFieldRewardID = big.NewInt(1 << 0)
+)
 
 type DeleteRewardsRequest struct {
 	// The ID of the [loyalty reward](entity:LoyaltyReward) to delete.
 	RewardID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (d *DeleteRewardsRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetRewardID sets the RewardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteRewardsRequest) SetRewardID(rewardID string) {
+	d.RewardID = rewardID
+	d.require(deleteRewardsRequestFieldRewardID)
+}
+
+var (
+	getRewardsRequestFieldRewardID = big.NewInt(1 << 0)
+)
 
 type GetRewardsRequest struct {
 	// The ID of the [loyalty reward](entity:LoyaltyReward) to retrieve.
 	RewardID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetRewardsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetRewardID sets the RewardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetRewardsRequest) SetRewardID(rewardID string) {
+	g.RewardID = rewardID
+	g.require(getRewardsRequestFieldRewardID)
+}
+
+var (
+	redeemLoyaltyRewardRequestFieldRewardID       = big.NewInt(1 << 0)
+	redeemLoyaltyRewardRequestFieldIdempotencyKey = big.NewInt(1 << 1)
+	redeemLoyaltyRewardRequestFieldLocationID     = big.NewInt(1 << 2)
+)
 
 type RedeemLoyaltyRewardRequest struct {
 	// The ID of the [loyalty reward](entity:LoyaltyReward) to redeem.
@@ -32,7 +110,44 @@ type RedeemLoyaltyRewardRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The ID of the [location](entity:Location) where the reward is redeemed.
 	LocationID string `json:"location_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RedeemLoyaltyRewardRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetRewardID sets the RewardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RedeemLoyaltyRewardRequest) SetRewardID(rewardID string) {
+	r.RewardID = rewardID
+	r.require(redeemLoyaltyRewardRequestFieldRewardID)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RedeemLoyaltyRewardRequest) SetIdempotencyKey(idempotencyKey string) {
+	r.IdempotencyKey = idempotencyKey
+	r.require(redeemLoyaltyRewardRequestFieldIdempotencyKey)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RedeemLoyaltyRewardRequest) SetLocationID(locationID string) {
+	r.LocationID = locationID
+	r.require(redeemLoyaltyRewardRequestFieldLocationID)
+}
+
+var (
+	searchLoyaltyRewardsRequestFieldQuery  = big.NewInt(1 << 0)
+	searchLoyaltyRewardsRequestFieldLimit  = big.NewInt(1 << 1)
+	searchLoyaltyRewardsRequestFieldCursor = big.NewInt(1 << 2)
+)
 
 type SearchLoyaltyRewardsRequest struct {
 	// The search criteria for the request.
@@ -46,4 +161,35 @@ type SearchLoyaltyRewardsRequest struct {
 	// For more information,
 	// see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchLoyaltyRewardsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyRewardsRequest) SetQuery(query *v2.SearchLoyaltyRewardsRequestLoyaltyRewardQuery) {
+	s.Query = query
+	s.require(searchLoyaltyRewardsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyRewardsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchLoyaltyRewardsRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchLoyaltyRewardsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchLoyaltyRewardsRequestFieldCursor)
 }

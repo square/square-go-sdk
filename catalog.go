@@ -6,6 +6,20 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	searchCatalogItemsRequestFieldTextFilter             = big.NewInt(1 << 0)
+	searchCatalogItemsRequestFieldCategoryIDs            = big.NewInt(1 << 1)
+	searchCatalogItemsRequestFieldStockLevels            = big.NewInt(1 << 2)
+	searchCatalogItemsRequestFieldEnabledLocationIDs     = big.NewInt(1 << 3)
+	searchCatalogItemsRequestFieldCursor                 = big.NewInt(1 << 4)
+	searchCatalogItemsRequestFieldLimit                  = big.NewInt(1 << 5)
+	searchCatalogItemsRequestFieldSortOrder              = big.NewInt(1 << 6)
+	searchCatalogItemsRequestFieldProductTypes           = big.NewInt(1 << 7)
+	searchCatalogItemsRequestFieldCustomAttributeFilters = big.NewInt(1 << 8)
+	searchCatalogItemsRequestFieldArchivedState          = big.NewInt(1 << 9)
 )
 
 type SearchCatalogItemsRequest struct {
@@ -35,7 +49,93 @@ type SearchCatalogItemsRequest struct {
 	CustomAttributeFilters []*CustomAttributeFilter `json:"custom_attribute_filters,omitempty" url:"-"`
 	// The query filter to return not archived (`ARCHIVED_STATE_NOT_ARCHIVED`), archived (`ARCHIVED_STATE_ARCHIVED`), or either type (`ARCHIVED_STATE_ALL`) of items.
 	ArchivedState *ArchivedState `json:"archived_state,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (s *SearchCatalogItemsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetTextFilter sets the TextFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetTextFilter(textFilter *string) {
+	s.TextFilter = textFilter
+	s.require(searchCatalogItemsRequestFieldTextFilter)
+}
+
+// SetCategoryIDs sets the CategoryIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetCategoryIDs(categoryIDs []string) {
+	s.CategoryIDs = categoryIDs
+	s.require(searchCatalogItemsRequestFieldCategoryIDs)
+}
+
+// SetStockLevels sets the StockLevels field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetStockLevels(stockLevels []SearchCatalogItemsRequestStockLevel) {
+	s.StockLevels = stockLevels
+	s.require(searchCatalogItemsRequestFieldStockLevels)
+}
+
+// SetEnabledLocationIDs sets the EnabledLocationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetEnabledLocationIDs(enabledLocationIDs []string) {
+	s.EnabledLocationIDs = enabledLocationIDs
+	s.require(searchCatalogItemsRequestFieldEnabledLocationIDs)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCatalogItemsRequestFieldCursor)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchCatalogItemsRequestFieldLimit)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetSortOrder(sortOrder *SortOrder) {
+	s.SortOrder = sortOrder
+	s.require(searchCatalogItemsRequestFieldSortOrder)
+}
+
+// SetProductTypes sets the ProductTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetProductTypes(productTypes []CatalogItemProductType) {
+	s.ProductTypes = productTypes
+	s.require(searchCatalogItemsRequestFieldProductTypes)
+}
+
+// SetCustomAttributeFilters sets the CustomAttributeFilters field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetCustomAttributeFilters(customAttributeFilters []*CustomAttributeFilter) {
+	s.CustomAttributeFilters = customAttributeFilters
+	s.require(searchCatalogItemsRequestFieldCustomAttributeFilters)
+}
+
+// SetArchivedState sets the ArchivedState field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetArchivedState(archivedState *ArchivedState) {
+	s.ArchivedState = archivedState
+	s.require(searchCatalogItemsRequestFieldArchivedState)
+}
+
+var (
+	updateItemModifierListsRequestFieldItemIDs                = big.NewInt(1 << 0)
+	updateItemModifierListsRequestFieldModifierListsToEnable  = big.NewInt(1 << 1)
+	updateItemModifierListsRequestFieldModifierListsToDisable = big.NewInt(1 << 2)
+)
 
 type UpdateItemModifierListsRequest struct {
 	// The IDs of the catalog items associated with the CatalogModifierList objects being updated.
@@ -46,7 +146,44 @@ type UpdateItemModifierListsRequest struct {
 	// The IDs of the CatalogModifierList objects to disable for the CatalogItem.
 	// At least one of `modifier_lists_to_enable` or `modifier_lists_to_disable` must be specified.
 	ModifierListsToDisable []string `json:"modifier_lists_to_disable,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateItemModifierListsRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetItemIDs sets the ItemIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemModifierListsRequest) SetItemIDs(itemIDs []string) {
+	u.ItemIDs = itemIDs
+	u.require(updateItemModifierListsRequestFieldItemIDs)
+}
+
+// SetModifierListsToEnable sets the ModifierListsToEnable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemModifierListsRequest) SetModifierListsToEnable(modifierListsToEnable []string) {
+	u.ModifierListsToEnable = modifierListsToEnable
+	u.require(updateItemModifierListsRequestFieldModifierListsToEnable)
+}
+
+// SetModifierListsToDisable sets the ModifierListsToDisable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemModifierListsRequest) SetModifierListsToDisable(modifierListsToDisable []string) {
+	u.ModifierListsToDisable = modifierListsToDisable
+	u.require(updateItemModifierListsRequestFieldModifierListsToDisable)
+}
+
+var (
+	updateItemTaxesRequestFieldItemIDs        = big.NewInt(1 << 0)
+	updateItemTaxesRequestFieldTaxesToEnable  = big.NewInt(1 << 1)
+	updateItemTaxesRequestFieldTaxesToDisable = big.NewInt(1 << 2)
+)
 
 type UpdateItemTaxesRequest struct {
 	// IDs for the CatalogItems associated with the CatalogTax objects being updated.
@@ -58,14 +195,74 @@ type UpdateItemTaxesRequest struct {
 	// IDs of the CatalogTax objects to disable.
 	// At least one of `taxes_to_enable` or `taxes_to_disable` must be specified.
 	TaxesToDisable []string `json:"taxes_to_disable,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (u *UpdateItemTaxesRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetItemIDs sets the ItemIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemTaxesRequest) SetItemIDs(itemIDs []string) {
+	u.ItemIDs = itemIDs
+	u.require(updateItemTaxesRequestFieldItemIDs)
+}
+
+// SetTaxesToEnable sets the TaxesToEnable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemTaxesRequest) SetTaxesToEnable(taxesToEnable []string) {
+	u.TaxesToEnable = taxesToEnable
+	u.require(updateItemTaxesRequestFieldTaxesToEnable)
+}
+
+// SetTaxesToDisable sets the TaxesToDisable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemTaxesRequest) SetTaxesToDisable(taxesToDisable []string) {
+	u.TaxesToDisable = taxesToDisable
+	u.require(updateItemTaxesRequestFieldTaxesToDisable)
+}
+
+var (
+	batchDeleteCatalogObjectsRequestFieldObjectIDs = big.NewInt(1 << 0)
+)
 
 type BatchDeleteCatalogObjectsRequest struct {
 	// The IDs of the CatalogObjects to be deleted. When an object is deleted, other objects
 	// in the graph that depend on that object will be deleted as well (for example, deleting a
 	// CatalogItem will delete its CatalogItemVariation.
 	ObjectIDs []string `json:"object_ids,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchDeleteCatalogObjectsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetObjectIDs sets the ObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchDeleteCatalogObjectsRequest) SetObjectIDs(objectIDs []string) {
+	b.ObjectIDs = objectIDs
+	b.require(batchDeleteCatalogObjectsRequestFieldObjectIDs)
+}
+
+var (
+	batchGetCatalogObjectsRequestFieldObjectIDs                 = big.NewInt(1 << 0)
+	batchGetCatalogObjectsRequestFieldIncludeRelatedObjects     = big.NewInt(1 << 1)
+	batchGetCatalogObjectsRequestFieldCatalogVersion            = big.NewInt(1 << 2)
+	batchGetCatalogObjectsRequestFieldIncludeDeletedObjects     = big.NewInt(1 << 3)
+	batchGetCatalogObjectsRequestFieldIncludeCategoryPathToRoot = big.NewInt(1 << 4)
+)
 
 type BatchGetCatalogObjectsRequest struct {
 	// The IDs of the CatalogObjects to be retrieved.
@@ -97,7 +294,57 @@ type BatchGetCatalogObjectsRequest struct {
 	// and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned
 	// in the response payload.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchGetCatalogObjectsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetObjectIDs sets the ObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetObjectIDs(objectIDs []string) {
+	b.ObjectIDs = objectIDs
+	b.require(batchGetCatalogObjectsRequestFieldObjectIDs)
+}
+
+// SetIncludeRelatedObjects sets the IncludeRelatedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetIncludeRelatedObjects(includeRelatedObjects *bool) {
+	b.IncludeRelatedObjects = includeRelatedObjects
+	b.require(batchGetCatalogObjectsRequestFieldIncludeRelatedObjects)
+}
+
+// SetCatalogVersion sets the CatalogVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetCatalogVersion(catalogVersion *int64) {
+	b.CatalogVersion = catalogVersion
+	b.require(batchGetCatalogObjectsRequestFieldCatalogVersion)
+}
+
+// SetIncludeDeletedObjects sets the IncludeDeletedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetIncludeDeletedObjects(includeDeletedObjects *bool) {
+	b.IncludeDeletedObjects = includeDeletedObjects
+	b.require(batchGetCatalogObjectsRequestFieldIncludeDeletedObjects)
+}
+
+// SetIncludeCategoryPathToRoot sets the IncludeCategoryPathToRoot field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCategoryPathToRoot *bool) {
+	b.IncludeCategoryPathToRoot = includeCategoryPathToRoot
+	b.require(batchGetCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
+}
+
+var (
+	batchUpsertCatalogObjectsRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	batchUpsertCatalogObjectsRequestFieldBatches        = big.NewInt(1 << 1)
+)
 
 type BatchUpsertCatalogObjectsRequest struct {
 	// A value you specify that uniquely identifies this
@@ -132,7 +379,37 @@ type BatchUpsertCatalogObjectsRequest struct {
 	// may not exceed 10,000. If either of these limits is violated, an error will be returned and no objects will
 	// be inserted or updated.
 	Batches []*CatalogObjectBatch `json:"batches,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (b *BatchUpsertCatalogObjectsRequest) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsRequest) SetIdempotencyKey(idempotencyKey string) {
+	b.IdempotencyKey = idempotencyKey
+	b.require(batchUpsertCatalogObjectsRequestFieldIdempotencyKey)
+}
+
+// SetBatches sets the Batches field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsRequest) SetBatches(batches []*CatalogObjectBatch) {
+	b.Batches = batches
+	b.require(batchUpsertCatalogObjectsRequestFieldBatches)
+}
+
+var (
+	listCatalogRequestFieldCursor         = big.NewInt(1 << 0)
+	listCatalogRequestFieldTypes          = big.NewInt(1 << 1)
+	listCatalogRequestFieldCatalogVersion = big.NewInt(1 << 2)
+)
 
 type ListCatalogRequest struct {
 	// The pagination cursor returned in the previous response. Leave unset for an initial request.
@@ -159,7 +436,49 @@ type ListCatalogRequest struct {
 	// the [CatalogObject](entity:CatalogObject)s' `version` attribute.  If not included, results will be from the
 	// current version of the catalog.
 	CatalogVersion *int64 `json:"-" url:"catalog_version,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (l *ListCatalogRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCatalogRequestFieldCursor)
+}
+
+// SetTypes sets the Types field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogRequest) SetTypes(types *string) {
+	l.Types = types
+	l.require(listCatalogRequestFieldTypes)
+}
+
+// SetCatalogVersion sets the CatalogVersion field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogRequest) SetCatalogVersion(catalogVersion *int64) {
+	l.CatalogVersion = catalogVersion
+	l.require(listCatalogRequestFieldCatalogVersion)
+}
+
+var (
+	searchCatalogObjectsRequestFieldCursor                    = big.NewInt(1 << 0)
+	searchCatalogObjectsRequestFieldObjectTypes               = big.NewInt(1 << 1)
+	searchCatalogObjectsRequestFieldIncludeDeletedObjects     = big.NewInt(1 << 2)
+	searchCatalogObjectsRequestFieldIncludeRelatedObjects     = big.NewInt(1 << 3)
+	searchCatalogObjectsRequestFieldBeginTime                 = big.NewInt(1 << 4)
+	searchCatalogObjectsRequestFieldQuery                     = big.NewInt(1 << 5)
+	searchCatalogObjectsRequestFieldLimit                     = big.NewInt(1 << 6)
+	searchCatalogObjectsRequestFieldIncludeCategoryPathToRoot = big.NewInt(1 << 7)
+)
 
 type SearchCatalogObjectsRequest struct {
 	// The pagination cursor returned in the previous response. Leave unset for an initial request.
@@ -209,6 +528,72 @@ type SearchCatalogObjectsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists of `CategoryPathToRootNode` objects and specifies the path that starts with the immediate parent category of the returned category and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned in the response payload. If `include_category_path_to_root` is `true`, then the `include_deleted_objects` request parameter must be `false`. Both properties cannot be `true` at the same time.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (s *SearchCatalogObjectsRequest) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCatalogObjectsRequestFieldCursor)
+}
+
+// SetObjectTypes sets the ObjectTypes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetObjectTypes(objectTypes []CatalogObjectType) {
+	s.ObjectTypes = objectTypes
+	s.require(searchCatalogObjectsRequestFieldObjectTypes)
+}
+
+// SetIncludeDeletedObjects sets the IncludeDeletedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetIncludeDeletedObjects(includeDeletedObjects *bool) {
+	s.IncludeDeletedObjects = includeDeletedObjects
+	s.require(searchCatalogObjectsRequestFieldIncludeDeletedObjects)
+}
+
+// SetIncludeRelatedObjects sets the IncludeRelatedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetIncludeRelatedObjects(includeRelatedObjects *bool) {
+	s.IncludeRelatedObjects = includeRelatedObjects
+	s.require(searchCatalogObjectsRequestFieldIncludeRelatedObjects)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetBeginTime(beginTime *string) {
+	s.BeginTime = beginTime
+	s.require(searchCatalogObjectsRequestFieldBeginTime)
+}
+
+// SetQuery sets the Query field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetQuery(query *CatalogQuery) {
+	s.Query = query
+	s.require(searchCatalogObjectsRequestFieldQuery)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetLimit(limit *int) {
+	s.Limit = limit
+	s.require(searchCatalogObjectsRequestFieldLimit)
+}
+
+// SetIncludeCategoryPathToRoot sets the IncludeCategoryPathToRoot field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCategoryPathToRoot *bool) {
+	s.IncludeCategoryPathToRoot = includeCategoryPathToRoot
+	s.require(searchCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
 }
 
 // Defines the values for the `archived_state` query expression
@@ -239,6 +624,12 @@ func (a ArchivedState) Ptr() *ArchivedState {
 	return &a
 }
 
+var (
+	batchDeleteCatalogObjectsResponseFieldErrors           = big.NewInt(1 << 0)
+	batchDeleteCatalogObjectsResponseFieldDeletedObjectIDs = big.NewInt(1 << 1)
+	batchDeleteCatalogObjectsResponseFieldDeletedAt        = big.NewInt(1 << 2)
+)
+
 type BatchDeleteCatalogObjectsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -246,6 +637,9 @@ type BatchDeleteCatalogObjectsResponse struct {
 	DeletedObjectIDs []string `json:"deleted_object_ids,omitempty" url:"deleted_object_ids,omitempty"`
 	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this deletion in RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
 	DeletedAt *string `json:"deleted_at,omitempty" url:"deleted_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -276,6 +670,34 @@ func (b *BatchDeleteCatalogObjectsResponse) GetExtraProperties() map[string]inte
 	return b.extraProperties
 }
 
+func (b *BatchDeleteCatalogObjectsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchDeleteCatalogObjectsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchDeleteCatalogObjectsResponseFieldErrors)
+}
+
+// SetDeletedObjectIDs sets the DeletedObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchDeleteCatalogObjectsResponse) SetDeletedObjectIDs(deletedObjectIDs []string) {
+	b.DeletedObjectIDs = deletedObjectIDs
+	b.require(batchDeleteCatalogObjectsResponseFieldDeletedObjectIDs)
+}
+
+// SetDeletedAt sets the DeletedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchDeleteCatalogObjectsResponse) SetDeletedAt(deletedAt *string) {
+	b.DeletedAt = deletedAt
+	b.require(batchDeleteCatalogObjectsResponseFieldDeletedAt)
+}
+
 func (b *BatchDeleteCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchDeleteCatalogObjectsResponse
 	var value unmarshaler
@@ -292,6 +714,17 @@ func (b *BatchDeleteCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchDeleteCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchDeleteCatalogObjectsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchDeleteCatalogObjectsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -304,6 +737,12 @@ func (b *BatchDeleteCatalogObjectsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	batchGetCatalogObjectsResponseFieldErrors         = big.NewInt(1 << 0)
+	batchGetCatalogObjectsResponseFieldObjects        = big.NewInt(1 << 1)
+	batchGetCatalogObjectsResponseFieldRelatedObjects = big.NewInt(1 << 2)
+)
+
 type BatchGetCatalogObjectsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -311,6 +750,9 @@ type BatchGetCatalogObjectsResponse struct {
 	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
 	// A list of [CatalogObject](entity:CatalogObject)s referenced by the object in the `objects` field.
 	RelatedObjects []*CatalogObject `json:"related_objects,omitempty" url:"related_objects,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -341,6 +783,34 @@ func (b *BatchGetCatalogObjectsResponse) GetExtraProperties() map[string]interfa
 	return b.extraProperties
 }
 
+func (b *BatchGetCatalogObjectsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchGetCatalogObjectsResponseFieldErrors)
+}
+
+// SetObjects sets the Objects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsResponse) SetObjects(objects []*CatalogObject) {
+	b.Objects = objects
+	b.require(batchGetCatalogObjectsResponseFieldObjects)
+}
+
+// SetRelatedObjects sets the RelatedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsResponse) SetRelatedObjects(relatedObjects []*CatalogObject) {
+	b.RelatedObjects = relatedObjects
+	b.require(batchGetCatalogObjectsResponseFieldRelatedObjects)
+}
+
 func (b *BatchGetCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchGetCatalogObjectsResponse
 	var value unmarshaler
@@ -357,6 +827,17 @@ func (b *BatchGetCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchGetCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchGetCatalogObjectsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchGetCatalogObjectsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -369,6 +850,13 @@ func (b *BatchGetCatalogObjectsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	batchUpsertCatalogObjectsResponseFieldErrors     = big.NewInt(1 << 0)
+	batchUpsertCatalogObjectsResponseFieldObjects    = big.NewInt(1 << 1)
+	batchUpsertCatalogObjectsResponseFieldUpdatedAt  = big.NewInt(1 << 2)
+	batchUpsertCatalogObjectsResponseFieldIDMappings = big.NewInt(1 << 3)
+)
+
 type BatchUpsertCatalogObjectsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -378,6 +866,9 @@ type BatchUpsertCatalogObjectsResponse struct {
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
 	// The mapping between client and server IDs for this upsert.
 	IDMappings []*CatalogIDMapping `json:"id_mappings,omitempty" url:"id_mappings,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -415,6 +906,41 @@ func (b *BatchUpsertCatalogObjectsResponse) GetExtraProperties() map[string]inte
 	return b.extraProperties
 }
 
+func (b *BatchUpsertCatalogObjectsResponse) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsResponse) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(batchUpsertCatalogObjectsResponseFieldErrors)
+}
+
+// SetObjects sets the Objects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsResponse) SetObjects(objects []*CatalogObject) {
+	b.Objects = objects
+	b.require(batchUpsertCatalogObjectsResponseFieldObjects)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsResponse) SetUpdatedAt(updatedAt *string) {
+	b.UpdatedAt = updatedAt
+	b.require(batchUpsertCatalogObjectsResponseFieldUpdatedAt)
+}
+
+// SetIDMappings sets the IDMappings field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchUpsertCatalogObjectsResponse) SetIDMappings(idMappings []*CatalogIDMapping) {
+	b.IDMappings = idMappings
+	b.require(batchUpsertCatalogObjectsResponseFieldIDMappings)
+}
+
 func (b *BatchUpsertCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchUpsertCatalogObjectsResponse
 	var value unmarshaler
@@ -431,6 +957,17 @@ func (b *BatchUpsertCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (b *BatchUpsertCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
+	type embed BatchUpsertCatalogObjectsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (b *BatchUpsertCatalogObjectsResponse) String() string {
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
@@ -443,6 +980,12 @@ func (b *BatchUpsertCatalogObjectsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
+var (
+	catalogInfoResponseFieldErrors                       = big.NewInt(1 << 0)
+	catalogInfoResponseFieldLimits                       = big.NewInt(1 << 1)
+	catalogInfoResponseFieldStandardUnitDescriptionGroup = big.NewInt(1 << 2)
+)
+
 type CatalogInfoResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -450,6 +993,9 @@ type CatalogInfoResponse struct {
 	Limits *CatalogInfoResponseLimits `json:"limits,omitempty" url:"limits,omitempty"`
 	// Names and abbreviations for standard units.
 	StandardUnitDescriptionGroup *StandardUnitDescriptionGroup `json:"standard_unit_description_group,omitempty" url:"standard_unit_description_group,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -480,6 +1026,34 @@ func (c *CatalogInfoResponse) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogInfoResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(catalogInfoResponseFieldErrors)
+}
+
+// SetLimits sets the Limits field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponse) SetLimits(limits *CatalogInfoResponseLimits) {
+	c.Limits = limits
+	c.require(catalogInfoResponseFieldLimits)
+}
+
+// SetStandardUnitDescriptionGroup sets the StandardUnitDescriptionGroup field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponse) SetStandardUnitDescriptionGroup(standardUnitDescriptionGroup *StandardUnitDescriptionGroup) {
+	c.StandardUnitDescriptionGroup = standardUnitDescriptionGroup
+	c.require(catalogInfoResponseFieldStandardUnitDescriptionGroup)
+}
+
 func (c *CatalogInfoResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogInfoResponse
 	var value unmarshaler
@@ -496,6 +1070,17 @@ func (c *CatalogInfoResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogInfoResponse) MarshalJSON() ([]byte, error) {
+	type embed CatalogInfoResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogInfoResponse) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -507,6 +1092,20 @@ func (c *CatalogInfoResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", c)
 }
+
+var (
+	catalogInfoResponseLimitsFieldBatchUpsertMaxObjectsPerBatch                    = big.NewInt(1 << 0)
+	catalogInfoResponseLimitsFieldBatchUpsertMaxTotalObjects                       = big.NewInt(1 << 1)
+	catalogInfoResponseLimitsFieldBatchRetrieveMaxObjectIDs                        = big.NewInt(1 << 2)
+	catalogInfoResponseLimitsFieldSearchMaxPageLimit                               = big.NewInt(1 << 3)
+	catalogInfoResponseLimitsFieldBatchDeleteMaxObjectIDs                          = big.NewInt(1 << 4)
+	catalogInfoResponseLimitsFieldUpdateItemTaxesMaxItemIDs                        = big.NewInt(1 << 5)
+	catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToEnable                  = big.NewInt(1 << 6)
+	catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToDisable                 = big.NewInt(1 << 7)
+	catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxItemIDs                = big.NewInt(1 << 8)
+	catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToEnable  = big.NewInt(1 << 9)
+	catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToDisable = big.NewInt(1 << 10)
+)
 
 type CatalogInfoResponseLimits struct {
 	// The maximum number of objects that may appear within a single batch in a
@@ -542,6 +1141,9 @@ type CatalogInfoResponseLimits struct {
 	// The maximum number of modifier list IDs to be disabled that may be included in
 	// a single `/v2/catalog/update-item-modifier-lists` request.
 	UpdateItemModifierListsMaxModifierListsToDisable *int `json:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty" url:"update_item_modifier_lists_max_modifier_lists_to_disable,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -628,6 +1230,90 @@ func (c *CatalogInfoResponseLimits) GetExtraProperties() map[string]interface{} 
 	return c.extraProperties
 }
 
+func (c *CatalogInfoResponseLimits) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBatchUpsertMaxObjectsPerBatch sets the BatchUpsertMaxObjectsPerBatch field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetBatchUpsertMaxObjectsPerBatch(batchUpsertMaxObjectsPerBatch *int) {
+	c.BatchUpsertMaxObjectsPerBatch = batchUpsertMaxObjectsPerBatch
+	c.require(catalogInfoResponseLimitsFieldBatchUpsertMaxObjectsPerBatch)
+}
+
+// SetBatchUpsertMaxTotalObjects sets the BatchUpsertMaxTotalObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetBatchUpsertMaxTotalObjects(batchUpsertMaxTotalObjects *int) {
+	c.BatchUpsertMaxTotalObjects = batchUpsertMaxTotalObjects
+	c.require(catalogInfoResponseLimitsFieldBatchUpsertMaxTotalObjects)
+}
+
+// SetBatchRetrieveMaxObjectIDs sets the BatchRetrieveMaxObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetBatchRetrieveMaxObjectIDs(batchRetrieveMaxObjectIDs *int) {
+	c.BatchRetrieveMaxObjectIDs = batchRetrieveMaxObjectIDs
+	c.require(catalogInfoResponseLimitsFieldBatchRetrieveMaxObjectIDs)
+}
+
+// SetSearchMaxPageLimit sets the SearchMaxPageLimit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetSearchMaxPageLimit(searchMaxPageLimit *int) {
+	c.SearchMaxPageLimit = searchMaxPageLimit
+	c.require(catalogInfoResponseLimitsFieldSearchMaxPageLimit)
+}
+
+// SetBatchDeleteMaxObjectIDs sets the BatchDeleteMaxObjectIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetBatchDeleteMaxObjectIDs(batchDeleteMaxObjectIDs *int) {
+	c.BatchDeleteMaxObjectIDs = batchDeleteMaxObjectIDs
+	c.require(catalogInfoResponseLimitsFieldBatchDeleteMaxObjectIDs)
+}
+
+// SetUpdateItemTaxesMaxItemIDs sets the UpdateItemTaxesMaxItemIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemTaxesMaxItemIDs(updateItemTaxesMaxItemIDs *int) {
+	c.UpdateItemTaxesMaxItemIDs = updateItemTaxesMaxItemIDs
+	c.require(catalogInfoResponseLimitsFieldUpdateItemTaxesMaxItemIDs)
+}
+
+// SetUpdateItemTaxesMaxTaxesToEnable sets the UpdateItemTaxesMaxTaxesToEnable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemTaxesMaxTaxesToEnable(updateItemTaxesMaxTaxesToEnable *int) {
+	c.UpdateItemTaxesMaxTaxesToEnable = updateItemTaxesMaxTaxesToEnable
+	c.require(catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToEnable)
+}
+
+// SetUpdateItemTaxesMaxTaxesToDisable sets the UpdateItemTaxesMaxTaxesToDisable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemTaxesMaxTaxesToDisable(updateItemTaxesMaxTaxesToDisable *int) {
+	c.UpdateItemTaxesMaxTaxesToDisable = updateItemTaxesMaxTaxesToDisable
+	c.require(catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToDisable)
+}
+
+// SetUpdateItemModifierListsMaxItemIDs sets the UpdateItemModifierListsMaxItemIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemModifierListsMaxItemIDs(updateItemModifierListsMaxItemIDs *int) {
+	c.UpdateItemModifierListsMaxItemIDs = updateItemModifierListsMaxItemIDs
+	c.require(catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxItemIDs)
+}
+
+// SetUpdateItemModifierListsMaxModifierListsToEnable sets the UpdateItemModifierListsMaxModifierListsToEnable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemModifierListsMaxModifierListsToEnable(updateItemModifierListsMaxModifierListsToEnable *int) {
+	c.UpdateItemModifierListsMaxModifierListsToEnable = updateItemModifierListsMaxModifierListsToEnable
+	c.require(catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToEnable)
+}
+
+// SetUpdateItemModifierListsMaxModifierListsToDisable sets the UpdateItemModifierListsMaxModifierListsToDisable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogInfoResponseLimits) SetUpdateItemModifierListsMaxModifierListsToDisable(updateItemModifierListsMaxModifierListsToDisable *int) {
+	c.UpdateItemModifierListsMaxModifierListsToDisable = updateItemModifierListsMaxModifierListsToDisable
+	c.require(catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToDisable)
+}
+
 func (c *CatalogInfoResponseLimits) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogInfoResponseLimits
 	var value unmarshaler
@@ -644,6 +1330,17 @@ func (c *CatalogInfoResponseLimits) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogInfoResponseLimits) MarshalJSON() ([]byte, error) {
+	type embed CatalogInfoResponseLimits
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogInfoResponseLimits) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -657,9 +1354,16 @@ func (c *CatalogInfoResponseLimits) String() string {
 }
 
 // A batch of catalog objects.
+var (
+	catalogObjectBatchFieldObjects = big.NewInt(1 << 0)
+)
+
 type CatalogObjectBatch struct {
 	// A list of CatalogObjects belonging to this batch.
 	Objects []*CatalogObject `json:"objects" url:"objects"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -676,6 +1380,20 @@ func (c *CatalogObjectBatch) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogObjectBatch) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetObjects sets the Objects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogObjectBatch) SetObjects(objects []*CatalogObject) {
+	c.Objects = objects
+	c.require(catalogObjectBatchFieldObjects)
+}
+
 func (c *CatalogObjectBatch) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogObjectBatch
 	var value unmarshaler
@@ -690,6 +1408,17 @@ func (c *CatalogObjectBatch) UnmarshalJSON(data []byte) error {
 	c.extraProperties = extraProperties
 	c.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (c *CatalogObjectBatch) MarshalJSON() ([]byte, error) {
+	type embed CatalogObjectBatch
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (c *CatalogObjectBatch) String() string {
@@ -730,6 +1459,19 @@ func (c *CatalogObjectBatch) String() string {
 //
 // For example, to search for [CatalogItem](entity:CatalogItem) objects by searchable attributes, you can use
 // the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
+var (
+	catalogQueryFieldSortedAttributeQuery                   = big.NewInt(1 << 0)
+	catalogQueryFieldExactQuery                             = big.NewInt(1 << 1)
+	catalogQueryFieldSetQuery                               = big.NewInt(1 << 2)
+	catalogQueryFieldPrefixQuery                            = big.NewInt(1 << 3)
+	catalogQueryFieldRangeQuery                             = big.NewInt(1 << 4)
+	catalogQueryFieldTextQuery                              = big.NewInt(1 << 5)
+	catalogQueryFieldItemsForTaxQuery                       = big.NewInt(1 << 6)
+	catalogQueryFieldItemsForModifierListQuery              = big.NewInt(1 << 7)
+	catalogQueryFieldItemsForItemOptionsQuery               = big.NewInt(1 << 8)
+	catalogQueryFieldItemVariationsForItemOptionValuesQuery = big.NewInt(1 << 9)
+)
+
 type CatalogQuery struct {
 	// A query expression to sort returned query result by the given attribute.
 	SortedAttributeQuery *CatalogQuerySortedAttribute `json:"sorted_attribute_query,omitempty" url:"sorted_attribute_query,omitempty"`
@@ -760,6 +1502,9 @@ type CatalogQuery struct {
 	// A query expression to return item variations (of the [CatalogItemVariation](entity:CatalogItemVariation) type) that
 	// contain all of the specified `CatalogItemOption` IDs.
 	ItemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues `json:"item_variations_for_item_option_values_query,omitempty" url:"item_variations_for_item_option_values_query,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -839,6 +1584,83 @@ func (c *CatalogQuery) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogQuery) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetSortedAttributeQuery sets the SortedAttributeQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetSortedAttributeQuery(sortedAttributeQuery *CatalogQuerySortedAttribute) {
+	c.SortedAttributeQuery = sortedAttributeQuery
+	c.require(catalogQueryFieldSortedAttributeQuery)
+}
+
+// SetExactQuery sets the ExactQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetExactQuery(exactQuery *CatalogQueryExact) {
+	c.ExactQuery = exactQuery
+	c.require(catalogQueryFieldExactQuery)
+}
+
+// SetSetQuery sets the SetQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetSetQuery(setQuery *CatalogQuerySet) {
+	c.SetQuery = setQuery
+	c.require(catalogQueryFieldSetQuery)
+}
+
+// SetPrefixQuery sets the PrefixQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetPrefixQuery(prefixQuery *CatalogQueryPrefix) {
+	c.PrefixQuery = prefixQuery
+	c.require(catalogQueryFieldPrefixQuery)
+}
+
+// SetRangeQuery sets the RangeQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetRangeQuery(rangeQuery *CatalogQueryRange) {
+	c.RangeQuery = rangeQuery
+	c.require(catalogQueryFieldRangeQuery)
+}
+
+// SetTextQuery sets the TextQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetTextQuery(textQuery *CatalogQueryText) {
+	c.TextQuery = textQuery
+	c.require(catalogQueryFieldTextQuery)
+}
+
+// SetItemsForTaxQuery sets the ItemsForTaxQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetItemsForTaxQuery(itemsForTaxQuery *CatalogQueryItemsForTax) {
+	c.ItemsForTaxQuery = itemsForTaxQuery
+	c.require(catalogQueryFieldItemsForTaxQuery)
+}
+
+// SetItemsForModifierListQuery sets the ItemsForModifierListQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetItemsForModifierListQuery(itemsForModifierListQuery *CatalogQueryItemsForModifierList) {
+	c.ItemsForModifierListQuery = itemsForModifierListQuery
+	c.require(catalogQueryFieldItemsForModifierListQuery)
+}
+
+// SetItemsForItemOptionsQuery sets the ItemsForItemOptionsQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetItemsForItemOptionsQuery(itemsForItemOptionsQuery *CatalogQueryItemsForItemOptions) {
+	c.ItemsForItemOptionsQuery = itemsForItemOptionsQuery
+	c.require(catalogQueryFieldItemsForItemOptionsQuery)
+}
+
+// SetItemVariationsForItemOptionValuesQuery sets the ItemVariationsForItemOptionValuesQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetItemVariationsForItemOptionValuesQuery(itemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues) {
+	c.ItemVariationsForItemOptionValuesQuery = itemVariationsForItemOptionValuesQuery
+	c.require(catalogQueryFieldItemVariationsForItemOptionValuesQuery)
+}
+
 func (c *CatalogQuery) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQuery
 	var value unmarshaler
@@ -855,6 +1677,17 @@ func (c *CatalogQuery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQuery) MarshalJSON() ([]byte, error) {
+	type embed CatalogQuery
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQuery) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -868,12 +1701,20 @@ func (c *CatalogQuery) String() string {
 }
 
 // The query filter to return the search result by exact match of the specified attribute name and value.
+var (
+	catalogQueryExactFieldAttributeName  = big.NewInt(1 << 0)
+	catalogQueryExactFieldAttributeValue = big.NewInt(1 << 1)
+)
+
 type CatalogQueryExact struct {
 	// The name of the attribute to be searched. Matching of the attribute name is exact.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
 	// The desired value of the search attribute. Matching of the attribute value is case insensitive and can be partial.
 	// For example, if a specified value of "sma", objects with the named attribute value of "Small", "small" are both matched.
 	AttributeValue string `json:"attribute_value" url:"attribute_value"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -897,6 +1738,27 @@ func (c *CatalogQueryExact) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogQueryExact) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributeName sets the AttributeName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryExact) SetAttributeName(attributeName string) {
+	c.AttributeName = attributeName
+	c.require(catalogQueryExactFieldAttributeName)
+}
+
+// SetAttributeValue sets the AttributeValue field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryExact) SetAttributeValue(attributeValue string) {
+	c.AttributeValue = attributeValue
+	c.require(catalogQueryExactFieldAttributeValue)
+}
+
 func (c *CatalogQueryExact) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQueryExact
 	var value unmarshaler
@@ -913,6 +1775,17 @@ func (c *CatalogQueryExact) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryExact) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryExact
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryExact) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -926,11 +1799,18 @@ func (c *CatalogQueryExact) String() string {
 }
 
 // The query filter to return the item variations containing the specified item option value IDs.
+var (
+	catalogQueryItemVariationsForItemOptionValuesFieldItemOptionValueIDs = big.NewInt(1 << 0)
+)
+
 type CatalogQueryItemVariationsForItemOptionValues struct {
 	// A set of `CatalogItemOptionValue` IDs to be used to find associated
 	// `CatalogItemVariation`s. All ItemVariations that contain all of the given
 	// Item Option Values (in any order) will be returned.
 	ItemOptionValueIDs []string `json:"item_option_value_ids,omitempty" url:"item_option_value_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -945,6 +1825,20 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) GetItemOptionValueIDs() 
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CatalogQueryItemVariationsForItemOptionValues) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetItemOptionValueIDs sets the ItemOptionValueIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryItemVariationsForItemOptionValues) SetItemOptionValueIDs(itemOptionValueIDs []string) {
+	c.ItemOptionValueIDs = itemOptionValueIDs
+	c.require(catalogQueryItemVariationsForItemOptionValuesFieldItemOptionValueIDs)
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) UnmarshalJSON(data []byte) error {
@@ -963,6 +1857,17 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) UnmarshalJSON(data []byt
 	return nil
 }
 
+func (c *CatalogQueryItemVariationsForItemOptionValues) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryItemVariationsForItemOptionValues
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -976,11 +1881,18 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
 }
 
 // The query filter to return the items containing the specified item option IDs.
+var (
+	catalogQueryItemsForItemOptionsFieldItemOptionIDs = big.NewInt(1 << 0)
+)
+
 type CatalogQueryItemsForItemOptions struct {
 	// A set of `CatalogItemOption` IDs to be used to find associated
 	// `CatalogItem`s. All Items that contain all of the given Item Options (in any order)
 	// will be returned.
 	ItemOptionIDs []string `json:"item_option_ids,omitempty" url:"item_option_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -995,6 +1907,20 @@ func (c *CatalogQueryItemsForItemOptions) GetItemOptionIDs() []string {
 
 func (c *CatalogQueryItemsForItemOptions) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForItemOptions) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetItemOptionIDs sets the ItemOptionIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryItemsForItemOptions) SetItemOptionIDs(itemOptionIDs []string) {
+	c.ItemOptionIDs = itemOptionIDs
+	c.require(catalogQueryItemsForItemOptionsFieldItemOptionIDs)
 }
 
 func (c *CatalogQueryItemsForItemOptions) UnmarshalJSON(data []byte) error {
@@ -1013,6 +1939,17 @@ func (c *CatalogQueryItemsForItemOptions) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryItemsForItemOptions) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryItemsForItemOptions
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryItemsForItemOptions) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1026,9 +1963,16 @@ func (c *CatalogQueryItemsForItemOptions) String() string {
 }
 
 // The query filter to return the items containing the specified modifier list IDs.
+var (
+	catalogQueryItemsForModifierListFieldModifierListIDs = big.NewInt(1 << 0)
+)
+
 type CatalogQueryItemsForModifierList struct {
 	// A set of `CatalogModifierList` IDs to be used to find associated `CatalogItem`s.
 	ModifierListIDs []string `json:"modifier_list_ids" url:"modifier_list_ids"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1043,6 +1987,20 @@ func (c *CatalogQueryItemsForModifierList) GetModifierListIDs() []string {
 
 func (c *CatalogQueryItemsForModifierList) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForModifierList) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetModifierListIDs sets the ModifierListIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryItemsForModifierList) SetModifierListIDs(modifierListIDs []string) {
+	c.ModifierListIDs = modifierListIDs
+	c.require(catalogQueryItemsForModifierListFieldModifierListIDs)
 }
 
 func (c *CatalogQueryItemsForModifierList) UnmarshalJSON(data []byte) error {
@@ -1061,6 +2019,17 @@ func (c *CatalogQueryItemsForModifierList) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryItemsForModifierList) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryItemsForModifierList
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryItemsForModifierList) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1074,9 +2043,16 @@ func (c *CatalogQueryItemsForModifierList) String() string {
 }
 
 // The query filter to return the items containing the specified tax IDs.
+var (
+	catalogQueryItemsForTaxFieldTaxIDs = big.NewInt(1 << 0)
+)
+
 type CatalogQueryItemsForTax struct {
 	// A set of `CatalogTax` IDs to be used to find associated `CatalogItem`s.
 	TaxIDs []string `json:"tax_ids" url:"tax_ids"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1091,6 +2067,20 @@ func (c *CatalogQueryItemsForTax) GetTaxIDs() []string {
 
 func (c *CatalogQueryItemsForTax) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CatalogQueryItemsForTax) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetTaxIDs sets the TaxIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryItemsForTax) SetTaxIDs(taxIDs []string) {
+	c.TaxIDs = taxIDs
+	c.require(catalogQueryItemsForTaxFieldTaxIDs)
 }
 
 func (c *CatalogQueryItemsForTax) UnmarshalJSON(data []byte) error {
@@ -1109,6 +2099,17 @@ func (c *CatalogQueryItemsForTax) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryItemsForTax) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryItemsForTax
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryItemsForTax) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1122,11 +2123,19 @@ func (c *CatalogQueryItemsForTax) String() string {
 }
 
 // The query filter to return the search result whose named attribute values are prefixed by the specified attribute value.
+var (
+	catalogQueryPrefixFieldAttributeName   = big.NewInt(1 << 0)
+	catalogQueryPrefixFieldAttributePrefix = big.NewInt(1 << 1)
+)
+
 type CatalogQueryPrefix struct {
 	// The name of the attribute to be searched.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
 	// The desired prefix of the search attribute value.
 	AttributePrefix string `json:"attribute_prefix" url:"attribute_prefix"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1150,6 +2159,27 @@ func (c *CatalogQueryPrefix) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogQueryPrefix) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributeName sets the AttributeName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryPrefix) SetAttributeName(attributeName string) {
+	c.AttributeName = attributeName
+	c.require(catalogQueryPrefixFieldAttributeName)
+}
+
+// SetAttributePrefix sets the AttributePrefix field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryPrefix) SetAttributePrefix(attributePrefix string) {
+	c.AttributePrefix = attributePrefix
+	c.require(catalogQueryPrefixFieldAttributePrefix)
+}
+
 func (c *CatalogQueryPrefix) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQueryPrefix
 	var value unmarshaler
@@ -1166,6 +2196,17 @@ func (c *CatalogQueryPrefix) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryPrefix) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryPrefix
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryPrefix) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1179,6 +2220,12 @@ func (c *CatalogQueryPrefix) String() string {
 }
 
 // The query filter to return the search result whose named attribute values fall between the specified range.
+var (
+	catalogQueryRangeFieldAttributeName     = big.NewInt(1 << 0)
+	catalogQueryRangeFieldAttributeMinValue = big.NewInt(1 << 1)
+	catalogQueryRangeFieldAttributeMaxValue = big.NewInt(1 << 2)
+)
+
 type CatalogQueryRange struct {
 	// The name of the attribute to be searched.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -1186,6 +2233,9 @@ type CatalogQueryRange struct {
 	AttributeMinValue *int64 `json:"attribute_min_value,omitempty" url:"attribute_min_value,omitempty"`
 	// The desired maximum value for the search attribute (inclusive).
 	AttributeMaxValue *int64 `json:"attribute_max_value,omitempty" url:"attribute_max_value,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1216,6 +2266,34 @@ func (c *CatalogQueryRange) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogQueryRange) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributeName sets the AttributeName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryRange) SetAttributeName(attributeName string) {
+	c.AttributeName = attributeName
+	c.require(catalogQueryRangeFieldAttributeName)
+}
+
+// SetAttributeMinValue sets the AttributeMinValue field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryRange) SetAttributeMinValue(attributeMinValue *int64) {
+	c.AttributeMinValue = attributeMinValue
+	c.require(catalogQueryRangeFieldAttributeMinValue)
+}
+
+// SetAttributeMaxValue sets the AttributeMaxValue field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryRange) SetAttributeMaxValue(attributeMaxValue *int64) {
+	c.AttributeMaxValue = attributeMaxValue
+	c.require(catalogQueryRangeFieldAttributeMaxValue)
+}
+
 func (c *CatalogQueryRange) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQueryRange
 	var value unmarshaler
@@ -1232,6 +2310,17 @@ func (c *CatalogQueryRange) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryRange) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryRange
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryRange) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1246,12 +2335,20 @@ func (c *CatalogQueryRange) String() string {
 
 // The query filter to return the search result(s) by exact match of the specified `attribute_name` and any of
 // the `attribute_values`.
+var (
+	catalogQuerySetFieldAttributeName   = big.NewInt(1 << 0)
+	catalogQuerySetFieldAttributeValues = big.NewInt(1 << 1)
+)
+
 type CatalogQuerySet struct {
 	// The name of the attribute to be searched. Matching of the attribute name is exact.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
 	// The desired values of the search attribute. Matching of the attribute values is exact and case insensitive.
 	// A maximum of 250 values may be searched in a request.
 	AttributeValues []string `json:"attribute_values" url:"attribute_values"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1275,6 +2372,27 @@ func (c *CatalogQuerySet) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CatalogQuerySet) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributeName sets the AttributeName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuerySet) SetAttributeName(attributeName string) {
+	c.AttributeName = attributeName
+	c.require(catalogQuerySetFieldAttributeName)
+}
+
+// SetAttributeValues sets the AttributeValues field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuerySet) SetAttributeValues(attributeValues []string) {
+	c.AttributeValues = attributeValues
+	c.require(catalogQuerySetFieldAttributeValues)
+}
+
 func (c *CatalogQuerySet) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQuerySet
 	var value unmarshaler
@@ -1291,6 +2409,17 @@ func (c *CatalogQuerySet) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQuerySet) MarshalJSON() ([]byte, error) {
+	type embed CatalogQuerySet
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQuerySet) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1304,6 +2433,12 @@ func (c *CatalogQuerySet) String() string {
 }
 
 // The query expression to specify the key to sort search results.
+var (
+	catalogQuerySortedAttributeFieldAttributeName         = big.NewInt(1 << 0)
+	catalogQuerySortedAttributeFieldInitialAttributeValue = big.NewInt(1 << 1)
+	catalogQuerySortedAttributeFieldSortOrder             = big.NewInt(1 << 2)
+)
+
 type CatalogQuerySortedAttribute struct {
 	// The attribute whose value is used as the sort key.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -1314,6 +2449,9 @@ type CatalogQuerySortedAttribute struct {
 	// The desired sort order, `"ASC"` (ascending) or `"DESC"` (descending).
 	// See [SortOrder](#type-sortorder) for possible values
 	SortOrder *SortOrder `json:"sort_order,omitempty" url:"sort_order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1344,6 +2482,34 @@ func (c *CatalogQuerySortedAttribute) GetExtraProperties() map[string]interface{
 	return c.extraProperties
 }
 
+func (c *CatalogQuerySortedAttribute) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetAttributeName sets the AttributeName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuerySortedAttribute) SetAttributeName(attributeName string) {
+	c.AttributeName = attributeName
+	c.require(catalogQuerySortedAttributeFieldAttributeName)
+}
+
+// SetInitialAttributeValue sets the InitialAttributeValue field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuerySortedAttribute) SetInitialAttributeValue(initialAttributeValue *string) {
+	c.InitialAttributeValue = initialAttributeValue
+	c.require(catalogQuerySortedAttributeFieldInitialAttributeValue)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuerySortedAttribute) SetSortOrder(sortOrder *SortOrder) {
+	c.SortOrder = sortOrder
+	c.require(catalogQuerySortedAttributeFieldSortOrder)
+}
+
 func (c *CatalogQuerySortedAttribute) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogQuerySortedAttribute
 	var value unmarshaler
@@ -1360,6 +2526,17 @@ func (c *CatalogQuerySortedAttribute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQuerySortedAttribute) MarshalJSON() ([]byte, error) {
+	type embed CatalogQuerySortedAttribute
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQuerySortedAttribute) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1373,9 +2550,16 @@ func (c *CatalogQuerySortedAttribute) String() string {
 }
 
 // The query filter to return the search result whose searchable attribute values contain all of the specified keywords or tokens, independent of the token order or case.
+var (
+	catalogQueryTextFieldKeywords = big.NewInt(1 << 0)
+)
+
 type CatalogQueryText struct {
 	// A list of 1, 2, or 3 search keywords. Keywords with fewer than 3 alphanumeric characters are ignored.
 	Keywords []string `json:"keywords" url:"keywords"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1390,6 +2574,20 @@ func (c *CatalogQueryText) GetKeywords() []string {
 
 func (c *CatalogQueryText) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
+}
+
+func (c *CatalogQueryText) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetKeywords sets the Keywords field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryText) SetKeywords(keywords []string) {
+	c.Keywords = keywords
+	c.require(catalogQueryTextFieldKeywords)
 }
 
 func (c *CatalogQueryText) UnmarshalJSON(data []byte) error {
@@ -1408,6 +2606,17 @@ func (c *CatalogQueryText) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CatalogQueryText) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryText
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CatalogQueryText) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1423,6 +2632,15 @@ func (c *CatalogQueryText) String() string {
 // Supported custom attribute query expressions for calling the
 // [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
 // endpoint to search for items or item variations.
+var (
+	customAttributeFilterFieldCustomAttributeDefinitionID = big.NewInt(1 << 0)
+	customAttributeFilterFieldKey                         = big.NewInt(1 << 1)
+	customAttributeFilterFieldStringFilter                = big.NewInt(1 << 2)
+	customAttributeFilterFieldNumberFilter                = big.NewInt(1 << 3)
+	customAttributeFilterFieldSelectionUIDsFilter         = big.NewInt(1 << 4)
+	customAttributeFilterFieldBoolFilter                  = big.NewInt(1 << 5)
+)
+
 type CustomAttributeFilter struct {
 	// A query expression to filter items or item variations by matching their custom attributes'
 	// `custom_attribute_definition_id` property value against the the specified id.
@@ -1448,6 +2666,9 @@ type CustomAttributeFilter struct {
 	// `boolean_value` property values against the specified Boolean expression.
 	// Exactly one of `string_filter`, `number_filter`, `selection_uids_filter`, or `bool_filter` must be specified.
 	BoolFilter *bool `json:"bool_filter,omitempty" url:"bool_filter,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1499,6 +2720,55 @@ func (c *CustomAttributeFilter) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
+func (c *CustomAttributeFilter) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCustomAttributeDefinitionID sets the CustomAttributeDefinitionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetCustomAttributeDefinitionID(customAttributeDefinitionID *string) {
+	c.CustomAttributeDefinitionID = customAttributeDefinitionID
+	c.require(customAttributeFilterFieldCustomAttributeDefinitionID)
+}
+
+// SetKey sets the Key field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetKey(key *string) {
+	c.Key = key
+	c.require(customAttributeFilterFieldKey)
+}
+
+// SetStringFilter sets the StringFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetStringFilter(stringFilter *string) {
+	c.StringFilter = stringFilter
+	c.require(customAttributeFilterFieldStringFilter)
+}
+
+// SetNumberFilter sets the NumberFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetNumberFilter(numberFilter *Range) {
+	c.NumberFilter = numberFilter
+	c.require(customAttributeFilterFieldNumberFilter)
+}
+
+// SetSelectionUIDsFilter sets the SelectionUIDsFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetSelectionUIDsFilter(selectionUIDsFilter []string) {
+	c.SelectionUIDsFilter = selectionUIDsFilter
+	c.require(customAttributeFilterFieldSelectionUIDsFilter)
+}
+
+// SetBoolFilter sets the BoolFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CustomAttributeFilter) SetBoolFilter(boolFilter *bool) {
+	c.BoolFilter = boolFilter
+	c.require(customAttributeFilterFieldBoolFilter)
+}
+
 func (c *CustomAttributeFilter) UnmarshalJSON(data []byte) error {
 	type unmarshaler CustomAttributeFilter
 	var value unmarshaler
@@ -1515,6 +2785,17 @@ func (c *CustomAttributeFilter) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (c *CustomAttributeFilter) MarshalJSON() ([]byte, error) {
+	type embed CustomAttributeFilter
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (c *CustomAttributeFilter) String() string {
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
@@ -1527,6 +2808,12 @@ func (c *CustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	listCatalogResponseFieldErrors  = big.NewInt(1 << 0)
+	listCatalogResponseFieldCursor  = big.NewInt(1 << 1)
+	listCatalogResponseFieldObjects = big.NewInt(1 << 2)
+)
+
 type ListCatalogResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1535,6 +2822,9 @@ type ListCatalogResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// The CatalogObjects returned.
 	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1565,6 +2855,34 @@ func (l *ListCatalogResponse) GetExtraProperties() map[string]interface{} {
 	return l.extraProperties
 }
 
+func (l *ListCatalogResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listCatalogResponseFieldErrors)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCatalogResponseFieldCursor)
+}
+
+// SetObjects sets the Objects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCatalogResponse) SetObjects(objects []*CatalogObject) {
+	l.Objects = objects
+	l.require(listCatalogResponseFieldObjects)
+}
+
 func (l *ListCatalogResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListCatalogResponse
 	var value unmarshaler
@@ -1581,6 +2899,17 @@ func (l *ListCatalogResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListCatalogResponse) MarshalJSON() ([]byte, error) {
+	type embed ListCatalogResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListCatalogResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -1594,6 +2923,11 @@ func (l *ListCatalogResponse) String() string {
 }
 
 // The range of a number value between the specified lower and upper bounds.
+var (
+	rangeFieldMin = big.NewInt(1 << 0)
+	rangeFieldMax = big.NewInt(1 << 1)
+)
+
 type Range struct {
 	// The lower bound of the number range. At least one of `min` or `max` must be specified.
 	// If unspecified, the results will have no minimum value.
@@ -1601,6 +2935,9 @@ type Range struct {
 	// The upper bound of the number range. At least one of `min` or `max` must be specified.
 	// If unspecified, the results will have no maximum value.
 	Max *string `json:"max,omitempty" url:"max,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1624,6 +2961,27 @@ func (r *Range) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *Range) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetMin sets the Min field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *Range) SetMin(min *string) {
+	r.Min = min
+	r.require(rangeFieldMin)
+}
+
+// SetMax sets the Max field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *Range) SetMax(max *string) {
+	r.Max = max
+	r.require(rangeFieldMax)
+}
+
 func (r *Range) UnmarshalJSON(data []byte) error {
 	type unmarshaler Range
 	var value unmarshaler
@@ -1638,6 +2996,17 @@ func (r *Range) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *Range) MarshalJSON() ([]byte, error) {
+	type embed Range
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *Range) String() string {
@@ -1676,6 +3045,13 @@ func (s SearchCatalogItemsRequestStockLevel) Ptr() *SearchCatalogItemsRequestSto
 }
 
 // Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
+var (
+	searchCatalogItemsResponseFieldErrors              = big.NewInt(1 << 0)
+	searchCatalogItemsResponseFieldItems               = big.NewInt(1 << 1)
+	searchCatalogItemsResponseFieldCursor              = big.NewInt(1 << 2)
+	searchCatalogItemsResponseFieldMatchedVariationIDs = big.NewInt(1 << 3)
+)
+
 type SearchCatalogItemsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1685,6 +3061,9 @@ type SearchCatalogItemsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Ids of returned item variations matching the specified query expression.
 	MatchedVariationIDs []string `json:"matched_variation_ids,omitempty" url:"matched_variation_ids,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1722,6 +3101,41 @@ func (s *SearchCatalogItemsResponse) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
+func (s *SearchCatalogItemsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchCatalogItemsResponseFieldErrors)
+}
+
+// SetItems sets the Items field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsResponse) SetItems(items []*CatalogObject) {
+	s.Items = items
+	s.require(searchCatalogItemsResponseFieldItems)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCatalogItemsResponseFieldCursor)
+}
+
+// SetMatchedVariationIDs sets the MatchedVariationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsResponse) SetMatchedVariationIDs(matchedVariationIDs []string) {
+	s.MatchedVariationIDs = matchedVariationIDs
+	s.require(searchCatalogItemsResponseFieldMatchedVariationIDs)
+}
+
 func (s *SearchCatalogItemsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchCatalogItemsResponse
 	var value unmarshaler
@@ -1738,6 +3152,17 @@ func (s *SearchCatalogItemsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchCatalogItemsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchCatalogItemsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchCatalogItemsResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1749,6 +3174,14 @@ func (s *SearchCatalogItemsResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", s)
 }
+
+var (
+	searchCatalogObjectsResponseFieldErrors         = big.NewInt(1 << 0)
+	searchCatalogObjectsResponseFieldCursor         = big.NewInt(1 << 1)
+	searchCatalogObjectsResponseFieldObjects        = big.NewInt(1 << 2)
+	searchCatalogObjectsResponseFieldRelatedObjects = big.NewInt(1 << 3)
+	searchCatalogObjectsResponseFieldLatestTime     = big.NewInt(1 << 4)
+)
 
 type SearchCatalogObjectsResponse struct {
 	// Any errors that occurred during the request.
@@ -1763,6 +3196,9 @@ type SearchCatalogObjectsResponse struct {
 	// When the associated product catalog was last updated. Will
 	// match the value for `end_time` or `cursor` if either field is included in the `SearchCatalog` request.
 	LatestTime *string `json:"latest_time,omitempty" url:"latest_time,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1807,6 +3243,48 @@ func (s *SearchCatalogObjectsResponse) GetExtraProperties() map[string]interface
 	return s.extraProperties
 }
 
+func (s *SearchCatalogObjectsResponse) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetErrors(errors []*Error) {
+	s.Errors = errors
+	s.require(searchCatalogObjectsResponseFieldErrors)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetCursor(cursor *string) {
+	s.Cursor = cursor
+	s.require(searchCatalogObjectsResponseFieldCursor)
+}
+
+// SetObjects sets the Objects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetObjects(objects []*CatalogObject) {
+	s.Objects = objects
+	s.require(searchCatalogObjectsResponseFieldObjects)
+}
+
+// SetRelatedObjects sets the RelatedObjects field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetRelatedObjects(relatedObjects []*CatalogObject) {
+	s.RelatedObjects = relatedObjects
+	s.require(searchCatalogObjectsResponseFieldRelatedObjects)
+}
+
+// SetLatestTime sets the LatestTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetLatestTime(latestTime *string) {
+	s.LatestTime = latestTime
+	s.require(searchCatalogObjectsResponseFieldLatestTime)
+}
+
 func (s *SearchCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler SearchCatalogObjectsResponse
 	var value unmarshaler
@@ -1823,6 +3301,17 @@ func (s *SearchCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SearchCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
+	type embed SearchCatalogObjectsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *SearchCatalogObjectsResponse) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1836,6 +3325,12 @@ func (s *SearchCatalogObjectsResponse) String() string {
 }
 
 // Contains the name and abbreviation for standard measurement unit.
+var (
+	standardUnitDescriptionFieldUnit         = big.NewInt(1 << 0)
+	standardUnitDescriptionFieldName         = big.NewInt(1 << 1)
+	standardUnitDescriptionFieldAbbreviation = big.NewInt(1 << 2)
+)
+
 type StandardUnitDescription struct {
 	// Identifies the measurement unit being described.
 	Unit *MeasurementUnit `json:"unit,omitempty" url:"unit,omitempty"`
@@ -1843,6 +3338,9 @@ type StandardUnitDescription struct {
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// UI display abbreviation for the measurement unit. For example, 'lb'.
 	Abbreviation *string `json:"abbreviation,omitempty" url:"abbreviation,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1873,6 +3371,34 @@ func (s *StandardUnitDescription) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
+func (s *StandardUnitDescription) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetUnit sets the Unit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StandardUnitDescription) SetUnit(unit *MeasurementUnit) {
+	s.Unit = unit
+	s.require(standardUnitDescriptionFieldUnit)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StandardUnitDescription) SetName(name *string) {
+	s.Name = name
+	s.require(standardUnitDescriptionFieldName)
+}
+
+// SetAbbreviation sets the Abbreviation field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StandardUnitDescription) SetAbbreviation(abbreviation *string) {
+	s.Abbreviation = abbreviation
+	s.require(standardUnitDescriptionFieldAbbreviation)
+}
+
 func (s *StandardUnitDescription) UnmarshalJSON(data []byte) error {
 	type unmarshaler StandardUnitDescription
 	var value unmarshaler
@@ -1889,6 +3415,17 @@ func (s *StandardUnitDescription) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *StandardUnitDescription) MarshalJSON() ([]byte, error) {
+	type embed StandardUnitDescription
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *StandardUnitDescription) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1902,11 +3439,19 @@ func (s *StandardUnitDescription) String() string {
 }
 
 // Group of standard measurement units.
+var (
+	standardUnitDescriptionGroupFieldStandardUnitDescriptions = big.NewInt(1 << 0)
+	standardUnitDescriptionGroupFieldLanguageCode             = big.NewInt(1 << 1)
+)
+
 type StandardUnitDescriptionGroup struct {
 	// List of standard (non-custom) measurement units in this description group.
 	StandardUnitDescriptions []*StandardUnitDescription `json:"standard_unit_descriptions,omitempty" url:"standard_unit_descriptions,omitempty"`
 	// IETF language tag.
 	LanguageCode *string `json:"language_code,omitempty" url:"language_code,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1930,6 +3475,27 @@ func (s *StandardUnitDescriptionGroup) GetExtraProperties() map[string]interface
 	return s.extraProperties
 }
 
+func (s *StandardUnitDescriptionGroup) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetStandardUnitDescriptions sets the StandardUnitDescriptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StandardUnitDescriptionGroup) SetStandardUnitDescriptions(standardUnitDescriptions []*StandardUnitDescription) {
+	s.StandardUnitDescriptions = standardUnitDescriptions
+	s.require(standardUnitDescriptionGroupFieldStandardUnitDescriptions)
+}
+
+// SetLanguageCode sets the LanguageCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *StandardUnitDescriptionGroup) SetLanguageCode(languageCode *string) {
+	s.LanguageCode = languageCode
+	s.require(standardUnitDescriptionGroupFieldLanguageCode)
+}
+
 func (s *StandardUnitDescriptionGroup) UnmarshalJSON(data []byte) error {
 	type unmarshaler StandardUnitDescriptionGroup
 	var value unmarshaler
@@ -1946,6 +3512,17 @@ func (s *StandardUnitDescriptionGroup) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *StandardUnitDescriptionGroup) MarshalJSON() ([]byte, error) {
+	type embed StandardUnitDescriptionGroup
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (s *StandardUnitDescriptionGroup) String() string {
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
@@ -1958,11 +3535,19 @@ func (s *StandardUnitDescriptionGroup) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+var (
+	updateItemModifierListsResponseFieldErrors    = big.NewInt(1 << 0)
+	updateItemModifierListsResponseFieldUpdatedAt = big.NewInt(1 << 1)
+)
+
 type UpdateItemModifierListsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The database [timestamp](https://developer.squareup.com/docs/build-basics/common-data-types/working-with-dates) of this update in RFC 3339 format, e.g., `2016-09-04T23:59:33.123Z`.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -1986,6 +3571,27 @@ func (u *UpdateItemModifierListsResponse) GetExtraProperties() map[string]interf
 	return u.extraProperties
 }
 
+func (u *UpdateItemModifierListsResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemModifierListsResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateItemModifierListsResponseFieldErrors)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemModifierListsResponse) SetUpdatedAt(updatedAt *string) {
+	u.UpdatedAt = updatedAt
+	u.require(updateItemModifierListsResponseFieldUpdatedAt)
+}
+
 func (u *UpdateItemModifierListsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateItemModifierListsResponse
 	var value unmarshaler
@@ -2002,6 +3608,17 @@ func (u *UpdateItemModifierListsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UpdateItemModifierListsResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateItemModifierListsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (u *UpdateItemModifierListsResponse) String() string {
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
@@ -2014,11 +3631,19 @@ func (u *UpdateItemModifierListsResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+var (
+	updateItemTaxesResponseFieldErrors    = big.NewInt(1 << 0)
+	updateItemTaxesResponseFieldUpdatedAt = big.NewInt(1 << 1)
+)
+
 type UpdateItemTaxesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this update in RFC 3339 format, e.g., `2016-09-04T23:59:33.123Z`.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -2042,6 +3667,27 @@ func (u *UpdateItemTaxesResponse) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
+func (u *UpdateItemTaxesResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemTaxesResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateItemTaxesResponseFieldErrors)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateItemTaxesResponse) SetUpdatedAt(updatedAt *string) {
+	u.UpdatedAt = updatedAt
+	u.require(updateItemTaxesResponseFieldUpdatedAt)
+}
+
 func (u *UpdateItemTaxesResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler UpdateItemTaxesResponse
 	var value unmarshaler
@@ -2056,6 +3702,17 @@ func (u *UpdateItemTaxesResponse) UnmarshalJSON(data []byte) error {
 	u.extraProperties = extraProperties
 	u.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (u *UpdateItemTaxesResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateItemTaxesResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (u *UpdateItemTaxesResponse) String() string {

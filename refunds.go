@@ -6,6 +6,23 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	internal "github.com/square/square-go-sdk/v2/internal"
+	big "math/big"
+)
+
+var (
+	refundPaymentRequestFieldIdempotencyKey      = big.NewInt(1 << 0)
+	refundPaymentRequestFieldAmountMoney         = big.NewInt(1 << 1)
+	refundPaymentRequestFieldAppFeeMoney         = big.NewInt(1 << 2)
+	refundPaymentRequestFieldPaymentID           = big.NewInt(1 << 3)
+	refundPaymentRequestFieldDestinationID       = big.NewInt(1 << 4)
+	refundPaymentRequestFieldUnlinked            = big.NewInt(1 << 5)
+	refundPaymentRequestFieldLocationID          = big.NewInt(1 << 6)
+	refundPaymentRequestFieldCustomerID          = big.NewInt(1 << 7)
+	refundPaymentRequestFieldReason              = big.NewInt(1 << 8)
+	refundPaymentRequestFieldPaymentVersionToken = big.NewInt(1 << 9)
+	refundPaymentRequestFieldTeamMemberID        = big.NewInt(1 << 10)
+	refundPaymentRequestFieldCashDetails         = big.NewInt(1 << 11)
+	refundPaymentRequestFieldExternalDetails     = big.NewInt(1 << 12)
 )
 
 type RefundPaymentRequest struct {
@@ -81,12 +98,148 @@ type RefundPaymentRequest struct {
 	// Additional details required when recording an unlinked external refund
 	// (`destination_id` is EXTERNAL).
 	ExternalDetails *DestinationDetailsExternalRefundDetails `json:"external_details,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (r *RefundPaymentRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetIdempotencyKey(idempotencyKey string) {
+	r.IdempotencyKey = idempotencyKey
+	r.require(refundPaymentRequestFieldIdempotencyKey)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetAmountMoney(amountMoney *Money) {
+	r.AmountMoney = amountMoney
+	r.require(refundPaymentRequestFieldAmountMoney)
+}
+
+// SetAppFeeMoney sets the AppFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetAppFeeMoney(appFeeMoney *Money) {
+	r.AppFeeMoney = appFeeMoney
+	r.require(refundPaymentRequestFieldAppFeeMoney)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetPaymentID(paymentID *string) {
+	r.PaymentID = paymentID
+	r.require(refundPaymentRequestFieldPaymentID)
+}
+
+// SetDestinationID sets the DestinationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetDestinationID(destinationID *string) {
+	r.DestinationID = destinationID
+	r.require(refundPaymentRequestFieldDestinationID)
+}
+
+// SetUnlinked sets the Unlinked field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetUnlinked(unlinked *bool) {
+	r.Unlinked = unlinked
+	r.require(refundPaymentRequestFieldUnlinked)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetLocationID(locationID *string) {
+	r.LocationID = locationID
+	r.require(refundPaymentRequestFieldLocationID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetCustomerID(customerID *string) {
+	r.CustomerID = customerID
+	r.require(refundPaymentRequestFieldCustomerID)
+}
+
+// SetReason sets the Reason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetReason(reason *string) {
+	r.Reason = reason
+	r.require(refundPaymentRequestFieldReason)
+}
+
+// SetPaymentVersionToken sets the PaymentVersionToken field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetPaymentVersionToken(paymentVersionToken *string) {
+	r.PaymentVersionToken = paymentVersionToken
+	r.require(refundPaymentRequestFieldPaymentVersionToken)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetTeamMemberID(teamMemberID *string) {
+	r.TeamMemberID = teamMemberID
+	r.require(refundPaymentRequestFieldTeamMemberID)
+}
+
+// SetCashDetails sets the CashDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetCashDetails(cashDetails *DestinationDetailsCashRefundDetails) {
+	r.CashDetails = cashDetails
+	r.require(refundPaymentRequestFieldCashDetails)
+}
+
+// SetExternalDetails sets the ExternalDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetExternalDetails(externalDetails *DestinationDetailsExternalRefundDetails) {
+	r.ExternalDetails = externalDetails
+	r.require(refundPaymentRequestFieldExternalDetails)
+}
+
+var (
+	getRefundsRequestFieldRefundID = big.NewInt(1 << 0)
+)
 
 type GetRefundsRequest struct {
 	// The unique ID for the desired `PaymentRefund`.
 	RefundID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetRefundsRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetRefundID sets the RefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetRefundsRequest) SetRefundID(refundID string) {
+	g.RefundID = refundID
+	g.require(getRefundsRequestFieldRefundID)
+}
+
+var (
+	listRefundsRequestFieldBeginTime          = big.NewInt(1 << 0)
+	listRefundsRequestFieldEndTime            = big.NewInt(1 << 1)
+	listRefundsRequestFieldSortOrder          = big.NewInt(1 << 2)
+	listRefundsRequestFieldCursor             = big.NewInt(1 << 3)
+	listRefundsRequestFieldLocationID         = big.NewInt(1 << 4)
+	listRefundsRequestFieldStatus             = big.NewInt(1 << 5)
+	listRefundsRequestFieldSourceType         = big.NewInt(1 << 6)
+	listRefundsRequestFieldLimit              = big.NewInt(1 << 7)
+	listRefundsRequestFieldUpdatedAtBeginTime = big.NewInt(1 << 8)
+	listRefundsRequestFieldUpdatedAtEndTime   = big.NewInt(1 << 9)
+	listRefundsRequestFieldSortField          = big.NewInt(1 << 10)
+)
 
 type ListRefundsRequest struct {
 	// Indicates the start of the time range to retrieve each `PaymentRefund` for, in RFC 3339
@@ -143,9 +296,102 @@ type ListRefundsRequest struct {
 	UpdatedAtEndTime *string `json:"-" url:"updated_at_end_time,omitempty"`
 	// The field used to sort results by. The default is `CREATED_AT`.
 	SortField *ListPaymentRefundsRequestSortField `json:"-" url:"sort_field,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListRefundsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetBeginTime(beginTime *string) {
+	l.BeginTime = beginTime
+	l.require(listRefundsRequestFieldBeginTime)
+}
+
+// SetEndTime sets the EndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetEndTime(endTime *string) {
+	l.EndTime = endTime
+	l.require(listRefundsRequestFieldEndTime)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetSortOrder(sortOrder *string) {
+	l.SortOrder = sortOrder
+	l.require(listRefundsRequestFieldSortOrder)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listRefundsRequestFieldCursor)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listRefundsRequestFieldLocationID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetStatus(status *string) {
+	l.Status = status
+	l.require(listRefundsRequestFieldStatus)
+}
+
+// SetSourceType sets the SourceType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetSourceType(sourceType *string) {
+	l.SourceType = sourceType
+	l.require(listRefundsRequestFieldSourceType)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listRefundsRequestFieldLimit)
+}
+
+// SetUpdatedAtBeginTime sets the UpdatedAtBeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetUpdatedAtBeginTime(updatedAtBeginTime *string) {
+	l.UpdatedAtBeginTime = updatedAtBeginTime
+	l.require(listRefundsRequestFieldUpdatedAtBeginTime)
+}
+
+// SetUpdatedAtEndTime sets the UpdatedAtEndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetUpdatedAtEndTime(updatedAtEndTime *string) {
+	l.UpdatedAtEndTime = updatedAtEndTime
+	l.require(listRefundsRequestFieldUpdatedAtEndTime)
+}
+
+// SetSortField sets the SortField field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListRefundsRequest) SetSortField(sortField *ListPaymentRefundsRequestSortField) {
+	l.SortField = sortField
+	l.require(listRefundsRequestFieldSortField)
 }
 
 // Details about a refund's destination.
+var (
+	destinationDetailsFieldCardDetails     = big.NewInt(1 << 0)
+	destinationDetailsFieldCashDetails     = big.NewInt(1 << 1)
+	destinationDetailsFieldExternalDetails = big.NewInt(1 << 2)
+)
+
 type DestinationDetails struct {
 	// Details about a card refund. Only populated if the destination_type is `CARD`.
 	CardDetails *DestinationDetailsCardRefundDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
@@ -153,6 +399,9 @@ type DestinationDetails struct {
 	CashDetails *DestinationDetailsCashRefundDetails `json:"cash_details,omitempty" url:"cash_details,omitempty"`
 	// Details about an external refund. Only populated if the destination_type is `EXTERNAL`.
 	ExternalDetails *DestinationDetailsExternalRefundDetails `json:"external_details,omitempty" url:"external_details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -183,6 +432,34 @@ func (d *DestinationDetails) GetExtraProperties() map[string]interface{} {
 	return d.extraProperties
 }
 
+func (d *DestinationDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCardDetails sets the CardDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetails) SetCardDetails(cardDetails *DestinationDetailsCardRefundDetails) {
+	d.CardDetails = cardDetails
+	d.require(destinationDetailsFieldCardDetails)
+}
+
+// SetCashDetails sets the CashDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetails) SetCashDetails(cashDetails *DestinationDetailsCashRefundDetails) {
+	d.CashDetails = cashDetails
+	d.require(destinationDetailsFieldCashDetails)
+}
+
+// SetExternalDetails sets the ExternalDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetails) SetExternalDetails(externalDetails *DestinationDetailsExternalRefundDetails) {
+	d.ExternalDetails = externalDetails
+	d.require(destinationDetailsFieldExternalDetails)
+}
+
 func (d *DestinationDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DestinationDetails
 	var value unmarshaler
@@ -199,6 +476,17 @@ func (d *DestinationDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DestinationDetails) MarshalJSON() ([]byte, error) {
+	type embed DestinationDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DestinationDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -211,6 +499,12 @@ func (d *DestinationDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	destinationDetailsCardRefundDetailsFieldCard           = big.NewInt(1 << 0)
+	destinationDetailsCardRefundDetailsFieldEntryMethod    = big.NewInt(1 << 1)
+	destinationDetailsCardRefundDetailsFieldAuthResultCode = big.NewInt(1 << 2)
+)
+
 type DestinationDetailsCardRefundDetails struct {
 	// The card's non-confidential details.
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
@@ -219,6 +513,9 @@ type DestinationDetailsCardRefundDetails struct {
 	EntryMethod *string `json:"entry_method,omitempty" url:"entry_method,omitempty"`
 	// The authorization code provided by the issuer when a refund is approved.
 	AuthResultCode *string `json:"auth_result_code,omitempty" url:"auth_result_code,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -249,6 +546,34 @@ func (d *DestinationDetailsCardRefundDetails) GetExtraProperties() map[string]in
 	return d.extraProperties
 }
 
+func (d *DestinationDetailsCardRefundDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetCard sets the Card field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsCardRefundDetails) SetCard(card *Card) {
+	d.Card = card
+	d.require(destinationDetailsCardRefundDetailsFieldCard)
+}
+
+// SetEntryMethod sets the EntryMethod field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsCardRefundDetails) SetEntryMethod(entryMethod *string) {
+	d.EntryMethod = entryMethod
+	d.require(destinationDetailsCardRefundDetailsFieldEntryMethod)
+}
+
+// SetAuthResultCode sets the AuthResultCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsCardRefundDetails) SetAuthResultCode(authResultCode *string) {
+	d.AuthResultCode = authResultCode
+	d.require(destinationDetailsCardRefundDetailsFieldAuthResultCode)
+}
+
 func (d *DestinationDetailsCardRefundDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DestinationDetailsCardRefundDetails
 	var value unmarshaler
@@ -265,6 +590,17 @@ func (d *DestinationDetailsCardRefundDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DestinationDetailsCardRefundDetails) MarshalJSON() ([]byte, error) {
+	type embed DestinationDetailsCardRefundDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DestinationDetailsCardRefundDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -278,6 +614,11 @@ func (d *DestinationDetailsCardRefundDetails) String() string {
 }
 
 // Stores details about a cash refund. Contains only non-confidential information.
+var (
+	destinationDetailsCashRefundDetailsFieldSellerSuppliedMoney = big.NewInt(1 << 0)
+	destinationDetailsCashRefundDetailsFieldChangeBackMoney     = big.NewInt(1 << 1)
+)
+
 type DestinationDetailsCashRefundDetails struct {
 	// The amount and currency of the money supplied by the seller.
 	SellerSuppliedMoney *Money `json:"seller_supplied_money" url:"seller_supplied_money"`
@@ -285,6 +626,9 @@ type DestinationDetailsCashRefundDetails struct {
 	// This read-only field is calculated
 	// from the `amount_money` and `seller_supplied_money` fields.
 	ChangeBackMoney *Money `json:"change_back_money,omitempty" url:"change_back_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -308,6 +652,27 @@ func (d *DestinationDetailsCashRefundDetails) GetExtraProperties() map[string]in
 	return d.extraProperties
 }
 
+func (d *DestinationDetailsCashRefundDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetSellerSuppliedMoney sets the SellerSuppliedMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsCashRefundDetails) SetSellerSuppliedMoney(sellerSuppliedMoney *Money) {
+	d.SellerSuppliedMoney = sellerSuppliedMoney
+	d.require(destinationDetailsCashRefundDetailsFieldSellerSuppliedMoney)
+}
+
+// SetChangeBackMoney sets the ChangeBackMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsCashRefundDetails) SetChangeBackMoney(changeBackMoney *Money) {
+	d.ChangeBackMoney = changeBackMoney
+	d.require(destinationDetailsCashRefundDetailsFieldChangeBackMoney)
+}
+
 func (d *DestinationDetailsCashRefundDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DestinationDetailsCashRefundDetails
 	var value unmarshaler
@@ -324,6 +689,17 @@ func (d *DestinationDetailsCashRefundDetails) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DestinationDetailsCashRefundDetails) MarshalJSON() ([]byte, error) {
+	type embed DestinationDetailsCashRefundDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (d *DestinationDetailsCashRefundDetails) String() string {
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
@@ -337,6 +713,12 @@ func (d *DestinationDetailsCashRefundDetails) String() string {
 }
 
 // Stores details about an external refund. Contains only non-confidential information.
+var (
+	destinationDetailsExternalRefundDetailsFieldType     = big.NewInt(1 << 0)
+	destinationDetailsExternalRefundDetailsFieldSource   = big.NewInt(1 << 1)
+	destinationDetailsExternalRefundDetailsFieldSourceID = big.NewInt(1 << 2)
+)
+
 type DestinationDetailsExternalRefundDetails struct {
 	// The type of external refund the seller paid to the buyer. It can be one of the
 	// following:
@@ -358,6 +740,9 @@ type DestinationDetailsExternalRefundDetails struct {
 	Source string `json:"source" url:"source"`
 	// An ID to associate the refund to its originating source.
 	SourceID *string `json:"source_id,omitempty" url:"source_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -388,6 +773,34 @@ func (d *DestinationDetailsExternalRefundDetails) GetExtraProperties() map[strin
 	return d.extraProperties
 }
 
+func (d *DestinationDetailsExternalRefundDetails) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsExternalRefundDetails) SetType(type_ string) {
+	d.Type = type_
+	d.require(destinationDetailsExternalRefundDetailsFieldType)
+}
+
+// SetSource sets the Source field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsExternalRefundDetails) SetSource(source string) {
+	d.Source = source
+	d.require(destinationDetailsExternalRefundDetailsFieldSource)
+}
+
+// SetSourceID sets the SourceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DestinationDetailsExternalRefundDetails) SetSourceID(sourceID *string) {
+	d.SourceID = sourceID
+	d.require(destinationDetailsExternalRefundDetailsFieldSourceID)
+}
+
 func (d *DestinationDetailsExternalRefundDetails) UnmarshalJSON(data []byte) error {
 	type unmarshaler DestinationDetailsExternalRefundDetails
 	var value unmarshaler
@@ -402,6 +815,17 @@ func (d *DestinationDetailsExternalRefundDetails) UnmarshalJSON(data []byte) err
 	d.extraProperties = extraProperties
 	d.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DestinationDetailsExternalRefundDetails) MarshalJSON() ([]byte, error) {
+	type embed DestinationDetailsExternalRefundDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (d *DestinationDetailsExternalRefundDetails) String() string {
@@ -420,11 +844,19 @@ func (d *DestinationDetailsExternalRefundDetails) String() string {
 //
 // Note: If there are errors processing the request, the refund field might not be
 // present or it might be present in a FAILED state.
+var (
+	getPaymentRefundResponseFieldErrors = big.NewInt(1 << 0)
+	getPaymentRefundResponseFieldRefund = big.NewInt(1 << 1)
+)
+
 type GetPaymentRefundResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested `PaymentRefund`.
 	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -448,6 +880,27 @@ func (g *GetPaymentRefundResponse) GetExtraProperties() map[string]interface{} {
 	return g.extraProperties
 }
 
+func (g *GetPaymentRefundResponse) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentRefundResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getPaymentRefundResponseFieldErrors)
+}
+
+// SetRefund sets the Refund field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetPaymentRefundResponse) SetRefund(refund *PaymentRefund) {
+	g.Refund = refund
+	g.require(getPaymentRefundResponseFieldRefund)
+}
+
 func (g *GetPaymentRefundResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler GetPaymentRefundResponse
 	var value unmarshaler
@@ -462,6 +915,17 @@ func (g *GetPaymentRefundResponse) UnmarshalJSON(data []byte) error {
 	g.extraProperties = extraProperties
 	g.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (g *GetPaymentRefundResponse) MarshalJSON() ([]byte, error) {
+	type embed GetPaymentRefundResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (g *GetPaymentRefundResponse) String() string {
@@ -501,6 +965,12 @@ func (l ListPaymentRefundsRequestSortField) Ptr() *ListPaymentRefundsRequestSort
 // Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
 //
 // Either `errors` or `refunds` is present in a given response (never both).
+var (
+	listPaymentRefundsResponseFieldErrors  = big.NewInt(1 << 0)
+	listPaymentRefundsResponseFieldRefunds = big.NewInt(1 << 1)
+	listPaymentRefundsResponseFieldCursor  = big.NewInt(1 << 2)
+)
+
 type ListPaymentRefundsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -511,6 +981,9 @@ type ListPaymentRefundsResponse struct {
 	//
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -541,6 +1014,34 @@ func (l *ListPaymentRefundsResponse) GetExtraProperties() map[string]interface{}
 	return l.extraProperties
 }
 
+func (l *ListPaymentRefundsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentRefundsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listPaymentRefundsResponseFieldErrors)
+}
+
+// SetRefunds sets the Refunds field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentRefundsResponse) SetRefunds(refunds []*PaymentRefund) {
+	l.Refunds = refunds
+	l.require(listPaymentRefundsResponseFieldRefunds)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListPaymentRefundsResponse) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listPaymentRefundsResponseFieldCursor)
+}
+
 func (l *ListPaymentRefundsResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler ListPaymentRefundsResponse
 	var value unmarshaler
@@ -557,6 +1058,17 @@ func (l *ListPaymentRefundsResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListPaymentRefundsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListPaymentRefundsResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 func (l *ListPaymentRefundsResponse) String() string {
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
@@ -571,6 +1083,25 @@ func (l *ListPaymentRefundsResponse) String() string {
 
 // Represents a refund of a payment made using Square. Contains information about
 // the original payment and the amount of money refunded.
+var (
+	paymentRefundFieldID                 = big.NewInt(1 << 0)
+	paymentRefundFieldStatus             = big.NewInt(1 << 1)
+	paymentRefundFieldLocationID         = big.NewInt(1 << 2)
+	paymentRefundFieldUnlinked           = big.NewInt(1 << 3)
+	paymentRefundFieldDestinationType    = big.NewInt(1 << 4)
+	paymentRefundFieldDestinationDetails = big.NewInt(1 << 5)
+	paymentRefundFieldAmountMoney        = big.NewInt(1 << 6)
+	paymentRefundFieldAppFeeMoney        = big.NewInt(1 << 7)
+	paymentRefundFieldProcessingFee      = big.NewInt(1 << 8)
+	paymentRefundFieldPaymentID          = big.NewInt(1 << 9)
+	paymentRefundFieldOrderID            = big.NewInt(1 << 10)
+	paymentRefundFieldReason             = big.NewInt(1 << 11)
+	paymentRefundFieldCreatedAt          = big.NewInt(1 << 12)
+	paymentRefundFieldUpdatedAt          = big.NewInt(1 << 13)
+	paymentRefundFieldTeamMemberID       = big.NewInt(1 << 14)
+	paymentRefundFieldTerminalRefundID   = big.NewInt(1 << 15)
+)
+
 type PaymentRefund struct {
 	// The unique ID for this refund, generated by Square.
 	ID string `json:"id" url:"id"`
@@ -616,6 +1147,9 @@ type PaymentRefund struct {
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
 	// An optional ID for a Terminal refund.
 	TerminalRefundID *string `json:"terminal_refund_id,omitempty" url:"terminal_refund_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -737,6 +1271,125 @@ func (p *PaymentRefund) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
+func (p *PaymentRefund) require(field *big.Int) {
+	if p.explicitFields == nil {
+		p.explicitFields = big.NewInt(0)
+	}
+	p.explicitFields.Or(p.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetID(id string) {
+	p.ID = id
+	p.require(paymentRefundFieldID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetStatus(status *string) {
+	p.Status = status
+	p.require(paymentRefundFieldStatus)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetLocationID(locationID *string) {
+	p.LocationID = locationID
+	p.require(paymentRefundFieldLocationID)
+}
+
+// SetUnlinked sets the Unlinked field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetUnlinked(unlinked *bool) {
+	p.Unlinked = unlinked
+	p.require(paymentRefundFieldUnlinked)
+}
+
+// SetDestinationType sets the DestinationType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetDestinationType(destinationType *string) {
+	p.DestinationType = destinationType
+	p.require(paymentRefundFieldDestinationType)
+}
+
+// SetDestinationDetails sets the DestinationDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetDestinationDetails(destinationDetails *DestinationDetails) {
+	p.DestinationDetails = destinationDetails
+	p.require(paymentRefundFieldDestinationDetails)
+}
+
+// SetAmountMoney sets the AmountMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetAmountMoney(amountMoney *Money) {
+	p.AmountMoney = amountMoney
+	p.require(paymentRefundFieldAmountMoney)
+}
+
+// SetAppFeeMoney sets the AppFeeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetAppFeeMoney(appFeeMoney *Money) {
+	p.AppFeeMoney = appFeeMoney
+	p.require(paymentRefundFieldAppFeeMoney)
+}
+
+// SetProcessingFee sets the ProcessingFee field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetProcessingFee(processingFee []*ProcessingFee) {
+	p.ProcessingFee = processingFee
+	p.require(paymentRefundFieldProcessingFee)
+}
+
+// SetPaymentID sets the PaymentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetPaymentID(paymentID *string) {
+	p.PaymentID = paymentID
+	p.require(paymentRefundFieldPaymentID)
+}
+
+// SetOrderID sets the OrderID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetOrderID(orderID *string) {
+	p.OrderID = orderID
+	p.require(paymentRefundFieldOrderID)
+}
+
+// SetReason sets the Reason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetReason(reason *string) {
+	p.Reason = reason
+	p.require(paymentRefundFieldReason)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetCreatedAt(createdAt *string) {
+	p.CreatedAt = createdAt
+	p.require(paymentRefundFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetUpdatedAt(updatedAt *string) {
+	p.UpdatedAt = updatedAt
+	p.require(paymentRefundFieldUpdatedAt)
+}
+
+// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetTeamMemberID(teamMemberID *string) {
+	p.TeamMemberID = teamMemberID
+	p.require(paymentRefundFieldTeamMemberID)
+}
+
+// SetTerminalRefundID sets the TerminalRefundID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetTerminalRefundID(terminalRefundID *string) {
+	p.TerminalRefundID = terminalRefundID
+	p.require(paymentRefundFieldTerminalRefundID)
+}
+
 func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
 	type unmarshaler PaymentRefund
 	var value unmarshaler
@@ -751,6 +1404,17 @@ func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
 	p.extraProperties = extraProperties
 	p.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (p *PaymentRefund) MarshalJSON() ([]byte, error) {
+	type embed PaymentRefund
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (p *PaymentRefund) String() string {
@@ -770,11 +1434,19 @@ func (p *PaymentRefund) String() string {
 //
 // If there are errors processing the request, the `refund` field might not be
 // present, or it might be present with a status of `FAILED`.
+var (
+	refundPaymentResponseFieldErrors = big.NewInt(1 << 0)
+	refundPaymentResponseFieldRefund = big.NewInt(1 << 1)
+)
+
 type RefundPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The successfully created `PaymentRefund`.
 	Refund *PaymentRefund `json:"refund,omitempty" url:"refund,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
@@ -798,6 +1470,27 @@ func (r *RefundPaymentResponse) GetExtraProperties() map[string]interface{} {
 	return r.extraProperties
 }
 
+func (r *RefundPaymentResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(refundPaymentResponseFieldErrors)
+}
+
+// SetRefund sets the Refund field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentResponse) SetRefund(refund *PaymentRefund) {
+	r.Refund = refund
+	r.require(refundPaymentResponseFieldRefund)
+}
+
 func (r *RefundPaymentResponse) UnmarshalJSON(data []byte) error {
 	type unmarshaler RefundPaymentResponse
 	var value unmarshaler
@@ -812,6 +1505,17 @@ func (r *RefundPaymentResponse) UnmarshalJSON(data []byte) error {
 	r.extraProperties = extraProperties
 	r.rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RefundPaymentResponse) MarshalJSON() ([]byte, error) {
+	type embed RefundPaymentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 func (r *RefundPaymentResponse) String() string {

@@ -4,6 +4,12 @@ package giftcards
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createGiftCardActivityRequestFieldIdempotencyKey   = big.NewInt(1 << 0)
+	createGiftCardActivityRequestFieldGiftCardActivity = big.NewInt(1 << 1)
 )
 
 type CreateGiftCardActivityRequest struct {
@@ -12,7 +18,42 @@ type CreateGiftCardActivityRequest struct {
 	// The activity to create for the gift card. This activity must specify `gift_card_id` or `gift_card_gan` for the target
 	// gift card, the `location_id` where the activity occurred, and the activity `type` along with the corresponding activity details.
 	GiftCardActivity *v2.GiftCardActivity `json:"gift_card_activity,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateGiftCardActivityRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardActivityRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createGiftCardActivityRequestFieldIdempotencyKey)
+}
+
+// SetGiftCardActivity sets the GiftCardActivity field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateGiftCardActivityRequest) SetGiftCardActivity(giftCardActivity *v2.GiftCardActivity) {
+	c.GiftCardActivity = giftCardActivity
+	c.require(createGiftCardActivityRequestFieldGiftCardActivity)
+}
+
+var (
+	listActivitiesRequestFieldGiftCardID = big.NewInt(1 << 0)
+	listActivitiesRequestFieldType       = big.NewInt(1 << 1)
+	listActivitiesRequestFieldLocationID = big.NewInt(1 << 2)
+	listActivitiesRequestFieldBeginTime  = big.NewInt(1 << 3)
+	listActivitiesRequestFieldEndTime    = big.NewInt(1 << 4)
+	listActivitiesRequestFieldLimit      = big.NewInt(1 << 5)
+	listActivitiesRequestFieldCursor     = big.NewInt(1 << 6)
+	listActivitiesRequestFieldSortOrder  = big.NewInt(1 << 7)
+)
 
 type ListActivitiesRequest struct {
 	// If a gift card ID is provided, the endpoint returns activities related
@@ -44,4 +85,70 @@ type ListActivitiesRequest struct {
 	// - `ASC` - Oldest to newest.
 	// - `DESC` - Newest to oldest (default).
 	SortOrder *string `json:"-" url:"sort_order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListActivitiesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetGiftCardID sets the GiftCardID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetGiftCardID(giftCardID *string) {
+	l.GiftCardID = giftCardID
+	l.require(listActivitiesRequestFieldGiftCardID)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetType(type_ *string) {
+	l.Type = type_
+	l.require(listActivitiesRequestFieldType)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listActivitiesRequestFieldLocationID)
+}
+
+// SetBeginTime sets the BeginTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetBeginTime(beginTime *string) {
+	l.BeginTime = beginTime
+	l.require(listActivitiesRequestFieldBeginTime)
+}
+
+// SetEndTime sets the EndTime field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetEndTime(endTime *string) {
+	l.EndTime = endTime
+	l.require(listActivitiesRequestFieldEndTime)
+}
+
+// SetLimit sets the Limit field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetLimit(limit *int) {
+	l.Limit = limit
+	l.require(listActivitiesRequestFieldLimit)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listActivitiesRequestFieldCursor)
+}
+
+// SetSortOrder sets the SortOrder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListActivitiesRequest) SetSortOrder(sortOrder *string) {
+	l.SortOrder = sortOrder
+	l.require(listActivitiesRequestFieldSortOrder)
 }

@@ -4,7 +4,7 @@ package oauth
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) RevokeToken(
 	ctx context.Context,
-	request *v2.RevokeTokenRequest,
+	request *square.RevokeTokenRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RevokeTokenResponse], error) {
+) (*core.Response[*square.RevokeTokenResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) RevokeToken(
 	)
 	endpointURL := baseURL + "/oauth2/revoke"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.RevokeTokenResponse
+	var response *square.RevokeTokenResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) RevokeToken(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RevokeTokenResponse]{
+	return &core.Response[*square.RevokeTokenResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) RevokeToken(
 
 func (r *RawClient) ObtainToken(
 	ctx context.Context,
-	request *v2.ObtainTokenRequest,
+	request *square.ObtainTokenRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ObtainTokenResponse], error) {
+) (*core.Response[*square.ObtainTokenResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) ObtainToken(
 	)
 	endpointURL := baseURL + "/oauth2/token"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.ObtainTokenResponse
+	var response *square.ObtainTokenResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) ObtainToken(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ObtainTokenResponse]{
+	return &core.Response[*square.ObtainTokenResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -117,7 +117,7 @@ func (r *RawClient) ObtainToken(
 func (r *RawClient) RetrieveTokenStatus(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveTokenStatusResponse], error) {
+) (*core.Response[*square.RetrieveTokenStatusResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -126,10 +126,10 @@ func (r *RawClient) RetrieveTokenStatus(
 	)
 	endpointURL := baseURL + "/oauth2/token/status"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveTokenStatusResponse
+	var response *square.RetrieveTokenStatusResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -146,7 +146,7 @@ func (r *RawClient) RetrieveTokenStatus(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveTokenStatusResponse]{
+	return &core.Response[*square.RetrieveTokenStatusResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -165,7 +165,7 @@ func (r *RawClient) Authorize(
 	)
 	endpointURL := baseURL + "/oauth2/authorize"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	raw, err := r.caller.Call(

@@ -4,7 +4,7 @@ package invoices
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateInvoiceRequest,
+	request *square.CreateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateInvoiceResponse], error) {
+) (*core.Response[*square.CreateInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/invoices"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateInvoiceResponse
+	var response *square.CreateInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateInvoiceResponse]{
+	return &core.Response[*square.CreateInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Search(
 	ctx context.Context,
-	request *v2.SearchInvoicesRequest,
+	request *square.SearchInvoicesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchInvoicesResponse], error) {
+) (*core.Response[*square.SearchInvoicesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) Search(
 	)
 	endpointURL := baseURL + "/v2/invoices/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchInvoicesResponse
+	var response *square.SearchInvoicesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) Search(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchInvoicesResponse]{
+	return &core.Response[*square.SearchInvoicesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) Search(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetInvoicesRequest,
+	request *square.GetInvoicesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetInvoiceResponse], error) {
+) (*core.Response[*square.GetInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -130,10 +130,10 @@ func (r *RawClient) Get(
 		request.InvoiceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetInvoiceResponse
+	var response *square.GetInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -150,7 +150,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetInvoiceResponse]{
+	return &core.Response[*square.GetInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,9 +159,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateInvoiceRequest,
+	request *square.UpdateInvoiceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateInvoiceResponse], error) {
+) (*core.Response[*square.UpdateInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -173,11 +173,11 @@ func (r *RawClient) Update(
 		request.InvoiceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateInvoiceResponse
+	var response *square.UpdateInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -195,7 +195,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateInvoiceResponse]{
+	return &core.Response[*square.UpdateInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -204,9 +204,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Delete(
 	ctx context.Context,
-	request *v2.DeleteInvoicesRequest,
+	request *square.DeleteInvoicesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteInvoiceResponse], error) {
+) (*core.Response[*square.DeleteInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -225,10 +225,10 @@ func (r *RawClient) Delete(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteInvoiceResponse
+	var response *square.DeleteInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -245,7 +245,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteInvoiceResponse]{
+	return &core.Response[*square.DeleteInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -254,9 +254,9 @@ func (r *RawClient) Delete(
 
 func (r *RawClient) CreateInvoiceAttachment(
 	ctx context.Context,
-	request *v2.CreateInvoiceAttachmentRequest,
+	request *square.CreateInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateInvoiceAttachmentResponse], error) {
+) (*core.Response[*square.CreateInvoiceAttachmentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -268,7 +268,7 @@ func (r *RawClient) CreateInvoiceAttachment(
 		request.InvoiceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	writer := internal.NewMultipartWriter()
@@ -285,7 +285,7 @@ func (r *RawClient) CreateInvoiceAttachment(
 	}
 	headers.Set("Content-Type", writer.ContentType())
 
-	var response *v2.CreateInvoiceAttachmentResponse
+	var response *square.CreateInvoiceAttachmentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -303,7 +303,7 @@ func (r *RawClient) CreateInvoiceAttachment(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateInvoiceAttachmentResponse]{
+	return &core.Response[*square.CreateInvoiceAttachmentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -312,9 +312,9 @@ func (r *RawClient) CreateInvoiceAttachment(
 
 func (r *RawClient) DeleteInvoiceAttachment(
 	ctx context.Context,
-	request *v2.DeleteInvoiceAttachmentRequest,
+	request *square.DeleteInvoiceAttachmentRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteInvoiceAttachmentResponse], error) {
+) (*core.Response[*square.DeleteInvoiceAttachmentResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -327,10 +327,10 @@ func (r *RawClient) DeleteInvoiceAttachment(
 		request.AttachmentID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteInvoiceAttachmentResponse
+	var response *square.DeleteInvoiceAttachmentResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -347,7 +347,7 @@ func (r *RawClient) DeleteInvoiceAttachment(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteInvoiceAttachmentResponse]{
+	return &core.Response[*square.DeleteInvoiceAttachmentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -356,9 +356,9 @@ func (r *RawClient) DeleteInvoiceAttachment(
 
 func (r *RawClient) Cancel(
 	ctx context.Context,
-	request *v2.CancelInvoiceRequest,
+	request *square.CancelInvoiceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelInvoiceResponse], error) {
+) (*core.Response[*square.CancelInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -370,11 +370,11 @@ func (r *RawClient) Cancel(
 		request.InvoiceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CancelInvoiceResponse
+	var response *square.CancelInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -392,7 +392,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelInvoiceResponse]{
+	return &core.Response[*square.CancelInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -401,9 +401,9 @@ func (r *RawClient) Cancel(
 
 func (r *RawClient) Publish(
 	ctx context.Context,
-	request *v2.PublishInvoiceRequest,
+	request *square.PublishInvoiceRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.PublishInvoiceResponse], error) {
+) (*core.Response[*square.PublishInvoiceResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -415,11 +415,11 @@ func (r *RawClient) Publish(
 		request.InvoiceID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.PublishInvoiceResponse
+	var response *square.PublishInvoiceResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -437,7 +437,7 @@ func (r *RawClient) Publish(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.PublishInvoiceResponse]{
+	return &core.Response[*square.PublishInvoiceResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

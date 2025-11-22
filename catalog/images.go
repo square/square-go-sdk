@@ -5,16 +5,48 @@ package catalog
 import (
 	v2 "github.com/square/square-go-sdk/v2"
 	io "io"
+	big "math/big"
 )
 
 type CreateImagesRequest struct {
 	ImageFile io.Reader                     `json:"-" url:"-"`
 	Request   *v2.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateImagesRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+var (
+	updateImagesRequestFieldImageID = big.NewInt(1 << 0)
+)
 
 type UpdateImagesRequest struct {
 	// The ID of the `CatalogImage` object to update the encapsulated image file.
 	ImageID   string                        `json:"-" url:"-"`
 	ImageFile io.Reader                     `json:"-" url:"-"`
 	Request   *v2.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateImagesRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetImageID sets the ImageID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateImagesRequest) SetImageID(imageID string) {
+	u.ImageID = imageID
+	u.require(updateImagesRequestFieldImageID)
 }

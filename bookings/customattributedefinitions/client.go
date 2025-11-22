@@ -4,7 +4,7 @@ package customattributedefinitions
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	bookings "github.com/square/square-go-sdk/v2/bookings"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -16,13 +16,12 @@ import (
 type Client struct {
 	WithRawResponse *RawClient
 
+	options *core.RequestOptions
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
 }
 
-func NewClient(opts ...option.RequestOption) *Client {
-	options := core.NewRequestOptions(opts...)
+func NewClient(options *core.RequestOptions) *Client {
 	if options.Token == "" {
 		options.Token = os.Getenv("SQUARE_TOKEN")
 	}
@@ -31,6 +30,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 	return &Client{
 		WithRawResponse: NewRawClient(options),
+		options:         options,
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -38,7 +38,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -50,7 +49,7 @@ func (c *Client) List(
 	ctx context.Context,
 	request *bookings.ListCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*core.Page[*v2.CustomAttributeDefinition], error) {
+) (*core.Page[*string, *square.CustomAttributeDefinition, *square.ListBookingCustomAttributeDefinitionsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -63,10 +62,10 @@ func (c *Client) List(
 		return nil, err
 	}
 	headers := internal.MergeHeaders(
-		c.header.Clone(),
+		c.options.ToHeader(),
 		options.ToHeader(),
 	)
-	prepareCall := func(pageRequest *internal.PageRequest[*string]) *internal.CallParams {
+	prepareCall := func(pageRequest *core.PageRequest[*string]) *internal.CallParams {
 		if pageRequest.Cursor != nil {
 			queryParams.Set("cursor", *pageRequest.Cursor)
 		}
@@ -85,14 +84,15 @@ func (c *Client) List(
 			Response:        pageRequest.Response,
 		}
 	}
-	readPageResponse := func(response *v2.ListBookingCustomAttributeDefinitionsResponse) *internal.PageResponse[*string, *v2.CustomAttributeDefinition] {
+	readPageResponse := func(response *square.ListBookingCustomAttributeDefinitionsResponse) *core.PageResponse[*string, *square.CustomAttributeDefinition, *square.ListBookingCustomAttributeDefinitionsResponse] {
 		var zeroValue *string
 		next := response.GetCursor()
 		results := response.GetCustomAttributeDefinitions()
-		return &internal.PageResponse[*string, *v2.CustomAttributeDefinition]{
-			Next:    next,
-			Results: results,
-			Done:    next == zeroValue,
+		return &core.PageResponse[*string, *square.CustomAttributeDefinition, *square.ListBookingCustomAttributeDefinitionsResponse]{
+			Results:  results,
+			Response: response,
+			Next:     next,
+			Done:     next == zeroValue,
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -114,7 +114,7 @@ func (c *Client) Create(
 	ctx context.Context,
 	request *bookings.CreateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*v2.CreateBookingCustomAttributeDefinitionResponse, error) {
+) (*square.CreateBookingCustomAttributeDefinitionResponse, error) {
 	response, err := c.WithRawResponse.Create(
 		ctx,
 		request,
@@ -134,7 +134,7 @@ func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.GetCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*v2.RetrieveBookingCustomAttributeDefinitionResponse, error) {
+) (*square.RetrieveBookingCustomAttributeDefinitionResponse, error) {
 	response, err := c.WithRawResponse.Get(
 		ctx,
 		request,
@@ -157,7 +157,7 @@ func (c *Client) Update(
 	ctx context.Context,
 	request *bookings.UpdateBookingCustomAttributeDefinitionRequest,
 	opts ...option.RequestOption,
-) (*v2.UpdateBookingCustomAttributeDefinitionResponse, error) {
+) (*square.UpdateBookingCustomAttributeDefinitionResponse, error) {
 	response, err := c.WithRawResponse.Update(
 		ctx,
 		request,
@@ -180,7 +180,7 @@ func (c *Client) Delete(
 	ctx context.Context,
 	request *bookings.DeleteCustomAttributeDefinitionsRequest,
 	opts ...option.RequestOption,
-) (*v2.DeleteBookingCustomAttributeDefinitionResponse, error) {
+) (*square.DeleteBookingCustomAttributeDefinitionResponse, error) {
 	response, err := c.WithRawResponse.Delete(
 		ctx,
 		request,

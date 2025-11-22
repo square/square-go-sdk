@@ -4,7 +4,7 @@ package customattributes
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	bookings "github.com/square/square-go-sdk/v2/bookings"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
@@ -15,11 +15,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -27,7 +28,6 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *RawClient) BatchDelete(
 	ctx context.Context,
 	request *bookings.BulkDeleteBookingCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkDeleteBookingCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkDeleteBookingCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -44,11 +44,11 @@ func (r *RawClient) BatchDelete(
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-delete"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkDeleteBookingCustomAttributesResponse
+	var response *square.BulkDeleteBookingCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -66,7 +66,7 @@ func (r *RawClient) BatchDelete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkDeleteBookingCustomAttributesResponse]{
+	return &core.Response[*square.BulkDeleteBookingCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -77,7 +77,7 @@ func (r *RawClient) BatchUpsert(
 	ctx context.Context,
 	request *bookings.BulkUpsertBookingCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkUpsertBookingCustomAttributesResponse], error) {
+) (*core.Response[*square.BulkUpsertBookingCustomAttributesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -86,11 +86,11 @@ func (r *RawClient) BatchUpsert(
 	)
 	endpointURL := baseURL + "/v2/bookings/custom-attributes/bulk-upsert"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkUpsertBookingCustomAttributesResponse
+	var response *square.BulkUpsertBookingCustomAttributesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) BatchUpsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkUpsertBookingCustomAttributesResponse]{
+	return &core.Response[*square.BulkUpsertBookingCustomAttributesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -119,7 +119,7 @@ func (r *RawClient) Get(
 	ctx context.Context,
 	request *bookings.GetCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveBookingCustomAttributeResponse], error) {
+) (*core.Response[*square.RetrieveBookingCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -139,10 +139,10 @@ func (r *RawClient) Get(
 		endpointURL += "?" + queryParams.Encode()
 	}
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveBookingCustomAttributeResponse
+	var response *square.RetrieveBookingCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -159,7 +159,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveBookingCustomAttributeResponse]{
+	return &core.Response[*square.RetrieveBookingCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -170,7 +170,7 @@ func (r *RawClient) Upsert(
 	ctx context.Context,
 	request *bookings.UpsertBookingCustomAttributeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpsertBookingCustomAttributeResponse], error) {
+) (*core.Response[*square.UpsertBookingCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -183,11 +183,11 @@ func (r *RawClient) Upsert(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpsertBookingCustomAttributeResponse
+	var response *square.UpsertBookingCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -205,7 +205,7 @@ func (r *RawClient) Upsert(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpsertBookingCustomAttributeResponse]{
+	return &core.Response[*square.UpsertBookingCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -216,7 +216,7 @@ func (r *RawClient) Delete(
 	ctx context.Context,
 	request *bookings.DeleteCustomAttributesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.DeleteBookingCustomAttributeResponse], error) {
+) (*core.Response[*square.DeleteBookingCustomAttributeResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -229,10 +229,10 @@ func (r *RawClient) Delete(
 		request.Key,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.DeleteBookingCustomAttributeResponse
+	var response *square.DeleteBookingCustomAttributeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -249,7 +249,7 @@ func (r *RawClient) Delete(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.DeleteBookingCustomAttributeResponse]{
+	return &core.Response[*square.DeleteBookingCustomAttributeResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

@@ -4,7 +4,7 @@ package channels
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) BulkRetrieve(
 	ctx context.Context,
-	request *v2.BulkRetrieveChannelsRequest,
+	request *square.BulkRetrieveChannelsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkRetrieveChannelsResponse], error) {
+) (*core.Response[*square.BulkRetrieveChannelsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) BulkRetrieve(
 	)
 	endpointURL := baseURL + "/v2/channels/bulk-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkRetrieveChannelsResponse
+	var response *square.BulkRetrieveChannelsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) BulkRetrieve(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkRetrieveChannelsResponse]{
+	return &core.Response[*square.BulkRetrieveChannelsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) BulkRetrieve(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetChannelsRequest,
+	request *square.GetChannelsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveChannelResponse], error) {
+) (*core.Response[*square.RetrieveChannelResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -88,10 +88,10 @@ func (r *RawClient) Get(
 		request.ChannelID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveChannelResponse
+	var response *square.RetrieveChannelResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -108,7 +108,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveChannelResponse]{
+	return &core.Response[*square.RetrieveChannelResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

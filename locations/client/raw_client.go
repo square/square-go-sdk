@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,14 +27,13 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.ListLocationsResponse], error) {
+) (*core.Response[*square.ListLocationsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -42,10 +42,10 @@ func (r *RawClient) List(
 	)
 	endpointURL := baseURL + "/v2/locations"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.ListLocationsResponse
+	var response *square.ListLocationsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -62,7 +62,7 @@ func (r *RawClient) List(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.ListLocationsResponse]{
+	return &core.Response[*square.ListLocationsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -71,9 +71,9 @@ func (r *RawClient) List(
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateLocationRequest,
+	request *square.CreateLocationRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateLocationResponse], error) {
+) (*core.Response[*square.CreateLocationResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -82,11 +82,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/locations"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateLocationResponse
+	var response *square.CreateLocationResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -104,7 +104,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateLocationResponse]{
+	return &core.Response[*square.CreateLocationResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -113,9 +113,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetLocationsRequest,
+	request *square.GetLocationsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetLocationResponse], error) {
+) (*core.Response[*square.GetLocationResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,10 +127,10 @@ func (r *RawClient) Get(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetLocationResponse
+	var response *square.GetLocationResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -147,7 +147,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetLocationResponse]{
+	return &core.Response[*square.GetLocationResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -156,9 +156,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateLocationRequest,
+	request *square.UpdateLocationRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateLocationResponse], error) {
+) (*core.Response[*square.UpdateLocationResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -170,11 +170,11 @@ func (r *RawClient) Update(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateLocationResponse
+	var response *square.UpdateLocationResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -192,7 +192,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateLocationResponse]{
+	return &core.Response[*square.UpdateLocationResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -201,9 +201,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Checkouts(
 	ctx context.Context,
-	request *v2.CreateCheckoutRequest,
+	request *square.CreateCheckoutRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateCheckoutResponse], error) {
+) (*core.Response[*square.CreateCheckoutResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -215,11 +215,11 @@ func (r *RawClient) Checkouts(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateCheckoutResponse
+	var response *square.CreateCheckoutResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -237,7 +237,7 @@ func (r *RawClient) Checkouts(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateCheckoutResponse]{
+	return &core.Response[*square.CreateCheckoutResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

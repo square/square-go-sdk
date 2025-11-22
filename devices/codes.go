@@ -4,6 +4,12 @@ package devices
 
 import (
 	v2 "github.com/square/square-go-sdk/v2"
+	big "math/big"
+)
+
+var (
+	createDeviceCodeRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createDeviceCodeRequestFieldDeviceCode     = big.NewInt(1 << 1)
 )
 
 type CreateDeviceCodeRequest struct {
@@ -14,12 +20,64 @@ type CreateDeviceCodeRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The device code to create.
 	DeviceCode *v2.DeviceCode `json:"device_code,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (c *CreateDeviceCodeRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDeviceCodeRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createDeviceCodeRequestFieldIdempotencyKey)
+}
+
+// SetDeviceCode sets the DeviceCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateDeviceCodeRequest) SetDeviceCode(deviceCode *v2.DeviceCode) {
+	c.DeviceCode = deviceCode
+	c.require(createDeviceCodeRequestFieldDeviceCode)
+}
+
+var (
+	getCodesRequestFieldID = big.NewInt(1 << 0)
+)
 
 type GetCodesRequest struct {
 	// The unique identifier for the device code.
 	ID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
 }
+
+func (g *GetCodesRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetCodesRequest) SetID(id string) {
+	g.ID = id
+	g.require(getCodesRequestFieldID)
+}
+
+var (
+	listCodesRequestFieldCursor      = big.NewInt(1 << 0)
+	listCodesRequestFieldLocationID  = big.NewInt(1 << 1)
+	listCodesRequestFieldProductType = big.NewInt(1 << 2)
+	listCodesRequestFieldStatus      = big.NewInt(1 << 3)
+)
 
 type ListCodesRequest struct {
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -36,4 +94,42 @@ type ListCodesRequest struct {
 	// If specified, returns DeviceCodes with the specified statuses.
 	// Returns DeviceCodes of status `PAIRED` and `UNPAIRED` if empty.
 	Status *v2.DeviceCodeStatus `json:"-" url:"status,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListCodesRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetCursor sets the Cursor field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCodesRequest) SetCursor(cursor *string) {
+	l.Cursor = cursor
+	l.require(listCodesRequestFieldCursor)
+}
+
+// SetLocationID sets the LocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCodesRequest) SetLocationID(locationID *string) {
+	l.LocationID = locationID
+	l.require(listCodesRequestFieldLocationID)
+}
+
+// SetProductType sets the ProductType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCodesRequest) SetProductType(productType *v2.ProductType) {
+	l.ProductType = productType
+	l.require(listCodesRequestFieldProductType)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListCodesRequest) SetStatus(status *v2.DeviceCodeStatus) {
+	l.Status = status
+	l.require(listCodesRequestFieldStatus)
 }

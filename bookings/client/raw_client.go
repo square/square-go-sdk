@@ -4,7 +4,7 @@ package client
 
 import (
 	context "context"
-	v2 "github.com/square/square-go-sdk/v2"
+	square "github.com/square/square-go-sdk/v2"
 	core "github.com/square/square-go-sdk/v2/core"
 	internal "github.com/square/square-go-sdk/v2/internal"
 	option "github.com/square/square-go-sdk/v2/option"
@@ -14,11 +14,12 @@ import (
 type RawClient struct {
 	baseURL string
 	caller  *internal.Caller
-	header  http.Header
+	options *core.RequestOptions
 }
 
 func NewRawClient(options *core.RequestOptions) *RawClient {
 	return &RawClient{
+		options: options,
 		baseURL: options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
@@ -26,15 +27,14 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header: options.ToHeader(),
 	}
 }
 
 func (r *RawClient) Create(
 	ctx context.Context,
-	request *v2.CreateBookingRequest,
+	request *square.CreateBookingRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CreateBookingResponse], error) {
+) (*core.Response[*square.CreateBookingResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -43,11 +43,11 @@ func (r *RawClient) Create(
 	)
 	endpointURL := baseURL + "/v2/bookings"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CreateBookingResponse
+	var response *square.CreateBookingResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -65,7 +65,7 @@ func (r *RawClient) Create(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CreateBookingResponse]{
+	return &core.Response[*square.CreateBookingResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -74,9 +74,9 @@ func (r *RawClient) Create(
 
 func (r *RawClient) SearchAvailability(
 	ctx context.Context,
-	request *v2.SearchAvailabilityRequest,
+	request *square.SearchAvailabilityRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.SearchAvailabilityResponse], error) {
+) (*core.Response[*square.SearchAvailabilityResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -85,11 +85,11 @@ func (r *RawClient) SearchAvailability(
 	)
 	endpointURL := baseURL + "/v2/bookings/availability/search"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.SearchAvailabilityResponse
+	var response *square.SearchAvailabilityResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -107,7 +107,7 @@ func (r *RawClient) SearchAvailability(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.SearchAvailabilityResponse]{
+	return &core.Response[*square.SearchAvailabilityResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -116,9 +116,9 @@ func (r *RawClient) SearchAvailability(
 
 func (r *RawClient) BulkRetrieveBookings(
 	ctx context.Context,
-	request *v2.BulkRetrieveBookingsRequest,
+	request *square.BulkRetrieveBookingsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkRetrieveBookingsResponse], error) {
+) (*core.Response[*square.BulkRetrieveBookingsResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -127,11 +127,11 @@ func (r *RawClient) BulkRetrieveBookings(
 	)
 	endpointURL := baseURL + "/v2/bookings/bulk-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkRetrieveBookingsResponse
+	var response *square.BulkRetrieveBookingsResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -149,7 +149,7 @@ func (r *RawClient) BulkRetrieveBookings(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkRetrieveBookingsResponse]{
+	return &core.Response[*square.BulkRetrieveBookingsResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -159,7 +159,7 @@ func (r *RawClient) BulkRetrieveBookings(
 func (r *RawClient) GetBusinessProfile(
 	ctx context.Context,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetBusinessBookingProfileResponse], error) {
+) (*core.Response[*square.GetBusinessBookingProfileResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -168,10 +168,10 @@ func (r *RawClient) GetBusinessProfile(
 	)
 	endpointURL := baseURL + "/v2/bookings/business-booking-profile"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetBusinessBookingProfileResponse
+	var response *square.GetBusinessBookingProfileResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -188,7 +188,7 @@ func (r *RawClient) GetBusinessProfile(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetBusinessBookingProfileResponse]{
+	return &core.Response[*square.GetBusinessBookingProfileResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -197,9 +197,9 @@ func (r *RawClient) GetBusinessProfile(
 
 func (r *RawClient) RetrieveLocationBookingProfile(
 	ctx context.Context,
-	request *v2.RetrieveLocationBookingProfileRequest,
+	request *square.RetrieveLocationBookingProfileRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.RetrieveLocationBookingProfileResponse], error) {
+) (*core.Response[*square.RetrieveLocationBookingProfileResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -211,10 +211,10 @@ func (r *RawClient) RetrieveLocationBookingProfile(
 		request.LocationID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.RetrieveLocationBookingProfileResponse
+	var response *square.RetrieveLocationBookingProfileResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -231,7 +231,7 @@ func (r *RawClient) RetrieveLocationBookingProfile(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.RetrieveLocationBookingProfileResponse]{
+	return &core.Response[*square.RetrieveLocationBookingProfileResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -240,9 +240,9 @@ func (r *RawClient) RetrieveLocationBookingProfile(
 
 func (r *RawClient) BulkRetrieveTeamMemberBookingProfiles(
 	ctx context.Context,
-	request *v2.BulkRetrieveTeamMemberBookingProfilesRequest,
+	request *square.BulkRetrieveTeamMemberBookingProfilesRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.BulkRetrieveTeamMemberBookingProfilesResponse], error) {
+) (*core.Response[*square.BulkRetrieveTeamMemberBookingProfilesResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -251,11 +251,11 @@ func (r *RawClient) BulkRetrieveTeamMemberBookingProfiles(
 	)
 	endpointURL := baseURL + "/v2/bookings/team-member-booking-profiles/bulk-retrieve"
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.BulkRetrieveTeamMemberBookingProfilesResponse
+	var response *square.BulkRetrieveTeamMemberBookingProfilesResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -273,7 +273,7 @@ func (r *RawClient) BulkRetrieveTeamMemberBookingProfiles(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.BulkRetrieveTeamMemberBookingProfilesResponse]{
+	return &core.Response[*square.BulkRetrieveTeamMemberBookingProfilesResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -282,9 +282,9 @@ func (r *RawClient) BulkRetrieveTeamMemberBookingProfiles(
 
 func (r *RawClient) Get(
 	ctx context.Context,
-	request *v2.GetBookingsRequest,
+	request *square.GetBookingsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.GetBookingResponse], error) {
+) (*core.Response[*square.GetBookingResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -296,10 +296,10 @@ func (r *RawClient) Get(
 		request.BookingID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *v2.GetBookingResponse
+	var response *square.GetBookingResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -316,7 +316,7 @@ func (r *RawClient) Get(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.GetBookingResponse]{
+	return &core.Response[*square.GetBookingResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -325,9 +325,9 @@ func (r *RawClient) Get(
 
 func (r *RawClient) Update(
 	ctx context.Context,
-	request *v2.UpdateBookingRequest,
+	request *square.UpdateBookingRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.UpdateBookingResponse], error) {
+) (*core.Response[*square.UpdateBookingResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -339,11 +339,11 @@ func (r *RawClient) Update(
 		request.BookingID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.UpdateBookingResponse
+	var response *square.UpdateBookingResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -361,7 +361,7 @@ func (r *RawClient) Update(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.UpdateBookingResponse]{
+	return &core.Response[*square.UpdateBookingResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -370,9 +370,9 @@ func (r *RawClient) Update(
 
 func (r *RawClient) Cancel(
 	ctx context.Context,
-	request *v2.CancelBookingRequest,
+	request *square.CancelBookingRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*v2.CancelBookingResponse], error) {
+) (*core.Response[*square.CancelBookingResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -384,11 +384,11 @@ func (r *RawClient) Cancel(
 		request.BookingID,
 	)
 	headers := internal.MergeHeaders(
-		r.header.Clone(),
+		r.options.ToHeader(),
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *v2.CancelBookingResponse
+	var response *square.CancelBookingResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -406,7 +406,7 @@ func (r *RawClient) Cancel(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*v2.CancelBookingResponse]{
+	return &core.Response[*square.CancelBookingResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
