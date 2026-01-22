@@ -4,10 +4,10 @@ package bankaccounts
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )
@@ -99,6 +99,23 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
+// Store a bank account on file for a square account
+func (c *Client) CreateBankAccount(
+	ctx context.Context,
+	request *square.CreateBankAccountRequest,
+	opts ...option.RequestOption,
+) (*square.CreateBankAccountResponse, error) {
+	response, err := c.WithRawResponse.CreateBankAccount(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
 // Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
 func (c *Client) GetByV1ID(
 	ctx context.Context,
@@ -116,14 +133,30 @@ func (c *Client) GetByV1ID(
 	return response.Body, nil
 }
 
-// Returns details of a [BankAccount](entity:BankAccount)
-// linked to a Square account.
+// Retrieve details of a [BankAccount](entity:BankAccount) bank account linked to a Square account.
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetBankAccountsRequest,
 	opts ...option.RequestOption,
 ) (*square.GetBankAccountResponse, error) {
 	response, err := c.WithRawResponse.Get(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Disable a bank account.
+func (c *Client) DisableBankAccount(
+	ctx context.Context,
+	request *square.DisableBankAccountRequest,
+	opts ...option.RequestOption,
+) (*square.DisableBankAccountResponse, error) {
+	response, err := c.WithRawResponse.DisableBankAccount(
 		ctx,
 		request,
 		opts...,

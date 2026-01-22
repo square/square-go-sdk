@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/square/square-go-sdk/v2/core"
+	"github.com/square/square-go-sdk/v3/core"
 )
 
 // ErrorCodes maps HTTP status codes to error constructors.

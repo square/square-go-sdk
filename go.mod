@@ -1,4 +1,4 @@
-module github.com/square/square-go-sdk/v2
+module github.com/square/square-go-sdk/v3
 
 go 1.21
 

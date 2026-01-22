@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/square/square-go-sdk/v2/core"
+	"github.com/square/square-go-sdk/v3/core"
 )
 
 type TestPageResponse struct {

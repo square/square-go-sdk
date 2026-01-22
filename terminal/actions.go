@@ -3,7 +3,7 @@
 package terminal
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -46,7 +46,7 @@ type CreateTerminalActionRequest struct {
 	// information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
-	Action *v2.TerminalAction `json:"action,omitempty" url:"-"`
+	Action *v3.TerminalAction `json:"action,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -68,7 +68,7 @@ func (c *CreateTerminalActionRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetAction sets the Action field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateTerminalActionRequest) SetAction(action *v2.TerminalAction) {
+func (c *CreateTerminalActionRequest) SetAction(action *v3.TerminalAction) {
 	c.Action = action
 	c.require(createTerminalActionRequestFieldAction)
 }
@@ -108,7 +108,7 @@ var (
 type SearchTerminalActionsRequest struct {
 	// Queries terminal actions based on given conditions and sort order.
 	// Leaving this unset will return all actions with the default sort order.
-	Query *v2.TerminalActionQuery `json:"query,omitempty" url:"-"`
+	Query *v3.TerminalActionQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more
@@ -130,7 +130,7 @@ func (s *SearchTerminalActionsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchTerminalActionsRequest) SetQuery(query *v2.TerminalActionQuery) {
+func (s *SearchTerminalActionsRequest) SetQuery(query *v3.TerminalActionQuery) {
 	s.Query = query
 	s.require(searchTerminalActionsRequestFieldQuery)
 }

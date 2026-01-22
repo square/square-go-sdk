@@ -4,11 +4,11 @@ package subscriptions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
-	webhooks "github.com/square/square-go-sdk/v2/webhooks"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
+	webhooks "github.com/square/square-go-sdk/v3/webhooks"
 	http "net/http"
 )
 

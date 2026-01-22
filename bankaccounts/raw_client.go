@@ -4,10 +4,10 @@ package bankaccounts
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 )
 
@@ -28,6 +28,48 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 			},
 		),
 	}
+}
+
+func (r *RawClient) CreateBankAccount(
+	ctx context.Context,
+	request *square.CreateBankAccountRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.CreateBankAccountResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/bank-accounts"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.CreateBankAccountResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.CreateBankAccountResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
 }
 
 func (r *RawClient) GetByV1ID(
@@ -110,6 +152,49 @@ func (r *RawClient) Get(
 		return nil, err
 	}
 	return &core.Response[*square.GetBankAccountResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) DisableBankAccount(
+	ctx context.Context,
+	request *square.DisableBankAccountRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.DisableBankAccountResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := internal.EncodeURL(
+		baseURL+"/v2/bank-accounts/%v/disable",
+		request.BankAccountID,
+	)
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	var response *square.DisableBankAccountResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.DisableBankAccountResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

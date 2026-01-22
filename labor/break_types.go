@@ -3,7 +3,7 @@
 package labor
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -16,7 +16,7 @@ type CreateBreakTypeRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `BreakType` to be created.
-	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v3.BreakType `json:"break_type,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -38,7 +38,7 @@ func (c *CreateBreakTypeRequest) SetIdempotencyKey(idempotencyKey *string) {
 
 // SetBreakType sets the BreakType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateBreakTypeRequest) SetBreakType(breakType *v2.BreakType) {
+func (c *CreateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
 	c.BreakType = breakType
 	c.require(createBreakTypeRequestFieldBreakType)
 }
@@ -152,7 +152,7 @@ type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
-	BreakType *v2.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v3.BreakType `json:"break_type,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -174,7 +174,7 @@ func (u *UpdateBreakTypeRequest) SetID(id string) {
 
 // SetBreakType sets the BreakType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v2.BreakType) {
+func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
 	u.BreakType = breakType
 	u.require(updateBreakTypeRequestFieldBreakType)
 }

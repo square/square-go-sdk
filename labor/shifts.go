@@ -3,7 +3,7 @@
 package labor
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -16,7 +16,7 @@ type CreateShiftRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Shift` to be created.
-	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v3.Shift `json:"shift,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -38,7 +38,7 @@ func (c *CreateShiftRequest) SetIdempotencyKey(idempotencyKey *string) {
 
 // SetShift sets the Shift field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateShiftRequest) SetShift(shift *v2.Shift) {
+func (c *CreateShiftRequest) SetShift(shift *v3.Shift) {
 	c.Shift = shift
 	c.require(createShiftRequestFieldShift)
 }
@@ -103,7 +103,7 @@ var (
 
 type SearchShiftsRequest struct {
 	// Query filters.
-	Query *v2.ShiftQuery `json:"query,omitempty" url:"-"`
+	Query *v3.ShiftQuery `json:"query,omitempty" url:"-"`
 	// The number of resources in a page (200 by default).
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// An opaque cursor for fetching the next page.
@@ -122,7 +122,7 @@ func (s *SearchShiftsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchShiftsRequest) SetQuery(query *v2.ShiftQuery) {
+func (s *SearchShiftsRequest) SetQuery(query *v3.ShiftQuery) {
 	s.Query = query
 	s.require(searchShiftsRequestFieldQuery)
 }
@@ -150,7 +150,7 @@ type UpdateShiftRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Shift` object.
-	Shift *v2.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v3.Shift `json:"shift,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -172,7 +172,7 @@ func (u *UpdateShiftRequest) SetID(id string) {
 
 // SetShift sets the Shift field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateShiftRequest) SetShift(shift *v2.Shift) {
+func (u *UpdateShiftRequest) SetShift(shift *v3.Shift) {
 	u.Shift = shift
 	u.require(updateShiftRequestFieldShift)
 }

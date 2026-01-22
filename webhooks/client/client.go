@@ -3,10 +3,10 @@
 package client
 
 import (
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	eventtypes "github.com/square/square-go-sdk/v2/webhooks/eventtypes"
-	subscriptions "github.com/square/square-go-sdk/v2/webhooks/subscriptions"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	eventtypes "github.com/square/square-go-sdk/v3/webhooks/eventtypes"
+	subscriptions "github.com/square/square-go-sdk/v3/webhooks/subscriptions"
 	os "os"
 )
 

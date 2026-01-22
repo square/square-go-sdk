@@ -3,7 +3,7 @@
 package option
 
 import (
-	core "github.com/square/square-go-sdk/v2/core"
+	core "github.com/square/square-go-sdk/v3/core"
 	http "net/http"
 	url "net/url"
 )

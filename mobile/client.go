@@ -4,10 +4,9 @@ package mobile
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	os "os"
 )
 
@@ -39,33 +38,16 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
-// __Note:__ This endpoint is used by the deprecated Reader SDK.
-// Developers should update their integration to use the [Mobile Payments SDK](https://developer.squareup.com/docs/mobile-payments-sdk), which includes its own authorization methods.
-//
-// Generates code to authorize a mobile application to connect to a Square card reader.
-//
-// Authorization codes are one-time-use codes and expire 60 minutes after being issued.
-//
-// The `Authorization` header you provide to this endpoint must have the following format:
-//
-// ```
-// Authorization: Bearer ACCESS_TOKEN
-// ```
-//
-// Replace `ACCESS_TOKEN` with a
-// [valid production authorization credential](https://developer.squareup.com/docs/build-basics/access-tokens).
 func (c *Client) AuthorizationCode(
 	ctx context.Context,
-	request *square.CreateMobileAuthorizationCodeRequest,
 	opts ...option.RequestOption,
-) (*square.CreateMobileAuthorizationCodeResponse, error) {
-	response, err := c.WithRawResponse.AuthorizationCode(
+) error {
+	_, err := c.WithRawResponse.AuthorizationCode(
 		ctx,
-		request,
 		opts...,
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return response.Body, nil
+	return nil
 }

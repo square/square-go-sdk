@@ -4,11 +4,11 @@ package customattributedefinitions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	bookings "github.com/square/square-go-sdk/v2/bookings"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	bookings "github.com/square/square-go-sdk/v3/bookings"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )

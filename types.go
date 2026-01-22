@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -7775,11 +7775,13 @@ var (
 	cardFieldCardType       = big.NewInt(1 << 12)
 	cardFieldPrepaidType    = big.NewInt(1 << 13)
 	cardFieldBin            = big.NewInt(1 << 14)
-	cardFieldVersion        = big.NewInt(1 << 15)
-	cardFieldCardCoBrand    = big.NewInt(1 << 16)
-	cardFieldIssuerAlert    = big.NewInt(1 << 17)
-	cardFieldIssuerAlertAt  = big.NewInt(1 << 18)
-	cardFieldHsaFsa         = big.NewInt(1 << 19)
+	cardFieldCreatedAt      = big.NewInt(1 << 15)
+	cardFieldDisabledAt     = big.NewInt(1 << 16)
+	cardFieldVersion        = big.NewInt(1 << 17)
+	cardFieldCardCoBrand    = big.NewInt(1 << 18)
+	cardFieldIssuerAlert    = big.NewInt(1 << 19)
+	cardFieldIssuerAlertAt  = big.NewInt(1 << 20)
+	cardFieldHsaFsa         = big.NewInt(1 << 21)
 )
 
 type Card struct {
@@ -7824,6 +7826,10 @@ type Card struct {
 	// The first six digits of the card number, known as the Bank Identification Number (BIN). Only the Payments API
 	// returns this field.
 	Bin *string `json:"bin,omitempty" url:"bin,omitempty"`
+	// Timestamp for when the card object was created on Square’s servers. In RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// Timestamp for when the card object was disabled on Square’s servers. In RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
+	DisabledAt *string `json:"disabled_at,omitempty" url:"disabled_at,omitempty"`
 	// Current version number of the card. Increments with each card update. Requests to update an
 	// existing Card object will be rejected unless the version in the request matches the current
 	// version for the Card.
@@ -7958,6 +7964,20 @@ func (c *Card) GetBin() *string {
 		return nil
 	}
 	return c.Bin
+}
+
+func (c *Card) GetCreatedAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CreatedAt
+}
+
+func (c *Card) GetDisabledAt() *string {
+	if c == nil {
+		return nil
+	}
+	return c.DisabledAt
 }
 
 func (c *Card) GetVersion() *int64 {
@@ -8102,6 +8122,20 @@ func (c *Card) SetPrepaidType(prepaidType *CardPrepaidType) {
 func (c *Card) SetBin(bin *string) {
 	c.Bin = bin
 	c.require(cardFieldBin)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Card) SetCreatedAt(createdAt *string) {
+	c.CreatedAt = createdAt
+	c.require(cardFieldCreatedAt)
+}
+
+// SetDisabledAt sets the DisabledAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *Card) SetDisabledAt(disabledAt *string) {
+	c.DisabledAt = disabledAt
+	c.require(cardFieldDisabledAt)
 }
 
 // SetVersion sets the Version field and marks it as non-optional;
@@ -13229,25 +13263,27 @@ var (
 	catalogItemFieldLabelColor             = big.NewInt(1 << 3)
 	catalogItemFieldIsTaxable              = big.NewInt(1 << 4)
 	catalogItemFieldCategoryID             = big.NewInt(1 << 5)
-	catalogItemFieldTaxIDs                 = big.NewInt(1 << 6)
-	catalogItemFieldModifierListInfo       = big.NewInt(1 << 7)
-	catalogItemFieldVariations             = big.NewInt(1 << 8)
-	catalogItemFieldProductType            = big.NewInt(1 << 9)
-	catalogItemFieldSkipModifierScreen     = big.NewInt(1 << 10)
-	catalogItemFieldItemOptions            = big.NewInt(1 << 11)
-	catalogItemFieldEcomURI                = big.NewInt(1 << 12)
-	catalogItemFieldEcomImageURIs          = big.NewInt(1 << 13)
-	catalogItemFieldImageIDs               = big.NewInt(1 << 14)
-	catalogItemFieldSortName               = big.NewInt(1 << 15)
-	catalogItemFieldCategories             = big.NewInt(1 << 16)
-	catalogItemFieldDescriptionHTML        = big.NewInt(1 << 17)
-	catalogItemFieldDescriptionPlaintext   = big.NewInt(1 << 18)
-	catalogItemFieldChannels               = big.NewInt(1 << 19)
-	catalogItemFieldIsArchived             = big.NewInt(1 << 20)
-	catalogItemFieldEcomSeoData            = big.NewInt(1 << 21)
-	catalogItemFieldFoodAndBeverageDetails = big.NewInt(1 << 22)
-	catalogItemFieldReportingCategory      = big.NewInt(1 << 23)
-	catalogItemFieldIsAlcoholic            = big.NewInt(1 << 24)
+	catalogItemFieldBuyerFacingName        = big.NewInt(1 << 6)
+	catalogItemFieldTaxIDs                 = big.NewInt(1 << 7)
+	catalogItemFieldModifierListInfo       = big.NewInt(1 << 8)
+	catalogItemFieldVariations             = big.NewInt(1 << 9)
+	catalogItemFieldProductType            = big.NewInt(1 << 10)
+	catalogItemFieldSkipModifierScreen     = big.NewInt(1 << 11)
+	catalogItemFieldItemOptions            = big.NewInt(1 << 12)
+	catalogItemFieldEcomURI                = big.NewInt(1 << 13)
+	catalogItemFieldEcomImageURIs          = big.NewInt(1 << 14)
+	catalogItemFieldImageIDs               = big.NewInt(1 << 15)
+	catalogItemFieldSortName               = big.NewInt(1 << 16)
+	catalogItemFieldCategories             = big.NewInt(1 << 17)
+	catalogItemFieldDescriptionHTML        = big.NewInt(1 << 18)
+	catalogItemFieldDescriptionPlaintext   = big.NewInt(1 << 19)
+	catalogItemFieldKitchenName            = big.NewInt(1 << 20)
+	catalogItemFieldChannels               = big.NewInt(1 << 21)
+	catalogItemFieldIsArchived             = big.NewInt(1 << 22)
+	catalogItemFieldEcomSeoData            = big.NewInt(1 << 23)
+	catalogItemFieldFoodAndBeverageDetails = big.NewInt(1 << 24)
+	catalogItemFieldReportingCategory      = big.NewInt(1 << 25)
+	catalogItemFieldIsAlcoholic            = big.NewInt(1 << 26)
 )
 
 type CatalogItem struct {
@@ -13270,6 +13306,8 @@ type CatalogItem struct {
 	IsTaxable *bool `json:"is_taxable,omitempty" url:"is_taxable,omitempty"`
 	// The ID of the item's category, if any. Deprecated since 2023-12-13. Use `CatalogItem.categories`, instead.
 	CategoryID *string `json:"category_id,omitempty" url:"category_id,omitempty"`
+	// The override to a product name to display to users
+	BuyerFacingName *string `json:"buyer_facing_name,omitempty" url:"buyer_facing_name,omitempty"`
 	// A set of IDs indicating the taxes enabled for
 	// this item. When updating an item, any taxes listed here will be added to the item.
 	// Taxes may also be added to or deleted from an item using `UpdateItemTaxes`.
@@ -13343,6 +13381,11 @@ type CatalogItem struct {
 	DescriptionHTML *string `json:"description_html,omitempty" url:"description_html,omitempty"`
 	// A server-generated plaintext version of the `description_html` field, without formatting tags.
 	DescriptionPlaintext *string `json:"description_plaintext,omitempty" url:"description_plaintext,omitempty"`
+	// (Optional) Name that the restaurant wants to display to their kitchen workers
+	// instead of the customer-facing name.
+	// e.g., customer name might be "Big John's Mega Burger" and the
+	// kitchen name is "12oz beef burger"
+	KitchenName *string `json:"kitchen_name,omitempty" url:"kitchen_name,omitempty"`
 	// A list of IDs representing channels, such as a Square Online site, where the item can be made visible or available.
 	// This field is read only and cannot be edited.
 	Channels []string `json:"channels,omitempty" url:"channels,omitempty"`
@@ -13404,6 +13447,13 @@ func (c *CatalogItem) GetCategoryID() *string {
 		return nil
 	}
 	return c.CategoryID
+}
+
+func (c *CatalogItem) GetBuyerFacingName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BuyerFacingName
 }
 
 func (c *CatalogItem) GetTaxIDs() []string {
@@ -13495,6 +13545,13 @@ func (c *CatalogItem) GetDescriptionPlaintext() *string {
 		return nil
 	}
 	return c.DescriptionPlaintext
+}
+
+func (c *CatalogItem) GetKitchenName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.KitchenName
 }
 
 func (c *CatalogItem) GetChannels() []string {
@@ -13592,6 +13649,13 @@ func (c *CatalogItem) SetCategoryID(categoryID *string) {
 	c.require(catalogItemFieldCategoryID)
 }
 
+// SetBuyerFacingName sets the BuyerFacingName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogItem) SetBuyerFacingName(buyerFacingName *string) {
+	c.BuyerFacingName = buyerFacingName
+	c.require(catalogItemFieldBuyerFacingName)
+}
+
 // SetTaxIDs sets the TaxIDs field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (c *CatalogItem) SetTaxIDs(taxIDs []string) {
@@ -13681,6 +13745,13 @@ func (c *CatalogItem) SetDescriptionHTML(descriptionHTML *string) {
 func (c *CatalogItem) SetDescriptionPlaintext(descriptionPlaintext *string) {
 	c.DescriptionPlaintext = descriptionPlaintext
 	c.require(catalogItemFieldDescriptionPlaintext)
+}
+
+// SetKitchenName sets the KitchenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogItem) SetKitchenName(kitchenName *string) {
+	c.KitchenName = kitchenName
+	c.require(catalogItemFieldKitchenName)
 }
 
 // SetChannels sets the Channels field and marks it as non-optional;
@@ -14271,10 +14342,28 @@ type CatalogItemModifierListInfo struct {
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 	// The position of this `CatalogItemModifierListInfo` object within the `modifier_list_info` list applied
 	// to a `CatalogItem` instance.
-	Ordinal                    *int        `json:"ordinal,omitempty" url:"ordinal,omitempty"`
-	AllowQuantities            interface{} `json:"allow_quantities,omitempty" url:"allow_quantities,omitempty"`
-	IsConversational           interface{} `json:"is_conversational,omitempty" url:"is_conversational,omitempty"`
-	HiddenFromCustomerOverride interface{} `json:"hidden_from_customer_override,omitempty" url:"hidden_from_customer_override,omitempty"`
+	Ordinal *int `json:"ordinal,omitempty" url:"ordinal,omitempty"`
+	// Controls whether multiple quantities of the same modifier can be selected for this item.
+	// - `YES` means that every modifier in the `CatalogModifierList` can have multiple quantities
+	// selected for this item.
+	// - `NO` means that each modifier in the `CatalogModifierList` can be selected only once for this item.
+	// - `NOT_SET` means that the `allow_quantities` setting on the `CatalogModifierList` is obeyed.
+	// See [CatalogModifierToggleOverrideType](#type-catalogmodifiertoggleoverridetype) for possible values
+	AllowQuantities *CatalogModifierToggleOverrideType `json:"allow_quantities,omitempty" url:"allow_quantities,omitempty"`
+	// Controls whether conversational mode is enabled for modifiers on this item.
+	//
+	// - `YES` means conversational mode is enabled for every modifier in the `CatalogModifierList`.
+	// - `NO` means that conversational mode is not enabled for any modifier in the `CatalogModifierList`.
+	// - `NOT_SET` means that conversational mode is not enabled for any modifier in the `CatalogModifierList`.
+	// See [CatalogModifierToggleOverrideType](#type-catalogmodifiertoggleoverridetype) for possible values
+	IsConversational *CatalogModifierToggleOverrideType `json:"is_conversational,omitempty" url:"is_conversational,omitempty"`
+	// Controls whether all modifiers for this item are hidden from customer receipts.
+	// - `YES` means that all modifiers in the `CatalogModifierList` are hidden from customer
+	// receipts for this item.
+	// - `NO` means that all modifiers in the `CatalogModifierList` are visible on customer receipts for this item.
+	// - `NOT_SET` means that the `hidden_from_customer` setting on the `CatalogModifierList` is obeyed.
+	// See [CatalogModifierToggleOverrideType](#type-catalogmodifiertoggleoverridetype) for possible values
+	HiddenFromCustomerOverride *CatalogModifierToggleOverrideType `json:"hidden_from_customer_override,omitempty" url:"hidden_from_customer_override,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -14325,21 +14414,21 @@ func (c *CatalogItemModifierListInfo) GetOrdinal() *int {
 	return c.Ordinal
 }
 
-func (c *CatalogItemModifierListInfo) GetAllowQuantities() interface{} {
+func (c *CatalogItemModifierListInfo) GetAllowQuantities() *CatalogModifierToggleOverrideType {
 	if c == nil {
 		return nil
 	}
 	return c.AllowQuantities
 }
 
-func (c *CatalogItemModifierListInfo) GetIsConversational() interface{} {
+func (c *CatalogItemModifierListInfo) GetIsConversational() *CatalogModifierToggleOverrideType {
 	if c == nil {
 		return nil
 	}
 	return c.IsConversational
 }
 
-func (c *CatalogItemModifierListInfo) GetHiddenFromCustomerOverride() interface{} {
+func (c *CatalogItemModifierListInfo) GetHiddenFromCustomerOverride() *CatalogModifierToggleOverrideType {
 	if c == nil {
 		return nil
 	}
@@ -14401,21 +14490,21 @@ func (c *CatalogItemModifierListInfo) SetOrdinal(ordinal *int) {
 
 // SetAllowQuantities sets the AllowQuantities field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CatalogItemModifierListInfo) SetAllowQuantities(allowQuantities interface{}) {
+func (c *CatalogItemModifierListInfo) SetAllowQuantities(allowQuantities *CatalogModifierToggleOverrideType) {
 	c.AllowQuantities = allowQuantities
 	c.require(catalogItemModifierListInfoFieldAllowQuantities)
 }
 
 // SetIsConversational sets the IsConversational field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CatalogItemModifierListInfo) SetIsConversational(isConversational interface{}) {
+func (c *CatalogItemModifierListInfo) SetIsConversational(isConversational *CatalogModifierToggleOverrideType) {
 	c.IsConversational = isConversational
 	c.require(catalogItemModifierListInfoFieldIsConversational)
 }
 
 // SetHiddenFromCustomerOverride sets the HiddenFromCustomerOverride field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CatalogItemModifierListInfo) SetHiddenFromCustomerOverride(hiddenFromCustomerOverride interface{}) {
+func (c *CatalogItemModifierListInfo) SetHiddenFromCustomerOverride(hiddenFromCustomerOverride *CatalogModifierToggleOverrideType) {
 	c.HiddenFromCustomerOverride = hiddenFromCustomerOverride
 	c.require(catalogItemModifierListInfoFieldHiddenFromCustomerOverride)
 }
@@ -15022,6 +15111,7 @@ var (
 	catalogItemVariationFieldImageIDs                = big.NewInt(1 << 18)
 	catalogItemVariationFieldTeamMemberIDs           = big.NewInt(1 << 19)
 	catalogItemVariationFieldStockableConversion     = big.NewInt(1 << 20)
+	catalogItemVariationFieldKitchenName             = big.NewInt(1 << 21)
 )
 
 type CatalogItemVariation struct {
@@ -15102,6 +15192,11 @@ type CatalogItemVariation struct {
 	// you can accurately track inventory when an item variation is sold in one unit, but stocked in
 	// another unit.
 	StockableConversion *CatalogStockConversion `json:"stockable_conversion,omitempty" url:"stockable_conversion,omitempty"`
+	// (Optional) Name that the restaurant wants to display to their kitchen workers
+	// instead of the customer-facing name.
+	// e.g., customer name might be "Mega-Jumbo Triplesized" and the
+	// kitchen name is "Large container"
+	KitchenName *string `json:"kitchen_name,omitempty" url:"kitchen_name,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -15255,6 +15350,13 @@ func (c *CatalogItemVariation) GetStockableConversion() *CatalogStockConversion 
 		return nil
 	}
 	return c.StockableConversion
+}
+
+func (c *CatalogItemVariation) GetKitchenName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.KitchenName
 }
 
 func (c *CatalogItemVariation) GetExtraProperties() map[string]interface{} {
@@ -15415,6 +15517,13 @@ func (c *CatalogItemVariation) SetStockableConversion(stockableConversion *Catal
 	c.require(catalogItemVariationFieldStockableConversion)
 }
 
+// SetKitchenName sets the KitchenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogItemVariation) SetKitchenName(kitchenName *string) {
+	c.KitchenName = kitchenName
+	c.require(catalogItemVariationFieldKitchenName)
+}
+
 func (c *CatalogItemVariation) UnmarshalJSON(data []byte) error {
 	type unmarshaler CatalogItemVariation
 	var value unmarshaler
@@ -15568,8 +15677,9 @@ var (
 	catalogModifierFieldOrdinal           = big.NewInt(1 << 3)
 	catalogModifierFieldModifierListID    = big.NewInt(1 << 4)
 	catalogModifierFieldLocationOverrides = big.NewInt(1 << 5)
-	catalogModifierFieldImageID           = big.NewInt(1 << 6)
-	catalogModifierFieldHiddenOnline      = big.NewInt(1 << 7)
+	catalogModifierFieldKitchenName       = big.NewInt(1 << 6)
+	catalogModifierFieldImageID           = big.NewInt(1 << 7)
+	catalogModifierFieldHiddenOnline      = big.NewInt(1 << 8)
 )
 
 type CatalogModifier struct {
@@ -15586,6 +15696,11 @@ type CatalogModifier struct {
 	ModifierListID *string `json:"modifier_list_id,omitempty" url:"modifier_list_id,omitempty"`
 	// Location-specific price overrides.
 	LocationOverrides []*ModifierLocationOverrides `json:"location_overrides,omitempty" url:"location_overrides,omitempty"`
+	// (Optional) Name that the restaurant wants to display to their kitchen workers
+	// instead of the customer-facing name.
+	// e.g., customer name might be "Double Baconize" and the
+	// kitchen name is "Add 2x bacon"
+	KitchenName *string `json:"kitchen_name,omitempty" url:"kitchen_name,omitempty"`
 	// The ID of the image associated with this `CatalogModifier` instance.
 	// Currently this image is not displayed by Square, but is free to be displayed in 3rd party applications.
 	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
@@ -15639,6 +15754,13 @@ func (c *CatalogModifier) GetLocationOverrides() []*ModifierLocationOverrides {
 		return nil
 	}
 	return c.LocationOverrides
+}
+
+func (c *CatalogModifier) GetKitchenName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.KitchenName
 }
 
 func (c *CatalogModifier) GetImageID() *string {
@@ -15706,6 +15828,13 @@ func (c *CatalogModifier) SetModifierListID(modifierListID *string) {
 func (c *CatalogModifier) SetLocationOverrides(locationOverrides []*ModifierLocationOverrides) {
 	c.LocationOverrides = locationOverrides
 	c.require(catalogModifierFieldLocationOverrides)
+}
+
+// SetKitchenName sets the KitchenName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogModifier) SetKitchenName(kitchenName *string) {
+	c.KitchenName = kitchenName
+	c.require(catalogModifierFieldKitchenName)
 }
 
 // SetImageID sets the ImageID field and marks it as non-optional;
@@ -16165,9 +16294,20 @@ type CatalogModifierOverride struct {
 	// The ID of the `CatalogModifier` whose default behavior is being overridden.
 	ModifierID string `json:"modifier_id" url:"modifier_id"`
 	// __Deprecated__: Use `on_by_default_override` instead.
-	OnByDefault          *bool       `json:"on_by_default,omitempty" url:"on_by_default,omitempty"`
-	HiddenOnlineOverride interface{} `json:"hidden_online_override,omitempty" url:"hidden_online_override,omitempty"`
-	OnByDefaultOverride  interface{} `json:"on_by_default_override,omitempty" url:"on_by_default_override,omitempty"`
+	OnByDefault *bool `json:"on_by_default,omitempty" url:"on_by_default,omitempty"`
+	// If `YES`, this setting overrides the `hidden_online` setting on the `CatalogModifier` object,
+	// and the modifier is always hidden from online sales channels.
+	// If `NO`, the modifier is not hidden. It is always visible in online sales channels for this catalog item.
+	// `NOT_SET` means the `hidden_online` setting on the `CatalogModifier` object is obeyed.
+	// See [CatalogModifierToggleOverrideType](#type-catalogmodifiertoggleoverridetype) for possible values
+	HiddenOnlineOverride *CatalogModifierToggleOverrideType `json:"hidden_online_override,omitempty" url:"hidden_online_override,omitempty"`
+	// If `YES`, this setting overrides the `on_by_default` setting on the `CatalogModifier` object,
+	// and the modifier is always selected by default for the catalog item.
+	//
+	// If `NO`, the modifier is not selected by default for this catalog item.
+	// `NOT_SET` means the `on_by_default` setting on the `CatalogModifier` object is obeyed.
+	// See [CatalogModifierToggleOverrideType](#type-catalogmodifiertoggleoverridetype) for possible values
+	OnByDefaultOverride *CatalogModifierToggleOverrideType `json:"on_by_default_override,omitempty" url:"on_by_default_override,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -16190,14 +16330,14 @@ func (c *CatalogModifierOverride) GetOnByDefault() *bool {
 	return c.OnByDefault
 }
 
-func (c *CatalogModifierOverride) GetHiddenOnlineOverride() interface{} {
+func (c *CatalogModifierOverride) GetHiddenOnlineOverride() *CatalogModifierToggleOverrideType {
 	if c == nil {
 		return nil
 	}
 	return c.HiddenOnlineOverride
 }
 
-func (c *CatalogModifierOverride) GetOnByDefaultOverride() interface{} {
+func (c *CatalogModifierOverride) GetOnByDefaultOverride() *CatalogModifierToggleOverrideType {
 	if c == nil {
 		return nil
 	}
@@ -16231,14 +16371,14 @@ func (c *CatalogModifierOverride) SetOnByDefault(onByDefault *bool) {
 
 // SetHiddenOnlineOverride sets the HiddenOnlineOverride field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CatalogModifierOverride) SetHiddenOnlineOverride(hiddenOnlineOverride interface{}) {
+func (c *CatalogModifierOverride) SetHiddenOnlineOverride(hiddenOnlineOverride *CatalogModifierToggleOverrideType) {
 	c.HiddenOnlineOverride = hiddenOnlineOverride
 	c.require(catalogModifierOverrideFieldHiddenOnlineOverride)
 }
 
 // SetOnByDefaultOverride sets the OnByDefaultOverride field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CatalogModifierOverride) SetOnByDefaultOverride(onByDefaultOverride interface{}) {
+func (c *CatalogModifierOverride) SetOnByDefaultOverride(onByDefaultOverride *CatalogModifierToggleOverrideType) {
 	c.OnByDefaultOverride = onByDefaultOverride
 	c.require(catalogModifierOverrideFieldOnByDefaultOverride)
 }
@@ -16280,6 +16420,32 @@ func (c *CatalogModifierOverride) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", c)
+}
+
+// Item level overrides for bool attributes
+type CatalogModifierToggleOverrideType string
+
+const (
+	CatalogModifierToggleOverrideTypeNo     CatalogModifierToggleOverrideType = "NO"
+	CatalogModifierToggleOverrideTypeYes    CatalogModifierToggleOverrideType = "YES"
+	CatalogModifierToggleOverrideTypeNotSet CatalogModifierToggleOverrideType = "NOT_SET"
+)
+
+func NewCatalogModifierToggleOverrideTypeFromString(s string) (CatalogModifierToggleOverrideType, error) {
+	switch s {
+	case "NO":
+		return CatalogModifierToggleOverrideTypeNo, nil
+	case "YES":
+		return CatalogModifierToggleOverrideTypeYes, nil
+	case "NOT_SET":
+		return CatalogModifierToggleOverrideTypeNotSet, nil
+	}
+	var t CatalogModifierToggleOverrideType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c CatalogModifierToggleOverrideType) Ptr() *CatalogModifierToggleOverrideType {
+	return &c
 }
 
 // The wrapper object for the catalog entries of a given object type.
@@ -22943,14 +23109,14 @@ type CatalogProductSet struct {
 	//
 	// Only one of `product_ids_all`, `product_ids_any`, or `all_products` can be set.
 	//
-	// Max: 500 catalog object IDs.
+	// Max: 5000 catalog object IDs.
 	ProductIDsAny []string `json:"product_ids_any,omitempty" url:"product_ids_any,omitempty"`
 	// Unique IDs for any `CatalogObject` included in this product set.
 	// All objects in this set must be included in an order for a pricing rule to apply.
 	//
 	// Only one of `product_ids_all`, `product_ids_any`, or `all_products` can be set.
 	//
-	// Max: 500 catalog object IDs.
+	// Max: 5000 catalog object IDs.
 	ProductIDsAll []string `json:"product_ids_all,omitempty" url:"product_ids_all,omitempty"`
 	// If set, there must be exactly this many items from `products_any` or `products_all`
 	// in the cart for the discount to apply.
@@ -36483,11 +36649,12 @@ func (d *DeleteWebhookSubscriptionResponse) String() string {
 }
 
 var (
-	deviceCheckoutOptionsFieldDeviceID          = big.NewInt(1 << 0)
-	deviceCheckoutOptionsFieldSkipReceiptScreen = big.NewInt(1 << 1)
-	deviceCheckoutOptionsFieldCollectSignature  = big.NewInt(1 << 2)
-	deviceCheckoutOptionsFieldTipSettings       = big.NewInt(1 << 3)
-	deviceCheckoutOptionsFieldShowItemizedCart  = big.NewInt(1 << 4)
+	deviceCheckoutOptionsFieldDeviceID               = big.NewInt(1 << 0)
+	deviceCheckoutOptionsFieldSkipReceiptScreen      = big.NewInt(1 << 1)
+	deviceCheckoutOptionsFieldCollectSignature       = big.NewInt(1 << 2)
+	deviceCheckoutOptionsFieldTipSettings            = big.NewInt(1 << 3)
+	deviceCheckoutOptionsFieldShowItemizedCart       = big.NewInt(1 << 4)
+	deviceCheckoutOptionsFieldAllowAutoCardSurcharge = big.NewInt(1 << 5)
 )
 
 type DeviceCheckoutOptions struct {
@@ -36504,6 +36671,11 @@ type DeviceCheckoutOptions struct {
 	// Show the itemization screen prior to taking a payment. This field is only meaningful when the
 	// checkout includes an order ID. Defaults to true.
 	ShowItemizedCart *bool `json:"show_itemized_cart,omitempty" url:"show_itemized_cart,omitempty"`
+	// Controls whether the mobile client applies Auto Card Surcharge (ACS) during checkout.
+	// If true, ACS is applied based on Dashboard configuration.
+	// If false, ACS is not applied regardless of that configuration.
+	// For more information, see [Add a Card Surcharge](https://developer.squareupstaging.com/docs/terminal-api/additional-payment-checkout-features#add-a-card-surcharge).
+	AllowAutoCardSurcharge *bool `json:"allow_auto_card_surcharge,omitempty" url:"allow_auto_card_surcharge,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -36545,6 +36717,13 @@ func (d *DeviceCheckoutOptions) GetShowItemizedCart() *bool {
 		return nil
 	}
 	return d.ShowItemizedCart
+}
+
+func (d *DeviceCheckoutOptions) GetAllowAutoCardSurcharge() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.AllowAutoCardSurcharge
 }
 
 func (d *DeviceCheckoutOptions) GetExtraProperties() map[string]interface{} {
@@ -36591,6 +36770,13 @@ func (d *DeviceCheckoutOptions) SetTipSettings(tipSettings *TipSettings) {
 func (d *DeviceCheckoutOptions) SetShowItemizedCart(showItemizedCart *bool) {
 	d.ShowItemizedCart = showItemizedCart
 	d.require(deviceCheckoutOptionsFieldShowItemizedCart)
+}
+
+// SetAllowAutoCardSurcharge sets the AllowAutoCardSurcharge field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeviceCheckoutOptions) SetAllowAutoCardSurcharge(allowAutoCardSurcharge *bool) {
+	d.AllowAutoCardSurcharge = allowAutoCardSurcharge
+	d.require(deviceCheckoutOptionsFieldAllowAutoCardSurcharge)
 }
 
 func (d *DeviceCheckoutOptions) UnmarshalJSON(data []byte) error {
@@ -41181,6 +41367,7 @@ const (
 	ErrorCodeUnsupportedLoyaltyRewardTier                  ErrorCode = "UNSUPPORTED_LOYALTY_REWARD_TIER"
 	ErrorCodeLocationMismatch                              ErrorCode = "LOCATION_MISMATCH"
 	ErrorCodeOrderUnpaidNotReturnable                      ErrorCode = "ORDER_UNPAID_NOT_RETURNABLE"
+	ErrorCodePartialPaymentDelayCaptureNotSupported        ErrorCode = "PARTIAL_PAYMENT_DELAY_CAPTURE_NOT_SUPPORTED"
 	ErrorCodeIdempotencyKeyReused                          ErrorCode = "IDEMPOTENCY_KEY_REUSED"
 	ErrorCodeUnexpectedValue                               ErrorCode = "UNEXPECTED_VALUE"
 	ErrorCodeSandboxNotSupported                           ErrorCode = "SANDBOX_NOT_SUPPORTED"
@@ -41196,6 +41383,7 @@ const (
 	ErrorCodePlaidError                                    ErrorCode = "PLAID_ERROR"
 	ErrorCodePlaidErrorItemLoginRequired                   ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
 	ErrorCodePlaidErrorRateLimit                           ErrorCode = "PLAID_ERROR_RATE_LIMIT"
+	ErrorCodePaymentSourceNotEnabledForTarget              ErrorCode = "PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET"
 	ErrorCodeCardDeclined                                  ErrorCode = "CARD_DECLINED"
 	ErrorCodeVerifyCvvFailure                              ErrorCode = "VERIFY_CVV_FAILURE"
 	ErrorCodeVerifyAvsFailure                              ErrorCode = "VERIFY_AVS_FAILURE"
@@ -41450,6 +41638,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeLocationMismatch, nil
 	case "ORDER_UNPAID_NOT_RETURNABLE":
 		return ErrorCodeOrderUnpaidNotReturnable, nil
+	case "PARTIAL_PAYMENT_DELAY_CAPTURE_NOT_SUPPORTED":
+		return ErrorCodePartialPaymentDelayCaptureNotSupported, nil
 	case "IDEMPOTENCY_KEY_REUSED":
 		return ErrorCodeIdempotencyKeyReused, nil
 	case "UNEXPECTED_VALUE":
@@ -41480,6 +41670,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePlaidErrorItemLoginRequired, nil
 	case "PLAID_ERROR_RATE_LIMIT":
 		return ErrorCodePlaidErrorRateLimit, nil
+	case "PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET":
+		return ErrorCodePaymentSourceNotEnabledForTarget, nil
 	case "CARD_DECLINED":
 		return ErrorCodeCardDeclined, nil
 	case "VERIFY_CVV_FAILURE":
@@ -42088,7 +42280,7 @@ type FulfillmentDeliveryDetails struct {
 	// The contact information for the person to receive the fulfillment.
 	Recipient *FulfillmentRecipient `json:"recipient,omitempty" url:"recipient,omitempty"`
 	// Indicates the fulfillment delivery schedule type. If `SCHEDULED`, then
-	// `deliver_at` is required. If `ASAP`, then `prep_time_duration` is required. The default is `SCHEDULED`.
+	// `deliver_at` is required. The default is `SCHEDULED`.
 	// See [OrderFulfillmentDeliveryDetailsScheduleType](#type-orderfulfillmentdeliverydetailsscheduletype) for possible values
 	ScheduleType *FulfillmentDeliveryDetailsOrderFulfillmentDeliveryDetailsScheduleType `json:"schedule_type,omitempty" url:"schedule_type,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
@@ -42099,24 +42291,29 @@ type FulfillmentDeliveryDetails struct {
 	PlacedAt *string `json:"placed_at,omitempty" url:"placed_at,omitempty"`
 	// The [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates)
 	// that represents the start of the delivery period.
-	// When the fulfillment `schedule_type` is `ASAP`, the field is automatically
-	// set to the current time plus the `prep_time_duration`.
-	// Otherwise, the application can set this field while the fulfillment `state` is
+	// The application can set this field while the fulfillment `state` is
 	// `PROPOSED`, `RESERVED`, or `PREPARED` (any time before the
 	// terminal state such as `COMPLETED`, `CANCELED`, and `FAILED`).
 	//
 	// The timestamp must be in RFC 3339 format
 	// (for example, "2016-09-04T23:59:33.123Z").
+	//
+	// For fulfillments with the schedule type `ASAP`, this is automatically set
+	// to the current time plus `prep_time_duration`, if available.
 	DeliverAt *string `json:"deliver_at,omitempty" url:"deliver_at,omitempty"`
-	// The duration of time it takes to prepare and deliver this fulfillment.
-	// The duration must be in RFC 3339 format (for example, "P1W3D").
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// needed to prepare and deliver this fulfillment.
+	// The duration must be in RFC 3339 format (for example, "PT30M" for 30 minutes). Don't confuse
+	// "M" for months with "M" for minutes. "P5M" means 5 months, while "PT5M" means 5 minutes.
 	PrepTimeDuration *string `json:"prep_time_duration,omitempty" url:"prep_time_duration,omitempty"`
-	// The time period after `deliver_at` in which to deliver the order.
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// after `deliver_at` in which to deliver the order.
 	// Applications can set this field when the fulfillment `state` is
 	// `PROPOSED`, `RESERVED`, or `PREPARED` (any time before the terminal state
 	// such as `COMPLETED`, `CANCELED`, and `FAILED`).
 	//
-	// The duration must be in RFC 3339 format (for example, "P1W3D").
+	// The duration must be in RFC 3339 format (for example, "PT30M" for 30 minutes). Don't confuse
+	// "M" for months with "M" for minutes. "P5M" means 5 months, while "PT5M" means 5 minutes.
 	DeliveryWindowDuration *string `json:"delivery_window_duration,omitempty" url:"delivery_window_duration,omitempty"`
 	// Provides additional instructions about the delivery fulfillment.
 	// It is displayed in the Square Point of Sale application and set by the API.
@@ -42158,8 +42355,10 @@ type FulfillmentDeliveryDetails struct {
 	// indicating when an order can be picked up by the courier for delivery.
 	// The timestamp must be in RFC 3339 format (for example, "2016-09-04T23:59:33.123Z").
 	CourierPickupAt *string `json:"courier_pickup_at,omitempty" url:"courier_pickup_at,omitempty"`
-	// The time period after `courier_pickup_at` in which the courier should pick up the order.
-	// The duration must be in RFC 3339 format (for example, "P1W3D").
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// after `courier_pickup_at` in which the courier should pick up the order.
+	// The duration must be in RFC 3339 format (for example, "PT30M" for 30 minutes). Don't confuse
+	// "M" for months with "M" for minutes. "P5M" means 5 months, while "PT5M" means 5 minutes.
 	CourierPickupWindowDuration *string `json:"courier_pickup_window_duration,omitempty" url:"courier_pickup_window_duration,omitempty"`
 	// Whether the delivery is preferred to be no contact.
 	IsNoContactDelivery *bool `json:"is_no_contact_delivery,omitempty" url:"is_no_contact_delivery,omitempty"`
@@ -42789,8 +42988,9 @@ type FulfillmentPickupDetails struct {
 	// up to 7 days in the future. If `expires_at` is not set, any new payments attached to the order
 	// are automatically completed.
 	ExpiresAt *string `json:"expires_at,omitempty" url:"expires_at,omitempty"`
-	// The duration of time after which an in progress pickup fulfillment is automatically moved
-	// to the `COMPLETED` state. The duration must be in RFC 3339 format (for example, "P1W3D").
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// after which an in-progress pickup fulfillment is automatically moved
+	// to the `COMPLETED` state. The duration must be in RFC 3339 format (for example, "PT4H" for 4 hours).
 	//
 	// If not set, this pickup fulfillment remains in progress until it is canceled or completed.
 	AutoCompleteDuration *string `json:"auto_complete_duration,omitempty" url:"auto_complete_duration,omitempty"`
@@ -42802,14 +43002,19 @@ type FulfillmentPickupDetails struct {
 	// "2016-09-04T23:59:33.123Z".
 	//
 	// For fulfillments with the schedule type `ASAP`, this is automatically set
-	// to the current time plus the expected duration to prepare the fulfillment.
+	// to the current time plus `prep_time_duration`, if available.
 	PickupAt *string `json:"pickup_at,omitempty" url:"pickup_at,omitempty"`
-	// The window of time in which the order should be picked up after the `pickup_at` timestamp.
-	// Must be in RFC 3339 duration format, e.g., "P1W3D". Can be used as an
-	// informational guideline for merchants.
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// in which the order should be picked up after the `pickup_at` timestamp.
+	// The duration must be in RFC 3339 format (for example, "PT30M" for 30 minutes). Don't confuse
+	// "M" for months with "M" for minutes. "P5M" means 5 months, while "PT5M" means 5 minutes.
+	//
+	// Can be used as an informational guideline for merchants.
 	PickupWindowDuration *string `json:"pickup_window_duration,omitempty" url:"pickup_window_duration,omitempty"`
-	// The duration of time it takes to prepare this fulfillment.
-	// The duration must be in RFC 3339 format (for example, "P1W3D").
+	// The [duration](https://developer.squareup.com/docs/build-basics/working-with-dates)
+	// needed to prepare this fulfillment.
+	// The duration must be in RFC 3339 format (for example, "PT30M" for 30 minutes). Don't confuse
+	// "M" for months with "M" for minutes. "P5M" means 5 months, while "PT5M" means 5 minutes.
 	PrepTimeDuration *string `json:"prep_time_duration,omitempty" url:"prep_time_duration,omitempty"`
 	// A note to provide additional instructions about the pickup
 	// fulfillment displayed in the Square Point of Sale application and set by the API.
@@ -74416,6 +74621,30 @@ func (o *Order) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
+// Indicates whether the card surcharge will be treated as a value-holding line item or
+// apportioned across all line items.
+type OrderCardSurchargeTreatmentType string
+
+const (
+	OrderCardSurchargeTreatmentTypeLineItemTreatment    OrderCardSurchargeTreatmentType = "LINE_ITEM_TREATMENT"
+	OrderCardSurchargeTreatmentTypeApportionedTreatment OrderCardSurchargeTreatmentType = "APPORTIONED_TREATMENT"
+)
+
+func NewOrderCardSurchargeTreatmentTypeFromString(s string) (OrderCardSurchargeTreatmentType, error) {
+	switch s {
+	case "LINE_ITEM_TREATMENT":
+		return OrderCardSurchargeTreatmentTypeLineItemTreatment, nil
+	case "APPORTIONED_TREATMENT":
+		return OrderCardSurchargeTreatmentTypeApportionedTreatment, nil
+	}
+	var t OrderCardSurchargeTreatmentType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (o OrderCardSurchargeTreatmentType) Ptr() *OrderCardSurchargeTreatmentType {
+	return &o
+}
+
 var (
 	orderCreatedFieldOrderID    = big.NewInt(1 << 0)
 	orderCreatedFieldVersion    = big.NewInt(1 << 1)
@@ -77275,11 +77504,13 @@ type OrderLineItem struct {
 	//
 	// To change the amount of a service charge, modify the referenced top-level service charge.
 	AppliedServiceCharges []*OrderLineItemAppliedServiceCharge `json:"applied_service_charges,omitempty" url:"applied_service_charges,omitempty"`
-	// The base price for a single unit of the line item.
+	// The base price for a single unit of the line item. Note - If inclusive tax is set on
+	// this item it will be included in this value.
 	BasePriceMoney *Money `json:"base_price_money,omitempty" url:"base_price_money,omitempty"`
 	// The total price of all item variations sold in this line item.
 	// The price is calculated as `base_price_money` multiplied by `quantity`.
-	// It does not include modifiers.
+	// It does not include modifiers. Note - If inclusive tax is set on
+	// this item it will be included in this value.
 	VariationTotalPriceMoney *Money `json:"variation_total_price_money,omitempty" url:"variation_total_price_money,omitempty"`
 	// The amount of money made in gross sales for this line item.
 	// The amount is calculated as the sum of the variation's total price and each modifier's total price.
@@ -77914,6 +78145,7 @@ var (
 	orderLineItemAppliedTaxFieldUID          = big.NewInt(1 << 0)
 	orderLineItemAppliedTaxFieldTaxUID       = big.NewInt(1 << 1)
 	orderLineItemAppliedTaxFieldAppliedMoney = big.NewInt(1 << 2)
+	orderLineItemAppliedTaxFieldAutoApplied  = big.NewInt(1 << 3)
 )
 
 type OrderLineItemAppliedTax struct {
@@ -77927,6 +78159,10 @@ type OrderLineItemAppliedTax struct {
 	TaxUID string `json:"tax_uid" url:"tax_uid"`
 	// The amount of money applied by the tax to the line item.
 	AppliedMoney *Money `json:"applied_money,omitempty" url:"applied_money,omitempty"`
+	// Indicates whether the tax was automatically applied to the order based on
+	// the catalog configuration. For an example, see
+	// [Automatically Apply Taxes to an Order](https://developer.squareup.com/docs/orders-api/apply-taxes-and-discounts/auto-apply-taxes).
+	AutoApplied *bool `json:"auto_applied,omitempty" url:"auto_applied,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -77954,6 +78190,13 @@ func (o *OrderLineItemAppliedTax) GetAppliedMoney() *Money {
 		return nil
 	}
 	return o.AppliedMoney
+}
+
+func (o *OrderLineItemAppliedTax) GetAutoApplied() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.AutoApplied
 }
 
 func (o *OrderLineItemAppliedTax) GetExtraProperties() map[string]interface{} {
@@ -77986,6 +78229,13 @@ func (o *OrderLineItemAppliedTax) SetTaxUID(taxUID string) {
 func (o *OrderLineItemAppliedTax) SetAppliedMoney(appliedMoney *Money) {
 	o.AppliedMoney = appliedMoney
 	o.require(orderLineItemAppliedTaxFieldAppliedMoney)
+}
+
+// SetAutoApplied sets the AutoApplied field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderLineItemAppliedTax) SetAutoApplied(autoApplied *bool) {
+	o.AutoApplied = autoApplied
+	o.require(orderLineItemAppliedTaxFieldAutoApplied)
 }
 
 func (o *OrderLineItemAppliedTax) UnmarshalJSON(data []byte) error {
@@ -78659,8 +78909,9 @@ func (o *OrderLineItemModifier) String() string {
 // application to a line item. For more information, see
 // [Apply Taxes and Discounts](https://developer.squareup.com/docs/orders-api/apply-taxes-and-discounts).
 var (
-	orderLineItemPricingBlocklistsFieldBlockedDiscounts = big.NewInt(1 << 0)
-	orderLineItemPricingBlocklistsFieldBlockedTaxes     = big.NewInt(1 << 1)
+	orderLineItemPricingBlocklistsFieldBlockedDiscounts      = big.NewInt(1 << 0)
+	orderLineItemPricingBlocklistsFieldBlockedTaxes          = big.NewInt(1 << 1)
+	orderLineItemPricingBlocklistsFieldBlockedServiceCharges = big.NewInt(1 << 2)
 )
 
 type OrderLineItemPricingBlocklists struct {
@@ -78672,6 +78923,11 @@ type OrderLineItemPricingBlocklists struct {
 	// Taxes can be blocked by the `tax_uid` (for ad hoc taxes) or
 	// the `tax_catalog_object_id` (for catalog taxes).
 	BlockedTaxes []*OrderLineItemPricingBlocklistsBlockedTax `json:"blocked_taxes,omitempty" url:"blocked_taxes,omitempty"`
+	// A list of service charges blocked from applying to the line item.
+	// Service charges can be blocked by the `service_charge_uid` (for ad hoc
+	// service charges) or the `service_charge_catalog_object_id` (for catalog
+	// service charges).
+	BlockedServiceCharges []*OrderLineItemPricingBlocklistsBlockedServiceCharge `json:"blocked_service_charges,omitempty" url:"blocked_service_charges,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -78692,6 +78948,13 @@ func (o *OrderLineItemPricingBlocklists) GetBlockedTaxes() []*OrderLineItemPrici
 		return nil
 	}
 	return o.BlockedTaxes
+}
+
+func (o *OrderLineItemPricingBlocklists) GetBlockedServiceCharges() []*OrderLineItemPricingBlocklistsBlockedServiceCharge {
+	if o == nil {
+		return nil
+	}
+	return o.BlockedServiceCharges
 }
 
 func (o *OrderLineItemPricingBlocklists) GetExtraProperties() map[string]interface{} {
@@ -78717,6 +78980,13 @@ func (o *OrderLineItemPricingBlocklists) SetBlockedDiscounts(blockedDiscounts []
 func (o *OrderLineItemPricingBlocklists) SetBlockedTaxes(blockedTaxes []*OrderLineItemPricingBlocklistsBlockedTax) {
 	o.BlockedTaxes = blockedTaxes
 	o.require(orderLineItemPricingBlocklistsFieldBlockedTaxes)
+}
+
+// SetBlockedServiceCharges sets the BlockedServiceCharges field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderLineItemPricingBlocklists) SetBlockedServiceCharges(blockedServiceCharges []*OrderLineItemPricingBlocklistsBlockedServiceCharge) {
+	o.BlockedServiceCharges = blockedServiceCharges
+	o.require(orderLineItemPricingBlocklistsFieldBlockedServiceCharges)
 }
 
 func (o *OrderLineItemPricingBlocklists) UnmarshalJSON(data []byte) error {
@@ -78865,6 +79135,126 @@ func (o *OrderLineItemPricingBlocklistsBlockedDiscount) MarshalJSON() ([]byte, e
 }
 
 func (o *OrderLineItemPricingBlocklistsBlockedDiscount) String() string {
+	if len(o.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// A service charge to block from applying to a line item. The service charge
+// must be identified by either `service_charge_uid` or
+// `service_charge_catalog_object_id`, but not both.
+var (
+	orderLineItemPricingBlocklistsBlockedServiceChargeFieldUID                          = big.NewInt(1 << 0)
+	orderLineItemPricingBlocklistsBlockedServiceChargeFieldServiceChargeUID             = big.NewInt(1 << 1)
+	orderLineItemPricingBlocklistsBlockedServiceChargeFieldServiceChargeCatalogObjectID = big.NewInt(1 << 2)
+)
+
+type OrderLineItemPricingBlocklistsBlockedServiceCharge struct {
+	// A unique ID of the `BlockedServiceCharge` within the order.
+	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
+	// The `uid` of the service charge that should be blocked. Use this field to
+	// block ad hoc service charges. For catalog service charges, use the
+	// `service_charge_catalog_object_id` field.
+	ServiceChargeUID *string `json:"service_charge_uid,omitempty" url:"service_charge_uid,omitempty"`
+	// The `catalog_object_id` of the service charge that should be blocked.
+	// Use this field to block catalog service charges. For ad hoc service charges,
+	// use the `service_charge_uid` field.
+	ServiceChargeCatalogObjectID *string `json:"service_charge_catalog_object_id,omitempty" url:"service_charge_catalog_object_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) GetUID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.UID
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) GetServiceChargeUID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ServiceChargeUID
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) GetServiceChargeCatalogObjectID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.ServiceChargeCatalogObjectID
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) require(field *big.Int) {
+	if o.explicitFields == nil {
+		o.explicitFields = big.NewInt(0)
+	}
+	o.explicitFields.Or(o.explicitFields, field)
+}
+
+// SetUID sets the UID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) SetUID(uid *string) {
+	o.UID = uid
+	o.require(orderLineItemPricingBlocklistsBlockedServiceChargeFieldUID)
+}
+
+// SetServiceChargeUID sets the ServiceChargeUID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) SetServiceChargeUID(serviceChargeUID *string) {
+	o.ServiceChargeUID = serviceChargeUID
+	o.require(orderLineItemPricingBlocklistsBlockedServiceChargeFieldServiceChargeUID)
+}
+
+// SetServiceChargeCatalogObjectID sets the ServiceChargeCatalogObjectID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) SetServiceChargeCatalogObjectID(serviceChargeCatalogObjectID *string) {
+	o.ServiceChargeCatalogObjectID = serviceChargeCatalogObjectID
+	o.require(orderLineItemPricingBlocklistsBlockedServiceChargeFieldServiceChargeCatalogObjectID)
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) UnmarshalJSON(data []byte) error {
+	type unmarshaler OrderLineItemPricingBlocklistsBlockedServiceCharge
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OrderLineItemPricingBlocklistsBlockedServiceCharge(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+	o.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) MarshalJSON() ([]byte, error) {
+	type embed OrderLineItemPricingBlocklistsBlockedServiceCharge
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (o *OrderLineItemPricingBlocklistsBlockedServiceCharge) String() string {
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -80847,6 +81237,7 @@ var (
 	orderReturnServiceChargeFieldAppliedTaxes           = big.NewInt(1 << 12)
 	orderReturnServiceChargeFieldTreatmentType          = big.NewInt(1 << 13)
 	orderReturnServiceChargeFieldScope                  = big.NewInt(1 << 14)
+	orderReturnServiceChargeFieldType                   = big.NewInt(1 << 15)
 )
 
 type OrderReturnServiceCharge struct {
@@ -80898,7 +81289,7 @@ type OrderReturnServiceCharge struct {
 	// applied to the `OrderReturnServiceCharge`. On reads, the applied amount is
 	// populated.
 	AppliedTaxes []*OrderLineItemAppliedTax `json:"applied_taxes,omitempty" url:"applied_taxes,omitempty"`
-	// The treatment type of the service charge.
+	// Indicates whether the service charge will be treated as a value-holding line item or apportioned toward a line item.
 	// See [OrderServiceChargeTreatmentType](#type-orderservicechargetreatmenttype) for possible values
 	TreatmentType *OrderServiceChargeTreatmentType `json:"treatment_type,omitempty" url:"treatment_type,omitempty"`
 	// Indicates the level at which the apportioned service charge applies. For `ORDER`
@@ -80911,6 +81302,9 @@ type OrderReturnServiceCharge struct {
 	// the apportioned service charge and re-add it as a new apportioned service charge.
 	// See [OrderServiceChargeScope](#type-orderservicechargescope) for possible values
 	Scope *OrderServiceChargeScope `json:"scope,omitempty" url:"scope,omitempty"`
+	// The type of the service charge.
+	// See [OrderServiceChargeType](#type-orderservicechargetype) for possible values
+	Type *OrderServiceChargeType `json:"type,omitempty" url:"type,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -81022,6 +81416,13 @@ func (o *OrderReturnServiceCharge) GetScope() *OrderServiceChargeScope {
 		return nil
 	}
 	return o.Scope
+}
+
+func (o *OrderReturnServiceCharge) GetType() *OrderServiceChargeType {
+	if o == nil {
+		return nil
+	}
+	return o.Type
 }
 
 func (o *OrderReturnServiceCharge) GetExtraProperties() map[string]interface{} {
@@ -81138,6 +81539,13 @@ func (o *OrderReturnServiceCharge) SetTreatmentType(treatmentType *OrderServiceC
 func (o *OrderReturnServiceCharge) SetScope(scope *OrderServiceChargeScope) {
 	o.Scope = scope
 	o.require(orderReturnServiceChargeFieldScope)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *OrderReturnServiceCharge) SetType(type_ *OrderServiceChargeType) {
+	o.Type = type_
+	o.require(orderReturnServiceChargeFieldType)
 }
 
 func (o *OrderReturnServiceCharge) UnmarshalJSON(data []byte) error {
@@ -81773,7 +82181,7 @@ var (
 type OrderServiceCharge struct {
 	// A unique ID that identifies the service charge only within this order.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
-	// The name of the service charge.
+	// The name of the service charge. This is unused and null for AUTO_GRATUITY to match the behavior on Bills.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// The catalog object ID referencing the service charge [CatalogObject](entity:CatalogObject).
 	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
@@ -81846,7 +82254,7 @@ type OrderServiceCharge struct {
 	// The type of the service charge.
 	// See [OrderServiceChargeType](#type-orderservicechargetype) for possible values
 	Type *OrderServiceChargeType `json:"type,omitempty" url:"type,omitempty"`
-	// The treatment type of the service charge.
+	// Indicates whether the service charge will be treated as a value-holding line item or apportioned toward a line item.
 	// See [OrderServiceChargeTreatmentType](#type-orderservicechargetreatmenttype) for possible values
 	TreatmentType *OrderServiceChargeTreatmentType `json:"treatment_type,omitempty" url:"treatment_type,omitempty"`
 	// Indicates the level at which the apportioned service charge applies. For `ORDER`
@@ -91152,29 +91560,34 @@ func (s SubscriptionPricingType) Ptr() *SubscriptionPricingType {
 	return &s
 }
 
-// Represents the details of a webhook subscription, including notification URL,
-// event types, and signature key.
+// Represents the result of testing a webhook subscription. Note: The actual API returns these fields at the root level of TestWebhookSubscriptionResponse, not nested under this object.
 var (
-	subscriptionTestResultFieldID         = big.NewInt(1 << 0)
-	subscriptionTestResultFieldStatusCode = big.NewInt(1 << 1)
-	subscriptionTestResultFieldPayload    = big.NewInt(1 << 2)
-	subscriptionTestResultFieldCreatedAt  = big.NewInt(1 << 3)
-	subscriptionTestResultFieldUpdatedAt  = big.NewInt(1 << 4)
+	subscriptionTestResultFieldID              = big.NewInt(1 << 0)
+	subscriptionTestResultFieldStatusCode      = big.NewInt(1 << 1)
+	subscriptionTestResultFieldPayload         = big.NewInt(1 << 2)
+	subscriptionTestResultFieldCreatedAt       = big.NewInt(1 << 3)
+	subscriptionTestResultFieldUpdatedAt       = big.NewInt(1 << 4)
+	subscriptionTestResultFieldNotificationURL = big.NewInt(1 << 5)
+	subscriptionTestResultFieldPassesFilter    = big.NewInt(1 << 6)
 )
 
 type SubscriptionTestResult struct {
 	// A Square-generated unique ID for the subscription test result.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// The status code returned by the subscription notification URL.
+	// The HTTP status code returned by the notification URL.
 	StatusCode *int `json:"status_code,omitempty" url:"status_code,omitempty"`
-	// An object containing the payload of the test event. For example, a `payment.created` event.
-	Payload *string `json:"payload,omitempty" url:"payload,omitempty"`
+	// The payload that was sent in the test notification.
+	Payload map[string]interface{} `json:"payload,omitempty" url:"payload,omitempty"`
 	// The timestamp of when the subscription was created, in RFC 3339 format.
 	// For example, "2016-09-04T23:59:33.123Z".
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
 	// The timestamp of when the subscription was updated, in RFC 3339 format. For example, "2016-09-04T23:59:33.123Z".
 	// Because a subscription test result is unique, this field is the same as the `created_at` field.
 	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// The URL that was used for the webhook notification test.
+	NotificationURL *string `json:"notification_url,omitempty" url:"notification_url,omitempty"`
+	// Whether the notification passed any configured filters.
+	PassesFilter *bool `json:"passes_filter,omitempty" url:"passes_filter,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -91197,7 +91610,7 @@ func (s *SubscriptionTestResult) GetStatusCode() *int {
 	return s.StatusCode
 }
 
-func (s *SubscriptionTestResult) GetPayload() *string {
+func (s *SubscriptionTestResult) GetPayload() map[string]interface{} {
 	if s == nil {
 		return nil
 	}
@@ -91216,6 +91629,20 @@ func (s *SubscriptionTestResult) GetUpdatedAt() *string {
 		return nil
 	}
 	return s.UpdatedAt
+}
+
+func (s *SubscriptionTestResult) GetNotificationURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.NotificationURL
+}
+
+func (s *SubscriptionTestResult) GetPassesFilter() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.PassesFilter
 }
 
 func (s *SubscriptionTestResult) GetExtraProperties() map[string]interface{} {
@@ -91245,7 +91672,7 @@ func (s *SubscriptionTestResult) SetStatusCode(statusCode *int) {
 
 // SetPayload sets the Payload field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SubscriptionTestResult) SetPayload(payload *string) {
+func (s *SubscriptionTestResult) SetPayload(payload map[string]interface{}) {
 	s.Payload = payload
 	s.require(subscriptionTestResultFieldPayload)
 }
@@ -91262,6 +91689,20 @@ func (s *SubscriptionTestResult) SetCreatedAt(createdAt *string) {
 func (s *SubscriptionTestResult) SetUpdatedAt(updatedAt *string) {
 	s.UpdatedAt = updatedAt
 	s.require(subscriptionTestResultFieldUpdatedAt)
+}
+
+// SetNotificationURL sets the NotificationURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionTestResult) SetNotificationURL(notificationURL *string) {
+	s.NotificationURL = notificationURL
+	s.require(subscriptionTestResultFieldNotificationURL)
+}
+
+// SetPassesFilter sets the PassesFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SubscriptionTestResult) SetPassesFilter(passesFilter *bool) {
+	s.PassesFilter = passesFilter
+	s.require(subscriptionTestResultFieldPassesFilter)
 }
 
 func (s *SubscriptionTestResult) UnmarshalJSON(data []byte) error {
@@ -98286,14 +98727,14 @@ func (t *TerminalRefundUpdatedEventObject) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [TestWebhookSubscription](api-endpoint:WebhookSubscriptions-TestWebhookSubscription) endpoint.
-//
-// Note: If there are errors processing the request, the [SubscriptionTestResult](entity:SubscriptionTestResult) field is not
-// present.
+// Defines the fields that are included in the response body of a request to the TestWebhookSubscription endpoint.
 var (
 	testWebhookSubscriptionResponseFieldErrors                 = big.NewInt(1 << 0)
 	testWebhookSubscriptionResponseFieldSubscriptionTestResult = big.NewInt(1 << 1)
+	testWebhookSubscriptionResponseFieldNotificationURL        = big.NewInt(1 << 2)
+	testWebhookSubscriptionResponseFieldStatusCode             = big.NewInt(1 << 3)
+	testWebhookSubscriptionResponseFieldPassesFilter           = big.NewInt(1 << 4)
+	testWebhookSubscriptionResponseFieldPayload                = big.NewInt(1 << 5)
 )
 
 type TestWebhookSubscriptionResponse struct {
@@ -98301,6 +98742,14 @@ type TestWebhookSubscriptionResponse struct {
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The [SubscriptionTestResult](entity:SubscriptionTestResult).
 	SubscriptionTestResult *SubscriptionTestResult `json:"subscription_test_result,omitempty" url:"subscription_test_result,omitempty"`
+	// The URL that was used for the webhook notification test.
+	NotificationURL *string `json:"notification_url,omitempty" url:"notification_url,omitempty"`
+	// The HTTP status code returned by the notification URL.
+	StatusCode *int `json:"status_code,omitempty" url:"status_code,omitempty"`
+	// Whether the notification passed any configured filters.
+	PassesFilter *bool `json:"passes_filter,omitempty" url:"passes_filter,omitempty"`
+	// The payload that was sent in the test notification.
+	Payload map[string]interface{} `json:"payload,omitempty" url:"payload,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -98321,6 +98770,34 @@ func (t *TestWebhookSubscriptionResponse) GetSubscriptionTestResult() *Subscript
 		return nil
 	}
 	return t.SubscriptionTestResult
+}
+
+func (t *TestWebhookSubscriptionResponse) GetNotificationURL() *string {
+	if t == nil {
+		return nil
+	}
+	return t.NotificationURL
+}
+
+func (t *TestWebhookSubscriptionResponse) GetStatusCode() *int {
+	if t == nil {
+		return nil
+	}
+	return t.StatusCode
+}
+
+func (t *TestWebhookSubscriptionResponse) GetPassesFilter() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.PassesFilter
+}
+
+func (t *TestWebhookSubscriptionResponse) GetPayload() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
+	return t.Payload
 }
 
 func (t *TestWebhookSubscriptionResponse) GetExtraProperties() map[string]interface{} {
@@ -98346,6 +98823,34 @@ func (t *TestWebhookSubscriptionResponse) SetErrors(errors []*Error) {
 func (t *TestWebhookSubscriptionResponse) SetSubscriptionTestResult(subscriptionTestResult *SubscriptionTestResult) {
 	t.SubscriptionTestResult = subscriptionTestResult
 	t.require(testWebhookSubscriptionResponseFieldSubscriptionTestResult)
+}
+
+// SetNotificationURL sets the NotificationURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionResponse) SetNotificationURL(notificationURL *string) {
+	t.NotificationURL = notificationURL
+	t.require(testWebhookSubscriptionResponseFieldNotificationURL)
+}
+
+// SetStatusCode sets the StatusCode field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionResponse) SetStatusCode(statusCode *int) {
+	t.StatusCode = statusCode
+	t.require(testWebhookSubscriptionResponseFieldStatusCode)
+}
+
+// SetPassesFilter sets the PassesFilter field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionResponse) SetPassesFilter(passesFilter *bool) {
+	t.PassesFilter = passesFilter
+	t.require(testWebhookSubscriptionResponseFieldPassesFilter)
+}
+
+// SetPayload sets the Payload field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (t *TestWebhookSubscriptionResponse) SetPayload(payload map[string]interface{}) {
+	t.Payload = payload
+	t.require(testWebhookSubscriptionResponseFieldPayload)
 }
 
 func (t *TestWebhookSubscriptionResponse) UnmarshalJSON(data []byte) error {

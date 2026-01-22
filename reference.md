@@ -1,82 +1,4 @@
 # Reference
-## Mobile
-<details><summary><code>client.Mobile.AuthorizationCode(request) -> *square.CreateMobileAuthorizationCodeResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-__Note:__ This endpoint is used by the deprecated Reader SDK. 
-Developers should update their integration to use the [Mobile Payments SDK](https://developer.squareup.com/docs/mobile-payments-sdk), which includes its own authorization methods. 
-
-Generates code to authorize a mobile application to connect to a Square card reader.
-
-Authorization codes are one-time-use codes and expire 60 minutes after being issued.
-
-The `Authorization` header you provide to this endpoint must have the following format:
-
-```
-Authorization: Bearer ACCESS_TOKEN
-```
-
-Replace `ACCESS_TOKEN` with a
-[valid production authorization credential](https://developer.squareup.com/docs/build-basics/access-tokens).
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-request := &square.CreateMobileAuthorizationCodeRequest{
-        LocationID: square.String(
-            "YOUR_LOCATION_ID",
-        ),
-    }
-client.Mobile.AuthorizationCode(
-        context.TODO(),
-        request,
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**locationID:** `*string` — The Square location ID that the authorization code should be tied to.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## OAuth
 <details><summary><code>client.OAuth.RevokeToken(request) -> *square.RevokeTokenResponse</code></summary>
 <dl>
@@ -401,6 +323,18 @@ obtain the authorization code. This is the source of the `code_challenge` hash y
 provided in your authorization URL.
 
 Required for the PKCE flow if `grant_type` is `authorization_code`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**useJwt:** `*bool` 
+
+Indicates whether to use a JWT (JSON Web Token) as the OAuth access token.
+When set to `true`, the OAuth flow returns a JWT to your application, used in the
+same way as a regular token. The default value is `false`.
     
 </dd>
 </dl>
@@ -888,6 +822,9 @@ request := &square.ListBankAccountsRequest{
         LocationID: square.String(
             "location_id",
         ),
+        CustomerID: square.String(
+            "customer_id",
+        ),
     }
 client.BankAccounts.List(
         context.TODO(),
@@ -911,7 +848,7 @@ client.BankAccounts.List(
 **cursor:** `*string` 
 
 The pagination cursor returned by a previous call to this endpoint.
-Use it in the next `ListBankAccounts` request to retrieve the next set 
+Use it in the next `ListBankAccounts` request to retrieve the next set
 of results.
 
 See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
@@ -924,8 +861,8 @@ See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagin
 
 **limit:** `*int` 
 
-Upper limit on the number of bank accounts to return in the response. 
-Currently, 1000 is the largest supported limit. You can specify a limit 
+Upper limit on the number of bank accounts to return in the response.
+Currently, 1000 is the largest supported limit. You can specify a limit
 of up to 1000 bank accounts. This is also the default limit.
     
 </dd>
@@ -936,8 +873,106 @@ of up to 1000 bank accounts. This is also the default limit.
 
 **locationID:** `*string` 
 
-Location ID. You can specify this optional filter 
+Location ID. You can specify this optional filter
 to retrieve only the linked bank accounts belonging to a specific location.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customerID:** `*string` 
+
+Customer ID. You can specify this optional filter
+to retrieve only the linked bank accounts belonging to a specific customer.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.BankAccounts.CreateBankAccount(request) -> *square.CreateBankAccountResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Store a bank account on file for a square account
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &square.CreateBankAccountRequest{
+        IdempotencyKey: "4e43559a-f0fd-47d3-9da2-7ea1f97d94be",
+        SourceID: "bnon:CA4SEHsQwr0rx6DbWLD5BQaqMnoYAQ",
+        CustomerID: square.String(
+            "HM3B2D5JKGZ69359BTEHXM2V8M",
+        ),
+    }
+client.BankAccounts.CreateBankAccount(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `string` 
+
+Unique ID. For more information, see the
+[Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sourceID:** `string` 
+
+The ID of the source that represents the bank account information to be stored. This field
+accepts the payment token created by WebSDK
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customerID:** `*string` — The ID of the customer associated with the bank account to be stored.
     
 </dd>
 </dl>
@@ -1025,8 +1060,7 @@ Connect V1 ID of the desired `BankAccount`. For more information, see
 <dl>
 <dd>
 
-Returns details of a [BankAccount](entity:BankAccount)
-linked to a Square account.
+Retrieve details of a [BankAccount](entity:BankAccount) bank account linked to a Square account.
 </dd>
 </dl>
 </dd>
@@ -1064,6 +1098,67 @@ client.BankAccounts.Get(
 <dd>
 
 **bankAccountID:** `string` — Square-issued ID of the desired `BankAccount`.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.BankAccounts.DisableBankAccount(BankAccountID) -> *square.DisableBankAccountResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Disable a bank account.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+request := &square.DisableBankAccountRequest{
+        BankAccountID: "bank_account_id",
+    }
+client.BankAccounts.DisableBankAccount(
+        context.TODO(),
+        request,
+    )
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**bankAccountID:** `string` — The ID of the bank account to disable.
     
 </dd>
 </dl>
@@ -11824,6 +11919,8 @@ The amount must be specified in the smallest denomination of the applicable curr
 (for example, US dollar amounts are specified in cents). For more information, see
 [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
 
+Tips for external vendors such as a 3rd party delivery courier must be recorded using Order.service_charges.
+
 The currency code must match the currency associated with the business
 that is accepting the payment.
     
@@ -16572,7 +16669,7 @@ request := &square.ReceiveTransferOrderRequest{
         Receipt: &square.TransferOrderGoodsReceipt{
             LineItems: []*square.TransferOrderGoodsReceiptLineItem{
                 &square.TransferOrderGoodsReceiptLineItem{
-                    TransferOrderLineUID: "transfer_order_line_uid",
+                    TransferOrderLineUID: "1",
                     QuantityReceived: square.String(
                         "3",
                     ),
@@ -16584,7 +16681,7 @@ request := &square.ReceiveTransferOrderRequest{
                     ),
                 },
                 &square.TransferOrderGoodsReceiptLineItem{
-                    TransferOrderLineUID: "transfer_order_line_uid",
+                    TransferOrderLineUID: "2",
                     QuantityReceived: square.String(
                         "2",
                     ),
@@ -17319,6 +17416,35 @@ client.Vendors.Update(
 
 **request:** `*square.UpdateVendorRequest` 
     
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Mobile
+<details><summary><code>client.Mobile.AuthorizationCode() -> error</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```go
+client.Mobile.AuthorizationCode(
+        context.TODO(),
+    )
+}
+```
 </dd>
 </dl>
 </dd>

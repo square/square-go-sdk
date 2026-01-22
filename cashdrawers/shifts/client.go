@@ -4,11 +4,11 @@ package shifts
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	cashdrawers "github.com/square/square-go-sdk/v2/cashdrawers"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	cashdrawers "github.com/square/square-go-sdk/v3/cashdrawers"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )

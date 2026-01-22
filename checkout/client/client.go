@@ -4,11 +4,11 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	paymentlinks "github.com/square/square-go-sdk/v2/checkout/paymentlinks"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	paymentlinks "github.com/square/square-go-sdk/v3/checkout/paymentlinks"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	os "os"
 )
 

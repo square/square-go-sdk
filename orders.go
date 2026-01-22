@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -1857,7 +1857,9 @@ func (s SearchOrdersSortField) Ptr() *SearchOrdersSortField {
 
 // A filter based on order `source` information.
 var (
-	searchOrdersSourceFilterFieldSourceNames = big.NewInt(1 << 0)
+	searchOrdersSourceFilterFieldSourceNames          = big.NewInt(1 << 0)
+	searchOrdersSourceFilterFieldSourceApplicationIDs = big.NewInt(1 << 1)
+	searchOrdersSourceFilterFieldSourceClientOus      = big.NewInt(1 << 2)
 )
 
 type SearchOrdersSourceFilter struct {
@@ -1866,6 +1868,16 @@ type SearchOrdersSourceFilter struct {
 	//
 	// Max: 10 source names.
 	SourceNames []string `json:"source_names,omitempty" url:"source_names,omitempty"`
+	// Filters by the [Source](entity:OrderSource) `applicationId`. The filter returns any orders
+	// with a `source.applicationId` that matches any of the listed source applicationIds.
+	//
+	// Max: 100 source applicationIds.
+	SourceApplicationIDs []string `json:"source_application_ids,omitempty" url:"source_application_ids,omitempty"`
+	// Filters by the [Source](entity:OrderSource) `clientOu`. The filter returns any orders
+	// with a `source.clientOu` that matches any of the listed source clientOus.
+	//
+	// Max: 100 source clientOus.
+	SourceClientOus []string `json:"source_client_ous,omitempty" url:"source_client_ous,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1879,6 +1891,20 @@ func (s *SearchOrdersSourceFilter) GetSourceNames() []string {
 		return nil
 	}
 	return s.SourceNames
+}
+
+func (s *SearchOrdersSourceFilter) GetSourceApplicationIDs() []string {
+	if s == nil {
+		return nil
+	}
+	return s.SourceApplicationIDs
+}
+
+func (s *SearchOrdersSourceFilter) GetSourceClientOus() []string {
+	if s == nil {
+		return nil
+	}
+	return s.SourceClientOus
 }
 
 func (s *SearchOrdersSourceFilter) GetExtraProperties() map[string]interface{} {
@@ -1897,6 +1923,20 @@ func (s *SearchOrdersSourceFilter) require(field *big.Int) {
 func (s *SearchOrdersSourceFilter) SetSourceNames(sourceNames []string) {
 	s.SourceNames = sourceNames
 	s.require(searchOrdersSourceFilterFieldSourceNames)
+}
+
+// SetSourceApplicationIDs sets the SourceApplicationIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersSourceFilter) SetSourceApplicationIDs(sourceApplicationIDs []string) {
+	s.SourceApplicationIDs = sourceApplicationIDs
+	s.require(searchOrdersSourceFilterFieldSourceApplicationIDs)
+}
+
+// SetSourceClientOus sets the SourceClientOus field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchOrdersSourceFilter) SetSourceClientOus(sourceClientOus []string) {
+	s.SourceClientOus = sourceClientOus
+	s.require(searchOrdersSourceFilterFieldSourceClientOus)
 }
 
 func (s *SearchOrdersSourceFilter) UnmarshalJSON(data []byte) error {

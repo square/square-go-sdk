@@ -3,7 +3,7 @@
 package bookings
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -28,7 +28,7 @@ type CreateBookingCustomAttributeDefinitionRequest struct {
 	// - `schema`. With the exception of the `Selection` data type, the `schema` is specified as a
 	// simple URL to the JSON schema definition hosted on the Square CDN. For more information, see
 	// [Specifying the schema](https://developer.squareup.com/docs/booking-custom-attributes-api/custom-attribute-definitions#specify-schema).
-	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -46,7 +46,7 @@ func (c *CreateBookingCustomAttributeDefinitionRequest) require(field *big.Int) 
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+func (c *CreateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
 	c.CustomAttributeDefinition = customAttributeDefinition
 	c.require(createBookingCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -185,7 +185,7 @@ type UpdateBookingCustomAttributeDefinitionRequest struct {
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -210,7 +210,7 @@ func (u *UpdateBookingCustomAttributeDefinitionRequest) SetKey(key string) {
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+func (u *UpdateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
 	u.CustomAttributeDefinition = customAttributeDefinition
 	u.require(updateBookingCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }

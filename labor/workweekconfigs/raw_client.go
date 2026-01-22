@@ -4,11 +4,11 @@ package workweekconfigs
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	labor "github.com/square/square-go-sdk/v2/labor"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	labor "github.com/square/square-go-sdk/v3/labor"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 )
 
