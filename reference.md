@@ -17426,35 +17426,6 @@ client.Vendors.Update(
 </dl>
 </details>
 
-## Mobile
-<details><summary><code>client.Mobile.AuthorizationCode() -> error</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```go
-client.Mobile.AuthorizationCode(
-        context.TODO(),
-    )
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Bookings CustomAttributeDefinitions
 <details><summary><code>client.Bookings.CustomAttributeDefinitions.List() -> *square.ListBookingCustomAttributeDefinitionsResponse</code></summary>
 <dl>
