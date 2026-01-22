@@ -4,14 +4,14 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	customattributedefinitions "github.com/square/square-go-sdk/v2/bookings/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/v2/bookings/customattributes"
-	locationprofiles "github.com/square/square-go-sdk/v2/bookings/locationprofiles"
-	teammemberprofiles "github.com/square/square-go-sdk/v2/bookings/teammemberprofiles"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	customattributedefinitions "github.com/square/square-go-sdk/v3/bookings/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v3/bookings/customattributes"
+	locationprofiles "github.com/square/square-go-sdk/v3/bookings/locationprofiles"
+	teammemberprofiles "github.com/square/square-go-sdk/v3/bookings/teammemberprofiles"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )

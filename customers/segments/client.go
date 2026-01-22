@@ -4,11 +4,11 @@ package segments
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	customers "github.com/square/square-go-sdk/v2/customers"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	customers "github.com/square/square-go-sdk/v3/customers"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )

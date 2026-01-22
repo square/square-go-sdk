@@ -3,7 +3,7 @@
 package customers
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -52,7 +52,7 @@ type CreateCustomerGroupRequest struct {
 	// The idempotency key for the request. For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The customer group to create.
-	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v3.CustomerGroup `json:"group,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -74,7 +74,7 @@ func (c *CreateCustomerGroupRequest) SetIdempotencyKey(idempotencyKey *string) {
 
 // SetGroup sets the Group field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateCustomerGroupRequest) SetGroup(group *v2.CustomerGroup) {
+func (c *CreateCustomerGroupRequest) SetGroup(group *v3.CustomerGroup) {
 	c.Group = group
 	c.require(createCustomerGroupRequestFieldGroup)
 }
@@ -218,7 +218,7 @@ type UpdateCustomerGroupRequest struct {
 	// The ID of the customer group to update.
 	GroupID string `json:"-" url:"-"`
 	// The `CustomerGroup` object including all the updates you want to make.
-	Group *v2.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v3.CustomerGroup `json:"group,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -240,7 +240,7 @@ func (u *UpdateCustomerGroupRequest) SetGroupID(groupID string) {
 
 // SetGroup sets the Group field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateCustomerGroupRequest) SetGroup(group *v2.CustomerGroup) {
+func (u *UpdateCustomerGroupRequest) SetGroup(group *v3.CustomerGroup) {
 	u.Group = group
 	u.require(updateCustomerGroupRequestFieldGroup)
 }

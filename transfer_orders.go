@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 

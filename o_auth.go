@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -20,6 +20,7 @@ var (
 	obtainTokenRequestFieldScopes         = big.NewInt(1 << 7)
 	obtainTokenRequestFieldShortLived     = big.NewInt(1 << 8)
 	obtainTokenRequestFieldCodeVerifier   = big.NewInt(1 << 9)
+	obtainTokenRequestFieldUseJwt         = big.NewInt(1 << 10)
 )
 
 type ObtainTokenRequest struct {
@@ -81,6 +82,10 @@ type ObtainTokenRequest struct {
 	//
 	// Required for the PKCE flow if `grant_type` is `authorization_code`.
 	CodeVerifier *string `json:"code_verifier,omitempty" url:"-"`
+	// Indicates whether to use a JWT (JSON Web Token) as the OAuth access token.
+	// When set to `true`, the OAuth flow returns a JWT to your application, used in the
+	// same way as a regular token. The default value is `false`.
+	UseJwt *bool `json:"use_jwt,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -161,6 +166,13 @@ func (o *ObtainTokenRequest) SetShortLived(shortLived *bool) {
 func (o *ObtainTokenRequest) SetCodeVerifier(codeVerifier *string) {
 	o.CodeVerifier = codeVerifier
 	o.require(obtainTokenRequestFieldCodeVerifier)
+}
+
+// SetUseJwt sets the UseJwt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (o *ObtainTokenRequest) SetUseJwt(useJwt *bool) {
+	o.UseJwt = useJwt
+	o.require(obtainTokenRequestFieldUseJwt)
 }
 
 var (

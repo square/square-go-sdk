@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	square "github.com/square/square-go-sdk/v2"
-	"github.com/square/square-go-sdk/v2/catalog"
-	"github.com/square/square-go-sdk/v2/core"
+	square "github.com/square/square-go-sdk/v3"
+	"github.com/square/square-go-sdk/v3/catalog"
+	"github.com/square/square-go-sdk/v3/core"
 )
 
 // Catalog API integration tests.

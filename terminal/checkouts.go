@@ -3,7 +3,7 @@
 package terminal
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -45,7 +45,7 @@ type CreateTerminalCheckoutRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The checkout to create.
-	Checkout *v2.TerminalCheckout `json:"checkout,omitempty" url:"-"`
+	Checkout *v3.TerminalCheckout `json:"checkout,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -67,7 +67,7 @@ func (c *CreateTerminalCheckoutRequest) SetIdempotencyKey(idempotencyKey string)
 
 // SetCheckout sets the Checkout field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v2.TerminalCheckout) {
+func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v3.TerminalCheckout) {
 	c.Checkout = checkout
 	c.require(createTerminalCheckoutRequestFieldCheckout)
 }
@@ -107,7 +107,7 @@ var (
 type SearchTerminalCheckoutsRequest struct {
 	// Queries Terminal checkouts based on given conditions and the sort order.
 	// Leaving these unset returns all checkouts with the default sort order.
-	Query *v2.TerminalCheckoutQuery `json:"query,omitempty" url:"-"`
+	Query *v3.TerminalCheckoutQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
@@ -128,7 +128,7 @@ func (s *SearchTerminalCheckoutsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchTerminalCheckoutsRequest) SetQuery(query *v2.TerminalCheckoutQuery) {
+func (s *SearchTerminalCheckoutsRequest) SetQuery(query *v3.TerminalCheckoutQuery) {
 	s.Query = query
 	s.require(searchTerminalCheckoutsRequestFieldQuery)
 }

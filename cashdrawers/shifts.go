@@ -3,7 +3,7 @@
 package cashdrawers
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -57,7 +57,7 @@ type ListShiftsRequest struct {
 	LocationID string `json:"-" url:"location_id"`
 	// The order in which cash drawer shifts are listed in the response,
 	// based on their opened_at field. Default value: ASC
-	SortOrder *v2.SortOrder `json:"-" url:"sort_order,omitempty"`
+	SortOrder *v3.SortOrder `json:"-" url:"sort_order,omitempty"`
 	// The inclusive start time of the query on opened_at, in ISO 8601 format.
 	BeginTime *string `json:"-" url:"begin_time,omitempty"`
 	// The exclusive end date of the query on opened_at, in ISO 8601 format.
@@ -88,7 +88,7 @@ func (l *ListShiftsRequest) SetLocationID(locationID string) {
 
 // SetSortOrder sets the SortOrder field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListShiftsRequest) SetSortOrder(sortOrder *v2.SortOrder) {
+func (l *ListShiftsRequest) SetSortOrder(sortOrder *v3.SortOrder) {
 	l.SortOrder = sortOrder
 	l.require(listShiftsRequestFieldSortOrder)
 }

@@ -4,10 +4,9 @@ package mobile
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	option "github.com/square/square-go-sdk/v2/option"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 )
 
@@ -32,9 +31,8 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 
 func (r *RawClient) AuthorizationCode(
 	ctx context.Context,
-	request *square.CreateMobileAuthorizationCodeRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*square.CreateMobileAuthorizationCodeResponse], error) {
+) (*core.Response[any], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -46,8 +44,6 @@ func (r *RawClient) AuthorizationCode(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	headers.Add("Content-Type", "application/json")
-	var response *square.CreateMobileAuthorizationCodeResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -58,16 +54,14 @@ func (r *RawClient) AuthorizationCode(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
-			Response:        &response,
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*square.CreateMobileAuthorizationCodeResponse]{
+	return &core.Response[any]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
-		Body:       response,
+		Body:       nil,
 	}, nil
 }

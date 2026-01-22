@@ -5,12 +5,12 @@ package client
 import (
 	context "context"
 	fmt "fmt"
-	square "github.com/square/square-go-sdk/v2"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
-	customattributedefinitions "github.com/square/square-go-sdk/v2/merchants/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/v2/merchants/customattributes"
-	option "github.com/square/square-go-sdk/v2/option"
+	square "github.com/square/square-go-sdk/v3"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
+	customattributedefinitions "github.com/square/square-go-sdk/v3/merchants/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v3/merchants/customattributes"
+	option "github.com/square/square-go-sdk/v3/option"
 	http "net/http"
 	os "os"
 )

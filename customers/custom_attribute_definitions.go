@@ -3,7 +3,7 @@
 package customers
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -15,7 +15,7 @@ type BatchUpsertCustomerCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertCustomerCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v2.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -30,7 +30,7 @@ func (b *BatchUpsertCustomerCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BatchUpsertCustomerCustomAttributesRequest) SetValues(values map[string]*v2.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) {
+func (b *BatchUpsertCustomerCustomAttributesRequest) SetValues(values map[string]*v3.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(batchUpsertCustomerCustomAttributesRequestFieldValues)
 }
@@ -47,7 +47,7 @@ type CreateCustomerCustomAttributeDefinitionRequest struct {
 	// [Specifying the schema](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attribute-definitions#specify-schema).
 	// - If provided, `name` must be unique (case-sensitive) across all visible customer-related custom attribute definitions for the seller.
 	// - All custom attributes are visible in exported customer data, including those set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -65,7 +65,7 @@ func (c *CreateCustomerCustomAttributeDefinitionRequest) require(field *big.Int)
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateCustomerCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+func (c *CreateCustomerCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
 	c.CustomAttributeDefinition = customAttributeDefinition
 	c.require(createCustomerCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -207,7 +207,7 @@ type UpdateCustomerCustomAttributeDefinitionRequest struct {
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *v2.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -232,7 +232,7 @@ func (u *UpdateCustomerCustomAttributeDefinitionRequest) SetKey(key string) {
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateCustomerCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v2.CustomAttributeDefinition) {
+func (u *UpdateCustomerCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
 	u.CustomAttributeDefinition = customAttributeDefinition
 	u.require(updateCustomerCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }

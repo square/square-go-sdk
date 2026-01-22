@@ -3,7 +3,7 @@
 package terminal
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -45,7 +45,7 @@ type CreateTerminalRefundRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The refund to create.
-	Refund *v2.TerminalRefund `json:"refund,omitempty" url:"-"`
+	Refund *v3.TerminalRefund `json:"refund,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -67,7 +67,7 @@ func (c *CreateTerminalRefundRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetRefund sets the Refund field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateTerminalRefundRequest) SetRefund(refund *v2.TerminalRefund) {
+func (c *CreateTerminalRefundRequest) SetRefund(refund *v3.TerminalRefund) {
 	c.Refund = refund
 	c.require(createTerminalRefundRequestFieldRefund)
 }
@@ -108,7 +108,7 @@ type SearchTerminalRefundsRequest struct {
 	// Queries the Terminal refunds based on given conditions and the sort order. Calling
 	// `SearchTerminalRefunds` without an explicit query parameter returns all available
 	// refunds with the default sort order.
-	Query *v2.TerminalRefundQuery `json:"query,omitempty" url:"-"`
+	Query *v3.TerminalRefundQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	Cursor *string `json:"cursor,omitempty" url:"-"`
@@ -128,7 +128,7 @@ func (s *SearchTerminalRefundsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchTerminalRefundsRequest) SetQuery(query *v2.TerminalRefundQuery) {
+func (s *SearchTerminalRefundsRequest) SetQuery(query *v3.TerminalRefundQuery) {
 	s.Query = query
 	s.require(searchTerminalRefundsRequestFieldQuery)
 }

@@ -3,9 +3,9 @@
 package client
 
 import (
-	shifts "github.com/square/square-go-sdk/v2/cashdrawers/shifts"
-	core "github.com/square/square-go-sdk/v2/core"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	shifts "github.com/square/square-go-sdk/v3/cashdrawers/shifts"
+	core "github.com/square/square-go-sdk/v3/core"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	os "os"
 )
 

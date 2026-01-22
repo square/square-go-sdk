@@ -5,9 +5,83 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
+
+var (
+	createBankAccountRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	createBankAccountRequestFieldSourceID       = big.NewInt(1 << 1)
+	createBankAccountRequestFieldCustomerID     = big.NewInt(1 << 2)
+)
+
+type CreateBankAccountRequest struct {
+	// Unique ID. For more information, see the
+	// [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
+	IdempotencyKey string `json:"idempotency_key" url:"-"`
+	// The ID of the source that represents the bank account information to be stored. This field
+	// accepts the payment token created by WebSDK
+	SourceID string `json:"source_id" url:"-"`
+	// The ID of the customer associated with the bank account to be stored.
+	CustomerID *string `json:"customer_id,omitempty" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateBankAccountRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBankAccountRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createBankAccountRequestFieldIdempotencyKey)
+}
+
+// SetSourceID sets the SourceID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBankAccountRequest) SetSourceID(sourceID string) {
+	c.SourceID = sourceID
+	c.require(createBankAccountRequestFieldSourceID)
+}
+
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBankAccountRequest) SetCustomerID(customerID *string) {
+	c.CustomerID = customerID
+	c.require(createBankAccountRequestFieldCustomerID)
+}
+
+var (
+	disableBankAccountRequestFieldBankAccountID = big.NewInt(1 << 0)
+)
+
+type DisableBankAccountRequest struct {
+	// The ID of the bank account to disable.
+	BankAccountID string `json:"-" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (d *DisableBankAccountRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetBankAccountID sets the BankAccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableBankAccountRequest) SetBankAccountID(bankAccountID string) {
+	d.BankAccountID = bankAccountID
+	d.require(disableBankAccountRequestFieldBankAccountID)
+}
 
 var (
 	getByV1IDBankAccountsRequestFieldV1BankAccountID = big.NewInt(1 << 0)
@@ -66,6 +140,7 @@ var (
 	listBankAccountsRequestFieldCursor     = big.NewInt(1 << 0)
 	listBankAccountsRequestFieldLimit      = big.NewInt(1 << 1)
 	listBankAccountsRequestFieldLocationID = big.NewInt(1 << 2)
+	listBankAccountsRequestFieldCustomerID = big.NewInt(1 << 3)
 )
 
 type ListBankAccountsRequest struct {
@@ -82,6 +157,9 @@ type ListBankAccountsRequest struct {
 	// Location ID. You can specify this optional filter
 	// to retrieve only the linked bank accounts belonging to a specific location.
 	LocationID *string `json:"-" url:"location_id,omitempty"`
+	// Customer ID. You can specify this optional filter
+	// to retrieve only the linked bank accounts belonging to a specific customer.
+	CustomerID *string `json:"-" url:"customer_id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -115,6 +193,13 @@ func (l *ListBankAccountsRequest) SetLocationID(locationID *string) {
 	l.require(listBankAccountsRequestFieldLocationID)
 }
 
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBankAccountsRequest) SetCustomerID(customerID *string) {
+	l.CustomerID = customerID
+	l.require(listBankAccountsRequestFieldCustomerID)
+}
+
 // Represents a bank account. For more information about
 // linking a bank account to a Square account, see
 // [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
@@ -136,6 +221,7 @@ var (
 	bankAccountFieldFingerprint                       = big.NewInt(1 << 14)
 	bankAccountFieldVersion                           = big.NewInt(1 << 15)
 	bankAccountFieldBankName                          = big.NewInt(1 << 16)
+	bankAccountFieldCustomerID                        = big.NewInt(1 << 17)
 )
 
 type BankAccount struct {
@@ -188,6 +274,8 @@ type BankAccount struct {
 	// Read only. Name of actual financial institution.
 	// For example "Bank of America".
 	BankName *string `json:"bank_name,omitempty" url:"bank_name,omitempty"`
+	// The ID of the customer who owns the bank account
+	CustomerID *string `json:"customer_id,omitempty" url:"customer_id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -313,6 +401,13 @@ func (b *BankAccount) GetBankName() *string {
 		return nil
 	}
 	return b.BankName
+}
+
+func (b *BankAccount) GetCustomerID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.CustomerID
 }
 
 func (b *BankAccount) GetExtraProperties() map[string]interface{} {
@@ -445,6 +540,13 @@ func (b *BankAccount) SetBankName(bankName *string) {
 	b.require(bankAccountFieldBankName)
 }
 
+// SetCustomerID sets the CustomerID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BankAccount) SetCustomerID(customerID *string) {
+	b.CustomerID = customerID
+	b.require(bankAccountFieldCustomerID)
+}
+
 func (b *BankAccount) UnmarshalJSON(data []byte) error {
 	type unmarshaler BankAccount
 	var value unmarshaler
@@ -540,6 +642,200 @@ func NewBankAccountTypeFromString(s string) (BankAccountType, error) {
 
 func (b BankAccountType) Ptr() *BankAccountType {
 	return &b
+}
+
+// Response object returned by CreateBankAccount.
+var (
+	createBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
+	createBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
+)
+
+type CreateBankAccountResponse struct {
+	// The 'BankAccount' that was created.
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateBankAccountResponse) GetBankAccount() *BankAccount {
+	if c == nil {
+		return nil
+	}
+	return c.BankAccount
+}
+
+func (c *CreateBankAccountResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateBankAccountResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetBankAccount sets the BankAccount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBankAccountResponse) SetBankAccount(bankAccount *BankAccount) {
+	c.BankAccount = bankAccount
+	c.require(createBankAccountResponseFieldBankAccount)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateBankAccountResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createBankAccountResponseFieldErrors)
+}
+
+func (c *CreateBankAccountResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBankAccountResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateBankAccountResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateBankAccountResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateBankAccountResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateBankAccountResponse) String() string {
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Response object returned by `DisableBankAccount`.
+var (
+	disableBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
+	disableBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
+)
+
+type DisableBankAccountResponse struct {
+	// The disabled 'BankAccount'
+	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DisableBankAccountResponse) GetBankAccount() *BankAccount {
+	if d == nil {
+		return nil
+	}
+	return d.BankAccount
+}
+
+func (d *DisableBankAccountResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DisableBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DisableBankAccountResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetBankAccount sets the BankAccount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableBankAccountResponse) SetBankAccount(bankAccount *BankAccount) {
+	d.BankAccount = bankAccount
+	d.require(disableBankAccountResponseFieldBankAccount)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DisableBankAccountResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(disableBankAccountResponseFieldErrors)
+}
+
+func (d *DisableBankAccountResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DisableBankAccountResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DisableBankAccountResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DisableBankAccountResponse) MarshalJSON() ([]byte, error) {
+	type embed DisableBankAccountResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (d *DisableBankAccountResponse) String() string {
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
 }
 
 // Response object returned by GetBankAccountByV1Id.
@@ -641,15 +937,15 @@ func (g *GetBankAccountByV1IDResponse) String() string {
 
 // Response object returned by `GetBankAccount`.
 var (
-	getBankAccountResponseFieldErrors      = big.NewInt(1 << 0)
-	getBankAccountResponseFieldBankAccount = big.NewInt(1 << 1)
+	getBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
+	getBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
 type GetBankAccountResponse struct {
-	// Information on errors encountered during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// The requested `BankAccount` object.
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -658,18 +954,18 @@ type GetBankAccountResponse struct {
 	rawJSON         json.RawMessage
 }
 
-func (g *GetBankAccountResponse) GetErrors() []*Error {
-	if g == nil {
-		return nil
-	}
-	return g.Errors
-}
-
 func (g *GetBankAccountResponse) GetBankAccount() *BankAccount {
 	if g == nil {
 		return nil
 	}
 	return g.BankAccount
+}
+
+func (g *GetBankAccountResponse) GetErrors() []*Error {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
 }
 
 func (g *GetBankAccountResponse) GetExtraProperties() map[string]interface{} {
@@ -683,18 +979,18 @@ func (g *GetBankAccountResponse) require(field *big.Int) {
 	g.explicitFields.Or(g.explicitFields, field)
 }
 
-// SetErrors sets the Errors field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetBankAccountResponse) SetErrors(errors []*Error) {
-	g.Errors = errors
-	g.require(getBankAccountResponseFieldErrors)
-}
-
 // SetBankAccount sets the BankAccount field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (g *GetBankAccountResponse) SetBankAccount(bankAccount *BankAccount) {
 	g.BankAccount = bankAccount
 	g.require(getBankAccountResponseFieldBankAccount)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetBankAccountResponse) SetErrors(errors []*Error) {
+	g.Errors = errors
+	g.require(getBankAccountResponseFieldErrors)
 }
 
 func (g *GetBankAccountResponse) UnmarshalJSON(data []byte) error {
@@ -738,16 +1034,16 @@ func (g *GetBankAccountResponse) String() string {
 
 // Response object returned by ListBankAccounts.
 var (
-	listBankAccountsResponseFieldErrors       = big.NewInt(1 << 0)
-	listBankAccountsResponseFieldBankAccounts = big.NewInt(1 << 1)
+	listBankAccountsResponseFieldBankAccounts = big.NewInt(1 << 0)
+	listBankAccountsResponseFieldErrors       = big.NewInt(1 << 1)
 	listBankAccountsResponseFieldCursor       = big.NewInt(1 << 2)
 )
 
 type ListBankAccountsResponse struct {
-	// Information on errors encountered during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// List of BankAccounts associated with this account.
 	BankAccounts []*BankAccount `json:"bank_accounts,omitempty" url:"bank_accounts,omitempty"`
+	// Information on errors encountered during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 	// When a response is truncated, it includes a cursor that you can
 	// use in a subsequent request to fetch next set of bank accounts.
 	// If empty, this is the final response.
@@ -762,18 +1058,18 @@ type ListBankAccountsResponse struct {
 	rawJSON         json.RawMessage
 }
 
-func (l *ListBankAccountsResponse) GetErrors() []*Error {
-	if l == nil {
-		return nil
-	}
-	return l.Errors
-}
-
 func (l *ListBankAccountsResponse) GetBankAccounts() []*BankAccount {
 	if l == nil {
 		return nil
 	}
 	return l.BankAccounts
+}
+
+func (l *ListBankAccountsResponse) GetErrors() []*Error {
+	if l == nil {
+		return nil
+	}
+	return l.Errors
 }
 
 func (l *ListBankAccountsResponse) GetCursor() *string {
@@ -794,18 +1090,18 @@ func (l *ListBankAccountsResponse) require(field *big.Int) {
 	l.explicitFields.Or(l.explicitFields, field)
 }
 
-// SetErrors sets the Errors field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListBankAccountsResponse) SetErrors(errors []*Error) {
-	l.Errors = errors
-	l.require(listBankAccountsResponseFieldErrors)
-}
-
 // SetBankAccounts sets the BankAccounts field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (l *ListBankAccountsResponse) SetBankAccounts(bankAccounts []*BankAccount) {
 	l.BankAccounts = bankAccounts
 	l.require(listBankAccountsResponseFieldBankAccounts)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListBankAccountsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listBankAccountsResponseFieldErrors)
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;

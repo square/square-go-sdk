@@ -3,7 +3,7 @@
 package orders
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -13,7 +13,7 @@ var (
 
 type BulkDeleteOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual delete operations for custom attributes.
-	Values map[string]*v2.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -28,7 +28,7 @@ func (b *BulkDeleteOrderCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkDeleteOrderCustomAttributesRequest) SetValues(values map[string]*v2.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) {
+func (b *BulkDeleteOrderCustomAttributesRequest) SetValues(values map[string]*v3.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) {
 	b.Values = values
 	b.require(bulkDeleteOrderCustomAttributesRequestFieldValues)
 }
@@ -39,7 +39,7 @@ var (
 
 type BulkUpsertOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual upsert operations for custom attributes.
-	Values map[string]*v2.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -54,7 +54,7 @@ func (b *BulkUpsertOrderCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkUpsertOrderCustomAttributesRequest) SetValues(values map[string]*v2.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) {
+func (b *BulkUpsertOrderCustomAttributesRequest) SetValues(values map[string]*v3.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) {
 	b.Values = values
 	b.require(bulkUpsertOrderCustomAttributesRequestFieldValues)
 }
@@ -168,7 +168,7 @@ type ListCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *v2.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v3.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
@@ -203,7 +203,7 @@ func (l *ListCustomAttributesRequest) SetOrderID(orderID string) {
 
 // SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v2.VisibilityFilter) {
+func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v3.VisibilityFilter) {
 	l.VisibilityFilter = visibilityFilter
 	l.require(listCustomAttributesRequestFieldVisibilityFilter)
 }
@@ -249,7 +249,7 @@ type UpsertOrderCustomAttributeRequest struct {
 	//
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include this optional field and specify the current version of the custom attribute.
-	CustomAttribute *v2.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -281,7 +281,7 @@ func (u *UpsertOrderCustomAttributeRequest) SetCustomAttributeKey(customAttribut
 
 // SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *v2.CustomAttribute) {
+func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *v3.CustomAttribute) {
 	u.CustomAttribute = customAttribute
 	u.require(upsertOrderCustomAttributeRequestFieldCustomAttribute)
 }

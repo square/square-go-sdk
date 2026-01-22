@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v2/internal"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -158,6 +158,8 @@ type CreatePaymentRequest struct {
 	// The amount must be specified in the smallest denomination of the applicable currency
 	// (for example, US dollar amounts are specified in cents). For more information, see
 	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	//
+	// Tips for external vendors such as a 3rd party delivery courier must be recorded using Order.service_charges.
 	//
 	// The currency code must match the currency associated with the business
 	// that is accepting the payment.
@@ -1237,6 +1239,7 @@ var (
 	buyNowPayLaterDetailsFieldBrand           = big.NewInt(1 << 0)
 	buyNowPayLaterDetailsFieldAfterpayDetails = big.NewInt(1 << 1)
 	buyNowPayLaterDetailsFieldClearpayDetails = big.NewInt(1 << 2)
+	buyNowPayLaterDetailsFieldErrors          = big.NewInt(1 << 3)
 )
 
 type BuyNowPayLaterDetails struct {
@@ -1249,6 +1252,8 @@ type BuyNowPayLaterDetails struct {
 	// Details about a Clearpay payment. These details are only populated if the `brand` is
 	// `CLEARPAY`.
 	ClearpayDetails *ClearpayDetails `json:"clearpay_details,omitempty" url:"clearpay_details,omitempty"`
+	// Information about errors encountered during the payment.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1276,6 +1281,13 @@ func (b *BuyNowPayLaterDetails) GetClearpayDetails() *ClearpayDetails {
 		return nil
 	}
 	return b.ClearpayDetails
+}
+
+func (b *BuyNowPayLaterDetails) GetErrors() []*Error {
+	if b == nil {
+		return nil
+	}
+	return b.Errors
 }
 
 func (b *BuyNowPayLaterDetails) GetExtraProperties() map[string]interface{} {
@@ -1308,6 +1320,13 @@ func (b *BuyNowPayLaterDetails) SetAfterpayDetails(afterpayDetails *AfterpayDeta
 func (b *BuyNowPayLaterDetails) SetClearpayDetails(clearpayDetails *ClearpayDetails) {
 	b.ClearpayDetails = clearpayDetails
 	b.require(buyNowPayLaterDetailsFieldClearpayDetails)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BuyNowPayLaterDetails) SetErrors(errors []*Error) {
+	b.Errors = errors
+	b.require(buyNowPayLaterDetailsFieldErrors)
 }
 
 func (b *BuyNowPayLaterDetails) UnmarshalJSON(data []byte) error {
@@ -2700,6 +2719,7 @@ var (
 	digitalWalletDetailsFieldStatus         = big.NewInt(1 << 0)
 	digitalWalletDetailsFieldBrand          = big.NewInt(1 << 1)
 	digitalWalletDetailsFieldCashAppDetails = big.NewInt(1 << 2)
+	digitalWalletDetailsFieldErrors         = big.NewInt(1 << 3)
 )
 
 type DigitalWalletDetails struct {
@@ -2707,10 +2727,12 @@ type DigitalWalletDetails struct {
 	// `FAILED`.
 	Status *string `json:"status,omitempty" url:"status,omitempty"`
 	// The brand used for the `WALLET` payment. The brand can be `CASH_APP`, `PAYPAY`, `ALIPAY`,
-	// `RAKUTEN_PAY`, `AU_PAY`, `D_BARAI`, `MERPAY`, `WECHAT_PAY` or `UNKNOWN`.
+	// `RAKUTEN_PAY`, `AU_PAY`, `D_BARAI`, `MERPAY`, `WECHAT_PAY`, `LIGHTNING` or `UNKNOWN`.
 	Brand *string `json:"brand,omitempty" url:"brand,omitempty"`
 	// Brand-specific details for payments with the `brand` of `CASH_APP`.
 	CashAppDetails *CashAppDetails `json:"cash_app_details,omitempty" url:"cash_app_details,omitempty"`
+	// Information about errors encountered during the payment.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2738,6 +2760,13 @@ func (d *DigitalWalletDetails) GetCashAppDetails() *CashAppDetails {
 		return nil
 	}
 	return d.CashAppDetails
+}
+
+func (d *DigitalWalletDetails) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
 }
 
 func (d *DigitalWalletDetails) GetExtraProperties() map[string]interface{} {
@@ -2770,6 +2799,13 @@ func (d *DigitalWalletDetails) SetBrand(brand *string) {
 func (d *DigitalWalletDetails) SetCashAppDetails(cashAppDetails *CashAppDetails) {
 	d.CashAppDetails = cashAppDetails
 	d.require(digitalWalletDetailsFieldCashAppDetails)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DigitalWalletDetails) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(digitalWalletDetailsFieldErrors)
 }
 
 func (d *DigitalWalletDetails) UnmarshalJSON(data []byte) error {

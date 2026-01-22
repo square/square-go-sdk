@@ -3,7 +3,7 @@
 package customers
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -192,7 +192,7 @@ type UpsertCustomerCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *v2.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -224,7 +224,7 @@ func (u *UpsertCustomerCustomAttributeRequest) SetKey(key string) {
 
 // SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertCustomerCustomAttributeRequest) SetCustomAttribute(customAttribute *v2.CustomAttribute) {
+func (u *UpsertCustomerCustomAttributeRequest) SetCustomAttribute(customAttribute *v3.CustomAttribute) {
 	u.CustomAttribute = customAttribute
 	u.require(upsertCustomerCustomAttributeRequestFieldCustomAttribute)
 }

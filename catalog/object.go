@@ -3,7 +3,7 @@
 package catalog
 
 import (
-	v2 "github.com/square/square-go-sdk/v2"
+	v3 "github.com/square/square-go-sdk/v3"
 	big "math/big"
 )
 
@@ -131,7 +131,7 @@ type UpsertCatalogObjectRequest struct {
 	//
 	// - For updates, the object must be active (the `is_deleted` field is not `true`).
 	// - For creates, the object ID must start with `#`. The provided ID is replaced with a server-generated ID.
-	Object *v2.CatalogObject `json:"object,omitempty" url:"-"`
+	Object *v3.CatalogObject `json:"object,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -153,7 +153,7 @@ func (u *UpsertCatalogObjectRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetObject sets the Object field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertCatalogObjectRequest) SetObject(object *v2.CatalogObject) {
+func (u *UpsertCatalogObjectRequest) SetObject(object *v3.CatalogObject) {
 	u.Object = object
 	u.require(upsertCatalogObjectRequestFieldObject)
 }
