@@ -59,6 +59,27 @@ func (b *BulkSwapPlanRequest) SetLocationID(locationID string) {
 	b.require(bulkSwapPlanRequestFieldLocationID)
 }
 
+func (b *BulkSwapPlanRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkSwapPlanRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkSwapPlanRequest(body)
+	return nil
+}
+
+func (b *BulkSwapPlanRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkSwapPlanRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	changeBillingAnchorDateRequestFieldSubscriptionID           = big.NewInt(1 << 0)
 	changeBillingAnchorDateRequestFieldMonthlyBillingAnchorDate = big.NewInt(1 << 1)
@@ -107,6 +128,27 @@ func (c *ChangeBillingAnchorDateRequest) SetMonthlyBillingAnchorDate(monthlyBill
 func (c *ChangeBillingAnchorDateRequest) SetEffectiveDate(effectiveDate *string) {
 	c.EffectiveDate = effectiveDate
 	c.require(changeBillingAnchorDateRequestFieldEffectiveDate)
+}
+
+func (c *ChangeBillingAnchorDateRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChangeBillingAnchorDateRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = ChangeBillingAnchorDateRequest(body)
+	return nil
+}
+
+func (c *ChangeBillingAnchorDateRequest) MarshalJSON() ([]byte, error) {
+	type embed ChangeBillingAnchorDateRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -191,6 +233,27 @@ func (s *SwapPlanRequest) SetNewPlanVariationID(newPlanVariationID *string) {
 func (s *SwapPlanRequest) SetPhases(phases []*PhaseInput) {
 	s.Phases = phases
 	s.require(swapPlanRequestFieldPhases)
+}
+
+func (s *SwapPlanRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SwapPlanRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SwapPlanRequest(body)
+	return nil
+}
+
+func (s *SwapPlanRequest) MarshalJSON() ([]byte, error) {
+	type embed SwapPlanRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -387,6 +450,27 @@ func (c *CreateSubscriptionRequest) SetPhases(phases []*Phase) {
 	c.require(createSubscriptionRequestFieldPhases)
 }
 
+func (c *CreateSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateSubscriptionRequest(body)
+	return nil
+}
+
+func (c *CreateSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	getSubscriptionsRequestFieldSubscriptionID = big.NewInt(1 << 0)
 	getSubscriptionsRequestFieldInclude        = big.NewInt(1 << 1)
@@ -564,6 +648,27 @@ func (p *PauseSubscriptionRequest) SetPauseReason(pauseReason *string) {
 	p.require(pauseSubscriptionRequestFieldPauseReason)
 }
 
+func (p *PauseSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PauseSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*p = PauseSubscriptionRequest(body)
+	return nil
+}
+
+func (p *PauseSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed PauseSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	resumeSubscriptionRequestFieldSubscriptionID      = big.NewInt(1 << 0)
 	resumeSubscriptionRequestFieldResumeEffectiveDate = big.NewInt(1 << 1)
@@ -610,6 +715,27 @@ func (r *ResumeSubscriptionRequest) SetResumeEffectiveDate(resumeEffectiveDate *
 func (r *ResumeSubscriptionRequest) SetResumeChangeTiming(resumeChangeTiming *ChangeTiming) {
 	r.ResumeChangeTiming = resumeChangeTiming
 	r.require(resumeSubscriptionRequestFieldResumeChangeTiming)
+}
+
+func (r *ResumeSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ResumeSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = ResumeSubscriptionRequest(body)
+	return nil
+}
+
+func (r *ResumeSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed ResumeSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -679,6 +805,27 @@ func (s *SearchSubscriptionsRequest) SetInclude(include []string) {
 	s.require(searchSubscriptionsRequestFieldInclude)
 }
 
+func (s *SearchSubscriptionsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchSubscriptionsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchSubscriptionsRequest(body)
+	return nil
+}
+
+func (s *SearchSubscriptionsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchSubscriptionsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines output parameters in a response of the
 // [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
 var (
@@ -714,6 +861,9 @@ func (b *BulkSwapPlanResponse) GetAffectedSubscriptions() *int {
 }
 
 func (b *BulkSwapPlanResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -766,6 +916,9 @@ func (b *BulkSwapPlanResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkSwapPlanResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -822,6 +975,9 @@ func (c *CancelSubscriptionResponse) GetActions() []*SubscriptionAction {
 }
 
 func (c *CancelSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -881,6 +1037,9 @@ func (c *CancelSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelSubscriptionResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -937,6 +1096,9 @@ func (c *ChangeBillingAnchorDateResponse) GetActions() []*SubscriptionAction {
 }
 
 func (c *ChangeBillingAnchorDateResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -996,6 +1158,9 @@ func (c *ChangeBillingAnchorDateResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ChangeBillingAnchorDateResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1068,6 +1233,9 @@ func (c *CreateSubscriptionResponse) GetSubscription() *Subscription {
 }
 
 func (c *CreateSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1120,6 +1288,9 @@ func (c *CreateSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateSubscriptionResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1166,6 +1337,9 @@ func (d *DeleteSubscriptionActionResponse) GetSubscription() *Subscription {
 }
 
 func (d *DeleteSubscriptionActionResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1218,6 +1392,9 @@ func (d *DeleteSubscriptionActionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteSubscriptionActionResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1264,6 +1441,9 @@ func (g *GetSubscriptionResponse) GetSubscription() *Subscription {
 }
 
 func (g *GetSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1316,6 +1496,9 @@ func (g *GetSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetSubscriptionResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1376,6 +1559,9 @@ func (l *ListSubscriptionEventsResponse) GetCursor() *string {
 }
 
 func (l *ListSubscriptionEventsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1435,6 +1621,9 @@ func (l *ListSubscriptionEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListSubscriptionEventsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1491,6 +1680,9 @@ func (p *PauseSubscriptionResponse) GetActions() []*SubscriptionAction {
 }
 
 func (p *PauseSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1550,6 +1742,9 @@ func (p *PauseSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PauseSubscriptionResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1615,6 +1810,9 @@ func (p *Phase) GetPlanPhaseUID() *string {
 }
 
 func (p *Phase) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1681,6 +1879,9 @@ func (p *Phase) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Phase) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1726,6 +1927,9 @@ func (p *PhaseInput) GetOrderTemplateID() *string {
 }
 
 func (p *PhaseInput) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1778,6 +1982,9 @@ func (p *PhaseInput) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PhaseInput) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1834,6 +2041,9 @@ func (r *ResumeSubscriptionResponse) GetActions() []*SubscriptionAction {
 }
 
 func (r *ResumeSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1893,6 +2103,9 @@ func (r *ResumeSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ResumeSubscriptionResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1949,6 +2162,9 @@ func (s *SearchSubscriptionsFilter) GetSourceNames() []string {
 }
 
 func (s *SearchSubscriptionsFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2008,6 +2224,9 @@ func (s *SearchSubscriptionsFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchSubscriptionsFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2043,6 +2262,9 @@ func (s *SearchSubscriptionsQuery) GetFilter() *SearchSubscriptionsFilter {
 }
 
 func (s *SearchSubscriptionsQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2088,6 +2310,9 @@ func (s *SearchSubscriptionsQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchSubscriptionsQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2148,6 +2373,9 @@ func (s *SearchSubscriptionsResponse) GetCursor() *string {
 }
 
 func (s *SearchSubscriptionsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2207,6 +2435,9 @@ func (s *SearchSubscriptionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchSubscriptionsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2465,6 +2696,9 @@ func (s *Subscription) GetCompletedDate() *string {
 }
 
 func (s *Subscription) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2643,6 +2877,9 @@ func (s *Subscription) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Subscription) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2729,6 +2966,9 @@ func (s *SubscriptionAction) GetNewPlanVariationID() *string {
 }
 
 func (s *SubscriptionAction) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2809,6 +3049,9 @@ func (s *SubscriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionAction) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2940,6 +3183,9 @@ func (s *SubscriptionEvent) GetPlanVariationID() string {
 }
 
 func (s *SubscriptionEvent) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3027,6 +3273,9 @@ func (s *SubscriptionEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionEvent) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3073,6 +3322,9 @@ func (s *SubscriptionEventInfo) GetCode() *SubscriptionEventInfoCode {
 }
 
 func (s *SubscriptionEventInfo) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3125,6 +3377,9 @@ func (s *SubscriptionEventInfo) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionEventInfo) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3235,6 +3490,9 @@ func (s *SubscriptionSource) GetName() *string {
 }
 
 func (s *SubscriptionSource) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3280,6 +3538,9 @@ func (s *SubscriptionSource) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionSource) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3371,6 +3632,9 @@ func (s *SwapPlanResponse) GetActions() []*SubscriptionAction {
 }
 
 func (s *SwapPlanResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3430,6 +3694,9 @@ func (s *SwapPlanResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SwapPlanResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3476,6 +3743,9 @@ func (u *UpdateSubscriptionResponse) GetSubscription() *Subscription {
 }
 
 func (u *UpdateSubscriptionResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3528,6 +3798,9 @@ func (u *UpdateSubscriptionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateSubscriptionResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -3575,4 +3848,25 @@ func (u *UpdateSubscriptionRequest) SetSubscriptionID(subscriptionID string) {
 func (u *UpdateSubscriptionRequest) SetSubscription(subscription *Subscription) {
 	u.Subscription = subscription
 	u.require(updateSubscriptionRequestFieldSubscription)
+}
+
+func (u *UpdateSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateSubscriptionRequest(body)
+	return nil
+}
+
+func (u *UpdateSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

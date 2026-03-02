@@ -3,7 +3,9 @@
 package customers
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -52,7 +54,7 @@ type CreateCustomerGroupRequest struct {
 	// The idempotency key for the request. For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The customer group to create.
-	Group *v3.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v3.CustomerGroup `json:"group" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -77,6 +79,27 @@ func (c *CreateCustomerGroupRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (c *CreateCustomerGroupRequest) SetGroup(group *v3.CustomerGroup) {
 	c.Group = group
 	c.require(createCustomerGroupRequestFieldGroup)
+}
+
+func (c *CreateCustomerGroupRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCustomerGroupRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateCustomerGroupRequest(body)
+	return nil
+}
+
+func (c *CreateCustomerGroupRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateCustomerGroupRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -218,7 +241,7 @@ type UpdateCustomerGroupRequest struct {
 	// The ID of the customer group to update.
 	GroupID string `json:"-" url:"-"`
 	// The `CustomerGroup` object including all the updates you want to make.
-	Group *v3.CustomerGroup `json:"group,omitempty" url:"-"`
+	Group *v3.CustomerGroup `json:"group" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -243,4 +266,25 @@ func (u *UpdateCustomerGroupRequest) SetGroupID(groupID string) {
 func (u *UpdateCustomerGroupRequest) SetGroup(group *v3.CustomerGroup) {
 	u.Group = group
 	u.require(updateCustomerGroupRequestFieldGroup)
+}
+
+func (u *UpdateCustomerGroupRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateCustomerGroupRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateCustomerGroupRequest(body)
+	return nil
+}
+
+func (u *UpdateCustomerGroupRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateCustomerGroupRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

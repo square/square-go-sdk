@@ -3,7 +3,9 @@
 package labor
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -16,7 +18,7 @@ type CreateShiftRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Shift` to be created.
-	Shift *v3.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v3.Shift `json:"shift" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -41,6 +43,27 @@ func (c *CreateShiftRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (c *CreateShiftRequest) SetShift(shift *v3.Shift) {
 	c.Shift = shift
 	c.require(createShiftRequestFieldShift)
+}
+
+func (c *CreateShiftRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateShiftRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateShiftRequest(body)
+	return nil
+}
+
+func (c *CreateShiftRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateShiftRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -141,6 +164,27 @@ func (s *SearchShiftsRequest) SetCursor(cursor *string) {
 	s.require(searchShiftsRequestFieldCursor)
 }
 
+func (s *SearchShiftsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchShiftsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchShiftsRequest(body)
+	return nil
+}
+
+func (s *SearchShiftsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchShiftsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateShiftRequestFieldID    = big.NewInt(1 << 0)
 	updateShiftRequestFieldShift = big.NewInt(1 << 1)
@@ -150,7 +194,7 @@ type UpdateShiftRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Shift` object.
-	Shift *v3.Shift `json:"shift,omitempty" url:"-"`
+	Shift *v3.Shift `json:"shift" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -175,4 +219,25 @@ func (u *UpdateShiftRequest) SetID(id string) {
 func (u *UpdateShiftRequest) SetShift(shift *v3.Shift) {
 	u.Shift = shift
 	u.require(updateShiftRequestFieldShift)
+}
+
+func (u *UpdateShiftRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateShiftRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateShiftRequest(body)
+	return nil
+}
+
+func (u *UpdateShiftRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateShiftRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

@@ -15,7 +15,7 @@ var (
 
 type BatchCreateVendorsRequest struct {
 	// Specifies a set of new [Vendor](entity:Vendor) objects as represented by a collection of idempotency-key/`Vendor`-object pairs.
-	Vendors map[string]*Vendor `json:"vendors,omitempty" url:"-"`
+	Vendors map[string]*Vendor `json:"vendors" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -33,6 +33,27 @@ func (b *BatchCreateVendorsRequest) require(field *big.Int) {
 func (b *BatchCreateVendorsRequest) SetVendors(vendors map[string]*Vendor) {
 	b.Vendors = vendors
 	b.require(batchCreateVendorsRequestFieldVendors)
+}
+
+func (b *BatchCreateVendorsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchCreateVendorsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchCreateVendorsRequest(body)
+	return nil
+}
+
+func (b *BatchCreateVendorsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchCreateVendorsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -61,6 +82,27 @@ func (b *BatchGetVendorsRequest) SetVendorIDs(vendorIDs []string) {
 	b.require(batchGetVendorsRequestFieldVendorIDs)
 }
 
+func (b *BatchGetVendorsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetVendorsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchGetVendorsRequest(body)
+	return nil
+}
+
+func (b *BatchGetVendorsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchGetVendorsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	batchUpdateVendorsRequestFieldVendors = big.NewInt(1 << 0)
 )
@@ -68,7 +110,7 @@ var (
 type BatchUpdateVendorsRequest struct {
 	// A set of [UpdateVendorRequest](entity:UpdateVendorRequest) objects encapsulating to-be-updated [Vendor](entity:Vendor)
 	// objects. The set is represented by  a collection of `Vendor`-ID/`UpdateVendorRequest`-object pairs.
-	Vendors map[string]*UpdateVendorRequest `json:"vendors,omitempty" url:"-"`
+	Vendors map[string]*UpdateVendorRequest `json:"vendors" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -86,6 +128,27 @@ func (b *BatchUpdateVendorsRequest) require(field *big.Int) {
 func (b *BatchUpdateVendorsRequest) SetVendors(vendors map[string]*UpdateVendorRequest) {
 	b.Vendors = vendors
 	b.require(batchUpdateVendorsRequestFieldVendors)
+}
+
+func (b *BatchUpdateVendorsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpdateVendorsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchUpdateVendorsRequest(body)
+	return nil
+}
+
+func (b *BatchUpdateVendorsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchUpdateVendorsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -126,6 +189,27 @@ func (c *CreateVendorRequest) SetIdempotencyKey(idempotencyKey string) {
 func (c *CreateVendorRequest) SetVendor(vendor_ *Vendor) {
 	c.Vendor = vendor_
 	c.require(createVendorRequestFieldVendor)
+}
+
+func (c *CreateVendorRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateVendorRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateVendorRequest(body)
+	return nil
+}
+
+func (c *CreateVendorRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateVendorRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -203,6 +287,27 @@ func (s *SearchVendorsRequest) SetCursor(cursor *string) {
 	s.require(searchVendorsRequestFieldCursor)
 }
 
+func (s *SearchVendorsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchVendorsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchVendorsRequest(body)
+	return nil
+}
+
+func (s *SearchVendorsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchVendorsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
 var (
 	batchCreateVendorsResponseFieldErrors    = big.NewInt(1 << 0)
@@ -240,6 +345,9 @@ func (b *BatchCreateVendorsResponse) GetResponses() map[string]*CreateVendorResp
 }
 
 func (b *BatchCreateVendorsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -292,6 +400,9 @@ func (b *BatchCreateVendorsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchCreateVendorsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -339,6 +450,9 @@ func (b *BatchGetVendorsResponse) GetResponses() map[string]*GetVendorResponse {
 }
 
 func (b *BatchGetVendorsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -391,6 +505,9 @@ func (b *BatchGetVendorsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetVendorsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -438,6 +555,9 @@ func (b *BatchUpdateVendorsResponse) GetResponses() map[string]*UpdateVendorResp
 }
 
 func (b *BatchUpdateVendorsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -490,6 +610,9 @@ func (b *BatchUpdateVendorsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchUpdateVendorsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -535,6 +658,9 @@ func (c *CreateVendorResponse) GetVendor() *Vendor {
 }
 
 func (c *CreateVendorResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -587,6 +713,9 @@ func (c *CreateVendorResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateVendorResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -632,6 +761,9 @@ func (g *GetVendorResponse) GetVendor() *Vendor {
 }
 
 func (g *GetVendorResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -684,6 +816,9 @@ func (g *GetVendorResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetVendorResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -730,6 +865,9 @@ func (s *SearchVendorsRequestFilter) GetStatus() []VendorStatus {
 }
 
 func (s *SearchVendorsRequestFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -782,6 +920,9 @@ func (s *SearchVendorsRequestFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchVendorsRequestFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -829,6 +970,9 @@ func (s *SearchVendorsRequestSort) GetOrder() *SortOrder {
 }
 
 func (s *SearchVendorsRequestSort) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -881,6 +1025,9 @@ func (s *SearchVendorsRequestSort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchVendorsRequestSort) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -962,6 +1109,9 @@ func (s *SearchVendorsResponse) GetCursor() *string {
 }
 
 func (s *SearchVendorsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1021,6 +1171,9 @@ func (s *SearchVendorsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchVendorsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1071,6 +1224,9 @@ func (u *UpdateVendorRequest) GetVendor() *Vendor {
 }
 
 func (u *UpdateVendorRequest) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1123,6 +1279,9 @@ func (u *UpdateVendorRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateVendorRequest) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -1168,6 +1327,9 @@ func (u *UpdateVendorResponse) GetVendor() *Vendor {
 }
 
 func (u *UpdateVendorResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1220,6 +1382,9 @@ func (u *UpdateVendorResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateVendorResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -1350,6 +1515,9 @@ func (v *Vendor) GetStatus() *VendorStatus {
 }
 
 func (v *Vendor) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -1458,6 +1626,9 @@ func (v *Vendor) MarshalJSON() ([]byte, error) {
 }
 
 func (v *Vendor) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -1545,6 +1716,9 @@ func (v *VendorContact) GetOrdinal() int {
 }
 
 func (v *VendorContact) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -1625,6 +1799,9 @@ func (v *VendorContact) MarshalJSON() ([]byte, error) {
 }
 
 func (v *VendorContact) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value

@@ -33,7 +33,7 @@ type CreateCardRequest struct {
 	// See the [SCA Overview](https://developer.squareup.com/docs/sca-overview).
 	VerificationToken *string `json:"verification_token,omitempty" url:"-"`
 	// Payment details associated with the card to be stored.
-	Card *Card `json:"card,omitempty" url:"-"`
+	Card *Card `json:"card" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -72,6 +72,27 @@ func (c *CreateCardRequest) SetVerificationToken(verificationToken *string) {
 func (c *CreateCardRequest) SetCard(card *Card) {
 	c.Card = card
 	c.require(createCardRequestFieldCard)
+}
+
+func (c *CreateCardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateCardRequest(body)
+	return nil
+}
+
+func (c *CreateCardRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateCardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -236,6 +257,9 @@ func (c *CreateCardResponse) GetCard() *Card {
 }
 
 func (c *CreateCardResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -288,6 +312,9 @@ func (c *CreateCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateCardResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -337,6 +364,9 @@ func (d *DisableCardResponse) GetCard() *Card {
 }
 
 func (d *DisableCardResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -389,6 +419,9 @@ func (d *DisableCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DisableCardResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -438,6 +471,9 @@ func (g *GetCardResponse) GetCard() *Card {
 }
 
 func (g *GetCardResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -490,6 +526,9 @@ func (g *GetCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetCardResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -552,6 +591,9 @@ func (l *ListCardsResponse) GetCursor() *string {
 }
 
 func (l *ListCardsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -611,6 +653,9 @@ func (l *ListCardsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListCardsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value

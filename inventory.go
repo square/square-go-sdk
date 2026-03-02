@@ -292,6 +292,9 @@ func (b *BatchChangeInventoryRequest) GetIgnoreUnchangedCounts() *bool {
 }
 
 func (b *BatchChangeInventoryRequest) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -351,6 +354,9 @@ func (b *BatchChangeInventoryRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchChangeInventoryRequest) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -405,6 +411,9 @@ func (b *BatchChangeInventoryResponse) GetChanges() []*InventoryChange {
 }
 
 func (b *BatchChangeInventoryResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -464,6 +473,9 @@ func (b *BatchChangeInventoryResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchChangeInventoryResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -521,6 +533,9 @@ func (b *BatchGetInventoryChangesResponse) GetCursor() *string {
 }
 
 func (b *BatchGetInventoryChangesResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -580,6 +595,9 @@ func (b *BatchGetInventoryChangesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetInventoryChangesResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -673,6 +691,9 @@ func (b *BatchGetInventoryCountsRequest) GetLimit() *int {
 }
 
 func (b *BatchGetInventoryCountsRequest) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -753,6 +774,9 @@ func (b *BatchGetInventoryCountsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetInventoryCountsRequest) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -811,6 +835,9 @@ func (b *BatchGetInventoryCountsResponse) GetCursor() *string {
 }
 
 func (b *BatchGetInventoryCountsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -870,6 +897,9 @@ func (b *BatchGetInventoryCountsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetInventoryCountsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -986,6 +1016,9 @@ func (b *BatchRetrieveInventoryChangesRequest) GetLimit() *int {
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1080,6 +1113,9 @@ func (b *BatchRetrieveInventoryChangesRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1124,6 +1160,9 @@ func (g *GetInventoryAdjustmentResponse) GetAdjustment() *InventoryAdjustment {
 }
 
 func (g *GetInventoryAdjustmentResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1176,6 +1215,9 @@ func (g *GetInventoryAdjustmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInventoryAdjustmentResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1233,6 +1275,9 @@ func (g *GetInventoryChangesResponse) GetCursor() *string {
 }
 
 func (g *GetInventoryChangesResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1292,6 +1337,9 @@ func (g *GetInventoryChangesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInventoryChangesResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1350,6 +1398,9 @@ func (g *GetInventoryCountResponse) GetCursor() *string {
 }
 
 func (g *GetInventoryCountResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1409,6 +1460,9 @@ func (g *GetInventoryCountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInventoryCountResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1453,6 +1507,9 @@ func (g *GetInventoryPhysicalCountResponse) GetCount() *InventoryPhysicalCount {
 }
 
 func (g *GetInventoryPhysicalCountResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1505,6 +1562,9 @@ func (g *GetInventoryPhysicalCountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInventoryPhysicalCountResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1549,6 +1609,9 @@ func (g *GetInventoryTransferResponse) GetTransfer() *InventoryTransfer {
 }
 
 func (g *GetInventoryTransferResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1601,6 +1664,9 @@ func (g *GetInventoryTransferResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInventoryTransferResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1846,6 +1912,9 @@ func (i *InventoryAdjustment) GetAdjustmentGroup() *InventoryAdjustmentGroup {
 }
 
 func (i *InventoryAdjustment) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2017,6 +2086,9 @@ func (i *InventoryAdjustment) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryAdjustment) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2088,6 +2160,9 @@ func (i *InventoryAdjustmentGroup) GetToState() *InventoryState {
 }
 
 func (i *InventoryAdjustmentGroup) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2154,6 +2229,9 @@ func (i *InventoryAdjustmentGroup) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryAdjustmentGroup) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2249,6 +2327,9 @@ func (i *InventoryChange) GetMeasurementUnitID() *string {
 }
 
 func (i *InventoryChange) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2329,6 +2410,9 @@ func (i *InventoryChange) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryChange) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2465,6 +2549,9 @@ func (i *InventoryCount) GetIsEstimated() *bool {
 }
 
 func (i *InventoryCount) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2552,6 +2639,9 @@ func (i *InventoryCount) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryCount) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2717,6 +2807,9 @@ func (i *InventoryPhysicalCount) GetCreatedAt() *string {
 }
 
 func (i *InventoryPhysicalCount) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2839,6 +2932,9 @@ func (i *InventoryPhysicalCount) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryPhysicalCount) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3078,6 +3174,9 @@ func (i *InventoryTransfer) GetTeamMemberID() *string {
 }
 
 func (i *InventoryTransfer) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3207,6 +3306,9 @@ func (i *InventoryTransfer) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InventoryTransfer) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value

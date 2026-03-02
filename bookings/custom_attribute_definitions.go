@@ -3,7 +3,9 @@
 package bookings
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -28,7 +30,7 @@ type CreateBookingCustomAttributeDefinitionRequest struct {
 	// - `schema`. With the exception of the `Selection` data type, the `schema` is specified as a
 	// simple URL to the JSON schema definition hosted on the Square CDN. For more information, see
 	// [Specifying the schema](https://developer.squareup.com/docs/booking-custom-attributes-api/custom-attribute-definitions#specify-schema).
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -56,6 +58,27 @@ func (c *CreateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefini
 func (c *CreateBookingCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createBookingCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (c *CreateBookingCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBookingCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateBookingCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (c *CreateBookingCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateBookingCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -185,7 +208,7 @@ type UpdateBookingCustomAttributeDefinitionRequest struct {
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -220,4 +243,25 @@ func (u *UpdateBookingCustomAttributeDefinitionRequest) SetCustomAttributeDefini
 func (u *UpdateBookingCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateBookingCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBookingCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateBookingCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (u *UpdateBookingCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateBookingCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

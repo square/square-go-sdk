@@ -3,7 +3,9 @@
 package terminal
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -45,7 +47,7 @@ type CreateTerminalCheckoutRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The checkout to create.
-	Checkout *v3.TerminalCheckout `json:"checkout,omitempty" url:"-"`
+	Checkout *v3.TerminalCheckout `json:"checkout" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -70,6 +72,27 @@ func (c *CreateTerminalCheckoutRequest) SetIdempotencyKey(idempotencyKey string)
 func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v3.TerminalCheckout) {
 	c.Checkout = checkout
 	c.require(createTerminalCheckoutRequestFieldCheckout)
+}
+
+func (c *CreateTerminalCheckoutRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTerminalCheckoutRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTerminalCheckoutRequest(body)
+	return nil
+}
+
+func (c *CreateTerminalCheckoutRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTerminalCheckoutRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -145,4 +168,25 @@ func (s *SearchTerminalCheckoutsRequest) SetCursor(cursor *string) {
 func (s *SearchTerminalCheckoutsRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTerminalCheckoutsRequestFieldLimit)
+}
+
+func (s *SearchTerminalCheckoutsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTerminalCheckoutsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTerminalCheckoutsRequest(body)
+	return nil
+}
+
+func (s *SearchTerminalCheckoutsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTerminalCheckoutsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

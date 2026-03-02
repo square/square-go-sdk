@@ -3,7 +3,9 @@
 package checkout
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -103,6 +105,27 @@ func (c *CreatePaymentLinkRequest) SetPrePopulatedData(prePopulatedData *v3.PreP
 func (c *CreatePaymentLinkRequest) SetPaymentNote(paymentNote *string) {
 	c.PaymentNote = paymentNote
 	c.require(createPaymentLinkRequestFieldPaymentNote)
+}
+
+func (c *CreatePaymentLinkRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreatePaymentLinkRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreatePaymentLinkRequest(body)
+	return nil
+}
+
+func (c *CreatePaymentLinkRequest) MarshalJSON() ([]byte, error) {
+	type embed CreatePaymentLinkRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -210,7 +233,7 @@ type UpdatePaymentLinkRequest struct {
 	ID string `json:"-" url:"-"`
 	// The `payment_link` object describing the updates to apply.
 	// For more information, see [Update a payment link](https://developer.squareup.com/docs/checkout-api/manage-checkout#update-a-payment-link).
-	PaymentLink *v3.PaymentLink `json:"payment_link,omitempty" url:"-"`
+	PaymentLink *v3.PaymentLink `json:"payment_link" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -235,4 +258,25 @@ func (u *UpdatePaymentLinkRequest) SetID(id string) {
 func (u *UpdatePaymentLinkRequest) SetPaymentLink(paymentLink *v3.PaymentLink) {
 	u.PaymentLink = paymentLink
 	u.require(updatePaymentLinkRequestFieldPaymentLink)
+}
+
+func (u *UpdatePaymentLinkRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdatePaymentLinkRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdatePaymentLinkRequest(body)
+	return nil
+}
+
+func (u *UpdatePaymentLinkRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdatePaymentLinkRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

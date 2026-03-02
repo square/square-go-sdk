@@ -3,7 +3,9 @@
 package locations
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -18,7 +20,7 @@ type CreateLocationCustomAttributeDefinitionRequest struct {
 	// definition hosted on the Square CDN. For more information, including supported values and constraints, see
 	// [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
 	// - `name` is required unless `visibility` is set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -46,6 +48,27 @@ func (c *CreateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefin
 func (c *CreateLocationCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createLocationCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (c *CreateLocationCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLocationCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLocationCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (c *CreateLocationCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLocationCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -187,7 +210,7 @@ type UpdateLocationCustomAttributeDefinitionRequest struct {
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, specify the current version of the custom attribute definition.
 	// If this is not important for your application, `version` can be set to -1.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -222,4 +245,25 @@ func (u *UpdateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefin
 func (u *UpdateLocationCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateLocationCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateLocationCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateLocationCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateLocationCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (u *UpdateLocationCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

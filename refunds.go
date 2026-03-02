@@ -46,7 +46,7 @@ type RefundPaymentRequest struct {
 	//
 	// The currency code must match the currency associated with the business
 	// that is charging the card.
-	AmountMoney *Money `json:"amount_money,omitempty" url:"-"`
+	AmountMoney *Money `json:"amount_money" url:"-"`
 	// The amount of money the developer contributes to help cover the refunded amount.
 	// This amount is specified in the smallest denomination of the applicable currency (for example,
 	// US dollar amounts are specified in cents).
@@ -199,6 +199,27 @@ func (r *RefundPaymentRequest) SetCashDetails(cashDetails *DestinationDetailsCas
 func (r *RefundPaymentRequest) SetExternalDetails(externalDetails *DestinationDetailsExternalRefundDetails) {
 	r.ExternalDetails = externalDetails
 	r.require(refundPaymentRequestFieldExternalDetails)
+}
+
+func (r *RefundPaymentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RefundPaymentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RefundPaymentRequest(body)
+	return nil
+}
+
+func (r *RefundPaymentRequest) MarshalJSON() ([]byte, error) {
+	type embed RefundPaymentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -429,6 +450,9 @@ func (d *DestinationDetails) GetExternalDetails() *DestinationDetailsExternalRef
 }
 
 func (d *DestinationDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -488,6 +512,9 @@ func (d *DestinationDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DestinationDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -543,6 +570,9 @@ func (d *DestinationDetailsCardRefundDetails) GetAuthResultCode() *string {
 }
 
 func (d *DestinationDetailsCardRefundDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -602,6 +632,9 @@ func (d *DestinationDetailsCardRefundDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DestinationDetailsCardRefundDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -649,6 +682,9 @@ func (d *DestinationDetailsCashRefundDetails) GetChangeBackMoney() *Money {
 }
 
 func (d *DestinationDetailsCashRefundDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -701,6 +737,9 @@ func (d *DestinationDetailsCashRefundDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DestinationDetailsCashRefundDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -770,6 +809,9 @@ func (d *DestinationDetailsExternalRefundDetails) GetSourceID() *string {
 }
 
 func (d *DestinationDetailsExternalRefundDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -829,6 +871,9 @@ func (d *DestinationDetailsExternalRefundDetails) MarshalJSON() ([]byte, error) 
 }
 
 func (d *DestinationDetailsExternalRefundDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -877,6 +922,9 @@ func (g *GetPaymentRefundResponse) GetRefund() *PaymentRefund {
 }
 
 func (g *GetPaymentRefundResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -929,6 +977,9 @@ func (g *GetPaymentRefundResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetPaymentRefundResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1011,6 +1062,9 @@ func (l *ListPaymentRefundsResponse) GetCursor() *string {
 }
 
 func (l *ListPaymentRefundsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1070,6 +1124,9 @@ func (l *ListPaymentRefundsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPaymentRefundsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1268,6 +1325,9 @@ func (p *PaymentRefund) GetTerminalRefundID() *string {
 }
 
 func (p *PaymentRefund) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1418,6 +1478,9 @@ func (p *PaymentRefund) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentRefund) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1467,6 +1530,9 @@ func (r *RefundPaymentResponse) GetRefund() *PaymentRefund {
 }
 
 func (r *RefundPaymentResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1519,6 +1585,9 @@ func (r *RefundPaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RefundPaymentResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value

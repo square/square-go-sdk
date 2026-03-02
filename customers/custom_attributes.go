@@ -3,7 +3,9 @@
 package customers
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -192,7 +194,7 @@ type UpsertCustomerCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -234,4 +236,25 @@ func (u *UpsertCustomerCustomAttributeRequest) SetCustomAttribute(customAttribut
 func (u *UpsertCustomerCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(upsertCustomerCustomAttributeRequestFieldIdempotencyKey)
+}
+
+func (u *UpsertCustomerCustomAttributeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertCustomerCustomAttributeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertCustomerCustomAttributeRequest(body)
+	return nil
+}
+
+func (u *UpsertCustomerCustomAttributeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertCustomerCustomAttributeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
