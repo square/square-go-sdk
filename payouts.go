@@ -419,6 +419,9 @@ func (d *Destination) GetID() *string {
 }
 
 func (d *Destination) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -471,6 +474,9 @@ func (d *Destination) MarshalJSON() ([]byte, error) {
 }
 
 func (d *Destination) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -544,6 +550,9 @@ func (g *GetPayoutResponse) GetErrors() []*Error {
 }
 
 func (g *GetPayoutResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -596,6 +605,9 @@ func (g *GetPayoutResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetPayoutResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -652,6 +664,9 @@ func (l *ListPayoutEntriesResponse) GetErrors() []*Error {
 }
 
 func (l *ListPayoutEntriesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -711,6 +726,9 @@ func (l *ListPayoutEntriesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPayoutEntriesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -767,6 +785,9 @@ func (l *ListPayoutsResponse) GetErrors() []*Error {
 }
 
 func (l *ListPayoutsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -826,6 +847,9 @@ func (l *ListPayoutsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPayoutsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -880,6 +904,9 @@ func (p *PaymentBalanceActivityAppFeeRefundDetail) GetLocationID() *string {
 }
 
 func (p *PaymentBalanceActivityAppFeeRefundDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -939,6 +966,9 @@ func (p *PaymentBalanceActivityAppFeeRefundDetail) MarshalJSON() ([]byte, error)
 }
 
 func (p *PaymentBalanceActivityAppFeeRefundDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -983,6 +1013,9 @@ func (p *PaymentBalanceActivityAppFeeRevenueDetail) GetLocationID() *string {
 }
 
 func (p *PaymentBalanceActivityAppFeeRevenueDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1035,6 +1068,9 @@ func (p *PaymentBalanceActivityAppFeeRevenueDetail) MarshalJSON() ([]byte, error
 }
 
 func (p *PaymentBalanceActivityAppFeeRevenueDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1079,6 +1115,9 @@ func (p *PaymentBalanceActivityAutomaticSavingsDetail) GetPayoutID() *string {
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1131,6 +1170,9 @@ func (p *PaymentBalanceActivityAutomaticSavingsDetail) MarshalJSON() ([]byte, er
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1175,6 +1217,9 @@ func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) GetPayoutID() *st
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1227,6 +1272,9 @@ func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) MarshalJSON() ([]
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1261,6 +1309,9 @@ func (p *PaymentBalanceActivityChargeDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityChargeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1306,6 +1357,9 @@ func (p *PaymentBalanceActivityChargeDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityChargeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1340,6 +1394,9 @@ func (p *PaymentBalanceActivityDepositFeeDetail) GetPayoutID() *string {
 }
 
 func (p *PaymentBalanceActivityDepositFeeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1385,6 +1442,9 @@ func (p *PaymentBalanceActivityDepositFeeDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityDepositFeeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1419,6 +1479,9 @@ func (p *PaymentBalanceActivityDepositFeeReversedDetail) GetPayoutID() *string {
 }
 
 func (p *PaymentBalanceActivityDepositFeeReversedDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1464,6 +1527,9 @@ func (p *PaymentBalanceActivityDepositFeeReversedDetail) MarshalJSON() ([]byte, 
 }
 
 func (p *PaymentBalanceActivityDepositFeeReversedDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1508,6 +1574,9 @@ func (p *PaymentBalanceActivityDisputeDetail) GetDisputeID() *string {
 }
 
 func (p *PaymentBalanceActivityDisputeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1560,6 +1629,9 @@ func (p *PaymentBalanceActivityDisputeDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityDisputeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1597,6 +1669,9 @@ func (p *PaymentBalanceActivityFeeDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityFeeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1642,6 +1717,9 @@ func (p *PaymentBalanceActivityFeeDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityFeeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1676,6 +1754,9 @@ func (p *PaymentBalanceActivityFreeProcessingDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityFreeProcessingDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1721,6 +1802,9 @@ func (p *PaymentBalanceActivityFreeProcessingDetail) MarshalJSON() ([]byte, erro
 }
 
 func (p *PaymentBalanceActivityFreeProcessingDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1755,6 +1839,9 @@ func (p *PaymentBalanceActivityHoldAdjustmentDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityHoldAdjustmentDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1800,6 +1887,9 @@ func (p *PaymentBalanceActivityHoldAdjustmentDetail) MarshalJSON() ([]byte, erro
 }
 
 func (p *PaymentBalanceActivityHoldAdjustmentDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1844,6 +1934,9 @@ func (p *PaymentBalanceActivityOpenDisputeDetail) GetDisputeID() *string {
 }
 
 func (p *PaymentBalanceActivityOpenDisputeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1896,6 +1989,9 @@ func (p *PaymentBalanceActivityOpenDisputeDetail) MarshalJSON() ([]byte, error) 
 }
 
 func (p *PaymentBalanceActivityOpenDisputeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1930,6 +2026,9 @@ func (p *PaymentBalanceActivityOtherAdjustmentDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityOtherAdjustmentDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1975,6 +2074,9 @@ func (p *PaymentBalanceActivityOtherAdjustmentDetail) MarshalJSON() ([]byte, err
 }
 
 func (p *PaymentBalanceActivityOtherAdjustmentDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2009,6 +2111,9 @@ func (p *PaymentBalanceActivityOtherDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityOtherDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2054,6 +2159,9 @@ func (p *PaymentBalanceActivityOtherDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityOtherDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2098,6 +2206,9 @@ func (p *PaymentBalanceActivityRefundDetail) GetRefundID() *string {
 }
 
 func (p *PaymentBalanceActivityRefundDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2150,6 +2261,9 @@ func (p *PaymentBalanceActivityRefundDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityRefundDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2184,6 +2298,9 @@ func (p *PaymentBalanceActivityReleaseAdjustmentDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityReleaseAdjustmentDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2229,6 +2346,9 @@ func (p *PaymentBalanceActivityReleaseAdjustmentDetail) MarshalJSON() ([]byte, e
 }
 
 func (p *PaymentBalanceActivityReleaseAdjustmentDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2263,6 +2383,9 @@ func (p *PaymentBalanceActivityReserveHoldDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityReserveHoldDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2308,6 +2431,9 @@ func (p *PaymentBalanceActivityReserveHoldDetail) MarshalJSON() ([]byte, error) 
 }
 
 func (p *PaymentBalanceActivityReserveHoldDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2342,6 +2468,9 @@ func (p *PaymentBalanceActivityReserveReleaseDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityReserveReleaseDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2387,6 +2516,9 @@ func (p *PaymentBalanceActivityReserveReleaseDetail) MarshalJSON() ([]byte, erro
 }
 
 func (p *PaymentBalanceActivityReserveReleaseDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2421,6 +2553,9 @@ func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) GetPaymentID() *strin
 }
 
 func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2466,6 +2601,9 @@ func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) MarshalJSON() ([]byte
 }
 
 func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2500,6 +2638,9 @@ func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) GetPaymentID(
 }
 
 func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2545,6 +2686,9 @@ func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) MarshalJSON()
 }
 
 func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2579,6 +2723,9 @@ func (p *PaymentBalanceActivitySquarePayrollTransferDetail) GetPaymentID() *stri
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2624,6 +2771,9 @@ func (p *PaymentBalanceActivitySquarePayrollTransferDetail) MarshalJSON() ([]byt
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2658,6 +2808,9 @@ func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) GetPaymentID
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2703,6 +2856,9 @@ func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) MarshalJSON(
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2747,6 +2903,9 @@ func (p *PaymentBalanceActivityTaxOnFeeDetail) GetTaxRateDescription() *string {
 }
 
 func (p *PaymentBalanceActivityTaxOnFeeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2799,6 +2958,9 @@ func (p *PaymentBalanceActivityTaxOnFeeDetail) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PaymentBalanceActivityTaxOnFeeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2833,6 +2995,9 @@ func (p *PaymentBalanceActivityThirdPartyFeeDetail) GetPaymentID() *string {
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2878,6 +3043,9 @@ func (p *PaymentBalanceActivityThirdPartyFeeDetail) MarshalJSON() ([]byte, error
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -2922,6 +3090,9 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) GetRefundID() *string 
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -2974,6 +3145,9 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) MarshalJSON() ([]byte,
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -3124,6 +3298,9 @@ func (p *Payout) GetEndToEndID() *string {
 }
 
 func (p *Payout) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -3246,6 +3423,9 @@ func (p *Payout) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Payout) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -3593,6 +3773,9 @@ func (p *PayoutEntry) GetTypeSquarePayrollTransferReversedDetails() *PaymentBala
 }
 
 func (p *PayoutEntry) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -3855,6 +4038,9 @@ func (p *PayoutEntry) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PayoutEntry) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -3911,6 +4097,9 @@ func (p *PayoutFee) GetType() *PayoutFeeType {
 }
 
 func (p *PayoutFee) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -3970,6 +4159,9 @@ func (p *PayoutFee) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PayoutFee) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value

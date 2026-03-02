@@ -120,6 +120,9 @@ func (d *DismissTerminalActionResponse) GetAction() *TerminalAction {
 }
 
 func (d *DismissTerminalActionResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -172,6 +175,9 @@ func (d *DismissTerminalActionResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DismissTerminalActionResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -216,6 +222,9 @@ func (d *DismissTerminalCheckoutResponse) GetCheckout() *TerminalCheckout {
 }
 
 func (d *DismissTerminalCheckoutResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -268,6 +277,9 @@ func (d *DismissTerminalCheckoutResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DismissTerminalCheckoutResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -312,6 +324,9 @@ func (d *DismissTerminalRefundResponse) GetRefund() *TerminalRefund {
 }
 
 func (d *DismissTerminalRefundResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -364,6 +379,9 @@ func (d *DismissTerminalRefundResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DismissTerminalRefundResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value

@@ -3,7 +3,9 @@
 package catalog
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	io "io"
 	big "math/big"
 )
@@ -49,4 +51,25 @@ func (u *UpdateImagesRequest) require(field *big.Int) {
 func (u *UpdateImagesRequest) SetImageID(imageID string) {
 	u.ImageID = imageID
 	u.require(updateImagesRequestFieldImageID)
+}
+
+func (u *UpdateImagesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateImagesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateImagesRequest(body)
+	return nil
+}
+
+func (u *UpdateImagesRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateImagesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

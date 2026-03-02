@@ -14,7 +14,7 @@ var (
 )
 
 type BulkRetrieveChannelsRequest struct {
-	ChannelIDs []string `json:"channel_ids,omitempty" url:"-"`
+	ChannelIDs []string `json:"channel_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -32,6 +32,27 @@ func (b *BulkRetrieveChannelsRequest) require(field *big.Int) {
 func (b *BulkRetrieveChannelsRequest) SetChannelIDs(channelIDs []string) {
 	b.ChannelIDs = channelIDs
 	b.require(bulkRetrieveChannelsRequestFieldChannelIDs)
+}
+
+func (b *BulkRetrieveChannelsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveChannelsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkRetrieveChannelsRequest(body)
+	return nil
+}
+
+func (b *BulkRetrieveChannelsRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveChannelsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -165,6 +186,9 @@ func (b *BulkRetrieveChannelsResponse) GetResponses() map[string]*RetrieveChanne
 }
 
 func (b *BulkRetrieveChannelsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -217,6 +241,9 @@ func (b *BulkRetrieveChannelsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkRetrieveChannelsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -324,6 +351,9 @@ func (c *Channel) GetUpdatedAt() *string {
 }
 
 func (c *Channel) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -418,6 +448,9 @@ func (c *Channel) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Channel) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -494,6 +527,9 @@ func (l *ListChannelsResponse) GetCursor() *string {
 }
 
 func (l *ListChannelsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -553,6 +589,9 @@ func (l *ListChannelsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListChannelsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -598,6 +637,9 @@ func (r *Reference) GetID() *string {
 }
 
 func (r *Reference) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -650,6 +692,9 @@ func (r *Reference) MarshalJSON() ([]byte, error) {
 }
 
 func (r *Reference) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -756,6 +801,9 @@ func (r *RetrieveChannelResponse) GetChannel() *Channel {
 }
 
 func (r *RetrieveChannelResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -808,6 +856,9 @@ func (r *RetrieveChannelResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveChannelResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value

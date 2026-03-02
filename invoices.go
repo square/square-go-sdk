@@ -38,6 +38,27 @@ func (c *CreateInvoiceAttachmentRequest) SetInvoiceID(invoiceID string) {
 	c.require(createInvoiceAttachmentRequestFieldInvoiceID)
 }
 
+func (c *CreateInvoiceAttachmentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateInvoiceAttachmentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateInvoiceAttachmentRequest(body)
+	return nil
+}
+
+func (c *CreateInvoiceAttachmentRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateInvoiceAttachmentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	deleteInvoiceAttachmentRequestFieldInvoiceID    = big.NewInt(1 << 0)
 	deleteInvoiceAttachmentRequestFieldAttachmentID = big.NewInt(1 << 1)
@@ -112,6 +133,27 @@ func (c *CancelInvoiceRequest) SetVersion(version int) {
 	c.require(cancelInvoiceRequestFieldVersion)
 }
 
+func (c *CancelInvoiceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelInvoiceRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CancelInvoiceRequest(body)
+	return nil
+}
+
+func (c *CancelInvoiceRequest) MarshalJSON() ([]byte, error) {
+	type embed CancelInvoiceRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createInvoiceRequestFieldInvoice        = big.NewInt(1 << 0)
 	createInvoiceRequestFieldIdempotencyKey = big.NewInt(1 << 1)
@@ -119,7 +161,7 @@ var (
 
 type CreateInvoiceRequest struct {
 	// The invoice to create.
-	Invoice *Invoice `json:"invoice,omitempty" url:"-"`
+	Invoice *Invoice `json:"invoice" url:"-"`
 	// A unique string that identifies the `CreateInvoice` request. If you do not
 	// provide `idempotency_key` (or provide an empty string as the value), the endpoint
 	// treats each request as independent.
@@ -150,6 +192,27 @@ func (c *CreateInvoiceRequest) SetInvoice(invoice *Invoice) {
 func (c *CreateInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createInvoiceRequestFieldIdempotencyKey)
+}
+
+func (c *CreateInvoiceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateInvoiceRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateInvoiceRequest(body)
+	return nil
+}
+
+func (c *CreateInvoiceRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateInvoiceRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -317,6 +380,27 @@ func (p *PublishInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
 	p.require(publishInvoiceRequestFieldIdempotencyKey)
 }
 
+func (p *PublishInvoiceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PublishInvoiceRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*p = PublishInvoiceRequest(body)
+	return nil
+}
+
+func (p *PublishInvoiceRequest) MarshalJSON() ([]byte, error) {
+	type embed PublishInvoiceRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	searchInvoicesRequestFieldQuery  = big.NewInt(1 << 0)
 	searchInvoicesRequestFieldLimit  = big.NewInt(1 << 1)
@@ -325,7 +409,7 @@ var (
 
 type SearchInvoicesRequest struct {
 	// Describes the query criteria for searching invoices.
-	Query *InvoiceQuery `json:"query,omitempty" url:"-"`
+	Query *InvoiceQuery `json:"query" url:"-"`
 	// The maximum number of invoices to return (200 is the maximum `limit`).
 	// If not provided, the server uses a default limit of 100 invoices.
 	Limit *int `json:"limit,omitempty" url:"-"`
@@ -367,6 +451,27 @@ func (s *SearchInvoicesRequest) SetCursor(cursor *string) {
 	s.require(searchInvoicesRequestFieldCursor)
 }
 
+func (s *SearchInvoicesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchInvoicesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchInvoicesRequest(body)
+	return nil
+}
+
+func (s *SearchInvoicesRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchInvoicesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // The response returned by the `CancelInvoice` request.
 var (
 	cancelInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
@@ -401,6 +506,9 @@ func (c *CancelInvoiceResponse) GetErrors() []*Error {
 }
 
 func (c *CancelInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -453,6 +561,9 @@ func (c *CancelInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelInvoiceResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -499,6 +610,9 @@ func (c *CreateInvoiceAttachmentRequestData) GetDescription() *string {
 }
 
 func (c *CreateInvoiceAttachmentRequestData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -551,6 +665,9 @@ func (c *CreateInvoiceAttachmentRequestData) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateInvoiceAttachmentRequestData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -596,6 +713,9 @@ func (c *CreateInvoiceAttachmentResponse) GetErrors() []*Error {
 }
 
 func (c *CreateInvoiceAttachmentResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -648,6 +768,9 @@ func (c *CreateInvoiceAttachmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateInvoiceAttachmentResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -693,6 +816,9 @@ func (c *CreateInvoiceResponse) GetErrors() []*Error {
 }
 
 func (c *CreateInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -745,6 +871,9 @@ func (c *CreateInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateInvoiceResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -780,6 +909,9 @@ func (d *DeleteInvoiceAttachmentResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteInvoiceAttachmentResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -825,6 +957,9 @@ func (d *DeleteInvoiceAttachmentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteInvoiceAttachmentResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -860,6 +995,9 @@ func (d *DeleteInvoiceResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -905,6 +1043,9 @@ func (d *DeleteInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteInvoiceResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -950,6 +1091,9 @@ func (g *GetInvoiceResponse) GetErrors() []*Error {
 }
 
 func (g *GetInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1002,6 +1146,9 @@ func (g *GetInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetInvoiceResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1348,6 +1495,9 @@ func (i *Invoice) GetCreatorTeamMemberID() *string {
 }
 
 func (i *Invoice) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1561,6 +1711,9 @@ func (i *Invoice) MarshalJSON() ([]byte, error) {
 }
 
 func (i *Invoice) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1644,6 +1797,9 @@ func (i *InvoiceAcceptedPaymentMethods) GetCashAppPay() *bool {
 }
 
 func (i *InvoiceAcceptedPaymentMethods) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1717,6 +1873,9 @@ func (i *InvoiceAcceptedPaymentMethods) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceAcceptedPaymentMethods) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1815,6 +1974,9 @@ func (i *InvoiceAttachment) GetUploadedAt() *string {
 }
 
 func (i *InvoiceAttachment) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -1902,6 +2064,9 @@ func (i *InvoiceAttachment) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceAttachment) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -1988,6 +2153,9 @@ func (i *InvoiceCustomField) GetPlacement() *InvoiceCustomFieldPlacement {
 }
 
 func (i *InvoiceCustomField) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2047,6 +2215,9 @@ func (i *InvoiceCustomField) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceCustomField) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2145,6 +2316,9 @@ func (i *InvoiceFilter) GetCustomerIDs() []string {
 }
 
 func (i *InvoiceFilter) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2197,6 +2371,9 @@ func (i *InvoiceFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceFilter) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2278,6 +2455,9 @@ func (i *InvoicePaymentReminder) GetSentAt() *string {
 }
 
 func (i *InvoicePaymentReminder) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2351,6 +2531,9 @@ func (i *InvoicePaymentReminder) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoicePaymentReminder) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2578,6 +2761,9 @@ func (i *InvoicePaymentRequest) GetRoundingAdjustmentIncludedMoney() *Money {
 }
 
 func (i *InvoicePaymentRequest) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2707,6 +2893,9 @@ func (i *InvoicePaymentRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoicePaymentRequest) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2753,6 +2942,9 @@ func (i *InvoiceQuery) GetSort() *InvoiceSort {
 }
 
 func (i *InvoiceQuery) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -2805,6 +2997,9 @@ func (i *InvoiceQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceQuery) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -2917,6 +3112,9 @@ func (i *InvoiceRecipient) GetTaxIDs() *InvoiceRecipientTaxIDs {
 }
 
 func (i *InvoiceRecipient) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3011,6 +3209,9 @@ func (i *InvoiceRecipient) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceRecipient) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3048,6 +3249,9 @@ func (i *InvoiceRecipientTaxIDs) GetEuVat() *string {
 }
 
 func (i *InvoiceRecipientTaxIDs) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3093,6 +3297,9 @@ func (i *InvoiceRecipientTaxIDs) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceRecipientTaxIDs) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3201,6 +3408,9 @@ func (i *InvoiceSort) GetOrder() *SortOrder {
 }
 
 func (i *InvoiceSort) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
 	return i.extraProperties
 }
 
@@ -3253,6 +3463,9 @@ func (i *InvoiceSort) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InvoiceSort) String() string {
+	if i == nil {
+		return "<nil>"
+	}
 	if len(i.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
 			return value
@@ -3361,6 +3574,9 @@ func (l *ListInvoicesResponse) GetErrors() []*Error {
 }
 
 func (l *ListInvoicesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -3420,6 +3636,9 @@ func (l *ListInvoicesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListInvoicesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -3465,6 +3684,9 @@ func (p *PublishInvoiceResponse) GetErrors() []*Error {
 }
 
 func (p *PublishInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -3517,6 +3739,9 @@ func (p *PublishInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PublishInvoiceResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -3575,6 +3800,9 @@ func (s *SearchInvoicesResponse) GetErrors() []*Error {
 }
 
 func (s *SearchInvoicesResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3634,6 +3862,9 @@ func (s *SearchInvoicesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchInvoicesResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3679,6 +3910,9 @@ func (u *UpdateInvoiceResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateInvoiceResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3731,6 +3965,9 @@ func (u *UpdateInvoiceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateInvoiceResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -3756,7 +3993,7 @@ type UpdateInvoiceRequest struct {
 	// null values or the `remove` field (for individual payment requests or reminders).
 	// The current invoice `version` is also required. For more information, including requirements,
 	// limitations, and more examples, see [Update an Invoice](https://developer.squareup.com/docs/invoices-api/update-invoices).
-	Invoice *Invoice `json:"invoice,omitempty" url:"-"`
+	Invoice *Invoice `json:"invoice" url:"-"`
 	// A unique string that identifies the `UpdateInvoice` request. If you do not
 	// provide `idempotency_key` (or provide an empty string as the value), the endpoint
 	// treats each request as independent.
@@ -3805,4 +4042,25 @@ func (u *UpdateInvoiceRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (u *UpdateInvoiceRequest) SetFieldsToClear(fieldsToClear []string) {
 	u.FieldsToClear = fieldsToClear
 	u.require(updateInvoiceRequestFieldFieldsToClear)
+}
+
+func (u *UpdateInvoiceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateInvoiceRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateInvoiceRequest(body)
+	return nil
+}
+
+func (u *UpdateInvoiceRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateInvoiceRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

@@ -3,7 +3,9 @@
 package locations
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -14,7 +16,7 @@ var (
 type BulkDeleteLocationCustomAttributesRequest struct {
 	// The data used to update the `CustomAttribute` objects.
 	// The keys must be unique and are used to map to the corresponding response.
-	Values map[string]*v3.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -34,6 +36,27 @@ func (b *BulkDeleteLocationCustomAttributesRequest) SetValues(values map[string]
 	b.require(bulkDeleteLocationCustomAttributesRequestFieldValues)
 }
 
+func (b *BulkDeleteLocationCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteLocationCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkDeleteLocationCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkDeleteLocationCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteLocationCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkUpsertLocationCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
 )
@@ -42,7 +65,7 @@ type BulkUpsertLocationCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertLocationCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v3.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -60,6 +83,27 @@ func (b *BulkUpsertLocationCustomAttributesRequest) require(field *big.Int) {
 func (b *BulkUpsertLocationCustomAttributesRequest) SetValues(values map[string]*v3.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(bulkUpsertLocationCustomAttributesRequestFieldValues)
+}
+
+func (b *BulkUpsertLocationCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertLocationCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkUpsertLocationCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkUpsertLocationCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkUpsertLocationCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -255,7 +299,7 @@ type UpsertLocationCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include the current version of the custom attribute.
 	// If this is not important for your application, version can be set to -1.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -297,4 +341,25 @@ func (u *UpsertLocationCustomAttributeRequest) SetCustomAttribute(customAttribut
 func (u *UpsertLocationCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(upsertLocationCustomAttributeRequestFieldIdempotencyKey)
+}
+
+func (u *UpsertLocationCustomAttributeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertLocationCustomAttributeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertLocationCustomAttributeRequest(body)
+	return nil
+}
+
+func (u *UpsertLocationCustomAttributeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertLocationCustomAttributeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

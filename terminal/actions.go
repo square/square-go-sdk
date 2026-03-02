@@ -3,7 +3,9 @@
 package terminal
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -46,7 +48,7 @@ type CreateTerminalActionRequest struct {
 	// information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
-	Action *v3.TerminalAction `json:"action,omitempty" url:"-"`
+	Action *v3.TerminalAction `json:"action" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -71,6 +73,27 @@ func (c *CreateTerminalActionRequest) SetIdempotencyKey(idempotencyKey string) {
 func (c *CreateTerminalActionRequest) SetAction(action *v3.TerminalAction) {
 	c.Action = action
 	c.require(createTerminalActionRequestFieldAction)
+}
+
+func (c *CreateTerminalActionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTerminalActionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTerminalActionRequest(body)
+	return nil
+}
+
+func (c *CreateTerminalActionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTerminalActionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -147,4 +170,25 @@ func (s *SearchTerminalActionsRequest) SetCursor(cursor *string) {
 func (s *SearchTerminalActionsRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTerminalActionsRequestFieldLimit)
+}
+
+func (s *SearchTerminalActionsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTerminalActionsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTerminalActionsRequest(body)
+	return nil
+}
+
+func (s *SearchTerminalActionsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTerminalActionsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

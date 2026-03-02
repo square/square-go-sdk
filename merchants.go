@@ -96,6 +96,9 @@ func (g *GetMerchantResponse) GetMerchant() *Merchant {
 }
 
 func (g *GetMerchantResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -148,6 +151,9 @@ func (g *GetMerchantResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetMerchantResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -203,6 +209,9 @@ func (l *ListMerchantsResponse) GetCursor() *int {
 }
 
 func (l *ListMerchantsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -262,6 +271,9 @@ func (l *ListMerchantsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListMerchantsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -372,6 +384,9 @@ func (m *Merchant) GetCreatedAt() *string {
 }
 
 func (m *Merchant) GetExtraProperties() map[string]interface{} {
+	if m == nil {
+		return nil
+	}
 	return m.extraProperties
 }
 
@@ -466,6 +481,9 @@ func (m *Merchant) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Merchant) String() string {
+	if m == nil {
+		return "<nil>"
+	}
 	if len(m.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
 			return value

@@ -3,7 +3,9 @@
 package loyalty
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -20,7 +22,7 @@ type AccumulateLoyaltyPointsRequest struct {
 	// The points to add to the account.
 	// If you are using the Orders API to manage orders, specify the order ID.
 	// Otherwise, specify the points to add.
-	AccumulatePoints *v3.LoyaltyEventAccumulatePoints `json:"accumulate_points,omitempty" url:"-"`
+	AccumulatePoints *v3.LoyaltyEventAccumulatePoints `json:"accumulate_points" url:"-"`
 	// A unique string that identifies the `AccumulateLoyaltyPoints` request.
 	// Keys can be any valid string but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -66,6 +68,27 @@ func (a *AccumulateLoyaltyPointsRequest) SetLocationID(locationID string) {
 	a.require(accumulateLoyaltyPointsRequestFieldLocationID)
 }
 
+func (a *AccumulateLoyaltyPointsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler AccumulateLoyaltyPointsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*a = AccumulateLoyaltyPointsRequest(body)
+	return nil
+}
+
+func (a *AccumulateLoyaltyPointsRequest) MarshalJSON() ([]byte, error) {
+	type embed AccumulateLoyaltyPointsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	adjustLoyaltyPointsRequestFieldAccountID            = big.NewInt(1 << 0)
 	adjustLoyaltyPointsRequestFieldIdempotencyKey       = big.NewInt(1 << 1)
@@ -81,7 +104,7 @@ type AdjustLoyaltyPointsRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The points to add or subtract and the reason for the adjustment. To add points, specify a positive integer.
 	// To subtract points, specify a negative integer.
-	AdjustPoints *v3.LoyaltyEventAdjustPoints `json:"adjust_points,omitempty" url:"-"`
+	AdjustPoints *v3.LoyaltyEventAdjustPoints `json:"adjust_points" url:"-"`
 	// Indicates whether to allow a negative adjustment to result in a negative balance. If `true`, a negative
 	// balance is allowed when subtracting points. If `false`, Square returns a `BAD_REQUEST` error when subtracting
 	// the specified number of points would result in a negative balance. The default value is `false`.
@@ -126,6 +149,27 @@ func (a *AdjustLoyaltyPointsRequest) SetAllowNegativeBalance(allowNegativeBalanc
 	a.require(adjustLoyaltyPointsRequestFieldAllowNegativeBalance)
 }
 
+func (a *AdjustLoyaltyPointsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdjustLoyaltyPointsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*a = AdjustLoyaltyPointsRequest(body)
+	return nil
+}
+
+func (a *AdjustLoyaltyPointsRequest) MarshalJSON() ([]byte, error) {
+	type embed AdjustLoyaltyPointsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*a),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createLoyaltyAccountRequestFieldLoyaltyAccount = big.NewInt(1 << 0)
 	createLoyaltyAccountRequestFieldIdempotencyKey = big.NewInt(1 << 1)
@@ -133,7 +177,7 @@ var (
 
 type CreateLoyaltyAccountRequest struct {
 	// The loyalty account to create.
-	LoyaltyAccount *v3.LoyaltyAccount `json:"loyalty_account,omitempty" url:"-"`
+	LoyaltyAccount *v3.LoyaltyAccount `json:"loyalty_account" url:"-"`
 	// A unique string that identifies this `CreateLoyaltyAccount` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -161,6 +205,27 @@ func (c *CreateLoyaltyAccountRequest) SetLoyaltyAccount(loyaltyAccount *v3.Loyal
 func (c *CreateLoyaltyAccountRequest) SetIdempotencyKey(idempotencyKey string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createLoyaltyAccountRequestFieldIdempotencyKey)
+}
+
+func (c *CreateLoyaltyAccountRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLoyaltyAccountRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLoyaltyAccountRequest(body)
+	return nil
+}
+
+func (c *CreateLoyaltyAccountRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLoyaltyAccountRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -238,4 +303,25 @@ func (s *SearchLoyaltyAccountsRequest) SetLimit(limit *int) {
 func (s *SearchLoyaltyAccountsRequest) SetCursor(cursor *string) {
 	s.Cursor = cursor
 	s.require(searchLoyaltyAccountsRequestFieldCursor)
+}
+
+func (s *SearchLoyaltyAccountsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchLoyaltyAccountsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchLoyaltyAccountsRequest(body)
+	return nil
+}
+
+func (s *SearchLoyaltyAccountsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchLoyaltyAccountsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

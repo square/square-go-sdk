@@ -3,7 +3,9 @@
 package labor
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -16,7 +18,7 @@ type CreateBreakTypeRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `BreakType` to be created.
-	BreakType *v3.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v3.BreakType `json:"break_type" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -41,6 +43,27 @@ func (c *CreateBreakTypeRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (c *CreateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
 	c.BreakType = breakType
 	c.require(createBreakTypeRequestFieldBreakType)
+}
+
+func (c *CreateBreakTypeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBreakTypeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateBreakTypeRequest(body)
+	return nil
+}
+
+func (c *CreateBreakTypeRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateBreakTypeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -152,7 +175,7 @@ type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
-	BreakType *v3.BreakType `json:"break_type,omitempty" url:"-"`
+	BreakType *v3.BreakType `json:"break_type" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -177,4 +200,25 @@ func (u *UpdateBreakTypeRequest) SetID(id string) {
 func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
 	u.BreakType = breakType
 	u.require(updateBreakTypeRequestFieldBreakType)
+}
+
+func (u *UpdateBreakTypeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBreakTypeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateBreakTypeRequest(body)
+	return nil
+}
+
+func (u *UpdateBreakTypeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateBreakTypeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

@@ -131,6 +131,27 @@ func (s *SearchCatalogItemsRequest) SetArchivedState(archivedState *ArchivedStat
 	s.require(searchCatalogItemsRequestFieldArchivedState)
 }
 
+func (s *SearchCatalogItemsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCatalogItemsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchCatalogItemsRequest(body)
+	return nil
+}
+
+func (s *SearchCatalogItemsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchCatalogItemsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateItemModifierListsRequestFieldItemIDs                = big.NewInt(1 << 0)
 	updateItemModifierListsRequestFieldModifierListsToEnable  = big.NewInt(1 << 1)
@@ -139,7 +160,7 @@ var (
 
 type UpdateItemModifierListsRequest struct {
 	// The IDs of the catalog items associated with the CatalogModifierList objects being updated.
-	ItemIDs []string `json:"item_ids,omitempty" url:"-"`
+	ItemIDs []string `json:"item_ids" url:"-"`
 	// The IDs of the CatalogModifierList objects to enable for the CatalogItem.
 	// At least one of `modifier_lists_to_enable` or `modifier_lists_to_disable` must be specified.
 	ModifierListsToEnable []string `json:"modifier_lists_to_enable,omitempty" url:"-"`
@@ -179,6 +200,27 @@ func (u *UpdateItemModifierListsRequest) SetModifierListsToDisable(modifierLists
 	u.require(updateItemModifierListsRequestFieldModifierListsToDisable)
 }
 
+func (u *UpdateItemModifierListsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateItemModifierListsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateItemModifierListsRequest(body)
+	return nil
+}
+
+func (u *UpdateItemModifierListsRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateItemModifierListsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateItemTaxesRequestFieldItemIDs        = big.NewInt(1 << 0)
 	updateItemTaxesRequestFieldTaxesToEnable  = big.NewInt(1 << 1)
@@ -188,7 +230,7 @@ var (
 type UpdateItemTaxesRequest struct {
 	// IDs for the CatalogItems associated with the CatalogTax objects being updated.
 	// No more than 1,000 IDs may be provided.
-	ItemIDs []string `json:"item_ids,omitempty" url:"-"`
+	ItemIDs []string `json:"item_ids" url:"-"`
 	// IDs of the CatalogTax objects to enable.
 	// At least one of `taxes_to_enable` or `taxes_to_disable` must be specified.
 	TaxesToEnable []string `json:"taxes_to_enable,omitempty" url:"-"`
@@ -228,6 +270,27 @@ func (u *UpdateItemTaxesRequest) SetTaxesToDisable(taxesToDisable []string) {
 	u.require(updateItemTaxesRequestFieldTaxesToDisable)
 }
 
+func (u *UpdateItemTaxesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateItemTaxesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateItemTaxesRequest(body)
+	return nil
+}
+
+func (u *UpdateItemTaxesRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateItemTaxesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	batchDeleteCatalogObjectsRequestFieldObjectIDs = big.NewInt(1 << 0)
 )
@@ -236,7 +299,7 @@ type BatchDeleteCatalogObjectsRequest struct {
 	// The IDs of the CatalogObjects to be deleted. When an object is deleted, other objects
 	// in the graph that depend on that object will be deleted as well (for example, deleting a
 	// CatalogItem will delete its CatalogItemVariation.
-	ObjectIDs []string `json:"object_ids,omitempty" url:"-"`
+	ObjectIDs []string `json:"object_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -256,6 +319,27 @@ func (b *BatchDeleteCatalogObjectsRequest) SetObjectIDs(objectIDs []string) {
 	b.require(batchDeleteCatalogObjectsRequestFieldObjectIDs)
 }
 
+func (b *BatchDeleteCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchDeleteCatalogObjectsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchDeleteCatalogObjectsRequest(body)
+	return nil
+}
+
+func (b *BatchDeleteCatalogObjectsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchDeleteCatalogObjectsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	batchGetCatalogObjectsRequestFieldObjectIDs                 = big.NewInt(1 << 0)
 	batchGetCatalogObjectsRequestFieldIncludeRelatedObjects     = big.NewInt(1 << 1)
@@ -266,7 +350,7 @@ var (
 
 type BatchGetCatalogObjectsRequest struct {
 	// The IDs of the CatalogObjects to be retrieved.
-	ObjectIDs []string `json:"object_ids,omitempty" url:"-"`
+	ObjectIDs []string `json:"object_ids" url:"-"`
 	// If `true`, the response will include additional objects that are related to the
 	// requested objects. Related objects are defined as any objects referenced by ID by the results in the `objects` field
 	// of the response. These objects are put in the `related_objects` field. Setting this to `true` is
@@ -341,6 +425,27 @@ func (b *BatchGetCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCate
 	b.require(batchGetCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
 }
 
+func (b *BatchGetCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetCatalogObjectsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchGetCatalogObjectsRequest(body)
+	return nil
+}
+
+func (b *BatchGetCatalogObjectsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchGetCatalogObjectsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	batchUpsertCatalogObjectsRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	batchUpsertCatalogObjectsRequestFieldBatches        = big.NewInt(1 << 1)
@@ -378,7 +483,7 @@ type BatchUpsertCatalogObjectsRequest struct {
 	// Each batch may contain up to 1,000 objects. The total number of objects across all batches for a single request
 	// may not exceed 10,000. If either of these limits is violated, an error will be returned and no objects will
 	// be inserted or updated.
-	Batches []*CatalogObjectBatch `json:"batches,omitempty" url:"-"`
+	Batches []*CatalogObjectBatch `json:"batches" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -403,6 +508,27 @@ func (b *BatchUpsertCatalogObjectsRequest) SetIdempotencyKey(idempotencyKey stri
 func (b *BatchUpsertCatalogObjectsRequest) SetBatches(batches []*CatalogObjectBatch) {
 	b.Batches = batches
 	b.require(batchUpsertCatalogObjectsRequestFieldBatches)
+}
+
+func (b *BatchUpsertCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpsertCatalogObjectsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchUpsertCatalogObjectsRequest(body)
+	return nil
+}
+
+func (b *BatchUpsertCatalogObjectsRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchUpsertCatalogObjectsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -596,6 +722,27 @@ func (s *SearchCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCatego
 	s.require(searchCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
 }
 
+func (s *SearchCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCatalogObjectsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchCatalogObjectsRequest(body)
+	return nil
+}
+
+func (s *SearchCatalogObjectsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchCatalogObjectsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines the values for the `archived_state` query expression
 // used in [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
 // to return the archived, not archived or either type of catalog items.
@@ -667,6 +814,9 @@ func (b *BatchDeleteCatalogObjectsResponse) GetDeletedAt() *string {
 }
 
 func (b *BatchDeleteCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -726,6 +876,9 @@ func (b *BatchDeleteCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchDeleteCatalogObjectsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -780,6 +933,9 @@ func (b *BatchGetCatalogObjectsResponse) GetRelatedObjects() []*CatalogObject {
 }
 
 func (b *BatchGetCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -839,6 +995,9 @@ func (b *BatchGetCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetCatalogObjectsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -903,6 +1062,9 @@ func (b *BatchUpsertCatalogObjectsResponse) GetIDMappings() []*CatalogIDMapping 
 }
 
 func (b *BatchUpsertCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -969,6 +1131,9 @@ func (b *BatchUpsertCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchUpsertCatalogObjectsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1023,6 +1188,9 @@ func (c *CatalogInfoResponse) GetStandardUnitDescriptionGroup() *StandardUnitDes
 }
 
 func (c *CatalogInfoResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1082,6 +1250,9 @@ func (c *CatalogInfoResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogInfoResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1227,6 +1398,9 @@ func (c *CatalogInfoResponseLimits) GetUpdateItemModifierListsMaxModifierListsTo
 }
 
 func (c *CatalogInfoResponseLimits) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1342,6 +1516,9 @@ func (c *CatalogInfoResponseLimits) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogInfoResponseLimits) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1377,6 +1554,9 @@ func (c *CatalogObjectBatch) GetObjects() []*CatalogObject {
 }
 
 func (c *CatalogObjectBatch) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1422,6 +1602,9 @@ func (c *CatalogObjectBatch) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogObjectBatch) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1581,6 +1764,9 @@ func (c *CatalogQuery) GetItemVariationsForItemOptionValuesQuery() *CatalogQuery
 }
 
 func (c *CatalogQuery) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1689,6 +1875,9 @@ func (c *CatalogQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQuery) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1735,6 +1924,9 @@ func (c *CatalogQueryExact) GetAttributeValue() string {
 }
 
 func (c *CatalogQueryExact) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1787,6 +1979,9 @@ func (c *CatalogQueryExact) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryExact) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1824,6 +2019,9 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) GetItemOptionValueIDs() 
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1869,6 +2067,9 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) MarshalJSON() ([]byte, e
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1906,6 +2107,9 @@ func (c *CatalogQueryItemsForItemOptions) GetItemOptionIDs() []string {
 }
 
 func (c *CatalogQueryItemsForItemOptions) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1951,6 +2155,9 @@ func (c *CatalogQueryItemsForItemOptions) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryItemsForItemOptions) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1986,6 +2193,9 @@ func (c *CatalogQueryItemsForModifierList) GetModifierListIDs() []string {
 }
 
 func (c *CatalogQueryItemsForModifierList) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2031,6 +2241,9 @@ func (c *CatalogQueryItemsForModifierList) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryItemsForModifierList) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2066,6 +2279,9 @@ func (c *CatalogQueryItemsForTax) GetTaxIDs() []string {
 }
 
 func (c *CatalogQueryItemsForTax) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2111,6 +2327,9 @@ func (c *CatalogQueryItemsForTax) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryItemsForTax) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2156,6 +2375,9 @@ func (c *CatalogQueryPrefix) GetAttributePrefix() string {
 }
 
 func (c *CatalogQueryPrefix) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2208,6 +2430,9 @@ func (c *CatalogQueryPrefix) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryPrefix) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2263,6 +2488,9 @@ func (c *CatalogQueryRange) GetAttributeMaxValue() *int64 {
 }
 
 func (c *CatalogQueryRange) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2322,6 +2550,9 @@ func (c *CatalogQueryRange) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryRange) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2369,6 +2600,9 @@ func (c *CatalogQuerySet) GetAttributeValues() []string {
 }
 
 func (c *CatalogQuerySet) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2421,6 +2655,9 @@ func (c *CatalogQuerySet) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQuerySet) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2479,6 +2716,9 @@ func (c *CatalogQuerySortedAttribute) GetSortOrder() *SortOrder {
 }
 
 func (c *CatalogQuerySortedAttribute) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2538,6 +2778,9 @@ func (c *CatalogQuerySortedAttribute) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQuerySortedAttribute) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2573,6 +2816,9 @@ func (c *CatalogQueryText) GetKeywords() []string {
 }
 
 func (c *CatalogQueryText) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2618,6 +2864,9 @@ func (c *CatalogQueryText) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryText) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2717,6 +2966,9 @@ func (c *CustomAttributeFilter) GetBoolFilter() *bool {
 }
 
 func (c *CustomAttributeFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2797,6 +3049,9 @@ func (c *CustomAttributeFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomAttributeFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2852,6 +3107,9 @@ func (l *ListCatalogResponse) GetObjects() []*CatalogObject {
 }
 
 func (l *ListCatalogResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -2911,6 +3169,9 @@ func (l *ListCatalogResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListCatalogResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -2958,6 +3219,9 @@ func (r *Range) GetMax() *string {
 }
 
 func (r *Range) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -3010,6 +3274,9 @@ func (r *Range) MarshalJSON() ([]byte, error) {
 }
 
 func (r *Range) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -3098,6 +3365,9 @@ func (s *SearchCatalogItemsResponse) GetMatchedVariationIDs() []string {
 }
 
 func (s *SearchCatalogItemsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3164,6 +3434,9 @@ func (s *SearchCatalogItemsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchCatalogItemsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3240,6 +3513,9 @@ func (s *SearchCatalogObjectsResponse) GetLatestTime() *string {
 }
 
 func (s *SearchCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3313,6 +3589,9 @@ func (s *SearchCatalogObjectsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchCatalogObjectsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3368,6 +3647,9 @@ func (s *StandardUnitDescription) GetAbbreviation() *string {
 }
 
 func (s *StandardUnitDescription) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3427,6 +3709,9 @@ func (s *StandardUnitDescription) MarshalJSON() ([]byte, error) {
 }
 
 func (s *StandardUnitDescription) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3472,6 +3757,9 @@ func (s *StandardUnitDescriptionGroup) GetLanguageCode() *string {
 }
 
 func (s *StandardUnitDescriptionGroup) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -3524,6 +3812,9 @@ func (s *StandardUnitDescriptionGroup) MarshalJSON() ([]byte, error) {
 }
 
 func (s *StandardUnitDescriptionGroup) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3568,6 +3859,9 @@ func (u *UpdateItemModifierListsResponse) GetUpdatedAt() *string {
 }
 
 func (u *UpdateItemModifierListsResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3620,6 +3914,9 @@ func (u *UpdateItemModifierListsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateItemModifierListsResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -3664,6 +3961,9 @@ func (u *UpdateItemTaxesResponse) GetUpdatedAt() *string {
 }
 
 func (u *UpdateItemTaxesResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3716,6 +4016,9 @@ func (u *UpdateItemTaxesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateItemTaxesResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

@@ -35,6 +35,27 @@ func (r *RegisterDomainRequest) SetDomainName(domainName string) {
 	r.require(registerDomainRequestFieldDomainName)
 }
 
+func (r *RegisterDomainRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RegisterDomainRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RegisterDomainRequest(body)
+	return nil
+}
+
+func (r *RegisterDomainRequest) MarshalJSON() ([]byte, error) {
+	type embed RegisterDomainRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines the fields that are included in the response body of
 // a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
 //
@@ -75,6 +96,9 @@ func (r *RegisterDomainResponse) GetStatus() *RegisterDomainResponseStatus {
 }
 
 func (r *RegisterDomainResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -127,6 +151,9 @@ func (r *RegisterDomainResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RegisterDomainResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value

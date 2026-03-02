@@ -3,7 +3,9 @@
 package customers
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -84,6 +86,27 @@ func (c *CreateCustomerCardRequest) SetCardholderName(cardholderName *string) {
 func (c *CreateCustomerCardRequest) SetVerificationToken(verificationToken *string) {
 	c.VerificationToken = verificationToken
 	c.require(createCustomerCardRequestFieldVerificationToken)
+}
+
+func (c *CreateCustomerCardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCustomerCardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateCustomerCardRequest(body)
+	return nil
+}
+
+func (c *CreateCustomerCardRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateCustomerCardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (

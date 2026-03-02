@@ -189,6 +189,27 @@ func (v *V1UpdateOrderRequest) SetCanceledNote(canceledNote *string) {
 	v.require(v1UpdateOrderRequestFieldCanceledNote)
 }
 
+func (v *V1UpdateOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler V1UpdateOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*v = V1UpdateOrderRequest(body)
+	return nil
+}
+
+func (v *V1UpdateOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed V1UpdateOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*v),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	v1MoneyFieldAmount       = big.NewInt(1 << 0)
 	v1MoneyFieldCurrencyCode = big.NewInt(1 << 1)
@@ -223,6 +244,9 @@ func (v *V1Money) GetCurrencyCode() *Currency {
 }
 
 func (v *V1Money) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -275,6 +299,9 @@ func (v *V1Money) MarshalJSON() ([]byte, error) {
 }
 
 func (v *V1Money) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -551,6 +578,9 @@ func (v *V1Order) GetBtcPriceSatoshi() *float64 {
 }
 
 func (v *V1Order) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -764,6 +794,9 @@ func (v *V1Order) MarshalJSON() ([]byte, error) {
 }
 
 func (v *V1Order) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -810,6 +843,9 @@ func (v *V1OrderHistoryEntry) GetCreatedAt() *string {
 }
 
 func (v *V1OrderHistoryEntry) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -862,6 +898,9 @@ func (v *V1OrderHistoryEntry) MarshalJSON() ([]byte, error) {
 }
 
 func (v *V1OrderHistoryEntry) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value
@@ -1142,6 +1181,9 @@ func (v *V1Tender) GetIsExchange() *bool {
 }
 
 func (v *V1Tender) GetExtraProperties() map[string]interface{} {
+	if v == nil {
+		return nil
+	}
 	return v.extraProperties
 }
 
@@ -1292,6 +1334,9 @@ func (v *V1Tender) MarshalJSON() ([]byte, error) {
 }
 
 func (v *V1Tender) String() string {
+	if v == nil {
+		return "<nil>"
+	}
 	if len(v.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
 			return value

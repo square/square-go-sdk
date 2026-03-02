@@ -20,7 +20,7 @@ type BulkPublishScheduledShiftsRequest struct {
 	// - Each key is the ID of a scheduled shift you want to publish.
 	// - Each value is a `BulkPublishScheduledShiftsData` object that contains the
 	// `version` field or is an empty object.
-	ScheduledShifts map[string]*BulkPublishScheduledShiftsData `json:"scheduled_shifts,omitempty" url:"-"`
+	ScheduledShifts map[string]*BulkPublishScheduledShiftsData `json:"scheduled_shifts" url:"-"`
 	// Indicates whether Square should send email notifications to team members and
 	// which team members should receive the notifications. This setting applies to all shifts
 	// specified in the bulk operation. The default value is `AFFECTED`.
@@ -52,6 +52,27 @@ func (b *BulkPublishScheduledShiftsRequest) SetScheduledShiftNotificationAudienc
 	b.require(bulkPublishScheduledShiftsRequestFieldScheduledShiftNotificationAudience)
 }
 
+func (b *BulkPublishScheduledShiftsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkPublishScheduledShiftsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkPublishScheduledShiftsRequest(body)
+	return nil
+}
+
+func (b *BulkPublishScheduledShiftsRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkPublishScheduledShiftsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createScheduledShiftRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createScheduledShiftRequestFieldScheduledShift = big.NewInt(1 << 1)
@@ -69,7 +90,7 @@ type CreateScheduledShiftRequest struct {
 	//
 	// The `start_at` and `end_at` timestamps must be provided in the time zone + offset of the
 	// shift location specified in `location_id`. Example for Pacific Standard Time: 2024-10-31T12:30:00-08:00
-	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"-"`
+	ScheduledShift *ScheduledShift `json:"scheduled_shift" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -96,6 +117,27 @@ func (c *CreateScheduledShiftRequest) SetScheduledShift(scheduledShift *Schedule
 	c.require(createScheduledShiftRequestFieldScheduledShift)
 }
 
+func (c *CreateScheduledShiftRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateScheduledShiftRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateScheduledShiftRequest(body)
+	return nil
+}
+
+func (c *CreateScheduledShiftRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateScheduledShiftRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createTimecardRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createTimecardRequestFieldTimecard       = big.NewInt(1 << 1)
@@ -105,7 +147,7 @@ type CreateTimecardRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `Timecard` to be created.
-	Timecard *Timecard `json:"timecard,omitempty" url:"-"`
+	Timecard *Timecard `json:"timecard" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -130,6 +172,27 @@ func (c *CreateTimecardRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (c *CreateTimecardRequest) SetTimecard(timecard *Timecard) {
 	c.Timecard = timecard
 	c.require(createTimecardRequestFieldTimecard)
+}
+
+func (c *CreateTimecardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTimecardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTimecardRequest(body)
+	return nil
+}
+
+func (c *CreateTimecardRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTimecardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -218,6 +281,27 @@ func (p *PublishScheduledShiftRequest) SetVersion(version *int) {
 func (p *PublishScheduledShiftRequest) SetScheduledShiftNotificationAudience(scheduledShiftNotificationAudience *ScheduledShiftNotificationAudience) {
 	p.ScheduledShiftNotificationAudience = scheduledShiftNotificationAudience
 	p.require(publishScheduledShiftRequestFieldScheduledShiftNotificationAudience)
+}
+
+func (p *PublishScheduledShiftRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PublishScheduledShiftRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*p = PublishScheduledShiftRequest(body)
+	return nil
+}
+
+func (p *PublishScheduledShiftRequest) MarshalJSON() ([]byte, error) {
+	type embed PublishScheduledShiftRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -320,6 +404,27 @@ func (s *SearchScheduledShiftsRequest) SetCursor(cursor *string) {
 	s.require(searchScheduledShiftsRequestFieldCursor)
 }
 
+func (s *SearchScheduledShiftsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchScheduledShiftsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchScheduledShiftsRequest(body)
+	return nil
+}
+
+func (s *SearchScheduledShiftsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchScheduledShiftsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	searchTimecardsRequestFieldQuery  = big.NewInt(1 << 0)
 	searchTimecardsRequestFieldLimit  = big.NewInt(1 << 1)
@@ -366,6 +471,27 @@ func (s *SearchTimecardsRequest) SetCursor(cursor *string) {
 	s.require(searchTimecardsRequestFieldCursor)
 }
 
+func (s *SearchTimecardsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTimecardsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTimecardsRequest(body)
+	return nil
+}
+
+func (s *SearchTimecardsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTimecardsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateScheduledShiftRequestFieldID             = big.NewInt(1 << 0)
 	updateScheduledShiftRequestFieldScheduledShift = big.NewInt(1 << 1)
@@ -387,7 +513,7 @@ type UpdateScheduledShiftRequest struct {
 	// control for the request, provide the current version of the shift in the `version` field.
 	// If the provided version doesn't match the server version, the request fails. If `version` is
 	// omitted, Square executes a blind write, potentially overwriting data from another publish request.
-	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"-"`
+	ScheduledShift *ScheduledShift `json:"scheduled_shift" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -414,6 +540,27 @@ func (u *UpdateScheduledShiftRequest) SetScheduledShift(scheduledShift *Schedule
 	u.require(updateScheduledShiftRequestFieldScheduledShift)
 }
 
+func (u *UpdateScheduledShiftRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateScheduledShiftRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateScheduledShiftRequest(body)
+	return nil
+}
+
+func (u *UpdateScheduledShiftRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateScheduledShiftRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateTimecardRequestFieldID       = big.NewInt(1 << 0)
 	updateTimecardRequestFieldTimecard = big.NewInt(1 << 1)
@@ -423,7 +570,7 @@ type UpdateTimecardRequest struct {
 	// The ID of the object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `Timecard` object.
-	Timecard *Timecard `json:"timecard,omitempty" url:"-"`
+	Timecard *Timecard `json:"timecard" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -448,6 +595,27 @@ func (u *UpdateTimecardRequest) SetID(id string) {
 func (u *UpdateTimecardRequest) SetTimecard(timecard *Timecard) {
 	u.Timecard = timecard
 	u.require(updateTimecardRequestFieldTimecard)
+}
+
+func (u *UpdateTimecardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateTimecardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateTimecardRequest(body)
+	return nil
+}
+
+func (u *UpdateTimecardRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateTimecardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 // Represents options for an individual publish request in a
@@ -478,6 +646,9 @@ func (b *BulkPublishScheduledShiftsData) GetVersion() *int {
 }
 
 func (b *BulkPublishScheduledShiftsData) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -523,6 +694,9 @@ func (b *BulkPublishScheduledShiftsData) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkPublishScheduledShiftsData) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -575,6 +749,9 @@ func (b *BulkPublishScheduledShiftsResponse) GetErrors() []*Error {
 }
 
 func (b *BulkPublishScheduledShiftsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -627,6 +804,9 @@ func (b *BulkPublishScheduledShiftsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkPublishScheduledShiftsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -675,6 +855,9 @@ func (c *CreateScheduledShiftResponse) GetErrors() []*Error {
 }
 
 func (c *CreateScheduledShiftResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -727,6 +910,9 @@ func (c *CreateScheduledShiftResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateScheduledShiftResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -774,6 +960,9 @@ func (c *CreateTimecardResponse) GetErrors() []*Error {
 }
 
 func (c *CreateTimecardResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -826,6 +1015,9 @@ func (c *CreateTimecardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTimecardResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -862,6 +1054,9 @@ func (d *DeleteTimecardResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteTimecardResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -907,6 +1102,9 @@ func (d *DeleteTimecardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteTimecardResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -953,6 +1151,9 @@ func (p *PublishScheduledShiftResponse) GetErrors() []*Error {
 }
 
 func (p *PublishScheduledShiftResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1005,6 +1206,9 @@ func (p *PublishScheduledShiftResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PublishScheduledShiftResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1051,6 +1255,9 @@ func (r *RetrieveScheduledShiftResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveScheduledShiftResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1103,6 +1310,9 @@ func (r *RetrieveScheduledShiftResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveScheduledShiftResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1150,6 +1360,9 @@ func (r *RetrieveTimecardResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveTimecardResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1202,6 +1415,9 @@ func (r *RetrieveTimecardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveTimecardResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1293,6 +1509,9 @@ func (s *ScheduledShift) GetUpdatedAt() *string {
 }
 
 func (s *ScheduledShift) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1373,6 +1592,9 @@ func (s *ScheduledShift) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShift) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1486,6 +1708,9 @@ func (s *ScheduledShiftDetails) GetTimezone() *string {
 }
 
 func (s *ScheduledShiftDetails) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1580,6 +1805,9 @@ func (s *ScheduledShiftDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShiftDetails) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1696,6 +1924,9 @@ func (s *ScheduledShiftFilter) GetScheduledShiftStatuses() []ScheduledShiftFilte
 }
 
 func (s *ScheduledShiftFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1783,6 +2014,9 @@ func (s *ScheduledShiftFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShiftFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1906,6 +2140,9 @@ func (s *ScheduledShiftQuery) GetSort() *ScheduledShiftSort {
 }
 
 func (s *ScheduledShiftQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1958,6 +2195,9 @@ func (s *ScheduledShiftQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShiftQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2006,6 +2246,9 @@ func (s *ScheduledShiftSort) GetOrder() *SortOrder {
 }
 
 func (s *ScheduledShiftSort) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2058,6 +2301,9 @@ func (s *ScheduledShiftSort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShiftSort) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2148,6 +2394,9 @@ func (s *ScheduledShiftWorkday) GetDefaultTimezone() *string {
 }
 
 func (s *ScheduledShiftWorkday) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2207,6 +2456,9 @@ func (s *ScheduledShiftWorkday) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScheduledShiftWorkday) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2290,6 +2542,9 @@ func (s *SearchScheduledShiftsResponse) GetErrors() []*Error {
 }
 
 func (s *SearchScheduledShiftsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2349,6 +2604,9 @@ func (s *SearchScheduledShiftsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchScheduledShiftsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2406,6 +2664,9 @@ func (s *SearchTimecardsResponse) GetErrors() []*Error {
 }
 
 func (s *SearchTimecardsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2465,6 +2726,9 @@ func (s *SearchTimecardsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchTimecardsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2632,6 +2896,9 @@ func (t *Timecard) GetDeclaredCashTipMoney() *Money {
 }
 
 func (t *Timecard) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2761,6 +3028,9 @@ func (t *Timecard) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Timecard) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2848,6 +3118,9 @@ func (t *TimecardFilter) GetTeamMemberIDs() []string {
 }
 
 func (t *TimecardFilter) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2928,6 +3201,9 @@ func (t *TimecardFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimecardFilter) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2996,6 +3272,9 @@ func (t *TimecardQuery) GetSort() *TimecardSort {
 }
 
 func (t *TimecardQuery) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -3048,6 +3327,9 @@ func (t *TimecardQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimecardQuery) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -3095,6 +3377,9 @@ func (t *TimecardSort) GetOrder() *SortOrder {
 }
 
 func (t *TimecardSort) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -3147,6 +3432,9 @@ func (t *TimecardSort) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimecardSort) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -3266,6 +3554,9 @@ func (t *TimecardWage) GetTipEligible() *bool {
 }
 
 func (t *TimecardWage) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -3332,6 +3623,9 @@ func (t *TimecardWage) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimecardWage) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -3392,6 +3686,9 @@ func (t *TimecardWorkday) GetDefaultTimezone() *string {
 }
 
 func (t *TimecardWorkday) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -3451,6 +3748,9 @@ func (t *TimecardWorkday) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TimecardWorkday) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -3525,6 +3825,9 @@ func (u *UpdateScheduledShiftResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateScheduledShiftResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3577,6 +3880,9 @@ func (u *UpdateScheduledShiftResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateScheduledShiftResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -3624,6 +3930,9 @@ func (u *UpdateTimecardResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateTimecardResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3676,6 +3985,9 @@ func (u *UpdateTimecardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTimecardResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

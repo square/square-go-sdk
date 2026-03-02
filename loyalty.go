@@ -62,6 +62,27 @@ func (s *SearchLoyaltyEventsRequest) SetCursor(cursor *string) {
 	s.require(searchLoyaltyEventsRequestFieldCursor)
 }
 
+func (s *SearchLoyaltyEventsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchLoyaltyEventsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchLoyaltyEventsRequest(body)
+	return nil
+}
+
+func (s *SearchLoyaltyEventsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchLoyaltyEventsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Filter events by date time range.
 var (
 	loyaltyEventDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
@@ -86,6 +107,9 @@ func (l *LoyaltyEventDateTimeFilter) GetCreatedAt() *TimeRange {
 }
 
 func (l *LoyaltyEventDateTimeFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -131,6 +155,9 @@ func (l *LoyaltyEventDateTimeFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventDateTimeFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -209,6 +236,9 @@ func (l *LoyaltyEventFilter) GetOrderFilter() *LoyaltyEventOrderFilter {
 }
 
 func (l *LoyaltyEventFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -282,6 +312,9 @@ func (l *LoyaltyEventFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -319,6 +352,9 @@ func (l *LoyaltyEventLocationFilter) GetLocationIDs() []string {
 }
 
 func (l *LoyaltyEventLocationFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -364,6 +400,9 @@ func (l *LoyaltyEventLocationFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventLocationFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -399,6 +438,9 @@ func (l *LoyaltyEventLoyaltyAccountFilter) GetLoyaltyAccountID() string {
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -444,6 +486,9 @@ func (l *LoyaltyEventLoyaltyAccountFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -479,6 +524,9 @@ func (l *LoyaltyEventOrderFilter) GetOrderID() string {
 }
 
 func (l *LoyaltyEventOrderFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -524,6 +572,9 @@ func (l *LoyaltyEventOrderFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventOrderFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -559,6 +610,9 @@ func (l *LoyaltyEventQuery) GetFilter() *LoyaltyEventFilter {
 }
 
 func (l *LoyaltyEventQuery) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -604,6 +658,9 @@ func (l *LoyaltyEventQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventQuery) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -642,6 +699,9 @@ func (l *LoyaltyEventTypeFilter) GetTypes() []LoyaltyEventType {
 }
 
 func (l *LoyaltyEventTypeFilter) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -687,6 +747,9 @@ func (l *LoyaltyEventTypeFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LoyaltyEventTypeFilter) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -746,6 +809,9 @@ func (s *SearchLoyaltyEventsResponse) GetCursor() *string {
 }
 
 func (s *SearchLoyaltyEventsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -805,6 +871,9 @@ func (s *SearchLoyaltyEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchLoyaltyEventsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
