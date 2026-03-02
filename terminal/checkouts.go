@@ -3,7 +3,9 @@
 package terminal
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -45,7 +47,7 @@ type CreateTerminalCheckoutRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The checkout to create.
-	Checkout *v3.TerminalCheckout `json:"checkout,omitempty" url:"-"`
+	Checkout *v505.TerminalCheckout `json:"checkout" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -67,9 +69,30 @@ func (c *CreateTerminalCheckoutRequest) SetIdempotencyKey(idempotencyKey string)
 
 // SetCheckout sets the Checkout field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v3.TerminalCheckout) {
+func (c *CreateTerminalCheckoutRequest) SetCheckout(checkout *v505.TerminalCheckout) {
 	c.Checkout = checkout
 	c.require(createTerminalCheckoutRequestFieldCheckout)
+}
+
+func (c *CreateTerminalCheckoutRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTerminalCheckoutRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTerminalCheckoutRequest(body)
+	return nil
+}
+
+func (c *CreateTerminalCheckoutRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTerminalCheckoutRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -107,7 +130,7 @@ var (
 type SearchTerminalCheckoutsRequest struct {
 	// Queries Terminal checkouts based on given conditions and the sort order.
 	// Leaving these unset returns all checkouts with the default sort order.
-	Query *v3.TerminalCheckoutQuery `json:"query,omitempty" url:"-"`
+	Query *v505.TerminalCheckoutQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this cursor to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more information.
@@ -128,7 +151,7 @@ func (s *SearchTerminalCheckoutsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchTerminalCheckoutsRequest) SetQuery(query *v3.TerminalCheckoutQuery) {
+func (s *SearchTerminalCheckoutsRequest) SetQuery(query *v505.TerminalCheckoutQuery) {
 	s.Query = query
 	s.require(searchTerminalCheckoutsRequestFieldQuery)
 }
@@ -145,4 +168,25 @@ func (s *SearchTerminalCheckoutsRequest) SetCursor(cursor *string) {
 func (s *SearchTerminalCheckoutsRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTerminalCheckoutsRequestFieldLimit)
+}
+
+func (s *SearchTerminalCheckoutsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTerminalCheckoutsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTerminalCheckoutsRequest(body)
+	return nil
+}
+
+func (s *SearchTerminalCheckoutsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTerminalCheckoutsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

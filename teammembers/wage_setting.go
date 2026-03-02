@@ -3,7 +3,9 @@
 package teammembers
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -46,7 +48,7 @@ type UpdateWageSettingRequest struct {
 	// Requires Square API version 2024-12-18 or later.
 	// - `job_title` - Use the exact, case-sensitive spelling of an existing title unless you want to create a new job.
 	// This value is ignored if `job_id` is also provided.
-	WageSetting *v3.WageSetting `json:"wage_setting,omitempty" url:"-"`
+	WageSetting *v505.WageSetting `json:"wage_setting" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -68,7 +70,28 @@ func (u *UpdateWageSettingRequest) SetTeamMemberID(teamMemberID string) {
 
 // SetWageSetting sets the WageSetting field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateWageSettingRequest) SetWageSetting(wageSetting *v3.WageSetting) {
+func (u *UpdateWageSettingRequest) SetWageSetting(wageSetting *v505.WageSetting) {
 	u.WageSetting = wageSetting
 	u.require(updateWageSettingRequestFieldWageSetting)
+}
+
+func (u *UpdateWageSettingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateWageSettingRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateWageSettingRequest(body)
+	return nil
+}
+
+func (u *UpdateWageSettingRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateWageSettingRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

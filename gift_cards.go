@@ -45,6 +45,27 @@ func (l *LinkCustomerToGiftCardRequest) SetCustomerID(customerID string) {
 	l.require(linkCustomerToGiftCardRequestFieldCustomerID)
 }
 
+func (l *LinkCustomerToGiftCardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler LinkCustomerToGiftCardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*l = LinkCustomerToGiftCardRequest(body)
+	return nil
+}
+
+func (l *LinkCustomerToGiftCardRequest) MarshalJSON() ([]byte, error) {
+	type embed LinkCustomerToGiftCardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	unlinkCustomerFromGiftCardRequestFieldGiftCardID = big.NewInt(1 << 0)
 	unlinkCustomerFromGiftCardRequestFieldCustomerID = big.NewInt(1 << 1)
@@ -81,6 +102,27 @@ func (u *UnlinkCustomerFromGiftCardRequest) SetCustomerID(customerID string) {
 	u.require(unlinkCustomerFromGiftCardRequestFieldCustomerID)
 }
 
+func (u *UnlinkCustomerFromGiftCardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UnlinkCustomerFromGiftCardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UnlinkCustomerFromGiftCardRequest(body)
+	return nil
+}
+
+func (u *UnlinkCustomerFromGiftCardRequest) MarshalJSON() ([]byte, error) {
+	type embed UnlinkCustomerFromGiftCardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createGiftCardRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createGiftCardRequestFieldLocationID     = big.NewInt(1 << 1)
@@ -110,7 +152,7 @@ type CreateGiftCardRequest struct {
 	//
 	// To register an unused, physical gift card that the seller previously ordered from Square,
 	// include `gan` and provide the GAN that is printed on the gift card.
-	GiftCard *GiftCard `json:"gift_card,omitempty" url:"-"`
+	GiftCard *GiftCard `json:"gift_card" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -142,6 +184,27 @@ func (c *CreateGiftCardRequest) SetLocationID(locationID string) {
 func (c *CreateGiftCardRequest) SetGiftCard(giftCard *GiftCard) {
 	c.GiftCard = giftCard
 	c.require(createGiftCardRequestFieldGiftCard)
+}
+
+func (c *CreateGiftCardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateGiftCardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateGiftCardRequest(body)
+	return nil
+}
+
+func (c *CreateGiftCardRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateGiftCardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -198,6 +261,27 @@ func (g *GetGiftCardFromGanRequest) SetGan(gan string) {
 	g.require(getGiftCardFromGanRequestFieldGan)
 }
 
+func (g *GetGiftCardFromGanRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetGiftCardFromGanRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*g = GetGiftCardFromGanRequest(body)
+	return nil
+}
+
+func (g *GetGiftCardFromGanRequest) MarshalJSON() ([]byte, error) {
+	type embed GetGiftCardFromGanRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	getGiftCardFromNonceRequestFieldNonce = big.NewInt(1 << 0)
 )
@@ -223,6 +307,27 @@ func (g *GetGiftCardFromNonceRequest) require(field *big.Int) {
 func (g *GetGiftCardFromNonceRequest) SetNonce(nonce string) {
 	g.Nonce = nonce
 	g.require(getGiftCardFromNonceRequestFieldNonce)
+}
+
+func (g *GetGiftCardFromNonceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetGiftCardFromNonceRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*g = GetGiftCardFromNonceRequest(body)
+	return nil
+}
+
+func (g *GetGiftCardFromNonceRequest) MarshalJSON() ([]byte, error) {
+	type embed GetGiftCardFromNonceRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -333,6 +438,9 @@ func (c *CreateGiftCardResponse) GetGiftCard() *GiftCard {
 }
 
 func (c *CreateGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -385,6 +493,9 @@ func (c *CreateGiftCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateGiftCardResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -431,6 +542,9 @@ func (g *GetGiftCardFromGanResponse) GetGiftCard() *GiftCard {
 }
 
 func (g *GetGiftCardFromGanResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -483,6 +597,9 @@ func (g *GetGiftCardFromGanResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetGiftCardFromGanResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -529,6 +646,9 @@ func (g *GetGiftCardFromNonceResponse) GetGiftCard() *GiftCard {
 }
 
 func (g *GetGiftCardFromNonceResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -581,6 +701,9 @@ func (g *GetGiftCardFromNonceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetGiftCardFromNonceResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -627,6 +750,9 @@ func (g *GetGiftCardResponse) GetGiftCard() *GiftCard {
 }
 
 func (g *GetGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -679,6 +805,9 @@ func (g *GetGiftCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetGiftCardResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -792,6 +921,9 @@ func (g *GiftCard) GetCustomerIDs() []string {
 }
 
 func (g *GiftCard) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -886,6 +1018,9 @@ func (g *GiftCard) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GiftCard) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1008,6 +1143,9 @@ func (l *LinkCustomerToGiftCardResponse) GetGiftCard() *GiftCard {
 }
 
 func (l *LinkCustomerToGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1060,6 +1198,9 @@ func (l *LinkCustomerToGiftCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LinkCustomerToGiftCardResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1119,6 +1260,9 @@ func (l *ListGiftCardsResponse) GetCursor() *string {
 }
 
 func (l *ListGiftCardsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1178,6 +1322,9 @@ func (l *ListGiftCardsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListGiftCardsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1225,6 +1372,9 @@ func (u *UnlinkCustomerFromGiftCardResponse) GetGiftCard() *GiftCard {
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1277,6 +1427,9 @@ func (u *UnlinkCustomerFromGiftCardResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

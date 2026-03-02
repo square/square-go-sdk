@@ -61,6 +61,27 @@ func (c *CancelPaymentByIdempotencyKeyRequest) SetIdempotencyKey(idempotencyKey 
 	c.require(cancelPaymentByIdempotencyKeyRequestFieldIdempotencyKey)
 }
 
+func (c *CancelPaymentByIdempotencyKeyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelPaymentByIdempotencyKeyRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CancelPaymentByIdempotencyKeyRequest(body)
+	return nil
+}
+
+func (c *CancelPaymentByIdempotencyKeyRequest) MarshalJSON() ([]byte, error) {
+	type embed CancelPaymentByIdempotencyKeyRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	completePaymentRequestFieldPaymentID    = big.NewInt(1 << 0)
 	completePaymentRequestFieldVersionToken = big.NewInt(1 << 1)
@@ -97,6 +118,27 @@ func (c *CompletePaymentRequest) SetPaymentID(paymentID string) {
 func (c *CompletePaymentRequest) SetVersionToken(versionToken *string) {
 	c.VersionToken = versionToken
 	c.require(completePaymentRequestFieldVersionToken)
+}
+
+func (c *CompletePaymentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CompletePaymentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CompletePaymentRequest(body)
+	return nil
+}
+
+func (c *CompletePaymentRequest) MarshalJSON() ([]byte, error) {
+	type embed CompletePaymentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -464,6 +506,27 @@ func (c *CreatePaymentRequest) SetOfflinePaymentDetails(offlinePaymentDetails *O
 	c.require(createPaymentRequestFieldOfflinePaymentDetails)
 }
 
+func (c *CreatePaymentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreatePaymentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreatePaymentRequest(body)
+	return nil
+}
+
+func (c *CreatePaymentRequest) MarshalJSON() ([]byte, error) {
+	type embed CreatePaymentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	getPaymentsRequestFieldPaymentID = big.NewInt(1 << 0)
 )
@@ -730,6 +793,9 @@ func (a *AchDetails) GetAccountType() *string {
 }
 
 func (a *AchDetails) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -789,6 +855,9 @@ func (a *AchDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AchDetails) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -824,6 +893,9 @@ func (a *AfterpayDetails) GetEmailAddress() *string {
 }
 
 func (a *AfterpayDetails) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -869,6 +941,9 @@ func (a *AfterpayDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AfterpayDetails) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -922,6 +997,9 @@ func (a *ApplicationDetails) GetApplicationID() *string {
 }
 
 func (a *ApplicationDetails) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -974,6 +1052,9 @@ func (a *ApplicationDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (a *ApplicationDetails) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -1129,6 +1210,9 @@ func (b *BankAccountPaymentDetails) GetErrors() []*Error {
 }
 
 func (b *BankAccountPaymentDetails) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1223,6 +1307,9 @@ func (b *BankAccountPaymentDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BankAccountPaymentDetails) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1291,6 +1378,9 @@ func (b *BuyNowPayLaterDetails) GetErrors() []*Error {
 }
 
 func (b *BuyNowPayLaterDetails) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1357,6 +1447,9 @@ func (b *BuyNowPayLaterDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BuyNowPayLaterDetails) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1394,6 +1487,9 @@ func (c *CancelPaymentByIdempotencyKeyResponse) GetErrors() []*Error {
 }
 
 func (c *CancelPaymentByIdempotencyKeyResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1439,6 +1535,9 @@ func (c *CancelPaymentByIdempotencyKeyResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelPaymentByIdempotencyKeyResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1484,6 +1583,9 @@ func (c *CancelPaymentResponse) GetPayment() *Payment {
 }
 
 func (c *CancelPaymentResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1536,6 +1638,9 @@ func (c *CancelPaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelPaymentResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1734,6 +1839,9 @@ func (c *CardPaymentDetails) GetErrors() []*Error {
 }
 
 func (c *CardPaymentDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1884,6 +1992,9 @@ func (c *CardPaymentDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CardPaymentDetails) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1939,6 +2050,9 @@ func (c *CardPaymentTimeline) GetVoidedAt() *string {
 }
 
 func (c *CardPaymentTimeline) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1998,6 +2112,9 @@ func (c *CardPaymentTimeline) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CardPaymentTimeline) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2055,6 +2172,9 @@ func (c *CashAppDetails) GetBuyerCashtag() *string {
 }
 
 func (c *CashAppDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2114,6 +2234,9 @@ func (c *CashAppDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CashAppDetails) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2162,6 +2285,9 @@ func (c *CashPaymentDetails) GetChangeBackMoney() *Money {
 }
 
 func (c *CashPaymentDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2214,6 +2340,9 @@ func (c *CashPaymentDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CashPaymentDetails) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2249,6 +2378,9 @@ func (c *ClearpayDetails) GetEmailAddress() *string {
 }
 
 func (c *ClearpayDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2294,6 +2426,9 @@ func (c *ClearpayDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ClearpayDetails) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2339,6 +2474,9 @@ func (c *CompletePaymentResponse) GetPayment() *Payment {
 }
 
 func (c *CompletePaymentResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2391,6 +2529,9 @@ func (c *CompletePaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CompletePaymentResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2439,6 +2580,9 @@ func (c *CreatePaymentResponse) GetPayment() *Payment {
 }
 
 func (c *CreatePaymentResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2491,6 +2635,9 @@ func (c *CreatePaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreatePaymentResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2537,6 +2684,9 @@ func (c *CustomerDetails) GetSellerKeyedIn() *bool {
 }
 
 func (c *CustomerDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2589,6 +2739,9 @@ func (c *CustomerDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerDetails) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2644,6 +2797,9 @@ func (d *DeviceDetails) GetDeviceName() *string {
 }
 
 func (d *DeviceDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -2703,6 +2859,9 @@ func (d *DeviceDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -2770,6 +2929,9 @@ func (d *DigitalWalletDetails) GetErrors() []*Error {
 }
 
 func (d *DigitalWalletDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -2836,6 +2998,9 @@ func (d *DigitalWalletDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DigitalWalletDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -2917,6 +3082,9 @@ func (e *ExternalPaymentDetails) GetSourceFeeMoney() *Money {
 }
 
 func (e *ExternalPaymentDetails) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -2983,6 +3151,9 @@ func (e *ExternalPaymentDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ExternalPaymentDetails) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -3028,6 +3199,9 @@ func (g *GetPaymentResponse) GetPayment() *Payment {
 }
 
 func (g *GetPaymentResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -3080,6 +3254,9 @@ func (g *GetPaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetPaymentResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -3163,6 +3340,9 @@ func (l *ListPaymentsResponse) GetCursor() *string {
 }
 
 func (l *ListPaymentsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -3222,6 +3402,9 @@ func (l *ListPaymentsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPaymentsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -3257,6 +3440,9 @@ func (o *OfflinePaymentDetails) GetClientCreatedAt() *string {
 }
 
 func (o *OfflinePaymentDetails) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -3302,6 +3488,9 @@ func (o *OfflinePaymentDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OfflinePaymentDetails) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -3851,6 +4040,9 @@ func (p *Payment) GetVersionToken() *string {
 }
 
 func (p *Payment) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -4197,6 +4389,9 @@ func (p *Payment) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Payment) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -4248,6 +4443,9 @@ func (r *RiskEvaluation) GetRiskLevel() *RiskEvaluationRiskLevel {
 }
 
 func (r *RiskEvaluation) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -4300,6 +4498,9 @@ func (r *RiskEvaluation) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RiskEvaluation) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -4373,6 +4574,9 @@ func (s *SquareAccountDetails) GetErrors() []*Error {
 }
 
 func (s *SquareAccountDetails) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -4425,6 +4629,9 @@ func (s *SquareAccountDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SquareAccountDetails) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -4471,6 +4678,9 @@ func (u *UpdatePaymentResponse) GetPayment() *Payment {
 }
 
 func (u *UpdatePaymentResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -4523,6 +4733,9 @@ func (u *UpdatePaymentResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdatePaymentResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -4581,4 +4794,25 @@ func (u *UpdatePaymentRequest) SetPayment(payment *Payment) {
 func (u *UpdatePaymentRequest) SetIdempotencyKey(idempotencyKey string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updatePaymentRequestFieldIdempotencyKey)
+}
+
+func (u *UpdatePaymentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdatePaymentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdatePaymentRequest(body)
+	return nil
+}
+
+func (u *UpdatePaymentRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdatePaymentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

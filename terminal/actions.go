@@ -3,7 +3,9 @@
 package terminal
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -46,7 +48,7 @@ type CreateTerminalActionRequest struct {
 	// information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The Action to create.
-	Action *v3.TerminalAction `json:"action,omitempty" url:"-"`
+	Action *v505.TerminalAction `json:"action" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -68,9 +70,30 @@ func (c *CreateTerminalActionRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetAction sets the Action field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateTerminalActionRequest) SetAction(action *v3.TerminalAction) {
+func (c *CreateTerminalActionRequest) SetAction(action *v505.TerminalAction) {
 	c.Action = action
 	c.require(createTerminalActionRequestFieldAction)
+}
+
+func (c *CreateTerminalActionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTerminalActionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTerminalActionRequest(body)
+	return nil
+}
+
+func (c *CreateTerminalActionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTerminalActionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -108,7 +131,7 @@ var (
 type SearchTerminalActionsRequest struct {
 	// Queries terminal actions based on given conditions and sort order.
 	// Leaving this unset will return all actions with the default sort order.
-	Query *v3.TerminalActionQuery `json:"query,omitempty" url:"-"`
+	Query *v505.TerminalActionQuery `json:"query,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for the original query.
 	// See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination) for more
@@ -130,7 +153,7 @@ func (s *SearchTerminalActionsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchTerminalActionsRequest) SetQuery(query *v3.TerminalActionQuery) {
+func (s *SearchTerminalActionsRequest) SetQuery(query *v505.TerminalActionQuery) {
 	s.Query = query
 	s.require(searchTerminalActionsRequestFieldQuery)
 }
@@ -147,4 +170,25 @@ func (s *SearchTerminalActionsRequest) SetCursor(cursor *string) {
 func (s *SearchTerminalActionsRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTerminalActionsRequestFieldLimit)
+}
+
+func (s *SearchTerminalActionsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTerminalActionsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTerminalActionsRequest(body)
+	return nil
+}
+
+func (s *SearchTerminalActionsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTerminalActionsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

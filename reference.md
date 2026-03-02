@@ -2723,7 +2723,7 @@ request := &square.ListCatalogRequest{
             "types",
         ),
         CatalogVersion: square.Int64(
-            1000000,
+            int64(1000000),
         ),
     }
 client.Catalog.List(
@@ -4307,7 +4307,7 @@ request := &square.BulkUpdateCustomersRequest{
                     "updated customer note",
                 ),
                 Version: square.Int64(
-                    2,
+                    int64(2),
                 ),
             },
             "N18CPRVXR5214XPBBA6BZQWF3C": &square.BulkUpdateCustomerData{
@@ -4318,7 +4318,7 @@ request := &square.BulkUpdateCustomersRequest{
                     "Curie",
                 ),
                 Version: square.Int64(
-                    0,
+                    int64(0),
                 ),
             },
         },
@@ -4400,7 +4400,7 @@ profiles can take closer to one minute or longer, especially during network inci
 ```go
 request := &square.SearchCustomersRequest{
         Limit: square.Int64(
-            2,
+            int64(2),
         ),
         Query: &square.CustomerQuery{
             Filter: &square.CustomerFilter{
@@ -4607,7 +4607,7 @@ request := &square.UpdateCustomerRequest{
             "updated customer note",
         ),
         Version: square.Int64(
-            2,
+            int64(2),
         ),
     }
 client.Customers.Update(
@@ -4815,7 +4815,7 @@ To delete a customer profile that was created by merging existing profiles, you 
 request := &square.DeleteCustomersRequest{
         CustomerID: "customer_id",
         Version: square.Int64(
-            1000000,
+            int64(1000000),
         ),
     }
 client.Customers.Delete(
@@ -5273,6 +5273,9 @@ multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats
 ```go
 request := &square.CreateEvidenceFileDisputesRequest{
         DisputeID: "dispute_id",
+        ImageFile: strings.NewReader(
+            "",
+        ),
     }
 client.Disputes.CreateEvidenceFile(
         context.TODO(),
@@ -8099,6 +8102,9 @@ __NOTE:__ When testing in the Sandbox environment, the total file size is limite
 ```go
 request := &square.CreateInvoiceAttachmentRequest{
         InvoiceID: "invoice_id",
+        ImageFile: strings.NewReader(
+            "",
+        ),
     }
 client.Invoices.CreateInvoiceAttachment(
         context.TODO(),
@@ -9026,7 +9032,7 @@ request := &square.CreateTimecardRequest{
                 ),
                 HourlyRate: &square.Money{
                     Amount: square.Int64(
-                        1100,
+                        int64(1100),
                     ),
                     Currency: square.CurrencyUsd.Ptr(),
                 },
@@ -9049,7 +9055,7 @@ request := &square.CreateTimecardRequest{
             TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
             DeclaredCashTipMoney: &square.Money{
                 Amount: square.Int64(
-                    500,
+                    int64(500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -9312,7 +9318,7 @@ request := &square.UpdateTimecardRequest{
                 ),
                 HourlyRate: &square.Money{
                     Amount: square.Int64(
-                        1500,
+                        int64(1500),
                     ),
                     Currency: square.CurrencyUsd.Ptr(),
                 },
@@ -9342,7 +9348,7 @@ request := &square.UpdateTimecardRequest{
             TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
             DeclaredCashTipMoney: &square.Money{
                 Amount: square.Int64(
-                    500,
+                    int64(500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -9817,7 +9823,7 @@ request := &square.CreateCheckoutRequest{
                         },
                         BasePriceMoney: &square.Money{
                             Amount: square.Int64(
-                                1500,
+                                int64(1500),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -9829,7 +9835,7 @@ request := &square.CreateCheckoutRequest{
                         Quantity: "1",
                         BasePriceMoney: &square.Money{
                             Amount: square.Int64(
-                                2500,
+                                int64(2500),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -9841,7 +9847,7 @@ request := &square.CreateCheckoutRequest{
                         Quantity: "3",
                         BasePriceMoney: &square.Money{
                             Amount: square.Int64(
-                                3500,
+                                int64(3500),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -9867,7 +9873,7 @@ request := &square.CreateCheckoutRequest{
                         Type: square.OrderLineItemDiscountTypeFixedAmount.Ptr(),
                         AmountMoney: &square.Money{
                             Amount: square.Int64(
-                                100,
+                                int64(100),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -9921,7 +9927,7 @@ request := &square.CreateCheckoutRequest{
                 Description: "Application fees",
                 AmountMoney: &square.Money{
                     Amount: square.Int64(
-                        60,
+                        int64(60),
                     ),
                     Currency: square.CurrencyUsd.Ptr(),
                 },
@@ -10622,7 +10628,7 @@ request := &square.CreateOrderRequest{
                     Quantity: "1",
                     BasePriceMoney: &square.Money{
                         Amount: square.Int64(
-                            1599,
+                            int64(1599),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -10691,7 +10697,7 @@ request := &square.CreateOrderRequest{
                     ),
                     AmountMoney: &square.Money{
                         Amount: square.Int64(
-                            100,
+                            int64(100),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -10852,7 +10858,7 @@ request := &square.CalculateOrderRequest{
                     Quantity: "1",
                     BasePriceMoney: &square.Money{
                         Amount: square.Int64(
-                            500,
+                            int64(500),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -10864,7 +10870,7 @@ request := &square.CalculateOrderRequest{
                     Quantity: "2",
                     BasePriceMoney: &square.Money{
                         Amount: square.Int64(
-                            300,
+                            int64(300),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -11307,7 +11313,7 @@ request := &square.UpdateOrderRequest{
                     Quantity: "2",
                     BasePriceMoney: &square.Money{
                         Amount: square.Int64(
-                            200,
+                            int64(200),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -11558,7 +11564,7 @@ request := &square.ListPaymentsRequest{
             "location_id",
         ),
         Total: square.Int64(
-            1000000,
+            int64(1000000),
         ),
         Last4: square.String(
             "last_4",
@@ -11817,13 +11823,13 @@ request := &square.CreatePaymentRequest{
         IdempotencyKey: "7b0f3ec5-086a-4871-8f13-3c81b3875218",
         AmountMoney: &square.Money{
             Amount: square.Int64(
-                1000,
+                int64(1000),
             ),
             Currency: square.CurrencyUsd.Ptr(),
         },
         AppFeeMoney: &square.Money{
             Amount: square.Int64(
-                10,
+                int64(10),
             ),
             Currency: square.CurrencyUsd.Ptr(),
         },
@@ -12364,13 +12370,13 @@ request := &square.UpdatePaymentRequest{
         Payment: &square.Payment{
             AmountMoney: &square.Money{
                 Amount: square.Int64(
-                    1000,
+                    int64(1000),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
             TipMoney: &square.Money{
                 Amount: square.Int64(
-                    100,
+                    int64(100),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -13147,13 +13153,13 @@ request := &square.RefundPaymentRequest{
         IdempotencyKey: "9b7f2dcf-49da-4411-b23e-a2d6af21333a",
         AmountMoney: &square.Money{
             Amount: square.Int64(
-                1000,
+                int64(1000),
             ),
             Currency: square.CurrencyUsd.Ptr(),
         },
         AppFeeMoney: &square.Money{
             Amount: square.Int64(
-                10,
+                int64(10),
             ),
             Currency: square.CurrencyUsd.Ptr(),
         },
@@ -13734,7 +13740,7 @@ request := &square.CreateSubscriptionRequest{
         Phases: []*square.Phase{
             &square.Phase{
                 Ordinal: square.Int64(
-                    0,
+                    int64(0),
                 ),
                 OrderTemplateID: square.String(
                     "U2NaowWxzXwpsZU697x7ZHOAnCNZY",
@@ -14826,7 +14832,7 @@ request := &square.SwapPlanRequest{
         ),
         Phases: []*square.PhaseInput{
             &square.PhaseInput{
-                Ordinal: 0,
+                Ordinal: int64(0),
                 OrderTemplateID: square.String(
                     "uhhnjH9osVv3shUADwaC0b3hNxQZY",
                 ),
@@ -14951,7 +14957,7 @@ request := &square.CreateTeamMemberRequest{
                         PayType: square.JobAssignmentPayTypeSalary,
                         AnnualRate: &square.Money{
                             Amount: square.Int64(
-                                3000000,
+                                int64(3000000),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -14966,7 +14972,7 @@ request := &square.CreateTeamMemberRequest{
                         PayType: square.JobAssignmentPayTypeHourly,
                         HourlyRate: &square.Money{
                             Amount: square.Int64(
-                                2000,
+                                int64(2000),
                             ),
                             Currency: square.CurrencyUsd.Ptr(),
                         },
@@ -15477,7 +15483,7 @@ request := &square.UpdateTeamMembersRequest{
                             PayType: square.JobAssignmentPayTypeSalary,
                             AnnualRate: &square.Money{
                                 Amount: square.Int64(
-                                    3000000,
+                                    int64(3000000),
                                 ),
                                 Currency: square.CurrencyUsd.Ptr(),
                             },
@@ -15492,7 +15498,7 @@ request := &square.UpdateTeamMembersRequest{
                             PayType: square.JobAssignmentPayTypeHourly,
                             HourlyRate: &square.Money{
                                 Amount: square.Int64(
-                                    1200,
+                                    int64(1200),
                                 ),
                                 Currency: square.CurrencyUsd.Ptr(),
                             },
@@ -16394,7 +16400,7 @@ request := &square.UpdateTransferOrderRequest{
             },
         },
         Version: square.Int64(
-            1753109537351,
+            int64(1753109537351),
         ),
     }
 client.TransferOrders.Update(
@@ -16486,7 +16492,7 @@ Creates a [transfer_order.deleted](webhook:transfer_order.deleted) webhook event
 request := &square.DeleteTransferOrdersRequest{
         TransferOrderID: "transfer_order_id",
         Version: square.Int64(
-            1000000,
+            int64(1000000),
         ),
     }
 client.TransferOrders.Delete(
@@ -16568,7 +16574,7 @@ request := &square.CancelTransferOrderRequest{
         TransferOrderID: "transfer_order_id",
         IdempotencyKey: "65cc0586-3e82-4d08-b524-3885cffd52",
         Version: square.Int64(
-            1753117449752,
+            int64(1753117449752),
         ),
     }
 client.TransferOrders.Cancel(
@@ -16692,7 +16698,7 @@ request := &square.ReceiveTransferOrderRequest{
             },
         },
         Version: square.Int64(
-            1753118664873,
+            int64(1753118664873),
         ),
     }
 client.TransferOrders.Receive(
@@ -16788,7 +16794,7 @@ request := &square.StartTransferOrderRequest{
         TransferOrderID: "transfer_order_id",
         IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_789",
         Version: square.Int64(
-            1753109537351,
+            int64(1753109537351),
         ),
     }
 client.TransferOrders.Start(
@@ -18969,7 +18975,11 @@ JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 <dd>
 
 ```go
-request := &catalog.CreateImagesRequest{}
+request := &catalog.CreateImagesRequest{
+        ImageFile: strings.NewReader(
+            "",
+        ),
+    }
 client.Catalog.Images.Create(
         context.TODO(),
         request,
@@ -19018,6 +19028,9 @@ JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 ```go
 request := &catalog.UpdateImagesRequest{
         ImageID: "image_id",
+        ImageFile: strings.NewReader(
+            "",
+        ),
     }
 client.Catalog.Images.Update(
         context.TODO(),
@@ -19184,7 +19197,7 @@ request := &catalog.GetObjectRequest{
             true,
         ),
         CatalogVersion: square.Int64(
-            1000000,
+            int64(1000000),
         ),
         IncludeCategoryPathToRoot: square.Bool(
             true,
@@ -19465,7 +19478,7 @@ request := &checkout.CreatePaymentLinkRequest{
             Name: "Auto Detailing",
             PriceMoney: &square.Money{
                 Amount: square.Int64(
-                    10000,
+                    int64(10000),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -19910,7 +19923,7 @@ request := &customers.CreateCustomerCustomAttributeDefinitionRequest{
                 "favoritemovie",
             ),
             Schema: map[string]any{
-                "\$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
             },
             Name: square.String(
                 "Favorite Movie",
@@ -21657,7 +21670,7 @@ request := &devices.ListCodesRequest{
         LocationID: square.String(
             "location_id",
         ),
-        ProductType: &square.ProductType(
+        ProductType: square.String(
             "TERMINAL_API",
         ),
         Status: square.DeviceCodeStatusUnknown.Ptr(),
@@ -22954,7 +22967,7 @@ request := &labor.CreateShiftRequest{
                 ),
                 HourlyRate: &square.Money{
                     Amount: square.Int64(
-                        1100,
+                        int64(1100),
                     ),
                     Currency: square.CurrencyUsd.Ptr(),
                 },
@@ -22979,7 +22992,7 @@ request := &labor.CreateShiftRequest{
             ),
             DeclaredCashTipMoney: &square.Money{
                 Amount: square.Int64(
-                    500,
+                    int64(500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -23242,7 +23255,7 @@ request := &labor.UpdateShiftRequest{
                 ),
                 HourlyRate: &square.Money{
                     Amount: square.Int64(
-                        1500,
+                        int64(1500),
                     ),
                     Currency: square.CurrencyUsd.Ptr(),
                 },
@@ -23273,7 +23286,7 @@ request := &labor.UpdateShiftRequest{
             ),
             DeclaredCashTipMoney: &square.Money{
                 Amount: square.Int64(
-                    500,
+                    int64(500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -23817,7 +23830,7 @@ request := &locations.CreateLocationCustomAttributeDefinitionRequest{
                 "bestseller",
             ),
             Schema: map[string]any{
-                "\$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
             },
             Name: square.String(
                 "Bestseller",
@@ -26340,7 +26353,7 @@ request := &programs.CreateLoyaltyPromotionRequest{
             },
             MinimumSpendAmountMoney: &square.Money{
                 Amount: square.Int64(
-                    2000,
+                    int64(2000),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -26689,7 +26702,7 @@ request := &merchants.CreateMerchantCustomAttributeDefinitionRequest{
                 "alternative_seller_name",
             ),
             Schema: map[string]any{
-                "\$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
             },
             Name: square.String(
                 "Alternative Merchant Name",
@@ -27716,7 +27729,7 @@ request := &orders.CreateOrderCustomAttributeDefinitionRequest{
                 "cover-count",
             ),
             Schema: map[string]any{
-                "\$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.Number",
+                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.Number",
             },
             Name: square.String(
                 "Cover count",
@@ -28746,7 +28759,7 @@ request := &teammembers.UpdateWageSettingRequest{
                     PayType: square.JobAssignmentPayTypeSalary,
                     AnnualRate: &square.Money{
                         Amount: square.Int64(
-                            3000000,
+                            int64(3000000),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -28761,7 +28774,7 @@ request := &teammembers.UpdateWageSettingRequest{
                     PayType: square.JobAssignmentPayTypeHourly,
                     HourlyRate: &square.Money{
                         Amount: square.Int64(
-                            2000,
+                            int64(2000),
                         ),
                         Currency: square.CurrencyUsd.Ptr(),
                     },
@@ -29163,7 +29176,7 @@ request := &terminal.CreateTerminalCheckoutRequest{
         Checkout: &square.TerminalCheckout{
             AmountMoney: &square.Money{
                 Amount: square.Int64(
-                    2610,
+                    int64(2610),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
@@ -29471,7 +29484,7 @@ request := &terminal.CreateTerminalRefundRequest{
             PaymentID: "5O5OvgkcNUhl7JBuINflcjKqUzXZY",
             AmountMoney: &square.Money{
                 Amount: square.Int64(
-                    111,
+                    int64(111),
                 ),
                 Currency: square.CurrencyCad.Ptr(),
             },
@@ -30345,3 +30358,4 @@ contained in the list of event types in the [Subscription](entity:WebhookSubscri
 </dd>
 </dl>
 </details>
+

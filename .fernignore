@@ -31,3 +31,4 @@ orders/alias.go
 teammembers/alias.go
 terminal/alias.go
 webhooks/alias.go
+changelog.md

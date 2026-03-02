@@ -209,6 +209,9 @@ func (e *Employee) GetUpdatedAt() *string {
 }
 
 func (e *Employee) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -317,6 +320,9 @@ func (e *Employee) MarshalJSON() ([]byte, error) {
 }
 
 func (e *Employee) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -385,6 +391,9 @@ func (g *GetEmployeeResponse) GetErrors() []*Error {
 }
 
 func (g *GetEmployeeResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -437,6 +446,9 @@ func (g *GetEmployeeResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetEmployeeResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -490,6 +502,9 @@ func (l *ListEmployeesResponse) GetErrors() []*Error {
 }
 
 func (l *ListEmployeesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -549,6 +564,9 @@ func (l *ListEmployeesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListEmployeesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value

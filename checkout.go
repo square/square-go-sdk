@@ -44,7 +44,7 @@ type UpdateLocationSettingsRequest struct {
 	// The ID of the location for which to retrieve settings.
 	LocationID string `json:"-" url:"-"`
 	// Describe your updates using the `location_settings` object. Make sure it contains only the fields that have changed.
-	LocationSettings *CheckoutLocationSettings `json:"location_settings,omitempty" url:"-"`
+	LocationSettings *CheckoutLocationSettings `json:"location_settings" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -71,13 +71,34 @@ func (u *UpdateLocationSettingsRequest) SetLocationSettings(locationSettings *Ch
 	u.require(updateLocationSettingsRequestFieldLocationSettings)
 }
 
+func (u *UpdateLocationSettingsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateLocationSettingsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateLocationSettingsRequest(body)
+	return nil
+}
+
+func (u *UpdateLocationSettingsRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationSettingsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateMerchantSettingsRequestFieldMerchantSettings = big.NewInt(1 << 0)
 )
 
 type UpdateMerchantSettingsRequest struct {
 	// Describe your updates using the `merchant_settings` object. Make sure it contains only the fields that have changed.
-	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings,omitempty" url:"-"`
+	MerchantSettings *CheckoutMerchantSettings `json:"merchant_settings" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -95,6 +116,27 @@ func (u *UpdateMerchantSettingsRequest) require(field *big.Int) {
 func (u *UpdateMerchantSettingsRequest) SetMerchantSettings(merchantSettings *CheckoutMerchantSettings) {
 	u.MerchantSettings = merchantSettings
 	u.require(updateMerchantSettingsRequestFieldMerchantSettings)
+}
+
+func (u *UpdateMerchantSettingsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateMerchantSettingsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateMerchantSettingsRequest(body)
+	return nil
+}
+
+func (u *UpdateMerchantSettingsRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateMerchantSettingsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -184,6 +226,9 @@ func (c *CheckoutLocationSettings) GetUpdatedAt() *string {
 }
 
 func (c *CheckoutLocationSettings) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -271,6 +316,9 @@ func (c *CheckoutLocationSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutLocationSettings) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -327,6 +375,9 @@ func (c *CheckoutLocationSettingsBranding) GetButtonShape() *CheckoutLocationSet
 }
 
 func (c *CheckoutLocationSettingsBranding) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -386,6 +437,9 @@ func (c *CheckoutLocationSettingsBranding) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutLocationSettingsBranding) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -470,6 +524,9 @@ func (c *CheckoutLocationSettingsCoupons) GetEnabled() *bool {
 }
 
 func (c *CheckoutLocationSettingsCoupons) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -515,6 +572,9 @@ func (c *CheckoutLocationSettingsCoupons) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutLocationSettingsCoupons) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -569,6 +629,9 @@ func (c *CheckoutLocationSettingsPolicy) GetDescription() *string {
 }
 
 func (c *CheckoutLocationSettingsPolicy) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -628,6 +691,9 @@ func (c *CheckoutLocationSettingsPolicy) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutLocationSettingsPolicy) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -705,6 +771,9 @@ func (c *CheckoutLocationSettingsTipping) GetDefaultSmartTip() *Money {
 }
 
 func (c *CheckoutLocationSettingsTipping) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -778,6 +847,9 @@ func (c *CheckoutLocationSettingsTipping) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutLocationSettingsTipping) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -825,6 +897,9 @@ func (c *CheckoutMerchantSettings) GetUpdatedAt() *string {
 }
 
 func (c *CheckoutMerchantSettings) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -877,6 +952,9 @@ func (c *CheckoutMerchantSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutMerchantSettings) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -937,6 +1015,9 @@ func (c *CheckoutMerchantSettingsPaymentMethods) GetAfterpayClearpay() *Checkout
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethods) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1003,6 +1084,9 @@ func (c *CheckoutMerchantSettingsPaymentMethods) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethods) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1058,6 +1142,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) GetEnabled() *b
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1117,6 +1204,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) MarshalJSON() (
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1160,6 +1250,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1212,6 +1305,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1247,6 +1343,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetEnabled() *bool
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1292,6 +1391,9 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) MarshalJSON() ([]b
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1336,6 +1438,9 @@ func (r *RetrieveLocationSettingsResponse) GetLocationSettings() *CheckoutLocati
 }
 
 func (r *RetrieveLocationSettingsResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1388,6 +1493,9 @@ func (r *RetrieveLocationSettingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveLocationSettingsResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1432,6 +1540,9 @@ func (r *RetrieveMerchantSettingsResponse) GetMerchantSettings() *CheckoutMercha
 }
 
 func (r *RetrieveMerchantSettingsResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1484,6 +1595,9 @@ func (r *RetrieveMerchantSettingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveMerchantSettingsResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1528,6 +1642,9 @@ func (u *UpdateLocationSettingsResponse) GetLocationSettings() *CheckoutLocation
 }
 
 func (u *UpdateLocationSettingsResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1580,6 +1697,9 @@ func (u *UpdateLocationSettingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateLocationSettingsResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -1624,6 +1744,9 @@ func (u *UpdateMerchantSettingsResponse) GetMerchantSettings() *CheckoutMerchant
 }
 
 func (u *UpdateMerchantSettingsResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1676,6 +1799,9 @@ func (u *UpdateMerchantSettingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateMerchantSettingsResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

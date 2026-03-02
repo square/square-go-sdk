@@ -3,7 +3,9 @@
 package catalog
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -131,7 +133,7 @@ type UpsertCatalogObjectRequest struct {
 	//
 	// - For updates, the object must be active (the `is_deleted` field is not `true`).
 	// - For creates, the object ID must start with `#`. The provided ID is replaced with a server-generated ID.
-	Object *v3.CatalogObject `json:"object,omitempty" url:"-"`
+	Object *v505.CatalogObject `json:"object" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -153,7 +155,28 @@ func (u *UpsertCatalogObjectRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetObject sets the Object field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertCatalogObjectRequest) SetObject(object *v3.CatalogObject) {
+func (u *UpsertCatalogObjectRequest) SetObject(object *v505.CatalogObject) {
 	u.Object = object
 	u.require(upsertCatalogObjectRequestFieldObject)
+}
+
+func (u *UpsertCatalogObjectRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertCatalogObjectRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertCatalogObjectRequest(body)
+	return nil
+}
+
+func (u *UpsertCatalogObjectRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertCatalogObjectRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

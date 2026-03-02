@@ -38,7 +38,7 @@ type CreateCheckoutRequest struct {
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The order including line items to be checked out.
-	Order *CreateOrderRequest `json:"order,omitempty" url:"-"`
+	Order *CreateOrderRequest `json:"order" url:"-"`
 	// If `true`, Square Checkout collects shipping information on your behalf and stores
 	// that information with the transaction information in the Square Seller Dashboard.
 	//
@@ -173,6 +173,27 @@ func (c *CreateCheckoutRequest) SetNote(note *string) {
 	c.require(createCheckoutRequestFieldNote)
 }
 
+func (c *CreateCheckoutRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCheckoutRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateCheckoutRequest(body)
+	return nil
+}
+
+func (c *CreateCheckoutRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateCheckoutRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createLocationRequestFieldLocation = big.NewInt(1 << 0)
 )
@@ -199,6 +220,27 @@ func (c *CreateLocationRequest) require(field *big.Int) {
 func (c *CreateLocationRequest) SetLocation(location *Location) {
 	c.Location = location
 	c.require(createLocationRequestFieldLocation)
+}
+
+func (c *CreateLocationRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLocationRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLocationRequest(body)
+	return nil
+}
+
+func (c *CreateLocationRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLocationRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -252,6 +294,9 @@ func (b *BusinessHours) GetPeriods() []*BusinessHoursPeriod {
 }
 
 func (b *BusinessHours) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -297,6 +342,9 @@ func (b *BusinessHours) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BusinessHours) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -357,6 +405,9 @@ func (b *BusinessHoursPeriod) GetEndLocalTime() *string {
 }
 
 func (b *BusinessHoursPeriod) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -416,6 +467,9 @@ func (b *BusinessHoursPeriod) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BusinessHoursPeriod) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -472,6 +526,9 @@ func (c *ChargeRequestAdditionalRecipient) GetAmountMoney() *Money {
 }
 
 func (c *ChargeRequestAdditionalRecipient) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -531,6 +588,9 @@ func (c *ChargeRequestAdditionalRecipient) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ChargeRequestAdditionalRecipient) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -686,6 +746,9 @@ func (c *Checkout) GetAdditionalRecipients() []*AdditionalRecipient {
 }
 
 func (c *Checkout) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -794,6 +857,9 @@ func (c *Checkout) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Checkout) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -839,6 +905,9 @@ func (c *Coordinates) GetLongitude() *float64 {
 }
 
 func (c *Coordinates) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -891,6 +960,9 @@ func (c *Coordinates) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Coordinates) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -937,6 +1009,9 @@ func (c *CreateCheckoutResponse) GetErrors() []*Error {
 }
 
 func (c *CreateCheckoutResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -989,6 +1064,9 @@ func (c *CreateCheckoutResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateCheckoutResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1034,6 +1112,9 @@ func (c *CreateLocationResponse) GetLocation() *Location {
 }
 
 func (c *CreateLocationResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1086,6 +1167,9 @@ func (c *CreateLocationResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateLocationResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1132,6 +1216,9 @@ func (g *GetLocationResponse) GetLocation() *Location {
 }
 
 func (g *GetLocationResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1184,6 +1271,9 @@ func (g *GetLocationResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetLocationResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1232,6 +1322,9 @@ func (l *ListLocationsResponse) GetLocations() []*Location {
 }
 
 func (l *ListLocationsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1284,6 +1377,9 @@ func (l *ListLocationsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListLocationsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1601,6 +1697,9 @@ func (l *Location) GetTaxIDs() *TaxIDs {
 }
 
 func (l *Location) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1828,6 +1927,9 @@ func (l *Location) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Location) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1982,6 +2084,9 @@ func (t *TaxIDs) GetJpQii() *string {
 }
 
 func (t *TaxIDs) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2055,6 +2160,9 @@ func (t *TaxIDs) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TaxIDs) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2100,6 +2208,9 @@ func (u *UpdateLocationResponse) GetLocation() *Location {
 }
 
 func (u *UpdateLocationResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -2152,6 +2263,9 @@ func (u *UpdateLocationResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateLocationResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -2197,4 +2311,25 @@ func (u *UpdateLocationRequest) SetLocationID(locationID string) {
 func (u *UpdateLocationRequest) SetLocation(location *Location) {
 	u.Location = location
 	u.require(updateLocationRequestFieldLocation)
+}
+
+func (u *UpdateLocationRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateLocationRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateLocationRequest(body)
+	return nil
+}
+
+func (u *UpdateLocationRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

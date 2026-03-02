@@ -3,7 +3,9 @@
 package locations
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -18,7 +20,7 @@ type CreateLocationCustomAttributeDefinitionRequest struct {
 	// definition hosted on the Square CDN. For more information, including supported values and constraints, see
 	// [Supported data types](https://developer.squareup.com/docs/devtools/customattributes/overview#supported-data-types).
 	// - `name` is required unless `visibility` is set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v505.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -36,7 +38,7 @@ func (c *CreateLocationCustomAttributeDefinitionRequest) require(field *big.Int)
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
+func (c *CreateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v505.CustomAttributeDefinition) {
 	c.CustomAttributeDefinition = customAttributeDefinition
 	c.require(createLocationCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -46,6 +48,27 @@ func (c *CreateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefin
 func (c *CreateLocationCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createLocationCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (c *CreateLocationCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLocationCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLocationCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (c *CreateLocationCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLocationCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -122,7 +145,7 @@ var (
 
 type ListCustomAttributeDefinitionsRequest struct {
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
-	VisibilityFilter *v3.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v505.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -145,7 +168,7 @@ func (l *ListCustomAttributeDefinitionsRequest) require(field *big.Int) {
 
 // SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCustomAttributeDefinitionsRequest) SetVisibilityFilter(visibilityFilter *v3.VisibilityFilter) {
+func (l *ListCustomAttributeDefinitionsRequest) SetVisibilityFilter(visibilityFilter *v505.VisibilityFilter) {
 	l.VisibilityFilter = visibilityFilter
 	l.require(listCustomAttributeDefinitionsRequestFieldVisibilityFilter)
 }
@@ -187,7 +210,7 @@ type UpdateLocationCustomAttributeDefinitionRequest struct {
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, specify the current version of the custom attribute definition.
 	// If this is not important for your application, `version` can be set to -1.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v505.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -212,7 +235,7 @@ func (u *UpdateLocationCustomAttributeDefinitionRequest) SetKey(key string) {
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
+func (u *UpdateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v505.CustomAttributeDefinition) {
 	u.CustomAttributeDefinition = customAttributeDefinition
 	u.require(updateLocationCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -222,4 +245,25 @@ func (u *UpdateLocationCustomAttributeDefinitionRequest) SetCustomAttributeDefin
 func (u *UpdateLocationCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateLocationCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateLocationCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateLocationCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateLocationCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (u *UpdateLocationCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateLocationCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

@@ -3,7 +3,9 @@
 package programs
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -56,7 +58,7 @@ type CreateLoyaltyPromotionRequest struct {
 	// using the `main` keyword.
 	ProgramID string `json:"-" url:"-"`
 	// The loyalty promotion to create.
-	LoyaltyPromotion *v3.LoyaltyPromotion `json:"loyalty_promotion,omitempty" url:"-"`
+	LoyaltyPromotion *v505.LoyaltyPromotion `json:"loyalty_promotion" url:"-"`
 	// A unique identifier for this request, which is used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -81,7 +83,7 @@ func (c *CreateLoyaltyPromotionRequest) SetProgramID(programID string) {
 
 // SetLoyaltyPromotion sets the LoyaltyPromotion field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateLoyaltyPromotionRequest) SetLoyaltyPromotion(loyaltyPromotion *v3.LoyaltyPromotion) {
+func (c *CreateLoyaltyPromotionRequest) SetLoyaltyPromotion(loyaltyPromotion *v505.LoyaltyPromotion) {
 	c.LoyaltyPromotion = loyaltyPromotion
 	c.require(createLoyaltyPromotionRequestFieldLoyaltyPromotion)
 }
@@ -91,6 +93,27 @@ func (c *CreateLoyaltyPromotionRequest) SetLoyaltyPromotion(loyaltyPromotion *v3
 func (c *CreateLoyaltyPromotionRequest) SetIdempotencyKey(idempotencyKey string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createLoyaltyPromotionRequestFieldIdempotencyKey)
+}
+
+func (c *CreateLoyaltyPromotionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLoyaltyPromotionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLoyaltyPromotionRequest(body)
+	return nil
+}
+
+func (c *CreateLoyaltyPromotionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLoyaltyPromotionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -144,7 +167,7 @@ type ListPromotionsRequest struct {
 	// The status to filter the results by. If a status is provided, only loyalty promotions
 	// with the specified status are returned. Otherwise, all loyalty promotions associated with
 	// the loyalty program are returned.
-	Status *v3.LoyaltyPromotionStatus `json:"-" url:"status,omitempty"`
+	Status *v505.LoyaltyPromotionStatus `json:"-" url:"status,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -174,7 +197,7 @@ func (l *ListPromotionsRequest) SetProgramID(programID string) {
 
 // SetStatus sets the Status field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListPromotionsRequest) SetStatus(status *v3.LoyaltyPromotionStatus) {
+func (l *ListPromotionsRequest) SetStatus(status *v505.LoyaltyPromotionStatus) {
 	l.Status = status
 	l.require(listPromotionsRequestFieldStatus)
 }

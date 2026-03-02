@@ -3,7 +3,9 @@
 package labor
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -16,7 +18,7 @@ type UpdateWorkweekConfigRequest struct {
 	// The UUID for the `WorkweekConfig` object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `WorkweekConfig` object.
-	WorkweekConfig *v3.WorkweekConfig `json:"workweek_config,omitempty" url:"-"`
+	WorkweekConfig *v505.WorkweekConfig `json:"workweek_config" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -38,9 +40,30 @@ func (u *UpdateWorkweekConfigRequest) SetID(id string) {
 
 // SetWorkweekConfig sets the WorkweekConfig field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateWorkweekConfigRequest) SetWorkweekConfig(workweekConfig *v3.WorkweekConfig) {
+func (u *UpdateWorkweekConfigRequest) SetWorkweekConfig(workweekConfig *v505.WorkweekConfig) {
 	u.WorkweekConfig = workweekConfig
 	u.require(updateWorkweekConfigRequestFieldWorkweekConfig)
+}
+
+func (u *UpdateWorkweekConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateWorkweekConfigRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateWorkweekConfigRequest(body)
+	return nil
+}
+
+func (u *UpdateWorkweekConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateWorkweekConfigRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (

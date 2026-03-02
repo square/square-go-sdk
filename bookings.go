@@ -15,7 +15,7 @@ var (
 
 type BulkRetrieveBookingsRequest struct {
 	// A non-empty list of [Booking](entity:Booking) IDs specifying bookings to retrieve.
-	BookingIDs []string `json:"booking_ids,omitempty" url:"-"`
+	BookingIDs []string `json:"booking_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -35,13 +35,34 @@ func (b *BulkRetrieveBookingsRequest) SetBookingIDs(bookingIDs []string) {
 	b.require(bulkRetrieveBookingsRequestFieldBookingIDs)
 }
 
+func (b *BulkRetrieveBookingsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveBookingsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkRetrieveBookingsRequest(body)
+	return nil
+}
+
+func (b *BulkRetrieveBookingsRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveBookingsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkRetrieveTeamMemberBookingProfilesRequestFieldTeamMemberIDs = big.NewInt(1 << 0)
 )
 
 type BulkRetrieveTeamMemberBookingProfilesRequest struct {
 	// A non-empty list of IDs of team members whose booking profiles you want to retrieve.
-	TeamMemberIDs []string `json:"team_member_ids,omitempty" url:"-"`
+	TeamMemberIDs []string `json:"team_member_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -59,6 +80,27 @@ func (b *BulkRetrieveTeamMemberBookingProfilesRequest) require(field *big.Int) {
 func (b *BulkRetrieveTeamMemberBookingProfilesRequest) SetTeamMemberIDs(teamMemberIDs []string) {
 	b.TeamMemberIDs = teamMemberIDs
 	b.require(bulkRetrieveTeamMemberBookingProfilesRequestFieldTeamMemberIDs)
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveTeamMemberBookingProfilesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkRetrieveTeamMemberBookingProfilesRequest(body)
+	return nil
+}
+
+func (b *BulkRetrieveTeamMemberBookingProfilesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveTeamMemberBookingProfilesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -93,7 +135,7 @@ var (
 
 type SearchAvailabilityRequest struct {
 	// Query conditions used to filter buyer-accessible booking availabilities.
-	Query *SearchAvailabilityQuery `json:"query,omitempty" url:"-"`
+	Query *SearchAvailabilityQuery `json:"query" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -111,6 +153,27 @@ func (s *SearchAvailabilityRequest) require(field *big.Int) {
 func (s *SearchAvailabilityRequest) SetQuery(query *SearchAvailabilityQuery) {
 	s.Query = query
 	s.require(searchAvailabilityRequestFieldQuery)
+}
+
+func (s *SearchAvailabilityRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchAvailabilityRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchAvailabilityRequest(body)
+	return nil
+}
+
+func (s *SearchAvailabilityRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchAvailabilityRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -159,6 +222,27 @@ func (c *CancelBookingRequest) SetBookingVersion(bookingVersion *int) {
 	c.require(cancelBookingRequestFieldBookingVersion)
 }
 
+func (c *CancelBookingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelBookingRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CancelBookingRequest(body)
+	return nil
+}
+
+func (c *CancelBookingRequest) MarshalJSON() ([]byte, error) {
+	type embed CancelBookingRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createBookingRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createBookingRequestFieldBooking        = big.NewInt(1 << 1)
@@ -168,7 +252,7 @@ type CreateBookingRequest struct {
 	// A unique key to make this request an idempotent operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The details of the booking to be created.
-	Booking *Booking `json:"booking,omitempty" url:"-"`
+	Booking *Booking `json:"booking" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -193,6 +277,27 @@ func (c *CreateBookingRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (c *CreateBookingRequest) SetBooking(booking *Booking) {
 	c.Booking = booking
 	c.require(createBookingRequestFieldBooking)
+}
+
+func (c *CreateBookingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBookingRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateBookingRequest(body)
+	return nil
+}
+
+func (c *CreateBookingRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateBookingRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -391,6 +496,9 @@ func (a *AppointmentSegment) GetResourceIDs() []string {
 }
 
 func (a *AppointmentSegment) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -478,6 +586,9 @@ func (a *AppointmentSegment) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AppointmentSegment) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -533,6 +644,9 @@ func (a *Availability) GetAppointmentSegments() []*AppointmentSegment {
 }
 
 func (a *Availability) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -592,6 +706,9 @@ func (a *Availability) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Availability) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -794,6 +911,9 @@ func (b *Booking) GetAddress() *Address {
 }
 
 func (b *Booking) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -951,6 +1071,9 @@ func (b *Booking) MarshalJSON() ([]byte, error) {
 }
 
 func (b *Booking) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1038,6 +1161,9 @@ func (b *BookingCreatorDetails) GetCustomerID() *string {
 }
 
 func (b *BookingCreatorDetails) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1097,6 +1223,9 @@ func (b *BookingCreatorDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BookingCreatorDetails) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1200,6 +1329,9 @@ func (b *BulkRetrieveBookingsResponse) GetErrors() []*Error {
 }
 
 func (b *BulkRetrieveBookingsResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1252,6 +1384,9 @@ func (b *BulkRetrieveBookingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkRetrieveBookingsResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1297,6 +1432,9 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetErrors() []*Error {
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1349,6 +1487,9 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) MarshalJSON() ([]byte, e
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1510,6 +1651,9 @@ func (b *BusinessAppointmentSettings) GetSkipBookingFlowStaffSelection() *bool {
 }
 
 func (b *BusinessAppointmentSettings) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1639,6 +1783,9 @@ func (b *BusinessAppointmentSettings) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BusinessAppointmentSettings) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1849,6 +1996,9 @@ func (b *BusinessBookingProfile) GetSupportSellerLevelWrites() *bool {
 }
 
 func (b *BusinessBookingProfile) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1943,6 +2093,9 @@ func (b *BusinessBookingProfile) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BusinessBookingProfile) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -2033,6 +2186,9 @@ func (c *CancelBookingResponse) GetErrors() []*Error {
 }
 
 func (c *CancelBookingResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2085,6 +2241,9 @@ func (c *CancelBookingResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelBookingResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2129,6 +2288,9 @@ func (c *CreateBookingResponse) GetErrors() []*Error {
 }
 
 func (c *CreateBookingResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2181,6 +2343,9 @@ func (c *CreateBookingResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBookingResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2225,6 +2390,9 @@ func (g *GetBookingResponse) GetErrors() []*Error {
 }
 
 func (g *GetBookingResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -2277,6 +2445,9 @@ func (g *GetBookingResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetBookingResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -2321,6 +2492,9 @@ func (g *GetBusinessBookingProfileResponse) GetErrors() []*Error {
 }
 
 func (g *GetBusinessBookingProfileResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -2373,6 +2547,9 @@ func (g *GetBusinessBookingProfileResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetBusinessBookingProfileResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -2427,6 +2604,9 @@ func (l *ListBookingsResponse) GetErrors() []*Error {
 }
 
 func (l *ListBookingsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -2486,6 +2666,9 @@ func (l *ListBookingsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBookingsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -2530,6 +2713,9 @@ func (r *RetrieveLocationBookingProfileResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveLocationBookingProfileResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -2582,6 +2768,9 @@ func (r *RetrieveLocationBookingProfileResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveLocationBookingProfileResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -2655,6 +2844,9 @@ func (s *SearchAvailabilityFilter) GetBookingID() *string {
 }
 
 func (s *SearchAvailabilityFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2721,6 +2913,9 @@ func (s *SearchAvailabilityFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchAvailabilityFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2756,6 +2951,9 @@ func (s *SearchAvailabilityQuery) GetFilter() *SearchAvailabilityFilter {
 }
 
 func (s *SearchAvailabilityQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2801,6 +2999,9 @@ func (s *SearchAvailabilityQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchAvailabilityQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2845,6 +3046,9 @@ func (s *SearchAvailabilityResponse) GetErrors() []*Error {
 }
 
 func (s *SearchAvailabilityResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2897,6 +3101,9 @@ func (s *SearchAvailabilityResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchAvailabilityResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2947,6 +3154,9 @@ func (s *SegmentFilter) GetTeamMemberIDFilter() *FilterValue {
 }
 
 func (s *SegmentFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2999,6 +3209,9 @@ func (s *SegmentFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SegmentFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -3043,6 +3256,9 @@ func (u *UpdateBookingResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateBookingResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -3095,6 +3311,9 @@ func (u *UpdateBookingResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateBookingResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -3118,7 +3337,7 @@ type UpdateBookingRequest struct {
 	// A unique key to make this request an idempotent operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The booking to be updated. Individual attributes explicitly specified here override the corresponding values of the existing booking.
-	Booking *Booking `json:"booking,omitempty" url:"-"`
+	Booking *Booking `json:"booking" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3150,4 +3369,25 @@ func (u *UpdateBookingRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (u *UpdateBookingRequest) SetBooking(booking *Booking) {
 	u.Booking = booking
 	u.require(updateBookingRequestFieldBooking)
+}
+
+func (u *UpdateBookingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateBookingRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateBookingRequest(body)
+	return nil
+}
+
+func (u *UpdateBookingRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateBookingRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

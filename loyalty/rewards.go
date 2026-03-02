@@ -3,7 +3,9 @@
 package loyalty
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -14,7 +16,7 @@ var (
 
 type CreateLoyaltyRewardRequest struct {
 	// The reward to create.
-	Reward *v3.LoyaltyReward `json:"reward,omitempty" url:"-"`
+	Reward *v505.LoyaltyReward `json:"reward" url:"-"`
 	// A unique string that identifies this `CreateLoyaltyReward` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -32,7 +34,7 @@ func (c *CreateLoyaltyRewardRequest) require(field *big.Int) {
 
 // SetReward sets the Reward field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateLoyaltyRewardRequest) SetReward(reward *v3.LoyaltyReward) {
+func (c *CreateLoyaltyRewardRequest) SetReward(reward *v505.LoyaltyReward) {
 	c.Reward = reward
 	c.require(createLoyaltyRewardRequestFieldReward)
 }
@@ -42,6 +44,27 @@ func (c *CreateLoyaltyRewardRequest) SetReward(reward *v3.LoyaltyReward) {
 func (c *CreateLoyaltyRewardRequest) SetIdempotencyKey(idempotencyKey string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createLoyaltyRewardRequestFieldIdempotencyKey)
+}
+
+func (c *CreateLoyaltyRewardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateLoyaltyRewardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateLoyaltyRewardRequest(body)
+	return nil
+}
+
+func (c *CreateLoyaltyRewardRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateLoyaltyRewardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -143,6 +166,27 @@ func (r *RedeemLoyaltyRewardRequest) SetLocationID(locationID string) {
 	r.require(redeemLoyaltyRewardRequestFieldLocationID)
 }
 
+func (r *RedeemLoyaltyRewardRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RedeemLoyaltyRewardRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RedeemLoyaltyRewardRequest(body)
+	return nil
+}
+
+func (r *RedeemLoyaltyRewardRequest) MarshalJSON() ([]byte, error) {
+	type embed RedeemLoyaltyRewardRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	searchLoyaltyRewardsRequestFieldQuery  = big.NewInt(1 << 0)
 	searchLoyaltyRewardsRequestFieldLimit  = big.NewInt(1 << 1)
@@ -152,7 +196,7 @@ var (
 type SearchLoyaltyRewardsRequest struct {
 	// The search criteria for the request.
 	// If empty, the endpoint retrieves all loyalty rewards in the loyalty program.
-	Query *v3.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
+	Query *v505.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
 	// The maximum number of results to return in the response. The default value is 30.
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to
@@ -175,7 +219,7 @@ func (s *SearchLoyaltyRewardsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchLoyaltyRewardsRequest) SetQuery(query *v3.SearchLoyaltyRewardsRequestLoyaltyRewardQuery) {
+func (s *SearchLoyaltyRewardsRequest) SetQuery(query *v505.SearchLoyaltyRewardsRequestLoyaltyRewardQuery) {
 	s.Query = query
 	s.require(searchLoyaltyRewardsRequestFieldQuery)
 }
@@ -192,4 +236,25 @@ func (s *SearchLoyaltyRewardsRequest) SetLimit(limit *int) {
 func (s *SearchLoyaltyRewardsRequest) SetCursor(cursor *string) {
 	s.Cursor = cursor
 	s.require(searchLoyaltyRewardsRequestFieldCursor)
+}
+
+func (s *SearchLoyaltyRewardsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchLoyaltyRewardsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchLoyaltyRewardsRequest(body)
+	return nil
+}
+
+func (s *SearchLoyaltyRewardsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchLoyaltyRewardsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

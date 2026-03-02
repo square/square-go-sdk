@@ -3,7 +3,9 @@
 package loyalty
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -24,7 +26,7 @@ type CalculateLoyaltyPointsRequest struct {
 	// The purchase amount for which to calculate the points.
 	// Specify this field if your application does not use the Orders API to process orders.
 	// Otherwise, specify the `order_id`.
-	TransactionAmountMoney *v3.Money `json:"transaction_amount_money,omitempty" url:"-"`
+	TransactionAmountMoney *v505.Money `json:"transaction_amount_money,omitempty" url:"-"`
 	// The ID of the target [loyalty account](entity:LoyaltyAccount). Optionally specify this field
 	// if your application uses the Orders API to process orders.
 	//
@@ -62,7 +64,7 @@ func (c *CalculateLoyaltyPointsRequest) SetOrderID(orderID *string) {
 
 // SetTransactionAmountMoney sets the TransactionAmountMoney field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmountMoney *v3.Money) {
+func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmountMoney *v505.Money) {
 	c.TransactionAmountMoney = transactionAmountMoney
 	c.require(calculateLoyaltyPointsRequestFieldTransactionAmountMoney)
 }
@@ -72,6 +74,27 @@ func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmo
 func (c *CalculateLoyaltyPointsRequest) SetLoyaltyAccountID(loyaltyAccountID *string) {
 	c.LoyaltyAccountID = loyaltyAccountID
 	c.require(calculateLoyaltyPointsRequestFieldLoyaltyAccountID)
+}
+
+func (c *CalculateLoyaltyPointsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CalculateLoyaltyPointsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CalculateLoyaltyPointsRequest(body)
+	return nil
+}
+
+func (c *CalculateLoyaltyPointsRequest) MarshalJSON() ([]byte, error) {
+	type embed CalculateLoyaltyPointsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (

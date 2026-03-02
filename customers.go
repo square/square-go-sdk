@@ -15,7 +15,7 @@ var (
 
 type BulkDeleteCustomersRequest struct {
 	// The IDs of the [customer profiles](entity:Customer) to delete.
-	CustomerIDs []string `json:"customer_ids,omitempty" url:"-"`
+	CustomerIDs []string `json:"customer_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -35,13 +35,34 @@ func (b *BulkDeleteCustomersRequest) SetCustomerIDs(customerIDs []string) {
 	b.require(bulkDeleteCustomersRequestFieldCustomerIDs)
 }
 
+func (b *BulkDeleteCustomersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteCustomersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkDeleteCustomersRequest(body)
+	return nil
+}
+
+func (b *BulkDeleteCustomersRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteCustomersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkRetrieveCustomersRequestFieldCustomerIDs = big.NewInt(1 << 0)
 )
 
 type BulkRetrieveCustomersRequest struct {
 	// The IDs of the [customer profiles](entity:Customer) to retrieve.
-	CustomerIDs []string `json:"customer_ids,omitempty" url:"-"`
+	CustomerIDs []string `json:"customer_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -61,6 +82,27 @@ func (b *BulkRetrieveCustomersRequest) SetCustomerIDs(customerIDs []string) {
 	b.require(bulkRetrieveCustomersRequestFieldCustomerIDs)
 }
 
+func (b *BulkRetrieveCustomersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkRetrieveCustomersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkRetrieveCustomersRequest(body)
+	return nil
+}
+
+func (b *BulkRetrieveCustomersRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkRetrieveCustomersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkUpdateCustomersRequestFieldCustomers = big.NewInt(1 << 0)
 )
@@ -74,7 +116,7 @@ type BulkUpdateCustomersRequest struct {
 	//
 	// Each value contains the updated customer data. Only new or changed fields are required. To add or
 	// update a field, specify the new value. To remove a field, specify `null`.
-	Customers map[string]*BulkUpdateCustomerData `json:"customers,omitempty" url:"-"`
+	Customers map[string]*BulkUpdateCustomerData `json:"customers" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -94,6 +136,27 @@ func (b *BulkUpdateCustomersRequest) SetCustomers(customers map[string]*BulkUpda
 	b.require(bulkUpdateCustomersRequestFieldCustomers)
 }
 
+func (b *BulkUpdateCustomersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpdateCustomersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkUpdateCustomersRequest(body)
+	return nil
+}
+
+func (b *BulkUpdateCustomersRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkUpdateCustomersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkCreateCustomersRequestFieldCustomers = big.NewInt(1 << 0)
 )
@@ -105,7 +168,7 @@ type BulkCreateCustomersRequest struct {
 	// Each key is an [idempotency key](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency)
 	// that uniquely identifies the create request. Each value contains the customer data used to create the
 	// customer profile.
-	Customers map[string]*BulkCreateCustomerData `json:"customers,omitempty" url:"-"`
+	Customers map[string]*BulkCreateCustomerData `json:"customers" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -123,6 +186,27 @@ func (b *BulkCreateCustomersRequest) require(field *big.Int) {
 func (b *BulkCreateCustomersRequest) SetCustomers(customers map[string]*BulkCreateCustomerData) {
 	b.Customers = customers
 	b.require(bulkCreateCustomersRequestFieldCustomers)
+}
+
+func (b *BulkCreateCustomersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkCreateCustomersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkCreateCustomersRequest(body)
+	return nil
+}
+
+func (b *BulkCreateCustomersRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkCreateCustomersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -281,6 +365,27 @@ func (c *CreateCustomerRequest) SetBirthday(birthday *string) {
 func (c *CreateCustomerRequest) SetTaxIDs(taxIDs *CustomerTaxIDs) {
 	c.TaxIDs = taxIDs
 	c.require(createCustomerRequestFieldTaxIDs)
+}
+
+func (c *CreateCustomerRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateCustomerRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateCustomerRequest(body)
+	return nil
+}
+
+func (c *CreateCustomerRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateCustomerRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -491,6 +596,27 @@ func (s *SearchCustomersRequest) SetCount(count *bool) {
 	s.require(searchCustomersRequestFieldCount)
 }
 
+func (s *SearchCustomersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchCustomersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchCustomersRequest(body)
+	return nil
+}
+
+func (s *SearchCustomersRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchCustomersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines the customer data provided in individual create requests for a
 // [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
 var (
@@ -626,6 +752,9 @@ func (b *BulkCreateCustomerData) GetTaxIDs() *CustomerTaxIDs {
 }
 
 func (b *BulkCreateCustomerData) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -741,6 +870,9 @@ func (b *BulkCreateCustomerData) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkCreateCustomerData) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -793,6 +925,9 @@ func (b *BulkCreateCustomersResponse) GetErrors() []*Error {
 }
 
 func (b *BulkCreateCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -845,6 +980,9 @@ func (b *BulkCreateCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkCreateCustomersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -897,6 +1035,9 @@ func (b *BulkDeleteCustomersResponse) GetErrors() []*Error {
 }
 
 func (b *BulkDeleteCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -949,6 +1090,9 @@ func (b *BulkDeleteCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkDeleteCustomersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1001,6 +1145,9 @@ func (b *BulkRetrieveCustomersResponse) GetErrors() []*Error {
 }
 
 func (b *BulkRetrieveCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1053,6 +1200,9 @@ func (b *BulkRetrieveCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkRetrieveCustomersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1213,6 +1363,9 @@ func (b *BulkUpdateCustomerData) GetVersion() *int64 {
 }
 
 func (b *BulkUpdateCustomerData) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1335,6 +1488,9 @@ func (b *BulkUpdateCustomerData) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkUpdateCustomerData) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1387,6 +1543,9 @@ func (b *BulkUpdateCustomersResponse) GetErrors() []*Error {
 }
 
 func (b *BulkUpdateCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -1439,6 +1598,9 @@ func (b *BulkUpdateCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BulkUpdateCustomersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -1488,6 +1650,9 @@ func (c *CreateCustomerResponse) GetCustomer() *Customer {
 }
 
 func (c *CreateCustomerResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1540,6 +1705,9 @@ func (c *CreateCustomerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateCustomerResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1762,6 +1930,9 @@ func (c *Customer) GetTaxIDs() *CustomerTaxIDs {
 }
 
 func (c *Customer) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -1933,6 +2104,9 @@ func (c *Customer) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Customer) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -1980,6 +2154,9 @@ func (c *CustomerAddressFilter) GetCountry() *Country {
 }
 
 func (c *CustomerAddressFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2032,6 +2209,9 @@ func (c *CustomerAddressFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerAddressFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2159,6 +2339,9 @@ func (c *CustomerCreationSourceFilter) GetRule() *CustomerInclusionExclusion {
 }
 
 func (c *CustomerCreationSourceFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2211,6 +2394,9 @@ func (c *CustomerCreationSourceFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerCreationSourceFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2275,6 +2461,9 @@ func (c *CustomerCustomAttributeFilter) GetUpdatedAt() *TimeRange {
 }
 
 func (c *CustomerCustomAttributeFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2334,6 +2523,9 @@ func (c *CustomerCustomAttributeFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerCustomAttributeFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2481,6 +2673,9 @@ func (c *CustomerCustomAttributeFilterValue) GetAddress() *CustomerAddressFilter
 }
 
 func (c *CustomerCustomAttributeFilterValue) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2575,6 +2770,9 @@ func (c *CustomerCustomAttributeFilterValue) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerCustomAttributeFilterValue) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2613,6 +2811,9 @@ func (c *CustomerCustomAttributeFilters) GetFilters() []*CustomerCustomAttribute
 }
 
 func (c *CustomerCustomAttributeFilters) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2658,6 +2859,9 @@ func (c *CustomerCustomAttributeFilters) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerCustomAttributeFilters) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -2859,6 +3063,9 @@ func (c *CustomerFilter) GetSegmentIDs() *FilterValue {
 }
 
 func (c *CustomerFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -2960,6 +3167,9 @@ func (c *CustomerFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3019,6 +3229,9 @@ func (c *CustomerPreferences) GetEmailUnsubscribed() *bool {
 }
 
 func (c *CustomerPreferences) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -3064,6 +3277,9 @@ func (c *CustomerPreferences) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerPreferences) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3114,6 +3330,9 @@ func (c *CustomerQuery) GetSort() *CustomerSort {
 }
 
 func (c *CustomerQuery) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -3166,6 +3385,9 @@ func (c *CustomerQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerQuery) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3220,6 +3442,9 @@ func (c *CustomerSort) GetOrder() *SortOrder {
 }
 
 func (c *CustomerSort) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -3272,6 +3497,9 @@ func (c *CustomerSort) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerSort) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3331,6 +3559,9 @@ func (c *CustomerTaxIDs) GetEuVat() *string {
 }
 
 func (c *CustomerTaxIDs) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -3376,6 +3607,9 @@ func (c *CustomerTaxIDs) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerTaxIDs) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3426,6 +3660,9 @@ func (c *CustomerTextFilter) GetFuzzy() *string {
 }
 
 func (c *CustomerTextFilter) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -3478,6 +3715,9 @@ func (c *CustomerTextFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CustomerTextFilter) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -3514,6 +3754,9 @@ func (d *DeleteCustomerResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteCustomerResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -3559,6 +3802,9 @@ func (d *DeleteCustomerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteCustomerResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -3604,6 +3850,9 @@ func (f *FloatNumberRange) GetEndAt() *string {
 }
 
 func (f *FloatNumberRange) GetExtraProperties() map[string]interface{} {
+	if f == nil {
+		return nil
+	}
 	return f.extraProperties
 }
 
@@ -3656,6 +3905,9 @@ func (f *FloatNumberRange) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FloatNumberRange) String() string {
+	if f == nil {
+		return "<nil>"
+	}
 	if len(f.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(f.rawJSON); err == nil {
 			return value
@@ -3704,6 +3956,9 @@ func (g *GetCustomerResponse) GetCustomer() *Customer {
 }
 
 func (g *GetCustomerResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -3756,6 +4011,9 @@ func (g *GetCustomerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetCustomerResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -3832,6 +4090,9 @@ func (l *ListCustomersResponse) GetCount() *int64 {
 }
 
 func (l *ListCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -3898,6 +4159,9 @@ func (l *ListCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListCustomersResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -3975,6 +4239,9 @@ func (s *SearchCustomersResponse) GetCount() *int64 {
 }
 
 func (s *SearchCustomersResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -4041,6 +4308,9 @@ func (s *SearchCustomersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchCustomersResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -4090,6 +4360,9 @@ func (u *UpdateCustomerResponse) GetCustomer() *Customer {
 }
 
 func (u *UpdateCustomerResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -4142,6 +4415,9 @@ func (u *UpdateCustomerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateCustomerResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -4321,4 +4597,25 @@ func (u *UpdateCustomerRequest) SetVersion(version *int64) {
 func (u *UpdateCustomerRequest) SetTaxIDs(taxIDs *CustomerTaxIDs) {
 	u.TaxIDs = taxIDs
 	u.require(updateCustomerRequestFieldTaxIDs)
+}
+
+func (u *UpdateCustomerRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateCustomerRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateCustomerRequest(body)
+	return nil
+}
+
+func (u *UpdateCustomerRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateCustomerRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

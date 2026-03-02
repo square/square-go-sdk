@@ -3,7 +3,9 @@
 package orders
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -19,7 +21,7 @@ type CreateOrderCustomAttributeDefinitionRequest struct {
 	// [Specifying the schema](https://developer.squareup.com/docs/customer-custom-attributes-api/custom-attribute-definitions#specify-schema).
 	// - If provided, `name` must be unique (case-sensitive) across all visible customer-related custom attribute definitions for the seller.
 	// - All custom attributes are visible in exported customer data, including those set to `VISIBILITY_HIDDEN`.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v505.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -37,7 +39,7 @@ func (c *CreateOrderCustomAttributeDefinitionRequest) require(field *big.Int) {
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
+func (c *CreateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v505.CustomAttributeDefinition) {
 	c.CustomAttributeDefinition = customAttributeDefinition
 	c.require(createOrderCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -47,6 +49,27 @@ func (c *CreateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefiniti
 func (c *CreateOrderCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createOrderCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (c *CreateOrderCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateOrderCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateOrderCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (c *CreateOrderCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateOrderCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -120,7 +143,7 @@ var (
 
 type ListCustomAttributeDefinitionsRequest struct {
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *v3.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v505.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
@@ -144,7 +167,7 @@ func (l *ListCustomAttributeDefinitionsRequest) require(field *big.Int) {
 
 // SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCustomAttributeDefinitionsRequest) SetVisibilityFilter(visibilityFilter *v3.VisibilityFilter) {
+func (l *ListCustomAttributeDefinitionsRequest) SetVisibilityFilter(visibilityFilter *v505.VisibilityFilter) {
 	l.VisibilityFilter = visibilityFilter
 	l.require(listCustomAttributeDefinitionsRequestFieldVisibilityFilter)
 }
@@ -177,7 +200,7 @@ type UpdateOrderCustomAttributeDefinitionRequest struct {
 	// [Updatable definition fields](https://developer.squareup.com/docs/orders-custom-attributes-api/custom-attribute-definitions#updatable-definition-fields).
 	//
 	// To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency) control, include the optional `version` field and specify the current version of the custom attribute definition.
-	CustomAttributeDefinition *v3.CustomAttributeDefinition `json:"custom_attribute_definition,omitempty" url:"-"`
+	CustomAttributeDefinition *v505.CustomAttributeDefinition `json:"custom_attribute_definition" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -202,7 +225,7 @@ func (u *UpdateOrderCustomAttributeDefinitionRequest) SetKey(key string) {
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v3.CustomAttributeDefinition) {
+func (u *UpdateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefinition(customAttributeDefinition *v505.CustomAttributeDefinition) {
 	u.CustomAttributeDefinition = customAttributeDefinition
 	u.require(updateOrderCustomAttributeDefinitionRequestFieldCustomAttributeDefinition)
 }
@@ -212,4 +235,25 @@ func (u *UpdateOrderCustomAttributeDefinitionRequest) SetCustomAttributeDefiniti
 func (u *UpdateOrderCustomAttributeDefinitionRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateOrderCustomAttributeDefinitionRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateOrderCustomAttributeDefinitionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateOrderCustomAttributeDefinitionRequest(body)
+	return nil
+}
+
+func (u *UpdateOrderCustomAttributeDefinitionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateOrderCustomAttributeDefinitionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

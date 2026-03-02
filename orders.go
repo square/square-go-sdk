@@ -19,7 +19,7 @@ type BatchGetOrdersRequest struct {
 	// orders within the scope of the current authorization's merchant ID.
 	LocationID *string `json:"location_id,omitempty" url:"-"`
 	// The IDs of the orders to retrieve. A maximum of 100 orders can be retrieved per request.
-	OrderIDs []string `json:"order_ids,omitempty" url:"-"`
+	OrderIDs []string `json:"order_ids" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -46,6 +46,27 @@ func (b *BatchGetOrdersRequest) SetOrderIDs(orderIDs []string) {
 	b.require(batchGetOrdersRequestFieldOrderIDs)
 }
 
+func (b *BatchGetOrdersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchGetOrdersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchGetOrdersRequest(body)
+	return nil
+}
+
+func (b *BatchGetOrdersRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchGetOrdersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	calculateOrderRequestFieldOrder           = big.NewInt(1 << 0)
 	calculateOrderRequestFieldProposedRewards = big.NewInt(1 << 1)
@@ -53,7 +74,7 @@ var (
 
 type CalculateOrderRequest struct {
 	// The order to be calculated. Expects the entire order, not a sparse update.
-	Order *Order `json:"order,omitempty" url:"-"`
+	Order *Order `json:"order" url:"-"`
 	// Identifies one or more loyalty reward tiers to apply during the order calculation.
 	// The discounts defined by the reward tiers are added to the order only to preview the
 	// effect of applying the specified rewards. The rewards do not correspond to actual
@@ -84,6 +105,27 @@ func (c *CalculateOrderRequest) SetOrder(order *Order) {
 func (c *CalculateOrderRequest) SetProposedRewards(proposedRewards []*OrderReward) {
 	c.ProposedRewards = proposedRewards
 	c.require(calculateOrderRequestFieldProposedRewards)
+}
+
+func (c *CalculateOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CalculateOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CalculateOrderRequest(body)
+	return nil
+}
+
+func (c *CalculateOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed CalculateOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -140,6 +182,27 @@ func (c *CloneOrderRequest) SetVersion(version *int) {
 func (c *CloneOrderRequest) SetIdempotencyKey(idempotencyKey *string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(cloneOrderRequestFieldIdempotencyKey)
+}
+
+func (c *CloneOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CloneOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CloneOrderRequest(body)
+	return nil
+}
+
+func (c *CloneOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed CloneOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -229,6 +292,27 @@ func (p *PayOrderRequest) SetPaymentIDs(paymentIDs []string) {
 	p.require(payOrderRequestFieldPaymentIDs)
 }
 
+func (p *PayOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PayOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*p = PayOrderRequest(body)
+	return nil
+}
+
+func (p *PayOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed PayOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*p),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, p.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	searchOrdersRequestFieldLocationIDs   = big.NewInt(1 << 0)
 	searchOrdersRequestFieldCursor        = big.NewInt(1 << 1)
@@ -308,6 +392,27 @@ func (s *SearchOrdersRequest) SetReturnEntries(returnEntries *bool) {
 	s.require(searchOrdersRequestFieldReturnEntries)
 }
 
+func (s *SearchOrdersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchOrdersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchOrdersRequest(body)
+	return nil
+}
+
+func (s *SearchOrdersRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchOrdersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines the fields that are included in the response body of
 // a request to the `BatchRetrieveOrders` endpoint.
 var (
@@ -343,6 +448,9 @@ func (b *BatchGetOrdersResponse) GetErrors() []*Error {
 }
 
 func (b *BatchGetOrdersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -395,6 +503,9 @@ func (b *BatchGetOrdersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchGetOrdersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -439,6 +550,9 @@ func (c *CalculateOrderResponse) GetErrors() []*Error {
 }
 
 func (c *CalculateOrderResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -491,6 +605,9 @@ func (c *CalculateOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CalculateOrderResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -537,6 +654,9 @@ func (c *CloneOrderResponse) GetErrors() []*Error {
 }
 
 func (c *CloneOrderResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -589,6 +709,9 @@ func (c *CloneOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CloneOrderResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -637,6 +760,9 @@ func (c *CreateOrderResponse) GetErrors() []*Error {
 }
 
 func (c *CreateOrderResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -689,6 +815,9 @@ func (c *CreateOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrderResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -733,6 +862,9 @@ func (g *GetOrderResponse) GetErrors() []*Error {
 }
 
 func (g *GetOrderResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -785,6 +917,9 @@ func (g *GetOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetOrderResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -845,6 +980,9 @@ func (o *OrderEntry) GetLocationID() *string {
 }
 
 func (o *OrderEntry) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -904,6 +1042,9 @@ func (o *OrderEntry) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OrderEntry) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -950,6 +1091,9 @@ func (p *PayOrderResponse) GetOrder() *Order {
 }
 
 func (p *PayOrderResponse) GetExtraProperties() map[string]interface{} {
+	if p == nil {
+		return nil
+	}
 	return p.extraProperties
 }
 
@@ -1002,6 +1146,9 @@ func (p *PayOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PayOrderResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
 	if len(p.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(p.rawJSON); err == nil {
 			return value
@@ -1041,6 +1188,9 @@ func (s *SearchOrdersCustomerFilter) GetCustomerIDs() []string {
 }
 
 func (s *SearchOrdersCustomerFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1086,6 +1236,9 @@ func (s *SearchOrdersCustomerFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersCustomerFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1160,6 +1313,9 @@ func (s *SearchOrdersDateTimeFilter) GetClosedAt() *TimeRange {
 }
 
 func (s *SearchOrdersDateTimeFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1219,6 +1375,9 @@ func (s *SearchOrdersDateTimeFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersDateTimeFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1299,6 +1458,9 @@ func (s *SearchOrdersFilter) GetCustomerFilter() *SearchOrdersCustomerFilter {
 }
 
 func (s *SearchOrdersFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1372,6 +1534,9 @@ func (s *SearchOrdersFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1423,6 +1588,9 @@ func (s *SearchOrdersFulfillmentFilter) GetFulfillmentStates() []FulfillmentStat
 }
 
 func (s *SearchOrdersFulfillmentFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1475,6 +1643,9 @@ func (s *SearchOrdersFulfillmentFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersFulfillmentFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1520,6 +1691,9 @@ func (s *SearchOrdersQuery) GetSort() *SearchOrdersSort {
 }
 
 func (s *SearchOrdersQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1572,6 +1746,9 @@ func (s *SearchOrdersQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1643,6 +1820,9 @@ func (s *SearchOrdersResponse) GetErrors() []*Error {
 }
 
 func (s *SearchOrdersResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1709,6 +1889,9 @@ func (s *SearchOrdersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1766,6 +1949,9 @@ func (s *SearchOrdersSort) GetSortOrder() *SortOrder {
 }
 
 func (s *SearchOrdersSort) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1818,6 +2004,9 @@ func (s *SearchOrdersSort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersSort) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1908,6 +2097,9 @@ func (s *SearchOrdersSourceFilter) GetSourceClientOus() []string {
 }
 
 func (s *SearchOrdersSourceFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1967,6 +2159,9 @@ func (s *SearchOrdersSourceFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersSourceFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2003,6 +2198,9 @@ func (s *SearchOrdersStateFilter) GetStates() []OrderState {
 }
 
 func (s *SearchOrdersStateFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -2048,6 +2246,9 @@ func (s *SearchOrdersStateFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchOrdersStateFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -2094,6 +2295,9 @@ func (u *UpdateOrderResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateOrderResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -2146,6 +2350,9 @@ func (u *UpdateOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateOrderResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -2222,4 +2429,25 @@ func (u *UpdateOrderRequest) SetFieldsToClear(fieldsToClear []string) {
 func (u *UpdateOrderRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateOrderRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateOrderRequest(body)
+	return nil
+}
+
+func (u *UpdateOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

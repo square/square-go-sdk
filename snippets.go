@@ -85,6 +85,9 @@ func (d *DeleteSnippetResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteSnippetResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -130,6 +133,9 @@ func (d *DeleteSnippetResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteSnippetResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -175,6 +181,9 @@ func (g *GetSnippetResponse) GetSnippet() *Snippet {
 }
 
 func (g *GetSnippetResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -227,6 +236,9 @@ func (g *GetSnippetResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetSnippetResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -302,6 +314,9 @@ func (s *Snippet) GetUpdatedAt() *string {
 }
 
 func (s *Snippet) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -375,6 +390,9 @@ func (s *Snippet) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Snippet) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -420,6 +438,9 @@ func (u *UpsertSnippetResponse) GetSnippet() *Snippet {
 }
 
 func (u *UpsertSnippetResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -472,6 +493,9 @@ func (u *UpsertSnippetResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpsertSnippetResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -492,7 +516,7 @@ type UpsertSnippetRequest struct {
 	// The ID of the site where you want to add or update the snippet.
 	SiteID string `json:"-" url:"-"`
 	// The snippet for the site.
-	Snippet *Snippet `json:"snippet,omitempty" url:"-"`
+	Snippet *Snippet `json:"snippet" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -517,4 +541,25 @@ func (u *UpsertSnippetRequest) SetSiteID(siteID string) {
 func (u *UpsertSnippetRequest) SetSnippet(snippet *Snippet) {
 	u.Snippet = snippet
 	u.require(upsertSnippetRequestFieldSnippet)
+}
+
+func (u *UpsertSnippetRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertSnippetRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertSnippetRequest(body)
+	return nil
+}
+
+func (u *UpsertSnippetRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertSnippetRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

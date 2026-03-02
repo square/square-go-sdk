@@ -56,6 +56,27 @@ func (c *CancelTransferOrderRequest) SetVersion(version *int64) {
 	c.require(cancelTransferOrderRequestFieldVersion)
 }
 
+func (c *CancelTransferOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CancelTransferOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CancelTransferOrderRequest(body)
+	return nil
+}
+
+func (c *CancelTransferOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed CancelTransferOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createTransferOrderRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createTransferOrderRequestFieldTransferOrder  = big.NewInt(1 << 1)
@@ -66,7 +87,7 @@ type CreateTransferOrderRequest struct {
 	// any valid string but must be unique for every CreateTransferOrder request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The transfer order to create
-	TransferOrder *CreateTransferOrderData `json:"transfer_order,omitempty" url:"-"`
+	TransferOrder *CreateTransferOrderData `json:"transfer_order" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -91,6 +112,27 @@ func (c *CreateTransferOrderRequest) SetIdempotencyKey(idempotencyKey string) {
 func (c *CreateTransferOrderRequest) SetTransferOrder(transferOrder *CreateTransferOrderData) {
 	c.TransferOrder = transferOrder
 	c.require(createTransferOrderRequestFieldTransferOrder)
+}
+
+func (c *CreateTransferOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTransferOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTransferOrderRequest(body)
+	return nil
+}
+
+func (c *CreateTransferOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTransferOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -168,7 +210,7 @@ type ReceiveTransferOrderRequest struct {
 	// A unique key to make this request idempotent
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The receipt details
-	Receipt *TransferOrderGoodsReceipt `json:"receipt,omitempty" url:"-"`
+	Receipt *TransferOrderGoodsReceipt `json:"receipt" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
 
@@ -209,6 +251,27 @@ func (r *ReceiveTransferOrderRequest) SetReceipt(receipt *TransferOrderGoodsRece
 func (r *ReceiveTransferOrderRequest) SetVersion(version *int64) {
 	r.Version = version
 	r.require(receiveTransferOrderRequestFieldVersion)
+}
+
+func (r *ReceiveTransferOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReceiveTransferOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = ReceiveTransferOrderRequest(body)
+	return nil
+}
+
+func (r *ReceiveTransferOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed ReceiveTransferOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -255,6 +318,27 @@ func (s *SearchTransferOrdersRequest) SetCursor(cursor *string) {
 func (s *SearchTransferOrdersRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTransferOrdersRequestFieldLimit)
+}
+
+func (s *SearchTransferOrdersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTransferOrdersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTransferOrdersRequest(body)
+	return nil
+}
+
+func (s *SearchTransferOrdersRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTransferOrdersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -304,6 +388,27 @@ func (s *StartTransferOrderRequest) SetVersion(version *int64) {
 	s.require(startTransferOrderRequestFieldVersion)
 }
 
+func (s *StartTransferOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler StartTransferOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = StartTransferOrderRequest(body)
+	return nil
+}
+
+func (s *StartTransferOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed StartTransferOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Response for canceling a transfer order
 var (
 	cancelTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
@@ -338,6 +443,9 @@ func (c *CancelTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (c *CancelTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -390,6 +498,9 @@ func (c *CancelTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelTransferOrderResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -490,6 +601,9 @@ func (c *CreateTransferOrderData) GetLineItems() []*CreateTransferOrderLineData 
 }
 
 func (c *CreateTransferOrderData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -577,6 +691,9 @@ func (c *CreateTransferOrderData) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTransferOrderData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -627,6 +744,9 @@ func (c *CreateTransferOrderLineData) GetQuantityOrdered() string {
 }
 
 func (c *CreateTransferOrderLineData) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -679,6 +799,9 @@ func (c *CreateTransferOrderLineData) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTransferOrderLineData) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -724,6 +847,9 @@ func (c *CreateTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (c *CreateTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -776,6 +902,9 @@ func (c *CreateTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTransferOrderResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -811,6 +940,9 @@ func (d *DeleteTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (d *DeleteTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -856,6 +988,9 @@ func (d *DeleteTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteTransferOrderResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -901,6 +1036,9 @@ func (r *ReceiveTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (r *ReceiveTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -953,6 +1091,9 @@ func (r *ReceiveTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ReceiveTransferOrderResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -998,6 +1139,9 @@ func (r *RetrieveTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -1050,6 +1194,9 @@ func (r *RetrieveTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveTransferOrderResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -1105,6 +1252,9 @@ func (s *SearchTransferOrdersResponse) GetErrors() []*Error {
 }
 
 func (s *SearchTransferOrdersResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1164,6 +1314,9 @@ func (s *SearchTransferOrdersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchTransferOrdersResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1209,6 +1362,9 @@ func (s *StartTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (s *StartTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1261,6 +1417,9 @@ func (s *StartTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *StartTransferOrderResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1469,6 +1628,9 @@ func (t *TransferOrder) GetVersion() *int64 {
 }
 
 func (t *TransferOrder) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1598,6 +1760,9 @@ func (t *TransferOrder) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrder) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -1654,6 +1819,9 @@ func (t *TransferOrderFilter) GetStatuses() []TransferOrderStatus {
 }
 
 func (t *TransferOrderFilter) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1713,6 +1881,9 @@ func (t *TransferOrderFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderFilter) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -1775,6 +1946,9 @@ func (t *TransferOrderGoodsReceipt) GetLineItems() []*TransferOrderGoodsReceiptL
 }
 
 func (t *TransferOrderGoodsReceipt) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1820,6 +1994,9 @@ func (t *TransferOrderGoodsReceipt) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderGoodsReceipt) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -1887,6 +2064,9 @@ func (t *TransferOrderGoodsReceiptLineItem) GetQuantityCanceled() *string {
 }
 
 func (t *TransferOrderGoodsReceiptLineItem) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1953,6 +2133,9 @@ func (t *TransferOrderGoodsReceiptLineItem) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderGoodsReceiptLineItem) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2061,6 +2244,9 @@ func (t *TransferOrderLine) GetQuantityCanceled() *string {
 }
 
 func (t *TransferOrderLine) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2148,6 +2334,9 @@ func (t *TransferOrderLine) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderLine) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2193,6 +2382,9 @@ func (t *TransferOrderQuery) GetSort() *TransferOrderSort {
 }
 
 func (t *TransferOrderQuery) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2245,6 +2437,9 @@ func (t *TransferOrderQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderQuery) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2292,6 +2487,9 @@ func (t *TransferOrderSort) GetOrder() *SortOrder {
 }
 
 func (t *TransferOrderSort) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -2344,6 +2542,9 @@ func (t *TransferOrderSort) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TransferOrderSort) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -2490,6 +2691,9 @@ func (u *UpdateTransferOrderData) GetLineItems() []*UpdateTransferOrderLineData 
 }
 
 func (u *UpdateTransferOrderData) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -2570,6 +2774,9 @@ func (u *UpdateTransferOrderData) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTransferOrderData) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -2637,6 +2844,9 @@ func (u *UpdateTransferOrderLineData) GetRemove() *bool {
 }
 
 func (u *UpdateTransferOrderLineData) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -2703,6 +2913,9 @@ func (u *UpdateTransferOrderLineData) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTransferOrderLineData) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -2748,6 +2961,9 @@ func (u *UpdateTransferOrderResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateTransferOrderResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -2800,6 +3016,9 @@ func (u *UpdateTransferOrderResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTransferOrderResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -2824,7 +3043,7 @@ type UpdateTransferOrderRequest struct {
 	// A unique string that identifies this UpdateTransferOrder request. Keys must contain only alphanumeric characters, dashes and underscores
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The transfer order updates to apply
-	TransferOrder *UpdateTransferOrderData `json:"transfer_order,omitempty" url:"-"`
+	TransferOrder *UpdateTransferOrderData `json:"transfer_order" url:"-"`
 	// Version for optimistic concurrency
 	Version *int64 `json:"version,omitempty" url:"-"`
 
@@ -2865,4 +3084,25 @@ func (u *UpdateTransferOrderRequest) SetTransferOrder(transferOrder *UpdateTrans
 func (u *UpdateTransferOrderRequest) SetVersion(version *int64) {
 	u.Version = version
 	u.require(updateTransferOrderRequestFieldVersion)
+}
+
+func (u *UpdateTransferOrderRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateTransferOrderRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateTransferOrderRequest(body)
+	return nil
+}
+
+func (u *UpdateTransferOrderRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateTransferOrderRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

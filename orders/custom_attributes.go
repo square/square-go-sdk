@@ -3,7 +3,9 @@
 package orders
 
 import (
-	v3 "github.com/square/square-go-sdk/v3"
+	json "encoding/json"
+	v505 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -13,7 +15,7 @@ var (
 
 type BulkDeleteOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual delete operations for custom attributes.
-	Values map[string]*v3.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v505.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -28,9 +30,30 @@ func (b *BulkDeleteOrderCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkDeleteOrderCustomAttributesRequest) SetValues(values map[string]*v3.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) {
+func (b *BulkDeleteOrderCustomAttributesRequest) SetValues(values map[string]*v505.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute) {
 	b.Values = values
 	b.require(bulkDeleteOrderCustomAttributesRequestFieldValues)
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteOrderCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkDeleteOrderCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkDeleteOrderCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteOrderCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -39,7 +62,7 @@ var (
 
 type BulkUpsertOrderCustomAttributesRequest struct {
 	// A map of requests that correspond to individual upsert operations for custom attributes.
-	Values map[string]*v3.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values,omitempty" url:"-"`
+	Values map[string]*v505.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -54,9 +77,30 @@ func (b *BulkUpsertOrderCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkUpsertOrderCustomAttributesRequest) SetValues(values map[string]*v3.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) {
+func (b *BulkUpsertOrderCustomAttributesRequest) SetValues(values map[string]*v505.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute) {
 	b.Values = values
 	b.require(bulkUpsertOrderCustomAttributesRequestFieldValues)
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertOrderCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkUpsertOrderCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkUpsertOrderCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkUpsertOrderCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -168,7 +212,7 @@ type ListCustomAttributesRequest struct {
 	// The ID of the target [order](entity:Order).
 	OrderID string `json:"-" url:"-"`
 	// Requests that all of the custom attributes be returned, or only those that are read-only or read-write.
-	VisibilityFilter *v3.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v505.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The cursor returned in the paged response from the previous call to this endpoint.
 	// Provide this cursor to retrieve the next page of results for your original request.
 	// For more information, see [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination).
@@ -203,7 +247,7 @@ func (l *ListCustomAttributesRequest) SetOrderID(orderID string) {
 
 // SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v3.VisibilityFilter) {
+func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v505.VisibilityFilter) {
 	l.VisibilityFilter = visibilityFilter
 	l.require(listCustomAttributesRequestFieldVisibilityFilter)
 }
@@ -249,7 +293,7 @@ type UpsertOrderCustomAttributeRequest struct {
 	//
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control, include this optional field and specify the current version of the custom attribute.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v505.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -281,7 +325,7 @@ func (u *UpsertOrderCustomAttributeRequest) SetCustomAttributeKey(customAttribut
 
 // SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *v3.CustomAttribute) {
+func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *v505.CustomAttribute) {
 	u.CustomAttribute = customAttribute
 	u.require(upsertOrderCustomAttributeRequestFieldCustomAttribute)
 }
@@ -291,4 +335,25 @@ func (u *UpsertOrderCustomAttributeRequest) SetCustomAttribute(customAttribute *
 func (u *UpsertOrderCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(upsertOrderCustomAttributeRequestFieldIdempotencyKey)
+}
+
+func (u *UpsertOrderCustomAttributeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertOrderCustomAttributeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertOrderCustomAttributeRequest(body)
+	return nil
+}
+
+func (u *UpsertOrderCustomAttributeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertOrderCustomAttributeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

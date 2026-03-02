@@ -43,6 +43,9 @@ func (l *ListSitesResponse) GetSites() []*Site {
 }
 
 func (l *ListSitesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -95,6 +98,9 @@ func (l *ListSitesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListSitesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -180,6 +186,9 @@ func (s *Site) GetUpdatedAt() *string {
 }
 
 func (s *Site) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -260,6 +269,9 @@ func (s *Site) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Site) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value

@@ -19,7 +19,7 @@ type BatchCreateTeamMembersRequest struct {
 	//
 	// If you include a team member's `wage_setting`, you must provide `job_id` for each job assignment. To get job IDs,
 	// call [ListJobs](api-endpoint:Team-ListJobs).
-	TeamMembers map[string]*CreateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
+	TeamMembers map[string]*CreateTeamMemberRequest `json:"team_members" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -39,6 +39,27 @@ func (b *BatchCreateTeamMembersRequest) SetTeamMembers(teamMembers map[string]*C
 	b.require(batchCreateTeamMembersRequestFieldTeamMembers)
 }
 
+func (b *BatchCreateTeamMembersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchCreateTeamMembersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchCreateTeamMembersRequest(body)
+	return nil
+}
+
+func (b *BatchCreateTeamMembersRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchCreateTeamMembersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	batchUpdateTeamMembersRequestFieldTeamMembers = big.NewInt(1 << 0)
 )
@@ -50,7 +71,7 @@ type BatchUpdateTeamMembersRequest struct {
 	// For each team member, include the fields to add, change, or clear. Fields can be cleared using a null value.
 	// To update `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed,
 	// call [ListJobs](api-endpoint:Team-ListJobs) to get the required `job_id` values.
-	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members,omitempty" url:"-"`
+	TeamMembers map[string]*UpdateTeamMemberRequest `json:"team_members" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -68,6 +89,27 @@ func (b *BatchUpdateTeamMembersRequest) require(field *big.Int) {
 func (b *BatchUpdateTeamMembersRequest) SetTeamMembers(teamMembers map[string]*UpdateTeamMemberRequest) {
 	b.TeamMembers = teamMembers
 	b.require(batchUpdateTeamMembersRequestFieldTeamMembers)
+}
+
+func (b *BatchUpdateTeamMembersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchUpdateTeamMembersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BatchUpdateTeamMembersRequest(body)
+	return nil
+}
+
+func (b *BatchUpdateTeamMembersRequest) MarshalJSON() ([]byte, error) {
+	type embed BatchUpdateTeamMembersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -143,6 +185,27 @@ func (s *SearchTeamMembersRequest) SetCursor(cursor *string) {
 	s.require(searchTeamMembersRequestFieldCursor)
 }
 
+func (s *SearchTeamMembersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTeamMembersRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTeamMembersRequest(body)
+	return nil
+}
+
+func (s *SearchTeamMembersRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTeamMembersRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Represents a response from a bulk create request containing the created `TeamMember` objects or error messages.
 var (
 	batchCreateTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
@@ -177,6 +240,9 @@ func (b *BatchCreateTeamMembersResponse) GetErrors() []*Error {
 }
 
 func (b *BatchCreateTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -229,6 +295,9 @@ func (b *BatchCreateTeamMembersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchCreateTeamMembersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -274,6 +343,9 @@ func (b *BatchUpdateTeamMembersResponse) GetErrors() []*Error {
 }
 
 func (b *BatchUpdateTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -326,6 +398,9 @@ func (b *BatchUpdateTeamMembersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BatchUpdateTeamMembersResponse) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -376,6 +451,9 @@ func (c *CreateTeamMemberRequest) GetTeamMember() *TeamMember {
 }
 
 func (c *CreateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -428,6 +506,9 @@ func (c *CreateTeamMemberRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTeamMemberRequest) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -473,6 +554,9 @@ func (c *CreateTeamMemberResponse) GetErrors() []*Error {
 }
 
 func (c *CreateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -525,6 +609,9 @@ func (c *CreateTeamMemberResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateTeamMemberResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -570,6 +657,9 @@ func (g *GetTeamMemberResponse) GetErrors() []*Error {
 }
 
 func (g *GetTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -622,6 +712,9 @@ func (g *GetTeamMemberResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetTeamMemberResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -686,6 +779,9 @@ func (s *SearchTeamMembersFilter) GetIsOwner() *bool {
 }
 
 func (s *SearchTeamMembersFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -745,6 +841,9 @@ func (s *SearchTeamMembersFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchTeamMembersFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -780,6 +879,9 @@ func (s *SearchTeamMembersQuery) GetFilter() *SearchTeamMembersFilter {
 }
 
 func (s *SearchTeamMembersQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -825,6 +927,9 @@ func (s *SearchTeamMembersQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchTeamMembersQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -881,6 +986,9 @@ func (s *SearchTeamMembersResponse) GetErrors() []*Error {
 }
 
 func (s *SearchTeamMembersResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -940,6 +1048,9 @@ func (s *SearchTeamMembersResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchTeamMembersResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1089,6 +1200,9 @@ func (t *TeamMember) GetWageSetting() *WageSetting {
 }
 
 func (t *TeamMember) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1211,6 +1325,9 @@ func (t *TeamMember) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TeamMember) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -1257,6 +1374,9 @@ func (t *TeamMemberAssignedLocations) GetLocationIDs() []string {
 }
 
 func (t *TeamMemberAssignedLocations) GetExtraProperties() map[string]interface{} {
+	if t == nil {
+		return nil
+	}
 	return t.extraProperties
 }
 
@@ -1309,6 +1429,9 @@ func (t *TeamMemberAssignedLocations) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TeamMemberAssignedLocations) String() string {
+	if t == nil {
+		return "<nil>"
+	}
 	if len(t.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(t.rawJSON); err == nil {
 			return value
@@ -1392,6 +1515,9 @@ func (u *UpdateTeamMemberRequest) GetTeamMember() *TeamMember {
 }
 
 func (u *UpdateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1437,6 +1563,9 @@ func (u *UpdateTeamMemberRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTeamMemberRequest) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
@@ -1482,6 +1611,9 @@ func (u *UpdateTeamMemberResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -1534,6 +1666,9 @@ func (u *UpdateTeamMemberResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateTeamMemberResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value
