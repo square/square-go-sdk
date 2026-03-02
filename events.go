@@ -87,6 +87,27 @@ func (s *SearchEventsRequest) SetQuery(query *SearchEventsQuery) {
 	s.require(searchEventsRequestFieldQuery)
 }
 
+func (s *SearchEventsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchEventsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchEventsRequest(body)
+	return nil
+}
+
+func (s *SearchEventsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchEventsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 // Defines the fields that are included in the response body of
 // a request to the [DisableEvents](api-endpoint:Events-DisableEvents) endpoint.
 //
@@ -115,6 +136,9 @@ func (d *DisableEventsResponse) GetErrors() []*Error {
 }
 
 func (d *DisableEventsResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -160,6 +184,9 @@ func (d *DisableEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DisableEventsResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -199,6 +226,9 @@ func (e *EnableEventsResponse) GetErrors() []*Error {
 }
 
 func (e *EnableEventsResponse) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -244,6 +274,9 @@ func (e *EnableEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EnableEventsResponse) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -328,6 +361,9 @@ func (e *Event) GetData() *EventData {
 }
 
 func (e *Event) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -408,6 +444,9 @@ func (e *Event) MarshalJSON() ([]byte, error) {
 }
 
 func (e *Event) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -472,6 +511,9 @@ func (e *EventData) GetObject() map[string]interface{} {
 }
 
 func (e *EventData) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -538,6 +580,9 @@ func (e *EventData) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventData) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -583,6 +628,9 @@ func (e *EventMetadata) GetAPIVersion() *string {
 }
 
 func (e *EventMetadata) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
 	return e.extraProperties
 }
 
@@ -635,6 +683,9 @@ func (e *EventMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EventMetadata) String() string {
+	if e == nil {
+		return "<nil>"
+	}
 	if len(e.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
 			return value
@@ -694,6 +745,9 @@ func (l *ListEventTypesResponse) GetMetadata() []*EventTypeMetadata {
 }
 
 func (l *ListEventTypesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -753,6 +807,9 @@ func (l *ListEventTypesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListEventTypesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -818,6 +875,9 @@ func (s *SearchEventsFilter) GetCreatedAt() *TimeRange {
 }
 
 func (s *SearchEventsFilter) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -884,6 +944,9 @@ func (s *SearchEventsFilter) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchEventsFilter) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -929,6 +992,9 @@ func (s *SearchEventsQuery) GetSort() *SearchEventsSort {
 }
 
 func (s *SearchEventsQuery) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -981,6 +1047,9 @@ func (s *SearchEventsQuery) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchEventsQuery) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1052,6 +1121,9 @@ func (s *SearchEventsResponse) GetCursor() *string {
 }
 
 func (s *SearchEventsResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1118,6 +1190,9 @@ func (s *SearchEventsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchEventsResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value
@@ -1158,6 +1233,9 @@ func (s *SearchEventsSort) GetOrder() *SortOrder {
 }
 
 func (s *SearchEventsSort) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1210,6 +1288,9 @@ func (s *SearchEventsSort) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SearchEventsSort) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value

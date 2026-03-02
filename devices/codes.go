@@ -3,7 +3,9 @@
 package devices
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -19,7 +21,7 @@ type CreateDeviceCodeRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The device code to create.
-	DeviceCode *v3.DeviceCode `json:"device_code,omitempty" url:"-"`
+	DeviceCode *v3.DeviceCode `json:"device_code" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -44,6 +46,27 @@ func (c *CreateDeviceCodeRequest) SetIdempotencyKey(idempotencyKey string) {
 func (c *CreateDeviceCodeRequest) SetDeviceCode(deviceCode *v3.DeviceCode) {
 	c.DeviceCode = deviceCode
 	c.require(createDeviceCodeRequestFieldDeviceCode)
+}
+
+func (c *CreateDeviceCodeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateDeviceCodeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateDeviceCodeRequest(body)
+	return nil
+}
+
+func (c *CreateDeviceCodeRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateDeviceCodeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (

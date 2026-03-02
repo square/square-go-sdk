@@ -3,7 +3,9 @@
 package merchants
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -14,7 +16,7 @@ var (
 type BulkDeleteMerchantCustomAttributesRequest struct {
 	// The data used to update the `CustomAttribute` objects.
 	// The keys must be unique and are used to map to the corresponding response.
-	Values map[string]*v3.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -34,6 +36,27 @@ func (b *BulkDeleteMerchantCustomAttributesRequest) SetValues(values map[string]
 	b.require(bulkDeleteMerchantCustomAttributesRequestFieldValues)
 }
 
+func (b *BulkDeleteMerchantCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteMerchantCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkDeleteMerchantCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkDeleteMerchantCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteMerchantCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkUpsertMerchantCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
 )
@@ -42,7 +65,7 @@ type BulkUpsertMerchantCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertMerchantCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v3.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -60,6 +83,27 @@ func (b *BulkUpsertMerchantCustomAttributesRequest) require(field *big.Int) {
 func (b *BulkUpsertMerchantCustomAttributesRequest) SetValues(values map[string]*v3.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(bulkUpsertMerchantCustomAttributesRequestFieldValues)
+}
+
+func (b *BulkUpsertMerchantCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertMerchantCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkUpsertMerchantCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkUpsertMerchantCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkUpsertMerchantCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -255,7 +299,7 @@ type UpsertMerchantCustomAttributeRequest struct {
 	// - The version field must match the current version of the custom attribute definition to enable
 	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// If this is not important for your application, version can be set to -1. For any other values, the request fails with a BAD_REQUEST error.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -297,4 +341,25 @@ func (u *UpsertMerchantCustomAttributeRequest) SetCustomAttribute(customAttribut
 func (u *UpsertMerchantCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(upsertMerchantCustomAttributeRequestFieldIdempotencyKey)
+}
+
+func (u *UpsertMerchantCustomAttributeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertMerchantCustomAttributeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertMerchantCustomAttributeRequest(body)
+	return nil
+}
+
+func (u *UpsertMerchantCustomAttributeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertMerchantCustomAttributeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

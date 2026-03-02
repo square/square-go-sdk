@@ -3,7 +3,9 @@
 package bookings
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -15,7 +17,7 @@ type BulkDeleteBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual Delete requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkDeleteBookingCustomAttributes` request and the
 	// information needed to delete a custom attribute.
-	Values map[string]*v3.BookingCustomAttributeDeleteRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BookingCustomAttributeDeleteRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -35,6 +37,27 @@ func (b *BulkDeleteBookingCustomAttributesRequest) SetValues(values map[string]*
 	b.require(bulkDeleteBookingCustomAttributesRequestFieldValues)
 }
 
+func (b *BulkDeleteBookingCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkDeleteBookingCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkDeleteBookingCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkDeleteBookingCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkDeleteBookingCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	bulkUpsertBookingCustomAttributesRequestFieldValues = big.NewInt(1 << 0)
 )
@@ -43,7 +66,7 @@ type BulkUpsertBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertBookingCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v3.BookingCustomAttributeUpsertRequest `json:"values,omitempty" url:"-"`
+	Values map[string]*v3.BookingCustomAttributeUpsertRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -61,6 +84,27 @@ func (b *BulkUpsertBookingCustomAttributesRequest) require(field *big.Int) {
 func (b *BulkUpsertBookingCustomAttributesRequest) SetValues(values map[string]*v3.BookingCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(bulkUpsertBookingCustomAttributesRequestFieldValues)
+}
+
+func (b *BulkUpsertBookingCustomAttributesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkUpsertBookingCustomAttributesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*b = BulkUpsertBookingCustomAttributesRequest(body)
+	return nil
+}
+
+func (b *BulkUpsertBookingCustomAttributesRequest) MarshalJSON() ([]byte, error) {
+	type embed BulkUpsertBookingCustomAttributesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -248,7 +292,7 @@ type UpsertBookingCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute,omitempty" url:"-"`
+	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -290,4 +334,25 @@ func (u *UpsertBookingCustomAttributeRequest) SetCustomAttribute(customAttribute
 func (u *UpsertBookingCustomAttributeRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(upsertBookingCustomAttributeRequestFieldIdempotencyKey)
+}
+
+func (u *UpsertBookingCustomAttributeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertBookingCustomAttributeRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpsertBookingCustomAttributeRequest(body)
+	return nil
+}
+
+func (u *UpsertBookingCustomAttributeRequest) MarshalJSON() ([]byte, error) {
+	type embed UpsertBookingCustomAttributeRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

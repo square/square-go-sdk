@@ -175,6 +175,27 @@ func (o *ObtainTokenRequest) SetUseJwt(useJwt *bool) {
 	o.require(obtainTokenRequestFieldUseJwt)
 }
 
+func (o *ObtainTokenRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ObtainTokenRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*o = ObtainTokenRequest(body)
+	return nil
+}
+
+func (o *ObtainTokenRequest) MarshalJSON() ([]byte, error) {
+	type embed ObtainTokenRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*o),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, o.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	revokeTokenRequestFieldClientID              = big.NewInt(1 << 0)
 	revokeTokenRequestFieldAccessToken           = big.NewInt(1 << 1)
@@ -234,6 +255,27 @@ func (r *RevokeTokenRequest) SetMerchantID(merchantID *string) {
 func (r *RevokeTokenRequest) SetRevokeOnlyAccessToken(revokeOnlyAccessToken *bool) {
 	r.RevokeOnlyAccessToken = revokeOnlyAccessToken
 	r.require(revokeTokenRequestFieldRevokeOnlyAccessToken)
+}
+
+func (r *RevokeTokenRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RevokeTokenRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RevokeTokenRequest(body)
+	return nil
+}
+
+func (r *RevokeTokenRequest) MarshalJSON() ([]byte, error) {
+	type embed RevokeTokenRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 // Represents an [ObtainToken](api-endpoint:OAuth-ObtainToken) response.
@@ -386,6 +428,9 @@ func (o *ObtainTokenResponse) GetRefreshTokenExpiresAt() *string {
 }
 
 func (o *ObtainTokenResponse) GetExtraProperties() map[string]interface{} {
+	if o == nil {
+		return nil
+	}
 	return o.extraProperties
 }
 
@@ -501,6 +546,9 @@ func (o *ObtainTokenResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (o *ObtainTokenResponse) String() string {
+	if o == nil {
+		return "<nil>"
+	}
 	if len(o.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(o.rawJSON); err == nil {
 			return value
@@ -577,6 +625,9 @@ func (r *RetrieveTokenStatusResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveTokenStatusResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -650,6 +701,9 @@ func (r *RetrieveTokenStatusResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveTokenStatusResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -694,6 +748,9 @@ func (r *RevokeTokenResponse) GetErrors() []*Error {
 }
 
 func (r *RevokeTokenResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -746,6 +803,9 @@ func (r *RevokeTokenResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RevokeTokenResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value

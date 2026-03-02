@@ -3,7 +3,9 @@
 package terminal
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -70,6 +72,27 @@ func (c *CreateTerminalRefundRequest) SetIdempotencyKey(idempotencyKey string) {
 func (c *CreateTerminalRefundRequest) SetRefund(refund *v3.TerminalRefund) {
 	c.Refund = refund
 	c.require(createTerminalRefundRequestFieldRefund)
+}
+
+func (c *CreateTerminalRefundRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTerminalRefundRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateTerminalRefundRequest(body)
+	return nil
+}
+
+func (c *CreateTerminalRefundRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateTerminalRefundRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -145,4 +168,25 @@ func (s *SearchTerminalRefundsRequest) SetCursor(cursor *string) {
 func (s *SearchTerminalRefundsRequest) SetLimit(limit *int) {
 	s.Limit = limit
 	s.require(searchTerminalRefundsRequestFieldLimit)
+}
+
+func (s *SearchTerminalRefundsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchTerminalRefundsRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*s = SearchTerminalRefundsRequest(body)
+	return nil
+}
+
+func (s *SearchTerminalRefundsRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchTerminalRefundsRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }

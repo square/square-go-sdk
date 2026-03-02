@@ -57,6 +57,27 @@ func (c *CreateBankAccountRequest) SetCustomerID(customerID *string) {
 	c.require(createBankAccountRequestFieldCustomerID)
 }
 
+func (c *CreateBankAccountRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateBankAccountRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateBankAccountRequest(body)
+	return nil
+}
+
+func (c *CreateBankAccountRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateBankAccountRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	disableBankAccountRequestFieldBankAccountID = big.NewInt(1 << 0)
 )
@@ -411,6 +432,9 @@ func (b *BankAccount) GetCustomerID() *string {
 }
 
 func (b *BankAccount) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
 	return b.extraProperties
 }
 
@@ -575,6 +599,9 @@ func (b *BankAccount) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BankAccount) String() string {
+	if b == nil {
+		return "<nil>"
+	}
 	if len(b.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
 			return value
@@ -678,6 +705,9 @@ func (c *CreateBankAccountResponse) GetErrors() []*Error {
 }
 
 func (c *CreateBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -730,6 +760,9 @@ func (c *CreateBankAccountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBankAccountResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -775,6 +808,9 @@ func (d *DisableBankAccountResponse) GetErrors() []*Error {
 }
 
 func (d *DisableBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -827,6 +863,9 @@ func (d *DisableBankAccountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DisableBankAccountResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -872,6 +911,9 @@ func (g *GetBankAccountByV1IDResponse) GetBankAccount() *BankAccount {
 }
 
 func (g *GetBankAccountByV1IDResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -924,6 +966,9 @@ func (g *GetBankAccountByV1IDResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetBankAccountByV1IDResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -969,6 +1014,9 @@ func (g *GetBankAccountResponse) GetErrors() []*Error {
 }
 
 func (g *GetBankAccountResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1021,6 +1069,9 @@ func (g *GetBankAccountResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetBankAccountResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1080,6 +1131,9 @@ func (l *ListBankAccountsResponse) GetCursor() *string {
 }
 
 func (l *ListBankAccountsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1139,6 +1193,9 @@ func (l *ListBankAccountsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBankAccountsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value

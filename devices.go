@@ -173,6 +173,9 @@ func (c *Component) GetEthernetDetails() *DeviceComponentDetailsEthernetDetails 
 }
 
 func (c *Component) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -253,6 +256,9 @@ func (c *Component) MarshalJSON() ([]byte, error) {
 }
 
 func (c *Component) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -353,6 +359,9 @@ func (d *Device) GetStatus() *DeviceStatus {
 }
 
 func (d *Device) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -419,6 +428,9 @@ func (d *Device) MarshalJSON() ([]byte, error) {
 }
 
 func (d *Device) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -526,6 +538,9 @@ func (d *DeviceAttributes) GetMerchantToken() *string {
 }
 
 func (d *DeviceAttributes) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -620,6 +635,9 @@ func (d *DeviceAttributes) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceAttributes) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -701,6 +719,9 @@ func (d *DeviceComponentDetailsApplicationDetails) GetDeviceCodeID() *string {
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -767,6 +788,9 @@ func (d *DeviceComponentDetailsApplicationDetails) MarshalJSON() ([]byte, error)
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -812,6 +836,9 @@ func (d *DeviceComponentDetailsBatteryDetails) GetExternalPower() *DeviceCompone
 }
 
 func (d *DeviceComponentDetailsBatteryDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -864,6 +891,9 @@ func (d *DeviceComponentDetailsBatteryDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceComponentDetailsBatteryDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -898,6 +928,9 @@ func (d *DeviceComponentDetailsCardReaderDetails) GetVersion() *string {
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -943,6 +976,9 @@ func (d *DeviceComponentDetailsCardReaderDetails) MarshalJSON() ([]byte, error) 
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -997,6 +1033,9 @@ func (d *DeviceComponentDetailsEthernetDetails) GetMacAddress() *string {
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1056,6 +1095,9 @@ func (d *DeviceComponentDetailsEthernetDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1120,6 +1162,9 @@ func (d *DeviceComponentDetailsMeasurement) GetValue() *int {
 }
 
 func (d *DeviceComponentDetailsMeasurement) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1165,6 +1210,9 @@ func (d *DeviceComponentDetailsMeasurement) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceComponentDetailsMeasurement) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1250,6 +1298,9 @@ func (d *DeviceComponentDetailsWiFiDetails) GetMacAddress() *string {
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1330,6 +1381,9 @@ func (d *DeviceComponentDetailsWiFiDetails) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1365,6 +1419,9 @@ func (d *DeviceStatus) GetCategory() *DeviceStatusCategory {
 }
 
 func (d *DeviceStatus) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1410,6 +1467,9 @@ func (d *DeviceStatus) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeviceStatus) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1479,6 +1539,9 @@ func (g *GetDeviceResponse) GetDevice() *Device {
 }
 
 func (g *GetDeviceResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1531,6 +1594,9 @@ func (g *GetDeviceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetDeviceResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1587,6 +1653,9 @@ func (l *ListDevicesResponse) GetCursor() *string {
 }
 
 func (l *ListDevicesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1646,6 +1715,9 @@ func (l *ListDevicesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDevicesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value

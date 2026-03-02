@@ -38,6 +38,27 @@ func (c *CreateEvidenceFileDisputesRequest) SetDisputeID(disputeID string) {
 	c.require(createEvidenceFileDisputesRequestFieldDisputeID)
 }
 
+func (c *CreateEvidenceFileDisputesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateEvidenceFileDisputesRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateEvidenceFileDisputesRequest(body)
+	return nil
+}
+
+func (c *CreateEvidenceFileDisputesRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateEvidenceFileDisputesRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	createDisputeEvidenceTextRequestFieldDisputeID      = big.NewInt(1 << 0)
 	createDisputeEvidenceTextRequestFieldIdempotencyKey = big.NewInt(1 << 1)
@@ -93,6 +114,27 @@ func (c *CreateDisputeEvidenceTextRequest) SetEvidenceType(evidenceType *Dispute
 func (c *CreateDisputeEvidenceTextRequest) SetEvidenceText(evidenceText string) {
 	c.EvidenceText = evidenceText
 	c.require(createDisputeEvidenceTextRequestFieldEvidenceText)
+}
+
+func (c *CreateDisputeEvidenceTextRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateDisputeEvidenceTextRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateDisputeEvidenceTextRequest(body)
+	return nil
+}
+
+func (c *CreateDisputeEvidenceTextRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateDisputeEvidenceTextRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -256,6 +298,9 @@ func (a *AcceptDisputeResponse) GetDispute() *Dispute {
 }
 
 func (a *AcceptDisputeResponse) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
 	return a.extraProperties
 }
 
@@ -308,6 +353,9 @@ func (a *AcceptDisputeResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AcceptDisputeResponse) String() string {
+	if a == nil {
+		return "<nil>"
+	}
 	if len(a.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
 			return value
@@ -365,6 +413,9 @@ func (c *CreateDisputeEvidenceFileRequest) GetContentType() *string {
 }
 
 func (c *CreateDisputeEvidenceFileRequest) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -424,6 +475,9 @@ func (c *CreateDisputeEvidenceFileRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDisputeEvidenceFileRequest) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -469,6 +523,9 @@ func (c *CreateDisputeEvidenceFileResponse) GetEvidence() *DisputeEvidence {
 }
 
 func (c *CreateDisputeEvidenceFileResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -521,6 +578,9 @@ func (c *CreateDisputeEvidenceFileResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDisputeEvidenceFileResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -566,6 +626,9 @@ func (c *CreateDisputeEvidenceTextResponse) GetEvidence() *DisputeEvidence {
 }
 
 func (c *CreateDisputeEvidenceTextResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -618,6 +681,9 @@ func (c *CreateDisputeEvidenceTextResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDisputeEvidenceTextResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -807,6 +873,9 @@ func (d *Dispute) GetLocationID() *string {
 }
 
 func (d *Dispute) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -957,6 +1026,9 @@ func (d *Dispute) MarshalJSON() ([]byte, error) {
 }
 
 func (d *Dispute) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1078,6 +1150,9 @@ func (d *DisputedPayment) GetPaymentID() *string {
 }
 
 func (d *DisputedPayment) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
 	return d.extraProperties
 }
 
@@ -1123,6 +1198,9 @@ func (d *DisputedPayment) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DisputedPayment) String() string {
+	if d == nil {
+		return "<nil>"
+	}
 	if len(d.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
 			return value
@@ -1168,6 +1246,9 @@ func (g *GetDisputeResponse) GetDispute() *Dispute {
 }
 
 func (g *GetDisputeResponse) GetExtraProperties() map[string]interface{} {
+	if g == nil {
+		return nil
+	}
 	return g.extraProperties
 }
 
@@ -1220,6 +1301,9 @@ func (g *GetDisputeResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetDisputeResponse) String() string {
+	if g == nil {
+		return "<nil>"
+	}
 	if len(g.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
 			return value
@@ -1276,6 +1360,9 @@ func (l *ListDisputesResponse) GetCursor() *string {
 }
 
 func (l *ListDisputesResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -1335,6 +1422,9 @@ func (l *ListDisputesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDisputesResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -1380,6 +1470,9 @@ func (s *SubmitEvidenceResponse) GetDispute() *Dispute {
 }
 
 func (s *SubmitEvidenceResponse) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
 	return s.extraProperties
 }
 
@@ -1432,6 +1525,9 @@ func (s *SubmitEvidenceResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubmitEvidenceResponse) String() string {
+	if s == nil {
+		return "<nil>"
+	}
 	if len(s.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
 			return value

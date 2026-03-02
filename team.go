@@ -16,7 +16,7 @@ var (
 
 type CreateJobRequest struct {
 	// The job to create. The `title` field is required and `is_tip_eligible` defaults to true.
-	Job *Job `json:"job,omitempty" url:"-"`
+	Job *Job `json:"job" url:"-"`
 	// A unique identifier for the `CreateJob` request. Keys can be any valid string,
 	// but must be unique for each request. For more information, see
 	// [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -45,6 +45,27 @@ func (c *CreateJobRequest) SetJob(job *Job) {
 func (c *CreateJobRequest) SetIdempotencyKey(idempotencyKey string) {
 	c.IdempotencyKey = idempotencyKey
 	c.require(createJobRequestFieldIdempotencyKey)
+}
+
+func (c *CreateJobRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateJobRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateJobRequest(body)
+	return nil
+}
+
+func (c *CreateJobRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateJobRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -111,7 +132,7 @@ type UpdateJobRequest struct {
 	JobID string `json:"-" url:"-"`
 	// The job with the updated fields, either `title`, `is_tip_eligible`, or both. Only changed fields need
 	// to be included in the request. Optionally include `version` to enable optimistic concurrency control.
-	Job *Job `json:"job,omitempty" url:"-"`
+	Job *Job `json:"job" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -136,6 +157,27 @@ func (u *UpdateJobRequest) SetJobID(jobID string) {
 func (u *UpdateJobRequest) SetJob(job *Job) {
 	u.Job = job
 	u.require(updateJobRequestFieldJob)
+}
+
+func (u *UpdateJobRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateJobRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateJobRequest(body)
+	return nil
+}
+
+func (u *UpdateJobRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateJobRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 // Represents a [CreateJob](api-endpoint:Team-CreateJob) response. Either `job` or `errors`
@@ -173,6 +215,9 @@ func (c *CreateJobResponse) GetErrors() []*Error {
 }
 
 func (c *CreateJobResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
 	return c.extraProperties
 }
 
@@ -225,6 +270,9 @@ func (c *CreateJobResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateJobResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
 	if len(c.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
 			return value
@@ -317,6 +365,9 @@ func (j *Job) GetVersion() *int {
 }
 
 func (j *Job) GetExtraProperties() map[string]interface{} {
+	if j == nil {
+		return nil
+	}
 	return j.extraProperties
 }
 
@@ -397,6 +448,9 @@ func (j *Job) MarshalJSON() ([]byte, error) {
 }
 
 func (j *Job) String() string {
+	if j == nil {
+		return "<nil>"
+	}
 	if len(j.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(j.rawJSON); err == nil {
 			return value
@@ -455,6 +509,9 @@ func (l *ListJobsResponse) GetErrors() []*Error {
 }
 
 func (l *ListJobsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
 	return l.extraProperties
 }
 
@@ -514,6 +571,9 @@ func (l *ListJobsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListJobsResponse) String() string {
+	if l == nil {
+		return "<nil>"
+	}
 	if len(l.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
@@ -560,6 +620,9 @@ func (r *RetrieveJobResponse) GetErrors() []*Error {
 }
 
 func (r *RetrieveJobResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
 	return r.extraProperties
 }
 
@@ -612,6 +675,9 @@ func (r *RetrieveJobResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RetrieveJobResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
 	if len(r.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
 			return value
@@ -658,6 +724,9 @@ func (u *UpdateJobResponse) GetErrors() []*Error {
 }
 
 func (u *UpdateJobResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
 	return u.extraProperties
 }
 
@@ -710,6 +779,9 @@ func (u *UpdateJobResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateJobResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
 	if len(u.rawJSON) > 0 {
 		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
 			return value

@@ -3,7 +3,9 @@
 package webhooks
 
 import (
+	json "encoding/json"
 	v3 "github.com/square/square-go-sdk/v3"
+	internal "github.com/square/square-go-sdk/v3/internal"
 	big "math/big"
 )
 
@@ -16,7 +18,7 @@ type CreateWebhookSubscriptionRequest struct {
 	// A unique string that identifies the [CreateWebhookSubscription](api-endpoint:WebhookSubscriptions-CreateWebhookSubscription) request.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The [Subscription](entity:WebhookSubscription) to create.
-	Subscription *v3.WebhookSubscription `json:"subscription,omitempty" url:"-"`
+	Subscription *v3.WebhookSubscription `json:"subscription" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -41,6 +43,27 @@ func (c *CreateWebhookSubscriptionRequest) SetIdempotencyKey(idempotencyKey *str
 func (c *CreateWebhookSubscriptionRequest) SetSubscription(subscription *v3.WebhookSubscription) {
 	c.Subscription = subscription
 	c.require(createWebhookSubscriptionRequestFieldSubscription)
+}
+
+func (c *CreateWebhookSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateWebhookSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateWebhookSubscriptionRequest(body)
+	return nil
+}
+
+func (c *CreateWebhookSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateWebhookSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -197,6 +220,27 @@ func (t *TestWebhookSubscriptionRequest) SetEventType(eventType *string) {
 	t.require(testWebhookSubscriptionRequestFieldEventType)
 }
 
+func (t *TestWebhookSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestWebhookSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*t = TestWebhookSubscriptionRequest(body)
+	return nil
+}
+
+func (t *TestWebhookSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed TestWebhookSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*t),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, t.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateWebhookSubscriptionRequestFieldSubscriptionID = big.NewInt(1 << 0)
 	updateWebhookSubscriptionRequestFieldSubscription   = big.NewInt(1 << 1)
@@ -233,6 +277,27 @@ func (u *UpdateWebhookSubscriptionRequest) SetSubscription(subscription *v3.Webh
 	u.require(updateWebhookSubscriptionRequestFieldSubscription)
 }
 
+func (u *UpdateWebhookSubscriptionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateWebhookSubscriptionRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateWebhookSubscriptionRequest(body)
+	return nil
+}
+
+func (u *UpdateWebhookSubscriptionRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateWebhookSubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
 var (
 	updateWebhookSubscriptionSignatureKeyRequestFieldSubscriptionID = big.NewInt(1 << 0)
 	updateWebhookSubscriptionSignatureKeyRequestFieldIdempotencyKey = big.NewInt(1 << 1)
@@ -267,4 +332,25 @@ func (u *UpdateWebhookSubscriptionSignatureKeyRequest) SetSubscriptionID(subscri
 func (u *UpdateWebhookSubscriptionSignatureKeyRequest) SetIdempotencyKey(idempotencyKey *string) {
 	u.IdempotencyKey = idempotencyKey
 	u.require(updateWebhookSubscriptionSignatureKeyRequestFieldIdempotencyKey)
+}
+
+func (u *UpdateWebhookSubscriptionSignatureKeyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateWebhookSubscriptionSignatureKeyRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateWebhookSubscriptionSignatureKeyRequest(body)
+	return nil
+}
+
+func (u *UpdateWebhookSubscriptionSignatureKeyRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateWebhookSubscriptionSignatureKeyRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
