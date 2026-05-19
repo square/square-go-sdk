@@ -31,3 +31,6 @@ orders/alias.go
 teammembers/alias.go
 terminal/alias.go
 webhooks/alias.go
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

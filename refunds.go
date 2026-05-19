@@ -13,16 +13,17 @@ var (
 	refundPaymentRequestFieldIdempotencyKey      = big.NewInt(1 << 0)
 	refundPaymentRequestFieldAmountMoney         = big.NewInt(1 << 1)
 	refundPaymentRequestFieldAppFeeMoney         = big.NewInt(1 << 2)
-	refundPaymentRequestFieldPaymentID           = big.NewInt(1 << 3)
-	refundPaymentRequestFieldDestinationID       = big.NewInt(1 << 4)
-	refundPaymentRequestFieldUnlinked            = big.NewInt(1 << 5)
-	refundPaymentRequestFieldLocationID          = big.NewInt(1 << 6)
-	refundPaymentRequestFieldCustomerID          = big.NewInt(1 << 7)
-	refundPaymentRequestFieldReason              = big.NewInt(1 << 8)
-	refundPaymentRequestFieldPaymentVersionToken = big.NewInt(1 << 9)
-	refundPaymentRequestFieldTeamMemberID        = big.NewInt(1 << 10)
-	refundPaymentRequestFieldCashDetails         = big.NewInt(1 << 11)
-	refundPaymentRequestFieldExternalDetails     = big.NewInt(1 << 12)
+	refundPaymentRequestFieldAppFeeAllocations   = big.NewInt(1 << 3)
+	refundPaymentRequestFieldPaymentID           = big.NewInt(1 << 4)
+	refundPaymentRequestFieldDestinationID       = big.NewInt(1 << 5)
+	refundPaymentRequestFieldUnlinked            = big.NewInt(1 << 6)
+	refundPaymentRequestFieldLocationID          = big.NewInt(1 << 7)
+	refundPaymentRequestFieldCustomerID          = big.NewInt(1 << 8)
+	refundPaymentRequestFieldReason              = big.NewInt(1 << 9)
+	refundPaymentRequestFieldPaymentVersionToken = big.NewInt(1 << 10)
+	refundPaymentRequestFieldTeamMemberID        = big.NewInt(1 << 11)
+	refundPaymentRequestFieldCashDetails         = big.NewInt(1 << 12)
+	refundPaymentRequestFieldExternalDetails     = big.NewInt(1 << 13)
 )
 
 type RefundPaymentRequest struct {
@@ -60,6 +61,11 @@ type RefundPaymentRequest struct {
 	// To set this field, `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required.
 	// For more information, see [Permissions](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees#permissions).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"-"`
+	// Details pertaining to contributors to the refund of the application fee.
+	// The sum of the amounts in the app_fee_allocations must equal the app_fee_money amount, if
+	// present. If populated, an allocation must be present for every party that expects to contribute
+	// a portion of the refunded application fee, including the application developer.
+	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"-"`
 	// The unique ID of the payment being refunded.
 	// Required when unlinked=false, otherwise must not be set.
 	PaymentID *string `json:"payment_id,omitempty" url:"-"`
@@ -129,6 +135,13 @@ func (r *RefundPaymentRequest) SetAmountMoney(amountMoney *Money) {
 func (r *RefundPaymentRequest) SetAppFeeMoney(appFeeMoney *Money) {
 	r.AppFeeMoney = appFeeMoney
 	r.require(refundPaymentRequestFieldAppFeeMoney)
+}
+
+// SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RefundPaymentRequest) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+	r.AppFeeAllocations = appFeeAllocations
+	r.require(refundPaymentRequestFieldAppFeeAllocations)
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1149,14 +1162,15 @@ var (
 	paymentRefundFieldDestinationDetails = big.NewInt(1 << 5)
 	paymentRefundFieldAmountMoney        = big.NewInt(1 << 6)
 	paymentRefundFieldAppFeeMoney        = big.NewInt(1 << 7)
-	paymentRefundFieldProcessingFee      = big.NewInt(1 << 8)
-	paymentRefundFieldPaymentID          = big.NewInt(1 << 9)
-	paymentRefundFieldOrderID            = big.NewInt(1 << 10)
-	paymentRefundFieldReason             = big.NewInt(1 << 11)
-	paymentRefundFieldCreatedAt          = big.NewInt(1 << 12)
-	paymentRefundFieldUpdatedAt          = big.NewInt(1 << 13)
-	paymentRefundFieldTeamMemberID       = big.NewInt(1 << 14)
-	paymentRefundFieldTerminalRefundID   = big.NewInt(1 << 15)
+	paymentRefundFieldAppFeeAllocations  = big.NewInt(1 << 8)
+	paymentRefundFieldProcessingFee      = big.NewInt(1 << 9)
+	paymentRefundFieldPaymentID          = big.NewInt(1 << 10)
+	paymentRefundFieldOrderID            = big.NewInt(1 << 11)
+	paymentRefundFieldReason             = big.NewInt(1 << 12)
+	paymentRefundFieldCreatedAt          = big.NewInt(1 << 13)
+	paymentRefundFieldUpdatedAt          = big.NewInt(1 << 14)
+	paymentRefundFieldTeamMemberID       = big.NewInt(1 << 15)
+	paymentRefundFieldTerminalRefundID   = big.NewInt(1 << 16)
 )
 
 type PaymentRefund struct {
@@ -1188,6 +1202,8 @@ type PaymentRefund struct {
 	// US dollar amounts are specified in cents). For more information, see
 	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"app_fee_money,omitempty"`
+	// Details pertaining to contributors to the refund of the application fee.
+	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"app_fee_allocations,omitempty"`
 	// Processing fees and fee adjustments assessed by Square for this refund.
 	ProcessingFee []*ProcessingFee `json:"processing_fee,omitempty" url:"processing_fee,omitempty"`
 	// The ID of the payment associated with this refund.
@@ -1266,6 +1282,13 @@ func (p *PaymentRefund) GetAppFeeMoney() *Money {
 		return nil
 	}
 	return p.AppFeeMoney
+}
+
+func (p *PaymentRefund) GetAppFeeAllocations() []interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.AppFeeAllocations
 }
 
 func (p *PaymentRefund) GetProcessingFee() []*ProcessingFee {
@@ -1392,6 +1415,13 @@ func (p *PaymentRefund) SetAmountMoney(amountMoney *Money) {
 func (p *PaymentRefund) SetAppFeeMoney(appFeeMoney *Money) {
 	p.AppFeeMoney = appFeeMoney
 	p.require(paymentRefundFieldAppFeeMoney)
+}
+
+// SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *PaymentRefund) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+	p.AppFeeAllocations = appFeeAllocations
+	p.require(paymentRefundFieldAppFeeAllocations)
 }
 
 // SetProcessingFee sets the ProcessingFee field and marks it as non-optional;
