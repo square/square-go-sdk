@@ -3281,22 +3281,6 @@ func TestSettersSearchOrdersSourceFilter(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetSourceApplicationIDs", func(t *testing.T) {
-		obj := &SearchOrdersSourceFilter{}
-		var fernTestValueSourceApplicationIDs []string
-		obj.SetSourceApplicationIDs(fernTestValueSourceApplicationIDs)
-		assert.Equal(t, fernTestValueSourceApplicationIDs, obj.SourceApplicationIDs)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetSourceClientOus", func(t *testing.T) {
-		obj := &SearchOrdersSourceFilter{}
-		var fernTestValueSourceClientOus []string
-		obj.SetSourceClientOus(fernTestValueSourceClientOus)
-		assert.Equal(t, fernTestValueSourceClientOus, obj.SourceClientOus)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
 }
 
 func TestGettersSearchOrdersSourceFilter(t *testing.T) {
@@ -3333,72 +3317,6 @@ func TestGettersSearchOrdersSourceFilter(t *testing.T) {
 		_ = obj.GetSourceNames() // Should return zero value
 	})
 
-	t.Run("GetSourceApplicationIDs", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		var expected []string
-		obj.SourceApplicationIDs = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetSourceApplicationIDs(), "getter should return the property value")
-	})
-
-	t.Run("GetSourceApplicationIDs_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		obj.SourceApplicationIDs = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetSourceApplicationIDs(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetSourceApplicationIDs_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *SearchOrdersSourceFilter
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetSourceApplicationIDs() // Should return zero value
-	})
-
-	t.Run("GetSourceClientOus", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		var expected []string
-		obj.SourceClientOus = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetSourceClientOus(), "getter should return the property value")
-	})
-
-	t.Run("GetSourceClientOus_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		obj.SourceClientOus = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetSourceClientOus(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetSourceClientOus_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *SearchOrdersSourceFilter
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetSourceClientOus() // Should return zero value
-	})
-
 }
 
 func TestSettersMarkExplicitSearchOrdersSourceFilter(t *testing.T) {
@@ -3410,68 +3328,6 @@ func TestSettersMarkExplicitSearchOrdersSourceFilter(t *testing.T) {
 
 		// Act
 		obj.SetSourceNames(fernTestValueSourceNames)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetSourceApplicationIDs_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		var fernTestValueSourceApplicationIDs []string
-
-		// Act
-		obj.SetSourceApplicationIDs(fernTestValueSourceApplicationIDs)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetSourceClientOus_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &SearchOrdersSourceFilter{}
-		var fernTestValueSourceClientOus []string
-
-		// Act
-		obj.SetSourceClientOus(fernTestValueSourceClientOus)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

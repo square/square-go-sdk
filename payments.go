@@ -147,26 +147,27 @@ var (
 	createPaymentRequestFieldAmountMoney                    = big.NewInt(1 << 2)
 	createPaymentRequestFieldTipMoney                       = big.NewInt(1 << 3)
 	createPaymentRequestFieldAppFeeMoney                    = big.NewInt(1 << 4)
-	createPaymentRequestFieldDelayDuration                  = big.NewInt(1 << 5)
-	createPaymentRequestFieldDelayAction                    = big.NewInt(1 << 6)
-	createPaymentRequestFieldAutocomplete                   = big.NewInt(1 << 7)
-	createPaymentRequestFieldOrderID                        = big.NewInt(1 << 8)
-	createPaymentRequestFieldCustomerID                     = big.NewInt(1 << 9)
-	createPaymentRequestFieldLocationID                     = big.NewInt(1 << 10)
-	createPaymentRequestFieldTeamMemberID                   = big.NewInt(1 << 11)
-	createPaymentRequestFieldReferenceID                    = big.NewInt(1 << 12)
-	createPaymentRequestFieldVerificationToken              = big.NewInt(1 << 13)
-	createPaymentRequestFieldAcceptPartialAuthorization     = big.NewInt(1 << 14)
-	createPaymentRequestFieldBuyerEmailAddress              = big.NewInt(1 << 15)
-	createPaymentRequestFieldBuyerPhoneNumber               = big.NewInt(1 << 16)
-	createPaymentRequestFieldBillingAddress                 = big.NewInt(1 << 17)
-	createPaymentRequestFieldShippingAddress                = big.NewInt(1 << 18)
-	createPaymentRequestFieldNote                           = big.NewInt(1 << 19)
-	createPaymentRequestFieldStatementDescriptionIdentifier = big.NewInt(1 << 20)
-	createPaymentRequestFieldCashDetails                    = big.NewInt(1 << 21)
-	createPaymentRequestFieldExternalDetails                = big.NewInt(1 << 22)
-	createPaymentRequestFieldCustomerDetails                = big.NewInt(1 << 23)
-	createPaymentRequestFieldOfflinePaymentDetails          = big.NewInt(1 << 24)
+	createPaymentRequestFieldAppFeeAllocations              = big.NewInt(1 << 5)
+	createPaymentRequestFieldDelayDuration                  = big.NewInt(1 << 6)
+	createPaymentRequestFieldDelayAction                    = big.NewInt(1 << 7)
+	createPaymentRequestFieldAutocomplete                   = big.NewInt(1 << 8)
+	createPaymentRequestFieldOrderID                        = big.NewInt(1 << 9)
+	createPaymentRequestFieldCustomerID                     = big.NewInt(1 << 10)
+	createPaymentRequestFieldLocationID                     = big.NewInt(1 << 11)
+	createPaymentRequestFieldTeamMemberID                   = big.NewInt(1 << 12)
+	createPaymentRequestFieldReferenceID                    = big.NewInt(1 << 13)
+	createPaymentRequestFieldVerificationToken              = big.NewInt(1 << 14)
+	createPaymentRequestFieldAcceptPartialAuthorization     = big.NewInt(1 << 15)
+	createPaymentRequestFieldBuyerEmailAddress              = big.NewInt(1 << 16)
+	createPaymentRequestFieldBuyerPhoneNumber               = big.NewInt(1 << 17)
+	createPaymentRequestFieldBillingAddress                 = big.NewInt(1 << 18)
+	createPaymentRequestFieldShippingAddress                = big.NewInt(1 << 19)
+	createPaymentRequestFieldNote                           = big.NewInt(1 << 20)
+	createPaymentRequestFieldStatementDescriptionIdentifier = big.NewInt(1 << 21)
+	createPaymentRequestFieldCashDetails                    = big.NewInt(1 << 22)
+	createPaymentRequestFieldExternalDetails                = big.NewInt(1 << 23)
+	createPaymentRequestFieldCustomerDetails                = big.NewInt(1 << 24)
+	createPaymentRequestFieldOfflinePaymentDetails          = big.NewInt(1 << 25)
 )
 
 type CreatePaymentRequest struct {
@@ -225,6 +226,11 @@ type CreatePaymentRequest struct {
 	// To set this field, `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required.
 	// For more information, see [Permissions](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees#permissions).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"-"`
+	// Details pertaining to recipients of the application fee. The sum of the amounts in the
+	// app_fee_allocations must equal the app_fee_money amount, if present. If populated, an
+	// allocation must be present for every party that expects to receive a portion of the application
+	// fee, including the application developer.
+	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"-"`
 	// The duration of time after the payment's creation when Square automatically
 	// either completes or cancels the payment depending on the `delay_action` field value.
 	// For more information, see
@@ -364,6 +370,13 @@ func (c *CreatePaymentRequest) SetTipMoney(tipMoney *Money) {
 func (c *CreatePaymentRequest) SetAppFeeMoney(appFeeMoney *Money) {
 	c.AppFeeMoney = appFeeMoney
 	c.require(createPaymentRequestFieldAppFeeMoney)
+}
+
+// SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreatePaymentRequest) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+	c.AppFeeAllocations = appFeeAllocations
+	c.require(createPaymentRequestFieldAppFeeAllocations)
 }
 
 // SetDelayDuration sets the DelayDuration field and marks it as non-optional;
@@ -1654,22 +1667,24 @@ func (c *CancelPaymentResponse) String() string {
 
 // Reflects the current status of a card payment. Contains only non-confidential information.
 var (
-	cardPaymentDetailsFieldStatus                     = big.NewInt(1 << 0)
-	cardPaymentDetailsFieldCard                       = big.NewInt(1 << 1)
-	cardPaymentDetailsFieldEntryMethod                = big.NewInt(1 << 2)
-	cardPaymentDetailsFieldCvvStatus                  = big.NewInt(1 << 3)
-	cardPaymentDetailsFieldAvsStatus                  = big.NewInt(1 << 4)
-	cardPaymentDetailsFieldAuthResultCode             = big.NewInt(1 << 5)
-	cardPaymentDetailsFieldApplicationIdentifier      = big.NewInt(1 << 6)
-	cardPaymentDetailsFieldApplicationName            = big.NewInt(1 << 7)
-	cardPaymentDetailsFieldApplicationCryptogram      = big.NewInt(1 << 8)
-	cardPaymentDetailsFieldVerificationMethod         = big.NewInt(1 << 9)
-	cardPaymentDetailsFieldVerificationResults        = big.NewInt(1 << 10)
-	cardPaymentDetailsFieldStatementDescription       = big.NewInt(1 << 11)
-	cardPaymentDetailsFieldDeviceDetails              = big.NewInt(1 << 12)
-	cardPaymentDetailsFieldCardPaymentTimeline        = big.NewInt(1 << 13)
-	cardPaymentDetailsFieldRefundRequiresCardPresence = big.NewInt(1 << 14)
-	cardPaymentDetailsFieldErrors                     = big.NewInt(1 << 15)
+	cardPaymentDetailsFieldStatus                      = big.NewInt(1 << 0)
+	cardPaymentDetailsFieldCard                        = big.NewInt(1 << 1)
+	cardPaymentDetailsFieldEntryMethod                 = big.NewInt(1 << 2)
+	cardPaymentDetailsFieldCvvStatus                   = big.NewInt(1 << 3)
+	cardPaymentDetailsFieldAvsStatus                   = big.NewInt(1 << 4)
+	cardPaymentDetailsFieldAuthResultCode              = big.NewInt(1 << 5)
+	cardPaymentDetailsFieldApplicationIdentifier       = big.NewInt(1 << 6)
+	cardPaymentDetailsFieldApplicationName             = big.NewInt(1 << 7)
+	cardPaymentDetailsFieldApplicationCryptogram       = big.NewInt(1 << 8)
+	cardPaymentDetailsFieldVerificationMethod          = big.NewInt(1 << 9)
+	cardPaymentDetailsFieldVerificationResults         = big.NewInt(1 << 10)
+	cardPaymentDetailsFieldStatementDescription        = big.NewInt(1 << 11)
+	cardPaymentDetailsFieldDeviceDetails               = big.NewInt(1 << 12)
+	cardPaymentDetailsFieldCardPaymentTimeline         = big.NewInt(1 << 13)
+	cardPaymentDetailsFieldRefundRequiresCardPresence  = big.NewInt(1 << 14)
+	cardPaymentDetailsFieldErrors                      = big.NewInt(1 << 15)
+	cardPaymentDetailsFieldAppliedCardSurchargeDetails = big.NewInt(1 << 16)
+	cardPaymentDetailsFieldWalletType                  = big.NewInt(1 << 17)
 )
 
 type CardPaymentDetails struct {
@@ -1718,6 +1733,16 @@ type CardPaymentDetails struct {
 	RefundRequiresCardPresence *bool `json:"refund_requires_card_presence,omitempty" url:"refund_requires_card_presence,omitempty"`
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// Additional information about a card_surcharge on the payment.
+	AppliedCardSurchargeDetails *CardSurchargeDetails `json:"applied_card_surcharge_details,omitempty" url:"applied_card_surcharge_details,omitempty"`
+	// The type of digital wallet used for this card payment, if applicable.
+	// Currently only populated for in-person Apple Pay payments. Detection has no false
+	// positives but may have false negatives (some Apple Pay payments may not be detected).
+	//
+	// For payments with `source_type` of `WALLET`, see `DigitalWalletDetails` instead.
+	//
+	// Values: `APPLE_PAY`
+	WalletType *string `json:"wallet_type,omitempty" url:"wallet_type,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1836,6 +1861,20 @@ func (c *CardPaymentDetails) GetErrors() []*Error {
 		return nil
 	}
 	return c.Errors
+}
+
+func (c *CardPaymentDetails) GetAppliedCardSurchargeDetails() *CardSurchargeDetails {
+	if c == nil {
+		return nil
+	}
+	return c.AppliedCardSurchargeDetails
+}
+
+func (c *CardPaymentDetails) GetWalletType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.WalletType
 }
 
 func (c *CardPaymentDetails) GetExtraProperties() map[string]interface{} {
@@ -1962,6 +2001,20 @@ func (c *CardPaymentDetails) SetRefundRequiresCardPresence(refundRequiresCardPre
 func (c *CardPaymentDetails) SetErrors(errors []*Error) {
 	c.Errors = errors
 	c.require(cardPaymentDetailsFieldErrors)
+}
+
+// SetAppliedCardSurchargeDetails sets the AppliedCardSurchargeDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetAppliedCardSurchargeDetails(appliedCardSurchargeDetails *CardSurchargeDetails) {
+	c.AppliedCardSurchargeDetails = appliedCardSurchargeDetails
+	c.require(cardPaymentDetailsFieldAppliedCardSurchargeDetails)
+}
+
+// SetWalletType sets the WalletType field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardPaymentDetails) SetWalletType(walletType *string) {
+	c.WalletType = walletType
+	c.require(cardPaymentDetailsFieldWalletType)
 }
 
 func (c *CardPaymentDetails) UnmarshalJSON(data []byte) error {
@@ -2112,6 +2165,103 @@ func (c *CardPaymentTimeline) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CardPaymentTimeline) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Details related to an attempt to apply a card surcharge to this payment.  When surcharge
+// eligibility is not known in advance, such as when the card type (debit or credit) is required
+// to make the eligibility determination, proposed_card_surcharge_money and
+// proposed_additional_amount_money will match the values in the request, while card_surcharge_money
+// and additional_amount_money are present only when the payment has a surcharge applied.
+var (
+	cardSurchargeDetailsFieldCardSurchargeMoney = big.NewInt(1 << 0)
+)
+
+type CardSurchargeDetails struct {
+	// A specific surcharge levied by the merchant, if a card payment is used, instead of cash or
+	// some other payment type. Should only include the base surcharge amount. Any additional fees related
+	// to the surcharge (e.g. taxes on the surcharge) should only be included in the additional_amount_money.
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
+	// The currency code must match the currency associated with the business that is accepting the
+	// payment.
+	CardSurchargeMoney *Money `json:"card_surcharge_money,omitempty" url:"card_surcharge_money,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CardSurchargeDetails) GetCardSurchargeMoney() *Money {
+	if c == nil {
+		return nil
+	}
+	return c.CardSurchargeMoney
+}
+
+func (c *CardSurchargeDetails) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CardSurchargeDetails) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCardSurchargeMoney sets the CardSurchargeMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CardSurchargeDetails) SetCardSurchargeMoney(cardSurchargeMoney *Money) {
+	c.CardSurchargeMoney = cardSurchargeMoney
+	c.require(cardSurchargeDetailsFieldCardSurchargeMoney)
+}
+
+func (c *CardSurchargeDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler CardSurchargeDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CardSurchargeDetails(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CardSurchargeDetails) MarshalJSON() ([]byte, error) {
+	type embed CardSurchargeDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CardSurchargeDetails) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -2875,10 +3025,11 @@ func (d *DeviceDetails) String() string {
 
 // Additional details about `WALLET` type payments. Contains only non-confidential information.
 var (
-	digitalWalletDetailsFieldStatus         = big.NewInt(1 << 0)
-	digitalWalletDetailsFieldBrand          = big.NewInt(1 << 1)
-	digitalWalletDetailsFieldCashAppDetails = big.NewInt(1 << 2)
-	digitalWalletDetailsFieldErrors         = big.NewInt(1 << 3)
+	digitalWalletDetailsFieldStatus           = big.NewInt(1 << 0)
+	digitalWalletDetailsFieldBrand            = big.NewInt(1 << 1)
+	digitalWalletDetailsFieldCashAppDetails   = big.NewInt(1 << 2)
+	digitalWalletDetailsFieldLightningDetails = big.NewInt(1 << 3)
+	digitalWalletDetailsFieldErrors           = big.NewInt(1 << 4)
 )
 
 type DigitalWalletDetails struct {
@@ -2890,6 +3041,8 @@ type DigitalWalletDetails struct {
 	Brand *string `json:"brand,omitempty" url:"brand,omitempty"`
 	// Brand-specific details for payments with the `brand` of `CASH_APP`.
 	CashAppDetails *CashAppDetails `json:"cash_app_details,omitempty" url:"cash_app_details,omitempty"`
+	// Brand-specific details for payments with the `brand` of `LIGHTNING`.
+	LightningDetails *LightningDetails `json:"lightning_details,omitempty" url:"lightning_details,omitempty"`
 	// Information about errors encountered during the payment.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
 
@@ -2919,6 +3072,13 @@ func (d *DigitalWalletDetails) GetCashAppDetails() *CashAppDetails {
 		return nil
 	}
 	return d.CashAppDetails
+}
+
+func (d *DigitalWalletDetails) GetLightningDetails() *LightningDetails {
+	if d == nil {
+		return nil
+	}
+	return d.LightningDetails
 }
 
 func (d *DigitalWalletDetails) GetErrors() []*Error {
@@ -2961,6 +3121,13 @@ func (d *DigitalWalletDetails) SetBrand(brand *string) {
 func (d *DigitalWalletDetails) SetCashAppDetails(cashAppDetails *CashAppDetails) {
 	d.CashAppDetails = cashAppDetails
 	d.require(digitalWalletDetailsFieldCashAppDetails)
+}
+
+// SetLightningDetails sets the LightningDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DigitalWalletDetails) SetLightningDetails(lightningDetails *LightningDetails) {
+	d.LightningDetails = lightningDetails
+	d.require(digitalWalletDetailsFieldLightningDetails)
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3010,6 +3177,92 @@ func (d *DigitalWalletDetails) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
+}
+
+// Details specific to electronic money payments.
+var (
+	electronicMoneyDetailsFieldFelicaDetails = big.NewInt(1 << 0)
+)
+
+type ElectronicMoneyDetails struct {
+	// Details specific to FeliCa payments.
+	FelicaDetails *FelicaDetails `json:"felica_details,omitempty" url:"felica_details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (e *ElectronicMoneyDetails) GetFelicaDetails() *FelicaDetails {
+	if e == nil {
+		return nil
+	}
+	return e.FelicaDetails
+}
+
+func (e *ElectronicMoneyDetails) GetExtraProperties() map[string]interface{} {
+	if e == nil {
+		return nil
+	}
+	return e.extraProperties
+}
+
+func (e *ElectronicMoneyDetails) require(field *big.Int) {
+	if e.explicitFields == nil {
+		e.explicitFields = big.NewInt(0)
+	}
+	e.explicitFields.Or(e.explicitFields, field)
+}
+
+// SetFelicaDetails sets the FelicaDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (e *ElectronicMoneyDetails) SetFelicaDetails(felicaDetails *FelicaDetails) {
+	e.FelicaDetails = felicaDetails
+	e.require(electronicMoneyDetailsFieldFelicaDetails)
+}
+
+func (e *ElectronicMoneyDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler ElectronicMoneyDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ElectronicMoneyDetails(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+	e.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ElectronicMoneyDetails) MarshalJSON() ([]byte, error) {
+	type embed ElectronicMoneyDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*e),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, e.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (e *ElectronicMoneyDetails) String() string {
+	if e == nil {
+		return "<nil>"
+	}
+	if len(e.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(e.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
 }
 
 // Stores details about an external payment. Contains only non-confidential information.
@@ -3165,6 +3418,156 @@ func (e *ExternalPaymentDetails) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// Details for Felica payments.
+var (
+	felicaDetailsFieldTerminalID             = big.NewInt(1 << 0)
+	felicaDetailsFieldFelicaMaskedCardNumber = big.NewInt(1 << 1)
+	felicaDetailsFieldFelicaBrand            = big.NewInt(1 << 2)
+)
+
+type FelicaDetails struct {
+	// The terminal id for a Felica payment.
+	TerminalID *string `json:"terminal_id,omitempty" url:"terminal_id,omitempty"`
+	// The masked card number for a Felica payment.
+	FelicaMaskedCardNumber *string `json:"felica_masked_card_number,omitempty" url:"felica_masked_card_number,omitempty"`
+	// The Felica sub-brand of the payment.
+	// See [FelicaBrand](#type-felicabrand) for possible values
+	FelicaBrand *FelicaDetailsFelicaBrand `json:"felica_brand,omitempty" url:"felica_brand,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (f *FelicaDetails) GetTerminalID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.TerminalID
+}
+
+func (f *FelicaDetails) GetFelicaMaskedCardNumber() *string {
+	if f == nil {
+		return nil
+	}
+	return f.FelicaMaskedCardNumber
+}
+
+func (f *FelicaDetails) GetFelicaBrand() *FelicaDetailsFelicaBrand {
+	if f == nil {
+		return nil
+	}
+	return f.FelicaBrand
+}
+
+func (f *FelicaDetails) GetExtraProperties() map[string]interface{} {
+	if f == nil {
+		return nil
+	}
+	return f.extraProperties
+}
+
+func (f *FelicaDetails) require(field *big.Int) {
+	if f.explicitFields == nil {
+		f.explicitFields = big.NewInt(0)
+	}
+	f.explicitFields.Or(f.explicitFields, field)
+}
+
+// SetTerminalID sets the TerminalID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FelicaDetails) SetTerminalID(terminalID *string) {
+	f.TerminalID = terminalID
+	f.require(felicaDetailsFieldTerminalID)
+}
+
+// SetFelicaMaskedCardNumber sets the FelicaMaskedCardNumber field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FelicaDetails) SetFelicaMaskedCardNumber(felicaMaskedCardNumber *string) {
+	f.FelicaMaskedCardNumber = felicaMaskedCardNumber
+	f.require(felicaDetailsFieldFelicaMaskedCardNumber)
+}
+
+// SetFelicaBrand sets the FelicaBrand field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (f *FelicaDetails) SetFelicaBrand(felicaBrand *FelicaDetailsFelicaBrand) {
+	f.FelicaBrand = felicaBrand
+	f.require(felicaDetailsFieldFelicaBrand)
+}
+
+func (f *FelicaDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler FelicaDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FelicaDetails(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+	f.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FelicaDetails) MarshalJSON() ([]byte, error) {
+	type embed FelicaDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*f),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, f.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (f *FelicaDetails) String() string {
+	if f == nil {
+		return "<nil>"
+	}
+	if len(f.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(f.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A Felica card's "sub-brand"--the actual brand on the Felica card
+type FelicaDetailsFelicaBrand string
+
+const (
+	FelicaDetailsFelicaBrandUnknown              FelicaDetailsFelicaBrand = "UNKNOWN"
+	FelicaDetailsFelicaBrandFelicaID             FelicaDetailsFelicaBrand = "FELICA_ID"
+	FelicaDetailsFelicaBrandFelicaTransportation FelicaDetailsFelicaBrand = "FELICA_TRANSPORTATION"
+	FelicaDetailsFelicaBrandFelicaQp             FelicaDetailsFelicaBrand = "FELICA_QP"
+)
+
+func NewFelicaDetailsFelicaBrandFromString(s string) (FelicaDetailsFelicaBrand, error) {
+	switch s {
+	case "UNKNOWN":
+		return FelicaDetailsFelicaBrandUnknown, nil
+	case "FELICA_ID":
+		return FelicaDetailsFelicaBrandFelicaID, nil
+	case "FELICA_TRANSPORTATION":
+		return FelicaDetailsFelicaBrandFelicaTransportation, nil
+	case "FELICA_QP":
+		return FelicaDetailsFelicaBrandFelicaQp, nil
+	}
+	var t FelicaDetailsFelicaBrand
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (f FelicaDetailsFelicaBrand) Ptr() *FelicaDetailsFelicaBrand {
+	return &f
+}
+
 // Defines the response returned by [GetPayment](api-endpoint:Payments-GetPayment).
 var (
 	getPaymentResponseFieldErrors  = big.NewInt(1 << 0)
@@ -3266,6 +3669,92 @@ func (g *GetPaymentResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", g)
+}
+
+// Additional details about `WALLET` type payments with the `brand` of `LIGHTNING`.
+var (
+	lightningDetailsFieldPaymentURL = big.NewInt(1 << 0)
+)
+
+type LightningDetails struct {
+	// Payment URL for the lightning payment, a.k.a. the invoice.
+	PaymentURL *string `json:"payment_url,omitempty" url:"payment_url,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LightningDetails) GetPaymentURL() *string {
+	if l == nil {
+		return nil
+	}
+	return l.PaymentURL
+}
+
+func (l *LightningDetails) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LightningDetails) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetPaymentURL sets the PaymentURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LightningDetails) SetPaymentURL(paymentURL *string) {
+	l.PaymentURL = paymentURL
+	l.require(lightningDetailsFieldPaymentURL)
+}
+
+func (l *LightningDetails) UnmarshalJSON(data []byte) error {
+	type unmarshaler LightningDetails
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LightningDetails(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LightningDetails) MarshalJSON() ([]byte, error) {
+	type embed LightningDetails
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LightningDetails) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
 }
 
 type ListPaymentsRequestSortField string
@@ -3511,43 +4000,46 @@ var (
 	paymentFieldTipMoney                       = big.NewInt(1 << 4)
 	paymentFieldTotalMoney                     = big.NewInt(1 << 5)
 	paymentFieldAppFeeMoney                    = big.NewInt(1 << 6)
-	paymentFieldApprovedMoney                  = big.NewInt(1 << 7)
-	paymentFieldProcessingFee                  = big.NewInt(1 << 8)
-	paymentFieldRefundedMoney                  = big.NewInt(1 << 9)
-	paymentFieldStatus                         = big.NewInt(1 << 10)
-	paymentFieldDelayDuration                  = big.NewInt(1 << 11)
-	paymentFieldDelayAction                    = big.NewInt(1 << 12)
-	paymentFieldDelayedUntil                   = big.NewInt(1 << 13)
-	paymentFieldSourceType                     = big.NewInt(1 << 14)
-	paymentFieldCardDetails                    = big.NewInt(1 << 15)
-	paymentFieldCashDetails                    = big.NewInt(1 << 16)
-	paymentFieldBankAccountDetails             = big.NewInt(1 << 17)
-	paymentFieldExternalDetails                = big.NewInt(1 << 18)
-	paymentFieldWalletDetails                  = big.NewInt(1 << 19)
-	paymentFieldBuyNowPayLaterDetails          = big.NewInt(1 << 20)
-	paymentFieldSquareAccountDetails           = big.NewInt(1 << 21)
-	paymentFieldLocationID                     = big.NewInt(1 << 22)
-	paymentFieldOrderID                        = big.NewInt(1 << 23)
-	paymentFieldReferenceID                    = big.NewInt(1 << 24)
-	paymentFieldCustomerID                     = big.NewInt(1 << 25)
-	paymentFieldEmployeeID                     = big.NewInt(1 << 26)
-	paymentFieldTeamMemberID                   = big.NewInt(1 << 27)
-	paymentFieldRefundIDs                      = big.NewInt(1 << 28)
-	paymentFieldRiskEvaluation                 = big.NewInt(1 << 29)
-	paymentFieldTerminalCheckoutID             = big.NewInt(1 << 30)
-	paymentFieldBuyerEmailAddress              = big.NewInt(1 << 31)
-	paymentFieldBillingAddress                 = big.NewInt(1 << 32)
-	paymentFieldShippingAddress                = big.NewInt(1 << 33)
-	paymentFieldNote                           = big.NewInt(1 << 34)
-	paymentFieldStatementDescriptionIdentifier = big.NewInt(1 << 35)
-	paymentFieldCapabilities                   = big.NewInt(1 << 36)
-	paymentFieldReceiptNumber                  = big.NewInt(1 << 37)
-	paymentFieldReceiptURL                     = big.NewInt(1 << 38)
-	paymentFieldDeviceDetails                  = big.NewInt(1 << 39)
-	paymentFieldApplicationDetails             = big.NewInt(1 << 40)
-	paymentFieldIsOfflinePayment               = big.NewInt(1 << 41)
-	paymentFieldOfflinePaymentDetails          = big.NewInt(1 << 42)
-	paymentFieldVersionToken                   = big.NewInt(1 << 43)
+	paymentFieldAppFeeAllocations              = big.NewInt(1 << 7)
+	paymentFieldApprovedMoney                  = big.NewInt(1 << 8)
+	paymentFieldProcessingFee                  = big.NewInt(1 << 9)
+	paymentFieldRefundedMoney                  = big.NewInt(1 << 10)
+	paymentFieldStatus                         = big.NewInt(1 << 11)
+	paymentFieldDelayDuration                  = big.NewInt(1 << 12)
+	paymentFieldDelayAction                    = big.NewInt(1 << 13)
+	paymentFieldDelayedUntil                   = big.NewInt(1 << 14)
+	paymentFieldSourceType                     = big.NewInt(1 << 15)
+	paymentFieldCardDetails                    = big.NewInt(1 << 16)
+	paymentFieldCashDetails                    = big.NewInt(1 << 17)
+	paymentFieldBankAccountDetails             = big.NewInt(1 << 18)
+	paymentFieldElectronicMoneyDetails         = big.NewInt(1 << 19)
+	paymentFieldExternalDetails                = big.NewInt(1 << 20)
+	paymentFieldWalletDetails                  = big.NewInt(1 << 21)
+	paymentFieldBuyNowPayLaterDetails          = big.NewInt(1 << 22)
+	paymentFieldSquareAccountDetails           = big.NewInt(1 << 23)
+	paymentFieldLocationID                     = big.NewInt(1 << 24)
+	paymentFieldOrderID                        = big.NewInt(1 << 25)
+	paymentFieldReferenceID                    = big.NewInt(1 << 26)
+	paymentFieldCustomerID                     = big.NewInt(1 << 27)
+	paymentFieldEmployeeID                     = big.NewInt(1 << 28)
+	paymentFieldTeamMemberID                   = big.NewInt(1 << 29)
+	paymentFieldRefundIDs                      = big.NewInt(1 << 30)
+	paymentFieldRiskEvaluation                 = big.NewInt(1 << 31)
+	paymentFieldTerminalCheckoutID             = big.NewInt(1 << 32)
+	paymentFieldBuyerEmailAddress              = big.NewInt(1 << 33)
+	paymentFieldBillingAddress                 = big.NewInt(1 << 34)
+	paymentFieldShippingAddress                = big.NewInt(1 << 35)
+	paymentFieldNote                           = big.NewInt(1 << 36)
+	paymentFieldStatementDescriptionIdentifier = big.NewInt(1 << 37)
+	paymentFieldCapabilities                   = big.NewInt(1 << 38)
+	paymentFieldReceiptNumber                  = big.NewInt(1 << 39)
+	paymentFieldReceiptURL                     = big.NewInt(1 << 40)
+	paymentFieldDeviceDetails                  = big.NewInt(1 << 41)
+	paymentFieldApplicationDetails             = big.NewInt(1 << 42)
+	paymentFieldBuyerCurrencyExchange          = big.NewInt(1 << 43)
+	paymentFieldIsOfflinePayment               = big.NewInt(1 << 44)
+	paymentFieldOfflinePaymentDetails          = big.NewInt(1 << 45)
+	paymentFieldVersionToken                   = big.NewInt(1 << 46)
 )
 
 type Payment struct {
@@ -3586,6 +4078,8 @@ type Payment struct {
 	// To set this field, `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required.
 	// For more information, see [Permissions](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees#permissions).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"app_fee_money,omitempty"`
+	// Details pertaining to recipients of the application fee.
+	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"app_fee_allocations,omitempty"`
 	// The amount of money approved for this payment. This value may change if Square chooses to
 	// obtain reauthorization as part of a call to [UpdatePayment](api-endpoint:Payments-UpdatePayment).
 	ApprovedMoney *Money `json:"approved_money,omitempty" url:"approved_money,omitempty"`
@@ -3636,6 +4130,8 @@ type Payment struct {
 	CashDetails *CashPaymentDetails `json:"cash_details,omitempty" url:"cash_details,omitempty"`
 	// Details about a bank account payment. These details are only populated if the source_type is `BANK_ACCOUNT`.
 	BankAccountDetails *BankAccountPaymentDetails `json:"bank_account_details,omitempty" url:"bank_account_details,omitempty"`
+	// Details specific to electronic money payments.
+	ElectronicMoneyDetails *ElectronicMoneyDetails `json:"electronic_money_details,omitempty" url:"electronic_money_details,omitempty"`
 	// Details about an external payment. The details are only populated
 	// if the `source_type` is `EXTERNAL`.
 	ExternalDetails *ExternalPaymentDetails `json:"external_details,omitempty" url:"external_details,omitempty"`
@@ -3715,7 +4211,8 @@ type Payment struct {
 	// Details about the device that took the payment.
 	DeviceDetails *DeviceDetails `json:"device_details,omitempty" url:"device_details,omitempty"`
 	// Details about the application that took the payment.
-	ApplicationDetails *ApplicationDetails `json:"application_details,omitempty" url:"application_details,omitempty"`
+	ApplicationDetails    *ApplicationDetails `json:"application_details,omitempty" url:"application_details,omitempty"`
+	BuyerCurrencyExchange interface{}         `json:"buyer_currency_exchange,omitempty" url:"buyer_currency_exchange,omitempty"`
 	// Whether or not this payment was taken offline.
 	IsOfflinePayment *bool `json:"is_offline_payment,omitempty" url:"is_offline_payment,omitempty"`
 	// Additional information about the payment if it was taken offline.
@@ -3778,6 +4275,13 @@ func (p *Payment) GetAppFeeMoney() *Money {
 		return nil
 	}
 	return p.AppFeeMoney
+}
+
+func (p *Payment) GetAppFeeAllocations() []interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.AppFeeAllocations
 }
 
 func (p *Payment) GetApprovedMoney() *Money {
@@ -3855,6 +4359,13 @@ func (p *Payment) GetBankAccountDetails() *BankAccountPaymentDetails {
 		return nil
 	}
 	return p.BankAccountDetails
+}
+
+func (p *Payment) GetElectronicMoneyDetails() *ElectronicMoneyDetails {
+	if p == nil {
+		return nil
+	}
+	return p.ElectronicMoneyDetails
 }
 
 func (p *Payment) GetExternalDetails() *ExternalPaymentDetails {
@@ -4018,6 +4529,13 @@ func (p *Payment) GetApplicationDetails() *ApplicationDetails {
 	return p.ApplicationDetails
 }
 
+func (p *Payment) GetBuyerCurrencyExchange() interface{} {
+	if p == nil {
+		return nil
+	}
+	return p.BuyerCurrencyExchange
+}
+
 func (p *Payment) GetIsOfflinePayment() *bool {
 	if p == nil {
 		return nil
@@ -4102,6 +4620,13 @@ func (p *Payment) SetAppFeeMoney(appFeeMoney *Money) {
 	p.require(paymentFieldAppFeeMoney)
 }
 
+// SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+	p.AppFeeAllocations = appFeeAllocations
+	p.require(paymentFieldAppFeeAllocations)
+}
+
 // SetApprovedMoney sets the ApprovedMoney field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (p *Payment) SetApprovedMoney(approvedMoney *Money) {
@@ -4177,6 +4702,13 @@ func (p *Payment) SetCashDetails(cashDetails *CashPaymentDetails) {
 func (p *Payment) SetBankAccountDetails(bankAccountDetails *BankAccountPaymentDetails) {
 	p.BankAccountDetails = bankAccountDetails
 	p.require(paymentFieldBankAccountDetails)
+}
+
+// SetElectronicMoneyDetails sets the ElectronicMoneyDetails field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetElectronicMoneyDetails(electronicMoneyDetails *ElectronicMoneyDetails) {
+	p.ElectronicMoneyDetails = electronicMoneyDetails
+	p.require(paymentFieldElectronicMoneyDetails)
 }
 
 // SetExternalDetails sets the ExternalDetails field and marks it as non-optional;
@@ -4338,6 +4870,13 @@ func (p *Payment) SetDeviceDetails(deviceDetails *DeviceDetails) {
 func (p *Payment) SetApplicationDetails(applicationDetails *ApplicationDetails) {
 	p.ApplicationDetails = applicationDetails
 	p.require(paymentFieldApplicationDetails)
+}
+
+// SetBuyerCurrencyExchange sets the BuyerCurrencyExchange field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (p *Payment) SetBuyerCurrencyExchange(buyerCurrencyExchange interface{}) {
+	p.BuyerCurrencyExchange = buyerCurrencyExchange
+	p.require(paymentFieldBuyerCurrencyExchange)
 }
 
 // SetIsOfflinePayment sets the IsOfflinePayment field and marks it as non-optional;
