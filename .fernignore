@@ -12,7 +12,8 @@ verify_signature.go
 webhooks/client/verify_signature.go
 webhooks/client/verify_signature_test.go
 
-# Custom Reporting API polling helper.
+# Custom Reporting API polling helper. (The live reporting integration test
+# lives under integration_tests/, already preserved above.)
 reporting/load_and_wait.go
 reporting/load_and_wait_test.go
 
