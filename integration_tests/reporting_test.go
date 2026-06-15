@@ -22,23 +22,24 @@ import (
 // The Reporting API is a beta, bespoke offering served ONLY from production
 // (connect.squareup.com/reporting) — it is not routed on sandbox (returns 404
 // there). Validating it live therefore needs a production, reporting-provisioned
-// token. CI's TEST_SQUARE_TOKEN is sandbox-only (it 401s against prod), so this
-// suite is gated behind TEST_SQUARE_REPORTING and skips by default — keeping CI
-// green. The endpoints are read-only (schema discovery + queries). The polling
-// *logic* is covered without a live account in reporting/load_and_wait_test.go.
+// token. The repo's other integration tests use TEST_SQUARE_TOKEN against
+// sandbox (which 401s against prod), so this suite is gated behind — and
+// authenticates with — TEST_SQUARE_REPORTING, the production,
+// reporting-provisioned access token. It skips by default when that is unset,
+// keeping CI green. The endpoints are read-only (schema discovery + queries).
+// The polling *logic* is covered without a live account in
+// reporting/load_and_wait_test.go.
 //
 // Run it against a real prod account:
 //
-//	TEST_SQUARE_REPORTING=1 TEST_SQUARE_TOKEN=<prod-access-token> \
+//	TEST_SQUARE_REPORTING=<prod-reporting-token> \
 //	  go test ./integration_tests/... -tags=integration -run TestReportingAPI -v
 //	# override the host with TEST_SQUARE_BASE_URL=<url> if reporting moves.
 func TestReportingAPI(t *testing.T) {
-	if os.Getenv("TEST_SQUARE_REPORTING") == "" {
-		t.Skip("set TEST_SQUARE_REPORTING=1 (with a production TEST_SQUARE_TOKEN) to run the live reporting suite")
+	token := os.Getenv("TEST_SQUARE_REPORTING")
+	if token == "" {
+		t.Skip("set TEST_SQUARE_REPORTING=<prod-reporting-token> to run the live reporting suite")
 	}
-
-	token := os.Getenv("TEST_SQUARE_TOKEN")
-	require.NotEmpty(t, token, "TEST_SQUARE_TOKEN must be set to run the reporting integration suite")
 
 	// Reporting only exists on production; allow overriding the host via TEST_SQUARE_BASE_URL.
 	baseURL := os.Getenv("TEST_SQUARE_BASE_URL")
