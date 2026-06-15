@@ -226,6 +226,43 @@ if err != nil {
 }
 ```
 
+## Reporting API
+
+The [Reporting API](https://developer.squareup.com/docs/reporting-api/overview) is asynchronous: a
+query sent to `client.Reporting.Load` that is still being computed comes back as an HTTP 200 whose
+body is `{"error": "Continue wait"}` rather than the results. Callers are expected to re-send the
+identical request, with backoff, until real results arrive.
+
+The SDK provides `client.Reporting.LoadAndWait`, which owns that polling loop for you (exponential
+backoff, defaults: 20 attempts, 2s → 20s, factor 2) and returns the resolved `*square.LoadResponse`.
+Discover the queryable schema first with `client.Reporting.GetMetadata`.
+
+```go
+// Discover the cubes, measures, and dimensions you can query.
+metadata, err := client.Reporting.GetMetadata(context.TODO())
+if err != nil {
+    return err
+}
+
+// Run a query and transparently poll until it resolves.
+response, err := client.Reporting.LoadAndWait(
+    context.TODO(),
+    &square.LoadRequest{
+        Query: &square.Query{
+            Measures: []string{"Orders.count"},
+        },
+    },
+    nil, // *reporting.LoadAndWaitOptions — pass nil for the defaults.
+)
+if err != nil {
+    return err
+}
+```
+
+Tune the polling loop by passing a `*reporting.LoadAndWaitOptions` (any unset field falls back to its
+default), and cancel it by cancelling the `context.Context`. The plain `client.Reporting.Load` call
+remains available if you want to own the retry loop yourself.
+
 ## Advanced
 
 ### Request Options
