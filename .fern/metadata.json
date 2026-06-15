@@ -6,5 +6,5 @@
     "packageName": "square",
     "enableWireTests": true
   },
-  "sdkVersion": "v3.1.0"
+  "sdkVersion": "v3.2.0"
 }

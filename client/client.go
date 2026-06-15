@@ -31,6 +31,7 @@ import (
 	payments "github.com/square/square-go-sdk/v3/payments"
 	payouts "github.com/square/square-go-sdk/v3/payouts"
 	refunds "github.com/square/square-go-sdk/v3/refunds"
+	reporting "github.com/square/square-go-sdk/v3/reporting"
 	sites "github.com/square/square-go-sdk/v3/sites"
 	snippets "github.com/square/square-go-sdk/v3/snippets"
 	subscriptions "github.com/square/square-go-sdk/v3/subscriptions"
@@ -78,6 +79,7 @@ type Client struct {
 	Terminal       *terminalclient.Client
 	TransferOrders *transferorders.Client
 	Vendors        *vendors.Client
+	Reporting      *reporting.Client
 	CashDrawers    *cashdrawersclient.Client
 	Webhooks       *webhooksclient.Client
 
@@ -128,6 +130,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Terminal:       terminalclient.NewClient(options),
 		TransferOrders: transferorders.NewClient(options),
 		Vendors:        vendors.NewClient(options),
+		Reporting:      reporting.NewClient(options),
 		CashDrawers:    cashdrawersclient.NewClient(options),
 		Webhooks:       webhooksclient.NewClient(options),
 		options:        options,

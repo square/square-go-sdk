@@ -90913,6 +90913,91 @@ func (r *RemoveGroupFromCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// Error envelope returned by the Reporting API. Note: a 200 response whose body is `{ "error": "Continue wait" }` is not a failure — it signals that a long-running query is still processing and the request should be retried.
+var (
+	reportingErrorFieldError = big.NewInt(1 << 0)
+)
+
+type ReportingError struct {
+	Error string `json:"error" url:"error"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *ReportingError) GetError() string {
+	if r == nil {
+		return ""
+	}
+	return r.Error
+}
+
+func (r *ReportingError) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *ReportingError) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetError sets the Error field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *ReportingError) SetError(error_ string) {
+	r.Error = error_
+	r.require(reportingErrorFieldError)
+}
+
+func (r *ReportingError) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReportingError
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReportingError(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReportingError) MarshalJSON() ([]byte, error) {
+	type embed ReportingError
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *ReportingError) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // Represents a [RetrieveBookingCustomAttributeDefinition](api-endpoint:BookingCustomAttributes-RetrieveBookingCustomAttributeDefinition) response.
 // Either `custom_attribute_definition` or `errors` is present in the response.
 var (
