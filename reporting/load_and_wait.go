@@ -87,8 +87,8 @@ func (c *Client) LoadAndWait(
 // isContinueWait reports whether response is the Reporting API's "still
 // processing" sentinel rather than a real result. A `{"error": "Continue wait"}`
 // body deserializes into a *square.LoadResponse whose `error` key lands in
-// ExtraProperties (it is not a declared field) while Results stays empty; that
-// is the signal to retry.
+// ExtraProperties (it is not a declared field) while the flat `data` field
+// stays empty; that is the signal to retry.
 func isContinueWait(response *square.LoadResponse) bool {
 	if response == nil {
 		return false

@@ -24,7 +24,9 @@ import (
 
 const (
 	continueWaitBody = `{"error":"Continue wait"}`
-	resolvedBody     = `{"results":[{}]}`
+	// A resolved query carries its rows in the flat top-level `data` field
+	// (LoadResultDataRow); there is no `results` wrapper.
+	resolvedBody = `{"data":[{"Orders.count":0}]}`
 )
 
 // scriptedServer serves the i-th body in bodies for each /reporting/v1/load call
@@ -76,7 +78,7 @@ func TestLoadAndWait_PollsPastContinueWait(t *testing.T) {
 	// The helper must never hand back the raw sentinel.
 	_, hasError := response.GetExtraProperties()["error"]
 	assert.False(t, hasError)
-	assert.NotEmpty(t, response.GetResults())
+	assert.NotNil(t, response.GetData())
 	assert.Equal(t, 3, calls())
 }
 
@@ -86,7 +88,7 @@ func TestLoadAndWait_ReturnsImmediatelyWhenResolved(t *testing.T) {
 
 	response, err := client.LoadAndWait(context.Background(), &square.LoadRequest{}, nil)
 	require.NoError(t, err)
-	assert.NotEmpty(t, response.GetResults())
+	assert.NotNil(t, response.GetData())
 	assert.Equal(t, 1, calls())
 }
 
@@ -116,19 +118,19 @@ func TestLoadAndWait_StopsOnContextCancellation(t *testing.T) {
 
 // TestIsContinueWait_SurvivesDeserialization is the crux of the design: the
 // generated LoadResponse keeps unrecognized keys in ExtraProperties, so the
-// `error` sentinel lands there (and Results stays empty) instead of being
-// dropped. If that ever changes, LoadAndWait would mistake "Continue wait" for a
-// real result and return it instead of polling.
+// `error` sentinel lands there (and the flat `data` field stays empty) instead
+// of being dropped. If that ever changes, LoadAndWait would mistake "Continue
+// wait" for a real result and return it instead of polling.
 func TestIsContinueWait_SurvivesDeserialization(t *testing.T) {
 	var pending square.LoadResponse
 	require.NoError(t, json.Unmarshal([]byte(continueWaitBody), &pending))
 	assert.True(t, isContinueWait(&pending))
-	assert.Empty(t, pending.GetResults())
+	assert.Nil(t, pending.GetData())
 
 	var resolved square.LoadResponse
 	require.NoError(t, json.Unmarshal([]byte(resolvedBody), &resolved))
 	assert.False(t, isContinueWait(&resolved))
-	assert.NotEmpty(t, resolved.GetResults())
+	assert.NotNil(t, resolved.GetData())
 
 	assert.False(t, isContinueWait(nil))
 }

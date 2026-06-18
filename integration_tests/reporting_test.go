@@ -84,7 +84,9 @@ func TestReportingAPI(t *testing.T) {
 			// with { "error": "Continue wait" } instead of results.
 			assert.Equal(t, "Continue wait", sentinel)
 		} else {
-			assert.NotNil(t, response.GetResults())
+			// A resolved query carries its rows in the flat top-level `data`
+			// field (e.g. [{"Orders.count": 0}]); there is no `results` wrapper.
+			assert.NotNil(t, response.GetData())
 		}
 	})
 
@@ -105,6 +107,7 @@ func TestReportingAPI(t *testing.T) {
 		// The polling helper must never hand back the raw "Continue wait" sentinel.
 		_, hasError := response.GetExtraProperties()["error"]
 		assert.False(t, hasError)
-		assert.NotNil(t, response.GetResults())
+		// The resolved payload lives in the flat top-level `data` field.
+		assert.NotNil(t, response.GetData())
 	})
 }
