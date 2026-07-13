@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	square "github.com/square/square-go-sdk/v3"
-	client "github.com/square/square-go-sdk/v3/client"
-	option "github.com/square/square-go-sdk/v3/option"
-	reporting "github.com/square/square-go-sdk/v3/reporting"
+	square "github.com/square/square-go-sdk/v4"
+	client "github.com/square/square-go-sdk/v4/client"
+	option "github.com/square/square-go-sdk/v4/option"
+	reporting "github.com/square/square-go-sdk/v4/reporting"
 )
 
 // Reporting API live integration tests.

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	square "github.com/square/square-go-sdk/v3"
+	square "github.com/square/square-go-sdk/v4"
 )
 
 // Teams API integration tests.
