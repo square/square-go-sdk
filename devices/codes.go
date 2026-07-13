@@ -4,8 +4,8 @@ package devices
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -21,7 +21,7 @@ type CreateDeviceCodeRequest struct {
 	// See [Idempotency keys](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) for more information.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The device code to create.
-	DeviceCode *v3.DeviceCode `json:"device_code" url:"-"`
+	DeviceCode *v4.DeviceCode `json:"device_code" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -43,7 +43,7 @@ func (c *CreateDeviceCodeRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetDeviceCode sets the DeviceCode field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDeviceCodeRequest) SetDeviceCode(deviceCode *v3.DeviceCode) {
+func (c *CreateDeviceCodeRequest) SetDeviceCode(deviceCode *v4.DeviceCode) {
 	c.DeviceCode = deviceCode
 	c.require(createDeviceCodeRequestFieldDeviceCode)
 }
@@ -113,10 +113,10 @@ type ListCodesRequest struct {
 	LocationID *string `json:"-" url:"location_id,omitempty"`
 	// If specified, only returns DeviceCodes targeting the specified product type.
 	// Returns DeviceCodes of all product types if empty.
-	ProductType *v3.ProductType `json:"-" url:"product_type,omitempty"`
+	ProductType *v4.ProductType `json:"-" url:"product_type,omitempty"`
 	// If specified, returns DeviceCodes with the specified statuses.
 	// Returns DeviceCodes of status `PAIRED` and `UNPAIRED` if empty.
-	Status *v3.DeviceCodeStatus `json:"-" url:"status,omitempty"`
+	Status *v4.DeviceCodeStatus `json:"-" url:"status,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -145,14 +145,14 @@ func (l *ListCodesRequest) SetLocationID(locationID *string) {
 
 // SetProductType sets the ProductType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCodesRequest) SetProductType(productType *v3.ProductType) {
+func (l *ListCodesRequest) SetProductType(productType *v4.ProductType) {
 	l.ProductType = productType
 	l.require(listCodesRequestFieldProductType)
 }
 
 // SetStatus sets the Status field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCodesRequest) SetStatus(status *v3.DeviceCodeStatus) {
+func (l *ListCodesRequest) SetStatus(status *v4.DeviceCodeStatus) {
 	l.Status = status
 	l.require(listCodesRequestFieldStatus)
 }

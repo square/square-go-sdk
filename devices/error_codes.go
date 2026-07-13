@@ -3,7 +3,7 @@
 package devices
 
 import (
-	internal "github.com/square/square-go-sdk/v3/internal"
+	internal "github.com/square/square-go-sdk/v4/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{}

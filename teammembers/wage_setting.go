@@ -4,8 +4,8 @@ package teammembers
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -48,7 +48,7 @@ type UpdateWageSettingRequest struct {
 	// Requires Square API version 2024-12-18 or later.
 	// - `job_title` - Use the exact, case-sensitive spelling of an existing title unless you want to create a new job.
 	// This value is ignored if `job_id` is also provided.
-	WageSetting *v3.WageSetting `json:"wage_setting" url:"-"`
+	WageSetting *v4.WageSetting `json:"wage_setting" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -70,7 +70,7 @@ func (u *UpdateWageSettingRequest) SetTeamMemberID(teamMemberID string) {
 
 // SetWageSetting sets the WageSetting field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateWageSettingRequest) SetWageSetting(wageSetting *v3.WageSetting) {
+func (u *UpdateWageSettingRequest) SetWageSetting(wageSetting *v4.WageSetting) {
 	u.WageSetting = wageSetting
 	u.require(updateWageSettingRequestFieldWageSetting)
 }

@@ -3,8 +3,8 @@
 package locationprofiles
 
 import (
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
 )
 
 type RawClient struct {

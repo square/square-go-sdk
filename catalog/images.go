@@ -4,15 +4,15 @@ package catalog
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	io "io"
 	big "math/big"
 )
 
 type CreateImagesRequest struct {
 	ImageFile io.Reader                     `json:"-" url:"-"`
-	Request   *v3.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	Request   *v4.CreateCatalogImageRequest `json:"request,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -33,7 +33,7 @@ type UpdateImagesRequest struct {
 	// The ID of the `CatalogImage` object to update the encapsulated image file.
 	ImageID   string                        `json:"-" url:"-"`
 	ImageFile io.Reader                     `json:"-" url:"-"`
-	Request   *v3.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
+	Request   *v4.UpdateCatalogImageRequest `json:"request,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`

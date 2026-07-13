@@ -134976,7 +134976,7 @@ func TestSettersLoyaltyEvent(t *testing.T) {
 
 	t.Run("SetType", func(t *testing.T) {
 		obj := &LoyaltyEvent{}
-		var fernTestValueType LoyaltyEventType
+		var fernTestValueType *LoyaltyEventType
 		obj.SetType(fernTestValueType)
 		assert.Equal(t, fernTestValueType, obj.Type)
 		assert.NotNil(t, obj.explicitFields)
@@ -135048,7 +135048,7 @@ func TestSettersLoyaltyEvent(t *testing.T) {
 
 	t.Run("SetSource", func(t *testing.T) {
 		obj := &LoyaltyEvent{}
-		var fernTestValueSource LoyaltyEventSource
+		var fernTestValueSource *LoyaltyEventSource
 		obj.SetSource(fernTestValueSource)
 		assert.Equal(t, fernTestValueSource, obj.Source)
 		assert.NotNil(t, obj.explicitFields)
@@ -135118,11 +135118,21 @@ func TestGettersLoyaltyEvent(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoyaltyEvent{}
-		var expected LoyaltyEventType
+		var expected *LoyaltyEventType
 		obj.Type = expected
 
 		// Act & Assert
 		assert.Equal(t, expected, obj.GetType(), "getter should return the property value")
+	})
+
+	t.Run("GetType_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LoyaltyEvent{}
+		obj.Type = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetType(), "getter should return nil when property is nil")
 	})
 
 	t.Run("GetType_NilReceiver", func(t *testing.T) {
@@ -135405,11 +135415,21 @@ func TestGettersLoyaltyEvent(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoyaltyEvent{}
-		var expected LoyaltyEventSource
+		var expected *LoyaltyEventSource
 		obj.Source = expected
 
 		// Act & Assert
 		assert.Equal(t, expected, obj.GetSource(), "getter should return the property value")
+	})
+
+	t.Run("GetSource_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &LoyaltyEvent{}
+		obj.Source = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetSource(), "getter should return nil when property is nil")
 	})
 
 	t.Run("GetSource_NilReceiver", func(t *testing.T) {
@@ -135561,7 +135581,7 @@ func TestSettersMarkExplicitLoyaltyEvent(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoyaltyEvent{}
-		var fernTestValueType LoyaltyEventType
+		var fernTestValueType *LoyaltyEventType
 
 		// Act
 		obj.SetType(fernTestValueType)
@@ -135840,7 +135860,7 @@ func TestSettersMarkExplicitLoyaltyEvent(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoyaltyEvent{}
-		var fernTestValueSource LoyaltyEventSource
+		var fernTestValueSource *LoyaltyEventSource
 
 		// Act
 		obj.SetSource(fernTestValueSource)
