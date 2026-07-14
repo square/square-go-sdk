@@ -4,11 +4,11 @@ package paymentlinks
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	checkout "github.com/square/square-go-sdk/v3/checkout"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	checkout "github.com/square/square-go-sdk/v4/checkout"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 	os "os"
 )

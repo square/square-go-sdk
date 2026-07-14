@@ -4,8 +4,8 @@ package labor
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -18,7 +18,7 @@ type UpdateWorkweekConfigRequest struct {
 	// The UUID for the `WorkweekConfig` object being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `WorkweekConfig` object.
-	WorkweekConfig *v3.WorkweekConfig `json:"workweek_config" url:"-"`
+	WorkweekConfig *v4.WorkweekConfig `json:"workweek_config" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -40,7 +40,7 @@ func (u *UpdateWorkweekConfigRequest) SetID(id string) {
 
 // SetWorkweekConfig sets the WorkweekConfig field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateWorkweekConfigRequest) SetWorkweekConfig(workweekConfig *v3.WorkweekConfig) {
+func (u *UpdateWorkweekConfigRequest) SetWorkweekConfig(workweekConfig *v4.WorkweekConfig) {
 	u.WorkweekConfig = workweekConfig
 	u.require(updateWorkweekConfigRequestFieldWorkweekConfig)
 }

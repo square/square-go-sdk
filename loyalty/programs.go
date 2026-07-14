@@ -4,8 +4,8 @@ package loyalty
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -26,7 +26,7 @@ type CalculateLoyaltyPointsRequest struct {
 	// The purchase amount for which to calculate the points.
 	// Specify this field if your application does not use the Orders API to process orders.
 	// Otherwise, specify the `order_id`.
-	TransactionAmountMoney *v3.Money `json:"transaction_amount_money,omitempty" url:"-"`
+	TransactionAmountMoney *v4.Money `json:"transaction_amount_money,omitempty" url:"-"`
 	// The ID of the target [loyalty account](entity:LoyaltyAccount). Optionally specify this field
 	// if your application uses the Orders API to process orders.
 	//
@@ -64,7 +64,7 @@ func (c *CalculateLoyaltyPointsRequest) SetOrderID(orderID *string) {
 
 // SetTransactionAmountMoney sets the TransactionAmountMoney field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmountMoney *v3.Money) {
+func (c *CalculateLoyaltyPointsRequest) SetTransactionAmountMoney(transactionAmountMoney *v4.Money) {
 	c.TransactionAmountMoney = transactionAmountMoney
 	c.require(calculateLoyaltyPointsRequestFieldTransactionAmountMoney)
 }

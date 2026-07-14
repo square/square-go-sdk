@@ -3,7 +3,7 @@
 package client
 
 import (
-	option "github.com/square/square-go-sdk/v3/option"
+	option "github.com/square/square-go-sdk/v4/option"
 	assert "github.com/stretchr/testify/assert"
 	http "net/http"
 	testing "testing"

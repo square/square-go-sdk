@@ -4,10 +4,10 @@ package inventory
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 )
 
@@ -28,6 +28,263 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 			},
 		),
 	}
+}
+
+func (r *RawClient) ListInventoryAdjustmentReasons(
+	ctx context.Context,
+	request *square.ListInventoryAdjustmentReasonsRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.ListInventoryAdjustmentReasonsResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons"
+	queryParams, err := internal.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	var response *square.ListInventoryAdjustmentReasonsResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.ListInventoryAdjustmentReasonsResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) CreateInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.CreateInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.CreateInventoryAdjustmentReasonResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons/create"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.CreateInventoryAdjustmentReasonResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.CreateInventoryAdjustmentReasonResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) DeleteInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.DeleteInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.DeleteInventoryAdjustmentReasonResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons/delete"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.DeleteInventoryAdjustmentReasonResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.DeleteInventoryAdjustmentReasonResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) RestoreInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.RestoreInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.RestoreInventoryAdjustmentReasonResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons/restore"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.RestoreInventoryAdjustmentReasonResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.RestoreInventoryAdjustmentReasonResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) RetrieveInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.RetrieveInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.RetrieveInventoryAdjustmentReasonResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons/retrieve"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.RetrieveInventoryAdjustmentReasonResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.RetrieveInventoryAdjustmentReasonResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) UpdateInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.UpdateInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.UpdateInventoryAdjustmentReasonResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustment-reasons/update"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.UpdateInventoryAdjustmentReasonResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.UpdateInventoryAdjustmentReasonResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
 }
 
 func (r *RawClient) DeprecatedGetAdjustment(
@@ -67,6 +324,48 @@ func (r *RawClient) DeprecatedGetAdjustment(
 		return nil, err
 	}
 	return &core.Response[*square.GetInventoryAdjustmentResponse]{
+		StatusCode: raw.StatusCode,
+		Header:     raw.Header,
+		Body:       response,
+	}, nil
+}
+
+func (r *RawClient) UpdateInventoryAdjustment(
+	ctx context.Context,
+	request *square.UpdateInventoryAdjustmentRequest,
+	opts ...option.RequestOption,
+) (*core.Response[*square.UpdateInventoryAdjustmentResponse], error) {
+	options := core.NewRequestOptions(opts...)
+	baseURL := internal.ResolveBaseURL(
+		options.BaseURL,
+		r.baseURL,
+		"https://connect.squareup.com",
+	)
+	endpointURL := baseURL + "/v2/inventory/adjustments/update"
+	headers := internal.MergeHeaders(
+		r.options.ToHeader(),
+		options.ToHeader(),
+	)
+	headers.Add("Content-Type", "application/json")
+	var response *square.UpdateInventoryAdjustmentResponse
+	raw, err := r.caller.Call(
+		ctx,
+		&internal.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			Headers:         headers,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &core.Response[*square.UpdateInventoryAdjustmentResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
@@ -452,7 +751,7 @@ func (r *RawClient) GetTransfer(
 	ctx context.Context,
 	request *square.GetTransferInventoryRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*square.GetInventoryTransferResponse], error) {
+) (*core.Response[any], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -467,7 +766,6 @@ func (r *RawClient) GetTransfer(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *square.GetInventoryTransferResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -478,15 +776,14 @@ func (r *RawClient) GetTransfer(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*square.GetInventoryTransferResponse]{
+	return &core.Response[any]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
-		Body:       response,
+		Body:       nil,
 	}, nil
 }

@@ -4,11 +4,11 @@ package rewards
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	loyalty "github.com/square/square-go-sdk/v3/loyalty"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	loyalty "github.com/square/square-go-sdk/v4/loyalty"
+	option "github.com/square/square-go-sdk/v4/option"
 	os "os"
 )
 

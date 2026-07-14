@@ -4,11 +4,11 @@ package employeewages
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	labor "github.com/square/square-go-sdk/v3/labor"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	labor "github.com/square/square-go-sdk/v4/labor"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 )
 

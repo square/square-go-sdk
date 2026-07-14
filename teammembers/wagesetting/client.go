@@ -4,11 +4,11 @@ package wagesetting
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
-	teammembers "github.com/square/square-go-sdk/v3/teammembers"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
+	teammembers "github.com/square/square-go-sdk/v4/teammembers"
 	os "os"
 )
 

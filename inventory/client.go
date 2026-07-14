@@ -4,10 +4,10 @@ package inventory
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 	os "os"
 )
@@ -40,6 +40,110 @@ func NewClient(options *core.RequestOptions) *Client {
 	}
 }
 
+// Returns the standard and custom inventory adjustment reasons available
+// to the seller.
+func (c *Client) ListInventoryAdjustmentReasons(
+	ctx context.Context,
+	request *square.ListInventoryAdjustmentReasonsRequest,
+	opts ...option.RequestOption,
+) (*square.ListInventoryAdjustmentReasonsResponse, error) {
+	response, err := c.WithRawResponse.ListInventoryAdjustmentReasons(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Creates a custom inventory adjustment reason.
+func (c *Client) CreateInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.CreateInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*square.CreateInventoryAdjustmentReasonResponse, error) {
+	response, err := c.WithRawResponse.CreateInventoryAdjustmentReason(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Soft deletes a custom inventory adjustment reason.
+func (c *Client) DeleteInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.DeleteInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*square.DeleteInventoryAdjustmentReasonResponse, error) {
+	response, err := c.WithRawResponse.DeleteInventoryAdjustmentReason(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Restores a soft-deleted custom inventory adjustment reason.
+func (c *Client) RestoreInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.RestoreInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*square.RestoreInventoryAdjustmentReasonResponse, error) {
+	response, err := c.WithRawResponse.RestoreInventoryAdjustmentReason(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Returns the inventory adjustment reason identified by the provided
+// `reason_id`. Deleted custom reasons can be retrieved by ID.
+func (c *Client) RetrieveInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.RetrieveInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*square.RetrieveInventoryAdjustmentReasonResponse, error) {
+	response, err := c.WithRawResponse.RetrieveInventoryAdjustmentReason(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Updates a custom inventory adjustment reason.
+func (c *Client) UpdateInventoryAdjustmentReason(
+	ctx context.Context,
+	request *square.UpdateInventoryAdjustmentReasonRequest,
+	opts ...option.RequestOption,
+) (*square.UpdateInventoryAdjustmentReasonResponse, error) {
+	response, err := c.WithRawResponse.UpdateInventoryAdjustmentReason(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
 // Deprecated version of [RetrieveInventoryAdjustment](api-endpoint:Inventory-RetrieveInventoryAdjustment) after the endpoint URL
 // is updated to conform to the standard convention.
 func (c *Client) DeprecatedGetAdjustment(
@@ -48,6 +152,26 @@ func (c *Client) DeprecatedGetAdjustment(
 	opts ...option.RequestOption,
 ) (*square.GetInventoryAdjustmentResponse, error) {
 	response, err := c.WithRawResponse.DeprecatedGetAdjustment(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}
+
+// Applies an update to the provided adjustment.
+//
+// On success: returns the newly updated adjustment.
+// On failure: returns a list of related errors.
+func (c *Client) UpdateInventoryAdjustment(
+	ctx context.Context,
+	request *square.UpdateInventoryAdjustmentRequest,
+	opts ...option.RequestOption,
+) (*square.UpdateInventoryAdjustmentResponse, error) {
+	response, err := c.WithRawResponse.UpdateInventoryAdjustment(
 		ctx,
 		request,
 		opts...,
@@ -238,24 +362,6 @@ func (c *Client) GetPhysicalCount(
 	return response.Body, nil
 }
 
-// Returns the [InventoryTransfer](entity:InventoryTransfer) object
-// with the provided `transfer_id`.
-func (c *Client) GetTransfer(
-	ctx context.Context,
-	request *square.GetTransferInventoryRequest,
-	opts ...option.RequestOption,
-) (*square.GetInventoryTransferResponse, error) {
-	response, err := c.WithRawResponse.GetTransfer(
-		ctx,
-		request,
-		opts...,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return response.Body, nil
-}
-
 // Retrieves the current calculated stock count for a given
 // [CatalogObject](entity:CatalogObject) at a given set of
 // [Location](entity:Location)s. Responses are paginated and unsorted.
@@ -393,4 +499,20 @@ func (c *Client) Changes(
 		readPageResponse,
 	)
 	return pager.GetPage(ctx, request.Cursor)
+}
+
+func (c *Client) GetTransfer(
+	ctx context.Context,
+	request *square.GetTransferInventoryRequest,
+	opts ...option.RequestOption,
+) error {
+	_, err := c.WithRawResponse.GetTransfer(
+		ctx,
+		request,
+		opts...,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }

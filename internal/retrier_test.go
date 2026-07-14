@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/square/square-go-sdk/v3/core"
+	"github.com/square/square-go-sdk/v4/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
