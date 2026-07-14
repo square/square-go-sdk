@@ -4,11 +4,11 @@ package object
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	catalog "github.com/square/square-go-sdk/v3/catalog"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	catalog "github.com/square/square-go-sdk/v4/catalog"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	os "os"
 )
 
@@ -41,6 +41,10 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Creates a new or updates the specified [CatalogObject](entity:CatalogObject).
+//
+// This endpoint uses full-replacement semantics. The client must send the complete object, and any
+// field absent from the request is interpreted as an intentional clear. This logic applies to
+// nested objects as well. For example, omitting inlined children like variations will delete them.
 //
 // To ensure consistency, only one update request is processed at a time per seller account.
 // While one (batch or non-batch) update request is being processed, other (batched and non-batched)

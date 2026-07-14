@@ -4,8 +4,8 @@ package checkout
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -32,18 +32,18 @@ type CreatePaymentLinkRequest struct {
 	// Describes an ad hoc item and price for which to generate a quick pay checkout link.
 	// For more information,
 	// see [Quick Pay Checkout](https://developer.squareup.com/docs/checkout-api/quick-pay-checkout).
-	QuickPay *v3.QuickPay `json:"quick_pay,omitempty" url:"-"`
+	QuickPay *v4.QuickPay `json:"quick_pay,omitempty" url:"-"`
 	// Describes the `Order` for which to create a checkout link.
 	// For more information,
 	// see [Square Order Checkout](https://developer.squareup.com/docs/checkout-api/square-order-checkout).
-	Order *v3.Order `json:"order,omitempty" url:"-"`
+	Order *v4.Order `json:"order,omitempty" url:"-"`
 	// Describes optional fields to add to the resulting checkout page.
 	// For more information,
 	// see [Optional Checkout Configurations](https://developer.squareup.com/docs/checkout-api/optional-checkout-configurations).
-	CheckoutOptions *v3.CheckoutOptions `json:"checkout_options,omitempty" url:"-"`
+	CheckoutOptions *v4.CheckoutOptions `json:"checkout_options,omitempty" url:"-"`
 	// Describes fields to prepopulate in the resulting checkout page.
 	// For more information, see [Prepopulate the shipping address](https://developer.squareup.com/docs/checkout-api/optional-checkout-configurations#prepopulate-the-shipping-address).
-	PrePopulatedData *v3.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
+	PrePopulatedData *v4.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
 	// A note for the payment. After processing the payment, Square adds this note to the resulting `Payment`.
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
 
@@ -74,28 +74,28 @@ func (c *CreatePaymentLinkRequest) SetDescription(description *string) {
 
 // SetQuickPay sets the QuickPay field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePaymentLinkRequest) SetQuickPay(quickPay *v3.QuickPay) {
+func (c *CreatePaymentLinkRequest) SetQuickPay(quickPay *v4.QuickPay) {
 	c.QuickPay = quickPay
 	c.require(createPaymentLinkRequestFieldQuickPay)
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePaymentLinkRequest) SetOrder(order *v3.Order) {
+func (c *CreatePaymentLinkRequest) SetOrder(order *v4.Order) {
 	c.Order = order
 	c.require(createPaymentLinkRequestFieldOrder)
 }
 
 // SetCheckoutOptions sets the CheckoutOptions field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePaymentLinkRequest) SetCheckoutOptions(checkoutOptions *v3.CheckoutOptions) {
+func (c *CreatePaymentLinkRequest) SetCheckoutOptions(checkoutOptions *v4.CheckoutOptions) {
 	c.CheckoutOptions = checkoutOptions
 	c.require(createPaymentLinkRequestFieldCheckoutOptions)
 }
 
 // SetPrePopulatedData sets the PrePopulatedData field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreatePaymentLinkRequest) SetPrePopulatedData(prePopulatedData *v3.PrePopulatedData) {
+func (c *CreatePaymentLinkRequest) SetPrePopulatedData(prePopulatedData *v4.PrePopulatedData) {
 	c.PrePopulatedData = prePopulatedData
 	c.require(createPaymentLinkRequestFieldPrePopulatedData)
 }
@@ -233,7 +233,7 @@ type UpdatePaymentLinkRequest struct {
 	ID string `json:"-" url:"-"`
 	// The `payment_link` object describing the updates to apply.
 	// For more information, see [Update a payment link](https://developer.squareup.com/docs/checkout-api/manage-checkout#update-a-payment-link).
-	PaymentLink *v3.PaymentLink `json:"payment_link" url:"-"`
+	PaymentLink *v4.PaymentLink `json:"payment_link" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -255,7 +255,7 @@ func (u *UpdatePaymentLinkRequest) SetID(id string) {
 
 // SetPaymentLink sets the PaymentLink field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdatePaymentLinkRequest) SetPaymentLink(paymentLink *v3.PaymentLink) {
+func (u *UpdatePaymentLinkRequest) SetPaymentLink(paymentLink *v4.PaymentLink) {
 	u.PaymentLink = paymentLink
 	u.require(updatePaymentLinkRequestFieldPaymentLink)
 }

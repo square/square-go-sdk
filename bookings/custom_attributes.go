@@ -4,8 +4,8 @@ package bookings
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -17,7 +17,7 @@ type BulkDeleteBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual Delete requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkDeleteBookingCustomAttributes` request and the
 	// information needed to delete a custom attribute.
-	Values map[string]*v3.BookingCustomAttributeDeleteRequest `json:"values" url:"-"`
+	Values map[string]*v4.BookingCustomAttributeDeleteRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -32,7 +32,7 @@ func (b *BulkDeleteBookingCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkDeleteBookingCustomAttributesRequest) SetValues(values map[string]*v3.BookingCustomAttributeDeleteRequest) {
+func (b *BulkDeleteBookingCustomAttributesRequest) SetValues(values map[string]*v4.BookingCustomAttributeDeleteRequest) {
 	b.Values = values
 	b.require(bulkDeleteBookingCustomAttributesRequestFieldValues)
 }
@@ -66,7 +66,7 @@ type BulkUpsertBookingCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertBookingCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v3.BookingCustomAttributeUpsertRequest `json:"values" url:"-"`
+	Values map[string]*v4.BookingCustomAttributeUpsertRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -81,7 +81,7 @@ func (b *BulkUpsertBookingCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkUpsertBookingCustomAttributesRequest) SetValues(values map[string]*v3.BookingCustomAttributeUpsertRequest) {
+func (b *BulkUpsertBookingCustomAttributesRequest) SetValues(values map[string]*v4.BookingCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(bulkUpsertBookingCustomAttributesRequestFieldValues)
 }
@@ -292,7 +292,7 @@ type UpsertBookingCustomAttributeRequest struct {
 	// - `version`. To enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control for an update operation, include this optional field and specify the current version
 	// of the custom attribute.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
+	CustomAttribute *v4.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -324,7 +324,7 @@ func (u *UpsertBookingCustomAttributeRequest) SetKey(key string) {
 
 // SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertBookingCustomAttributeRequest) SetCustomAttribute(customAttribute *v3.CustomAttribute) {
+func (u *UpsertBookingCustomAttributeRequest) SetCustomAttribute(customAttribute *v4.CustomAttribute) {
 	u.CustomAttribute = customAttribute
 	u.require(upsertBookingCustomAttributeRequestFieldCustomAttribute)
 }

@@ -4,13 +4,13 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	customattributedefinitions "github.com/square/square-go-sdk/v3/locations/customattributedefinitions"
-	customattributes "github.com/square/square-go-sdk/v3/locations/customattributes"
-	transactions "github.com/square/square-go-sdk/v3/locations/transactions"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	customattributedefinitions "github.com/square/square-go-sdk/v4/locations/customattributedefinitions"
+	customattributes "github.com/square/square-go-sdk/v4/locations/customattributes"
+	transactions "github.com/square/square-go-sdk/v4/locations/transactions"
+	option "github.com/square/square-go-sdk/v4/option"
 	os "os"
 )
 

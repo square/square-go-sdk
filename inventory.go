@@ -5,9 +5,116 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
+
+var (
+	createInventoryAdjustmentReasonRequestFieldIdempotencyKey   = big.NewInt(1 << 0)
+	createInventoryAdjustmentReasonRequestFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type CreateInventoryAdjustmentReasonRequest struct {
+	// A client-supplied, universally unique identifier to make this
+	// [CreateInventoryAdjustmentReason](api-endpoint:Inventory-CreateInventoryAdjustmentReason)
+	// request idempotent.
+	IdempotencyKey string `json:"idempotency_key" url:"-"`
+	// The custom inventory adjustment reason to create. Only custom
+	// adjustment reasons can be created.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateInventoryAdjustmentReasonRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInventoryAdjustmentReasonRequest) SetIdempotencyKey(idempotencyKey string) {
+	c.IdempotencyKey = idempotencyKey
+	c.require(createInventoryAdjustmentReasonRequestFieldIdempotencyKey)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInventoryAdjustmentReasonRequest) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	c.AdjustmentReason = adjustmentReason
+	c.require(createInventoryAdjustmentReasonRequestFieldAdjustmentReason)
+}
+
+func (c *CreateInventoryAdjustmentReasonRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateInventoryAdjustmentReasonRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateInventoryAdjustmentReasonRequest(body)
+	return nil
+}
+
+func (c *CreateInventoryAdjustmentReasonRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateInventoryAdjustmentReasonRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	deleteInventoryAdjustmentReasonRequestFieldReasonID = big.NewInt(1 << 0)
+)
+
+type DeleteInventoryAdjustmentReasonRequest struct {
+	// The identifier of the custom inventory adjustment reason to soft delete.
+	ReasonID *InventoryAdjustmentReasonID `json:"reason_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (d *DeleteInventoryAdjustmentReasonRequest) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetReasonID sets the ReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInventoryAdjustmentReasonRequest) SetReasonID(reasonID *InventoryAdjustmentReasonID) {
+	d.ReasonID = reasonID
+	d.require(deleteInventoryAdjustmentReasonRequestFieldReasonID)
+}
+
+func (d *DeleteInventoryAdjustmentReasonRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteInventoryAdjustmentReasonRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*d = DeleteInventoryAdjustmentReasonRequest(body)
+	return nil
+}
+
+func (d *DeleteInventoryAdjustmentReasonRequest) MarshalJSON() ([]byte, error) {
+	type embed DeleteInventoryAdjustmentReasonRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
 
 var (
 	deprecatedGetAdjustmentInventoryRequestFieldAdjustmentID = big.NewInt(1 << 0)
@@ -33,6 +140,274 @@ func (d *DeprecatedGetAdjustmentInventoryRequest) require(field *big.Int) {
 func (d *DeprecatedGetAdjustmentInventoryRequest) SetAdjustmentID(adjustmentID string) {
 	d.AdjustmentID = adjustmentID
 	d.require(deprecatedGetAdjustmentInventoryRequestFieldAdjustmentID)
+}
+
+var (
+	listInventoryAdjustmentReasonsRequestFieldIncludeDeleted     = big.NewInt(1 << 0)
+	listInventoryAdjustmentReasonsRequestFieldIncludeSystemCodes = big.NewInt(1 << 1)
+)
+
+type ListInventoryAdjustmentReasonsRequest struct {
+	// Indicates whether the response should include deleted custom inventory
+	// adjustment reasons. The default value is `false`.
+	IncludeDeleted *bool `json:"-" url:"include_deleted,omitempty"`
+	// Indicates whether the response should include Square-generated system
+	// inventory adjustment reason codes that cannot be used to write adjustments
+	// from the Connect API, such as `SALE`, `RECOUNT`, `TRANSFER`, `IN_TRANSIT`,
+	// and `CANCELED_SALE`. The default value is `false`.
+	IncludeSystemCodes *bool `json:"-" url:"include_system_codes,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (l *ListInventoryAdjustmentReasonsRequest) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetIncludeDeleted sets the IncludeDeleted field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInventoryAdjustmentReasonsRequest) SetIncludeDeleted(includeDeleted *bool) {
+	l.IncludeDeleted = includeDeleted
+	l.require(listInventoryAdjustmentReasonsRequestFieldIncludeDeleted)
+}
+
+// SetIncludeSystemCodes sets the IncludeSystemCodes field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *ListInventoryAdjustmentReasonsRequest) SetIncludeSystemCodes(includeSystemCodes *bool) {
+	l.IncludeSystemCodes = includeSystemCodes
+	l.require(listInventoryAdjustmentReasonsRequestFieldIncludeSystemCodes)
+}
+
+var (
+	restoreInventoryAdjustmentReasonRequestFieldReasonID = big.NewInt(1 << 0)
+)
+
+type RestoreInventoryAdjustmentReasonRequest struct {
+	// The identifier of the soft-deleted custom inventory adjustment reason
+	// to restore.
+	ReasonID *InventoryAdjustmentReasonID `json:"reason_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (r *RestoreInventoryAdjustmentReasonRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetReasonID sets the ReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RestoreInventoryAdjustmentReasonRequest) SetReasonID(reasonID *InventoryAdjustmentReasonID) {
+	r.ReasonID = reasonID
+	r.require(restoreInventoryAdjustmentReasonRequestFieldReasonID)
+}
+
+func (r *RestoreInventoryAdjustmentReasonRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RestoreInventoryAdjustmentReasonRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RestoreInventoryAdjustmentReasonRequest(body)
+	return nil
+}
+
+func (r *RestoreInventoryAdjustmentReasonRequest) MarshalJSON() ([]byte, error) {
+	type embed RestoreInventoryAdjustmentReasonRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	retrieveInventoryAdjustmentReasonRequestFieldReasonID = big.NewInt(1 << 0)
+)
+
+type RetrieveInventoryAdjustmentReasonRequest struct {
+	// The identifier of the inventory adjustment reason to retrieve.
+	ReasonID *InventoryAdjustmentReasonID `json:"reason_id" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (r *RetrieveInventoryAdjustmentReasonRequest) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetReasonID sets the ReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveInventoryAdjustmentReasonRequest) SetReasonID(reasonID *InventoryAdjustmentReasonID) {
+	r.ReasonID = reasonID
+	r.require(retrieveInventoryAdjustmentReasonRequestFieldReasonID)
+}
+
+func (r *RetrieveInventoryAdjustmentReasonRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveInventoryAdjustmentReasonRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*r = RetrieveInventoryAdjustmentReasonRequest(body)
+	return nil
+}
+
+func (r *RetrieveInventoryAdjustmentReasonRequest) MarshalJSON() ([]byte, error) {
+	type embed RetrieveInventoryAdjustmentReasonRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	updateInventoryAdjustmentRequestFieldIdempotencyKey = big.NewInt(1 << 0)
+	updateInventoryAdjustmentRequestFieldAdjustment     = big.NewInt(1 << 1)
+)
+
+type UpdateInventoryAdjustmentRequest struct {
+	// A client-supplied, universally unique identifier (UUID) for the
+	// request.
+	//
+	// See [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency) in the
+	// [Build Basics](https://developer.squareup.com/docs/buildbasics) section for more
+	// information.
+	IdempotencyKey string `json:"idempotency_key" url:"-"`
+	// Represents the updates being written to a past/existing inventory adjustment.
+	// This works using sparse updates, meaning that any fields omitted from the inputted InventoryAdjustment
+	// will retain their values.
+	//
+	// Only updates to the quantity, cost_money, vendor_id, and reason_id fields of an InventoryAdjustment can be made here.
+	// Note that the quantity field must be provided, but it can be identical to the current quantity if there are no desired quantity changes.
+	// cost_money and vendor_id can only be written to adjustments that add stock to the system (from_state of NONE or UNLINKED_RETURN) and to untracked sale adjustments.
+	// reason_id can be changed to any reason that is valid for the adjustment's state transition. The reason of a system-generated adjustment (for example, SALE or RECOUNT) cannot be changed.
+	// Adjustments generated by Square from other records cannot be updated. This includes inferred adjustments created by physical counts, transfer-like cross-location adjustments, and component adjustments.
+	// Adjustments linked to purchase orders cannot be updated. Adjustments linked to sales can only have cost_money and vendor_id updated, and only for untracked sales.
+	// Restock adjustments linked to an itemized return can have their quantity updated, up to the quantity remaining on the return.
+	// Adjustments older than one year cannot be updated.
+	Adjustment *InventoryAdjustment `json:"adjustment" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateInventoryAdjustmentRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentRequest) SetIdempotencyKey(idempotencyKey string) {
+	u.IdempotencyKey = idempotencyKey
+	u.require(updateInventoryAdjustmentRequestFieldIdempotencyKey)
+}
+
+// SetAdjustment sets the Adjustment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentRequest) SetAdjustment(adjustment *InventoryAdjustment) {
+	u.Adjustment = adjustment
+	u.require(updateInventoryAdjustmentRequestFieldAdjustment)
+}
+
+func (u *UpdateInventoryAdjustmentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateInventoryAdjustmentRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateInventoryAdjustmentRequest(body)
+	return nil
+}
+
+func (u *UpdateInventoryAdjustmentRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateInventoryAdjustmentRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	updateInventoryAdjustmentReasonRequestFieldReasonID         = big.NewInt(1 << 0)
+	updateInventoryAdjustmentReasonRequestFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type UpdateInventoryAdjustmentReasonRequest struct {
+	// The identifier of the custom inventory adjustment reason to update.
+	ReasonID *InventoryAdjustmentReasonID `json:"reason_id" url:"-"`
+	// The requested custom inventory adjustment reason update. Only the
+	// `name` field can be updated. Deleted custom reasons cannot be updated. To
+	// restore a deleted custom reason, call
+	// [RestoreInventoryAdjustmentReason](api-endpoint:Inventory-RestoreInventoryAdjustmentReason).
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (u *UpdateInventoryAdjustmentReasonRequest) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetReasonID sets the ReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentReasonRequest) SetReasonID(reasonID *InventoryAdjustmentReasonID) {
+	u.ReasonID = reasonID
+	u.require(updateInventoryAdjustmentReasonRequestFieldReasonID)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentReasonRequest) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	u.AdjustmentReason = adjustmentReason
+	u.require(updateInventoryAdjustmentReasonRequestFieldAdjustmentReason)
+}
+
+func (u *UpdateInventoryAdjustmentReasonRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateInventoryAdjustmentReasonRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*u = UpdateInventoryAdjustmentReasonRequest(body)
+	return nil
+}
+
+func (u *UpdateInventoryAdjustmentReasonRequest) MarshalJSON() ([]byte, error) {
+	type embed UpdateInventoryAdjustmentReasonRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -220,7 +595,6 @@ var (
 )
 
 type GetTransferInventoryRequest struct {
-	// ID of the [InventoryTransfer](entity:InventoryTransfer) to retrieve.
 	TransferID string `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -920,6 +1294,8 @@ var (
 	batchRetrieveInventoryChangesRequestFieldUpdatedBefore    = big.NewInt(1 << 5)
 	batchRetrieveInventoryChangesRequestFieldCursor           = big.NewInt(1 << 6)
 	batchRetrieveInventoryChangesRequestFieldLimit            = big.NewInt(1 << 7)
+	batchRetrieveInventoryChangesRequestFieldSort             = big.NewInt(1 << 8)
+	batchRetrieveInventoryChangesRequestFieldReasonIDs        = big.NewInt(1 << 9)
 )
 
 type BatchRetrieveInventoryChangesRequest struct {
@@ -951,6 +1327,15 @@ type BatchRetrieveInventoryChangesRequest struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// The number of [records](entity:InventoryChange) to return.
 	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
+	// Specification of how returned inventory changes should be ordered.
+	//
+	// Currently, inventory changes can only be ordered by the occurred_at field.
+	// The default sort order for occurred_at is ASC (changes are returned oldest-first by default).
+	Sort *BatchRetrieveInventoryChangesSort `json:"sort,omitempty" url:"sort,omitempty"`
+	// The filter to return `ADJUSTMENT` query results by inventory
+	// adjustment reason. This filter is only applied when set. The request cannot
+	// include both `reason_ids` and `states`.
+	ReasonIDs []*InventoryAdjustmentReasonID `json:"reason_ids,omitempty" url:"reason_ids,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1013,6 +1398,20 @@ func (b *BatchRetrieveInventoryChangesRequest) GetLimit() *int {
 		return nil
 	}
 	return b.Limit
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetSort() *BatchRetrieveInventoryChangesSort {
+	if b == nil {
+		return nil
+	}
+	return b.Sort
+}
+
+func (b *BatchRetrieveInventoryChangesRequest) GetReasonIDs() []*InventoryAdjustmentReasonID {
+	if b == nil {
+		return nil
+	}
+	return b.ReasonIDs
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) GetExtraProperties() map[string]interface{} {
@@ -1085,6 +1484,20 @@ func (b *BatchRetrieveInventoryChangesRequest) SetLimit(limit *int) {
 	b.require(batchRetrieveInventoryChangesRequestFieldLimit)
 }
 
+// SetSort sets the Sort field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetSort(sort *BatchRetrieveInventoryChangesSort) {
+	b.Sort = sort
+	b.require(batchRetrieveInventoryChangesRequestFieldSort)
+}
+
+// SetReasonIDs sets the ReasonIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesRequest) SetReasonIDs(reasonIDs []*InventoryAdjustmentReasonID) {
+	b.ReasonIDs = reasonIDs
+	b.require(batchRetrieveInventoryChangesRequestFieldReasonIDs)
+}
+
 func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error {
 	type unmarshaler BatchRetrieveInventoryChangesRequest
 	var value unmarshaler
@@ -1125,6 +1538,311 @@ func (b *BatchRetrieveInventoryChangesRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", b)
+}
+
+var (
+	batchRetrieveInventoryChangesSortFieldField = big.NewInt(1 << 0)
+	batchRetrieveInventoryChangesSortFieldOrder = big.NewInt(1 << 1)
+)
+
+type BatchRetrieveInventoryChangesSort struct {
+	// The field to sort inventory changes by.
+	// See [Field](#type-field) for possible values
+	Field *BatchRetrieveInventoryChangesSortField `json:"field,omitempty" url:"field,omitempty"`
+	// The order to sort inventory changes by.
+	// See [SortOrder](#type-sortorder) for possible values
+	Order *SortOrder `json:"order,omitempty" url:"order,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (b *BatchRetrieveInventoryChangesSort) GetOrder() *SortOrder {
+	if b == nil {
+		return nil
+	}
+	return b.Order
+}
+
+func (b *BatchRetrieveInventoryChangesSort) GetExtraProperties() map[string]interface{} {
+	if b == nil {
+		return nil
+	}
+	return b.extraProperties
+}
+
+func (b *BatchRetrieveInventoryChangesSort) require(field *big.Int) {
+	if b.explicitFields == nil {
+		b.explicitFields = big.NewInt(0)
+	}
+	b.explicitFields.Or(b.explicitFields, field)
+}
+
+// SetField sets the Field field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesSort) SetField(field *BatchRetrieveInventoryChangesSortField) {
+	b.Field = field
+	b.require(batchRetrieveInventoryChangesSortFieldField)
+}
+
+// SetOrder sets the Order field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchRetrieveInventoryChangesSort) SetOrder(order *SortOrder) {
+	b.Order = order
+	b.require(batchRetrieveInventoryChangesSortFieldOrder)
+}
+
+func (b *BatchRetrieveInventoryChangesSort) UnmarshalJSON(data []byte) error {
+	type unmarshaler BatchRetrieveInventoryChangesSort
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BatchRetrieveInventoryChangesSort(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+	b.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BatchRetrieveInventoryChangesSort) MarshalJSON() ([]byte, error) {
+	type embed BatchRetrieveInventoryChangesSort
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*b),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, b.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (b *BatchRetrieveInventoryChangesSort) String() string {
+	if b == nil {
+		return "<nil>"
+	}
+	if len(b.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(b.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type BatchRetrieveInventoryChangesSortField = string
+
+// Represents an output from a call to [CreateInventoryAdjustmentReason](api-endpoint:Inventory-CreateInventoryAdjustmentReason).
+var (
+	createInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
+	createInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type CreateInventoryAdjustmentReasonResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully created inventory adjustment reason.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason,omitempty" url:"adjustment_reason,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) GetErrors() []*Error {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) GetAdjustmentReason() *InventoryAdjustmentReason {
+	if c == nil {
+		return nil
+	}
+	return c.AdjustmentReason
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInventoryAdjustmentReasonResponse) SetErrors(errors []*Error) {
+	c.Errors = errors
+	c.require(createInventoryAdjustmentReasonResponseFieldErrors)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateInventoryAdjustmentReasonResponse) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	c.AdjustmentReason = adjustmentReason
+	c.require(createInventoryAdjustmentReasonResponseFieldAdjustmentReason)
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateInventoryAdjustmentReasonResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateInventoryAdjustmentReasonResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) MarshalJSON() ([]byte, error) {
+	type embed CreateInventoryAdjustmentReasonResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateInventoryAdjustmentReasonResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Represents an output from a call to [DeleteInventoryAdjustmentReason](api-endpoint:Inventory-DeleteInventoryAdjustmentReason).
+var (
+	deleteInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
+	deleteInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type DeleteInventoryAdjustmentReasonResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully soft-deleted inventory adjustment reason.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason,omitempty" url:"adjustment_reason,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) GetErrors() []*Error {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) GetAdjustmentReason() *InventoryAdjustmentReason {
+	if d == nil {
+		return nil
+	}
+	return d.AdjustmentReason
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
+	return d.extraProperties
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInventoryAdjustmentReasonResponse) SetErrors(errors []*Error) {
+	d.Errors = errors
+	d.require(deleteInventoryAdjustmentReasonResponseFieldErrors)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DeleteInventoryAdjustmentReasonResponse) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	d.AdjustmentReason = adjustmentReason
+	d.require(deleteInventoryAdjustmentReasonResponseFieldAdjustmentReason)
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeleteInventoryAdjustmentReasonResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeleteInventoryAdjustmentReasonResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) MarshalJSON() ([]byte, error) {
+	type embed DeleteInventoryAdjustmentReasonResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*d),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (d *DeleteInventoryAdjustmentReasonResponse) String() string {
+	if d == nil {
+		return "<nil>"
+	}
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
 }
 
 var (
@@ -1576,108 +2294,6 @@ func (g *GetInventoryPhysicalCountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-var (
-	getInventoryTransferResponseFieldErrors   = big.NewInt(1 << 0)
-	getInventoryTransferResponseFieldTransfer = big.NewInt(1 << 1)
-)
-
-type GetInventoryTransferResponse struct {
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-	// The requested [InventoryTransfer](entity:InventoryTransfer).
-	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (g *GetInventoryTransferResponse) GetErrors() []*Error {
-	if g == nil {
-		return nil
-	}
-	return g.Errors
-}
-
-func (g *GetInventoryTransferResponse) GetTransfer() *InventoryTransfer {
-	if g == nil {
-		return nil
-	}
-	return g.Transfer
-}
-
-func (g *GetInventoryTransferResponse) GetExtraProperties() map[string]interface{} {
-	if g == nil {
-		return nil
-	}
-	return g.extraProperties
-}
-
-func (g *GetInventoryTransferResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetErrors sets the Errors field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetInventoryTransferResponse) SetErrors(errors []*Error) {
-	g.Errors = errors
-	g.require(getInventoryTransferResponseFieldErrors)
-}
-
-// SetTransfer sets the Transfer field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetInventoryTransferResponse) SetTransfer(transfer *InventoryTransfer) {
-	g.Transfer = transfer
-	g.require(getInventoryTransferResponseFieldTransfer)
-}
-
-func (g *GetInventoryTransferResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler GetInventoryTransferResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GetInventoryTransferResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *g)
-	if err != nil {
-		return err
-	}
-	g.extraProperties = extraProperties
-	g.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GetInventoryTransferResponse) MarshalJSON() ([]byte, error) {
-	type embed GetInventoryTransferResponse
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*g),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (g *GetInventoryTransferResponse) String() string {
-	if g == nil {
-		return "<nil>"
-	}
-	if len(g.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(g.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
-}
-
 // Represents a change in state or quantity of product inventory at a
 // particular time and location.
 var (
@@ -1685,21 +2301,26 @@ var (
 	inventoryAdjustmentFieldReferenceID       = big.NewInt(1 << 1)
 	inventoryAdjustmentFieldFromState         = big.NewInt(1 << 2)
 	inventoryAdjustmentFieldToState           = big.NewInt(1 << 3)
-	inventoryAdjustmentFieldLocationID        = big.NewInt(1 << 4)
-	inventoryAdjustmentFieldCatalogObjectID   = big.NewInt(1 << 5)
-	inventoryAdjustmentFieldCatalogObjectType = big.NewInt(1 << 6)
-	inventoryAdjustmentFieldQuantity          = big.NewInt(1 << 7)
-	inventoryAdjustmentFieldTotalPriceMoney   = big.NewInt(1 << 8)
-	inventoryAdjustmentFieldOccurredAt        = big.NewInt(1 << 9)
-	inventoryAdjustmentFieldCreatedAt         = big.NewInt(1 << 10)
-	inventoryAdjustmentFieldSource            = big.NewInt(1 << 11)
-	inventoryAdjustmentFieldEmployeeID        = big.NewInt(1 << 12)
-	inventoryAdjustmentFieldTeamMemberID      = big.NewInt(1 << 13)
-	inventoryAdjustmentFieldTransactionID     = big.NewInt(1 << 14)
-	inventoryAdjustmentFieldRefundID          = big.NewInt(1 << 15)
-	inventoryAdjustmentFieldPurchaseOrderID   = big.NewInt(1 << 16)
-	inventoryAdjustmentFieldGoodsReceiptID    = big.NewInt(1 << 17)
-	inventoryAdjustmentFieldAdjustmentGroup   = big.NewInt(1 << 18)
+	inventoryAdjustmentFieldFromLocationID    = big.NewInt(1 << 4)
+	inventoryAdjustmentFieldToLocationID      = big.NewInt(1 << 5)
+	inventoryAdjustmentFieldCatalogObjectID   = big.NewInt(1 << 6)
+	inventoryAdjustmentFieldCatalogObjectType = big.NewInt(1 << 7)
+	inventoryAdjustmentFieldQuantity          = big.NewInt(1 << 8)
+	inventoryAdjustmentFieldTotalPriceMoney   = big.NewInt(1 << 9)
+	inventoryAdjustmentFieldOccurredAt        = big.NewInt(1 << 10)
+	inventoryAdjustmentFieldCreatedAt         = big.NewInt(1 << 11)
+	inventoryAdjustmentFieldSource            = big.NewInt(1 << 12)
+	inventoryAdjustmentFieldEmployeeID        = big.NewInt(1 << 13)
+	inventoryAdjustmentFieldTeamMemberID      = big.NewInt(1 << 14)
+	inventoryAdjustmentFieldTransactionID     = big.NewInt(1 << 15)
+	inventoryAdjustmentFieldRefundID          = big.NewInt(1 << 16)
+	inventoryAdjustmentFieldPurchaseOrderID   = big.NewInt(1 << 17)
+	inventoryAdjustmentFieldGoodsReceiptID    = big.NewInt(1 << 18)
+	inventoryAdjustmentFieldAdjustmentGroup   = big.NewInt(1 << 19)
+	inventoryAdjustmentFieldCostMoney         = big.NewInt(1 << 20)
+	inventoryAdjustmentFieldVendorID          = big.NewInt(1 << 21)
+	inventoryAdjustmentFieldPhysicalCountID   = big.NewInt(1 << 22)
+	inventoryAdjustmentFieldReasonID          = big.NewInt(1 << 23)
 )
 
 type InventoryAdjustment struct {
@@ -1719,8 +2340,11 @@ type InventoryAdjustment struct {
 	// See [InventoryState](#type-inventorystate) for possible values
 	ToState *InventoryState `json:"to_state,omitempty" url:"to_state,omitempty"`
 	// The Square-generated ID of the [Location](entity:Location) where the related
-	// quantity of items is being tracked.
-	LocationID *string `json:"location_id,omitempty" url:"location_id,omitempty"`
+	// quantity of items is being tracked before the adjustment.
+	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
+	// The Square-generated ID of the [Location](entity:Location) where the related
+	// quantity of items is being tracked after the adjustment.
+	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
 	// The Square-generated ID of the
 	// [CatalogObject](entity:CatalogObject) being tracked.
 	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
@@ -1770,6 +2394,20 @@ type InventoryAdjustment struct {
 	GoodsReceiptID *string `json:"goods_receipt_id,omitempty" url:"goods_receipt_id,omitempty"`
 	// An adjustment group bundling the related adjustments of item variations through stock conversions in a single inventory event.
 	AdjustmentGroup *InventoryAdjustmentGroup `json:"adjustment_group,omitempty" url:"adjustment_group,omitempty"`
+	// The total amount paid by the merchant to the supplying vendor for these units of the product.
+	// This field is only applicable for stock receive adjustments that introduce stock into the system (from_state is NONE or UNLINKED_RETURN).
+	// May be empty.
+	// This field will only accept writes if the merchant has an active subscription for either Retail Plus, Restaurants Plus, or Restaurants Premium.
+	CostMoney *Money `json:"cost_money,omitempty" url:"cost_money,omitempty"`
+	// The Square-generated ID of the Vendor from which the merchant purchased this product.
+	// This field is only applicable for stock receive adjustments that introduce stock into the system (from_state is NONE or UNLINKED_RETURN).
+	// This field will only accept writes if the merchant has an active subscription for either Retail Plus, Restaurants Plus, or Restaurants Premium.
+	VendorID *string `json:"vendor_id,omitempty" url:"vendor_id,omitempty"`
+	// The Square-generated ID of the InventoryPhysicalCount (recount) that generated this adjustment, if applicable.
+	// The quantity of an adjustment generated by a physical count cannot be edited.
+	PhysicalCountID *string `json:"physical_count_id,omitempty" url:"physical_count_id,omitempty"`
+	// Identifies the reason for this inventory adjustment.
+	ReasonID *InventoryAdjustmentReasonID `json:"reason_id,omitempty" url:"reason_id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1806,11 +2444,18 @@ func (i *InventoryAdjustment) GetToState() *InventoryState {
 	return i.ToState
 }
 
-func (i *InventoryAdjustment) GetLocationID() *string {
+func (i *InventoryAdjustment) GetFromLocationID() *string {
 	if i == nil {
 		return nil
 	}
-	return i.LocationID
+	return i.FromLocationID
+}
+
+func (i *InventoryAdjustment) GetToLocationID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ToLocationID
 }
 
 func (i *InventoryAdjustment) GetCatalogObjectID() *string {
@@ -1911,6 +2556,34 @@ func (i *InventoryAdjustment) GetAdjustmentGroup() *InventoryAdjustmentGroup {
 	return i.AdjustmentGroup
 }
 
+func (i *InventoryAdjustment) GetCostMoney() *Money {
+	if i == nil {
+		return nil
+	}
+	return i.CostMoney
+}
+
+func (i *InventoryAdjustment) GetVendorID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.VendorID
+}
+
+func (i *InventoryAdjustment) GetPhysicalCountID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.PhysicalCountID
+}
+
+func (i *InventoryAdjustment) GetReasonID() *InventoryAdjustmentReasonID {
+	if i == nil {
+		return nil
+	}
+	return i.ReasonID
+}
+
 func (i *InventoryAdjustment) GetExtraProperties() map[string]interface{} {
 	if i == nil {
 		return nil
@@ -1953,11 +2626,18 @@ func (i *InventoryAdjustment) SetToState(toState *InventoryState) {
 	i.require(inventoryAdjustmentFieldToState)
 }
 
-// SetLocationID sets the LocationID field and marks it as non-optional;
+// SetFromLocationID sets the FromLocationID field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryAdjustment) SetLocationID(locationID *string) {
-	i.LocationID = locationID
-	i.require(inventoryAdjustmentFieldLocationID)
+func (i *InventoryAdjustment) SetFromLocationID(fromLocationID *string) {
+	i.FromLocationID = fromLocationID
+	i.require(inventoryAdjustmentFieldFromLocationID)
+}
+
+// SetToLocationID sets the ToLocationID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetToLocationID(toLocationID *string) {
+	i.ToLocationID = toLocationID
+	i.require(inventoryAdjustmentFieldToLocationID)
 }
 
 // SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
@@ -2056,6 +2736,34 @@ func (i *InventoryAdjustment) SetGoodsReceiptID(goodsReceiptID *string) {
 func (i *InventoryAdjustment) SetAdjustmentGroup(adjustmentGroup *InventoryAdjustmentGroup) {
 	i.AdjustmentGroup = adjustmentGroup
 	i.require(inventoryAdjustmentFieldAdjustmentGroup)
+}
+
+// SetCostMoney sets the CostMoney field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetCostMoney(costMoney *Money) {
+	i.CostMoney = costMoney
+	i.require(inventoryAdjustmentFieldCostMoney)
+}
+
+// SetVendorID sets the VendorID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetVendorID(vendorID *string) {
+	i.VendorID = vendorID
+	i.require(inventoryAdjustmentFieldVendorID)
+}
+
+// SetPhysicalCountID sets the PhysicalCountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetPhysicalCountID(physicalCountID *string) {
+	i.PhysicalCountID = physicalCountID
+	i.require(inventoryAdjustmentFieldPhysicalCountID)
+}
+
+// SetReasonID sets the ReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustment) SetReasonID(reasonID *InventoryAdjustmentReasonID) {
+	i.ReasonID = reasonID
+	i.require(inventoryAdjustmentFieldReasonID)
 }
 
 func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
@@ -2243,6 +2951,399 @@ func (i *InventoryAdjustmentGroup) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// Represents an inventory adjustment reason.
+var (
+	inventoryAdjustmentReasonFieldID        = big.NewInt(1 << 0)
+	inventoryAdjustmentReasonFieldName      = big.NewInt(1 << 1)
+	inventoryAdjustmentReasonFieldDirection = big.NewInt(1 << 2)
+	inventoryAdjustmentReasonFieldCreatedAt = big.NewInt(1 << 3)
+	inventoryAdjustmentReasonFieldUpdatedAt = big.NewInt(1 << 4)
+	inventoryAdjustmentReasonFieldIsDeleted = big.NewInt(1 << 5)
+)
+
+type InventoryAdjustmentReason struct {
+	// The identifier for this inventory adjustment reason.
+	ID *InventoryAdjustmentReasonID `json:"id" url:"id"`
+	// The seller-facing name for a custom inventory adjustment reason. This
+	// field is empty for standard and system-generated adjustment reasons.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// Indicates whether this inventory adjustment reason increases or
+	// decreases inventory. This field is set for custom reasons and for standard
+	// seller-selectable reasons. It is empty for system-generated inventory
+	// events.
+	// See [Direction](#type-direction) for possible values
+	Direction *InventoryAdjustmentReasonDirection `json:"direction,omitempty" url:"direction,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when the custom
+	// adjustment reason was created. This field is empty for standard
+	// adjustment reasons.
+	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// An RFC 3339-formatted timestamp that indicates when the custom
+	// adjustment reason was last updated. This field is empty for standard
+	// adjustment reasons.
+	UpdatedAt *string `json:"updated_at,omitempty" url:"updated_at,omitempty"`
+	// Indicates whether this custom inventory adjustment reason has been
+	// deleted. Deleted custom reasons can still be retrieved by ID, but are
+	// omitted from list responses unless deleted reasons are explicitly included.
+	// To restore a deleted custom reason, call
+	// [RestoreInventoryAdjustmentReason](api-endpoint:Inventory-RestoreInventoryAdjustmentReason).
+	// This field is always `false` for standard and system-generated adjustment
+	// reasons.
+	IsDeleted *bool `json:"is_deleted,omitempty" url:"is_deleted,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InventoryAdjustmentReason) GetID() *InventoryAdjustmentReasonID {
+	if i == nil {
+		return nil
+	}
+	return i.ID
+}
+
+func (i *InventoryAdjustmentReason) GetName() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Name
+}
+
+func (i *InventoryAdjustmentReason) GetDirection() *InventoryAdjustmentReasonDirection {
+	if i == nil {
+		return nil
+	}
+	return i.Direction
+}
+
+func (i *InventoryAdjustmentReason) GetCreatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CreatedAt
+}
+
+func (i *InventoryAdjustmentReason) GetUpdatedAt() *string {
+	if i == nil {
+		return nil
+	}
+	return i.UpdatedAt
+}
+
+func (i *InventoryAdjustmentReason) GetIsDeleted() *bool {
+	if i == nil {
+		return nil
+	}
+	return i.IsDeleted
+}
+
+func (i *InventoryAdjustmentReason) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *InventoryAdjustmentReason) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetID sets the ID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetID(id *InventoryAdjustmentReasonID) {
+	i.ID = id
+	i.require(inventoryAdjustmentReasonFieldID)
+}
+
+// SetName sets the Name field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetName(name *string) {
+	i.Name = name
+	i.require(inventoryAdjustmentReasonFieldName)
+}
+
+// SetDirection sets the Direction field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetDirection(direction *InventoryAdjustmentReasonDirection) {
+	i.Direction = direction
+	i.require(inventoryAdjustmentReasonFieldDirection)
+}
+
+// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetCreatedAt(createdAt *string) {
+	i.CreatedAt = createdAt
+	i.require(inventoryAdjustmentReasonFieldCreatedAt)
+}
+
+// SetUpdatedAt sets the UpdatedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetUpdatedAt(updatedAt *string) {
+	i.UpdatedAt = updatedAt
+	i.require(inventoryAdjustmentReasonFieldUpdatedAt)
+}
+
+// SetIsDeleted sets the IsDeleted field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReason) SetIsDeleted(isDeleted *bool) {
+	i.IsDeleted = isDeleted
+	i.require(inventoryAdjustmentReasonFieldIsDeleted)
+}
+
+func (i *InventoryAdjustmentReason) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryAdjustmentReason
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryAdjustmentReason(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryAdjustmentReason) MarshalJSON() ([]byte, error) {
+	type embed InventoryAdjustmentReason
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *InventoryAdjustmentReason) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InventoryAdjustmentReasonDirection string
+
+const (
+	InventoryAdjustmentReasonDirectionIncrease InventoryAdjustmentReasonDirection = "INCREASE"
+	InventoryAdjustmentReasonDirectionDecrease InventoryAdjustmentReasonDirection = "DECREASE"
+)
+
+func NewInventoryAdjustmentReasonDirectionFromString(s string) (InventoryAdjustmentReasonDirection, error) {
+	switch s {
+	case "INCREASE":
+		return InventoryAdjustmentReasonDirectionIncrease, nil
+	case "DECREASE":
+		return InventoryAdjustmentReasonDirectionDecrease, nil
+	}
+	var t InventoryAdjustmentReasonDirection
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i InventoryAdjustmentReasonDirection) Ptr() *InventoryAdjustmentReasonDirection {
+	return &i
+}
+
+// Identifies a standard or custom inventory adjustment reason.
+var (
+	inventoryAdjustmentReasonIDFieldType           = big.NewInt(1 << 0)
+	inventoryAdjustmentReasonIDFieldCustomReasonID = big.NewInt(1 << 1)
+)
+
+type InventoryAdjustmentReasonID struct {
+	// The adjustment reason type.
+	// See [Type](#type-type) for possible values
+	Type InventoryAdjustmentReasonIDType `json:"type" url:"type"`
+	// The Square-generated ID of the custom adjustment reason. This field
+	// is only set when `type` is `CUSTOM`.
+	CustomReasonID *string `json:"custom_reason_id,omitempty" url:"custom_reason_id,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *InventoryAdjustmentReasonID) GetType() InventoryAdjustmentReasonIDType {
+	if i == nil {
+		return ""
+	}
+	return i.Type
+}
+
+func (i *InventoryAdjustmentReasonID) GetCustomReasonID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.CustomReasonID
+}
+
+func (i *InventoryAdjustmentReasonID) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *InventoryAdjustmentReasonID) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReasonID) SetType(type_ InventoryAdjustmentReasonIDType) {
+	i.Type = type_
+	i.require(inventoryAdjustmentReasonIDFieldType)
+}
+
+// SetCustomReasonID sets the CustomReasonID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryAdjustmentReasonID) SetCustomReasonID(customReasonID *string) {
+	i.CustomReasonID = customReasonID
+	i.require(inventoryAdjustmentReasonIDFieldCustomReasonID)
+}
+
+func (i *InventoryAdjustmentReasonID) UnmarshalJSON(data []byte) error {
+	type unmarshaler InventoryAdjustmentReasonID
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InventoryAdjustmentReasonID(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InventoryAdjustmentReasonID) MarshalJSON() ([]byte, error) {
+	type embed InventoryAdjustmentReasonID
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *InventoryAdjustmentReasonID) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// The type of inventory adjustment reason.
+//
+// Custom reasons use `CUSTOM` and include a `custom_reason_id`. Standard
+// seller-selectable reasons use `RECEIVED`, `DAMAGED`, `THEFT`, `LOST`,
+// `RETURNED`, `SPOILAGE_WASTE`, `SAMPLES_PROMOTIONAL`, `INTERNAL_USE`,
+// `VENDOR_RETURN`, or `PRODUCTION_WASTE`.
+//
+// The writable standard reasons with direction `INCREASE` are `RECEIVED`
+// and `RETURNED`. The writable standard reasons with direction `DECREASE`
+// are `DAMAGED`, `THEFT`, `LOST`, `SPOILAGE_WASTE`,
+// `SAMPLES_PROMOTIONAL`, `INTERNAL_USE`, `VENDOR_RETURN`, and
+// `PRODUCTION_WASTE`.
+//
+// The `SALE`, `RECOUNT`, `TRANSFER`, `IN_TRANSIT`, and `CANCELED_SALE`
+// values identify system-generated inventory events. These values can be
+// returned by Square, but cannot be used when writing inventory adjustments.
+type InventoryAdjustmentReasonIDType string
+
+const (
+	InventoryAdjustmentReasonIDTypeReceived           InventoryAdjustmentReasonIDType = "RECEIVED"
+	InventoryAdjustmentReasonIDTypeDamaged            InventoryAdjustmentReasonIDType = "DAMAGED"
+	InventoryAdjustmentReasonIDTypeTheft              InventoryAdjustmentReasonIDType = "THEFT"
+	InventoryAdjustmentReasonIDTypeLost               InventoryAdjustmentReasonIDType = "LOST"
+	InventoryAdjustmentReasonIDTypeReturned           InventoryAdjustmentReasonIDType = "RETURNED"
+	InventoryAdjustmentReasonIDTypeSpoilageWaste      InventoryAdjustmentReasonIDType = "SPOILAGE_WASTE"
+	InventoryAdjustmentReasonIDTypeSamplesPromotional InventoryAdjustmentReasonIDType = "SAMPLES_PROMOTIONAL"
+	InventoryAdjustmentReasonIDTypeInternalUse        InventoryAdjustmentReasonIDType = "INTERNAL_USE"
+	InventoryAdjustmentReasonIDTypeVendorReturn       InventoryAdjustmentReasonIDType = "VENDOR_RETURN"
+	InventoryAdjustmentReasonIDTypeProductionWaste    InventoryAdjustmentReasonIDType = "PRODUCTION_WASTE"
+	InventoryAdjustmentReasonIDTypeSale               InventoryAdjustmentReasonIDType = "SALE"
+	InventoryAdjustmentReasonIDTypeRecount            InventoryAdjustmentReasonIDType = "RECOUNT"
+	InventoryAdjustmentReasonIDTypeTransfer           InventoryAdjustmentReasonIDType = "TRANSFER"
+	InventoryAdjustmentReasonIDTypeInTransit          InventoryAdjustmentReasonIDType = "IN_TRANSIT"
+	InventoryAdjustmentReasonIDTypeCanceledSale       InventoryAdjustmentReasonIDType = "CANCELED_SALE"
+	InventoryAdjustmentReasonIDTypeCustom             InventoryAdjustmentReasonIDType = "CUSTOM"
+)
+
+func NewInventoryAdjustmentReasonIDTypeFromString(s string) (InventoryAdjustmentReasonIDType, error) {
+	switch s {
+	case "RECEIVED":
+		return InventoryAdjustmentReasonIDTypeReceived, nil
+	case "DAMAGED":
+		return InventoryAdjustmentReasonIDTypeDamaged, nil
+	case "THEFT":
+		return InventoryAdjustmentReasonIDTypeTheft, nil
+	case "LOST":
+		return InventoryAdjustmentReasonIDTypeLost, nil
+	case "RETURNED":
+		return InventoryAdjustmentReasonIDTypeReturned, nil
+	case "SPOILAGE_WASTE":
+		return InventoryAdjustmentReasonIDTypeSpoilageWaste, nil
+	case "SAMPLES_PROMOTIONAL":
+		return InventoryAdjustmentReasonIDTypeSamplesPromotional, nil
+	case "INTERNAL_USE":
+		return InventoryAdjustmentReasonIDTypeInternalUse, nil
+	case "VENDOR_RETURN":
+		return InventoryAdjustmentReasonIDTypeVendorReturn, nil
+	case "PRODUCTION_WASTE":
+		return InventoryAdjustmentReasonIDTypeProductionWaste, nil
+	case "SALE":
+		return InventoryAdjustmentReasonIDTypeSale, nil
+	case "RECOUNT":
+		return InventoryAdjustmentReasonIDTypeRecount, nil
+	case "TRANSFER":
+		return InventoryAdjustmentReasonIDTypeTransfer, nil
+	case "IN_TRANSIT":
+		return InventoryAdjustmentReasonIDTypeInTransit, nil
+	case "CANCELED_SALE":
+		return InventoryAdjustmentReasonIDTypeCanceledSale, nil
+	case "CUSTOM":
+		return InventoryAdjustmentReasonIDTypeCustom, nil
+	}
+	var t InventoryAdjustmentReasonIDType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i InventoryAdjustmentReasonIDType) Ptr() *InventoryAdjustmentReasonIDType {
+	return &i
+}
+
 // Represents a single physical count, inventory, adjustment, or transfer
 // that is part of the history of inventory changes for a particular
 // [CatalogObject](entity:CatalogObject) instance.
@@ -2250,9 +3351,8 @@ var (
 	inventoryChangeFieldType              = big.NewInt(1 << 0)
 	inventoryChangeFieldPhysicalCount     = big.NewInt(1 << 1)
 	inventoryChangeFieldAdjustment        = big.NewInt(1 << 2)
-	inventoryChangeFieldTransfer          = big.NewInt(1 << 3)
-	inventoryChangeFieldMeasurementUnit   = big.NewInt(1 << 4)
-	inventoryChangeFieldMeasurementUnitID = big.NewInt(1 << 5)
+	inventoryChangeFieldMeasurementUnit   = big.NewInt(1 << 3)
+	inventoryChangeFieldMeasurementUnitID = big.NewInt(1 << 4)
 )
 
 type InventoryChange struct {
@@ -2266,12 +3366,6 @@ type InventoryChange struct {
 	// Contains details about the inventory adjustment when `type` is
 	// `ADJUSTMENT`, and is unset for all other change types.
 	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
-	// Contains details about the inventory transfer when `type` is
-	// `TRANSFER`, and is unset for all other change types.
-	//
-	// _Note:_ An [InventoryTransfer](entity:InventoryTransfer) object can only be set in the input to the
-	// [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory) endpoint when the seller has an active Retail Plus subscription.
-	Transfer *InventoryTransfer `json:"transfer,omitempty" url:"transfer,omitempty"`
 	// The [CatalogMeasurementUnit](entity:CatalogMeasurementUnit) object representing the catalog measurement unit associated with the inventory change.
 	MeasurementUnit *CatalogMeasurementUnit `json:"measurement_unit,omitempty" url:"measurement_unit,omitempty"`
 	// The ID of the [CatalogMeasurementUnit](entity:CatalogMeasurementUnit) object representing the catalog measurement unit associated with the inventory change.
@@ -2303,13 +3397,6 @@ func (i *InventoryChange) GetAdjustment() *InventoryAdjustment {
 		return nil
 	}
 	return i.Adjustment
-}
-
-func (i *InventoryChange) GetTransfer() *InventoryTransfer {
-	if i == nil {
-		return nil
-	}
-	return i.Transfer
 }
 
 func (i *InventoryChange) GetMeasurementUnit() *CatalogMeasurementUnit {
@@ -2359,13 +3446,6 @@ func (i *InventoryChange) SetPhysicalCount(physicalCount *InventoryPhysicalCount
 func (i *InventoryChange) SetAdjustment(adjustment *InventoryAdjustment) {
 	i.Adjustment = adjustment
 	i.require(inventoryChangeFieldAdjustment)
-}
-
-// SetTransfer sets the Transfer field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryChange) SetTransfer(transfer *InventoryTransfer) {
-	i.Transfer = transfer
-	i.require(inventoryChangeFieldTransfer)
 }
 
 // SetMeasurementUnit sets the MeasurementUnit field and marks it as non-optional;
@@ -2430,7 +3510,6 @@ type InventoryChangeType string
 const (
 	InventoryChangeTypePhysicalCount InventoryChangeType = "PHYSICAL_COUNT"
 	InventoryChangeTypeAdjustment    InventoryChangeType = "ADJUSTMENT"
-	InventoryChangeTypeTransfer      InventoryChangeType = "TRANSFER"
 )
 
 func NewInventoryChangeTypeFromString(s string) (InventoryChangeType, error) {
@@ -2439,8 +3518,6 @@ func NewInventoryChangeTypeFromString(s string) (InventoryChangeType, error) {
 		return InventoryChangeTypePhysicalCount, nil
 	case "ADJUSTMENT":
 		return InventoryChangeTypeAdjustment, nil
-	case "TRANSFER":
-		return InventoryChangeTypeTransfer, nil
 	}
 	var t InventoryChangeType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -2452,7 +3529,8 @@ func (i InventoryChangeType) Ptr() *InventoryChangeType {
 
 // Represents Square-estimated quantity of items in a particular state at a
 // particular seller location based on the known history of physical counts and
-// inventory adjustments.
+// inventory adjustments. The absence of an inventory count indicates that the
+// catalog object hasn't interacted with the given inventory state at the given location.
 var (
 	inventoryCountFieldCatalogObjectID   = big.NewInt(1 << 0)
 	inventoryCountFieldCatalogObjectType = big.NewInt(1 << 1)
@@ -2670,6 +3748,7 @@ var (
 	inventoryPhysicalCountFieldTeamMemberID      = big.NewInt(1 << 9)
 	inventoryPhysicalCountFieldOccurredAt        = big.NewInt(1 << 10)
 	inventoryPhysicalCountFieldCreatedAt         = big.NewInt(1 << 11)
+	inventoryPhysicalCountFieldAdjustmentID      = big.NewInt(1 << 12)
 )
 
 type InventoryPhysicalCount struct {
@@ -2714,6 +3793,10 @@ type InventoryPhysicalCount struct {
 	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
 	// An RFC 3339-formatted timestamp that indicates when the physical count is received.
 	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
+	// The Square-generated ID of the InventoryAdjustment that was generated by this physical count in order to
+	// adjust the current stock count to reflect the re-counted quantity.
+	// This field may be empty if the merchant does not have an active subscription for either Retail Plus, Restaurants Plus, or Restaurants Premium.
+	AdjustmentID *string `json:"adjustment_id,omitempty" url:"adjustment_id,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2804,6 +3887,13 @@ func (i *InventoryPhysicalCount) GetCreatedAt() *string {
 		return nil
 	}
 	return i.CreatedAt
+}
+
+func (i *InventoryPhysicalCount) GetAdjustmentID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.AdjustmentID
 }
 
 func (i *InventoryPhysicalCount) GetExtraProperties() map[string]interface{} {
@@ -2904,6 +3994,13 @@ func (i *InventoryPhysicalCount) SetCreatedAt(createdAt *string) {
 	i.require(inventoryPhysicalCountFieldCreatedAt)
 }
 
+// SetAdjustmentID sets the AdjustmentID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *InventoryPhysicalCount) SetAdjustmentID(adjustmentID *string) {
+	i.AdjustmentID = adjustmentID
+	i.require(inventoryPhysicalCountFieldAdjustmentID)
+}
+
 func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
 	type unmarshaler InventoryPhysicalCount
 	var value unmarshaler
@@ -2966,6 +4063,7 @@ const (
 	InventoryStateDecomposed              InventoryState = "DECOMPOSED"
 	InventoryStateSupportedByNewerVersion InventoryState = "SUPPORTED_BY_NEWER_VERSION"
 	InventoryStateInTransit               InventoryState = "IN_TRANSIT"
+	InventoryStateUntracked               InventoryState = "UNTRACKED"
 )
 
 func NewInventoryStateFromString(s string) (InventoryState, error) {
@@ -3002,6 +4100,8 @@ func NewInventoryStateFromString(s string) (InventoryState, error) {
 		return InventoryStateSupportedByNewerVersion, nil
 	case "IN_TRANSIT":
 		return InventoryStateInTransit, nil
+	case "UNTRACKED":
+		return InventoryStateUntracked, nil
 	}
 	var t InventoryState
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -3011,69 +4111,18 @@ func (i InventoryState) Ptr() *InventoryState {
 	return &i
 }
 
-// Represents the transfer of a quantity of product inventory at a
-// particular time from one location to another.
+// Represents an output from a call to [ListInventoryAdjustmentReasons](api-endpoint:Inventory-ListInventoryAdjustmentReasons).
 var (
-	inventoryTransferFieldID                = big.NewInt(1 << 0)
-	inventoryTransferFieldReferenceID       = big.NewInt(1 << 1)
-	inventoryTransferFieldState             = big.NewInt(1 << 2)
-	inventoryTransferFieldFromLocationID    = big.NewInt(1 << 3)
-	inventoryTransferFieldToLocationID      = big.NewInt(1 << 4)
-	inventoryTransferFieldCatalogObjectID   = big.NewInt(1 << 5)
-	inventoryTransferFieldCatalogObjectType = big.NewInt(1 << 6)
-	inventoryTransferFieldQuantity          = big.NewInt(1 << 7)
-	inventoryTransferFieldOccurredAt        = big.NewInt(1 << 8)
-	inventoryTransferFieldCreatedAt         = big.NewInt(1 << 9)
-	inventoryTransferFieldSource            = big.NewInt(1 << 10)
-	inventoryTransferFieldEmployeeID        = big.NewInt(1 << 11)
-	inventoryTransferFieldTeamMemberID      = big.NewInt(1 << 12)
+	listInventoryAdjustmentReasonsResponseFieldErrors            = big.NewInt(1 << 0)
+	listInventoryAdjustmentReasonsResponseFieldAdjustmentReasons = big.NewInt(1 << 1)
 )
 
-type InventoryTransfer struct {
-	// A unique ID generated by Square for the
-	// `InventoryTransfer`.
-	ID *string `json:"id,omitempty" url:"id,omitempty"`
-	// An optional ID provided by the application to tie the
-	// `InventoryTransfer` to an external system.
-	ReferenceID *string `json:"reference_id,omitempty" url:"reference_id,omitempty"`
-	// The [inventory state](entity:InventoryState) for the quantity of
-	// items being transferred.
-	// See [InventoryState](#type-inventorystate) for possible values
-	State *InventoryState `json:"state,omitempty" url:"state,omitempty"`
-	// The Square-generated ID of the [Location](entity:Location) where the related
-	// quantity of items was tracked before the transfer.
-	FromLocationID *string `json:"from_location_id,omitempty" url:"from_location_id,omitempty"`
-	// The Square-generated ID of the [Location](entity:Location) where the related
-	// quantity of items was tracked after the transfer.
-	ToLocationID *string `json:"to_location_id,omitempty" url:"to_location_id,omitempty"`
-	// The Square-generated ID of the
-	// [CatalogObject](entity:CatalogObject) being tracked.
-	CatalogObjectID *string `json:"catalog_object_id,omitempty" url:"catalog_object_id,omitempty"`
-	// The [type](entity:CatalogObjectType) of the [CatalogObject](entity:CatalogObject) being tracked.
-	//
-	// The Inventory API supports setting and reading the `"catalog_object_type": "ITEM_VARIATION"` field value.
-	// In addition, it can also read the `"catalog_object_type": "ITEM"` field value that is set by the Square Restaurants app.
-	CatalogObjectType *string `json:"catalog_object_type,omitempty" url:"catalog_object_type,omitempty"`
-	// The number of items affected by the transfer as a decimal string.
-	// Can support up to 5 digits after the decimal point.
-	Quantity *string `json:"quantity,omitempty" url:"quantity,omitempty"`
-	// A client-generated RFC 3339-formatted timestamp that indicates when
-	// the transfer took place. For write actions, the `occurred_at` timestamp
-	// cannot be older than 24 hours or in the future relative to the time of the
-	// request.
-	OccurredAt *string `json:"occurred_at,omitempty" url:"occurred_at,omitempty"`
-	// An RFC 3339-formatted timestamp that indicates when Square
-	// received the transfer request.
-	CreatedAt *string `json:"created_at,omitempty" url:"created_at,omitempty"`
-	// Information about the application that initiated the
-	// inventory transfer.
-	Source *SourceApplication `json:"source,omitempty" url:"source,omitempty"`
-	// The Square-generated ID of the [Employee](entity:Employee) responsible for the
-	// inventory transfer.
-	EmployeeID *string `json:"employee_id,omitempty" url:"employee_id,omitempty"`
-	// The Square-generated ID of the [Team Member](entity:TeamMember) responsible for the
-	// inventory transfer.
-	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
+type ListInventoryAdjustmentReasonsResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The standard, system-generated, and custom inventory adjustment
+	// reasons available to the seller.
+	AdjustmentReasons []*InventoryAdjustmentReason `json:"adjustment_reasons,omitempty" url:"adjustment_reasons,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3082,240 +4131,498 @@ type InventoryTransfer struct {
 	rawJSON         json.RawMessage
 }
 
-func (i *InventoryTransfer) GetID() *string {
-	if i == nil {
+func (l *ListInventoryAdjustmentReasonsResponse) GetErrors() []*Error {
+	if l == nil {
 		return nil
 	}
-	return i.ID
+	return l.Errors
 }
 
-func (i *InventoryTransfer) GetReferenceID() *string {
-	if i == nil {
+func (l *ListInventoryAdjustmentReasonsResponse) GetAdjustmentReasons() []*InventoryAdjustmentReason {
+	if l == nil {
 		return nil
 	}
-	return i.ReferenceID
+	return l.AdjustmentReasons
 }
 
-func (i *InventoryTransfer) GetState() *InventoryState {
-	if i == nil {
+func (l *ListInventoryAdjustmentReasonsResponse) GetExtraProperties() map[string]interface{} {
+	if l == nil {
 		return nil
 	}
-	return i.State
+	return l.extraProperties
 }
 
-func (i *InventoryTransfer) GetFromLocationID() *string {
-	if i == nil {
-		return nil
+func (l *ListInventoryAdjustmentReasonsResponse) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
 	}
-	return i.FromLocationID
+	l.explicitFields.Or(l.explicitFields, field)
 }
 
-func (i *InventoryTransfer) GetToLocationID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.ToLocationID
-}
-
-func (i *InventoryTransfer) GetCatalogObjectID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CatalogObjectID
-}
-
-func (i *InventoryTransfer) GetCatalogObjectType() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CatalogObjectType
-}
-
-func (i *InventoryTransfer) GetQuantity() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Quantity
-}
-
-func (i *InventoryTransfer) GetOccurredAt() *string {
-	if i == nil {
-		return nil
-	}
-	return i.OccurredAt
-}
-
-func (i *InventoryTransfer) GetCreatedAt() *string {
-	if i == nil {
-		return nil
-	}
-	return i.CreatedAt
-}
-
-func (i *InventoryTransfer) GetSource() *SourceApplication {
-	if i == nil {
-		return nil
-	}
-	return i.Source
-}
-
-func (i *InventoryTransfer) GetEmployeeID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.EmployeeID
-}
-
-func (i *InventoryTransfer) GetTeamMemberID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.TeamMemberID
-}
-
-func (i *InventoryTransfer) GetExtraProperties() map[string]interface{} {
-	if i == nil {
-		return nil
-	}
-	return i.extraProperties
-}
-
-func (i *InventoryTransfer) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
-	}
-	i.explicitFields.Or(i.explicitFields, field)
-}
-
-// SetID sets the ID field and marks it as non-optional;
+// SetErrors sets the Errors field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetID(id *string) {
-	i.ID = id
-	i.require(inventoryTransferFieldID)
+func (l *ListInventoryAdjustmentReasonsResponse) SetErrors(errors []*Error) {
+	l.Errors = errors
+	l.require(listInventoryAdjustmentReasonsResponseFieldErrors)
 }
 
-// SetReferenceID sets the ReferenceID field and marks it as non-optional;
+// SetAdjustmentReasons sets the AdjustmentReasons field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetReferenceID(referenceID *string) {
-	i.ReferenceID = referenceID
-	i.require(inventoryTransferFieldReferenceID)
+func (l *ListInventoryAdjustmentReasonsResponse) SetAdjustmentReasons(adjustmentReasons []*InventoryAdjustmentReason) {
+	l.AdjustmentReasons = adjustmentReasons
+	l.require(listInventoryAdjustmentReasonsResponseFieldAdjustmentReasons)
 }
 
-// SetState sets the State field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetState(state *InventoryState) {
-	i.State = state
-	i.require(inventoryTransferFieldState)
-}
-
-// SetFromLocationID sets the FromLocationID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetFromLocationID(fromLocationID *string) {
-	i.FromLocationID = fromLocationID
-	i.require(inventoryTransferFieldFromLocationID)
-}
-
-// SetToLocationID sets the ToLocationID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetToLocationID(toLocationID *string) {
-	i.ToLocationID = toLocationID
-	i.require(inventoryTransferFieldToLocationID)
-}
-
-// SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetCatalogObjectID(catalogObjectID *string) {
-	i.CatalogObjectID = catalogObjectID
-	i.require(inventoryTransferFieldCatalogObjectID)
-}
-
-// SetCatalogObjectType sets the CatalogObjectType field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetCatalogObjectType(catalogObjectType *string) {
-	i.CatalogObjectType = catalogObjectType
-	i.require(inventoryTransferFieldCatalogObjectType)
-}
-
-// SetQuantity sets the Quantity field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetQuantity(quantity *string) {
-	i.Quantity = quantity
-	i.require(inventoryTransferFieldQuantity)
-}
-
-// SetOccurredAt sets the OccurredAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetOccurredAt(occurredAt *string) {
-	i.OccurredAt = occurredAt
-	i.require(inventoryTransferFieldOccurredAt)
-}
-
-// SetCreatedAt sets the CreatedAt field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetCreatedAt(createdAt *string) {
-	i.CreatedAt = createdAt
-	i.require(inventoryTransferFieldCreatedAt)
-}
-
-// SetSource sets the Source field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetSource(source *SourceApplication) {
-	i.Source = source
-	i.require(inventoryTransferFieldSource)
-}
-
-// SetEmployeeID sets the EmployeeID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetEmployeeID(employeeID *string) {
-	i.EmployeeID = employeeID
-	i.require(inventoryTransferFieldEmployeeID)
-}
-
-// SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (i *InventoryTransfer) SetTeamMemberID(teamMemberID *string) {
-	i.TeamMemberID = teamMemberID
-	i.require(inventoryTransferFieldTeamMemberID)
-}
-
-func (i *InventoryTransfer) UnmarshalJSON(data []byte) error {
-	type unmarshaler InventoryTransfer
+func (l *ListInventoryAdjustmentReasonsResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ListInventoryAdjustmentReasonsResponse
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*i = InventoryTransfer(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	*l = ListInventoryAdjustmentReasonsResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
 	if err != nil {
 		return err
 	}
-	i.extraProperties = extraProperties
-	i.rawJSON = json.RawMessage(data)
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (i *InventoryTransfer) MarshalJSON() ([]byte, error) {
-	type embed InventoryTransfer
+func (l *ListInventoryAdjustmentReasonsResponse) MarshalJSON() ([]byte, error) {
+	type embed ListInventoryAdjustmentReasonsResponse
 	var marshaler = struct {
 		embed
 	}{
-		embed: embed(*i),
+		embed: embed(*l),
 	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
 	return json.Marshal(explicitMarshaler)
 }
 
-func (i *InventoryTransfer) String() string {
-	if i == nil {
+func (l *ListInventoryAdjustmentReasonsResponse) String() string {
+	if l == nil {
 		return "<nil>"
 	}
-	if len(i.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
 			return value
 		}
 	}
-	if value, err := internal.StringifyJSON(i); err == nil {
+	if value, err := internal.StringifyJSON(l); err == nil {
 		return value
 	}
-	return fmt.Sprintf("%#v", i)
+	return fmt.Sprintf("%#v", l)
+}
+
+// Represents an output from a call to [RestoreInventoryAdjustmentReason](api-endpoint:Inventory-RestoreInventoryAdjustmentReason).
+var (
+	restoreInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
+	restoreInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type RestoreInventoryAdjustmentReasonResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully restored inventory adjustment reason.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason,omitempty" url:"adjustment_reason,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) GetAdjustmentReason() *InventoryAdjustmentReason {
+	if r == nil {
+		return nil
+	}
+	return r.AdjustmentReason
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RestoreInventoryAdjustmentReasonResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(restoreInventoryAdjustmentReasonResponseFieldErrors)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RestoreInventoryAdjustmentReasonResponse) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	r.AdjustmentReason = adjustmentReason
+	r.require(restoreInventoryAdjustmentReasonResponseFieldAdjustmentReason)
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RestoreInventoryAdjustmentReasonResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RestoreInventoryAdjustmentReasonResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) MarshalJSON() ([]byte, error) {
+	type embed RestoreInventoryAdjustmentReasonResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RestoreInventoryAdjustmentReasonResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents an output from a call to [RetrieveInventoryAdjustmentReason](api-endpoint:Inventory-RetrieveInventoryAdjustmentReason).
+var (
+	retrieveInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
+	retrieveInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type RetrieveInventoryAdjustmentReasonResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully retrieved inventory adjustment reason. Deleted custom
+	// reasons can be retrieved by ID and have `is_deleted` set to `true`.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason,omitempty" url:"adjustment_reason,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) GetErrors() []*Error {
+	if r == nil {
+		return nil
+	}
+	return r.Errors
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) GetAdjustmentReason() *InventoryAdjustmentReason {
+	if r == nil {
+		return nil
+	}
+	return r.AdjustmentReason
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) GetExtraProperties() map[string]interface{} {
+	if r == nil {
+		return nil
+	}
+	return r.extraProperties
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) require(field *big.Int) {
+	if r.explicitFields == nil {
+		r.explicitFields = big.NewInt(0)
+	}
+	r.explicitFields.Or(r.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveInventoryAdjustmentReasonResponse) SetErrors(errors []*Error) {
+	r.Errors = errors
+	r.require(retrieveInventoryAdjustmentReasonResponseFieldErrors)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RetrieveInventoryAdjustmentReasonResponse) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	r.AdjustmentReason = adjustmentReason
+	r.require(retrieveInventoryAdjustmentReasonResponseFieldAdjustmentReason)
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RetrieveInventoryAdjustmentReasonResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RetrieveInventoryAdjustmentReasonResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+	r.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) MarshalJSON() ([]byte, error) {
+	type embed RetrieveInventoryAdjustmentReasonResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*r),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, r.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (r *RetrieveInventoryAdjustmentReasonResponse) String() string {
+	if r == nil {
+		return "<nil>"
+	}
+	if len(r.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(r.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Represents an output from a call to [UpdateInventoryAdjustmentReason](api-endpoint:Inventory-UpdateInventoryAdjustmentReason).
+var (
+	updateInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
+	updateInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
+)
+
+type UpdateInventoryAdjustmentReasonResponse struct {
+	// Errors encountered when the request fails.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The successfully updated inventory adjustment reason.
+	AdjustmentReason *InventoryAdjustmentReason `json:"adjustment_reason,omitempty" url:"adjustment_reason,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) GetAdjustmentReason() *InventoryAdjustmentReason {
+	if u == nil {
+		return nil
+	}
+	return u.AdjustmentReason
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentReasonResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateInventoryAdjustmentReasonResponseFieldErrors)
+}
+
+// SetAdjustmentReason sets the AdjustmentReason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentReasonResponse) SetAdjustmentReason(adjustmentReason *InventoryAdjustmentReason) {
+	u.AdjustmentReason = adjustmentReason
+	u.require(updateInventoryAdjustmentReasonResponseFieldAdjustmentReason)
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateInventoryAdjustmentReasonResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateInventoryAdjustmentReasonResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateInventoryAdjustmentReasonResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateInventoryAdjustmentReasonResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+var (
+	updateInventoryAdjustmentResponseFieldErrors     = big.NewInt(1 << 0)
+	updateInventoryAdjustmentResponseFieldAdjustment = big.NewInt(1 << 1)
+)
+
+type UpdateInventoryAdjustmentResponse struct {
+	// Any errors that occurred during the request.
+	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
+	// The newly updated adjustment.
+	Adjustment *InventoryAdjustment `json:"adjustment,omitempty" url:"adjustment,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *UpdateInventoryAdjustmentResponse) GetErrors() []*Error {
+	if u == nil {
+		return nil
+	}
+	return u.Errors
+}
+
+func (u *UpdateInventoryAdjustmentResponse) GetAdjustment() *InventoryAdjustment {
+	if u == nil {
+		return nil
+	}
+	return u.Adjustment
+}
+
+func (u *UpdateInventoryAdjustmentResponse) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *UpdateInventoryAdjustmentResponse) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentResponse) SetErrors(errors []*Error) {
+	u.Errors = errors
+	u.require(updateInventoryAdjustmentResponseFieldErrors)
+}
+
+// SetAdjustment sets the Adjustment field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateInventoryAdjustmentResponse) SetAdjustment(adjustment *InventoryAdjustment) {
+	u.Adjustment = adjustment
+	u.require(updateInventoryAdjustmentResponseFieldAdjustment)
+}
+
+func (u *UpdateInventoryAdjustmentResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateInventoryAdjustmentResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateInventoryAdjustmentResponse(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateInventoryAdjustmentResponse) MarshalJSON() ([]byte, error) {
+	type embed UpdateInventoryAdjustmentResponse
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *UpdateInventoryAdjustmentResponse) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

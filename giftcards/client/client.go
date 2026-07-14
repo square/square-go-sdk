@@ -4,11 +4,11 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	activities "github.com/square/square-go-sdk/v3/giftcards/activities"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	activities "github.com/square/square-go-sdk/v4/giftcards/activities"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 	os "os"
 )

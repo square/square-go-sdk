@@ -4,8 +4,8 @@ package loyalty
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -22,7 +22,7 @@ type AccumulateLoyaltyPointsRequest struct {
 	// The points to add to the account.
 	// If you are using the Orders API to manage orders, specify the order ID.
 	// Otherwise, specify the points to add.
-	AccumulatePoints *v3.LoyaltyEventAccumulatePoints `json:"accumulate_points" url:"-"`
+	AccumulatePoints *v4.LoyaltyEventAccumulatePoints `json:"accumulate_points" url:"-"`
 	// A unique string that identifies the `AccumulateLoyaltyPoints` request.
 	// Keys can be any valid string but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -49,7 +49,7 @@ func (a *AccumulateLoyaltyPointsRequest) SetAccountID(accountID string) {
 
 // SetAccumulatePoints sets the AccumulatePoints field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AccumulateLoyaltyPointsRequest) SetAccumulatePoints(accumulatePoints *v3.LoyaltyEventAccumulatePoints) {
+func (a *AccumulateLoyaltyPointsRequest) SetAccumulatePoints(accumulatePoints *v4.LoyaltyEventAccumulatePoints) {
 	a.AccumulatePoints = accumulatePoints
 	a.require(accumulateLoyaltyPointsRequestFieldAccumulatePoints)
 }
@@ -104,7 +104,7 @@ type AdjustLoyaltyPointsRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The points to add or subtract and the reason for the adjustment. To add points, specify a positive integer.
 	// To subtract points, specify a negative integer.
-	AdjustPoints *v3.LoyaltyEventAdjustPoints `json:"adjust_points" url:"-"`
+	AdjustPoints *v4.LoyaltyEventAdjustPoints `json:"adjust_points" url:"-"`
 	// Indicates whether to allow a negative adjustment to result in a negative balance. If `true`, a negative
 	// balance is allowed when subtracting points. If `false`, Square returns a `BAD_REQUEST` error when subtracting
 	// the specified number of points would result in a negative balance. The default value is `false`.
@@ -137,7 +137,7 @@ func (a *AdjustLoyaltyPointsRequest) SetIdempotencyKey(idempotencyKey string) {
 
 // SetAdjustPoints sets the AdjustPoints field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (a *AdjustLoyaltyPointsRequest) SetAdjustPoints(adjustPoints *v3.LoyaltyEventAdjustPoints) {
+func (a *AdjustLoyaltyPointsRequest) SetAdjustPoints(adjustPoints *v4.LoyaltyEventAdjustPoints) {
 	a.AdjustPoints = adjustPoints
 	a.require(adjustLoyaltyPointsRequestFieldAdjustPoints)
 }
@@ -177,7 +177,7 @@ var (
 
 type CreateLoyaltyAccountRequest struct {
 	// The loyalty account to create.
-	LoyaltyAccount *v3.LoyaltyAccount `json:"loyalty_account" url:"-"`
+	LoyaltyAccount *v4.LoyaltyAccount `json:"loyalty_account" url:"-"`
 	// A unique string that identifies this `CreateLoyaltyAccount` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -195,7 +195,7 @@ func (c *CreateLoyaltyAccountRequest) require(field *big.Int) {
 
 // SetLoyaltyAccount sets the LoyaltyAccount field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateLoyaltyAccountRequest) SetLoyaltyAccount(loyaltyAccount *v3.LoyaltyAccount) {
+func (c *CreateLoyaltyAccountRequest) SetLoyaltyAccount(loyaltyAccount *v4.LoyaltyAccount) {
 	c.LoyaltyAccount = loyaltyAccount
 	c.require(createLoyaltyAccountRequestFieldLoyaltyAccount)
 }
@@ -262,7 +262,7 @@ var (
 
 type SearchLoyaltyAccountsRequest struct {
 	// The search criteria for the request.
-	Query *v3.SearchLoyaltyAccountsRequestLoyaltyAccountQuery `json:"query,omitempty" url:"-"`
+	Query *v4.SearchLoyaltyAccountsRequestLoyaltyAccountQuery `json:"query,omitempty" url:"-"`
 	// The maximum number of results to include in the response. The default value is 30.
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to
@@ -286,7 +286,7 @@ func (s *SearchLoyaltyAccountsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchLoyaltyAccountsRequest) SetQuery(query *v3.SearchLoyaltyAccountsRequestLoyaltyAccountQuery) {
+func (s *SearchLoyaltyAccountsRequest) SetQuery(query *v4.SearchLoyaltyAccountsRequestLoyaltyAccountQuery) {
 	s.Query = query
 	s.require(searchLoyaltyAccountsRequestFieldQuery)
 }

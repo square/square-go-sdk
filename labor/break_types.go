@@ -4,8 +4,8 @@ package labor
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -18,7 +18,7 @@ type CreateBreakTypeRequest struct {
 	// A unique string value to ensure the idempotency of the operation.
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
 	// The `BreakType` to be created.
-	BreakType *v3.BreakType `json:"break_type" url:"-"`
+	BreakType *v4.BreakType `json:"break_type" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -40,7 +40,7 @@ func (c *CreateBreakTypeRequest) SetIdempotencyKey(idempotencyKey *string) {
 
 // SetBreakType sets the BreakType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
+func (c *CreateBreakTypeRequest) SetBreakType(breakType *v4.BreakType) {
 	c.BreakType = breakType
 	c.require(createBreakTypeRequestFieldBreakType)
 }
@@ -175,7 +175,7 @@ type UpdateBreakTypeRequest struct {
 	// The UUID for the `BreakType` being updated.
 	ID string `json:"-" url:"-"`
 	// The updated `BreakType`.
-	BreakType *v3.BreakType `json:"break_type" url:"-"`
+	BreakType *v4.BreakType `json:"break_type" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -197,7 +197,7 @@ func (u *UpdateBreakTypeRequest) SetID(id string) {
 
 // SetBreakType sets the BreakType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v3.BreakType) {
+func (u *UpdateBreakTypeRequest) SetBreakType(breakType *v4.BreakType) {
 	u.BreakType = breakType
 	u.require(updateBreakTypeRequestFieldBreakType)
 }

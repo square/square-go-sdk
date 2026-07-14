@@ -4,8 +4,8 @@ package giftcards
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -19,7 +19,7 @@ type CreateGiftCardActivityRequest struct {
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
 	// The activity to create for the gift card. This activity must specify `gift_card_id` or `gift_card_gan` for the target
 	// gift card, the `location_id` where the activity occurred, and the activity `type` along with the corresponding activity details.
-	GiftCardActivity *v3.GiftCardActivity `json:"gift_card_activity" url:"-"`
+	GiftCardActivity *v4.GiftCardActivity `json:"gift_card_activity" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -41,7 +41,7 @@ func (c *CreateGiftCardActivityRequest) SetIdempotencyKey(idempotencyKey string)
 
 // SetGiftCardActivity sets the GiftCardActivity field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateGiftCardActivityRequest) SetGiftCardActivity(giftCardActivity *v3.GiftCardActivity) {
+func (c *CreateGiftCardActivityRequest) SetGiftCardActivity(giftCardActivity *v4.GiftCardActivity) {
 	c.GiftCardActivity = giftCardActivity
 	c.require(createGiftCardActivityRequestFieldGiftCardActivity)
 }

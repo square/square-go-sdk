@@ -6,9 +6,9 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v3"
-	client "github.com/square/square-go-sdk/v3/client"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	client "github.com/square/square-go-sdk/v4/client"
+	option "github.com/square/square-go-sdk/v4/option"
 	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
@@ -62,6 +62,201 @@ func VerifyRequestCount(
 	require.Equal(t, expected, len(result.Requests))
 }
 
+func TestInventoryListInventoryAdjustmentReasonsWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.ListInventoryAdjustmentReasonsRequest{
+		IncludeDeleted: square.Bool(
+			true,
+		),
+		IncludeSystemCodes: square.Bool(
+			true,
+		),
+	}
+	_, invocationErr := client.Inventory.ListInventoryAdjustmentReasons(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryListInventoryAdjustmentReasonsWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryListInventoryAdjustmentReasonsWithWireMock", "GET", "/v2/inventory/adjustment-reasons", map[string]string{"include_deleted": "true", "include_system_codes": "true"}, 1)
+}
+
+func TestInventoryCreateInventoryAdjustmentReasonWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.CreateInventoryAdjustmentReasonRequest{
+		IdempotencyKey: "27b2f2b1-1c2a-4b9e-8f3a-0d9c3a1e5b47",
+		AdjustmentReason: &square.InventoryAdjustmentReason{
+			ID: &square.InventoryAdjustmentReasonID{
+				Type: square.InventoryAdjustmentReasonIDTypeCustom,
+			},
+			Name: square.String(
+				"Donated to charity",
+			),
+			Direction: square.InventoryAdjustmentReasonDirectionDecrease.Ptr(),
+		},
+	}
+	_, invocationErr := client.Inventory.CreateInventoryAdjustmentReason(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryCreateInventoryAdjustmentReasonWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryCreateInventoryAdjustmentReasonWithWireMock", "POST", "/v2/inventory/adjustment-reasons/create", nil, 1)
+}
+
+func TestInventoryDeleteInventoryAdjustmentReasonWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.DeleteInventoryAdjustmentReasonRequest{
+		ReasonID: &square.InventoryAdjustmentReasonID{
+			Type: square.InventoryAdjustmentReasonIDTypeCustom,
+			CustomReasonID: square.String(
+				"R5BX3PDCZ6EXAMPLE",
+			),
+		},
+	}
+	_, invocationErr := client.Inventory.DeleteInventoryAdjustmentReason(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryDeleteInventoryAdjustmentReasonWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryDeleteInventoryAdjustmentReasonWithWireMock", "POST", "/v2/inventory/adjustment-reasons/delete", nil, 1)
+}
+
+func TestInventoryRestoreInventoryAdjustmentReasonWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.RestoreInventoryAdjustmentReasonRequest{
+		ReasonID: &square.InventoryAdjustmentReasonID{
+			Type: square.InventoryAdjustmentReasonIDTypeCustom,
+			CustomReasonID: square.String(
+				"R5BX3PDCZ6EXAMPLE",
+			),
+		},
+	}
+	_, invocationErr := client.Inventory.RestoreInventoryAdjustmentReason(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryRestoreInventoryAdjustmentReasonWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryRestoreInventoryAdjustmentReasonWithWireMock", "POST", "/v2/inventory/adjustment-reasons/restore", nil, 1)
+}
+
+func TestInventoryRetrieveInventoryAdjustmentReasonWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.RetrieveInventoryAdjustmentReasonRequest{
+		ReasonID: &square.InventoryAdjustmentReasonID{
+			Type: square.InventoryAdjustmentReasonIDTypeCustom,
+			CustomReasonID: square.String(
+				"R5BX3PDCZ6EXAMPLE",
+			),
+		},
+	}
+	_, invocationErr := client.Inventory.RetrieveInventoryAdjustmentReason(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryRetrieveInventoryAdjustmentReasonWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryRetrieveInventoryAdjustmentReasonWithWireMock", "POST", "/v2/inventory/adjustment-reasons/retrieve", nil, 1)
+}
+
+func TestInventoryUpdateInventoryAdjustmentReasonWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.UpdateInventoryAdjustmentReasonRequest{
+		ReasonID: &square.InventoryAdjustmentReasonID{
+			Type: square.InventoryAdjustmentReasonIDTypeCustom,
+			CustomReasonID: square.String(
+				"R5BX3PDCZ6EXAMPLE",
+			),
+		},
+		AdjustmentReason: &square.InventoryAdjustmentReason{
+			ID: &square.InventoryAdjustmentReasonID{
+				Type: square.InventoryAdjustmentReasonIDTypeCustom,
+				CustomReasonID: square.String(
+					"R5BX3PDCZ6EXAMPLE",
+				),
+			},
+			Name: square.String(
+				"Charitable donation",
+			),
+		},
+	}
+	_, invocationErr := client.Inventory.UpdateInventoryAdjustmentReason(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryUpdateInventoryAdjustmentReasonWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryUpdateInventoryAdjustmentReasonWithWireMock", "PUT", "/v2/inventory/adjustment-reasons/update", nil, 1)
+}
+
 func TestInventoryDeprecatedGetAdjustmentWithWireMock(
 	t *testing.T,
 ) {
@@ -85,6 +280,32 @@ func TestInventoryDeprecatedGetAdjustmentWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestInventoryDeprecatedGetAdjustmentWithWireMock", "GET", "/v2/inventory/adjustment/adjustment_id", nil, 1)
+}
+
+func TestInventoryUpdateInventoryAdjustmentWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.UpdateInventoryAdjustmentRequest{
+		IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+		Adjustment:     &square.InventoryAdjustment{},
+	}
+	_, invocationErr := client.Inventory.UpdateInventoryAdjustment(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryUpdateInventoryAdjustmentWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryUpdateInventoryAdjustmentWithWireMock", "PUT", "/v2/inventory/adjustments/update", nil, 1)
 }
 
 func TestInventoryGetAdjustmentWithWireMock(
@@ -420,31 +641,6 @@ func TestInventoryGetPhysicalCountWithWireMock(
 	VerifyRequestCount(t, "TestInventoryGetPhysicalCountWithWireMock", "GET", "/v2/inventory/physical-counts/physical_count_id", nil, 1)
 }
 
-func TestInventoryGetTransferWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &square.GetTransferInventoryRequest{
-		TransferID: "transfer_id",
-	}
-	_, invocationErr := client.Inventory.GetTransfer(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestInventoryGetTransferWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInventoryGetTransferWithWireMock", "GET", "/v2/inventory/transfers/transfer_id", nil, 1)
-}
-
 func TestInventoryGetWithWireMock(
 	t *testing.T,
 ) {
@@ -505,4 +701,29 @@ func TestInventoryChangesWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestInventoryChangesWithWireMock", "GET", "/v2/inventory/catalog_object_id/changes", map[string]string{"location_ids": "location_ids", "cursor": "cursor"}, 1)
+}
+
+func TestInventoryGetTransferWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+	)
+	request := &square.GetTransferInventoryRequest{
+		TransferID: "transfer_id",
+	}
+	invocationErr := client.Inventory.GetTransfer(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestInventoryGetTransferWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestInventoryGetTransferWithWireMock", "GET", "/v2/inventory/transfers/transfer_id", nil, 1)
 }

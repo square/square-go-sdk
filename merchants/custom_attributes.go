@@ -4,8 +4,8 @@ package merchants
 
 import (
 	json "encoding/json"
-	v3 "github.com/square/square-go-sdk/v3"
-	internal "github.com/square/square-go-sdk/v3/internal"
+	v4 "github.com/square/square-go-sdk/v4"
+	internal "github.com/square/square-go-sdk/v4/internal"
 	big "math/big"
 )
 
@@ -16,7 +16,7 @@ var (
 type BulkDeleteMerchantCustomAttributesRequest struct {
 	// The data used to update the `CustomAttribute` objects.
 	// The keys must be unique and are used to map to the corresponding response.
-	Values map[string]*v3.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest `json:"values" url:"-"`
+	Values map[string]*v4.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -31,7 +31,7 @@ func (b *BulkDeleteMerchantCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkDeleteMerchantCustomAttributesRequest) SetValues(values map[string]*v3.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest) {
+func (b *BulkDeleteMerchantCustomAttributesRequest) SetValues(values map[string]*v4.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest) {
 	b.Values = values
 	b.require(bulkDeleteMerchantCustomAttributesRequestFieldValues)
 }
@@ -65,7 +65,7 @@ type BulkUpsertMerchantCustomAttributesRequest struct {
 	// A map containing 1 to 25 individual upsert requests. For each request, provide an
 	// arbitrary ID that is unique for this `BulkUpsertMerchantCustomAttributes` request and the
 	// information needed to create or update a custom attribute.
-	Values map[string]*v3.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest `json:"values" url:"-"`
+	Values map[string]*v4.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest `json:"values" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -80,7 +80,7 @@ func (b *BulkUpsertMerchantCustomAttributesRequest) require(field *big.Int) {
 
 // SetValues sets the Values field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (b *BulkUpsertMerchantCustomAttributesRequest) SetValues(values map[string]*v3.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest) {
+func (b *BulkUpsertMerchantCustomAttributesRequest) SetValues(values map[string]*v4.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest) {
 	b.Values = values
 	b.require(bulkUpsertMerchantCustomAttributesRequestFieldValues)
 }
@@ -219,7 +219,7 @@ type ListCustomAttributesRequest struct {
 	// The ID of the target [merchant](entity:Merchant).
 	MerchantID string `json:"-" url:"-"`
 	// Filters the `CustomAttributeDefinition` results by their `visibility` values.
-	VisibilityFilter *v3.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
+	VisibilityFilter *v4.VisibilityFilter `json:"-" url:"visibility_filter,omitempty"`
 	// The maximum number of results to return in a single paged response. This limit is advisory.
 	// The response might contain more or fewer results. The minimum value is 1 and the maximum value is 100.
 	// The default value is 20. For more information, see [Pagination](https://developer.squareup.com/docs/build-basics/common-api-patterns/pagination).
@@ -253,7 +253,7 @@ func (l *ListCustomAttributesRequest) SetMerchantID(merchantID string) {
 
 // SetVisibilityFilter sets the VisibilityFilter field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v3.VisibilityFilter) {
+func (l *ListCustomAttributesRequest) SetVisibilityFilter(visibilityFilter *v4.VisibilityFilter) {
 	l.VisibilityFilter = visibilityFilter
 	l.require(listCustomAttributesRequestFieldVisibilityFilter)
 }
@@ -299,7 +299,7 @@ type UpsertMerchantCustomAttributeRequest struct {
 	// - The version field must match the current version of the custom attribute definition to enable
 	// [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// If this is not important for your application, version can be set to -1. For any other values, the request fails with a BAD_REQUEST error.
-	CustomAttribute *v3.CustomAttribute `json:"custom_attribute" url:"-"`
+	CustomAttribute *v4.CustomAttribute `json:"custom_attribute" url:"-"`
 	// A unique identifier for this request, used to ensure idempotency. For more information,
 	// see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
 	IdempotencyKey *string `json:"idempotency_key,omitempty" url:"-"`
@@ -331,7 +331,7 @@ func (u *UpsertMerchantCustomAttributeRequest) SetKey(key string) {
 
 // SetCustomAttribute sets the CustomAttribute field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpsertMerchantCustomAttributeRequest) SetCustomAttribute(customAttribute *v3.CustomAttribute) {
+func (u *UpsertMerchantCustomAttributeRequest) SetCustomAttribute(customAttribute *v4.CustomAttribute) {
 	u.CustomAttribute = customAttribute
 	u.require(upsertMerchantCustomAttributeRequestFieldCustomAttribute)
 }

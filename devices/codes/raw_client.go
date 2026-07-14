@@ -4,11 +4,11 @@ package codes
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v3"
-	core "github.com/square/square-go-sdk/v3/core"
-	devices "github.com/square/square-go-sdk/v3/devices"
-	internal "github.com/square/square-go-sdk/v3/internal"
-	option "github.com/square/square-go-sdk/v3/option"
+	square "github.com/square/square-go-sdk/v4"
+	core "github.com/square/square-go-sdk/v4/core"
+	devices "github.com/square/square-go-sdk/v4/devices"
+	internal "github.com/square/square-go-sdk/v4/internal"
+	option "github.com/square/square-go-sdk/v4/option"
 	http "net/http"
 )
 
