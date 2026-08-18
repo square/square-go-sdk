@@ -8979,6 +8979,10 @@ const (
 	CardBrandEftpos            CardBrand = "EFTPOS"
 	CardBrandFelica            CardBrand = "FELICA"
 	CardBrandEbt               CardBrand = "EBT"
+	CardBrandQuicpay           CardBrand = "QUICPAY"
+	CardBrandID                CardBrand = "ID"
+	CardBrandTransportationIc  CardBrand = "TRANSPORTATION_IC"
+	CardBrandCarnet            CardBrand = "CARNET"
 )
 
 func NewCardBrandFromString(s string) (CardBrand, error) {
@@ -9011,6 +9015,14 @@ func NewCardBrandFromString(s string) (CardBrand, error) {
 		return CardBrandFelica, nil
 	case "EBT":
 		return CardBrandEbt, nil
+	case "QUICPAY":
+		return CardBrandQuicpay, nil
+	case "ID":
+		return CardBrandID, nil
+	case "TRANSPORTATION_IC":
+		return CardBrandTransportationIc, nil
+	case "CARNET":
+		return CardBrandCarnet, nil
 	}
 	var t CardBrand
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -16469,15 +16481,16 @@ func (c *CatalogMeasurementUnit) String() string {
 
 // A modifier that can be applied to items at the time of sale. For example, a cheese modifier for a burger, or a flavor modifier for a serving of ice cream.
 var (
-	catalogModifierFieldName              = big.NewInt(1 << 0)
-	catalogModifierFieldPriceMoney        = big.NewInt(1 << 1)
-	catalogModifierFieldOnByDefault       = big.NewInt(1 << 2)
-	catalogModifierFieldOrdinal           = big.NewInt(1 << 3)
-	catalogModifierFieldModifierListID    = big.NewInt(1 << 4)
-	catalogModifierFieldLocationOverrides = big.NewInt(1 << 5)
-	catalogModifierFieldKitchenName       = big.NewInt(1 << 6)
-	catalogModifierFieldImageID           = big.NewInt(1 << 7)
-	catalogModifierFieldHiddenOnline      = big.NewInt(1 << 8)
+	catalogModifierFieldName                 = big.NewInt(1 << 0)
+	catalogModifierFieldPriceMoney           = big.NewInt(1 << 1)
+	catalogModifierFieldOnByDefault          = big.NewInt(1 << 2)
+	catalogModifierFieldOrdinal              = big.NewInt(1 << 3)
+	catalogModifierFieldModifierListID       = big.NewInt(1 << 4)
+	catalogModifierFieldLocationOverrides    = big.NewInt(1 << 5)
+	catalogModifierFieldKitchenName          = big.NewInt(1 << 6)
+	catalogModifierFieldImageID              = big.NewInt(1 << 7)
+	catalogModifierFieldHiddenOnline         = big.NewInt(1 << 8)
+	catalogModifierFieldChildModifierListIDs = big.NewInt(1 << 9)
 )
 
 type CatalogModifier struct {
@@ -16504,6 +16517,15 @@ type CatalogModifier struct {
 	ImageID *string `json:"image_id,omitempty" url:"image_id,omitempty"`
 	// When `true`, this modifier is hidden from online ordering channels. This setting can be overridden at the item level using `CatalogModifierListInfo.modifier_overrides`.
 	HiddenOnline *bool `json:"hidden_online,omitempty" url:"hidden_online,omitempty"`
+	// Child `CatalogModifierList`s that this `CatalogModifier` nests for multi-step choices.
+	// When a customer or staff member selects this modifier, the relevant follow-up modifier list appears.
+	// For example, selecting "Hummus" reveals a secondary "Choose Hummus Flavor" set, and selecting a flavor
+	// could reveal a third-level portion size set.
+	//
+	// Each entry references a child modifier list. Each modifier can nest up to 5 child modifier list, and
+	// supports up to 3 levels of nesting depth. The order in `child_modifier_list_ids` determines display order
+	// during checkout.
+	ChildModifierListIDs []string `json:"child_modifier_list_ids,omitempty" url:"child_modifier_list_ids,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -16573,6 +16595,13 @@ func (c *CatalogModifier) GetHiddenOnline() *bool {
 		return nil
 	}
 	return c.HiddenOnline
+}
+
+func (c *CatalogModifier) GetChildModifierListIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.ChildModifierListIDs
 }
 
 func (c *CatalogModifier) GetExtraProperties() map[string]interface{} {
@@ -16650,6 +16679,13 @@ func (c *CatalogModifier) SetImageID(imageID *string) {
 func (c *CatalogModifier) SetHiddenOnline(hiddenOnline *bool) {
 	c.HiddenOnline = hiddenOnline
 	c.require(catalogModifierFieldHiddenOnline)
+}
+
+// SetChildModifierListIDs sets the ChildModifierListIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogModifier) SetChildModifierListIDs(childModifierListIDs []string) {
+	c.ChildModifierListIDs = childModifierListIDs
+	c.require(catalogModifierFieldChildModifierListIDs)
 }
 
 func (c *CatalogModifier) UnmarshalJSON(data []byte) error {
@@ -43125,6 +43161,7 @@ const (
 	ErrorCodeCardTokenExpired                              ErrorCode = "CARD_TOKEN_EXPIRED"
 	ErrorCodeCardTokenUsed                                 ErrorCode = "CARD_TOKEN_USED"
 	ErrorCodeAmountTooHigh                                 ErrorCode = "AMOUNT_TOO_HIGH"
+	ErrorCodeAmountTooLow                                  ErrorCode = "AMOUNT_TOO_LOW"
 	ErrorCodeUnsupportedInstrumentType                     ErrorCode = "UNSUPPORTED_INSTRUMENT_TYPE"
 	ErrorCodeRefundAmountInvalid                           ErrorCode = "REFUND_AMOUNT_INVALID"
 	ErrorCodeRefundAlreadyPending                          ErrorCode = "REFUND_ALREADY_PENDING"
@@ -43155,6 +43192,13 @@ const (
 	ErrorCodePlaidError                                    ErrorCode = "PLAID_ERROR"
 	ErrorCodePlaidErrorItemLoginRequired                   ErrorCode = "PLAID_ERROR_ITEM_LOGIN_REQUIRED"
 	ErrorCodePlaidErrorRateLimit                           ErrorCode = "PLAID_ERROR_RATE_LIMIT"
+	ErrorCodePlaidErrorInvalidAccessToken                  ErrorCode = "PLAID_ERROR_INVALID_ACCESS_TOKEN"
+	ErrorCodePlaidErrorInvalidAccountID                    ErrorCode = "PLAID_ERROR_INVALID_ACCOUNT_ID"
+	ErrorCodePlaidErrorNoAccounts                          ErrorCode = "PLAID_ERROR_NO_ACCOUNTS"
+	ErrorCodePlaidErrorItemNotFound                        ErrorCode = "PLAID_ERROR_ITEM_NOT_FOUND"
+	ErrorCodePlaidErrorInsufficientCredentials             ErrorCode = "PLAID_ERROR_INSUFFICIENT_CREDENTIALS"
+	ErrorCodePlaidErrorItemNotSupported                    ErrorCode = "PLAID_ERROR_ITEM_NOT_SUPPORTED"
+	ErrorCodePlaidErrorProductNotReady                     ErrorCode = "PLAID_ERROR_PRODUCT_NOT_READY"
 	ErrorCodePaymentSourceNotEnabledForTarget              ErrorCode = "PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET"
 	ErrorCodeCardDeclined                                  ErrorCode = "CARD_DECLINED"
 	ErrorCodeVerifyCvvFailure                              ErrorCode = "VERIFY_CVV_FAILURE"
@@ -43166,6 +43210,7 @@ const (
 	ErrorCodeAllowablePinTriesExceeded                     ErrorCode = "ALLOWABLE_PIN_TRIES_EXCEEDED"
 	ErrorCodeReservationDeclined                           ErrorCode = "RESERVATION_DECLINED"
 	ErrorCodeUnknownBodyParameter                          ErrorCode = "UNKNOWN_BODY_PARAMETER"
+	ErrorCodeCartIneligibleForEbt                          ErrorCode = "CART_INELIGIBLE_FOR_EBT"
 	ErrorCodeNotFound                                      ErrorCode = "NOT_FOUND"
 	ErrorCodeApplePaymentProcessingCertificateHashNotFound ErrorCode = "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND"
 	ErrorCodeMethodNotAllowed                              ErrorCode = "METHOD_NOT_ALLOWED"
@@ -43382,6 +43427,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeCardTokenUsed, nil
 	case "AMOUNT_TOO_HIGH":
 		return ErrorCodeAmountTooHigh, nil
+	case "AMOUNT_TOO_LOW":
+		return ErrorCodeAmountTooLow, nil
 	case "UNSUPPORTED_INSTRUMENT_TYPE":
 		return ErrorCodeUnsupportedInstrumentType, nil
 	case "REFUND_AMOUNT_INVALID":
@@ -43442,6 +43489,20 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodePlaidErrorItemLoginRequired, nil
 	case "PLAID_ERROR_RATE_LIMIT":
 		return ErrorCodePlaidErrorRateLimit, nil
+	case "PLAID_ERROR_INVALID_ACCESS_TOKEN":
+		return ErrorCodePlaidErrorInvalidAccessToken, nil
+	case "PLAID_ERROR_INVALID_ACCOUNT_ID":
+		return ErrorCodePlaidErrorInvalidAccountID, nil
+	case "PLAID_ERROR_NO_ACCOUNTS":
+		return ErrorCodePlaidErrorNoAccounts, nil
+	case "PLAID_ERROR_ITEM_NOT_FOUND":
+		return ErrorCodePlaidErrorItemNotFound, nil
+	case "PLAID_ERROR_INSUFFICIENT_CREDENTIALS":
+		return ErrorCodePlaidErrorInsufficientCredentials, nil
+	case "PLAID_ERROR_ITEM_NOT_SUPPORTED":
+		return ErrorCodePlaidErrorItemNotSupported, nil
+	case "PLAID_ERROR_PRODUCT_NOT_READY":
+		return ErrorCodePlaidErrorProductNotReady, nil
 	case "PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET":
 		return ErrorCodePaymentSourceNotEnabledForTarget, nil
 	case "CARD_DECLINED":
@@ -43464,6 +43525,8 @@ func NewErrorCodeFromString(s string) (ErrorCode, error) {
 		return ErrorCodeReservationDeclined, nil
 	case "UNKNOWN_BODY_PARAMETER":
 		return ErrorCodeUnknownBodyParameter, nil
+	case "CART_INELIGIBLE_FOR_EBT":
+		return ErrorCodeCartIneligibleForEbt, nil
 	case "NOT_FOUND":
 		return ErrorCodeNotFound, nil
 	case "APPLE_PAYMENT_PROCESSING_CERTIFICATE_HASH_NOT_FOUND":

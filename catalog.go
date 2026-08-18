@@ -20,6 +20,7 @@ var (
 	searchCatalogItemsRequestFieldProductTypes           = big.NewInt(1 << 7)
 	searchCatalogItemsRequestFieldCustomAttributeFilters = big.NewInt(1 << 8)
 	searchCatalogItemsRequestFieldArchivedState          = big.NewInt(1 << 9)
+	searchCatalogItemsRequestFieldIncludeOptions         = big.NewInt(1 << 10)
 )
 
 type SearchCatalogItemsRequest struct {
@@ -49,6 +50,8 @@ type SearchCatalogItemsRequest struct {
 	CustomAttributeFilters []*CustomAttributeFilter `json:"custom_attribute_filters,omitempty" url:"-"`
 	// The query filter to return not archived (`ARCHIVED_STATE_NOT_ARCHIVED`), archived (`ARCHIVED_STATE_ARCHIVED`), or either type (`ARCHIVED_STATE_ALL`) of items.
 	ArchivedState *ArchivedState `json:"archived_state,omitempty" url:"-"`
+	// Options to include related resources in the response.
+	IncludeOptions *IncludeOptions `json:"include_options,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -129,6 +132,13 @@ func (s *SearchCatalogItemsRequest) SetCustomAttributeFilters(customAttributeFil
 func (s *SearchCatalogItemsRequest) SetArchivedState(archivedState *ArchivedState) {
 	s.ArchivedState = archivedState
 	s.require(searchCatalogItemsRequestFieldArchivedState)
+}
+
+// SetIncludeOptions sets the IncludeOptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsRequest) SetIncludeOptions(includeOptions *IncludeOptions) {
+	s.IncludeOptions = includeOptions
+	s.require(searchCatalogItemsRequestFieldIncludeOptions)
 }
 
 func (s *SearchCatalogItemsRequest) UnmarshalJSON(data []byte) error {
@@ -346,6 +356,7 @@ var (
 	batchGetCatalogObjectsRequestFieldCatalogVersion            = big.NewInt(1 << 2)
 	batchGetCatalogObjectsRequestFieldIncludeDeletedObjects     = big.NewInt(1 << 3)
 	batchGetCatalogObjectsRequestFieldIncludeCategoryPathToRoot = big.NewInt(1 << 4)
+	batchGetCatalogObjectsRequestFieldIncludeOptions            = big.NewInt(1 << 5)
 )
 
 type BatchGetCatalogObjectsRequest struct {
@@ -378,6 +389,8 @@ type BatchGetCatalogObjectsRequest struct {
 	// and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned
 	// in the response payload.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
+	// Options to include related resources in the response.
+	IncludeOptions *IncludeOptions `json:"include_options,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -423,6 +436,13 @@ func (b *BatchGetCatalogObjectsRequest) SetIncludeDeletedObjects(includeDeletedO
 func (b *BatchGetCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCategoryPathToRoot *bool) {
 	b.IncludeCategoryPathToRoot = includeCategoryPathToRoot
 	b.require(batchGetCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
+}
+
+// SetIncludeOptions sets the IncludeOptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsRequest) SetIncludeOptions(includeOptions *IncludeOptions) {
+	b.IncludeOptions = includeOptions
+	b.require(batchGetCatalogObjectsRequestFieldIncludeOptions)
 }
 
 func (b *BatchGetCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
@@ -604,6 +624,7 @@ var (
 	searchCatalogObjectsRequestFieldQuery                     = big.NewInt(1 << 5)
 	searchCatalogObjectsRequestFieldLimit                     = big.NewInt(1 << 6)
 	searchCatalogObjectsRequestFieldIncludeCategoryPathToRoot = big.NewInt(1 << 7)
+	searchCatalogObjectsRequestFieldIncludeOptions            = big.NewInt(1 << 8)
 )
 
 type SearchCatalogObjectsRequest struct {
@@ -654,6 +675,8 @@ type SearchCatalogObjectsRequest struct {
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// Specifies whether or not to include the `path_to_root` list for each returned category instance. The `path_to_root` list consists of `CategoryPathToRootNode` objects and specifies the path that starts with the immediate parent category of the returned category and ends with its root category. If the returned category is a top-level category, the `path_to_root` list is empty and is not returned in the response payload. If `include_category_path_to_root` is `true`, then the `include_deleted_objects` request parameter must be `false`. Both properties cannot be `true` at the same time.
 	IncludeCategoryPathToRoot *bool `json:"include_category_path_to_root,omitempty" url:"-"`
+	// Options to include related resources in the response.
+	IncludeOptions *IncludeOptions `json:"include_options,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -720,6 +743,13 @@ func (s *SearchCatalogObjectsRequest) SetLimit(limit *int) {
 func (s *SearchCatalogObjectsRequest) SetIncludeCategoryPathToRoot(includeCategoryPathToRoot *bool) {
 	s.IncludeCategoryPathToRoot = includeCategoryPathToRoot
 	s.require(searchCatalogObjectsRequestFieldIncludeCategoryPathToRoot)
+}
+
+// SetIncludeOptions sets the IncludeOptions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsRequest) SetIncludeOptions(includeOptions *IncludeOptions) {
+	s.IncludeOptions = includeOptions
+	s.require(searchCatalogObjectsRequestFieldIncludeOptions)
 }
 
 func (s *SearchCatalogObjectsRequest) UnmarshalJSON(data []byte) error {
@@ -891,9 +921,10 @@ func (b *BatchDeleteCatalogObjectsResponse) String() string {
 }
 
 var (
-	batchGetCatalogObjectsResponseFieldErrors         = big.NewInt(1 << 0)
-	batchGetCatalogObjectsResponseFieldObjects        = big.NewInt(1 << 1)
-	batchGetCatalogObjectsResponseFieldRelatedObjects = big.NewInt(1 << 2)
+	batchGetCatalogObjectsResponseFieldErrors            = big.NewInt(1 << 0)
+	batchGetCatalogObjectsResponseFieldObjects           = big.NewInt(1 << 1)
+	batchGetCatalogObjectsResponseFieldRelatedObjects    = big.NewInt(1 << 2)
+	batchGetCatalogObjectsResponseFieldIncludedResources = big.NewInt(1 << 3)
 )
 
 type BatchGetCatalogObjectsResponse struct {
@@ -903,6 +934,8 @@ type BatchGetCatalogObjectsResponse struct {
 	Objects []*CatalogObject `json:"objects,omitempty" url:"objects,omitempty"`
 	// A list of [CatalogObject](entity:CatalogObject)s referenced by the object in the `objects` field.
 	RelatedObjects []*CatalogObject `json:"related_objects,omitempty" url:"related_objects,omitempty"`
+	// A list of [CatalogObject](entity:CatalogObject)s referenced by the object in the `objects` field and specifically requested.
+	IncludedResources *IncludedResources `json:"included_resources,omitempty" url:"included_resources,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -930,6 +963,13 @@ func (b *BatchGetCatalogObjectsResponse) GetRelatedObjects() []*CatalogObject {
 		return nil
 	}
 	return b.RelatedObjects
+}
+
+func (b *BatchGetCatalogObjectsResponse) GetIncludedResources() *IncludedResources {
+	if b == nil {
+		return nil
+	}
+	return b.IncludedResources
 }
 
 func (b *BatchGetCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
@@ -965,6 +1005,13 @@ func (b *BatchGetCatalogObjectsResponse) SetObjects(objects []*CatalogObject) {
 func (b *BatchGetCatalogObjectsResponse) SetRelatedObjects(relatedObjects []*CatalogObject) {
 	b.RelatedObjects = relatedObjects
 	b.require(batchGetCatalogObjectsResponseFieldRelatedObjects)
+}
+
+// SetIncludedResources sets the IncludedResources field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (b *BatchGetCatalogObjectsResponse) SetIncludedResources(includedResources *IncludedResources) {
+	b.IncludedResources = includedResources
+	b.require(batchGetCatalogObjectsResponseFieldIncludedResources)
 }
 
 func (b *BatchGetCatalogObjectsResponse) UnmarshalJSON(data []byte) error {
@@ -1653,6 +1700,7 @@ var (
 	catalogQueryFieldItemsForModifierListQuery              = big.NewInt(1 << 7)
 	catalogQueryFieldItemsForItemOptionsQuery               = big.NewInt(1 << 8)
 	catalogQueryFieldItemVariationsForItemOptionValuesQuery = big.NewInt(1 << 9)
+	catalogQueryFieldModifiersForChildListQuery             = big.NewInt(1 << 10)
 )
 
 type CatalogQuery struct {
@@ -1685,6 +1733,8 @@ type CatalogQuery struct {
 	// A query expression to return item variations (of the [CatalogItemVariation](entity:CatalogItemVariation) type) that
 	// contain all of the specified `CatalogItemOption` IDs.
 	ItemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues `json:"item_variations_for_item_option_values_query,omitempty" url:"item_variations_for_item_option_values_query,omitempty"`
+	// A query expression to return `CatalogModifier` objects that nest the specified modifier lists (via `child_modifier_list_ids`)
+	ModifiersForChildListQuery *CatalogQueryModifiersForChildList `json:"modifiers_for_child_list_query,omitempty" url:"modifiers_for_child_list_query,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1761,6 +1811,13 @@ func (c *CatalogQuery) GetItemVariationsForItemOptionValuesQuery() *CatalogQuery
 		return nil
 	}
 	return c.ItemVariationsForItemOptionValuesQuery
+}
+
+func (c *CatalogQuery) GetModifiersForChildListQuery() *CatalogQueryModifiersForChildList {
+	if c == nil {
+		return nil
+	}
+	return c.ModifiersForChildListQuery
 }
 
 func (c *CatalogQuery) GetExtraProperties() map[string]interface{} {
@@ -1845,6 +1902,13 @@ func (c *CatalogQuery) SetItemsForItemOptionsQuery(itemsForItemOptionsQuery *Cat
 func (c *CatalogQuery) SetItemVariationsForItemOptionValuesQuery(itemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues) {
 	c.ItemVariationsForItemOptionValuesQuery = itemVariationsForItemOptionValuesQuery
 	c.require(catalogQueryFieldItemVariationsForItemOptionValuesQuery)
+}
+
+// SetModifiersForChildListQuery sets the ModifiersForChildListQuery field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQuery) SetModifiersForChildListQuery(modifiersForChildListQuery *CatalogQueryModifiersForChildList) {
+	c.ModifiersForChildListQuery = modifiersForChildListQuery
+	c.require(catalogQueryFieldModifiersForChildListQuery)
 }
 
 func (c *CatalogQuery) UnmarshalJSON(data []byte) error {
@@ -2327,6 +2391,93 @@ func (c *CatalogQueryItemsForTax) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CatalogQueryItemsForTax) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Query to find `CatalogModifier` objects that reference a given `CatalogModifierList` in their `child_modifier_list_ids` field.
+var (
+	catalogQueryModifiersForChildListFieldChildModifierListIDs = big.NewInt(1 << 0)
+)
+
+type CatalogQueryModifiersForChildList struct {
+	// The `CatalogModifierList` IDs to find parent `CatalogModifier`s for.
+	// Returns `CatalogModifier` objects where `child_modifier_list_ids` contains any of these IDs.
+	ChildModifierListIDs []string `json:"child_modifier_list_ids" url:"child_modifier_list_ids"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CatalogQueryModifiersForChildList) GetChildModifierListIDs() []string {
+	if c == nil {
+		return nil
+	}
+	return c.ChildModifierListIDs
+}
+
+func (c *CatalogQueryModifiersForChildList) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CatalogQueryModifiersForChildList) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetChildModifierListIDs sets the ChildModifierListIDs field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CatalogQueryModifiersForChildList) SetChildModifierListIDs(childModifierListIDs []string) {
+	c.ChildModifierListIDs = childModifierListIDs
+	c.require(catalogQueryModifiersForChildListFieldChildModifierListIDs)
+}
+
+func (c *CatalogQueryModifiersForChildList) UnmarshalJSON(data []byte) error {
+	type unmarshaler CatalogQueryModifiersForChildList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CatalogQueryModifiersForChildList(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CatalogQueryModifiersForChildList) MarshalJSON() ([]byte, error) {
+	type embed CatalogQueryModifiersForChildList
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CatalogQueryModifiersForChildList) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -3063,6 +3214,220 @@ func (c *CustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// Options to include related resources of the requested `CatalogObject`s. Related resources will be included in
+// `IncludedResources` in the response.
+var (
+	includeOptionsFieldInclude = big.NewInt(1 << 0)
+)
+
+type IncludeOptions struct {
+	// Resources to include in the response.
+	// See [IncludeType](#type-includetype) for possible values
+	Include []IncludeType `json:"include,omitempty" url:"include,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IncludeOptions) GetInclude() []IncludeType {
+	if i == nil {
+		return nil
+	}
+	return i.Include
+}
+
+func (i *IncludeOptions) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IncludeOptions) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetInclude sets the Include field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IncludeOptions) SetInclude(include []IncludeType) {
+	i.Include = include
+	i.require(includeOptionsFieldInclude)
+}
+
+func (i *IncludeOptions) UnmarshalJSON(data []byte) error {
+	type unmarshaler IncludeOptions
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IncludeOptions(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IncludeOptions) MarshalJSON() ([]byte, error) {
+	type embed IncludeOptions
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IncludeOptions) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Related resources of requested `CatalogObject`s to include as part of the response.
+type IncludeType string
+
+const (
+	IncludeTypeIncludeNestedModifiers   IncludeType = "INCLUDE_NESTED_MODIFIERS"
+	IncludeTypeIncludeAncestorModifiers IncludeType = "INCLUDE_ANCESTOR_MODIFIERS"
+)
+
+func NewIncludeTypeFromString(s string) (IncludeType, error) {
+	switch s {
+	case "INCLUDE_NESTED_MODIFIERS":
+		return IncludeTypeIncludeNestedModifiers, nil
+	case "INCLUDE_ANCESTOR_MODIFIERS":
+		return IncludeTypeIncludeAncestorModifiers, nil
+	}
+	var t IncludeType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IncludeType) Ptr() *IncludeType {
+	return &i
+}
+
+// Related resources of the response `CatalogObject`s requested using `IncludeOptions`
+var (
+	includedResourcesFieldNestedModifiers   = big.NewInt(1 << 0)
+	includedResourcesFieldAncestorModifiers = big.NewInt(1 << 1)
+)
+
+type IncludedResources struct {
+	// Nested `CatalogModifierList`s as requested via `INCLUDE_NESTED_MODIFIERS`.
+	NestedModifiers []*CatalogObject `json:"nested_modifiers,omitempty" url:"nested_modifiers,omitempty"`
+	// Ancestor `CatalogModifierList`s as requested via INCLUDE_ANCESTOR_MODIFIERS
+	AncestorModifiers []*CatalogObject `json:"ancestor_modifiers,omitempty" url:"ancestor_modifiers,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (i *IncludedResources) GetNestedModifiers() []*CatalogObject {
+	if i == nil {
+		return nil
+	}
+	return i.NestedModifiers
+}
+
+func (i *IncludedResources) GetAncestorModifiers() []*CatalogObject {
+	if i == nil {
+		return nil
+	}
+	return i.AncestorModifiers
+}
+
+func (i *IncludedResources) GetExtraProperties() map[string]interface{} {
+	if i == nil {
+		return nil
+	}
+	return i.extraProperties
+}
+
+func (i *IncludedResources) require(field *big.Int) {
+	if i.explicitFields == nil {
+		i.explicitFields = big.NewInt(0)
+	}
+	i.explicitFields.Or(i.explicitFields, field)
+}
+
+// SetNestedModifiers sets the NestedModifiers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IncludedResources) SetNestedModifiers(nestedModifiers []*CatalogObject) {
+	i.NestedModifiers = nestedModifiers
+	i.require(includedResourcesFieldNestedModifiers)
+}
+
+// SetAncestorModifiers sets the AncestorModifiers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (i *IncludedResources) SetAncestorModifiers(ancestorModifiers []*CatalogObject) {
+	i.AncestorModifiers = ancestorModifiers
+	i.require(includedResourcesFieldAncestorModifiers)
+}
+
+func (i *IncludedResources) UnmarshalJSON(data []byte) error {
+	type unmarshaler IncludedResources
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IncludedResources(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+	i.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IncludedResources) MarshalJSON() ([]byte, error) {
+	type embed IncludedResources
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*i),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, i.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (i *IncludedResources) String() string {
+	if i == nil {
+		return "<nil>"
+	}
+	if len(i.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(i.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 var (
 	listCatalogResponseFieldErrors  = big.NewInt(1 << 0)
 	listCatalogResponseFieldCursor  = big.NewInt(1 << 1)
@@ -3317,6 +3682,7 @@ var (
 	searchCatalogItemsResponseFieldItems               = big.NewInt(1 << 1)
 	searchCatalogItemsResponseFieldCursor              = big.NewInt(1 << 2)
 	searchCatalogItemsResponseFieldMatchedVariationIDs = big.NewInt(1 << 3)
+	searchCatalogItemsResponseFieldIncludedResources   = big.NewInt(1 << 4)
 )
 
 type SearchCatalogItemsResponse struct {
@@ -3328,6 +3694,8 @@ type SearchCatalogItemsResponse struct {
 	Cursor *string `json:"cursor,omitempty" url:"cursor,omitempty"`
 	// Ids of returned item variations matching the specified query expression.
 	MatchedVariationIDs []string `json:"matched_variation_ids,omitempty" url:"matched_variation_ids,omitempty"`
+	// Related resources included in the response as requested via include_options
+	IncludedResources *IncludedResources `json:"included_resources,omitempty" url:"included_resources,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3362,6 +3730,13 @@ func (s *SearchCatalogItemsResponse) GetMatchedVariationIDs() []string {
 		return nil
 	}
 	return s.MatchedVariationIDs
+}
+
+func (s *SearchCatalogItemsResponse) GetIncludedResources() *IncludedResources {
+	if s == nil {
+		return nil
+	}
+	return s.IncludedResources
 }
 
 func (s *SearchCatalogItemsResponse) GetExtraProperties() map[string]interface{} {
@@ -3404,6 +3779,13 @@ func (s *SearchCatalogItemsResponse) SetCursor(cursor *string) {
 func (s *SearchCatalogItemsResponse) SetMatchedVariationIDs(matchedVariationIDs []string) {
 	s.MatchedVariationIDs = matchedVariationIDs
 	s.require(searchCatalogItemsResponseFieldMatchedVariationIDs)
+}
+
+// SetIncludedResources sets the IncludedResources field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogItemsResponse) SetIncludedResources(includedResources *IncludedResources) {
+	s.IncludedResources = includedResources
+	s.require(searchCatalogItemsResponseFieldIncludedResources)
 }
 
 func (s *SearchCatalogItemsResponse) UnmarshalJSON(data []byte) error {
@@ -3449,11 +3831,12 @@ func (s *SearchCatalogItemsResponse) String() string {
 }
 
 var (
-	searchCatalogObjectsResponseFieldErrors         = big.NewInt(1 << 0)
-	searchCatalogObjectsResponseFieldCursor         = big.NewInt(1 << 1)
-	searchCatalogObjectsResponseFieldObjects        = big.NewInt(1 << 2)
-	searchCatalogObjectsResponseFieldRelatedObjects = big.NewInt(1 << 3)
-	searchCatalogObjectsResponseFieldLatestTime     = big.NewInt(1 << 4)
+	searchCatalogObjectsResponseFieldErrors            = big.NewInt(1 << 0)
+	searchCatalogObjectsResponseFieldCursor            = big.NewInt(1 << 1)
+	searchCatalogObjectsResponseFieldObjects           = big.NewInt(1 << 2)
+	searchCatalogObjectsResponseFieldRelatedObjects    = big.NewInt(1 << 3)
+	searchCatalogObjectsResponseFieldLatestTime        = big.NewInt(1 << 4)
+	searchCatalogObjectsResponseFieldIncludedResources = big.NewInt(1 << 5)
 )
 
 type SearchCatalogObjectsResponse struct {
@@ -3469,6 +3852,8 @@ type SearchCatalogObjectsResponse struct {
 	// When the associated product catalog was last updated. Will
 	// match the value for `end_time` or `cursor` if either field is included in the `SearchCatalog` request.
 	LatestTime *string `json:"latest_time,omitempty" url:"latest_time,omitempty"`
+	// A list of [CatalogObject](entity:CatalogObject)s referenced by the object in the `objects` field and specifically requested.
+	IncludedResources *IncludedResources `json:"included_resources,omitempty" url:"included_resources,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3510,6 +3895,13 @@ func (s *SearchCatalogObjectsResponse) GetLatestTime() *string {
 		return nil
 	}
 	return s.LatestTime
+}
+
+func (s *SearchCatalogObjectsResponse) GetIncludedResources() *IncludedResources {
+	if s == nil {
+		return nil
+	}
+	return s.IncludedResources
 }
 
 func (s *SearchCatalogObjectsResponse) GetExtraProperties() map[string]interface{} {
@@ -3559,6 +3951,13 @@ func (s *SearchCatalogObjectsResponse) SetRelatedObjects(relatedObjects []*Catal
 func (s *SearchCatalogObjectsResponse) SetLatestTime(latestTime *string) {
 	s.LatestTime = latestTime
 	s.require(searchCatalogObjectsResponseFieldLatestTime)
+}
+
+// SetIncludedResources sets the IncludedResources field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *SearchCatalogObjectsResponse) SetIncludedResources(includedResources *IncludedResources) {
+	s.IncludedResources = includedResources
+	s.require(searchCatalogObjectsResponseFieldIncludedResources)
 }
 
 func (s *SearchCatalogObjectsResponse) UnmarshalJSON(data []byte) error {

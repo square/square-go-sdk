@@ -34323,6 +34323,14 @@ func TestSettersCatalogModifier(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetChildModifierListIDs", func(t *testing.T) {
+		obj := &CatalogModifier{}
+		var fernTestValueChildModifierListIDs []string
+		obj.SetChildModifierListIDs(fernTestValueChildModifierListIDs)
+		assert.Equal(t, fernTestValueChildModifierListIDs, obj.ChildModifierListIDs)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestGettersCatalogModifier(t *testing.T) {
@@ -34623,6 +34631,39 @@ func TestGettersCatalogModifier(t *testing.T) {
 		_ = obj.GetHiddenOnline() // Should return zero value
 	})
 
+	t.Run("GetChildModifierListIDs", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CatalogModifier{}
+		var expected []string
+		obj.ChildModifierListIDs = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetChildModifierListIDs(), "getter should return the property value")
+	})
+
+	t.Run("GetChildModifierListIDs_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CatalogModifier{}
+		obj.ChildModifierListIDs = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetChildModifierListIDs(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetChildModifierListIDs_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *CatalogModifier
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetChildModifierListIDs() // Should return zero value
+	})
+
 }
 
 func TestSettersMarkExplicitCatalogModifier(t *testing.T) {
@@ -34882,6 +34923,37 @@ func TestSettersMarkExplicitCatalogModifier(t *testing.T) {
 
 		// Act
 		obj.SetHiddenOnline(fernTestValueHiddenOnline)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetChildModifierListIDs_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CatalogModifier{}
+		var fernTestValueChildModifierListIDs []string
+
+		// Act
+		obj.SetChildModifierListIDs(fernTestValueChildModifierListIDs)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -253099,6 +253171,34 @@ func TestEnumCardBrand(t *testing.T) {
 		assert.Equal(t, CardBrand("EBT"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_QUICPAY", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCardBrandFromString("QUICPAY")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CardBrand("QUICPAY"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_ID", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCardBrandFromString("ID")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CardBrand("ID"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_TRANSPORTATION_IC", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCardBrandFromString("TRANSPORTATION_IC")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CardBrand("TRANSPORTATION_IC"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_CARNET", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewCardBrandFromString("CARNET")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, CardBrand("CARNET"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_Invalid", func(t *testing.T) {
 		_, err := NewCardBrandFromString("invalid_value_that_does_not_exist")
 		assert.Error(t, err)
@@ -258396,6 +258496,13 @@ func TestEnumErrorCode(t *testing.T) {
 		assert.Equal(t, ErrorCode("AMOUNT_TOO_HIGH"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_AMOUNT_TOO_LOW", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("AMOUNT_TOO_LOW")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("AMOUNT_TOO_LOW"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_UNSUPPORTED_INSTRUMENT_TYPE", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewErrorCodeFromString("UNSUPPORTED_INSTRUMENT_TYPE")
@@ -258606,6 +258713,55 @@ func TestEnumErrorCode(t *testing.T) {
 		assert.Equal(t, ErrorCode("PLAID_ERROR_RATE_LIMIT"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_PLAID_ERROR_INVALID_ACCESS_TOKEN", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_INVALID_ACCESS_TOKEN")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_INVALID_ACCESS_TOKEN"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_INVALID_ACCOUNT_ID", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_INVALID_ACCOUNT_ID")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_INVALID_ACCOUNT_ID"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_NO_ACCOUNTS", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_NO_ACCOUNTS")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_NO_ACCOUNTS"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_ITEM_NOT_FOUND", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_ITEM_NOT_FOUND")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_ITEM_NOT_FOUND"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_INSUFFICIENT_CREDENTIALS", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_INSUFFICIENT_CREDENTIALS")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_INSUFFICIENT_CREDENTIALS"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_ITEM_NOT_SUPPORTED", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_ITEM_NOT_SUPPORTED")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_ITEM_NOT_SUPPORTED"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_PLAID_ERROR_PRODUCT_NOT_READY", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("PLAID_ERROR_PRODUCT_NOT_READY")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("PLAID_ERROR_PRODUCT_NOT_READY"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewErrorCodeFromString("PAYMENT_SOURCE_NOT_ENABLED_FOR_TARGET")
@@ -258681,6 +258837,13 @@ func TestEnumErrorCode(t *testing.T) {
 		val, err := NewErrorCodeFromString("UNKNOWN_BODY_PARAMETER")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, ErrorCode("UNKNOWN_BODY_PARAMETER"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_CART_INELIGIBLE_FOR_EBT", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewErrorCodeFromString("CART_INELIGIBLE_FOR_EBT")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, ErrorCode("CART_INELIGIBLE_FOR_EBT"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_NOT_FOUND", func(t *testing.T) {
