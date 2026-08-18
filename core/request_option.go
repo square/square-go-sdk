@@ -52,7 +52,7 @@ func (r *RequestOptions) ToHeader() http.Header {
 	if r.Token != "" {
 		header.Set("Authorization", "Bearer "+r.Token)
 	}
-	version := fmt.Sprintf("%v", "2026-07-15")
+	version := fmt.Sprintf("%v", "2026-08-19")
 	if envValue := os.Getenv("VERSION"); envValue != "" {
 		version = envValue
 	}

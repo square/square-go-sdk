@@ -1420,6 +1420,8 @@ var (
 	locationFieldMcc               = big.NewInt(1 << 24)
 	locationFieldFullFormatLogoURL = big.NewInt(1 << 25)
 	locationFieldTaxIDs            = big.NewInt(1 << 26)
+	locationFieldCustomReceiptText = big.NewInt(1 << 27)
+	locationFieldReturnPolicy      = big.NewInt(1 << 28)
 )
 
 type Location struct {
@@ -1499,6 +1501,12 @@ type Location struct {
 	FullFormatLogoURL *string `json:"full_format_logo_url,omitempty" url:"full_format_logo_url,omitempty"`
 	// The tax IDs for this location.
 	TaxIDs *TaxIDs `json:"tax_ids,omitempty" url:"tax_ids,omitempty"`
+	// The custom text that appears on receipts issued for this location.
+	// This text can also be configured in the Seller Dashboard (Receipts section).
+	CustomReceiptText *string `json:"custom_receipt_text,omitempty" url:"custom_receipt_text,omitempty"`
+	// The return policy that appears on receipts issued for this location.
+	// This text can also be configured in the Seller Dashboard (Receipts section).
+	ReturnPolicy *string `json:"return_policy,omitempty" url:"return_policy,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1694,6 +1702,20 @@ func (l *Location) GetTaxIDs() *TaxIDs {
 		return nil
 	}
 	return l.TaxIDs
+}
+
+func (l *Location) GetCustomReceiptText() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CustomReceiptText
+}
+
+func (l *Location) GetReturnPolicy() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ReturnPolicy
 }
 
 func (l *Location) GetExtraProperties() map[string]interface{} {
@@ -1897,6 +1919,20 @@ func (l *Location) SetFullFormatLogoURL(fullFormatLogoURL *string) {
 func (l *Location) SetTaxIDs(taxIDs *TaxIDs) {
 	l.TaxIDs = taxIDs
 	l.require(locationFieldTaxIDs)
+}
+
+// SetCustomReceiptText sets the CustomReceiptText field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetCustomReceiptText(customReceiptText *string) {
+	l.CustomReceiptText = customReceiptText
+	l.require(locationFieldCustomReceiptText)
+}
+
+// SetReturnPolicy sets the ReturnPolicy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *Location) SetReturnPolicy(returnPolicy *string) {
+	l.ReturnPolicy = returnPolicy
+	l.require(locationFieldReturnPolicy)
 }
 
 func (l *Location) UnmarshalJSON(data []byte) error {
