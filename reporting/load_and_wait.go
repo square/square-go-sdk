@@ -3,8 +3,8 @@ package reporting
 import (
 	context "context"
 	fmt "fmt"
-	square "github.com/square/square-go-sdk/v4"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	option "github.com/square/square-go-sdk/v5/option"
 	time "time"
 )
 

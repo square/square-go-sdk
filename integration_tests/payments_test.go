@@ -6,7 +6,7 @@ import (
 	"context"
 	"testing"
 
-	square "github.com/square/square-go-sdk/v4"
+	square "github.com/square/square-go-sdk/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

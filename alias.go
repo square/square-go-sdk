@@ -72,9 +72,6 @@ type InventoryGetAdjustmentRequest = GetAdjustmentInventoryRequest
 // InventoryGetPhysicalCountRequest is an alias for GetPhysicalCountInventoryRequest.
 type InventoryGetPhysicalCountRequest = GetPhysicalCountInventoryRequest
 
-// InventoryGetTransferRequest is an alias for GetTransferInventoryRequest.
-type InventoryGetTransferRequest = GetTransferInventoryRequest
-
 // InvoicesDeleteRequest is an alias for DeleteInvoicesRequest.
 type InvoicesDeleteRequest = DeleteInvoicesRequest
 
