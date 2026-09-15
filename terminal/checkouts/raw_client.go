@@ -4,11 +4,11 @@ package checkouts
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	option "github.com/square/square-go-sdk/v4/option"
-	terminal "github.com/square/square-go-sdk/v4/terminal"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	option "github.com/square/square-go-sdk/v5/option"
+	terminal "github.com/square/square-go-sdk/v5/terminal"
 	http "net/http"
 )
 

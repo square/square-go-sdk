@@ -4,11 +4,11 @@ package transactions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	locations "github.com/square/square-go-sdk/v4/locations"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	locations "github.com/square/square-go-sdk/v5/locations"
+	option "github.com/square/square-go-sdk/v5/option"
 	http "net/http"
 )
 
@@ -129,7 +129,7 @@ func (r *RawClient) Capture(
 	ctx context.Context,
 	request *locations.CaptureTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*square.CaptureTransactionResponse], error) {
+) (*core.Response[any], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -145,7 +145,6 @@ func (r *RawClient) Capture(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *square.CaptureTransactionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -156,16 +155,15 @@ func (r *RawClient) Capture(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*square.CaptureTransactionResponse]{
+	return &core.Response[any]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
-		Body:       response,
+		Body:       nil,
 	}, nil
 }
 
@@ -173,7 +171,7 @@ func (r *RawClient) Void(
 	ctx context.Context,
 	request *locations.VoidTransactionsRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*square.VoidTransactionResponse], error) {
+) (*core.Response[any], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -189,7 +187,6 @@ func (r *RawClient) Void(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	var response *square.VoidTransactionResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -200,15 +197,14 @@ func (r *RawClient) Void(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Response:        &response,
 		},
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*square.VoidTransactionResponse]{
+	return &core.Response[any]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
-		Body:       response,
+		Body:       nil,
 	}, nil
 }

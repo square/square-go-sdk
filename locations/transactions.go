@@ -3,7 +3,7 @@
 package locations
 
 import (
-	v4 "github.com/square/square-go-sdk/v4"
+	v5 "github.com/square/square-go-sdk/v5"
 	big "math/big"
 )
 
@@ -104,7 +104,7 @@ type ListTransactionsRequest struct {
 	// oldest first, `DESC` for newest first).
 	//
 	// Default value: `DESC`
-	SortOrder *v4.SortOrder `json:"-" url:"sort_order,omitempty"`
+	SortOrder *v5.SortOrder `json:"-" url:"sort_order,omitempty"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
 	//
@@ -145,7 +145,7 @@ func (l *ListTransactionsRequest) SetEndTime(endTime *string) {
 
 // SetSortOrder sets the SortOrder field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v4.SortOrder) {
+func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v5.SortOrder) {
 	l.SortOrder = sortOrder
 	l.require(listTransactionsRequestFieldSortOrder)
 }

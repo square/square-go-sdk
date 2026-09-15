@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v4/internal"
+	internal "github.com/square/square-go-sdk/v5/internal"
 	big "math/big"
 )
 
@@ -8040,93 +8040,6 @@ func (c *CancelTerminalRefundResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CancelTerminalRefundResponse) String() string {
-	if c == nil {
-		return "<nil>"
-	}
-	if len(c.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// Defines the fields that are included in the response body of
-// a request to the [CaptureTransaction](api-endpoint:Transactions-CaptureTransaction) endpoint.
-var (
-	captureTransactionResponseFieldErrors = big.NewInt(1 << 0)
-)
-
-type CaptureTransactionResponse struct {
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (c *CaptureTransactionResponse) GetErrors() []*Error {
-	if c == nil {
-		return nil
-	}
-	return c.Errors
-}
-
-func (c *CaptureTransactionResponse) GetExtraProperties() map[string]interface{} {
-	if c == nil {
-		return nil
-	}
-	return c.extraProperties
-}
-
-func (c *CaptureTransactionResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetErrors sets the Errors field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CaptureTransactionResponse) SetErrors(errors []*Error) {
-	c.Errors = errors
-	c.require(captureTransactionResponseFieldErrors)
-}
-
-func (c *CaptureTransactionResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler CaptureTransactionResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = CaptureTransactionResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-	c.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *CaptureTransactionResponse) MarshalJSON() ([]byte, error) {
-	type embed CaptureTransactionResponse
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*c),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (c *CaptureTransactionResponse) String() string {
 	if c == nil {
 		return "<nil>"
 	}
@@ -108138,93 +108051,6 @@ func NewVisibilityFilterFromString(s string) (VisibilityFilter, error) {
 
 func (v VisibilityFilter) Ptr() *VisibilityFilter {
 	return &v
-}
-
-// Defines the fields that are included in the response body of
-// a request to the [VoidTransaction](api-endpoint:Transactions-VoidTransaction) endpoint.
-var (
-	voidTransactionResponseFieldErrors = big.NewInt(1 << 0)
-)
-
-type VoidTransactionResponse struct {
-	// Any errors that occurred during the request.
-	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (v *VoidTransactionResponse) GetErrors() []*Error {
-	if v == nil {
-		return nil
-	}
-	return v.Errors
-}
-
-func (v *VoidTransactionResponse) GetExtraProperties() map[string]interface{} {
-	if v == nil {
-		return nil
-	}
-	return v.extraProperties
-}
-
-func (v *VoidTransactionResponse) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
-	}
-	v.explicitFields.Or(v.explicitFields, field)
-}
-
-// SetErrors sets the Errors field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (v *VoidTransactionResponse) SetErrors(errors []*Error) {
-	v.Errors = errors
-	v.require(voidTransactionResponseFieldErrors)
-}
-
-func (v *VoidTransactionResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler VoidTransactionResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*v = VoidTransactionResponse(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *v)
-	if err != nil {
-		return err
-	}
-	v.extraProperties = extraProperties
-	v.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (v *VoidTransactionResponse) MarshalJSON() ([]byte, error) {
-	type embed VoidTransactionResponse
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*v),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, v.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (v *VoidTransactionResponse) String() string {
-	if v == nil {
-		return "<nil>"
-	}
-	if len(v.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(v.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(v); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", v)
 }
 
 // Represents information about the overtime exemption status, job assignments, and compensation

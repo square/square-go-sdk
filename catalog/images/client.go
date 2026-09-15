@@ -4,11 +4,11 @@ package images
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	catalog "github.com/square/square-go-sdk/v4/catalog"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	catalog "github.com/square/square-go-sdk/v5/catalog"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	option "github.com/square/square-go-sdk/v5/option"
 	os "os"
 )
 

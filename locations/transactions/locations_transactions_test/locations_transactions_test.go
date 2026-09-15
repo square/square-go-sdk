@@ -6,10 +6,10 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v4"
-	client "github.com/square/square-go-sdk/v4/client"
-	locations "github.com/square/square-go-sdk/v4/locations"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	locations "github.com/square/square-go-sdk/v5/locations"
+	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
@@ -138,7 +138,7 @@ func TestLocationsTransactionsCaptureWithWireMock(
 		LocationID:    "location_id",
 		TransactionID: "transaction_id",
 	}
-	_, invocationErr := client.Locations.Transactions.Capture(
+	invocationErr := client.Locations.Transactions.Capture(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(
@@ -164,7 +164,7 @@ func TestLocationsTransactionsVoidWithWireMock(
 		LocationID:    "location_id",
 		TransactionID: "transaction_id",
 	}
-	_, invocationErr := client.Locations.Transactions.Void(
+	invocationErr := client.Locations.Transactions.Void(
 		context.TODO(),
 		request,
 		option.WithHTTPHeader(

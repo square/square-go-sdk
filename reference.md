@@ -25662,28 +25662,9 @@ client.Locations.Transactions.Get(
 </dl>
 </details>
 
-<details><summary><code>client.Locations.Transactions.Capture(LocationID, TransactionID) -> *square.CaptureTransactionResponse</code></summary>
+<details><summary><code>client.Locations.Transactions.Capture(LocationID, TransactionID) -> error</code></summary>
 <dl>
 <dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Captures a transaction that was created with the [Charge](api-endpoint:Transactions-Charge)
-endpoint with a `delay_capture` value of `true`.
-
-
-See [Delayed capture transactions](https://developer.squareup.com/docs/payments/transactions/overview#delayed-capture)
-for more information.
-</dd>
-</dl>
-</dd>
-</dl>
 
 #### 🔌 Usage
 
@@ -25717,7 +25698,7 @@ client.Locations.Transactions.Capture(
 <dl>
 <dd>
 
-**locationID:** `string` — 
+**locationID:** `string` 
     
 </dd>
 </dl>
@@ -25725,7 +25706,7 @@ client.Locations.Transactions.Capture(
 <dl>
 <dd>
 
-**transactionID:** `string` — 
+**transactionID:** `string` 
     
 </dd>
 </dl>
@@ -25737,28 +25718,9 @@ client.Locations.Transactions.Capture(
 </dl>
 </details>
 
-<details><summary><code>client.Locations.Transactions.Void(LocationID, TransactionID) -> *square.VoidTransactionResponse</code></summary>
+<details><summary><code>client.Locations.Transactions.Void(LocationID, TransactionID) -> error</code></summary>
 <dl>
 <dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Cancels a transaction that was created with the [Charge](api-endpoint:Transactions-Charge)
-endpoint with a `delay_capture` value of `true`.
-
-
-See [Delayed capture transactions](https://developer.squareup.com/docs/payments/transactions/overview#delayed-capture)
-for more information.
-</dd>
-</dl>
-</dd>
-</dl>
 
 #### 🔌 Usage
 
@@ -25792,7 +25754,7 @@ client.Locations.Transactions.Void(
 <dl>
 <dd>
 
-**locationID:** `string` — 
+**locationID:** `string` 
     
 </dd>
 </dl>
@@ -25800,7 +25762,7 @@ client.Locations.Transactions.Void(
 <dl>
 <dd>
 
-**transactionID:** `string` — 
+**transactionID:** `string` 
     
 </dd>
 </dl>
