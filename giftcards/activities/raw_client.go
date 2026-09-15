@@ -4,11 +4,11 @@ package activities
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	giftcards "github.com/square/square-go-sdk/v4/giftcards"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	giftcards "github.com/square/square-go-sdk/v5/giftcards"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	option "github.com/square/square-go-sdk/v5/option"
 	http "net/http"
 )
 

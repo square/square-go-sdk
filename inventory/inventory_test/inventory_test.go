@@ -6,9 +6,9 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v4"
-	client "github.com/square/square-go-sdk/v4/client"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
@@ -701,29 +701,4 @@ func TestInventoryChangesWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestInventoryChangesWithWireMock", "GET", "/v2/inventory/catalog_object_id/changes", map[string]string{"location_ids": "location_ids", "cursor": "cursor"}, 1)
-}
-
-func TestInventoryGetTransferWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &square.GetTransferInventoryRequest{
-		TransferID: "transfer_id",
-	}
-	invocationErr := client.Inventory.GetTransfer(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestInventoryGetTransferWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInventoryGetTransferWithWireMock", "GET", "/v2/inventory/transfers/transfer_id", nil, 1)
 }

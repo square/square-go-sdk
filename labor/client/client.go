@@ -4,15 +4,15 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	breaktypes "github.com/square/square-go-sdk/v4/labor/breaktypes"
-	employeewages "github.com/square/square-go-sdk/v4/labor/employeewages"
-	shifts "github.com/square/square-go-sdk/v4/labor/shifts"
-	teammemberwages "github.com/square/square-go-sdk/v4/labor/teammemberwages"
-	workweekconfigs "github.com/square/square-go-sdk/v4/labor/workweekconfigs"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	breaktypes "github.com/square/square-go-sdk/v5/labor/breaktypes"
+	employeewages "github.com/square/square-go-sdk/v5/labor/employeewages"
+	shifts "github.com/square/square-go-sdk/v5/labor/shifts"
+	teammemberwages "github.com/square/square-go-sdk/v5/labor/teammemberwages"
+	workweekconfigs "github.com/square/square-go-sdk/v5/labor/workweekconfigs"
+	option "github.com/square/square-go-sdk/v5/option"
 	os "os"
 )
 

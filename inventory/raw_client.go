@@ -4,10 +4,10 @@ package inventory
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	option "github.com/square/square-go-sdk/v5/option"
 	http "net/http"
 )
 
@@ -744,46 +744,5 @@ func (r *RawClient) GetPhysicalCount(
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) GetTransfer(
-	ctx context.Context,
-	request *square.GetTransferInventoryRequest,
-	opts ...option.RequestOption,
-) (*core.Response[any], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/inventory/transfers/%v",
-		request.TransferID,
-	)
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[any]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       nil,
 	}, nil
 }

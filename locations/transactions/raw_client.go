@@ -4,11 +4,11 @@ package transactions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	locations "github.com/square/square-go-sdk/v4/locations"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	locations "github.com/square/square-go-sdk/v5/locations"
+	option "github.com/square/square-go-sdk/v5/option"
 	http "net/http"
 )
 
@@ -119,94 +119,6 @@ func (r *RawClient) Get(
 		return nil, err
 	}
 	return &core.Response[*square.GetTransactionResponse]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) Capture(
-	ctx context.Context,
-	request *locations.CaptureTransactionsRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*square.CaptureTransactionResponse], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/locations/%v/transactions/%v/capture",
-		request.LocationID,
-		request.TransactionID,
-	)
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	var response *square.CaptureTransactionResponse
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPost,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*square.CaptureTransactionResponse]{
-		StatusCode: raw.StatusCode,
-		Header:     raw.Header,
-		Body:       response,
-	}, nil
-}
-
-func (r *RawClient) Void(
-	ctx context.Context,
-	request *locations.VoidTransactionsRequest,
-	opts ...option.RequestOption,
-) (*core.Response[*square.VoidTransactionResponse], error) {
-	options := core.NewRequestOptions(opts...)
-	baseURL := internal.ResolveBaseURL(
-		options.BaseURL,
-		r.baseURL,
-		"https://connect.squareup.com",
-	)
-	endpointURL := internal.EncodeURL(
-		baseURL+"/v2/locations/%v/transactions/%v/void",
-		request.LocationID,
-		request.TransactionID,
-	)
-	headers := internal.MergeHeaders(
-		r.options.ToHeader(),
-		options.ToHeader(),
-	)
-	var response *square.VoidTransactionResponse
-	raw, err := r.caller.Call(
-		ctx,
-		&internal.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodPost,
-			Headers:         headers,
-			MaxAttempts:     options.MaxAttempts,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &core.Response[*square.VoidTransactionResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

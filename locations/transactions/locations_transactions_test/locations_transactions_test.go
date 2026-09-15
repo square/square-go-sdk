@@ -6,10 +6,10 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v4"
-	client "github.com/square/square-go-sdk/v4/client"
-	locations "github.com/square/square-go-sdk/v4/locations"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	locations "github.com/square/square-go-sdk/v5/locations"
+	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
@@ -122,56 +122,4 @@ func TestLocationsTransactionsGetWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestLocationsTransactionsGetWithWireMock", "GET", "/v2/locations/location_id/transactions/transaction_id", nil, 1)
-}
-
-func TestLocationsTransactionsCaptureWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &locations.CaptureTransactionsRequest{
-		LocationID:    "location_id",
-		TransactionID: "transaction_id",
-	}
-	_, invocationErr := client.Locations.Transactions.Capture(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsTransactionsCaptureWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsTransactionsCaptureWithWireMock", "POST", "/v2/locations/location_id/transactions/transaction_id/capture", nil, 1)
-}
-
-func TestLocationsTransactionsVoidWithWireMock(
-	t *testing.T,
-) {
-	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
-	if WireMockBaseURL == "" {
-		WireMockBaseURL = "http://localhost:8080"
-	}
-	client := client.NewClient(
-		option.WithBaseURL(WireMockBaseURL),
-	)
-	request := &locations.VoidTransactionsRequest{
-		LocationID:    "location_id",
-		TransactionID: "transaction_id",
-	}
-	_, invocationErr := client.Locations.Transactions.Void(
-		context.TODO(),
-		request,
-		option.WithHTTPHeader(
-			http.Header{"X-Test-Id": []string{"TestLocationsTransactionsVoidWithWireMock"}},
-		),
-	)
-
-	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsTransactionsVoidWithWireMock", "POST", "/v2/locations/location_id/transactions/transaction_id/void", nil, 1)
 }

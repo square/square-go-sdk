@@ -52,7 +52,7 @@ func (r *RequestOptions) ToHeader() http.Header {
 	if r.Token != "" {
 		header.Set("Authorization", "Bearer "+r.Token)
 	}
-	version := fmt.Sprintf("%v", "2026-08-19")
+	version := fmt.Sprintf("%v", "2026-09-16")
 	if envValue := os.Getenv("VERSION"); envValue != "" {
 		version = envValue
 	}
@@ -66,9 +66,9 @@ func (r *RequestOptions) ToHeader() http.Header {
 func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
-	headers.Set("X-Fern-SDK-Name", "github.com/square/square-go-sdk/v4")
-	headers.Set("X-Fern-SDK-Version", "v4.1.0")
-	headers.Set("User-Agent", "github.com/square/square-go-sdk/v4.1.0")
+	headers.Set("X-Fern-SDK-Name", "github.com/square/square-go-sdk/v5")
+	headers.Set("X-Fern-SDK-Version", "v5.0.0")
+	headers.Set("User-Agent", "github.com/square/square-go-sdk/v5.0.0")
 	return headers
 }
 

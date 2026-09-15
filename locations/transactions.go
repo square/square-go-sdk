@@ -3,43 +3,9 @@
 package locations
 
 import (
-	v4 "github.com/square/square-go-sdk/v4"
+	v5 "github.com/square/square-go-sdk/v5"
 	big "math/big"
 )
-
-var (
-	captureTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
-	captureTransactionsRequestFieldTransactionID = big.NewInt(1 << 1)
-)
-
-type CaptureTransactionsRequest struct {
-	LocationID    string `json:"-" url:"-"`
-	TransactionID string `json:"-" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (c *CaptureTransactionsRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
-	}
-	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetLocationID sets the LocationID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CaptureTransactionsRequest) SetLocationID(locationID string) {
-	c.LocationID = locationID
-	c.require(captureTransactionsRequestFieldLocationID)
-}
-
-// SetTransactionID sets the TransactionID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CaptureTransactionsRequest) SetTransactionID(transactionID string) {
-	c.TransactionID = transactionID
-	c.require(captureTransactionsRequestFieldTransactionID)
-}
 
 var (
 	getTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
@@ -104,7 +70,7 @@ type ListTransactionsRequest struct {
 	// oldest first, `DESC` for newest first).
 	//
 	// Default value: `DESC`
-	SortOrder *v4.SortOrder `json:"-" url:"sort_order,omitempty"`
+	SortOrder *v5.SortOrder `json:"-" url:"sort_order,omitempty"`
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for your original query.
 	//
@@ -145,7 +111,7 @@ func (l *ListTransactionsRequest) SetEndTime(endTime *string) {
 
 // SetSortOrder sets the SortOrder field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v4.SortOrder) {
+func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v5.SortOrder) {
 	l.SortOrder = sortOrder
 	l.require(listTransactionsRequestFieldSortOrder)
 }
@@ -155,38 +121,4 @@ func (l *ListTransactionsRequest) SetSortOrder(sortOrder *v4.SortOrder) {
 func (l *ListTransactionsRequest) SetCursor(cursor *string) {
 	l.Cursor = cursor
 	l.require(listTransactionsRequestFieldCursor)
-}
-
-var (
-	voidTransactionsRequestFieldLocationID    = big.NewInt(1 << 0)
-	voidTransactionsRequestFieldTransactionID = big.NewInt(1 << 1)
-)
-
-type VoidTransactionsRequest struct {
-	LocationID    string `json:"-" url:"-"`
-	TransactionID string `json:"-" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (v *VoidTransactionsRequest) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
-	}
-	v.explicitFields.Or(v.explicitFields, field)
-}
-
-// SetLocationID sets the LocationID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (v *VoidTransactionsRequest) SetLocationID(locationID string) {
-	v.LocationID = locationID
-	v.require(voidTransactionsRequestFieldLocationID)
-}
-
-// SetTransactionID sets the TransactionID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (v *VoidTransactionsRequest) SetTransactionID(transactionID string) {
-	v.TransactionID = transactionID
-	v.require(voidTransactionsRequestFieldTransactionID)
 }

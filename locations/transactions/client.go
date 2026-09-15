@@ -4,11 +4,11 @@ package transactions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	locations "github.com/square/square-go-sdk/v4/locations"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	locations "github.com/square/square-go-sdk/v5/locations"
+	option "github.com/square/square-go-sdk/v5/option"
 	os "os"
 )
 
@@ -69,48 +69,6 @@ func (c *Client) Get(
 	opts ...option.RequestOption,
 ) (*square.GetTransactionResponse, error) {
 	response, err := c.WithRawResponse.Get(
-		ctx,
-		request,
-		opts...,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return response.Body, nil
-}
-
-// Captures a transaction that was created with the [Charge](api-endpoint:Transactions-Charge)
-// endpoint with a `delay_capture` value of `true`.
-//
-// See [Delayed capture transactions](https://developer.squareup.com/docs/payments/transactions/overview#delayed-capture)
-// for more information.
-func (c *Client) Capture(
-	ctx context.Context,
-	request *locations.CaptureTransactionsRequest,
-	opts ...option.RequestOption,
-) (*square.CaptureTransactionResponse, error) {
-	response, err := c.WithRawResponse.Capture(
-		ctx,
-		request,
-		opts...,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return response.Body, nil
-}
-
-// Cancels a transaction that was created with the [Charge](api-endpoint:Transactions-Charge)
-// endpoint with a `delay_capture` value of `true`.
-//
-// See [Delayed capture transactions](https://developer.squareup.com/docs/payments/transactions/overview#delayed-capture)
-// for more information.
-func (c *Client) Void(
-	ctx context.Context,
-	request *locations.VoidTransactionsRequest,
-	opts ...option.RequestOption,
-) (*square.VoidTransactionResponse, error) {
-	response, err := c.WithRawResponse.Void(
 		ctx,
 		request,
 		opts...,

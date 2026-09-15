@@ -3,7 +3,7 @@
 package labor
 
 import (
-	internal "github.com/square/square-go-sdk/v4/internal"
+	internal "github.com/square/square-go-sdk/v5/internal"
 )
 
 var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{}

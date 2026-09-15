@@ -4,13 +4,13 @@ package client
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	accounts "github.com/square/square-go-sdk/v4/loyalty/accounts"
-	client "github.com/square/square-go-sdk/v4/loyalty/programs/client"
-	rewards "github.com/square/square-go-sdk/v4/loyalty/rewards"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	accounts "github.com/square/square-go-sdk/v5/loyalty/accounts"
+	client "github.com/square/square-go-sdk/v5/loyalty/programs/client"
+	rewards "github.com/square/square-go-sdk/v5/loyalty/rewards"
+	option "github.com/square/square-go-sdk/v5/option"
 	os "os"
 )
 

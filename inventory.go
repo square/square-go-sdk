@@ -5,7 +5,7 @@ package square
 import (
 	json "encoding/json"
 	fmt "fmt"
-	internal "github.com/square/square-go-sdk/v4/internal"
+	internal "github.com/square/square-go-sdk/v5/internal"
 	big "math/big"
 )
 
@@ -588,31 +588,6 @@ func (g *GetPhysicalCountInventoryRequest) require(field *big.Int) {
 func (g *GetPhysicalCountInventoryRequest) SetPhysicalCountID(physicalCountID string) {
 	g.PhysicalCountID = physicalCountID
 	g.require(getPhysicalCountInventoryRequestFieldPhysicalCountID)
-}
-
-var (
-	getTransferInventoryRequestFieldTransferID = big.NewInt(1 << 0)
-)
-
-type GetTransferInventoryRequest struct {
-	TransferID string `json:"-" url:"-"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-}
-
-func (g *GetTransferInventoryRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
-	}
-	g.explicitFields.Or(g.explicitFields, field)
-}
-
-// SetTransferID sets the TransferID field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (g *GetTransferInventoryRequest) SetTransferID(transferID string) {
-	g.TransferID = transferID
-	g.require(getTransferInventoryRequestFieldTransferID)
 }
 
 var (
