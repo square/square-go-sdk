@@ -8,7 +8,7 @@ import (
 	"errors"
 	"hash"
 
-	v2 "github.com/square/square-go-sdk/v4"
+	v2 "github.com/square/square-go-sdk/v5"
 )
 
 // VerifySignature verifies and validates an event notification.

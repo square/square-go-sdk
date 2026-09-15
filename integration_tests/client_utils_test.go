@@ -11,9 +11,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	square "github.com/square/square-go-sdk/v4"
-	client "github.com/square/square-go-sdk/v4/client"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	option "github.com/square/square-go-sdk/v5/option"
 )
 
 // SourceID represents the payment source ID for the sandbox environment.

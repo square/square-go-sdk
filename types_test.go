@@ -15372,87 +15372,6 @@ func TestSettersMarkExplicitCancelTerminalRefundResponse(t *testing.T) {
 
 }
 
-func TestSettersCaptureTransactionResponse(t *testing.T) {
-	t.Run("SetErrors", func(t *testing.T) {
-		obj := &CaptureTransactionResponse{}
-		var fernTestValueErrors []*Error
-		obj.SetErrors(fernTestValueErrors)
-		assert.Equal(t, fernTestValueErrors, obj.Errors)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersCaptureTransactionResponse(t *testing.T) {
-	t.Run("GetErrors", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CaptureTransactionResponse{}
-		var expected []*Error
-		obj.Errors = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetErrors(), "getter should return the property value")
-	})
-
-	t.Run("GetErrors_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CaptureTransactionResponse{}
-		obj.Errors = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetErrors(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetErrors_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CaptureTransactionResponse
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetErrors() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitCaptureTransactionResponse(t *testing.T) {
-	t.Run("SetErrors_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CaptureTransactionResponse{}
-		var fernTestValueErrors []*Error
-
-		// Act
-		obj.SetErrors(fernTestValueErrors)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
 func TestSettersCard(t *testing.T) {
 	t.Run("SetID", func(t *testing.T) {
 		obj := &Card{}
@@ -215666,87 +215585,6 @@ func TestSettersMarkExplicitVendorUpdatedEventObject(t *testing.T) {
 
 }
 
-func TestSettersVoidTransactionResponse(t *testing.T) {
-	t.Run("SetErrors", func(t *testing.T) {
-		obj := &VoidTransactionResponse{}
-		var fernTestValueErrors []*Error
-		obj.SetErrors(fernTestValueErrors)
-		assert.Equal(t, fernTestValueErrors, obj.Errors)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersVoidTransactionResponse(t *testing.T) {
-	t.Run("GetErrors", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &VoidTransactionResponse{}
-		var expected []*Error
-		obj.Errors = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetErrors(), "getter should return the property value")
-	})
-
-	t.Run("GetErrors_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &VoidTransactionResponse{}
-		obj.Errors = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetErrors(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetErrors_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *VoidTransactionResponse
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetErrors() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitVoidTransactionResponse(t *testing.T) {
-	t.Run("SetErrors_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &VoidTransactionResponse{}
-		var fernTestValueErrors []*Error
-
-		// Act
-		obj.SetErrors(fernTestValueErrors)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
 func TestSettersWageSetting(t *testing.T) {
 	t.Run("SetTeamMemberID", func(t *testing.T) {
 		obj := &WageSetting{}
@@ -219340,39 +219178,6 @@ func TestJSONMarshalingCancelTerminalRefundResponse(t *testing.T) {
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
 		var obj CancelTerminalRefundResponse
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingCaptureTransactionResponse(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &CaptureTransactionResponse{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled CaptureTransactionResponse
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj CaptureTransactionResponse
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj CaptureTransactionResponse
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -241224,39 +241029,6 @@ func TestJSONMarshalingVendorUpdatedEventObject(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingVoidTransactionResponse(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &VoidTransactionResponse{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled VoidTransactionResponse
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj VoidTransactionResponse
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj VoidTransactionResponse
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
 func TestJSONMarshalingWageSetting(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -242359,22 +242131,6 @@ func TestStringCancelTerminalRefundResponse(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CancelTerminalRefundResponse
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringCaptureTransactionResponse(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &CaptureTransactionResponse{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CaptureTransactionResponse
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -252972,22 +252728,6 @@ func TestStringVendorUpdatedEventObject(t *testing.T) {
 	})
 }
 
-func TestStringVoidTransactionResponse(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &VoidTransactionResponse{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *VoidTransactionResponse
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
 func TestStringWageSetting(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -263518,29 +263258,6 @@ func TestExtraPropertiesCancelTerminalRefundResponse(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *CancelTerminalRefundResponse
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesCaptureTransactionResponse(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &CaptureTransactionResponse{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *CaptureTransactionResponse
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
@@ -278767,29 +278484,6 @@ func TestExtraPropertiesVendorUpdatedEventObject(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *VendorUpdatedEventObject
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesVoidTransactionResponse(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &VoidTransactionResponse{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *VoidTransactionResponse
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

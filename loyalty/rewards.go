@@ -4,8 +4,8 @@ package loyalty
 
 import (
 	json "encoding/json"
-	v4 "github.com/square/square-go-sdk/v4"
-	internal "github.com/square/square-go-sdk/v4/internal"
+	v5 "github.com/square/square-go-sdk/v5"
+	internal "github.com/square/square-go-sdk/v5/internal"
 	big "math/big"
 )
 
@@ -16,7 +16,7 @@ var (
 
 type CreateLoyaltyRewardRequest struct {
 	// The reward to create.
-	Reward *v4.LoyaltyReward `json:"reward" url:"-"`
+	Reward *v5.LoyaltyReward `json:"reward" url:"-"`
 	// A unique string that identifies this `CreateLoyaltyReward` request.
 	// Keys can be any valid string, but must be unique for every request.
 	IdempotencyKey string `json:"idempotency_key" url:"-"`
@@ -34,7 +34,7 @@ func (c *CreateLoyaltyRewardRequest) require(field *big.Int) {
 
 // SetReward sets the Reward field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateLoyaltyRewardRequest) SetReward(reward *v4.LoyaltyReward) {
+func (c *CreateLoyaltyRewardRequest) SetReward(reward *v5.LoyaltyReward) {
 	c.Reward = reward
 	c.require(createLoyaltyRewardRequestFieldReward)
 }
@@ -196,7 +196,7 @@ var (
 type SearchLoyaltyRewardsRequest struct {
 	// The search criteria for the request.
 	// If empty, the endpoint retrieves all loyalty rewards in the loyalty program.
-	Query *v4.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
+	Query *v5.SearchLoyaltyRewardsRequestLoyaltyRewardQuery `json:"query,omitempty" url:"-"`
 	// The maximum number of results to return in the response. The default value is 30.
 	Limit *int `json:"limit,omitempty" url:"-"`
 	// A pagination cursor returned by a previous call to
@@ -219,7 +219,7 @@ func (s *SearchLoyaltyRewardsRequest) require(field *big.Int) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *SearchLoyaltyRewardsRequest) SetQuery(query *v4.SearchLoyaltyRewardsRequestLoyaltyRewardQuery) {
+func (s *SearchLoyaltyRewardsRequest) SetQuery(query *v5.SearchLoyaltyRewardsRequestLoyaltyRewardQuery) {
 	s.Query = query
 	s.require(searchLoyaltyRewardsRequestFieldQuery)
 }

@@ -4,11 +4,11 @@ package promotions
 
 import (
 	context "context"
-	square "github.com/square/square-go-sdk/v4"
-	core "github.com/square/square-go-sdk/v4/core"
-	internal "github.com/square/square-go-sdk/v4/internal"
-	programs "github.com/square/square-go-sdk/v4/loyalty/programs"
-	option "github.com/square/square-go-sdk/v4/option"
+	square "github.com/square/square-go-sdk/v5"
+	core "github.com/square/square-go-sdk/v5/core"
+	internal "github.com/square/square-go-sdk/v5/internal"
+	programs "github.com/square/square-go-sdk/v5/loyalty/programs"
+	option "github.com/square/square-go-sdk/v5/option"
 	http "net/http"
 )
 

@@ -3,7 +3,7 @@
 package integration
 
 import (
-	square "github.com/square/square-go-sdk/v4"
+	square "github.com/square/square-go-sdk/v5"
 )
 
 // Simplified data structure for [square.OrderLineItem].
