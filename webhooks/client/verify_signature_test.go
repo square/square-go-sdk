@@ -106,6 +106,16 @@ func TestWebhookSignatureValidation(t *testing.T) {
 			expectedError: "signature hash does not match the expected signature hash for payload",
 		},
 		{
+			description: "empty request body should fail",
+			request: &square.VerifySignatureRequest{
+				RequestBody:     "",
+				SignatureHeader: "not-a-signature",
+				SignatureKey:    "signature-key",
+				NotificationURL: "https://webhook.site/webhooks",
+			},
+			expectedError: "request body is required",
+		},
+		{
 			description: "empty signature key should fail",
 			request: &square.VerifySignatureRequest{
 				RequestBody:     validRequest.RequestBody,
