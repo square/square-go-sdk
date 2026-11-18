@@ -4,12 +4,13 @@ package bankaccounts
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,14 +34,36 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square account.
+//
+// Example:
+//
+//	request := &square.ListBankAccountsRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    CustomerID: square.String(
+//	        "customer_id",
+//	    ),
+//	}
+//	_, err := client.BankAccounts.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListBankAccountsRequest,
@@ -74,6 +97,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -88,7 +112,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -100,6 +124,20 @@ func (c *Client) List(
 }
 
 // Store a bank account on file for a square account
+//
+// Example:
+//
+//	request := &square.CreateBankAccountRequest{
+//	    IdempotencyKey: "4e43559a-f0fd-47d3-9da2-7ea1f97d94be",
+//	    SourceID: "bnon:CA4SEHsQwr0rx6DbWLD5BQaqMnoYAQ",
+//	    CustomerID: square.String(
+//	        "HM3B2D5JKGZ69359BTEHXM2V8M",
+//	    ),
+//	}
+//	_, err := client.BankAccounts.CreateBankAccount(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateBankAccount(
 	ctx context.Context,
 	request *square.CreateBankAccountRequest,
@@ -117,6 +155,16 @@ func (c *Client) CreateBankAccount(
 }
 
 // Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank account ID.
+//
+// Example:
+//
+//	request := &square.GetByV1IDBankAccountsRequest{
+//	    V1BankAccountID: "v1_bank_account_id",
+//	}
+//	_, err := client.BankAccounts.GetByV1ID(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetByV1ID(
 	ctx context.Context,
 	request *square.GetByV1IDBankAccountsRequest,
@@ -134,6 +182,16 @@ func (c *Client) GetByV1ID(
 }
 
 // Retrieve details of a [BankAccount](entity:BankAccount) bank account linked to a Square account.
+//
+// Example:
+//
+//	request := &square.GetBankAccountsRequest{
+//	    BankAccountID: "bank_account_id",
+//	}
+//	_, err := client.BankAccounts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetBankAccountsRequest,
@@ -151,6 +209,16 @@ func (c *Client) Get(
 }
 
 // Disable a bank account.
+//
+// Example:
+//
+//	request := &square.DisableBankAccountRequest{
+//	    BankAccountID: "bank_account_id",
+//	}
+//	_, err := client.BankAccounts.DisableBankAccount(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DisableBankAccount(
 	ctx context.Context,
 	request *square.DisableBankAccountRequest,

@@ -47,10 +47,12 @@ type CreateCustomerCardRequest struct {
 }
 
 func (c *CreateCustomerCardRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -125,10 +127,12 @@ type DeleteCardsRequest struct {
 }
 
 func (d *DeleteCardsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;

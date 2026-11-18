@@ -45,7 +45,7 @@ func dereferenceArg(arg interface{}) interface{} {
 	v := reflect.ValueOf(arg)
 
 	// Keep dereferencing until we get to a non-pointer value or hit nil
-	for v.Kind() == reflect.Ptr {
+	for v.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return nil
 		}
@@ -59,12 +59,13 @@ func dereferenceArg(arg interface{}) interface{} {
 // takes precedence over the left.
 func MergeHeaders(left, right http.Header) http.Header {
 	for key, values := range right {
-		if len(values) > 1 {
-			left[key] = values
+		switch len(values) {
+		case 0:
 			continue
-		}
-		if value := right.Get(key); value != "" {
-			left.Set(key, value)
+		case 1:
+			left.Set(key, values[0])
+		default:
+			left[key] = values
 		}
 	}
 	return left

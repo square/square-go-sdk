@@ -4,6 +4,7 @@ package webhooks
 
 import (
 	json "encoding/json"
+	v5 "github.com/square/square-go-sdk/v5"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -18,6 +19,14 @@ func TestSettersCreateWebhookSubscriptionRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetSubscription", func(t *testing.T) {
+		obj := &CreateWebhookSubscriptionRequest{}
+		var fernTestValueSubscription *v5.WebhookSubscription
+		obj.SetSubscription(fernTestValueSubscription)
+		assert.Equal(t, fernTestValueSubscription, obj.Subscription)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestSettersMarkExplicitCreateWebhookSubscriptionRequest(t *testing.T) {
@@ -29,6 +38,37 @@ func TestSettersMarkExplicitCreateWebhookSubscriptionRequest(t *testing.T) {
 
 		// Act
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetSubscription_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateWebhookSubscriptionRequest{}
+		var fernTestValueSubscription *v5.WebhookSubscription
+
+		// Act
+		obj.SetSubscription(fernTestValueSubscription)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -161,6 +201,14 @@ func TestSettersListSubscriptionsRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetSortOrder", func(t *testing.T) {
+		obj := &ListSubscriptionsRequest{}
+		var fernTestValueSortOrder *v5.SortOrder
+		obj.SetSortOrder(fernTestValueSortOrder)
+		assert.Equal(t, fernTestValueSortOrder, obj.SortOrder)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetLimit", func(t *testing.T) {
 		obj := &ListSubscriptionsRequest{}
 		var fernTestValueLimit *int
@@ -211,6 +259,37 @@ func TestSettersMarkExplicitListSubscriptionsRequest(t *testing.T) {
 
 		// Act
 		obj.SetIncludeDisabled(fernTestValueIncludeDisabled)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetSortOrder_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &ListSubscriptionsRequest{}
+		var fernTestValueSortOrder *v5.SortOrder
+
+		// Act
+		obj.SetSortOrder(fernTestValueSortOrder)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -360,6 +439,14 @@ func TestSettersUpdateWebhookSubscriptionRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetSubscription", func(t *testing.T) {
+		obj := &UpdateWebhookSubscriptionRequest{}
+		var fernTestValueSubscription *v5.WebhookSubscription
+		obj.SetSubscription(fernTestValueSubscription)
+		assert.Equal(t, fernTestValueSubscription, obj.Subscription)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestSettersMarkExplicitUpdateWebhookSubscriptionRequest(t *testing.T) {
@@ -371,6 +458,37 @@ func TestSettersMarkExplicitUpdateWebhookSubscriptionRequest(t *testing.T) {
 
 		// Act
 		obj.SetSubscriptionID(fernTestValueSubscriptionID)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetSubscription_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateWebhookSubscriptionRequest{}
+		var fernTestValueSubscription *v5.WebhookSubscription
+
+		// Act
+		obj.SetSubscription(fernTestValueSubscription)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

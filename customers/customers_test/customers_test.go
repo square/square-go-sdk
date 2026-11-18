@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestCustomersListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListCustomersRequest{
 		Cursor: square.String(
@@ -94,7 +110,7 @@ func TestCustomersListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestCustomersListWithWireMock", "GET", "/v2/customers", map[string]string{"cursor": "cursor", "limit": "1", "sort_field": "DEFAULT", "sort_order": "DESC", "count": "true"}, 1)
+	VerifyRequestCount(t, "TestCustomersListWithWireMock", "GET", "/v2/customers", map[string]interface{}{"cursor": "cursor", "limit": "1", "sort_field": "DEFAULT", "sort_order": "DESC", "count": "true"}, 1)
 }
 
 func TestCustomersCreateWithWireMock(
@@ -106,6 +122,7 @@ func TestCustomersCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateCustomerRequest{
 		GivenName: square.String(
@@ -166,6 +183,7 @@ func TestCustomersBatchCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BulkCreateCustomersRequest{
 		Customers: map[string]*square.BulkCreateCustomerData{
@@ -268,6 +286,7 @@ func TestCustomersBulkDeleteCustomersWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BulkDeleteCustomersRequest{
 		CustomerIDs: []string{
@@ -297,6 +316,7 @@ func TestCustomersBulkRetrieveCustomersWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BulkRetrieveCustomersRequest{
 		CustomerIDs: []string{
@@ -326,6 +346,7 @@ func TestCustomersBulkUpdateCustomersWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BulkUpdateCustomersRequest{
 		Customers: map[string]*square.BulkUpdateCustomerData{
@@ -374,6 +395,7 @@ func TestCustomersSearchWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SearchCustomersRequest{
 		Limit: square.Int64(
@@ -433,6 +455,7 @@ func TestCustomersGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetCustomersRequest{
 		CustomerID: "customer_id",
@@ -458,6 +481,7 @@ func TestCustomersUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateCustomerRequest{
 		CustomerID: "customer_id",
@@ -492,6 +516,7 @@ func TestCustomersDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeleteCustomersRequest{
 		CustomerID: "customer_id",
@@ -508,5 +533,5 @@ func TestCustomersDeleteWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestCustomersDeleteWithWireMock", "DELETE", "/v2/customers/customer_id", map[string]string{"version": "1000000"}, 1)
+	VerifyRequestCount(t, "TestCustomersDeleteWithWireMock", "DELETE", "/v2/customers/customer_id", map[string]interface{}{"version": "1000000"}, 1)
 }

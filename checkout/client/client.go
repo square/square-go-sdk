@@ -4,12 +4,13 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	paymentlinks "github.com/square/square-go-sdk/v5/checkout/paymentlinks"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -35,14 +36,25 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieves the location-level settings for a Square-hosted checkout page.
+//
+// Example:
+//
+//	request := &square.RetrieveLocationSettingsRequest{
+//	    LocationID: "location_id",
+//	}
+//	_, err := client.Checkout.RetrieveLocationSettings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveLocationSettings(
 	ctx context.Context,
 	request *square.RetrieveLocationSettingsRequest,
@@ -60,6 +72,17 @@ func (c *Client) RetrieveLocationSettings(
 }
 
 // Updates the location-level settings for a Square-hosted checkout page.
+//
+// Example:
+//
+//	request := &square.UpdateLocationSettingsRequest{
+//	    LocationID: "location_id",
+//	    LocationSettings: &square.CheckoutLocationSettings{},
+//	}
+//	_, err := client.Checkout.UpdateLocationSettings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateLocationSettings(
 	ctx context.Context,
 	request *square.UpdateLocationSettingsRequest,
@@ -77,6 +100,12 @@ func (c *Client) UpdateLocationSettings(
 }
 
 // Retrieves the merchant-level settings for a Square-hosted checkout page.
+//
+// Example:
+//
+//	_, err := client.Checkout.RetrieveMerchantSettings(
+//	    context.TODO(),
+//	)
 func (c *Client) RetrieveMerchantSettings(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -92,6 +121,16 @@ func (c *Client) RetrieveMerchantSettings(
 }
 
 // Updates the merchant-level settings for a Square-hosted checkout page.
+//
+// Example:
+//
+//	request := &square.UpdateMerchantSettingsRequest{
+//	    MerchantSettings: &square.CheckoutMerchantSettings{},
+//	}
+//	_, err := client.Checkout.UpdateMerchantSettings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateMerchantSettings(
 	ctx context.Context,
 	request *square.UpdateMerchantSettingsRequest,

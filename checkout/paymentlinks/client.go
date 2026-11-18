@@ -4,13 +4,14 @@ package paymentlinks
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	checkout "github.com/square/square-go-sdk/v5/checkout"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists all payment links.
+//
+// Example:
+//
+//	request := &checkout.ListPaymentLinksRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Checkout.PaymentLinks.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *checkout.ListPaymentLinksRequest,
@@ -75,6 +92,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +107,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -101,6 +119,28 @@ func (c *Client) List(
 }
 
 // Creates a Square-hosted checkout page. Applications can share the resulting payment link with their buyer to pay for goods and services.
+//
+// Example:
+//
+//	request := &checkout.CreatePaymentLinkRequest{
+//	    IdempotencyKey: square.String(
+//	        "cd9e25dc-d9f2-4430-aedb-61605070e95f",
+//	    ),
+//	    QuickPay: &square.QuickPay{
+//	        Name: "Auto Detailing",
+//	        PriceMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(10000),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	        LocationID: "A9Y43N9ABXZBP",
+//	    },
+//	}
+//	_, err := client.Checkout.PaymentLinks.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *checkout.CreatePaymentLinkRequest,
@@ -118,6 +158,16 @@ func (c *Client) Create(
 }
 
 // Retrieves a payment link.
+//
+// Example:
+//
+//	request := &checkout.GetPaymentLinksRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Checkout.PaymentLinks.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *checkout.GetPaymentLinksRequest,
@@ -137,6 +187,24 @@ func (c *Client) Get(
 // Updates a payment link. You can update the `payment_link` fields such as
 // `description`, `checkout_options`, and  `pre_populated_data`.
 // You cannot update other fields such as the `order_id`, `version`, `URL`, or `timestamp` field.
+//
+// Example:
+//
+//	request := &checkout.UpdatePaymentLinkRequest{
+//	    ID: "id",
+//	    PaymentLink: &square.PaymentLink{
+//	        Version: 1,
+//	        CheckoutOptions: &square.CheckoutOptions{
+//	            AskForShippingAddress: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Checkout.PaymentLinks.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *checkout.UpdatePaymentLinkRequest,
@@ -154,6 +222,16 @@ func (c *Client) Update(
 }
 
 // Deletes a payment link.
+//
+// Example:
+//
+//	request := &checkout.DeletePaymentLinksRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Checkout.PaymentLinks.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *checkout.DeletePaymentLinksRequest,

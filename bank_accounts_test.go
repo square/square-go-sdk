@@ -2669,6 +2669,54 @@ func TestJSONMarshalingListBankAccountsResponse(t *testing.T) {
 	})
 }
 
+func TestOptionalNullableRoundTripBankAccount(t *testing.T) {
+	optionalNullableKeys := []string{
+		"secondary_bank_identification_number",
+		"debit_mandate_reference_id",
+		"reference_id",
+		"location_id",
+		"fingerprint",
+		"bank_name",
+	}
+	marshalToMap := func(t *testing.T, obj *BankAccount) map[string]json.RawMessage {
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		var result map[string]json.RawMessage
+		require.NoError(t, json.Unmarshal(data, &result), "marshaled data should be a JSON object")
+		return result
+	}
+
+	t.Run("NullPreserved", func(t *testing.T) {
+		t.Parallel()
+		var obj BankAccount
+		require.NoError(t, json.Unmarshal([]byte(`{"secondary_bank_identification_number":null,"debit_mandate_reference_id":null,"reference_id":null,"location_id":null,"fingerprint":null,"bank_name":null}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			value, ok := result[key]
+			require.True(t, ok, "optional nullable field %q received as null should be present in the output", key)
+			assert.Equal(t, "null", string(value), "optional nullable field %q received as null should be null in the output", key)
+		}
+	})
+
+	t.Run("AbsentStaysAbsent", func(t *testing.T) {
+		t.Parallel()
+		var obj BankAccount
+		require.NoError(t, json.Unmarshal([]byte(`{}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q absent from the input should be absent from the output", key)
+		}
+	})
+
+	t.Run("FreshValueOmits", func(t *testing.T) {
+		t.Parallel()
+		result := marshalToMap(t, &BankAccount{})
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q should be omitted from a freshly constructed value", key)
+		}
+	})
+}
+
 func TestStringBankAccount(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()

@@ -25,10 +25,12 @@ type CreateInvoiceAttachmentRequest struct {
 }
 
 func (c *CreateInvoiceAttachmentRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -75,10 +77,12 @@ type DeleteInvoiceAttachmentRequest struct {
 }
 
 func (d *DeleteInvoiceAttachmentRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -113,10 +117,12 @@ type CancelInvoiceRequest struct {
 }
 
 func (c *CancelInvoiceRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -174,10 +180,12 @@ type CreateInvoiceRequest struct {
 }
 
 func (c *CreateInvoiceRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -233,10 +241,12 @@ type DeleteInvoicesRequest struct {
 }
 
 func (d *DeleteInvoicesRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -266,10 +276,12 @@ type GetInvoicesRequest struct {
 }
 
 func (g *GetInvoicesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -302,10 +314,12 @@ type ListInvoicesRequest struct {
 }
 
 func (l *ListInvoicesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -353,10 +367,12 @@ type PublishInvoiceRequest struct {
 }
 
 func (p *PublishInvoiceRequest) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;
@@ -424,10 +440,12 @@ type SearchInvoicesRequest struct {
 }
 
 func (s *SearchInvoicesRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -472,12 +490,12 @@ func (s *SearchInvoicesRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// The response returned by the `CancelInvoice` request.
 var (
 	cancelInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
 	cancelInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
 )
 
+// The response returned by the `CancelInvoice` request.
 type CancelInvoiceResponse struct {
 	// The canceled invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
@@ -513,10 +531,12 @@ func (c *CancelInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CancelInvoiceResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -575,12 +595,12 @@ func (c *CancelInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) request.
 var (
 	createInvoiceAttachmentRequestDataFieldIdempotencyKey = big.NewInt(1 << 0)
 	createInvoiceAttachmentRequestDataFieldDescription    = big.NewInt(1 << 1)
 )
 
+// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) request.
 type CreateInvoiceAttachmentRequestData struct {
 	// A unique string that identifies the `CreateInvoiceAttachment` request.
 	// For more information, see [Idempotency](https://developer.squareup.com/docs/build-basics/common-api-patterns/idempotency).
@@ -617,10 +637,12 @@ func (c *CreateInvoiceAttachmentRequestData) GetExtraProperties() map[string]int
 }
 
 func (c *CreateInvoiceAttachmentRequestData) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -679,12 +701,12 @@ func (c *CreateInvoiceAttachmentRequestData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
 var (
 	createInvoiceAttachmentResponseFieldAttachment = big.NewInt(1 << 0)
 	createInvoiceAttachmentResponseFieldErrors     = big.NewInt(1 << 1)
 )
 
+// Represents a [CreateInvoiceAttachment](api-endpoint:Invoices-CreateInvoiceAttachment) response.
 type CreateInvoiceAttachmentResponse struct {
 	// Metadata about the attachment that was added to the invoice.
 	Attachment *InvoiceAttachment `json:"attachment,omitempty" url:"attachment,omitempty"`
@@ -720,10 +742,12 @@ func (c *CreateInvoiceAttachmentResponse) GetExtraProperties() map[string]interf
 }
 
 func (c *CreateInvoiceAttachmentResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttachment sets the Attachment field and marks it as non-optional;
@@ -782,12 +806,12 @@ func (c *CreateInvoiceAttachmentResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response returned by the `CreateInvoice` request.
 var (
 	createInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
 	createInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
 )
 
+// The response returned by the `CreateInvoice` request.
 type CreateInvoiceResponse struct {
 	// The newly created invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
@@ -823,10 +847,12 @@ func (c *CreateInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateInvoiceResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -885,11 +911,11 @@ func (c *CreateInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
 var (
 	deleteInvoiceAttachmentResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// Represents a [DeleteInvoiceAttachment](api-endpoint:Invoices-DeleteInvoiceAttachment) response.
 type DeleteInvoiceAttachmentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -916,10 +942,12 @@ func (d *DeleteInvoiceAttachmentResponse) GetExtraProperties() map[string]interf
 }
 
 func (d *DeleteInvoiceAttachmentResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -971,11 +999,11 @@ func (d *DeleteInvoiceAttachmentResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Describes a `DeleteInvoice` response.
 var (
 	deleteInvoiceResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// Describes a `DeleteInvoice` response.
 type DeleteInvoiceResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1002,10 +1030,12 @@ func (d *DeleteInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeleteInvoiceResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1057,12 +1087,12 @@ func (d *DeleteInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Describes a `GetInvoice` response.
 var (
 	getInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
 	getInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
 )
 
+// Describes a `GetInvoice` response.
 type GetInvoiceResponse struct {
 	// The invoice requested.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
@@ -1098,10 +1128,12 @@ func (g *GetInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetInvoiceResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -1160,8 +1192,6 @@ func (g *GetInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Stores information about an invoice. You use the Invoices API to create and manage
-// invoices. For more information, see [Invoices API Overview](https://developer.squareup.com/docs/invoices-api/overview).
 var (
 	invoiceFieldID                        = big.NewInt(1 << 0)
 	invoiceFieldVersion                   = big.NewInt(1 << 1)
@@ -1190,6 +1220,23 @@ var (
 	invoiceFieldCreatorTeamMemberID       = big.NewInt(1 << 24)
 )
 
+// invoiceNullableFields maps the wire names of Invoice's nullable fields (required or optional) to their field bits.
+var invoiceNullableFields = map[string]*big.Int{
+	"location_id":                  invoiceFieldLocationID,
+	"order_id":                     invoiceFieldOrderID,
+	"payment_requests":             invoiceFieldPaymentRequests,
+	"invoice_number":               invoiceFieldInvoiceNumber,
+	"title":                        invoiceFieldTitle,
+	"description":                  invoiceFieldDescription,
+	"scheduled_at":                 invoiceFieldScheduledAt,
+	"custom_fields":                invoiceFieldCustomFields,
+	"sale_or_service_date":         invoiceFieldSaleOrServiceDate,
+	"payment_conditions":           invoiceFieldPaymentConditions,
+	"store_payment_method_enabled": invoiceFieldStorePaymentMethodEnabled,
+}
+
+// Stores information about an invoice. You use the Invoices API to create and manage
+// invoices. For more information, see [Invoices API Overview](https://developer.squareup.com/docs/invoices-api/overview).
 type Invoice struct {
 	// The Square-assigned ID of the invoice.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1502,10 +1549,12 @@ func (i *Invoice) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *Invoice) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1695,6 +1744,13 @@ func (i *Invoice) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoiceNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1725,7 +1781,6 @@ func (i *Invoice) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
 var (
 	invoiceAcceptedPaymentMethodsFieldCard           = big.NewInt(1 << 0)
 	invoiceAcceptedPaymentMethodsFieldSquareGiftCard = big.NewInt(1 << 1)
@@ -1734,6 +1789,16 @@ var (
 	invoiceAcceptedPaymentMethodsFieldCashAppPay     = big.NewInt(1 << 4)
 )
 
+// invoiceAcceptedPaymentMethodsNullableFields maps the wire names of InvoiceAcceptedPaymentMethods's nullable fields (required or optional) to their field bits.
+var invoiceAcceptedPaymentMethodsNullableFields = map[string]*big.Int{
+	"card":              invoiceAcceptedPaymentMethodsFieldCard,
+	"square_gift_card":  invoiceAcceptedPaymentMethodsFieldSquareGiftCard,
+	"bank_account":      invoiceAcceptedPaymentMethodsFieldBankAccount,
+	"buy_now_pay_later": invoiceAcceptedPaymentMethodsFieldBuyNowPayLater,
+	"cash_app_pay":      invoiceAcceptedPaymentMethodsFieldCashAppPay,
+}
+
+// The payment methods that customers can use to pay an [invoice](entity:Invoice) on the Square-hosted invoice payment page.
 type InvoiceAcceptedPaymentMethods struct {
 	// Indicates whether credit card or debit card payments are accepted. The default value is `false`.
 	Card *bool `json:"card,omitempty" url:"card,omitempty"`
@@ -1804,10 +1869,12 @@ func (i *InvoiceAcceptedPaymentMethods) GetExtraProperties() map[string]interfac
 }
 
 func (i *InvoiceAcceptedPaymentMethods) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetCard sets the Card field and marks it as non-optional;
@@ -1857,6 +1924,13 @@ func (i *InvoiceAcceptedPaymentMethods) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoiceAcceptedPaymentMethodsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1887,7 +1961,6 @@ func (i *InvoiceAcceptedPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents a file attached to an [invoice](entity:Invoice).
 var (
 	invoiceAttachmentFieldID          = big.NewInt(1 << 0)
 	invoiceAttachmentFieldFilename    = big.NewInt(1 << 1)
@@ -1898,6 +1971,7 @@ var (
 	invoiceAttachmentFieldUploadedAt  = big.NewInt(1 << 6)
 )
 
+// Represents a file attached to an [invoice](entity:Invoice).
 type InvoiceAttachment struct {
 	// The Square-assigned ID of the attachment.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1981,10 +2055,12 @@ func (i *InvoiceAttachment) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceAttachment) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -2104,17 +2180,23 @@ func (i InvoiceAutomaticPaymentSource) Ptr() *InvoiceAutomaticPaymentSource {
 	return &i
 }
 
-// An additional seller-defined and customer-facing field to include on the invoice. For more information,
-// see [Custom fields](https://developer.squareup.com/docs/invoices-api/overview#custom-fields).
-//
-// Adding custom fields to an invoice requires an
-// [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
 var (
 	invoiceCustomFieldFieldLabel     = big.NewInt(1 << 0)
 	invoiceCustomFieldFieldValue     = big.NewInt(1 << 1)
 	invoiceCustomFieldFieldPlacement = big.NewInt(1 << 2)
 )
 
+// invoiceCustomFieldNullableFields maps the wire names of InvoiceCustomField's nullable fields (required or optional) to their field bits.
+var invoiceCustomFieldNullableFields = map[string]*big.Int{
+	"label": invoiceCustomFieldFieldLabel,
+	"value": invoiceCustomFieldFieldValue,
+}
+
+// An additional seller-defined and customer-facing field to include on the invoice. For more information,
+// see [Custom fields](https://developer.squareup.com/docs/invoices-api/overview#custom-fields).
+//
+// Adding custom fields to an invoice requires an
+// [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
 type InvoiceCustomField struct {
 	// The label or title of the custom field. This field is required for a custom field.
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
@@ -2160,10 +2242,12 @@ func (i *InvoiceCustomField) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceCustomField) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetLabel sets the Label field and marks it as non-optional;
@@ -2199,6 +2283,13 @@ func (i *InvoiceCustomField) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoiceCustomFieldNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2279,12 +2370,17 @@ func (i InvoiceDeliveryMethod) Ptr() *InvoiceDeliveryMethod {
 	return &i
 }
 
-// Describes query filters to apply.
 var (
 	invoiceFilterFieldLocationIDs = big.NewInt(1 << 0)
 	invoiceFilterFieldCustomerIDs = big.NewInt(1 << 1)
 )
 
+// invoiceFilterNullableFields maps the wire names of InvoiceFilter's nullable fields (required or optional) to their field bits.
+var invoiceFilterNullableFields = map[string]*big.Int{
+	"customer_ids": invoiceFilterFieldCustomerIDs,
+}
+
+// Describes query filters to apply.
 type InvoiceFilter struct {
 	// Limits the search to the specified locations. A location is required.
 	// In the current implementation, only one location can be specified.
@@ -2323,10 +2419,12 @@ func (i *InvoiceFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceFilter) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -2355,6 +2453,13 @@ func (i *InvoiceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoiceFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2385,9 +2490,6 @@ func (i *InvoiceFilter) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Describes a payment request reminder (automatic notification) that Square sends
-// to the customer. You configure a reminder relative to the payment request
-// `due_date`.
 var (
 	invoicePaymentReminderFieldUID                   = big.NewInt(1 << 0)
 	invoicePaymentReminderFieldRelativeScheduledDays = big.NewInt(1 << 1)
@@ -2396,6 +2498,15 @@ var (
 	invoicePaymentReminderFieldSentAt                = big.NewInt(1 << 4)
 )
 
+// invoicePaymentReminderNullableFields maps the wire names of InvoicePaymentReminder's nullable fields (required or optional) to their field bits.
+var invoicePaymentReminderNullableFields = map[string]*big.Int{
+	"relative_scheduled_days": invoicePaymentReminderFieldRelativeScheduledDays,
+	"message":                 invoicePaymentReminderFieldMessage,
+}
+
+// Describes a payment request reminder (automatic notification) that Square sends
+// to the customer. You configure a reminder relative to the payment request
+// `due_date`.
 type InvoicePaymentReminder struct {
 	// A Square-assigned ID that uniquely identifies the reminder within the
 	// `InvoicePaymentRequest`.
@@ -2462,10 +2573,12 @@ func (i *InvoicePaymentReminder) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoicePaymentReminder) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -2515,6 +2628,13 @@ func (i *InvoicePaymentReminder) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoicePaymentReminderNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2571,12 +2691,6 @@ func (i InvoicePaymentReminderStatus) Ptr() *InvoicePaymentReminderStatus {
 	return &i
 }
 
-// Represents a payment request for an [invoice](entity:Invoice). Invoices can specify a maximum
-// of 13 payment requests, with up to 12 `INSTALLMENT` request types. For more information,
-// see [Configuring payment requests](https://developer.squareup.com/docs/invoices-api/create-publish-invoices#payment-requests).
-//
-// Adding `INSTALLMENT` payment requests to an invoice requires an
-// [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
 var (
 	invoicePaymentRequestFieldUID                             = big.NewInt(1 << 0)
 	invoicePaymentRequestFieldRequestMethod                   = big.NewInt(1 << 1)
@@ -2593,6 +2707,22 @@ var (
 	invoicePaymentRequestFieldRoundingAdjustmentIncludedMoney = big.NewInt(1 << 12)
 )
 
+// invoicePaymentRequestNullableFields maps the wire names of InvoicePaymentRequest's nullable fields (required or optional) to their field bits.
+var invoicePaymentRequestNullableFields = map[string]*big.Int{
+	"uid":                  invoicePaymentRequestFieldUID,
+	"due_date":             invoicePaymentRequestFieldDueDate,
+	"percentage_requested": invoicePaymentRequestFieldPercentageRequested,
+	"tipping_enabled":      invoicePaymentRequestFieldTippingEnabled,
+	"card_id":              invoicePaymentRequestFieldCardID,
+	"reminders":            invoicePaymentRequestFieldReminders,
+}
+
+// Represents a payment request for an [invoice](entity:Invoice). Invoices can specify a maximum
+// of 13 payment requests, with up to 12 `INSTALLMENT` request types. For more information,
+// see [Configuring payment requests](https://developer.squareup.com/docs/invoices-api/create-publish-invoices#payment-requests).
+//
+// Adding `INSTALLMENT` payment requests to an invoice requires an
+// [Invoices Plus subscription](https://developer.squareup.com/docs/invoices-api/overview#invoices-plus-subscription).
 type InvoicePaymentRequest struct {
 	// The Square-generated ID of the payment request in an [invoice](entity:Invoice).
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -2768,10 +2898,12 @@ func (i *InvoicePaymentRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoicePaymentRequest) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -2877,6 +3009,13 @@ func (i *InvoicePaymentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoicePaymentRequestNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2907,12 +3046,12 @@ func (i *InvoicePaymentRequest) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Describes query criteria for searching invoices.
 var (
 	invoiceQueryFieldFilter = big.NewInt(1 << 0)
 	invoiceQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Describes query criteria for searching invoices.
 type InvoiceQuery struct {
 	// Query filters to apply in searching invoices.
 	// For more information, see [Search for invoices](https://developer.squareup.com/docs/invoices-api/retrieve-list-search-invoices#search-invoices).
@@ -2949,10 +3088,12 @@ func (i *InvoiceQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceQuery) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -3011,12 +3152,6 @@ func (i *InvoiceQuery) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents a snapshot of customer data. This object stores customer data that is displayed on the invoice
-// and that Square uses to deliver the invoice.
-//
-// When you provide a customer ID for a draft invoice, Square retrieves the associated customer profile and populates
-// the remaining `InvoiceRecipient` fields. You cannot update these fields after the invoice is published.
-// Square updates the customer ID in response to a merge operation, but does not update other fields.
 var (
 	invoiceRecipientFieldCustomerID   = big.NewInt(1 << 0)
 	invoiceRecipientFieldGivenName    = big.NewInt(1 << 1)
@@ -3028,6 +3163,17 @@ var (
 	invoiceRecipientFieldTaxIDs       = big.NewInt(1 << 7)
 )
 
+// invoiceRecipientNullableFields maps the wire names of InvoiceRecipient's nullable fields (required or optional) to their field bits.
+var invoiceRecipientNullableFields = map[string]*big.Int{
+	"customer_id": invoiceRecipientFieldCustomerID,
+}
+
+// Represents a snapshot of customer data. This object stores customer data that is displayed on the invoice
+// and that Square uses to deliver the invoice.
+//
+// When you provide a customer ID for a draft invoice, Square retrieves the associated customer profile and populates
+// the remaining `InvoiceRecipient` fields. You cannot update these fields after the invoice is published.
+// Square updates the customer ID in response to a merge operation, but does not update other fields.
 type InvoiceRecipient struct {
 	// The ID of the customer. This is the customer profile ID that
 	// you provide when creating a draft invoice.
@@ -3119,10 +3265,12 @@ func (i *InvoiceRecipient) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceRecipient) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -3193,6 +3341,13 @@ func (i *InvoiceRecipient) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, invoiceRecipientNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3223,13 +3378,13 @@ func (i *InvoiceRecipient) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents the tax IDs for an invoice recipient. The country of the seller account determines
-// whether the corresponding `tax_ids` field is available for the customer. For more information,
-// see [Invoice recipient tax IDs](https://developer.squareup.com/docs/invoices-api/overview#recipient-tax-ids).
 var (
 	invoiceRecipientTaxIDsFieldEuVat = big.NewInt(1 << 0)
 )
 
+// Represents the tax IDs for an invoice recipient. The country of the seller account determines
+// whether the corresponding `tax_ids` field is available for the customer. For more information,
+// see [Invoice recipient tax IDs](https://developer.squareup.com/docs/invoices-api/overview#recipient-tax-ids).
 type InvoiceRecipientTaxIDs struct {
 	// The EU VAT identification number for the invoice recipient. For example, `IE3426675K`.
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
@@ -3256,10 +3411,12 @@ func (i *InvoiceRecipientTaxIDs) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceRecipientTaxIDs) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetEuVat sets the EuVat field and marks it as non-optional;
@@ -3379,12 +3536,12 @@ func (i InvoiceRequestType) Ptr() *InvoiceRequestType {
 	return &i
 }
 
-// Identifies the sort field and sort order.
 var (
 	invoiceSortFieldField = big.NewInt(1 << 0)
 	invoiceSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Identifies the sort field and sort order.
 type InvoiceSort struct {
 	// The field to use for sorting.
 	// See [InvoiceSortField](#type-invoicesortfield) for possible values
@@ -3415,10 +3572,12 @@ func (i *InvoiceSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InvoiceSort) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -3527,13 +3686,13 @@ func (i InvoiceStatus) Ptr() *InvoiceStatus {
 	return &i
 }
 
-// Describes a `ListInvoice` response.
 var (
 	listInvoicesResponseFieldInvoices = big.NewInt(1 << 0)
 	listInvoicesResponseFieldCursor   = big.NewInt(1 << 1)
 	listInvoicesResponseFieldErrors   = big.NewInt(1 << 2)
 )
 
+// Describes a `ListInvoice` response.
 type ListInvoicesResponse struct {
 	// The invoices retrieved.
 	Invoices []*Invoice `json:"invoices,omitempty" url:"invoices,omitempty"`
@@ -3581,10 +3740,12 @@ func (l *ListInvoicesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListInvoicesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetInvoices sets the Invoices field and marks it as non-optional;
@@ -3650,12 +3811,12 @@ func (l *ListInvoicesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Describes a `PublishInvoice` response.
 var (
 	publishInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
 	publishInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
 )
 
+// Describes a `PublishInvoice` response.
 type PublishInvoiceResponse struct {
 	// The published invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
@@ -3691,10 +3852,12 @@ func (p *PublishInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PublishInvoiceResponse) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -3753,13 +3916,13 @@ func (p *PublishInvoiceResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Describes a `SearchInvoices` response.
 var (
 	searchInvoicesResponseFieldInvoices = big.NewInt(1 << 0)
 	searchInvoicesResponseFieldCursor   = big.NewInt(1 << 1)
 	searchInvoicesResponseFieldErrors   = big.NewInt(1 << 2)
 )
 
+// Describes a `SearchInvoices` response.
 type SearchInvoicesResponse struct {
 	// The list of invoices returned by the search.
 	Invoices []*Invoice `json:"invoices,omitempty" url:"invoices,omitempty"`
@@ -3807,10 +3970,12 @@ func (s *SearchInvoicesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchInvoicesResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetInvoices sets the Invoices field and marks it as non-optional;
@@ -3876,12 +4041,12 @@ func (s *SearchInvoicesResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Describes a `UpdateInvoice` response.
 var (
 	updateInvoiceResponseFieldInvoice = big.NewInt(1 << 0)
 	updateInvoiceResponseFieldErrors  = big.NewInt(1 << 1)
 )
 
+// Describes a `UpdateInvoice` response.
 type UpdateInvoiceResponse struct {
 	// The updated invoice.
 	Invoice *Invoice `json:"invoice,omitempty" url:"invoice,omitempty"`
@@ -3917,10 +4082,12 @@ func (u *UpdateInvoiceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateInvoiceResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetInvoice sets the Invoice field and marks it as non-optional;
@@ -4010,10 +4177,12 @@ type UpdateInvoiceRequest struct {
 }
 
 func (u *UpdateInvoiceRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetInvoiceID sets the InvoiceID field and marks it as non-optional;

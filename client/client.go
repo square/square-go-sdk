@@ -3,6 +3,8 @@
 package client
 
 import (
+	os "os"
+
 	applepay "github.com/square/square-go-sdk/v5/applepay"
 	bankaccounts "github.com/square/square-go-sdk/v5/bankaccounts"
 	client "github.com/square/square-go-sdk/v5/bookings/client"
@@ -42,7 +44,6 @@ import (
 	v1transactions "github.com/square/square-go-sdk/v5/v1transactions"
 	vendors "github.com/square/square-go-sdk/v5/vendors"
 	webhooksclient "github.com/square/square-go-sdk/v5/webhooks/client"
-	os "os"
 )
 
 type Client struct {
@@ -137,8 +138,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 		baseURL:        options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}

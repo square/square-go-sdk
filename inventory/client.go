@@ -4,12 +4,13 @@ package inventory
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -42,6 +44,21 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Returns the standard and custom inventory adjustment reasons available
 // to the seller.
+//
+// Example:
+//
+//	request := &square.ListInventoryAdjustmentReasonsRequest{
+//	    IncludeDeleted: square.Bool(
+//	        true,
+//	    ),
+//	    IncludeSystemCodes: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Inventory.ListInventoryAdjustmentReasons(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListInventoryAdjustmentReasons(
 	ctx context.Context,
 	request *square.ListInventoryAdjustmentReasonsRequest,
@@ -59,6 +76,25 @@ func (c *Client) ListInventoryAdjustmentReasons(
 }
 
 // Creates a custom inventory adjustment reason.
+//
+// Example:
+//
+//	request := &square.CreateInventoryAdjustmentReasonRequest{
+//	    IdempotencyKey: "27b2f2b1-1c2a-4b9e-8f3a-0d9c3a1e5b47",
+//	    AdjustmentReason: &square.InventoryAdjustmentReason{
+//	        ID: &square.InventoryAdjustmentReasonID{
+//	            Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	        },
+//	        Name: square.String(
+//	            "Donated to charity",
+//	        ),
+//	        Direction: square.InventoryAdjustmentReasonDirectionDecrease.Ptr(),
+//	    },
+//	}
+//	_, err := client.Inventory.CreateInventoryAdjustmentReason(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateInventoryAdjustmentReason(
 	ctx context.Context,
 	request *square.CreateInventoryAdjustmentReasonRequest,
@@ -76,6 +112,21 @@ func (c *Client) CreateInventoryAdjustmentReason(
 }
 
 // Soft deletes a custom inventory adjustment reason.
+//
+// Example:
+//
+//	request := &square.DeleteInventoryAdjustmentReasonRequest{
+//	    ReasonID: &square.InventoryAdjustmentReasonID{
+//	        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	        CustomReasonID: square.String(
+//	            "R5BX3PDCZ6EXAMPLE",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Inventory.DeleteInventoryAdjustmentReason(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteInventoryAdjustmentReason(
 	ctx context.Context,
 	request *square.DeleteInventoryAdjustmentReasonRequest,
@@ -93,6 +144,21 @@ func (c *Client) DeleteInventoryAdjustmentReason(
 }
 
 // Restores a soft-deleted custom inventory adjustment reason.
+//
+// Example:
+//
+//	request := &square.RestoreInventoryAdjustmentReasonRequest{
+//	    ReasonID: &square.InventoryAdjustmentReasonID{
+//	        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	        CustomReasonID: square.String(
+//	            "R5BX3PDCZ6EXAMPLE",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Inventory.RestoreInventoryAdjustmentReason(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RestoreInventoryAdjustmentReason(
 	ctx context.Context,
 	request *square.RestoreInventoryAdjustmentReasonRequest,
@@ -111,6 +177,21 @@ func (c *Client) RestoreInventoryAdjustmentReason(
 
 // Returns the inventory adjustment reason identified by the provided
 // `reason_id`. Deleted custom reasons can be retrieved by ID.
+//
+// Example:
+//
+//	request := &square.RetrieveInventoryAdjustmentReasonRequest{
+//	    ReasonID: &square.InventoryAdjustmentReasonID{
+//	        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	        CustomReasonID: square.String(
+//	            "R5BX3PDCZ6EXAMPLE",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Inventory.RetrieveInventoryAdjustmentReason(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveInventoryAdjustmentReason(
 	ctx context.Context,
 	request *square.RetrieveInventoryAdjustmentReasonRequest,
@@ -128,6 +209,32 @@ func (c *Client) RetrieveInventoryAdjustmentReason(
 }
 
 // Updates a custom inventory adjustment reason.
+//
+// Example:
+//
+//	request := &square.UpdateInventoryAdjustmentReasonRequest{
+//	    ReasonID: &square.InventoryAdjustmentReasonID{
+//	        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	        CustomReasonID: square.String(
+//	            "R5BX3PDCZ6EXAMPLE",
+//	        ),
+//	    },
+//	    AdjustmentReason: &square.InventoryAdjustmentReason{
+//	        ID: &square.InventoryAdjustmentReasonID{
+//	            Type: square.InventoryAdjustmentReasonIDTypeCustom,
+//	            CustomReasonID: square.String(
+//	                "R5BX3PDCZ6EXAMPLE",
+//	            ),
+//	        },
+//	        Name: square.String(
+//	            "Charitable donation",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Inventory.UpdateInventoryAdjustmentReason(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateInventoryAdjustmentReason(
 	ctx context.Context,
 	request *square.UpdateInventoryAdjustmentReasonRequest,
@@ -146,6 +253,16 @@ func (c *Client) UpdateInventoryAdjustmentReason(
 
 // Deprecated version of [RetrieveInventoryAdjustment](api-endpoint:Inventory-RetrieveInventoryAdjustment) after the endpoint URL
 // is updated to conform to the standard convention.
+//
+// Example:
+//
+//	request := &square.DeprecatedGetAdjustmentInventoryRequest{
+//	    AdjustmentID: "adjustment_id",
+//	}
+//	_, err := client.Inventory.DeprecatedGetAdjustment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeprecatedGetAdjustment(
 	ctx context.Context,
 	request *square.DeprecatedGetAdjustmentInventoryRequest,
@@ -166,6 +283,17 @@ func (c *Client) DeprecatedGetAdjustment(
 //
 // On success: returns the newly updated adjustment.
 // On failure: returns a list of related errors.
+//
+// Example:
+//
+//	request := &square.UpdateInventoryAdjustmentRequest{
+//	    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+//	    Adjustment: &square.InventoryAdjustment{},
+//	}
+//	_, err := client.Inventory.UpdateInventoryAdjustment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateInventoryAdjustment(
 	ctx context.Context,
 	request *square.UpdateInventoryAdjustmentRequest,
@@ -184,6 +312,16 @@ func (c *Client) UpdateInventoryAdjustment(
 
 // Returns the [InventoryAdjustment](entity:InventoryAdjustment) object
 // with the provided `adjustment_id`.
+//
+// Example:
+//
+//	request := &square.GetAdjustmentInventoryRequest{
+//	    AdjustmentID: "adjustment_id",
+//	}
+//	_, err := client.Inventory.GetAdjustment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetAdjustment(
 	ctx context.Context,
 	request *square.GetAdjustmentInventoryRequest,
@@ -202,6 +340,45 @@ func (c *Client) GetAdjustment(
 
 // Deprecated version of [BatchChangeInventory](api-endpoint:Inventory-BatchChangeInventory) after the endpoint URL
 // is updated to conform to the standard convention.
+//
+// Example:
+//
+//	request := &square.BatchChangeInventoryRequest{
+//	    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+//	    Changes: []*square.InventoryChange{
+//	        &square.InventoryChange{
+//	            Type: square.InventoryChangeTypePhysicalCount.Ptr(),
+//	            PhysicalCount: &square.InventoryPhysicalCount{
+//	                ReferenceID: square.String(
+//	                    "1536bfbf-efed-48bf-b17d-a197141b2a92",
+//	                ),
+//	                CatalogObjectID: square.String(
+//	                    "W62UWFY35CWMYGVWK6TWJDNI",
+//	                ),
+//	                State: square.InventoryStateInStock.Ptr(),
+//	                LocationID: square.String(
+//	                    "C6W5YS5QM06F5",
+//	                ),
+//	                Quantity: square.String(
+//	                    "53",
+//	                ),
+//	                TeamMemberID: square.String(
+//	                    "LRK57NSQ5X7PUD05",
+//	                ),
+//	                OccurredAt: square.String(
+//	                    "2016-11-16T22:25:24.878Z",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    IgnoreUnchangedCounts: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Inventory.DeprecatedBatchChange(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeprecatedBatchChange(
 	ctx context.Context,
 	request *square.BatchChangeInventoryRequest,
@@ -220,6 +397,33 @@ func (c *Client) DeprecatedBatchChange(
 
 // Deprecated version of [BatchRetrieveInventoryChanges](api-endpoint:Inventory-BatchRetrieveInventoryChanges) after the endpoint URL
 // is updated to conform to the standard convention.
+//
+// Example:
+//
+//	request := &square.BatchRetrieveInventoryChangesRequest{
+//	    CatalogObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	    },
+//	    LocationIDs: []string{
+//	        "C6W5YS5QM06F5",
+//	    },
+//	    Types: []square.InventoryChangeType{
+//	        square.InventoryChangeTypePhysicalCount,
+//	    },
+//	    States: []square.InventoryState{
+//	        square.InventoryStateInStock,
+//	    },
+//	    UpdatedAfter: square.String(
+//	        "2016-11-01T00:00:00.000Z",
+//	    ),
+//	    UpdatedBefore: square.String(
+//	        "2016-12-01T00:00:00.000Z",
+//	    ),
+//	}
+//	_, err := client.Inventory.DeprecatedBatchGetChanges(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeprecatedBatchGetChanges(
 	ctx context.Context,
 	request *square.BatchRetrieveInventoryChangesRequest,
@@ -238,6 +442,24 @@ func (c *Client) DeprecatedBatchGetChanges(
 
 // Deprecated version of [BatchRetrieveInventoryCounts](api-endpoint:Inventory-BatchRetrieveInventoryCounts) after the endpoint URL
 // is updated to conform to the standard convention.
+//
+// Example:
+//
+//	request := &square.BatchGetInventoryCountsRequest{
+//	    CatalogObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	    },
+//	    LocationIDs: []string{
+//	        "59TNP9SA8VGDA",
+//	    },
+//	    UpdatedAfter: square.String(
+//	        "2016-11-16T00:00:00.000Z",
+//	    ),
+//	}
+//	_, err := client.Inventory.DeprecatedBatchGetCounts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeprecatedBatchGetCounts(
 	ctx context.Context,
 	request *square.BatchGetInventoryCountsRequest,
@@ -259,6 +481,45 @@ func (c *Client) DeprecatedBatchGetCounts(
 // On success: returns the current calculated counts for all objects
 // referenced in the request.
 // On failure: returns a list of related errors.
+//
+// Example:
+//
+//	request := &square.BatchChangeInventoryRequest{
+//	    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+//	    Changes: []*square.InventoryChange{
+//	        &square.InventoryChange{
+//	            Type: square.InventoryChangeTypePhysicalCount.Ptr(),
+//	            PhysicalCount: &square.InventoryPhysicalCount{
+//	                ReferenceID: square.String(
+//	                    "1536bfbf-efed-48bf-b17d-a197141b2a92",
+//	                ),
+//	                CatalogObjectID: square.String(
+//	                    "W62UWFY35CWMYGVWK6TWJDNI",
+//	                ),
+//	                State: square.InventoryStateInStock.Ptr(),
+//	                LocationID: square.String(
+//	                    "C6W5YS5QM06F5",
+//	                ),
+//	                Quantity: square.String(
+//	                    "53",
+//	                ),
+//	                TeamMemberID: square.String(
+//	                    "LRK57NSQ5X7PUD05",
+//	                ),
+//	                OccurredAt: square.String(
+//	                    "2016-11-16T22:25:24.878Z",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    IgnoreUnchangedCounts: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Inventory.BatchCreateChanges(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchCreateChanges(
 	ctx context.Context,
 	request *square.BatchChangeInventoryRequest,
@@ -283,6 +544,33 @@ func (c *Client) BatchCreateChanges(
 //
 // BatchRetrieveInventoryChanges is a catch-all query endpoint for queries
 // that cannot be handled by other, simpler endpoints.
+//
+// Example:
+//
+//	request := &square.BatchRetrieveInventoryChangesRequest{
+//	    CatalogObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	    },
+//	    LocationIDs: []string{
+//	        "C6W5YS5QM06F5",
+//	    },
+//	    Types: []square.InventoryChangeType{
+//	        square.InventoryChangeTypePhysicalCount,
+//	    },
+//	    States: []square.InventoryState{
+//	        square.InventoryStateInStock,
+//	    },
+//	    UpdatedAfter: square.String(
+//	        "2016-11-01T00:00:00.000Z",
+//	    ),
+//	    UpdatedBefore: square.String(
+//	        "2016-12-01T00:00:00.000Z",
+//	    ),
+//	}
+//	_, err := client.Inventory.BatchGetChanges(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchGetChanges(
 	ctx context.Context,
 	request *square.BatchRetrieveInventoryChangesRequest,
@@ -310,6 +598,24 @@ func (c *Client) BatchGetChanges(
 // time (based on the server timestamp for the most recent change) are
 // returned. This allows clients to perform a "sync" operation, for example
 // in response to receiving a Webhook notification.
+//
+// Example:
+//
+//	request := &square.BatchGetInventoryCountsRequest{
+//	    CatalogObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	    },
+//	    LocationIDs: []string{
+//	        "59TNP9SA8VGDA",
+//	    },
+//	    UpdatedAfter: square.String(
+//	        "2016-11-16T00:00:00.000Z",
+//	    ),
+//	}
+//	_, err := client.Inventory.BatchGetCounts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchGetCounts(
 	ctx context.Context,
 	request *square.BatchGetInventoryCountsRequest,
@@ -328,6 +634,16 @@ func (c *Client) BatchGetCounts(
 
 // Deprecated version of [RetrieveInventoryPhysicalCount](api-endpoint:Inventory-RetrieveInventoryPhysicalCount) after the endpoint URL
 // is updated to conform to the standard convention.
+//
+// Example:
+//
+//	request := &square.DeprecatedGetPhysicalCountInventoryRequest{
+//	    PhysicalCountID: "physical_count_id",
+//	}
+//	_, err := client.Inventory.DeprecatedGetPhysicalCount(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeprecatedGetPhysicalCount(
 	ctx context.Context,
 	request *square.DeprecatedGetPhysicalCountInventoryRequest,
@@ -346,6 +662,16 @@ func (c *Client) DeprecatedGetPhysicalCount(
 
 // Returns the [InventoryPhysicalCount](entity:InventoryPhysicalCount)
 // object with the provided `physical_count_id`.
+//
+// Example:
+//
+//	request := &square.GetPhysicalCountInventoryRequest{
+//	    PhysicalCountID: "physical_count_id",
+//	}
+//	_, err := client.Inventory.GetPhysicalCount(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetPhysicalCount(
 	ctx context.Context,
 	request *square.GetPhysicalCountInventoryRequest,
@@ -366,6 +692,22 @@ func (c *Client) GetPhysicalCount(
 // [CatalogObject](entity:CatalogObject) at a given set of
 // [Location](entity:Location)s. Responses are paginated and unsorted.
 // For more sophisticated queries, use a batch endpoint.
+//
+// Example:
+//
+//	request := &square.GetInventoryRequest{
+//	    CatalogObjectID: "catalog_object_id",
+//	    LocationIDs: square.String(
+//	        "location_ids",
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Inventory.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetInventoryRequest,
@@ -402,6 +744,7 @@ func (c *Client) Get(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -416,7 +759,7 @@ func (c *Client) Get(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -440,6 +783,22 @@ func (c *Client) Get(
 // There are no limits on how far back the caller can page. This endpoint can be
 // used to display recent changes for a specific item. For more
 // sophisticated queries, use a batch endpoint.
+//
+// Example:
+//
+//	request := &square.ChangesInventoryRequest{
+//	    CatalogObjectID: "catalog_object_id",
+//	    LocationIDs: square.String(
+//	        "location_ids",
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Inventory.Changes(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Changes(
 	ctx context.Context,
 	request *square.ChangesInventoryRequest,
@@ -476,6 +835,7 @@ func (c *Client) Changes(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -490,7 +850,7 @@ func (c *Client) Changes(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(

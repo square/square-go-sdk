@@ -25,10 +25,12 @@ type CreateWebhookSubscriptionRequest struct {
 }
 
 func (c *CreateWebhookSubscriptionRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -79,10 +81,12 @@ type DeleteSubscriptionsRequest struct {
 }
 
 func (d *DeleteSubscriptionsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -105,10 +109,12 @@ type GetSubscriptionsRequest struct {
 }
 
 func (g *GetSubscriptionsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -149,10 +155,12 @@ type ListSubscriptionsRequest struct {
 }
 
 func (l *ListSubscriptionsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -200,10 +208,12 @@ type TestWebhookSubscriptionRequest struct {
 }
 
 func (t *TestWebhookSubscriptionRequest) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -257,10 +267,12 @@ type UpdateWebhookSubscriptionRequest struct {
 }
 
 func (u *UpdateWebhookSubscriptionRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -314,10 +326,12 @@ type UpdateWebhookSubscriptionSignatureKeyRequest struct {
 }
 
 func (u *UpdateWebhookSubscriptionSignatureKeyRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;

@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	loyalty "github.com/square/square-go-sdk/v5/loyalty"
 	promotions "github.com/square/square-go-sdk/v5/loyalty/programs/promotions"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -36,8 +37,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -47,6 +49,12 @@ func NewClient(options *core.RequestOptions) *Client {
 // Loyalty programs define how buyers can earn points and redeem points for rewards. Square sellers can have only one loyalty program, which is created and managed from the Seller Dashboard. For more information, see [Loyalty Program Overview](https://developer.squareup.com/docs/loyalty/overview).
 //
 // Replaced with [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgram) when used with the keyword `main`.
+//
+// Example:
+//
+//	_, err := client.Loyalty.Programs.List(
+//	    context.TODO(),
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -64,6 +72,16 @@ func (c *Client) List(
 // Retrieves the loyalty program in a seller's account, specified by the program ID or the keyword `main`.
 //
 // Loyalty programs define how buyers can earn points and redeem points for rewards. Square sellers can have only one loyalty program, which is created and managed from the Seller Dashboard. For more information, see [Loyalty Program Overview](https://developer.squareup.com/docs/loyalty/overview).
+//
+// Example:
+//
+//	request := &loyalty.GetProgramsRequest{
+//	    ProgramID: "program_id",
+//	}
+//	_, err := client.Loyalty.Programs.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.GetProgramsRequest,
@@ -95,6 +113,22 @@ func (c *Client) Get(
 // [ListLoyaltyPromotions](api-endpoint:Loyalty-ListLoyaltyPromotions) and perform a client-side computation
 // to calculate whether the purchase also qualifies for promotion points. For more information, see
 // [Calculating promotion points](https://developer.squareup.com/docs/loyalty-api/loyalty-promotions#calculate-promotion-points).
+//
+// Example:
+//
+//	request := &loyalty.CalculateLoyaltyPointsRequest{
+//	    ProgramID: "program_id",
+//	    OrderID: square.String(
+//	        "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+//	    ),
+//	    LoyaltyAccountID: square.String(
+//	        "79b807d2-d786-46a9-933b-918028d7a8c5",
+//	    ),
+//	}
+//	_, err := client.Loyalty.Programs.Calculate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Calculate(
 	ctx context.Context,
 	request *loyalty.CalculateLoyaltyPointsRequest,

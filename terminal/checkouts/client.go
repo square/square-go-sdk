@@ -4,12 +4,13 @@ package checkouts
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	terminal "github.com/square/square-go-sdk/v5/terminal"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -42,6 +44,33 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Creates a Terminal checkout request and sends it to the specified device to take a payment
 // for the requested amount.
+//
+// Example:
+//
+//	request := &terminal.CreateTerminalCheckoutRequest{
+//	    IdempotencyKey: "28a0c3bc-7839-11ea-bc55-0242ac130003",
+//	    Checkout: &square.TerminalCheckout{
+//	        AmountMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(2610),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	        ReferenceID: square.String(
+//	            "id11572",
+//	        ),
+//	        Note: square.String(
+//	            "A brief note",
+//	        ),
+//	        DeviceOptions: &square.DeviceCheckoutOptions{
+//	            DeviceID: "dbb5d83a-7838-11ea-bc55-0242ac130003",
+//	        },
+//	    },
+//	}
+//	_, err := client.Terminal.Checkouts.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalCheckoutRequest,
@@ -59,6 +88,25 @@ func (c *Client) Create(
 }
 
 // Returns a filtered list of Terminal checkout requests created by the application making the request. Only Terminal checkout requests created for the merchant scoped to the OAuth token are returned. Terminal checkout requests are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.SearchTerminalCheckoutsRequest{
+//	    Query: &square.TerminalCheckoutQuery{
+//	        Filter: &square.TerminalCheckoutQueryFilter{
+//	            Status: square.String(
+//	                "COMPLETED",
+//	            ),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        2,
+//	    ),
+//	}
+//	_, err := client.Terminal.Checkouts.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalCheckoutsRequest,
@@ -76,6 +124,16 @@ func (c *Client) Search(
 }
 
 // Retrieves a Terminal checkout request by `checkout_id`. Terminal checkout requests are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.GetCheckoutsRequest{
+//	    CheckoutID: "checkout_id",
+//	}
+//	_, err := client.Terminal.Checkouts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.GetCheckoutsRequest,
@@ -93,6 +151,16 @@ func (c *Client) Get(
 }
 
 // Cancels a Terminal checkout request if the status of the request permits it.
+//
+// Example:
+//
+//	request := &terminal.CancelCheckoutsRequest{
+//	    CheckoutID: "checkout_id",
+//	}
+//	_, err := client.Terminal.Checkouts.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.CancelCheckoutsRequest,

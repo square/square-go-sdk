@@ -4,13 +4,14 @@ package breaktypes
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	labor "github.com/square/square-go-sdk/v5/labor"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,33 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Returns a paginated list of `BreakType` instances for a business.
+//
+// Example:
+//
+//	request := &labor.ListBreakTypesRequest{
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Labor.BreakTypes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *labor.ListBreakTypesRequest,
@@ -75,6 +95,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +110,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -114,6 +135,24 @@ func (c *Client) List(
 // You can only have three `BreakType` instances per location. If you attempt to add a fourth
 // `BreakType` for a location, an `INVALID_REQUEST_ERROR` "Exceeded limit of 3 breaks per location."
 // is returned.
+//
+// Example:
+//
+//	request := &labor.CreateBreakTypeRequest{
+//	    IdempotencyKey: square.String(
+//	        "PAD3NG5KSN2GL",
+//	    ),
+//	    BreakType: &square.BreakType{
+//	        LocationID: "CGJN03P1D08GF",
+//	        BreakName: "Lunch Break",
+//	        ExpectedDuration: "PT30M",
+//	        IsPaid: true,
+//	    },
+//	}
+//	_, err := client.Labor.BreakTypes.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateBreakTypeRequest,
@@ -131,6 +170,16 @@ func (c *Client) Create(
 }
 
 // Returns a single `BreakType` specified by `id`.
+//
+// Example:
+//
+//	request := &labor.GetBreakTypesRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.BreakTypes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *labor.GetBreakTypesRequest,
@@ -148,6 +197,25 @@ func (c *Client) Get(
 }
 
 // Updates an existing `BreakType`.
+//
+// Example:
+//
+//	request := &labor.UpdateBreakTypeRequest{
+//	    ID: "id",
+//	    BreakType: &square.BreakType{
+//	        LocationID: "26M7H24AZ9N6R",
+//	        BreakName: "Lunch",
+//	        ExpectedDuration: "PT50M",
+//	        IsPaid: true,
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Labor.BreakTypes.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateBreakTypeRequest,
@@ -167,6 +235,16 @@ func (c *Client) Update(
 // Deletes an existing `BreakType`.
 //
 // A `BreakType` can be deleted even if it is referenced from a `Shift`.
+//
+// Example:
+//
+//	request := &labor.DeleteBreakTypesRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.BreakTypes.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.DeleteBreakTypesRequest,

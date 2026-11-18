@@ -4,12 +4,66 @@ package customers
 
 import (
 	json "encoding/json"
+	v5 "github.com/square/square-go-sdk/v5"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
 )
 
+func TestSettersBatchUpsertCustomerCustomAttributesRequest(t *testing.T) {
+	t.Run("SetValues", func(t *testing.T) {
+		obj := &BatchUpsertCustomerCustomAttributesRequest{}
+		var fernTestValueValues map[string]*v5.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest
+		obj.SetValues(fernTestValueValues)
+		assert.Equal(t, fernTestValueValues, obj.Values)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+}
+
+func TestSettersMarkExplicitBatchUpsertCustomerCustomAttributesRequest(t *testing.T) {
+	t.Run("SetValues_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &BatchUpsertCustomerCustomAttributesRequest{}
+		var fernTestValueValues map[string]*v5.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest
+
+		// Act
+		obj.SetValues(fernTestValueValues)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
 func TestSettersCreateCustomerCustomAttributeDefinitionRequest(t *testing.T) {
+	t.Run("SetCustomAttributeDefinition", func(t *testing.T) {
+		obj := &CreateCustomerCustomAttributeDefinitionRequest{}
+		var fernTestValueCustomAttributeDefinition *v5.CustomAttributeDefinition
+		obj.SetCustomAttributeDefinition(fernTestValueCustomAttributeDefinition)
+		assert.Equal(t, fernTestValueCustomAttributeDefinition, obj.CustomAttributeDefinition)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
 		obj := &CreateCustomerCustomAttributeDefinitionRequest{}
 		var fernTestValueIdempotencyKey *string
@@ -21,6 +75,37 @@ func TestSettersCreateCustomerCustomAttributeDefinitionRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCreateCustomerCustomAttributeDefinitionRequest(t *testing.T) {
+	t.Run("SetCustomAttributeDefinition_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateCustomerCustomAttributeDefinitionRequest{}
+		var fernTestValueCustomAttributeDefinition *v5.CustomAttributeDefinition
+
+		// Act
+		obj.SetCustomAttributeDefinition(fernTestValueCustomAttributeDefinition)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetIdempotencyKey_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -276,6 +361,14 @@ func TestSettersUpdateCustomerCustomAttributeDefinitionRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetCustomAttributeDefinition", func(t *testing.T) {
+		obj := &UpdateCustomerCustomAttributeDefinitionRequest{}
+		var fernTestValueCustomAttributeDefinition *v5.CustomAttributeDefinition
+		obj.SetCustomAttributeDefinition(fernTestValueCustomAttributeDefinition)
+		assert.Equal(t, fernTestValueCustomAttributeDefinition, obj.CustomAttributeDefinition)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
 		obj := &UpdateCustomerCustomAttributeDefinitionRequest{}
 		var fernTestValueIdempotencyKey *string
@@ -295,6 +388,37 @@ func TestSettersMarkExplicitUpdateCustomerCustomAttributeDefinitionRequest(t *te
 
 		// Act
 		obj.SetKey(fernTestValueKey)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetCustomAttributeDefinition_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateCustomerCustomAttributeDefinitionRequest{}
+		var fernTestValueCustomAttributeDefinition *v5.CustomAttributeDefinition
+
+		// Act
+		obj.SetCustomAttributeDefinition(fernTestValueCustomAttributeDefinition)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

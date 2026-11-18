@@ -4,12 +4,13 @@ package refunds
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	terminal "github.com/square/square-go-sdk/v5/terminal"
-	os "os"
 )
 
 type Client struct {
@@ -33,14 +34,36 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Creates a request to refund an Interac payment completed on a Square Terminal. Refunds for Interac payments on a Square Terminal are supported only for Interac debit cards in Canada. Other refunds for Terminal payments should use the Refunds API. For more information, see [Refunds API](api:Refunds).
+//
+// Example:
+//
+//	request := &terminal.CreateTerminalRefundRequest{
+//	    IdempotencyKey: "402a640b-b26f-401f-b406-46f839590c04",
+//	    Refund: &square.TerminalRefund{
+//	        PaymentID: "5O5OvgkcNUhl7JBuINflcjKqUzXZY",
+//	        AmountMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(111),
+//	            ),
+//	            Currency: square.CurrencyCad.Ptr(),
+//	        },
+//	        Reason: "Returning items",
+//	        DeviceID: "f72dfb8e-4d65-4e56-aade-ec3fb8d33291",
+//	    },
+//	}
+//	_, err := client.Terminal.Refunds.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalRefundRequest,
@@ -58,6 +81,25 @@ func (c *Client) Create(
 }
 
 // Retrieves a filtered list of Interac Terminal refund requests created by the seller making the request. Terminal refund requests are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.SearchTerminalRefundsRequest{
+//	    Query: &square.TerminalRefundQuery{
+//	        Filter: &square.TerminalRefundQueryFilter{
+//	            Status: square.String(
+//	                "COMPLETED",
+//	            ),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Terminal.Refunds.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalRefundsRequest,
@@ -75,6 +117,16 @@ func (c *Client) Search(
 }
 
 // Retrieves an Interac Terminal refund object by ID. Terminal refund objects are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.GetRefundsRequest{
+//	    TerminalRefundID: "terminal_refund_id",
+//	}
+//	_, err := client.Terminal.Refunds.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.GetRefundsRequest,
@@ -92,6 +144,16 @@ func (c *Client) Get(
 }
 
 // Cancels an Interac Terminal refund request by refund request ID if the status of the request permits it.
+//
+// Example:
+//
+//	request := &terminal.CancelRefundsRequest{
+//	    TerminalRefundID: "terminal_refund_id",
+//	}
+//	_, err := client.Terminal.Refunds.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.CancelRefundsRequest,

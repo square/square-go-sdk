@@ -3,7 +3,19 @@
 package square
 
 import (
+	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 )
 
-var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{}
+var ErrorCodes internal.ErrorCodes = internal.ErrorCodes{
+	internal.ClientErrorWildcard: func(apiError *core.APIError) error {
+		return &ClientRequestError{
+			APIError: apiError,
+		}
+	},
+	internal.ServerErrorWildcard: func(apiError *core.APIError) error {
+		return &ServerError{
+			APIError: apiError,
+		}
+	},
+}

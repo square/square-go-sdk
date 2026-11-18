@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestPayoutsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListPayoutsRequest{
 		LocationID: square.String(
@@ -100,7 +116,7 @@ func TestPayoutsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPayoutsListWithWireMock", "GET", "/v2/payouts", map[string]string{"location_id": "location_id", "status": "SENT", "begin_time": "begin_time", "end_time": "end_time", "sort_order": "DESC", "cursor": "cursor", "limit": "1"}, 1)
+	VerifyRequestCount(t, "TestPayoutsListWithWireMock", "GET", "/v2/payouts", map[string]interface{}{"location_id": "location_id", "status": "SENT", "begin_time": "begin_time", "end_time": "end_time", "sort_order": "DESC", "cursor": "cursor", "limit": "1"}, 1)
 }
 
 func TestPayoutsGetWithWireMock(
@@ -112,6 +128,7 @@ func TestPayoutsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetPayoutsRequest{
 		PayoutID: "payout_id",
@@ -137,6 +154,7 @@ func TestPayoutsListEntriesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListEntriesPayoutsRequest{
 		PayoutID:  "payout_id",
@@ -157,5 +175,5 @@ func TestPayoutsListEntriesWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPayoutsListEntriesWithWireMock", "GET", "/v2/payouts/payout_id/payout-entries", map[string]string{"sort_order": "DESC", "cursor": "cursor", "limit": "1"}, 1)
+	VerifyRequestCount(t, "TestPayoutsListEntriesWithWireMock", "GET", "/v2/payouts/payout_id/payout-entries", map[string]interface{}{"sort_order": "DESC", "cursor": "cursor", "limit": "1"}, 1)
 }

@@ -4,11 +4,12 @@ package reporting
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,14 +33,21 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Describes the data available to query: the cubes, views, measures, dimensions, and segments you can reference in a reporting query. Call this first to discover the schema, then pass the members you need to `load`.
+//
+// Example:
+//
+//	_, err := client.Reporting.GetMetadata(
+//	    context.TODO(),
+//	)
 func (c *Client) GetMetadata(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -55,6 +63,14 @@ func (c *Client) GetMetadata(
 }
 
 // Runs a reporting query against the discovered schema and returns the aggregated results. Long-running queries may return a "Continue wait" response while processing — retry the same request until results are ready.
+//
+// Example:
+//
+//	request := &square.LoadRequest{}
+//	_, err := client.Reporting.Load(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Load(
 	ctx context.Context,
 	request *square.LoadRequest,

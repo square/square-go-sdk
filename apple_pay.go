@@ -22,10 +22,12 @@ type RegisterDomainRequest struct {
 }
 
 func (r *RegisterDomainRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetDomainName sets the DomainName field and marks it as non-optional;
@@ -56,15 +58,15 @@ func (r *RegisterDomainRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
-//
-// Either `errors` or `status` are present in a given response (never both).
 var (
 	registerDomainResponseFieldErrors = big.NewInt(1 << 0)
 	registerDomainResponseFieldStatus = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [RegisterDomain](api-endpoint:ApplePay-RegisterDomain) endpoint.
+//
+// Either `errors` or `status` are present in a given response (never both).
 type RegisterDomainResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -103,10 +105,12 @@ func (r *RegisterDomainResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RegisterDomainResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

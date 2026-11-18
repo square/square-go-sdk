@@ -22,10 +22,12 @@ type DeleteEvidenceRequest struct {
 }
 
 func (d *DeleteEvidenceRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -58,10 +60,12 @@ type GetEvidenceRequest struct {
 }
 
 func (g *GetEvidenceRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -96,10 +100,12 @@ type ListEvidenceRequest struct {
 }
 
 func (l *ListEvidenceRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;

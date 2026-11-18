@@ -4,12 +4,13 @@ package wagesetting
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	teammembers "github.com/square/square-go-sdk/v5/teammembers"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -46,6 +48,16 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // Square recommends using [RetrieveTeamMember](api-endpoint:Team-RetrieveTeamMember) or [SearchTeamMembers](api-endpoint:Team-SearchTeamMembers)
 // to get this information directly from the `TeamMember.wage_setting` field.
+//
+// Example:
+//
+//	request := &teammembers.GetWageSettingRequest{
+//	    TeamMemberID: "team_member_id",
+//	}
+//	_, err := client.TeamMembers.WageSetting.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *teammembers.GetWageSettingRequest,
@@ -70,6 +82,50 @@ func (c *Client) Get(
 //
 // Square recommends using [CreateTeamMember](api-endpoint:Team-CreateTeamMember) or [UpdateTeamMember](api-endpoint:Team-UpdateTeamMember)
 // to manage the `TeamMember.wage_setting` field directly.
+//
+// Example:
+//
+//	request := &teammembers.UpdateWageSettingRequest{
+//	    TeamMemberID: "team_member_id",
+//	    WageSetting: &square.WageSetting{
+//	        JobAssignments: []*square.JobAssignment{
+//	            &square.JobAssignment{
+//	                JobTitle: square.String(
+//	                    "Manager",
+//	                ),
+//	                PayType: square.JobAssignmentPayTypeSalary,
+//	                AnnualRate: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(3000000),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	                WeeklyHours: square.Int(
+//	                    40,
+//	                ),
+//	            },
+//	            &square.JobAssignment{
+//	                JobTitle: square.String(
+//	                    "Cashier",
+//	                ),
+//	                PayType: square.JobAssignmentPayTypeHourly,
+//	                HourlyRate: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(2000),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	            },
+//	        },
+//	        IsOvertimeExempt: square.Bool(
+//	            true,
+//	        ),
+//	    },
+//	}
+//	_, err := client.TeamMembers.WageSetting.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *teammembers.UpdateWageSettingRequest,

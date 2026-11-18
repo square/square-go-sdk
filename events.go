@@ -22,10 +22,12 @@ type ListEventTypesRequest struct {
 }
 
 func (l *ListEventTypesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetAPIVersion sets the APIVersion field and marks it as non-optional;
@@ -60,10 +62,12 @@ type SearchEventsRequest struct {
 }
 
 func (s *SearchEventsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -108,15 +112,15 @@ func (s *SearchEventsRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
+var (
+	disableEventsResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 // Defines the fields that are included in the response body of
 // a request to the [DisableEvents](api-endpoint:Events-DisableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
-var (
-	disableEventsResponseFieldErrors = big.NewInt(1 << 0)
-)
-
 type DisableEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -143,10 +147,12 @@ func (d *DisableEventsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DisableEventsResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -198,15 +204,15 @@ func (d *DisableEventsResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+var (
+	enableEventsResponseFieldErrors = big.NewInt(1 << 0)
+)
+
 // Defines the fields that are included in the response body of
 // a request to the [EnableEvents](api-endpoint:Events-EnableEvents) endpoint.
 //
 // Note: if there are errors processing the request, the events field will not be
 // present.
-var (
-	enableEventsResponseFieldErrors = big.NewInt(1 << 0)
-)
-
 type EnableEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -233,10 +239,12 @@ func (e *EnableEventsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *EnableEventsResponse) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -296,6 +304,14 @@ var (
 	eventFieldCreatedAt  = big.NewInt(1 << 4)
 	eventFieldData       = big.NewInt(1 << 5)
 )
+
+// eventNullableFields maps the wire names of Event's nullable fields (required or optional) to their field bits.
+var eventNullableFields = map[string]*big.Int{
+	"merchant_id": eventFieldMerchantID,
+	"location_id": eventFieldLocationID,
+	"type":        eventFieldType,
+	"event_id":    eventFieldEventID,
+}
 
 type Event struct {
 	// The ID of the target merchant associated with the event.
@@ -368,10 +384,12 @@ func (e *Event) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *Event) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetMerchantID sets the MerchantID field and marks it as non-optional;
@@ -428,6 +446,13 @@ func (e *Event) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	e.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, eventNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		e.require(presentFields)
+	}
 	e.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -465,6 +490,13 @@ var (
 	eventDataFieldObject  = big.NewInt(1 << 3)
 )
 
+// eventDataNullableFields maps the wire names of EventData's nullable fields (required or optional) to their field bits.
+var eventDataNullableFields = map[string]*big.Int{
+	"type":    eventDataFieldType,
+	"deleted": eventDataFieldDeleted,
+	"object":  eventDataFieldObject,
+}
+
 type EventData struct {
 	// The name of the affected object’s type.
 	Type *string `json:"type,omitempty" url:"type,omitempty"`
@@ -473,7 +505,7 @@ type EventData struct {
 	// This is true if the affected object has been deleted; otherwise, it's absent.
 	Deleted *bool `json:"deleted,omitempty" url:"deleted,omitempty"`
 	// An object containing fields and values relevant to the event. It is absent if the affected object has been deleted.
-	Object map[string]interface{} `json:"object,omitempty" url:"object,omitempty"`
+	Object map[string]any `json:"object,omitempty" url:"object,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -503,7 +535,7 @@ func (e *EventData) GetDeleted() *bool {
 	return e.Deleted
 }
 
-func (e *EventData) GetObject() map[string]interface{} {
+func (e *EventData) GetObject() map[string]any {
 	if e == nil {
 		return nil
 	}
@@ -518,10 +550,12 @@ func (e *EventData) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *EventData) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -547,7 +581,7 @@ func (e *EventData) SetDeleted(deleted *bool) {
 
 // SetObject sets the Object field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (e *EventData) SetObject(object map[string]interface{}) {
+func (e *EventData) SetObject(object map[string]any) {
 	e.Object = object
 	e.require(eventDataFieldObject)
 }
@@ -564,6 +598,13 @@ func (e *EventData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	e.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, eventDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		e.require(presentFields)
+	}
 	e.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -594,12 +635,18 @@ func (e *EventData) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Contains metadata about a particular [Event](entity:Event).
 var (
 	eventMetadataFieldEventID    = big.NewInt(1 << 0)
 	eventMetadataFieldAPIVersion = big.NewInt(1 << 1)
 )
 
+// eventMetadataNullableFields maps the wire names of EventMetadata's nullable fields (required or optional) to their field bits.
+var eventMetadataNullableFields = map[string]*big.Int{
+	"event_id":    eventMetadataFieldEventID,
+	"api_version": eventMetadataFieldAPIVersion,
+}
+
+// Contains metadata about a particular [Event](entity:Event).
 type EventMetadata struct {
 	// A unique ID for the event.
 	EventID *string `json:"event_id,omitempty" url:"event_id,omitempty"`
@@ -635,10 +682,12 @@ func (e *EventMetadata) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *EventMetadata) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetEventID sets the EventID field and marks it as non-optional;
@@ -667,6 +716,13 @@ func (e *EventMetadata) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	e.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, eventMetadataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		e.require(presentFields)
+	}
 	e.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -697,17 +753,17 @@ func (e *EventMetadata) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [ListEventTypes](api-endpoint:Events-ListEventTypes) endpoint.
-//
-// Note: if there are errors processing the request, the event types field will not be
-// present.
 var (
 	listEventTypesResponseFieldErrors     = big.NewInt(1 << 0)
 	listEventTypesResponseFieldEventTypes = big.NewInt(1 << 1)
 	listEventTypesResponseFieldMetadata   = big.NewInt(1 << 2)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [ListEventTypes](api-endpoint:Events-ListEventTypes) endpoint.
+//
+// Note: if there are errors processing the request, the event types field will not be
+// present.
 type ListEventTypesResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -752,10 +808,12 @@ func (l *ListEventTypesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListEventTypesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -821,7 +879,6 @@ func (l *ListEventTypesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Criteria to filter events by.
 var (
 	searchEventsFilterFieldEventTypes  = big.NewInt(1 << 0)
 	searchEventsFilterFieldMerchantIDs = big.NewInt(1 << 1)
@@ -829,6 +886,14 @@ var (
 	searchEventsFilterFieldCreatedAt   = big.NewInt(1 << 3)
 )
 
+// searchEventsFilterNullableFields maps the wire names of SearchEventsFilter's nullable fields (required or optional) to their field bits.
+var searchEventsFilterNullableFields = map[string]*big.Int{
+	"event_types":  searchEventsFilterFieldEventTypes,
+	"merchant_ids": searchEventsFilterFieldMerchantIDs,
+	"location_ids": searchEventsFilterFieldLocationIDs,
+}
+
+// Criteria to filter events by.
 type SearchEventsFilter struct {
 	// Filter events by event types.
 	EventTypes []string `json:"event_types,omitempty" url:"event_types,omitempty"`
@@ -882,10 +947,12 @@ func (s *SearchEventsFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchEventsFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetEventTypes sets the EventTypes field and marks it as non-optional;
@@ -928,6 +995,13 @@ func (s *SearchEventsFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchEventsFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -958,12 +1032,12 @@ func (s *SearchEventsFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Contains query criteria for the search.
 var (
 	searchEventsQueryFieldFilter = big.NewInt(1 << 0)
 	searchEventsQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Contains query criteria for the search.
 type SearchEventsQuery struct {
 	// Criteria to filter events by.
 	Filter *SearchEventsFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -999,10 +1073,12 @@ func (s *SearchEventsQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchEventsQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -1061,11 +1137,6 @@ func (s *SearchEventsQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [SearchEvents](api-endpoint:Events-SearchEvents) endpoint.
-//
-// Note: if there are errors processing the request, the events field will not be
-// present.
 var (
 	searchEventsResponseFieldErrors   = big.NewInt(1 << 0)
 	searchEventsResponseFieldEvents   = big.NewInt(1 << 1)
@@ -1073,6 +1144,11 @@ var (
 	searchEventsResponseFieldCursor   = big.NewInt(1 << 3)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [SearchEvents](api-endpoint:Events-SearchEvents) endpoint.
+//
+// Note: if there are errors processing the request, the events field will not be
+// present.
 type SearchEventsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1128,10 +1204,12 @@ func (s *SearchEventsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchEventsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1204,12 +1282,12 @@ func (s *SearchEventsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Criteria to sort events by.
 var (
 	searchEventsSortFieldField = big.NewInt(1 << 0)
 	searchEventsSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Criteria to sort events by.
 type SearchEventsSort struct {
 	// Sort events by event types.
 	// See [SearchEventsSortField](#type-searcheventssortfield) for possible values
@@ -1240,10 +1318,12 @@ func (s *SearchEventsSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchEventsSort) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;

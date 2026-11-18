@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	activities "github.com/square/square-go-sdk/v5/giftcards/activities"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -36,8 +37,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,30 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Lists all gift cards. You can specify optional filters to retrieve
 // a subset of the gift cards. Results are sorted by `created_at` in ascending order.
+//
+// Example:
+//
+//	request := &square.ListGiftCardsRequest{
+//	    Type: square.String(
+//	        "type",
+//	    ),
+//	    State: square.String(
+//	        "state",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    CustomerID: square.String(
+//	        "customer_id",
+//	    ),
+//	}
+//	_, err := client.GiftCards.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListGiftCardsRequest,
@@ -78,6 +104,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +119,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -108,6 +135,20 @@ func (c *Client) List(
 // [CreateGiftCardActivity](api-endpoint:GiftCardActivities-CreateGiftCardActivity) and create an `ACTIVATE`
 // activity with the initial balance. Alternatively, you can use [RefundPayment](api-endpoint:Refunds-RefundPayment)
 // to refund a payment to the new gift card.
+//
+// Example:
+//
+//	request := &square.CreateGiftCardRequest{
+//	    IdempotencyKey: "NC9Tm69EjbjtConu",
+//	    LocationID: "81FN9BNFZTKS4",
+//	    GiftCard: &square.GiftCard{
+//	        Type: square.GiftCardTypeDigital,
+//	    },
+//	}
+//	_, err := client.GiftCards.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateGiftCardRequest,
@@ -125,6 +166,16 @@ func (c *Client) Create(
 }
 
 // Retrieves a gift card using the gift card account number (GAN).
+//
+// Example:
+//
+//	request := &square.GetGiftCardFromGanRequest{
+//	    Gan: "7783320001001635",
+//	}
+//	_, err := client.GiftCards.GetFromGan(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetFromGan(
 	ctx context.Context,
 	request *square.GetGiftCardFromGanRequest,
@@ -142,6 +193,16 @@ func (c *Client) GetFromGan(
 }
 
 // Retrieves a gift card using a secure payment token that represents the gift card.
+//
+// Example:
+//
+//	request := &square.GetGiftCardFromNonceRequest{
+//	    Nonce: "cnon:7783322135245171",
+//	}
+//	_, err := client.GiftCards.GetFromNonce(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetFromNonce(
 	ctx context.Context,
 	request *square.GetGiftCardFromNonceRequest,
@@ -159,6 +220,17 @@ func (c *Client) GetFromNonce(
 }
 
 // Links a customer to a gift card, which is also referred to as adding a card on file.
+//
+// Example:
+//
+//	request := &square.LinkCustomerToGiftCardRequest{
+//	    GiftCardID: "gift_card_id",
+//	    CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
+//	}
+//	_, err := client.GiftCards.LinkCustomer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) LinkCustomer(
 	ctx context.Context,
 	request *square.LinkCustomerToGiftCardRequest,
@@ -176,6 +248,17 @@ func (c *Client) LinkCustomer(
 }
 
 // Unlinks a customer from a gift card, which is also referred to as removing a card on file.
+//
+// Example:
+//
+//	request := &square.UnlinkCustomerFromGiftCardRequest{
+//	    GiftCardID: "gift_card_id",
+//	    CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
+//	}
+//	_, err := client.GiftCards.UnlinkCustomer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UnlinkCustomer(
 	ctx context.Context,
 	request *square.UnlinkCustomerFromGiftCardRequest,
@@ -193,6 +276,16 @@ func (c *Client) UnlinkCustomer(
 }
 
 // Retrieves a gift card using the gift card ID.
+//
+// Example:
+//
+//	request := &square.GetGiftCardsRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.GiftCards.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetGiftCardsRequest,

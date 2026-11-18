@@ -58,10 +58,12 @@ type SearchCatalogItemsRequest struct {
 }
 
 func (s *SearchCatalogItemsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTextFilter sets the TextFilter field and marks it as non-optional;
@@ -183,10 +185,12 @@ type UpdateItemModifierListsRequest struct {
 }
 
 func (u *UpdateItemModifierListsRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetItemIDs sets the ItemIDs field and marks it as non-optional;
@@ -253,10 +257,12 @@ type UpdateItemTaxesRequest struct {
 }
 
 func (u *UpdateItemTaxesRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetItemIDs sets the ItemIDs field and marks it as non-optional;
@@ -316,10 +322,12 @@ type BatchDeleteCatalogObjectsRequest struct {
 }
 
 func (b *BatchDeleteCatalogObjectsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetObjectIDs sets the ObjectIDs field and marks it as non-optional;
@@ -397,10 +405,12 @@ type BatchGetCatalogObjectsRequest struct {
 }
 
 func (b *BatchGetCatalogObjectsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetObjectIDs sets the ObjectIDs field and marks it as non-optional;
@@ -510,10 +520,12 @@ type BatchUpsertCatalogObjectsRequest struct {
 }
 
 func (b *BatchUpsertCatalogObjectsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -588,10 +600,12 @@ type ListCatalogRequest struct {
 }
 
 func (l *ListCatalogRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -683,10 +697,12 @@ type SearchCatalogObjectsRequest struct {
 }
 
 func (s *SearchCatalogObjectsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -851,10 +867,12 @@ func (b *BatchDeleteCatalogObjectsResponse) GetExtraProperties() map[string]inte
 }
 
 func (b *BatchDeleteCatalogObjectsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -980,10 +998,12 @@ func (b *BatchGetCatalogObjectsResponse) GetExtraProperties() map[string]interfa
 }
 
 func (b *BatchGetCatalogObjectsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1116,10 +1136,12 @@ func (b *BatchUpsertCatalogObjectsResponse) GetExtraProperties() map[string]inte
 }
 
 func (b *BatchUpsertCatalogObjectsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1242,10 +1264,12 @@ func (c *CatalogInfoResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogInfoResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1324,6 +1348,21 @@ var (
 	catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToEnable  = big.NewInt(1 << 9)
 	catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToDisable = big.NewInt(1 << 10)
 )
+
+// catalogInfoResponseLimitsNullableFields maps the wire names of CatalogInfoResponseLimits's nullable fields (required or optional) to their field bits.
+var catalogInfoResponseLimitsNullableFields = map[string]*big.Int{
+	"batch_upsert_max_objects_per_batch":                       catalogInfoResponseLimitsFieldBatchUpsertMaxObjectsPerBatch,
+	"batch_upsert_max_total_objects":                           catalogInfoResponseLimitsFieldBatchUpsertMaxTotalObjects,
+	"batch_retrieve_max_object_ids":                            catalogInfoResponseLimitsFieldBatchRetrieveMaxObjectIDs,
+	"search_max_page_limit":                                    catalogInfoResponseLimitsFieldSearchMaxPageLimit,
+	"batch_delete_max_object_ids":                              catalogInfoResponseLimitsFieldBatchDeleteMaxObjectIDs,
+	"update_item_taxes_max_item_ids":                           catalogInfoResponseLimitsFieldUpdateItemTaxesMaxItemIDs,
+	"update_item_taxes_max_taxes_to_enable":                    catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToEnable,
+	"update_item_taxes_max_taxes_to_disable":                   catalogInfoResponseLimitsFieldUpdateItemTaxesMaxTaxesToDisable,
+	"update_item_modifier_lists_max_item_ids":                  catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxItemIDs,
+	"update_item_modifier_lists_max_modifier_lists_to_enable":  catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToEnable,
+	"update_item_modifier_lists_max_modifier_lists_to_disable": catalogInfoResponseLimitsFieldUpdateItemModifierListsMaxModifierListsToDisable,
+}
 
 type CatalogInfoResponseLimits struct {
 	// The maximum number of objects that may appear within a single batch in a
@@ -1452,10 +1491,12 @@ func (c *CatalogInfoResponseLimits) GetExtraProperties() map[string]interface{} 
 }
 
 func (c *CatalogInfoResponseLimits) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetBatchUpsertMaxObjectsPerBatch sets the BatchUpsertMaxObjectsPerBatch field and marks it as non-optional;
@@ -1547,6 +1588,13 @@ func (c *CatalogInfoResponseLimits) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, catalogInfoResponseLimitsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1577,11 +1625,11 @@ func (c *CatalogInfoResponseLimits) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A batch of catalog objects.
 var (
 	catalogObjectBatchFieldObjects = big.NewInt(1 << 0)
 )
 
+// A batch of catalog objects.
 type CatalogObjectBatch struct {
 	// A list of CatalogObjects belonging to this batch.
 	Objects []*CatalogObject `json:"objects" url:"objects"`
@@ -1608,10 +1656,12 @@ func (c *CatalogObjectBatch) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogObjectBatch) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetObjects sets the Objects field and marks it as non-optional;
@@ -1663,6 +1713,20 @@ func (c *CatalogObjectBatch) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+var (
+	catalogQueryFieldSortedAttributeQuery                   = big.NewInt(1 << 0)
+	catalogQueryFieldExactQuery                             = big.NewInt(1 << 1)
+	catalogQueryFieldSetQuery                               = big.NewInt(1 << 2)
+	catalogQueryFieldPrefixQuery                            = big.NewInt(1 << 3)
+	catalogQueryFieldRangeQuery                             = big.NewInt(1 << 4)
+	catalogQueryFieldTextQuery                              = big.NewInt(1 << 5)
+	catalogQueryFieldItemsForTaxQuery                       = big.NewInt(1 << 6)
+	catalogQueryFieldItemsForModifierListQuery              = big.NewInt(1 << 7)
+	catalogQueryFieldItemsForItemOptionsQuery               = big.NewInt(1 << 8)
+	catalogQueryFieldItemVariationsForItemOptionValuesQuery = big.NewInt(1 << 9)
+	catalogQueryFieldModifiersForChildListQuery             = big.NewInt(1 << 10)
+)
+
 // A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
 //
 // Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects).
@@ -1689,20 +1753,6 @@ func (c *CatalogObjectBatch) String() string {
 //
 // For example, to search for [CatalogItem](entity:CatalogItem) objects by searchable attributes, you can use
 // the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
-var (
-	catalogQueryFieldSortedAttributeQuery                   = big.NewInt(1 << 0)
-	catalogQueryFieldExactQuery                             = big.NewInt(1 << 1)
-	catalogQueryFieldSetQuery                               = big.NewInt(1 << 2)
-	catalogQueryFieldPrefixQuery                            = big.NewInt(1 << 3)
-	catalogQueryFieldRangeQuery                             = big.NewInt(1 << 4)
-	catalogQueryFieldTextQuery                              = big.NewInt(1 << 5)
-	catalogQueryFieldItemsForTaxQuery                       = big.NewInt(1 << 6)
-	catalogQueryFieldItemsForModifierListQuery              = big.NewInt(1 << 7)
-	catalogQueryFieldItemsForItemOptionsQuery               = big.NewInt(1 << 8)
-	catalogQueryFieldItemVariationsForItemOptionValuesQuery = big.NewInt(1 << 9)
-	catalogQueryFieldModifiersForChildListQuery             = big.NewInt(1 << 10)
-)
-
 type CatalogQuery struct {
 	// A query expression to sort returned query result by the given attribute.
 	SortedAttributeQuery *CatalogQuerySortedAttribute `json:"sorted_attribute_query,omitempty" url:"sorted_attribute_query,omitempty"`
@@ -1828,10 +1878,12 @@ func (c *CatalogQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQuery) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetSortedAttributeQuery sets the SortedAttributeQuery field and marks it as non-optional;
@@ -1953,12 +2005,12 @@ func (c *CatalogQuery) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the search result by exact match of the specified attribute name and value.
 var (
 	catalogQueryExactFieldAttributeName  = big.NewInt(1 << 0)
 	catalogQueryExactFieldAttributeValue = big.NewInt(1 << 1)
 )
 
+// The query filter to return the search result by exact match of the specified attribute name and value.
 type CatalogQueryExact struct {
 	// The name of the attribute to be searched. Matching of the attribute name is exact.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -1995,10 +2047,12 @@ func (c *CatalogQueryExact) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQueryExact) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttributeName sets the AttributeName field and marks it as non-optional;
@@ -2057,11 +2111,16 @@ func (c *CatalogQueryExact) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the item variations containing the specified item option value IDs.
 var (
 	catalogQueryItemVariationsForItemOptionValuesFieldItemOptionValueIDs = big.NewInt(1 << 0)
 )
 
+// catalogQueryItemVariationsForItemOptionValuesNullableFields maps the wire names of CatalogQueryItemVariationsForItemOptionValues's nullable fields (required or optional) to their field bits.
+var catalogQueryItemVariationsForItemOptionValuesNullableFields = map[string]*big.Int{
+	"item_option_value_ids": catalogQueryItemVariationsForItemOptionValuesFieldItemOptionValueIDs,
+}
+
+// The query filter to return the item variations containing the specified item option value IDs.
 type CatalogQueryItemVariationsForItemOptionValues struct {
 	// A set of `CatalogItemOptionValue` IDs to be used to find associated
 	// `CatalogItemVariation`s. All ItemVariations that contain all of the given
@@ -2090,10 +2149,12 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) GetExtraProperties() map
 }
 
 func (c *CatalogQueryItemVariationsForItemOptionValues) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetItemOptionValueIDs sets the ItemOptionValueIDs field and marks it as non-optional;
@@ -2115,6 +2176,13 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) UnmarshalJSON(data []byt
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, catalogQueryItemVariationsForItemOptionValuesNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2145,11 +2213,16 @@ func (c *CatalogQueryItemVariationsForItemOptionValues) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the items containing the specified item option IDs.
 var (
 	catalogQueryItemsForItemOptionsFieldItemOptionIDs = big.NewInt(1 << 0)
 )
 
+// catalogQueryItemsForItemOptionsNullableFields maps the wire names of CatalogQueryItemsForItemOptions's nullable fields (required or optional) to their field bits.
+var catalogQueryItemsForItemOptionsNullableFields = map[string]*big.Int{
+	"item_option_ids": catalogQueryItemsForItemOptionsFieldItemOptionIDs,
+}
+
+// The query filter to return the items containing the specified item option IDs.
 type CatalogQueryItemsForItemOptions struct {
 	// A set of `CatalogItemOption` IDs to be used to find associated
 	// `CatalogItem`s. All Items that contain all of the given Item Options (in any order)
@@ -2178,10 +2251,12 @@ func (c *CatalogQueryItemsForItemOptions) GetExtraProperties() map[string]interf
 }
 
 func (c *CatalogQueryItemsForItemOptions) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetItemOptionIDs sets the ItemOptionIDs field and marks it as non-optional;
@@ -2203,6 +2278,13 @@ func (c *CatalogQueryItemsForItemOptions) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, catalogQueryItemsForItemOptionsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2233,11 +2315,11 @@ func (c *CatalogQueryItemsForItemOptions) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the items containing the specified modifier list IDs.
 var (
 	catalogQueryItemsForModifierListFieldModifierListIDs = big.NewInt(1 << 0)
 )
 
+// The query filter to return the items containing the specified modifier list IDs.
 type CatalogQueryItemsForModifierList struct {
 	// A set of `CatalogModifierList` IDs to be used to find associated `CatalogItem`s.
 	ModifierListIDs []string `json:"modifier_list_ids" url:"modifier_list_ids"`
@@ -2264,10 +2346,12 @@ func (c *CatalogQueryItemsForModifierList) GetExtraProperties() map[string]inter
 }
 
 func (c *CatalogQueryItemsForModifierList) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetModifierListIDs sets the ModifierListIDs field and marks it as non-optional;
@@ -2319,11 +2403,11 @@ func (c *CatalogQueryItemsForModifierList) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the items containing the specified tax IDs.
 var (
 	catalogQueryItemsForTaxFieldTaxIDs = big.NewInt(1 << 0)
 )
 
+// The query filter to return the items containing the specified tax IDs.
 type CatalogQueryItemsForTax struct {
 	// A set of `CatalogTax` IDs to be used to find associated `CatalogItem`s.
 	TaxIDs []string `json:"tax_ids" url:"tax_ids"`
@@ -2350,10 +2434,12 @@ func (c *CatalogQueryItemsForTax) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQueryItemsForTax) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTaxIDs sets the TaxIDs field and marks it as non-optional;
@@ -2405,11 +2491,11 @@ func (c *CatalogQueryItemsForTax) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Query to find `CatalogModifier` objects that reference a given `CatalogModifierList` in their `child_modifier_list_ids` field.
 var (
 	catalogQueryModifiersForChildListFieldChildModifierListIDs = big.NewInt(1 << 0)
 )
 
+// Query to find `CatalogModifier` objects that reference a given `CatalogModifierList` in their `child_modifier_list_ids` field.
 type CatalogQueryModifiersForChildList struct {
 	// The `CatalogModifierList` IDs to find parent `CatalogModifier`s for.
 	// Returns `CatalogModifier` objects where `child_modifier_list_ids` contains any of these IDs.
@@ -2437,10 +2523,12 @@ func (c *CatalogQueryModifiersForChildList) GetExtraProperties() map[string]inte
 }
 
 func (c *CatalogQueryModifiersForChildList) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetChildModifierListIDs sets the ChildModifierListIDs field and marks it as non-optional;
@@ -2492,12 +2580,12 @@ func (c *CatalogQueryModifiersForChildList) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the search result whose named attribute values are prefixed by the specified attribute value.
 var (
 	catalogQueryPrefixFieldAttributeName   = big.NewInt(1 << 0)
 	catalogQueryPrefixFieldAttributePrefix = big.NewInt(1 << 1)
 )
 
+// The query filter to return the search result whose named attribute values are prefixed by the specified attribute value.
 type CatalogQueryPrefix struct {
 	// The name of the attribute to be searched.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -2533,10 +2621,12 @@ func (c *CatalogQueryPrefix) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQueryPrefix) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttributeName sets the AttributeName field and marks it as non-optional;
@@ -2595,13 +2685,19 @@ func (c *CatalogQueryPrefix) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the search result whose named attribute values fall between the specified range.
 var (
 	catalogQueryRangeFieldAttributeName     = big.NewInt(1 << 0)
 	catalogQueryRangeFieldAttributeMinValue = big.NewInt(1 << 1)
 	catalogQueryRangeFieldAttributeMaxValue = big.NewInt(1 << 2)
 )
 
+// catalogQueryRangeNullableFields maps the wire names of CatalogQueryRange's nullable fields (required or optional) to their field bits.
+var catalogQueryRangeNullableFields = map[string]*big.Int{
+	"attribute_min_value": catalogQueryRangeFieldAttributeMinValue,
+	"attribute_max_value": catalogQueryRangeFieldAttributeMaxValue,
+}
+
+// The query filter to return the search result whose named attribute values fall between the specified range.
 type CatalogQueryRange struct {
 	// The name of the attribute to be searched.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -2646,10 +2742,12 @@ func (c *CatalogQueryRange) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQueryRange) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttributeName sets the AttributeName field and marks it as non-optional;
@@ -2685,6 +2783,13 @@ func (c *CatalogQueryRange) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, catalogQueryRangeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2715,13 +2820,13 @@ func (c *CatalogQueryRange) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the search result(s) by exact match of the specified `attribute_name` and any of
-// the `attribute_values`.
 var (
 	catalogQuerySetFieldAttributeName   = big.NewInt(1 << 0)
 	catalogQuerySetFieldAttributeValues = big.NewInt(1 << 1)
 )
 
+// The query filter to return the search result(s) by exact match of the specified `attribute_name` and any of
+// the `attribute_values`.
 type CatalogQuerySet struct {
 	// The name of the attribute to be searched. Matching of the attribute name is exact.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -2758,10 +2863,12 @@ func (c *CatalogQuerySet) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQuerySet) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttributeName sets the AttributeName field and marks it as non-optional;
@@ -2820,13 +2927,18 @@ func (c *CatalogQuerySet) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query expression to specify the key to sort search results.
 var (
 	catalogQuerySortedAttributeFieldAttributeName         = big.NewInt(1 << 0)
 	catalogQuerySortedAttributeFieldInitialAttributeValue = big.NewInt(1 << 1)
 	catalogQuerySortedAttributeFieldSortOrder             = big.NewInt(1 << 2)
 )
 
+// catalogQuerySortedAttributeNullableFields maps the wire names of CatalogQuerySortedAttribute's nullable fields (required or optional) to their field bits.
+var catalogQuerySortedAttributeNullableFields = map[string]*big.Int{
+	"initial_attribute_value": catalogQuerySortedAttributeFieldInitialAttributeValue,
+}
+
+// The query expression to specify the key to sort search results.
 type CatalogQuerySortedAttribute struct {
 	// The attribute whose value is used as the sort key.
 	AttributeName string `json:"attribute_name" url:"attribute_name"`
@@ -2874,10 +2986,12 @@ func (c *CatalogQuerySortedAttribute) GetExtraProperties() map[string]interface{
 }
 
 func (c *CatalogQuerySortedAttribute) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetAttributeName sets the AttributeName field and marks it as non-optional;
@@ -2913,6 +3027,13 @@ func (c *CatalogQuerySortedAttribute) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, catalogQuerySortedAttributeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2943,11 +3064,11 @@ func (c *CatalogQuerySortedAttribute) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The query filter to return the search result whose searchable attribute values contain all of the specified keywords or tokens, independent of the token order or case.
 var (
 	catalogQueryTextFieldKeywords = big.NewInt(1 << 0)
 )
 
+// The query filter to return the search result whose searchable attribute values contain all of the specified keywords or tokens, independent of the token order or case.
 type CatalogQueryText struct {
 	// A list of 1, 2, or 3 search keywords. Keywords with fewer than 3 alphanumeric characters are ignored.
 	Keywords []string `json:"keywords" url:"keywords"`
@@ -2974,10 +3095,12 @@ func (c *CatalogQueryText) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CatalogQueryText) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetKeywords sets the Keywords field and marks it as non-optional;
@@ -3029,9 +3152,6 @@ func (c *CatalogQueryText) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Supported custom attribute query expressions for calling the
-// [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
-// endpoint to search for items or item variations.
 var (
 	customAttributeFilterFieldCustomAttributeDefinitionID = big.NewInt(1 << 0)
 	customAttributeFilterFieldKey                         = big.NewInt(1 << 1)
@@ -3041,6 +3161,18 @@ var (
 	customAttributeFilterFieldBoolFilter                  = big.NewInt(1 << 5)
 )
 
+// customAttributeFilterNullableFields maps the wire names of CustomAttributeFilter's nullable fields (required or optional) to their field bits.
+var customAttributeFilterNullableFields = map[string]*big.Int{
+	"custom_attribute_definition_id": customAttributeFilterFieldCustomAttributeDefinitionID,
+	"key":                            customAttributeFilterFieldKey,
+	"string_filter":                  customAttributeFilterFieldStringFilter,
+	"selection_uids_filter":          customAttributeFilterFieldSelectionUIDsFilter,
+	"bool_filter":                    customAttributeFilterFieldBoolFilter,
+}
+
+// Supported custom attribute query expressions for calling the
+// [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems)
+// endpoint to search for items or item variations.
 type CustomAttributeFilter struct {
 	// A query expression to filter items or item variations by matching their custom attributes'
 	// `custom_attribute_definition_id` property value against the the specified id.
@@ -3124,10 +3256,12 @@ func (c *CustomAttributeFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomAttributeFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCustomAttributeDefinitionID sets the CustomAttributeDefinitionID field and marks it as non-optional;
@@ -3184,6 +3318,13 @@ func (c *CustomAttributeFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customAttributeFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3214,12 +3355,17 @@ func (c *CustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Options to include related resources of the requested `CatalogObject`s. Related resources will be included in
-// `IncludedResources` in the response.
 var (
 	includeOptionsFieldInclude = big.NewInt(1 << 0)
 )
 
+// includeOptionsNullableFields maps the wire names of IncludeOptions's nullable fields (required or optional) to their field bits.
+var includeOptionsNullableFields = map[string]*big.Int{
+	"include": includeOptionsFieldInclude,
+}
+
+// Options to include related resources of the requested `CatalogObject`s. Related resources will be included in
+// `IncludedResources` in the response.
 type IncludeOptions struct {
 	// Resources to include in the response.
 	// See [IncludeType](#type-includetype) for possible values
@@ -3247,10 +3393,12 @@ func (i *IncludeOptions) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IncludeOptions) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetInclude sets the Include field and marks it as non-optional;
@@ -3272,6 +3420,13 @@ func (i *IncludeOptions) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, includeOptionsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3325,12 +3480,18 @@ func (i IncludeType) Ptr() *IncludeType {
 	return &i
 }
 
-// Related resources of the response `CatalogObject`s requested using `IncludeOptions`
 var (
 	includedResourcesFieldNestedModifiers   = big.NewInt(1 << 0)
 	includedResourcesFieldAncestorModifiers = big.NewInt(1 << 1)
 )
 
+// includedResourcesNullableFields maps the wire names of IncludedResources's nullable fields (required or optional) to their field bits.
+var includedResourcesNullableFields = map[string]*big.Int{
+	"nested_modifiers":   includedResourcesFieldNestedModifiers,
+	"ancestor_modifiers": includedResourcesFieldAncestorModifiers,
+}
+
+// Related resources of the response `CatalogObject`s requested using `IncludeOptions`
 type IncludedResources struct {
 	// Nested `CatalogModifierList`s as requested via `INCLUDE_NESTED_MODIFIERS`.
 	NestedModifiers []*CatalogObject `json:"nested_modifiers,omitempty" url:"nested_modifiers,omitempty"`
@@ -3366,10 +3527,12 @@ func (i *IncludedResources) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *IncludedResources) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetNestedModifiers sets the NestedModifiers field and marks it as non-optional;
@@ -3398,6 +3561,13 @@ func (i *IncludedResources) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, includedResourcesNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3479,10 +3649,12 @@ func (l *ListCatalogResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListCatalogResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3548,12 +3720,18 @@ func (l *ListCatalogResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// The range of a number value between the specified lower and upper bounds.
 var (
 	rangeFieldMin = big.NewInt(1 << 0)
 	rangeFieldMax = big.NewInt(1 << 1)
 )
 
+// rangeNullableFields maps the wire names of Range's nullable fields (required or optional) to their field bits.
+var rangeNullableFields = map[string]*big.Int{
+	"min": rangeFieldMin,
+	"max": rangeFieldMax,
+}
+
+// The range of a number value between the specified lower and upper bounds.
 type Range struct {
 	// The lower bound of the number range. At least one of `min` or `max` must be specified.
 	// If unspecified, the results will have no minimum value.
@@ -3591,10 +3769,12 @@ func (r *Range) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *Range) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetMin sets the Min field and marks it as non-optional;
@@ -3623,6 +3803,13 @@ func (r *Range) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	r.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, rangeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		r.require(presentFields)
+	}
 	r.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3676,7 +3863,6 @@ func (s SearchCatalogItemsRequestStockLevel) Ptr() *SearchCatalogItemsRequestSto
 	return &s
 }
 
-// Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
 var (
 	searchCatalogItemsResponseFieldErrors              = big.NewInt(1 << 0)
 	searchCatalogItemsResponseFieldItems               = big.NewInt(1 << 1)
@@ -3685,6 +3871,7 @@ var (
 	searchCatalogItemsResponseFieldIncludedResources   = big.NewInt(1 << 4)
 )
 
+// Defines the response body returned from the [SearchCatalogItems](api-endpoint:Catalog-SearchCatalogItems) endpoint.
 type SearchCatalogItemsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3747,10 +3934,12 @@ func (s *SearchCatalogItemsResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (s *SearchCatalogItemsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3912,10 +4101,12 @@ func (s *SearchCatalogObjectsResponse) GetExtraProperties() map[string]interface
 }
 
 func (s *SearchCatalogObjectsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4002,13 +4193,19 @@ func (s *SearchCatalogObjectsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Contains the name and abbreviation for standard measurement unit.
 var (
 	standardUnitDescriptionFieldUnit         = big.NewInt(1 << 0)
 	standardUnitDescriptionFieldName         = big.NewInt(1 << 1)
 	standardUnitDescriptionFieldAbbreviation = big.NewInt(1 << 2)
 )
 
+// standardUnitDescriptionNullableFields maps the wire names of StandardUnitDescription's nullable fields (required or optional) to their field bits.
+var standardUnitDescriptionNullableFields = map[string]*big.Int{
+	"name":         standardUnitDescriptionFieldName,
+	"abbreviation": standardUnitDescriptionFieldAbbreviation,
+}
+
+// Contains the name and abbreviation for standard measurement unit.
 type StandardUnitDescription struct {
 	// Identifies the measurement unit being described.
 	Unit *MeasurementUnit `json:"unit,omitempty" url:"unit,omitempty"`
@@ -4053,10 +4250,12 @@ func (s *StandardUnitDescription) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *StandardUnitDescription) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetUnit sets the Unit field and marks it as non-optional;
@@ -4092,6 +4291,13 @@ func (s *StandardUnitDescription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, standardUnitDescriptionNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4122,12 +4328,18 @@ func (s *StandardUnitDescription) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Group of standard measurement units.
 var (
 	standardUnitDescriptionGroupFieldStandardUnitDescriptions = big.NewInt(1 << 0)
 	standardUnitDescriptionGroupFieldLanguageCode             = big.NewInt(1 << 1)
 )
 
+// standardUnitDescriptionGroupNullableFields maps the wire names of StandardUnitDescriptionGroup's nullable fields (required or optional) to their field bits.
+var standardUnitDescriptionGroupNullableFields = map[string]*big.Int{
+	"standard_unit_descriptions": standardUnitDescriptionGroupFieldStandardUnitDescriptions,
+	"language_code":              standardUnitDescriptionGroupFieldLanguageCode,
+}
+
+// Group of standard measurement units.
 type StandardUnitDescriptionGroup struct {
 	// List of standard (non-custom) measurement units in this description group.
 	StandardUnitDescriptions []*StandardUnitDescription `json:"standard_unit_descriptions,omitempty" url:"standard_unit_descriptions,omitempty"`
@@ -4163,10 +4375,12 @@ func (s *StandardUnitDescriptionGroup) GetExtraProperties() map[string]interface
 }
 
 func (s *StandardUnitDescriptionGroup) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetStandardUnitDescriptions sets the StandardUnitDescriptions field and marks it as non-optional;
@@ -4195,6 +4409,13 @@ func (s *StandardUnitDescriptionGroup) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, standardUnitDescriptionGroupNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4265,10 +4486,12 @@ func (u *UpdateItemModifierListsResponse) GetExtraProperties() map[string]interf
 }
 
 func (u *UpdateItemModifierListsResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4367,10 +4590,12 @@ func (u *UpdateItemTaxesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateItemTaxesResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

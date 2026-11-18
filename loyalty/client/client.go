@@ -4,6 +4,8 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
@@ -11,7 +13,6 @@ import (
 	client "github.com/square/square-go-sdk/v5/loyalty/programs/client"
 	rewards "github.com/square/square-go-sdk/v5/loyalty/rewards"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -41,8 +42,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -56,6 +58,25 @@ func NewClient(options *core.RequestOptions) *Client {
 // recorded in the ledger. Using this endpoint, you can search the ledger for events.
 //
 // Search results are sorted by `created_at` in descending order.
+//
+// Example:
+//
+//	request := &square.SearchLoyaltyEventsRequest{
+//	    Query: &square.LoyaltyEventQuery{
+//	        Filter: &square.LoyaltyEventFilter{
+//	            OrderFilter: &square.LoyaltyEventOrderFilter{
+//	                OrderID: "PyATxhYLfsMqpVkcKJITPydgEYfZY",
+//	            },
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        30,
+//	    ),
+//	}
+//	_, err := client.Loyalty.SearchEvents(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchEvents(
 	ctx context.Context,
 	request *square.SearchLoyaltyEventsRequest,

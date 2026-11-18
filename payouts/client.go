@@ -4,12 +4,13 @@ package payouts
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -43,6 +45,32 @@ func NewClient(options *core.RequestOptions) *Client {
 // Retrieves a list of all payouts for the default location.
 // You can filter payouts by location ID, status, time range, and order them in ascending or descending order.
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.ListPayoutsRequest{
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    Status: square.PayoutStatusSent.Ptr(),
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Payouts.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListPayoutsRequest,
@@ -76,6 +104,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -90,7 +119,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -103,6 +132,16 @@ func (c *Client) List(
 
 // Retrieves details of a specific payout identified by a payout ID.
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.GetPayoutsRequest{
+//	    PayoutID: "payout_id",
+//	}
+//	_, err := client.Payouts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetPayoutsRequest,
@@ -121,6 +160,23 @@ func (c *Client) Get(
 
 // Retrieves a list of all payout entries for a specific payout.
 // To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.ListEntriesPayoutsRequest{
+//	    PayoutID: "payout_id",
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Payouts.ListEntries(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListEntries(
 	ctx context.Context,
 	request *square.ListEntriesPayoutsRequest,
@@ -157,6 +213,7 @@ func (c *Client) ListEntries(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -171,7 +228,7 @@ func (c *Client) ListEntries(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(

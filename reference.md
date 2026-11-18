@@ -41,18 +41,17 @@ page for your application in the Developer Dashboard.
 
 ```go
 request := &square.RevokeTokenRequest{
-        ClientID: square.String(
-            "CLIENT_ID",
-        ),
-        AccessToken: square.String(
-            "ACCESS_TOKEN",
-        ),
-    }
-client.OAuth.RevokeToken(
-        context.TODO(),
-        request,
-    )
+    ClientID: square.String(
+        "CLIENT_ID",
+    ),
+    AccessToken: square.String(
+        "ACCESS_TOKEN",
+    ),
 }
+_, err := client.OAuth.RevokeToken(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -164,20 +163,19 @@ Application clients should never interact directly with OAuth tokens.
 
 ```go
 request := &square.ObtainTokenRequest{
-        ClientID: "sq0idp-uaPHILoPzWZk3tlJqlML0g",
-        ClientSecret: square.String(
-            "sq0csp-30a-4C_tVOnTh14Piza2BfTPBXyLafLPWSzY1qAjeBfM",
-        ),
-        Code: square.String(
-            "sq0cgb-l0SBqxs4uwxErTVyYOdemg",
-        ),
-        GrantType: "authorization_code",
-    }
-client.OAuth.ObtainToken(
-        context.TODO(),
-        request,
-    )
+    ClientID: "sq0idp-uaPHILoPzWZk3tlJqlML0g",
+    ClientSecret: square.String(
+        "sq0csp-30a-4C_tVOnTh14Piza2BfTPBXyLafLPWSzY1qAjeBfM",
+    ),
+    Code: square.String(
+        "sq0cgb-l0SBqxs4uwxErTVyYOdemg",
+    ),
+    GrantType: "authorization_code",
 }
+_, err := client.OAuth.ObtainToken(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -386,10 +384,9 @@ If the access token is expired or not a valid access token, the endpoint returns
 <dd>
 
 ```go
-client.OAuth.RetrieveTokenStatus(
-        context.TODO(),
-    )
-}
+_, err := client.OAuth.RetrieveTokenStatus(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -414,10 +411,9 @@ client.OAuth.RetrieveTokenStatus(
 <dd>
 
 ```go
-client.OAuth.Authorize(
-        context.TODO(),
-    )
-}
+err := client.OAuth.Authorize(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -458,20 +454,19 @@ Provides summary information for a merchant's online store orders.
 
 ```go
 request := &square.V1ListOrdersRequest{
-        LocationID: "location_id",
-        Order: square.SortOrderDesc.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        BatchToken: square.String(
-            "batch_token",
-        ),
-    }
-client.V1Transactions.V1ListOrders(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    Order: square.SortOrderDesc.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    BatchToken: square.String(
+        "batch_token",
+    ),
 }
+_, err := client.V1Transactions.V1ListOrders(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -553,14 +548,13 @@ Provides comprehensive information for a single online store order, including th
 
 ```go
 request := &square.V1RetrieveOrderRequest{
-        LocationID: "location_id",
-        OrderID: "order_id",
-    }
-client.V1Transactions.V1RetrieveOrder(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    OrderID: "order_id",
 }
+_, err := client.V1Transactions.V1RetrieveOrder(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -623,15 +617,14 @@ Updates the details of an online store order. Every update you perform on an ord
 
 ```go
 request := &square.V1UpdateOrderRequest{
-        LocationID: "location_id",
-        OrderID: "order_id",
-        Action: square.V1UpdateOrderRequestActionComplete,
-    }
-client.V1Transactions.V1UpdateOrder(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    OrderID: "order_id",
+    Action: square.V1UpdateOrderRequestActionComplete,
 }
+_, err := client.V1Transactions.V1UpdateOrder(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -662,7 +655,7 @@ client.V1Transactions.V1UpdateOrder(
 <dl>
 <dd>
 
-**action:** `*square.V1UpdateOrderRequestAction` 
+**action:** `square.V1UpdateOrderRequestAction` 
 
 The action to perform on the order (COMPLETE, CANCEL, or REFUND).
 See [V1UpdateOrderRequestAction](#type-v1updateorderrequestaction) for possible values
@@ -751,13 +744,12 @@ To learn more about the Web Payments SDK and how to add Apple Pay, see [Take an 
 
 ```go
 request := &square.RegisterDomainRequest{
-        DomainName: "example.com",
-    }
-client.ApplePay.RegisterDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
 }
+_, err := client.ApplePay.RegisterDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -813,24 +805,23 @@ Returns a list of [BankAccount](entity:BankAccount) objects linked to a Square a
 
 ```go
 request := &square.ListBankAccountsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        CustomerID: square.String(
-            "customer_id",
-        ),
-    }
-client.BankAccounts.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    CustomerID: square.String(
+        "customer_id",
+    ),
 }
+_, err := client.BankAccounts.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -925,17 +916,16 @@ Store a bank account on file for a square account
 
 ```go
 request := &square.CreateBankAccountRequest{
-        IdempotencyKey: "4e43559a-f0fd-47d3-9da2-7ea1f97d94be",
-        SourceID: "bnon:CA4SEHsQwr0rx6DbWLD5BQaqMnoYAQ",
-        CustomerID: square.String(
-            "HM3B2D5JKGZ69359BTEHXM2V8M",
-        ),
-    }
-client.BankAccounts.CreateBankAccount(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: "4e43559a-f0fd-47d3-9da2-7ea1f97d94be",
+    SourceID: "bnon:CA4SEHsQwr0rx6DbWLD5BQaqMnoYAQ",
+    CustomerID: square.String(
+        "HM3B2D5JKGZ69359BTEHXM2V8M",
+    ),
 }
+_, err := client.BankAccounts.CreateBankAccount(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1012,13 +1002,12 @@ Returns details of a [BankAccount](entity:BankAccount) identified by V1 bank acc
 
 ```go
 request := &square.GetByV1IDBankAccountsRequest{
-        V1BankAccountID: "v1_bank_account_id",
-    }
-client.BankAccounts.GetByV1ID(
-        context.TODO(),
-        request,
-    )
+    V1BankAccountID: "v1_bank_account_id",
 }
+_, err := client.BankAccounts.GetByV1ID(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1076,13 +1065,12 @@ Retrieve details of a [BankAccount](entity:BankAccount) bank account linked to a
 
 ```go
 request := &square.GetBankAccountsRequest{
-        BankAccountID: "bank_account_id",
-    }
-client.BankAccounts.Get(
-        context.TODO(),
-        request,
-    )
+    BankAccountID: "bank_account_id",
 }
+_, err := client.BankAccounts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1137,13 +1125,12 @@ Disable a bank account.
 
 ```go
 request := &square.DisableBankAccountRequest{
-        BankAccountID: "bank_account_id",
-    }
-client.BankAccounts.DisableBankAccount(
-        context.TODO(),
-        request,
-    )
+    BankAccountID: "bank_account_id",
 }
+_, err := client.BankAccounts.DisableBankAccount(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1202,33 +1189,32 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &square.ListBookingsRequest{
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        CustomerID: square.String(
-            "customer_id",
-        ),
-        TeamMemberID: square.String(
-            "team_member_id",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        StartAtMin: square.String(
-            "start_at_min",
-        ),
-        StartAtMax: square.String(
-            "start_at_max",
-        ),
-    }
-client.Bookings.List(
-        context.TODO(),
-        request,
-    )
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    CustomerID: square.String(
+        "customer_id",
+    ),
+    TeamMemberID: square.String(
+        "team_member_id",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    StartAtMin: square.String(
+        "start_at_min",
+    ),
+    StartAtMax: square.String(
+        "start_at_max",
+    ),
 }
+_, err := client.Bookings.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1344,13 +1330,12 @@ or *Appointments Premium*.
 
 ```go
 request := &square.CreateBookingRequest{
-        Booking: &square.Booking{},
-    }
-client.Bookings.Create(
-        context.TODO(),
-        request,
-    )
+    Booking: &square.Booking{},
 }
+_, err := client.Bookings.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1416,17 +1401,16 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &square.SearchAvailabilityRequest{
-        Query: &square.SearchAvailabilityQuery{
-            Filter: &square.SearchAvailabilityFilter{
-                StartAtRange: &square.TimeRange{},
-            },
+    Query: &square.SearchAvailabilityQuery{
+        Filter: &square.SearchAvailabilityFilter{
+            StartAtRange: &square.TimeRange{},
         },
-    }
-client.Bookings.SearchAvailability(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Bookings.SearchAvailability(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1484,15 +1468,14 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &square.BulkRetrieveBookingsRequest{
-        BookingIDs: []string{
-            "booking_ids",
-        },
-    }
-client.Bookings.BulkRetrieveBookings(
-        context.TODO(),
-        request,
-    )
+    BookingIDs: []string{
+        "booking_ids",
+    },
 }
+_, err := client.Bookings.BulkRetrieveBookings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1546,10 +1529,9 @@ Retrieves a seller's booking profile.
 <dd>
 
 ```go
-client.Bookings.GetBusinessProfile(
-        context.TODO(),
-    )
-}
+_, err := client.Bookings.GetBusinessProfile(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -1589,13 +1571,12 @@ Retrieves a seller's location booking profile.
 
 ```go
 request := &square.RetrieveLocationBookingProfileRequest{
-        LocationID: "location_id",
-    }
-client.Bookings.RetrieveLocationBookingProfile(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
 }
+_, err := client.Bookings.RetrieveLocationBookingProfile(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1650,15 +1631,14 @@ Retrieves one or more team members' booking profiles.
 
 ```go
 request := &square.BulkRetrieveTeamMemberBookingProfilesRequest{
-        TeamMemberIDs: []string{
-            "team_member_ids",
-        },
-    }
-client.Bookings.BulkRetrieveTeamMemberBookingProfiles(
-        context.TODO(),
-        request,
-    )
+    TeamMemberIDs: []string{
+        "team_member_ids",
+    },
 }
+_, err := client.Bookings.BulkRetrieveTeamMemberBookingProfiles(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1716,13 +1696,12 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &square.GetBookingsRequest{
-        BookingID: "booking_id",
-    }
-client.Bookings.Get(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
 }
+_, err := client.Bookings.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1783,14 +1762,13 @@ or *Appointments Premium*.
 
 ```go
 request := &square.UpdateBookingRequest{
-        BookingID: "booking_id",
-        Booking: &square.Booking{},
-    }
-client.Bookings.Update(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
+    Booking: &square.Booking{},
 }
+_, err := client.Bookings.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1867,13 +1845,12 @@ or *Appointments Premium*.
 
 ```go
 request := &square.CancelBookingRequest{
-        BookingID: "booking_id",
-    }
-client.Bookings.Cancel(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
 }
+_, err := client.Bookings.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1946,25 +1923,24 @@ A max of 25 cards will be returned.
 
 ```go
 request := &square.ListCardsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        CustomerID: square.String(
-            "customer_id",
-        ),
-        IncludeDisabled: square.Bool(
-            true,
-        ),
-        ReferenceID: square.String(
-            "reference_id",
-        ),
-        SortOrder: square.SortOrderDesc.Ptr(),
-    }
-client.Cards.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    CustomerID: square.String(
+        "customer_id",
+    ),
+    IncludeDisabled: square.Bool(
+        true,
+    ),
+    ReferenceID: square.String(
+        "reference_id",
+    ),
+    SortOrder: square.SortOrderDesc.Ptr(),
 }
+_, err := client.Cards.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2065,43 +2041,42 @@ Adds a card on file to an existing merchant.
 
 ```go
 request := &square.CreateCardRequest{
-        IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
-        SourceID: "cnon:uIbfJXhXETSP197M3GB",
-        Card: &square.Card{
-            CardholderName: square.String(
-                "Amelia Earhart",
+    IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
+    SourceID: "cnon:uIbfJXhXETSP197M3GB",
+    Card: &square.Card{
+        CardholderName: square.String(
+            "Amelia Earhart",
+        ),
+        BillingAddress: &square.Address{
+            AddressLine1: square.String(
+                "500 Electric Ave",
             ),
-            BillingAddress: &square.Address{
-                AddressLine1: square.String(
-                    "500 Electric Ave",
-                ),
-                AddressLine2: square.String(
-                    "Suite 600",
-                ),
-                Locality: square.String(
-                    "New York",
-                ),
-                AdministrativeDistrictLevel1: square.String(
-                    "NY",
-                ),
-                PostalCode: square.String(
-                    "10003",
-                ),
-                Country: square.CountryUs.Ptr(),
-            },
-            CustomerID: square.String(
-                "VDKXEEKPJN48QDG3BGGFAK05P8",
+            AddressLine2: square.String(
+                "Suite 600",
             ),
-            ReferenceID: square.String(
-                "user-id-1",
+            Locality: square.String(
+                "New York",
             ),
+            AdministrativeDistrictLevel1: square.String(
+                "NY",
+            ),
+            PostalCode: square.String(
+                "10003",
+            ),
+            Country: square.CountryUs.Ptr(),
         },
-    }
-client.Cards.Create(
-        context.TODO(),
-        request,
-    )
+        CustomerID: square.String(
+            "VDKXEEKPJN48QDG3BGGFAK05P8",
+        ),
+        ReferenceID: square.String(
+            "user-id-1",
+        ),
+    },
 }
+_, err := client.Cards.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2193,13 +2168,12 @@ Retrieves details for a specific Card.
 
 ```go
 request := &square.GetCardsRequest{
-        CardID: "card_id",
-    }
-client.Cards.Get(
-        context.TODO(),
-        request,
-    )
+    CardID: "card_id",
 }
+_, err := client.Cards.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2255,13 +2229,12 @@ Disabling an already disabled card is allowed but has no effect.
 
 ```go
 request := &square.DisableCardsRequest{
-        CardID: "card_id",
-    }
-client.Cards.Disable(
-        context.TODO(),
-        request,
-    )
+    CardID: "card_id",
 }
+_, err := client.Cards.Disable(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2330,16 +2303,15 @@ delete requests are rejected with the `429` error code.
 
 ```go
 request := &square.BatchDeleteCatalogObjectsRequest{
-        ObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-            "AA27W3M2GGTF3H6AVPNB77CK",
-        },
-    }
-client.Catalog.BatchDelete(
-        context.TODO(),
-        request,
-    )
+    ObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+        "AA27W3M2GGTF3H6AVPNB77CK",
+    },
 }
+_, err := client.Catalog.BatchDelete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2403,19 +2375,18 @@ any [CatalogTax](entity:CatalogTax) objects that apply to it.
 
 ```go
 request := &square.BatchGetCatalogObjectsRequest{
-        ObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-            "AA27W3M2GGTF3H6AVPNB77CK",
-        },
-        IncludeRelatedObjects: square.Bool(
-            true,
-        ),
-    }
-client.Catalog.BatchGet(
-        context.TODO(),
-        request,
-    )
+    ObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+        "AA27W3M2GGTF3H6AVPNB77CK",
+    },
+    IncludeRelatedObjects: square.Bool(
+        true,
+    ),
 }
+_, err := client.Catalog.BatchGet(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2553,39 +2524,36 @@ and parallel writes to the same seller will contend with each other, producing `
 
 ```go
 request := &square.BatchUpsertCatalogObjectsRequest{
-        IdempotencyKey: "789ff020-f723-43a9-b4b5-43b5dc1fa3dc",
-        Batches: []*square.CatalogObjectBatch{
-            &square.CatalogObjectBatch{
-                Objects: []*square.CatalogObject{
-                    &square.CatalogObject{
-                        Item: &square.CatalogObjectItem{
-                            ID: "id",
-                        },
+    IdempotencyKey: "789ff020-f723-43a9-b4b5-43b5dc1fa3dc",
+    Batches: []*square.CatalogObjectBatch{
+        &square.CatalogObjectBatch{
+            Objects: []*square.CatalogObject{
+                &square.CatalogObject{
+                    Item: &square.CatalogObjectItem{
+                        ID: "id",
                     },
-                    &square.CatalogObject{
-                        Item: &square.CatalogObjectItem{
-                            ID: "id",
-                        },
+                },
+                &square.CatalogObject{
+                    Item: &square.CatalogObjectItem{
+                        ID: "id",
                     },
-                    &square.CatalogObject{
-                        Item: &square.CatalogObjectItem{
-                            ID: "id",
-                        },
-                    },
-                    &square.CatalogObject{
-                        Tax: &square.CatalogObjectTax{
-                            ID: "id",
-                        },
+                },
+                &square.CatalogObject{
+                    Category: &square.CatalogObjectCategory{},
+                },
+                &square.CatalogObject{
+                    Tax: &square.CatalogObjectTax{
+                        ID: "id",
                     },
                 },
             },
         },
-    }
-client.Catalog.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Catalog.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2680,10 +2648,9 @@ limits that can be used by the `BatchUpsertCatalogObjects` endpoint.
 <dd>
 
 ```go
-client.Catalog.Info(
-        context.TODO(),
-    )
-}
+_, err := client.Catalog.Info(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -2732,21 +2699,20 @@ and set the `include_deleted_objects` attribute value to `true`.
 
 ```go
 request := &square.ListCatalogRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Types: square.String(
-            "types",
-        ),
-        CatalogVersion: square.Int64(
-            int64(1000000),
-        ),
-    }
-client.Catalog.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Types: square.String(
+        "types",
+    ),
+    CatalogVersion: square.Int64(
+        int64(1000000),
+    ),
 }
+_, err := client.Catalog.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2855,24 +2821,23 @@ the previous version.
 
 ```go
 request := &square.SearchCatalogObjectsRequest{
-        ObjectTypes: []square.CatalogObjectType{
-            square.CatalogObjectTypeItem,
+    ObjectTypes: []square.CatalogObjectType{
+        square.CatalogObjectTypeItem,
+    },
+    Query: &square.CatalogQuery{
+        PrefixQuery: &square.CatalogQueryPrefix{
+            AttributeName: "name",
+            AttributePrefix: "tea",
         },
-        Query: &square.CatalogQuery{
-            PrefixQuery: &square.CatalogQueryPrefix{
-                AttributeName: "name",
-                AttributePrefix: "tea",
-            },
-        },
-        Limit: square.Int(
-            100,
-        ),
-    }
-client.Catalog.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        100,
+    ),
 }
+_, err := client.Catalog.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2898,7 +2863,7 @@ See [Pagination](https://developer.squareup.com/docs/build-basics/common-api-pat
 <dl>
 <dd>
 
-**objectTypes:** `[]*square.CatalogObjectType` 
+**objectTypes:** `[]square.CatalogObjectType` 
 
 The desired set of object types to appear in the search results.
 
@@ -3041,68 +3006,67 @@ endpoint in the following aspects:
 
 ```go
 request := &square.SearchCatalogItemsRequest{
-        TextFilter: square.String(
-            "red",
-        ),
-        CategoryIDs: []string{
-            "WINE_CATEGORY_ID",
+    TextFilter: square.String(
+        "red",
+    ),
+    CategoryIDs: []string{
+        "WINE_CATEGORY_ID",
+    },
+    StockLevels: []square.SearchCatalogItemsRequestStockLevel{
+        square.SearchCatalogItemsRequestStockLevelOut,
+        square.SearchCatalogItemsRequestStockLevelLow,
+    },
+    EnabledLocationIDs: []string{
+        "ATL_LOCATION_ID",
+    },
+    Limit: square.Int(
+        100,
+    ),
+    SortOrder: square.SortOrderAsc.Ptr(),
+    ProductTypes: []square.CatalogItemProductType{
+        square.CatalogItemProductTypeRegular,
+    },
+    CustomAttributeFilters: []*square.CustomAttributeFilter{
+        &square.CustomAttributeFilter{
+            CustomAttributeDefinitionID: square.String(
+                "VEGAN_DEFINITION_ID",
+            ),
+            BoolFilter: square.Bool(
+                true,
+            ),
         },
-        StockLevels: []square.SearchCatalogItemsRequestStockLevel{
-            square.SearchCatalogItemsRequestStockLevelOut,
-            square.SearchCatalogItemsRequestStockLevelLow,
+        &square.CustomAttributeFilter{
+            CustomAttributeDefinitionID: square.String(
+                "BRAND_DEFINITION_ID",
+            ),
+            StringFilter: square.String(
+                "Dark Horse",
+            ),
         },
-        EnabledLocationIDs: []string{
-            "ATL_LOCATION_ID",
-        },
-        Limit: square.Int(
-            100,
-        ),
-        SortOrder: square.SortOrderAsc.Ptr(),
-        ProductTypes: []square.CatalogItemProductType{
-            square.CatalogItemProductTypeRegular,
-        },
-        CustomAttributeFilters: []*square.CustomAttributeFilter{
-            &square.CustomAttributeFilter{
-                CustomAttributeDefinitionID: square.String(
-                    "VEGAN_DEFINITION_ID",
+        &square.CustomAttributeFilter{
+            Key: square.String(
+                "VINTAGE",
+            ),
+            NumberFilter: &square.Range{
+                Min: square.String(
+                    "min",
                 ),
-                BoolFilter: square.Bool(
-                    true,
-                ),
-            },
-            &square.CustomAttributeFilter{
-                CustomAttributeDefinitionID: square.String(
-                    "BRAND_DEFINITION_ID",
-                ),
-                StringFilter: square.String(
-                    "Dark Horse",
-                ),
-            },
-            &square.CustomAttributeFilter{
-                Key: square.String(
-                    "VINTAGE",
-                ),
-                NumberFilter: &square.Range{
-                    Min: square.String(
-                        "min",
-                    ),
-                    Max: square.String(
-                        "max",
-                    ),
-                },
-            },
-            &square.CustomAttributeFilter{
-                CustomAttributeDefinitionID: square.String(
-                    "VARIETAL_DEFINITION_ID",
+                Max: square.String(
+                    "max",
                 ),
             },
         },
-    }
-client.Catalog.SearchItems(
-        context.TODO(),
-        request,
-    )
+        &square.CustomAttributeFilter{
+            CustomAttributeDefinitionID: square.String(
+                "VARIETAL_DEFINITION_ID",
+            ),
+        },
+    },
 }
+_, err := client.Catalog.SearchItems(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3137,7 +3101,7 @@ the `name`, `sku`, or `upc` attribute value of an item variation.
 <dl>
 <dd>
 
-**stockLevels:** `[]*square.SearchCatalogItemsRequestStockLevel` 
+**stockLevels:** `[]square.SearchCatalogItemsRequestStockLevel` 
 
 The stock-level query expression to return item variations with the specified stock levels.
 See [SearchCatalogItemsRequestStockLevel](#type-searchcatalogitemsrequeststocklevel) for possible values
@@ -3183,7 +3147,7 @@ See [SortOrder](#type-sortorder) for possible values
 <dl>
 <dd>
 
-**productTypes:** `[]*square.CatalogItemProductType` — The product types query expression to return items or item variations having the specified product types.
+**productTypes:** `[]square.CatalogItemProductType` — The product types query expression to return items or item variations having the specified product types.
     
 </dd>
 </dl>
@@ -3253,23 +3217,22 @@ to perform an upsert on the entire item.
 
 ```go
 request := &square.UpdateItemModifierListsRequest{
-        ItemIDs: []string{
-            "H42BRLUJ5KTZTTMPVSLFAACQ",
-            "2JXOBJIHCWBQ4NZ3RIXQGJA6",
-        },
-        ModifierListsToEnable: []string{
-            "H42BRLUJ5KTZTTMPVSLFAACQ",
-            "2JXOBJIHCWBQ4NZ3RIXQGJA6",
-        },
-        ModifierListsToDisable: []string{
-            "7WRC16CJZDVLSNDQ35PP6YAD",
-        },
-    }
-client.Catalog.UpdateItemModifierLists(
-        context.TODO(),
-        request,
-    )
+    ItemIDs: []string{
+        "H42BRLUJ5KTZTTMPVSLFAACQ",
+        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+    },
+    ModifierListsToEnable: []string{
+        "H42BRLUJ5KTZTTMPVSLFAACQ",
+        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+    },
+    ModifierListsToDisable: []string{
+        "7WRC16CJZDVLSNDQ35PP6YAD",
+    },
 }
+_, err := client.Catalog.UpdateItemModifierLists(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3348,22 +3311,21 @@ upsert on the entire item.
 
 ```go
 request := &square.UpdateItemTaxesRequest{
-        ItemIDs: []string{
-            "H42BRLUJ5KTZTTMPVSLFAACQ",
-            "2JXOBJIHCWBQ4NZ3RIXQGJA6",
-        },
-        TaxesToEnable: []string{
-            "4WRCNHCJZDVLSNDQ35PP6YAD",
-        },
-        TaxesToDisable: []string{
-            "AQCEGCEBBQONINDOHRGZISEX",
-        },
-    }
-client.Catalog.UpdateItemTaxes(
-        context.TODO(),
-        request,
-    )
+    ItemIDs: []string{
+        "H42BRLUJ5KTZTTMPVSLFAACQ",
+        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+    },
+    TaxesToEnable: []string{
+        "4WRCNHCJZDVLSNDQ35PP6YAD",
+    },
+    TaxesToDisable: []string{
+        "AQCEGCEBBQONINDOHRGZISEX",
+    },
 }
+_, err := client.Catalog.UpdateItemTaxes(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3444,23 +3406,22 @@ At least one of `taxes_to_enable` or `taxes_to_disable` must be specified.
 
 ```go
 request := &square.ListChannelsRequest{
-        ReferenceType: square.ReferenceTypeUnknownType.Ptr(),
-        ReferenceID: square.String(
-            "reference_id",
-        ),
-        Status: square.ChannelStatusActive.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Channels.List(
-        context.TODO(),
-        request,
-    )
+    ReferenceType: square.ReferenceTypeUnknownType.Ptr(),
+    ReferenceID: square.String(
+        "reference_id",
+    ),
+    Status: square.ChannelStatusActive.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Channels.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3550,17 +3511,16 @@ When not provided the returned results will be cap at 100 channels.
 
 ```go
 request := &square.BulkRetrieveChannelsRequest{
-        ChannelIDs: []string{
-            "CH_9C03D0B59",
-            "CH_6X139B5MN",
-            "NOT_EXISTING",
-        },
-    }
-client.Channels.BulkRetrieve(
-        context.TODO(),
-        request,
-    )
+    ChannelIDs: []string{
+        "CH_9C03D0B59",
+        "CH_6X139B5MN",
+        "NOT_EXISTING",
+    },
 }
+_, err := client.Channels.BulkRetrieve(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3615,13 +3575,12 @@ client.Channels.BulkRetrieve(
 
 ```go
 request := &square.GetChannelsRequest{
-        ChannelID: "channel_id",
-    }
-client.Channels.Get(
-        context.TODO(),
-        request,
-    )
+    ChannelID: "channel_id",
 }
+_, err := client.Channels.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3681,23 +3640,22 @@ profiles can take closer to one minute or longer, especially during network inci
 
 ```go
 request := &square.ListCustomersRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        SortField: square.CustomerSortFieldDefault.Ptr(),
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Count: square.Bool(
-            true,
-        ),
-    }
-client.Customers.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    SortField: square.CustomerSortFieldDefault.Ptr(),
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Count: square.Bool(
+        true,
+    ),
 }
+_, err := client.Customers.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3816,48 +3774,47 @@ endpoint:
 
 ```go
 request := &square.CreateCustomerRequest{
-        GivenName: square.String(
-            "Amelia",
+    GivenName: square.String(
+        "Amelia",
+    ),
+    FamilyName: square.String(
+        "Earhart",
+    ),
+    EmailAddress: square.String(
+        "Amelia.Earhart@example.com",
+    ),
+    Address: &square.Address{
+        AddressLine1: square.String(
+            "500 Electric Ave",
         ),
-        FamilyName: square.String(
-            "Earhart",
+        AddressLine2: square.String(
+            "Suite 600",
         ),
-        EmailAddress: square.String(
-            "Amelia.Earhart@example.com",
+        Locality: square.String(
+            "New York",
         ),
-        Address: &square.Address{
-            AddressLine1: square.String(
-                "500 Electric Ave",
-            ),
-            AddressLine2: square.String(
-                "Suite 600",
-            ),
-            Locality: square.String(
-                "New York",
-            ),
-            AdministrativeDistrictLevel1: square.String(
-                "NY",
-            ),
-            PostalCode: square.String(
-                "10003",
-            ),
-            Country: square.CountryUs.Ptr(),
-        },
-        PhoneNumber: square.String(
-            "+1-212-555-4240",
+        AdministrativeDistrictLevel1: square.String(
+            "NY",
         ),
-        ReferenceID: square.String(
-            "YOUR_REFERENCE_ID",
+        PostalCode: square.String(
+            "10003",
         ),
-        Note: square.String(
-            "a customer",
-        ),
-    }
-client.Customers.Create(
-        context.TODO(),
-        request,
-    )
+        Country: square.CountryUs.Ptr(),
+    },
+    PhoneNumber: square.String(
+        "+1-212-555-4240",
+    ),
+    ReferenceID: square.String(
+        "YOUR_REFERENCE_ID",
+    ),
+    Note: square.String(
+        "a customer",
+    ),
 }
+_, err := client.Customers.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4054,90 +4011,89 @@ You must provide at least one of the following values in each create request:
 
 ```go
 request := &square.BulkCreateCustomersRequest{
-        Customers: map[string]*square.BulkCreateCustomerData{
-            "8bb76c4f-e35d-4c5b-90de-1194cd9179f0": &square.BulkCreateCustomerData{
-                GivenName: square.String(
-                    "Amelia",
+    Customers: map[string]*square.BulkCreateCustomerData{
+        "8bb76c4f-e35d-4c5b-90de-1194cd9179f0": &square.BulkCreateCustomerData{
+            GivenName: square.String(
+                "Amelia",
+            ),
+            FamilyName: square.String(
+                "Earhart",
+            ),
+            EmailAddress: square.String(
+                "Amelia.Earhart@example.com",
+            ),
+            Address: &square.Address{
+                AddressLine1: square.String(
+                    "500 Electric Ave",
                 ),
-                FamilyName: square.String(
-                    "Earhart",
+                AddressLine2: square.String(
+                    "Suite 600",
                 ),
-                EmailAddress: square.String(
-                    "Amelia.Earhart@example.com",
+                Locality: square.String(
+                    "New York",
                 ),
-                Address: &square.Address{
-                    AddressLine1: square.String(
-                        "500 Electric Ave",
-                    ),
-                    AddressLine2: square.String(
-                        "Suite 600",
-                    ),
-                    Locality: square.String(
-                        "New York",
-                    ),
-                    AdministrativeDistrictLevel1: square.String(
-                        "NY",
-                    ),
-                    PostalCode: square.String(
-                        "10003",
-                    ),
-                    Country: square.CountryUs.Ptr(),
-                },
-                PhoneNumber: square.String(
-                    "+1-212-555-4240",
+                AdministrativeDistrictLevel1: square.String(
+                    "NY",
                 ),
-                ReferenceID: square.String(
-                    "YOUR_REFERENCE_ID",
+                PostalCode: square.String(
+                    "10003",
                 ),
-                Note: square.String(
-                    "a customer",
-                ),
+                Country: square.CountryUs.Ptr(),
             },
-            "d1689f23-b25d-4932-b2f0-aed00f5e2029": &square.BulkCreateCustomerData{
-                GivenName: square.String(
-                    "Marie",
-                ),
-                FamilyName: square.String(
-                    "Curie",
-                ),
-                EmailAddress: square.String(
-                    "Marie.Curie@example.com",
-                ),
-                Address: &square.Address{
-                    AddressLine1: square.String(
-                        "500 Electric Ave",
-                    ),
-                    AddressLine2: square.String(
-                        "Suite 601",
-                    ),
-                    Locality: square.String(
-                        "New York",
-                    ),
-                    AdministrativeDistrictLevel1: square.String(
-                        "NY",
-                    ),
-                    PostalCode: square.String(
-                        "10003",
-                    ),
-                    Country: square.CountryUs.Ptr(),
-                },
-                PhoneNumber: square.String(
-                    "+1-212-444-4240",
-                ),
-                ReferenceID: square.String(
-                    "YOUR_REFERENCE_ID",
-                ),
-                Note: square.String(
-                    "another customer",
-                ),
-            },
+            PhoneNumber: square.String(
+                "+1-212-555-4240",
+            ),
+            ReferenceID: square.String(
+                "YOUR_REFERENCE_ID",
+            ),
+            Note: square.String(
+                "a customer",
+            ),
         },
-    }
-client.Customers.BatchCreate(
-        context.TODO(),
-        request,
-    )
+        "d1689f23-b25d-4932-b2f0-aed00f5e2029": &square.BulkCreateCustomerData{
+            GivenName: square.String(
+                "Marie",
+            ),
+            FamilyName: square.String(
+                "Curie",
+            ),
+            EmailAddress: square.String(
+                "Marie.Curie@example.com",
+            ),
+            Address: &square.Address{
+                AddressLine1: square.String(
+                    "500 Electric Ave",
+                ),
+                AddressLine2: square.String(
+                    "Suite 601",
+                ),
+                Locality: square.String(
+                    "New York",
+                ),
+                AdministrativeDistrictLevel1: square.String(
+                    "NY",
+                ),
+                PostalCode: square.String(
+                    "10003",
+                ),
+                Country: square.CountryUs.Ptr(),
+            },
+            PhoneNumber: square.String(
+                "+1-212-444-4240",
+            ),
+            ReferenceID: square.String(
+                "YOUR_REFERENCE_ID",
+            ),
+            Note: square.String(
+                "another customer",
+            ),
+        },
+    },
 }
+_, err := client.Customers.BatchCreate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4201,17 +4157,16 @@ The endpoint takes a list of customer IDs and returns a map of responses.
 
 ```go
 request := &square.BulkDeleteCustomersRequest{
-        CustomerIDs: []string{
-            "8DDA5NZVBZFGAX0V3HPF81HHE0",
-            "N18CPRVXR5214XPBBA6BZQWF3C",
-            "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
-        },
-    }
-client.Customers.BulkDeleteCustomers(
-        context.TODO(),
-        request,
-    )
+    CustomerIDs: []string{
+        "8DDA5NZVBZFGAX0V3HPF81HHE0",
+        "N18CPRVXR5214XPBBA6BZQWF3C",
+        "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
+    },
 }
+_, err := client.Customers.BulkDeleteCustomers(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4268,17 +4223,16 @@ This endpoint takes a list of customer IDs and returns a map of responses.
 
 ```go
 request := &square.BulkRetrieveCustomersRequest{
-        CustomerIDs: []string{
-            "8DDA5NZVBZFGAX0V3HPF81HHE0",
-            "N18CPRVXR5214XPBBA6BZQWF3C",
-            "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
-        },
-    }
-client.Customers.BulkRetrieveCustomers(
-        context.TODO(),
-        request,
-    )
+    CustomerIDs: []string{
+        "8DDA5NZVBZFGAX0V3HPF81HHE0",
+        "N18CPRVXR5214XPBBA6BZQWF3C",
+        "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
+    },
 }
+_, err := client.Customers.BulkRetrieveCustomers(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4335,36 +4289,35 @@ This endpoint takes a map of individual update requests and returns a map of res
 
 ```go
 request := &square.BulkUpdateCustomersRequest{
-        Customers: map[string]*square.BulkUpdateCustomerData{
-            "8DDA5NZVBZFGAX0V3HPF81HHE0": &square.BulkUpdateCustomerData{
-                EmailAddress: square.String(
-                    "New.Amelia.Earhart@example.com",
-                ),
-                Note: square.String(
-                    "updated customer note",
-                ),
-                Version: square.Int64(
-                    int64(2),
-                ),
-            },
-            "N18CPRVXR5214XPBBA6BZQWF3C": &square.BulkUpdateCustomerData{
-                GivenName: square.String(
-                    "Marie",
-                ),
-                FamilyName: square.String(
-                    "Curie",
-                ),
-                Version: square.Int64(
-                    int64(0),
-                ),
-            },
+    Customers: map[string]*square.BulkUpdateCustomerData{
+        "8DDA5NZVBZFGAX0V3HPF81HHE0": &square.BulkUpdateCustomerData{
+            EmailAddress: square.String(
+                "New.Amelia.Earhart@example.com",
+            ),
+            Note: square.String(
+                "updated customer note",
+            ),
+            Version: square.Int64(
+                int64(2),
+            ),
         },
-    }
-client.Customers.BulkUpdateCustomers(
-        context.TODO(),
-        request,
-    )
+        "N18CPRVXR5214XPBBA6BZQWF3C": &square.BulkUpdateCustomerData{
+            GivenName: square.String(
+                "Marie",
+            ),
+            FamilyName: square.String(
+                "Curie",
+            ),
+            Version: square.Int64(
+                int64(0),
+            ),
+        },
+    },
 }
+_, err := client.Customers.BulkUpdateCustomers(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4436,47 +4389,46 @@ profiles can take closer to one minute or longer, especially during network inci
 
 ```go
 request := &square.SearchCustomersRequest{
-        Limit: square.Int64(
-            int64(2),
-        ),
-        Query: &square.CustomerQuery{
-            Filter: &square.CustomerFilter{
-                CreationSource: &square.CustomerCreationSourceFilter{
-                    Values: []square.CustomerCreationSource{
-                        square.CustomerCreationSourceThirdParty,
-                    },
-                    Rule: square.CustomerInclusionExclusionInclude.Ptr(),
+    Limit: square.Int64(
+        int64(2),
+    ),
+    Query: &square.CustomerQuery{
+        Filter: &square.CustomerFilter{
+            CreationSource: &square.CustomerCreationSourceFilter{
+                Values: []square.CustomerCreationSource{
+                    square.CustomerCreationSourceThirdParty,
                 },
-                CreatedAt: &square.TimeRange{
-                    StartAt: square.String(
-                        "2018-01-01T00:00:00-00:00",
-                    ),
-                    EndAt: square.String(
-                        "2018-02-01T00:00:00-00:00",
-                    ),
-                },
-                EmailAddress: &square.CustomerTextFilter{
-                    Fuzzy: square.String(
-                        "example.com",
-                    ),
-                },
-                GroupIDs: &square.FilterValue{
-                    All: []string{
-                        "545AXB44B4XXWMVQ4W8SBT3HHF",
-                    },
-                },
+                Rule: square.CustomerInclusionExclusionInclude.Ptr(),
             },
-            Sort: &square.CustomerSort{
-                Field: square.CustomerSortFieldCreatedAt.Ptr(),
-                Order: square.SortOrderAsc.Ptr(),
+            CreatedAt: &square.TimeRange{
+                StartAt: square.String(
+                    "2018-01-01T00:00:00-00:00",
+                ),
+                EndAt: square.String(
+                    "2018-02-01T00:00:00-00:00",
+                ),
+            },
+            EmailAddress: &square.CustomerTextFilter{
+                Fuzzy: square.String(
+                    "example.com",
+                ),
+            },
+            GroupIDs: &square.FilterValue{
+                All: []string{
+                    "545AXB44B4XXWMVQ4W8SBT3HHF",
+                },
             },
         },
-    }
-client.Customers.Search(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.CustomerSort{
+            Field: square.CustomerSortFieldCreatedAt.Ptr(),
+            Order: square.SortOrderAsc.Ptr(),
+        },
+    },
 }
+_, err := client.Customers.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4572,13 +4524,12 @@ Returns details for a single customer.
 
 ```go
 request := &square.GetCustomersRequest{
-        CustomerID: "customer_id",
-    }
-client.Customers.Get(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
 }
+_, err := client.Customers.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4636,22 +4587,21 @@ To update a customer profile that was created by merging existing profiles, you 
 
 ```go
 request := &square.UpdateCustomerRequest{
-        CustomerID: "customer_id",
-        EmailAddress: square.String(
-            "New.Amelia.Earhart@example.com",
-        ),
-        Note: square.String(
-            "updated customer note",
-        ),
-        Version: square.Int64(
-            int64(2),
-        ),
-    }
-client.Customers.Update(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    EmailAddress: square.String(
+        "New.Amelia.Earhart@example.com",
+    ),
+    Note: square.String(
+        "updated customer note",
+    ),
+    Version: square.Int64(
+        int64(2),
+    ),
 }
+_, err := client.Customers.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4850,16 +4800,15 @@ To delete a customer profile that was created by merging existing profiles, you 
 
 ```go
 request := &square.DeleteCustomersRequest{
-        CustomerID: "customer_id",
-        Version: square.Int64(
-            int64(1000000),
-        ),
-    }
-client.Customers.Delete(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    Version: square.Int64(
+        int64(1000000),
+    ),
 }
+_, err := client.Customers.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4928,22 +4877,21 @@ devices are supported.
 
 ```go
 request := &square.ListDevicesRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-    }
-client.Devices.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
 }
+_, err := client.Devices.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5030,13 +4978,12 @@ Retrieves Device with the associated `device_id`.
 
 ```go
 request := &square.GetDevicesRequest{
-        DeviceID: "device_id",
-    }
-client.Devices.Get(
-        context.TODO(),
-        request,
-    )
+    DeviceID: "device_id",
 }
+_, err := client.Devices.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5092,19 +5039,18 @@ Returns a list of disputes associated with a particular account.
 
 ```go
 request := &square.ListDisputesRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        States: square.DisputeStateInquiryEvidenceRequired.Ptr(),
-        LocationID: square.String(
-            "location_id",
-        ),
-    }
-client.Disputes.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    States: square.DisputeStateInquiryEvidenceRequired.Ptr(),
+    LocationID: square.String(
+        "location_id",
+    ),
 }
+_, err := client.Disputes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5182,13 +5128,12 @@ Returns details about a specific dispute.
 
 ```go
 request := &square.GetDisputesRequest{
-        DisputeID: "dispute_id",
-    }
-client.Disputes.Get(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
 }
+_, err := client.Disputes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5247,13 +5192,12 @@ does not have sufficient funds, Square debits the associated bank account.
 
 ```go
 request := &square.AcceptDisputesRequest{
-        DisputeID: "dispute_id",
-    }
-client.Disputes.Accept(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
 }
+_, err := client.Disputes.Accept(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5309,16 +5253,15 @@ multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats
 
 ```go
 request := &square.CreateEvidenceFileDisputesRequest{
-        DisputeID: "dispute_id",
-        ImageFile: strings.NewReader(
-            "",
-        ),
-    }
-client.Disputes.CreateEvidenceFile(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
+    ImageFile: strings.NewReader(
+        "",
+    ),
 }
+_, err := client.Disputes.CreateEvidenceFile(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5373,16 +5316,15 @@ Uploads text to use as evidence for a dispute challenge.
 
 ```go
 request := &square.CreateDisputeEvidenceTextRequest{
-        DisputeID: "dispute_id",
-        IdempotencyKey: "ed3ee3933d946f1514d505d173c82648",
-        EvidenceType: square.DisputeEvidenceTypeTrackingNumber.Ptr(),
-        EvidenceText: "1Z8888888888888888",
-    }
-client.Disputes.CreateEvidenceText(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
+    IdempotencyKey: "ed3ee3933d946f1514d505d173c82648",
+    EvidenceType: square.DisputeEvidenceTypeTrackingNumber.Ptr(),
+    EvidenceText: "1Z8888888888888888",
 }
+_, err := client.Disputes.CreateEvidenceText(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5470,13 +5412,12 @@ a dispute after submission.
 
 ```go
 request := &square.SubmitEvidenceDisputesRequest{
-        DisputeID: "dispute_id",
-    }
-client.Disputes.SubmitEvidence(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
 }
+_, err := client.Disputes.SubmitEvidence(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5532,22 +5473,21 @@ client.Disputes.SubmitEvidence(
 
 ```go
 request := &square.ListEmployeesRequest{
-        LocationID: square.String(
-            "location_id",
-        ),
-        Status: square.EmployeeStatusActive.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Employees.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: square.String(
+        "location_id",
+    ),
+    Status: square.EmployeeStatusActive.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Employees.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5626,13 +5566,12 @@ client.Employees.List(
 
 ```go
 request := &square.GetEmployeesRequest{
-        ID: "id",
-    }
-client.Employees.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Employees.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5688,11 +5627,10 @@ Search for Square API events that occur within a 28-day timeframe.
 
 ```go
 request := &square.SearchEventsRequest{}
-client.Events.SearchEvents(
-        context.TODO(),
-        request,
-    )
-}
+_, err := client.Events.SearchEvents(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5774,10 +5712,9 @@ Disabling events for a specific time period prevents them from being searchable,
 <dd>
 
 ```go
-client.Events.DisableEvents(
-        context.TODO(),
-    )
-}
+_, err := client.Events.DisableEvents(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -5816,10 +5753,9 @@ Enables events to make them searchable. Only events that occur while in the enab
 <dd>
 
 ```go
-client.Events.EnableEvents(
-        context.TODO(),
-    )
-}
+_, err := client.Events.EnableEvents(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -5859,15 +5795,14 @@ Lists all event types that you can subscribe to as webhooks or query using the E
 
 ```go
 request := &square.ListEventTypesRequest{
-        APIVersion: square.String(
-            "api_version",
-        ),
-    }
-client.Events.ListEventTypes(
-        context.TODO(),
-        request,
-    )
+    APIVersion: square.String(
+        "api_version",
+    ),
 }
+_, err := client.Events.ListEventTypes(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5924,27 +5859,26 @@ a subset of the gift cards. Results are sorted by `created_at` in ascending orde
 
 ```go
 request := &square.ListGiftCardsRequest{
-        Type: square.String(
-            "type",
-        ),
-        State: square.String(
-            "state",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        CustomerID: square.String(
-            "customer_id",
-        ),
-    }
-client.GiftCards.List(
-        context.TODO(),
-        request,
-    )
+    Type: square.String(
+        "type",
+    ),
+    State: square.String(
+        "state",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    CustomerID: square.String(
+        "customer_id",
+    ),
 }
+_, err := client.GiftCards.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6050,17 +5984,16 @@ to refund a payment to the new gift card.
 
 ```go
 request := &square.CreateGiftCardRequest{
-        IdempotencyKey: "NC9Tm69EjbjtConu",
-        LocationID: "81FN9BNFZTKS4",
-        GiftCard: &square.GiftCard{
-            Type: square.GiftCardTypeDigital,
-        },
-    }
-client.GiftCards.Create(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: "NC9Tm69EjbjtConu",
+    LocationID: "81FN9BNFZTKS4",
+    GiftCard: &square.GiftCard{
+        Type: square.GiftCardTypeDigital,
+    },
 }
+_, err := client.GiftCards.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6154,13 +6087,12 @@ Retrieves a gift card using the gift card account number (GAN).
 
 ```go
 request := &square.GetGiftCardFromGanRequest{
-        Gan: "7783320001001635",
-    }
-client.GiftCards.GetFromGan(
-        context.TODO(),
-        request,
-    )
+    Gan: "7783320001001635",
 }
+_, err := client.GiftCards.GetFromGan(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6219,13 +6151,12 @@ Retrieves a gift card using a secure payment token that represents the gift card
 
 ```go
 request := &square.GetGiftCardFromNonceRequest{
-        Nonce: "cnon:7783322135245171",
-    }
-client.GiftCards.GetFromNonce(
-        context.TODO(),
-        request,
-    )
+    Nonce: "cnon:7783322135245171",
 }
+_, err := client.GiftCards.GetFromNonce(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6283,14 +6214,13 @@ Links a customer to a gift card, which is also referred to as adding a card on f
 
 ```go
 request := &square.LinkCustomerToGiftCardRequest{
-        GiftCardID: "gift_card_id",
-        CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
-    }
-client.GiftCards.LinkCustomer(
-        context.TODO(),
-        request,
-    )
+    GiftCardID: "gift_card_id",
+    CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
 }
+_, err := client.GiftCards.LinkCustomer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6353,14 +6283,13 @@ Unlinks a customer from a gift card, which is also referred to as removing a car
 
 ```go
 request := &square.UnlinkCustomerFromGiftCardRequest{
-        GiftCardID: "gift_card_id",
-        CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
-    }
-client.GiftCards.UnlinkCustomer(
-        context.TODO(),
-        request,
-    )
+    GiftCardID: "gift_card_id",
+    CustomerID: "GKY0FZ3V717AH8Q2D821PNT2ZW",
 }
+_, err := client.GiftCards.UnlinkCustomer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6423,13 +6352,12 @@ Retrieves a gift card using the gift card ID.
 
 ```go
 request := &square.GetGiftCardsRequest{
-        ID: "id",
-    }
-client.GiftCards.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.GiftCards.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6486,18 +6414,17 @@ to the seller.
 
 ```go
 request := &square.ListInventoryAdjustmentReasonsRequest{
-        IncludeDeleted: square.Bool(
-            true,
-        ),
-        IncludeSystemCodes: square.Bool(
-            true,
-        ),
-    }
-client.Inventory.ListInventoryAdjustmentReasons(
-        context.TODO(),
-        request,
-    )
+    IncludeDeleted: square.Bool(
+        true,
+    ),
+    IncludeSystemCodes: square.Bool(
+        true,
+    ),
 }
+_, err := client.Inventory.ListInventoryAdjustmentReasons(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6568,22 +6495,21 @@ Creates a custom inventory adjustment reason.
 
 ```go
 request := &square.CreateInventoryAdjustmentReasonRequest{
-        IdempotencyKey: "27b2f2b1-1c2a-4b9e-8f3a-0d9c3a1e5b47",
-        AdjustmentReason: &square.InventoryAdjustmentReason{
-            ID: &square.InventoryAdjustmentReasonID{
-                Type: square.InventoryAdjustmentReasonIDTypeCustom,
-            },
-            Name: square.String(
-                "Donated to charity",
-            ),
-            Direction: square.InventoryAdjustmentReasonDirectionDecrease.Ptr(),
+    IdempotencyKey: "27b2f2b1-1c2a-4b9e-8f3a-0d9c3a1e5b47",
+    AdjustmentReason: &square.InventoryAdjustmentReason{
+        ID: &square.InventoryAdjustmentReasonID{
+            Type: square.InventoryAdjustmentReasonIDTypeCustom,
         },
-    }
-client.Inventory.CreateInventoryAdjustmentReason(
-        context.TODO(),
-        request,
-    )
+        Name: square.String(
+            "Donated to charity",
+        ),
+        Direction: square.InventoryAdjustmentReasonDirectionDecrease.Ptr(),
+    },
 }
+_, err := client.Inventory.CreateInventoryAdjustmentReason(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6653,18 +6579,17 @@ Soft deletes a custom inventory adjustment reason.
 
 ```go
 request := &square.DeleteInventoryAdjustmentReasonRequest{
-        ReasonID: &square.InventoryAdjustmentReasonID{
-            Type: square.InventoryAdjustmentReasonIDTypeCustom,
-            CustomReasonID: square.String(
-                "R5BX3PDCZ6EXAMPLE",
-            ),
-        },
-    }
-client.Inventory.DeleteInventoryAdjustmentReason(
-        context.TODO(),
-        request,
-    )
+    ReasonID: &square.InventoryAdjustmentReasonID{
+        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+        CustomReasonID: square.String(
+            "R5BX3PDCZ6EXAMPLE",
+        ),
+    },
 }
+_, err := client.Inventory.DeleteInventoryAdjustmentReason(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6719,18 +6644,17 @@ Restores a soft-deleted custom inventory adjustment reason.
 
 ```go
 request := &square.RestoreInventoryAdjustmentReasonRequest{
-        ReasonID: &square.InventoryAdjustmentReasonID{
-            Type: square.InventoryAdjustmentReasonIDTypeCustom,
-            CustomReasonID: square.String(
-                "R5BX3PDCZ6EXAMPLE",
-            ),
-        },
-    }
-client.Inventory.RestoreInventoryAdjustmentReason(
-        context.TODO(),
-        request,
-    )
+    ReasonID: &square.InventoryAdjustmentReasonID{
+        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+        CustomReasonID: square.String(
+            "R5BX3PDCZ6EXAMPLE",
+        ),
+    },
 }
+_, err := client.Inventory.RestoreInventoryAdjustmentReason(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6789,18 +6713,17 @@ Returns the inventory adjustment reason identified by the provided
 
 ```go
 request := &square.RetrieveInventoryAdjustmentReasonRequest{
-        ReasonID: &square.InventoryAdjustmentReasonID{
-            Type: square.InventoryAdjustmentReasonIDTypeCustom,
-            CustomReasonID: square.String(
-                "R5BX3PDCZ6EXAMPLE",
-            ),
-        },
-    }
-client.Inventory.RetrieveInventoryAdjustmentReason(
-        context.TODO(),
-        request,
-    )
+    ReasonID: &square.InventoryAdjustmentReasonID{
+        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+        CustomReasonID: square.String(
+            "R5BX3PDCZ6EXAMPLE",
+        ),
+    },
 }
+_, err := client.Inventory.RetrieveInventoryAdjustmentReason(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6855,29 +6778,28 @@ Updates a custom inventory adjustment reason.
 
 ```go
 request := &square.UpdateInventoryAdjustmentReasonRequest{
-        ReasonID: &square.InventoryAdjustmentReasonID{
+    ReasonID: &square.InventoryAdjustmentReasonID{
+        Type: square.InventoryAdjustmentReasonIDTypeCustom,
+        CustomReasonID: square.String(
+            "R5BX3PDCZ6EXAMPLE",
+        ),
+    },
+    AdjustmentReason: &square.InventoryAdjustmentReason{
+        ID: &square.InventoryAdjustmentReasonID{
             Type: square.InventoryAdjustmentReasonIDTypeCustom,
             CustomReasonID: square.String(
                 "R5BX3PDCZ6EXAMPLE",
             ),
         },
-        AdjustmentReason: &square.InventoryAdjustmentReason{
-            ID: &square.InventoryAdjustmentReasonID{
-                Type: square.InventoryAdjustmentReasonIDTypeCustom,
-                CustomReasonID: square.String(
-                    "R5BX3PDCZ6EXAMPLE",
-                ),
-            },
-            Name: square.String(
-                "Charitable donation",
-            ),
-        },
-    }
-client.Inventory.UpdateInventoryAdjustmentReason(
-        context.TODO(),
-        request,
-    )
+        Name: square.String(
+            "Charitable donation",
+        ),
+    },
 }
+_, err := client.Inventory.UpdateInventoryAdjustmentReason(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -6946,13 +6868,12 @@ is updated to conform to the standard convention.
 
 ```go
 request := &square.DeprecatedGetAdjustmentInventoryRequest{
-        AdjustmentID: "adjustment_id",
-    }
-client.Inventory.DeprecatedGetAdjustment(
-        context.TODO(),
-        request,
-    )
+    AdjustmentID: "adjustment_id",
 }
+_, err := client.Inventory.DeprecatedGetAdjustment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7010,14 +6931,13 @@ On failure: returns a list of related errors.
 
 ```go
 request := &square.UpdateInventoryAdjustmentRequest{
-        IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
-        Adjustment: &square.InventoryAdjustment{},
-    }
-client.Inventory.UpdateInventoryAdjustment(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+    Adjustment: &square.InventoryAdjustment{},
 }
+_, err := client.Inventory.UpdateInventoryAdjustment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7101,13 +7021,12 @@ with the provided `adjustment_id`.
 
 ```go
 request := &square.GetAdjustmentInventoryRequest{
-        AdjustmentID: "adjustment_id",
-    }
-client.Inventory.GetAdjustment(
-        context.TODO(),
-        request,
-    )
+    AdjustmentID: "adjustment_id",
 }
+_, err := client.Inventory.GetAdjustment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7163,42 +7082,41 @@ is updated to conform to the standard convention.
 
 ```go
 request := &square.BatchChangeInventoryRequest{
-        IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
-        Changes: []*square.InventoryChange{
-            &square.InventoryChange{
-                Type: square.InventoryChangeTypePhysicalCount.Ptr(),
-                PhysicalCount: &square.InventoryPhysicalCount{
-                    ReferenceID: square.String(
-                        "1536bfbf-efed-48bf-b17d-a197141b2a92",
-                    ),
-                    CatalogObjectID: square.String(
-                        "W62UWFY35CWMYGVWK6TWJDNI",
-                    ),
-                    State: square.InventoryStateInStock.Ptr(),
-                    LocationID: square.String(
-                        "C6W5YS5QM06F5",
-                    ),
-                    Quantity: square.String(
-                        "53",
-                    ),
-                    TeamMemberID: square.String(
-                        "LRK57NSQ5X7PUD05",
-                    ),
-                    OccurredAt: square.String(
-                        "2016-11-16T22:25:24.878Z",
-                    ),
-                },
+    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+    Changes: []*square.InventoryChange{
+        &square.InventoryChange{
+            Type: square.InventoryChangeTypePhysicalCount.Ptr(),
+            PhysicalCount: &square.InventoryPhysicalCount{
+                ReferenceID: square.String(
+                    "1536bfbf-efed-48bf-b17d-a197141b2a92",
+                ),
+                CatalogObjectID: square.String(
+                    "W62UWFY35CWMYGVWK6TWJDNI",
+                ),
+                State: square.InventoryStateInStock.Ptr(),
+                LocationID: square.String(
+                    "C6W5YS5QM06F5",
+                ),
+                Quantity: square.String(
+                    "53",
+                ),
+                TeamMemberID: square.String(
+                    "LRK57NSQ5X7PUD05",
+                ),
+                OccurredAt: square.String(
+                    "2016-11-16T22:25:24.878Z",
+                ),
             },
         },
-        IgnoreUnchangedCounts: square.Bool(
-            true,
-        ),
-    }
-client.Inventory.DeprecatedBatchChange(
-        context.TODO(),
-        request,
-    )
+    },
+    IgnoreUnchangedCounts: square.Bool(
+        true,
+    ),
 }
+_, err := client.Inventory.DeprecatedBatchChange(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7254,30 +7172,29 @@ is updated to conform to the standard convention.
 
 ```go
 request := &square.BatchRetrieveInventoryChangesRequest{
-        CatalogObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-        },
-        LocationIDs: []string{
-            "C6W5YS5QM06F5",
-        },
-        Types: []square.InventoryChangeType{
-            square.InventoryChangeTypePhysicalCount,
-        },
-        States: []square.InventoryState{
-            square.InventoryStateInStock,
-        },
-        UpdatedAfter: square.String(
-            "2016-11-01T00:00:00.000Z",
-        ),
-        UpdatedBefore: square.String(
-            "2016-12-01T00:00:00.000Z",
-        ),
-    }
-client.Inventory.DeprecatedBatchGetChanges(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+    },
+    LocationIDs: []string{
+        "C6W5YS5QM06F5",
+    },
+    Types: []square.InventoryChangeType{
+        square.InventoryChangeTypePhysicalCount,
+    },
+    States: []square.InventoryState{
+        square.InventoryStateInStock,
+    },
+    UpdatedAfter: square.String(
+        "2016-11-01T00:00:00.000Z",
+    ),
+    UpdatedBefore: square.String(
+        "2016-12-01T00:00:00.000Z",
+    ),
 }
+_, err := client.Inventory.DeprecatedBatchGetChanges(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7333,21 +7250,20 @@ is updated to conform to the standard convention.
 
 ```go
 request := &square.BatchGetInventoryCountsRequest{
-        CatalogObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-        },
-        LocationIDs: []string{
-            "59TNP9SA8VGDA",
-        },
-        UpdatedAfter: square.String(
-            "2016-11-16T00:00:00.000Z",
-        ),
-    }
-client.Inventory.DeprecatedBatchGetCounts(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+    },
+    LocationIDs: []string{
+        "59TNP9SA8VGDA",
+    },
+    UpdatedAfter: square.String(
+        "2016-11-16T00:00:00.000Z",
+    ),
 }
+_, err := client.Inventory.DeprecatedBatchGetCounts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7406,42 +7322,41 @@ On failure: returns a list of related errors.
 
 ```go
 request := &square.BatchChangeInventoryRequest{
-        IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
-        Changes: []*square.InventoryChange{
-            &square.InventoryChange{
-                Type: square.InventoryChangeTypePhysicalCount.Ptr(),
-                PhysicalCount: &square.InventoryPhysicalCount{
-                    ReferenceID: square.String(
-                        "1536bfbf-efed-48bf-b17d-a197141b2a92",
-                    ),
-                    CatalogObjectID: square.String(
-                        "W62UWFY35CWMYGVWK6TWJDNI",
-                    ),
-                    State: square.InventoryStateInStock.Ptr(),
-                    LocationID: square.String(
-                        "C6W5YS5QM06F5",
-                    ),
-                    Quantity: square.String(
-                        "53",
-                    ),
-                    TeamMemberID: square.String(
-                        "LRK57NSQ5X7PUD05",
-                    ),
-                    OccurredAt: square.String(
-                        "2016-11-16T22:25:24.878Z",
-                    ),
-                },
+    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+    Changes: []*square.InventoryChange{
+        &square.InventoryChange{
+            Type: square.InventoryChangeTypePhysicalCount.Ptr(),
+            PhysicalCount: &square.InventoryPhysicalCount{
+                ReferenceID: square.String(
+                    "1536bfbf-efed-48bf-b17d-a197141b2a92",
+                ),
+                CatalogObjectID: square.String(
+                    "W62UWFY35CWMYGVWK6TWJDNI",
+                ),
+                State: square.InventoryStateInStock.Ptr(),
+                LocationID: square.String(
+                    "C6W5YS5QM06F5",
+                ),
+                Quantity: square.String(
+                    "53",
+                ),
+                TeamMemberID: square.String(
+                    "LRK57NSQ5X7PUD05",
+                ),
+                OccurredAt: square.String(
+                    "2016-11-16T22:25:24.878Z",
+                ),
             },
         },
-        IgnoreUnchangedCounts: square.Bool(
-            true,
-        ),
-    }
-client.Inventory.BatchCreateChanges(
-        context.TODO(),
-        request,
-    )
+    },
+    IgnoreUnchangedCounts: square.Bool(
+        true,
+    ),
 }
+_, err := client.Inventory.BatchCreateChanges(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7503,30 +7418,29 @@ that cannot be handled by other, simpler endpoints.
 
 ```go
 request := &square.BatchRetrieveInventoryChangesRequest{
-        CatalogObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-        },
-        LocationIDs: []string{
-            "C6W5YS5QM06F5",
-        },
-        Types: []square.InventoryChangeType{
-            square.InventoryChangeTypePhysicalCount,
-        },
-        States: []square.InventoryState{
-            square.InventoryStateInStock,
-        },
-        UpdatedAfter: square.String(
-            "2016-11-01T00:00:00.000Z",
-        ),
-        UpdatedBefore: square.String(
-            "2016-12-01T00:00:00.000Z",
-        ),
-    }
-client.Inventory.BatchGetChanges(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+    },
+    LocationIDs: []string{
+        "C6W5YS5QM06F5",
+    },
+    Types: []square.InventoryChangeType{
+        square.InventoryChangeTypePhysicalCount,
+    },
+    States: []square.InventoryState{
+        square.InventoryStateInStock,
+    },
+    UpdatedAfter: square.String(
+        "2016-11-01T00:00:00.000Z",
+    ),
+    UpdatedBefore: square.String(
+        "2016-12-01T00:00:00.000Z",
+    ),
 }
+_, err := client.Inventory.BatchGetChanges(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7591,21 +7505,20 @@ in response to receiving a Webhook notification.
 
 ```go
 request := &square.BatchGetInventoryCountsRequest{
-        CatalogObjectIDs: []string{
-            "W62UWFY35CWMYGVWK6TWJDNI",
-        },
-        LocationIDs: []string{
-            "59TNP9SA8VGDA",
-        },
-        UpdatedAfter: square.String(
-            "2016-11-16T00:00:00.000Z",
-        ),
-    }
-client.Inventory.BatchGetCounts(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectIDs: []string{
+        "W62UWFY35CWMYGVWK6TWJDNI",
+    },
+    LocationIDs: []string{
+        "59TNP9SA8VGDA",
+    },
+    UpdatedAfter: square.String(
+        "2016-11-16T00:00:00.000Z",
+    ),
 }
+_, err := client.Inventory.BatchGetCounts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7661,13 +7574,12 @@ is updated to conform to the standard convention.
 
 ```go
 request := &square.DeprecatedGetPhysicalCountInventoryRequest{
-        PhysicalCountID: "physical_count_id",
-    }
-client.Inventory.DeprecatedGetPhysicalCount(
-        context.TODO(),
-        request,
-    )
+    PhysicalCountID: "physical_count_id",
 }
+_, err := client.Inventory.DeprecatedGetPhysicalCount(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7726,13 +7638,12 @@ object with the provided `physical_count_id`.
 
 ```go
 request := &square.GetPhysicalCountInventoryRequest{
-        PhysicalCountID: "physical_count_id",
-    }
-client.Inventory.GetPhysicalCount(
-        context.TODO(),
-        request,
-    )
+    PhysicalCountID: "physical_count_id",
 }
+_, err := client.Inventory.GetPhysicalCount(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7793,19 +7704,18 @@ For more sophisticated queries, use a batch endpoint.
 
 ```go
 request := &square.GetInventoryRequest{
-        CatalogObjectID: "catalog_object_id",
-        LocationIDs: square.String(
-            "location_ids",
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Inventory.Get(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectID: "catalog_object_id",
+    LocationIDs: square.String(
+        "location_ids",
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Inventory.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7896,19 +7806,18 @@ sophisticated queries, use a batch endpoint.
 
 ```go
 request := &square.ChangesInventoryRequest{
-        CatalogObjectID: "catalog_object_id",
-        LocationIDs: square.String(
-            "location_ids",
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Inventory.Changes(
-        context.TODO(),
-        request,
-    )
+    CatalogObjectID: "catalog_object_id",
+    LocationIDs: square.String(
+        "location_ids",
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Inventory.Changes(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -7990,19 +7899,18 @@ use in a subsequent request to retrieve the next set of invoices.
 
 ```go
 request := &square.ListInvoicesRequest{
-        LocationID: "location_id",
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Invoices.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Invoices.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8085,106 +7993,105 @@ You must publish the invoice before Square can process it (send it to the custom
 
 ```go
 request := &square.CreateInvoiceRequest{
-        Invoice: &square.Invoice{
-            LocationID: square.String(
-                "ES0RJRZYEC39A",
+    Invoice: &square.Invoice{
+        LocationID: square.String(
+            "ES0RJRZYEC39A",
+        ),
+        OrderID: square.String(
+            "CAISENgvlJ6jLWAzERDzjyHVybY",
+        ),
+        PrimaryRecipient: &square.InvoiceRecipient{
+            CustomerID: square.String(
+                "JDKYHBWT1D4F8MFH63DBMEN8Y4",
             ),
-            OrderID: square.String(
-                "CAISENgvlJ6jLWAzERDzjyHVybY",
-            ),
-            PrimaryRecipient: &square.InvoiceRecipient{
-                CustomerID: square.String(
-                    "JDKYHBWT1D4F8MFH63DBMEN8Y4",
+        },
+        PaymentRequests: []*square.InvoicePaymentRequest{
+            &square.InvoicePaymentRequest{
+                RequestType: square.InvoiceRequestTypeBalance.Ptr(),
+                DueDate: square.String(
+                    "2030-01-24",
                 ),
-            },
-            PaymentRequests: []*square.InvoicePaymentRequest{
-                &square.InvoicePaymentRequest{
-                    RequestType: square.InvoiceRequestTypeBalance.Ptr(),
-                    DueDate: square.String(
-                        "2030-01-24",
-                    ),
-                    TippingEnabled: square.Bool(
-                        true,
-                    ),
-                    AutomaticPaymentSource: square.InvoiceAutomaticPaymentSourceNone.Ptr(),
-                    Reminders: []*square.InvoicePaymentReminder{
-                        &square.InvoicePaymentReminder{
-                            RelativeScheduledDays: square.Int(
-                                -1,
-                            ),
-                            Message: square.String(
-                                "Your invoice is due tomorrow",
-                            ),
-                        },
+                TippingEnabled: square.Bool(
+                    true,
+                ),
+                AutomaticPaymentSource: square.InvoiceAutomaticPaymentSourceNone.Ptr(),
+                Reminders: []*square.InvoicePaymentReminder{
+                    &square.InvoicePaymentReminder{
+                        RelativeScheduledDays: square.Int(
+                            -1,
+                        ),
+                        Message: square.String(
+                            "Your invoice is due tomorrow",
+                        ),
                     },
                 },
             },
-            DeliveryMethod: square.InvoiceDeliveryMethodEmail.Ptr(),
-            InvoiceNumber: square.String(
-                "inv-100",
+        },
+        DeliveryMethod: square.InvoiceDeliveryMethodEmail.Ptr(),
+        InvoiceNumber: square.String(
+            "inv-100",
+        ),
+        Title: square.String(
+            "Event Planning Services",
+        ),
+        Description: square.String(
+            "We appreciate your business!",
+        ),
+        ScheduledAt: square.String(
+            "2030-01-13T10:00:00Z",
+        ),
+        AcceptedPaymentMethods: &square.InvoiceAcceptedPaymentMethods{
+            Card: square.Bool(
+                true,
             ),
-            Title: square.String(
-                "Event Planning Services",
+            SquareGiftCard: square.Bool(
+                false,
             ),
-            Description: square.String(
-                "We appreciate your business!",
+            BankAccount: square.Bool(
+                false,
             ),
-            ScheduledAt: square.String(
-                "2030-01-13T10:00:00Z",
+            BuyNowPayLater: square.Bool(
+                false,
             ),
-            AcceptedPaymentMethods: &square.InvoiceAcceptedPaymentMethods{
-                Card: square.Bool(
-                    true,
-                ),
-                SquareGiftCard: square.Bool(
-                    false,
-                ),
-                BankAccount: square.Bool(
-                    false,
-                ),
-                BuyNowPayLater: square.Bool(
-                    false,
-                ),
-                CashAppPay: square.Bool(
-                    false,
-                ),
-            },
-            CustomFields: []*square.InvoiceCustomField{
-                &square.InvoiceCustomField{
-                    Label: square.String(
-                        "Event Reference Number",
-                    ),
-                    Value: square.String(
-                        "Ref. #1234",
-                    ),
-                    Placement: square.InvoiceCustomFieldPlacementAboveLineItems.Ptr(),
-                },
-                &square.InvoiceCustomField{
-                    Label: square.String(
-                        "Terms of Service",
-                    ),
-                    Value: square.String(
-                        "The terms of service are...",
-                    ),
-                    Placement: square.InvoiceCustomFieldPlacementBelowLineItems.Ptr(),
-                },
-            },
-            SaleOrServiceDate: square.String(
-                "2030-01-24",
-            ),
-            StorePaymentMethodEnabled: square.Bool(
+            CashAppPay: square.Bool(
                 false,
             ),
         },
-        IdempotencyKey: square.String(
-            "ce3748f9-5fc1-4762-aa12-aae5e843f1f4",
+        CustomFields: []*square.InvoiceCustomField{
+            &square.InvoiceCustomField{
+                Label: square.String(
+                    "Event Reference Number",
+                ),
+                Value: square.String(
+                    "Ref. #1234",
+                ),
+                Placement: square.InvoiceCustomFieldPlacementAboveLineItems.Ptr(),
+            },
+            &square.InvoiceCustomField{
+                Label: square.String(
+                    "Terms of Service",
+                ),
+                Value: square.String(
+                    "The terms of service are...",
+                ),
+                Placement: square.InvoiceCustomFieldPlacementBelowLineItems.Ptr(),
+            },
+        },
+        SaleOrServiceDate: square.String(
+            "2030-01-24",
         ),
-    }
-client.Invoices.Create(
-        context.TODO(),
-        request,
-    )
+        StorePaymentMethodEnabled: square.Bool(
+            false,
+        ),
+    },
+    IdempotencyKey: square.String(
+        "ce3748f9-5fc1-4762-aa12-aae5e843f1f4",
+    ),
 }
+_, err := client.Invoices.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8259,31 +8166,30 @@ that you use in a subsequent request to retrieve the next set of invoices.
 
 ```go
 request := &square.SearchInvoicesRequest{
-        Query: &square.InvoiceQuery{
-            Filter: &square.InvoiceFilter{
-                LocationIDs: []string{
-                    "ES0RJRZYEC39A",
-                },
-                CustomerIDs: []string{
-                    "JDKYHBWT1D4F8MFH63DBMEN8Y4",
-                },
+    Query: &square.InvoiceQuery{
+        Filter: &square.InvoiceFilter{
+            LocationIDs: []string{
+                "ES0RJRZYEC39A",
             },
-            Sort: &square.InvoiceSort{
-                Field: square.InvoiceSortField(
-                    "INVOICE_SORT_DATE",
-                ),
-                Order: square.SortOrderDesc.Ptr(),
+            CustomerIDs: []string{
+                "JDKYHBWT1D4F8MFH63DBMEN8Y4",
             },
         },
-        Limit: square.Int(
-            100,
-        ),
-    }
-client.Invoices.Search(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.InvoiceSort{
+            Field: square.InvoiceSortField(
+                "INVOICE_SORT_DATE",
+            ),
+            Order: square.SortOrderDesc.Ptr(),
+        },
+    },
+    Limit: square.Int(
+        100,
+    ),
 }
+_, err := client.Invoices.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8362,13 +8268,12 @@ Retrieves an invoice by invoice ID.
 
 ```go
 request := &square.GetInvoicesRequest{
-        InvoiceID: "invoice_id",
-    }
-client.Invoices.Get(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
 }
+_, err := client.Invoices.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8426,31 +8331,30 @@ Some restrictions apply to updating invoices. For example, you cannot change the
 
 ```go
 request := &square.UpdateInvoiceRequest{
-        InvoiceID: "invoice_id",
-        Invoice: &square.Invoice{
-            Version: square.Int(
-                1,
-            ),
-            PaymentRequests: []*square.InvoicePaymentRequest{
-                &square.InvoicePaymentRequest{
-                    UID: square.String(
-                        "2da7964f-f3d2-4f43-81e8-5aa220bf3355",
-                    ),
-                    TippingEnabled: square.Bool(
-                        false,
-                    ),
-                },
+    InvoiceID: "invoice_id",
+    Invoice: &square.Invoice{
+        Version: square.Int(
+            1,
+        ),
+        PaymentRequests: []*square.InvoicePaymentRequest{
+            &square.InvoicePaymentRequest{
+                UID: square.String(
+                    "2da7964f-f3d2-4f43-81e8-5aa220bf3355",
+                ),
+                TippingEnabled: square.Bool(
+                    false,
+                ),
             },
         },
-        IdempotencyKey: square.String(
-            "4ee82288-0910-499e-ab4c-5d0071dad1be",
-        ),
-    }
-client.Invoices.Update(
-        context.TODO(),
-        request,
-    )
+    },
+    IdempotencyKey: square.String(
+        "4ee82288-0910-499e-ab4c-5d0071dad1be",
+    ),
 }
+_, err := client.Invoices.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8546,16 +8450,15 @@ invoice (you cannot delete a published invoice, including one that is scheduled 
 
 ```go
 request := &square.DeleteInvoicesRequest{
-        InvoiceID: "invoice_id",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Invoices.Delete(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Invoices.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8629,16 +8532,15 @@ __NOTE:__ When testing in the Sandbox environment, the total file size is limite
 
 ```go
 request := &square.CreateInvoiceAttachmentRequest{
-        InvoiceID: "invoice_id",
-        ImageFile: strings.NewReader(
-            "",
-        ),
-    }
-client.Invoices.CreateInvoiceAttachment(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
+    ImageFile: strings.NewReader(
+        "",
+    ),
 }
+_, err := client.Invoices.CreateInvoiceAttachment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8694,14 +8596,13 @@ from invoices in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
 
 ```go
 request := &square.DeleteInvoiceAttachmentRequest{
-        InvoiceID: "invoice_id",
-        AttachmentID: "attachment_id",
-    }
-client.Invoices.DeleteInvoiceAttachment(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
+    AttachmentID: "attachment_id",
 }
+_, err := client.Invoices.DeleteInvoiceAttachment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8767,14 +8668,13 @@ You cannot cancel an invoice in the `DRAFT` state or in a terminal state: `PAID`
 
 ```go
 request := &square.CancelInvoiceRequest{
-        InvoiceID: "invoice_id",
-        Version: 0,
-    }
-client.Invoices.Cancel(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
+    Version: 0,
 }
+_, err := client.Invoices.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8854,17 +8754,16 @@ and `PAYMENTS_WRITE` are required when publishing invoices configured for card-o
 
 ```go
 request := &square.PublishInvoiceRequest{
-        InvoiceID: "invoice_id",
-        Version: 1,
-        IdempotencyKey: square.String(
-            "32da42d0-1997-41b0-826b-f09464fc2c2e",
-        ),
-    }
-client.Invoices.Publish(
-        context.TODO(),
-        request,
-    )
+    InvoiceID: "invoice_id",
+    Version: 1,
+    IdempotencyKey: square.String(
+        "32da42d0-1997-41b0-826b-f09464fc2c2e",
+    ),
 }
+_, err := client.Invoices.Publish(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -8952,40 +8851,39 @@ The following `draft_shift_details` fields are required:
 
 ```go
 request := &square.CreateScheduledShiftRequest{
-        IdempotencyKey: square.String(
-            "HIDSNG5KS478L",
-        ),
-        ScheduledShift: &square.ScheduledShift{
-            DraftShiftDetails: &square.ScheduledShiftDetails{
-                TeamMemberID: square.String(
-                    "ormj0jJJZ5OZIzxrZYJI",
-                ),
-                LocationID: square.String(
-                    "PAA1RJZZKXBFG",
-                ),
-                JobID: square.String(
-                    "FzbJAtt9qEWncK1BWgVCxQ6M",
-                ),
-                StartAt: square.String(
-                    "2019-01-25T03:11:00-05:00",
-                ),
-                EndAt: square.String(
-                    "2019-01-25T13:11:00-05:00",
-                ),
-                Notes: square.String(
-                    "Dont forget to prep the vegetables",
-                ),
-                IsDeleted: square.Bool(
-                    false,
-                ),
-            },
+    IdempotencyKey: square.String(
+        "HIDSNG5KS478L",
+    ),
+    ScheduledShift: &square.ScheduledShift{
+        DraftShiftDetails: &square.ScheduledShiftDetails{
+            TeamMemberID: square.String(
+                "ormj0jJJZ5OZIzxrZYJI",
+            ),
+            LocationID: square.String(
+                "PAA1RJZZKXBFG",
+            ),
+            JobID: square.String(
+                "FzbJAtt9qEWncK1BWgVCxQ6M",
+            ),
+            StartAt: square.String(
+                "2019-01-25T03:11:00-05:00",
+            ),
+            EndAt: square.String(
+                "2019-01-25T13:11:00-05:00",
+            ),
+            Notes: square.String(
+                "Dont forget to prep the vegetables",
+            ),
+            IsDeleted: square.Bool(
+                false,
+            ),
         },
-    }
-client.Labor.CreateScheduledShift(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Labor.CreateScheduledShift(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9065,16 +8963,15 @@ The minimum `start_at` and maximum `end_at` timestamps of all shifts in a
 
 ```go
 request := &square.BulkPublishScheduledShiftsRequest{
-        ScheduledShifts: map[string]*square.BulkPublishScheduledShiftsData{
-            "key": &square.BulkPublishScheduledShiftsData{},
-        },
-        ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAffected.Ptr(),
-    }
-client.Labor.BulkPublishScheduledShifts(
-        context.TODO(),
-        request,
-    )
+    ScheduledShifts: map[string]*square.BulkPublishScheduledShiftsData{
+        "key": &square.BulkPublishScheduledShiftsData{},
+    },
+    ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAffected.Ptr(),
 }
+_, err := client.Labor.BulkPublishScheduledShifts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9149,27 +9046,26 @@ By default, results are sorted by `start_at` in ascending order.
 
 ```go
 request := &square.SearchScheduledShiftsRequest{
-        Query: &square.ScheduledShiftQuery{
-            Filter: &square.ScheduledShiftFilter{
-                AssignmentStatus: square.ScheduledShiftFilterAssignmentStatusAssigned.Ptr(),
-            },
-            Sort: &square.ScheduledShiftSort{
-                Field: square.ScheduledShiftSortFieldCreatedAt.Ptr(),
-                Order: square.SortOrderAsc.Ptr(),
-            },
+    Query: &square.ScheduledShiftQuery{
+        Filter: &square.ScheduledShiftFilter{
+            AssignmentStatus: square.ScheduledShiftFilterAssignmentStatusAssigned.Ptr(),
         },
-        Limit: square.Int(
-            2,
-        ),
-        Cursor: square.String(
-            "xoxp-1234-5678-90123",
-        ),
-    }
-client.Labor.SearchScheduledShifts(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.ScheduledShiftSort{
+            Field: square.ScheduledShiftSortFieldCreatedAt.Ptr(),
+            Order: square.SortOrderAsc.Ptr(),
+        },
+    },
+    Limit: square.Int(
+        2,
+    ),
+    Cursor: square.String(
+        "xoxp-1234-5678-90123",
+    ),
 }
+_, err := client.Labor.SearchScheduledShifts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9244,13 +9140,12 @@ Retrieves a scheduled shift by ID.
 
 ```go
 request := &square.RetrieveScheduledShiftRequest{
-        ID: "id",
-    }
-client.Labor.RetrieveScheduledShift(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.RetrieveScheduledShift(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9314,41 +9209,40 @@ and then publish the shift.
 
 ```go
 request := &square.UpdateScheduledShiftRequest{
-        ID: "id",
-        ScheduledShift: &square.ScheduledShift{
-            DraftShiftDetails: &square.ScheduledShiftDetails{
-                TeamMemberID: square.String(
-                    "ormj0jJJZ5OZIzxrZYJI",
-                ),
-                LocationID: square.String(
-                    "PAA1RJZZKXBFG",
-                ),
-                JobID: square.String(
-                    "FzbJAtt9qEWncK1BWgVCxQ6M",
-                ),
-                StartAt: square.String(
-                    "2019-03-25T03:11:00-05:00",
-                ),
-                EndAt: square.String(
-                    "2019-03-25T13:18:00-05:00",
-                ),
-                Notes: square.String(
-                    "Dont forget to prep the vegetables",
-                ),
-                IsDeleted: square.Bool(
-                    false,
-                ),
-            },
-            Version: square.Int(
-                1,
+    ID: "id",
+    ScheduledShift: &square.ScheduledShift{
+        DraftShiftDetails: &square.ScheduledShiftDetails{
+            TeamMemberID: square.String(
+                "ormj0jJJZ5OZIzxrZYJI",
+            ),
+            LocationID: square.String(
+                "PAA1RJZZKXBFG",
+            ),
+            JobID: square.String(
+                "FzbJAtt9qEWncK1BWgVCxQ6M",
+            ),
+            StartAt: square.String(
+                "2019-03-25T03:11:00-05:00",
+            ),
+            EndAt: square.String(
+                "2019-03-25T13:18:00-05:00",
+            ),
+            Notes: square.String(
+                "Dont forget to prep the vegetables",
+            ),
+            IsDeleted: square.Bool(
+                false,
             ),
         },
-    }
-client.Labor.UpdateScheduledShift(
-        context.TODO(),
-        request,
-    )
+        Version: square.Int(
+            1,
+        ),
+    },
 }
+_, err := client.Labor.UpdateScheduledShift(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9426,18 +9320,17 @@ Publishes a scheduled shift. When a scheduled shift is published, Square keeps t
 
 ```go
 request := &square.PublishScheduledShiftRequest{
-        ID: "id",
-        IdempotencyKey: "HIDSNG5KS478L",
-        Version: square.Int(
-            2,
-        ),
-        ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAll.Ptr(),
-    }
-client.Labor.PublishScheduledShift(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
+    IdempotencyKey: "HIDSNG5KS478L",
+    Version: square.Int(
+        2,
+    ),
+    ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAll.Ptr(),
 }
+_, err := client.Labor.PublishScheduledShift(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9545,55 +9438,54 @@ the `Timecard.end_at`, or both.
 
 ```go
 request := &square.CreateTimecardRequest{
-        IdempotencyKey: square.String(
-            "HIDSNG5KS478L",
+    IdempotencyKey: square.String(
+        "HIDSNG5KS478L",
+    ),
+    Timecard: &square.Timecard{
+        LocationID: "PAA1RJZZKXBFG",
+        StartAt: "2019-01-25T03:11:00-05:00",
+        EndAt: square.String(
+            "2019-01-25T13:11:00-05:00",
         ),
-        Timecard: &square.Timecard{
-            LocationID: "PAA1RJZZKXBFG",
-            StartAt: "2019-01-25T03:11:00-05:00",
-            EndAt: square.String(
-                "2019-01-25T13:11:00-05:00",
+        Wage: &square.TimecardWage{
+            Title: square.String(
+                "Barista",
             ),
-            Wage: &square.TimecardWage{
-                Title: square.String(
-                    "Barista",
-                ),
-                HourlyRate: &square.Money{
-                    Amount: square.Int64(
-                        int64(1100),
-                    ),
-                    Currency: square.CurrencyUsd.Ptr(),
-                },
-                TipEligible: square.Bool(
-                    true,
-                ),
-            },
-            Breaks: []*square.Break{
-                &square.Break{
-                    StartAt: "2019-01-25T06:11:00-05:00",
-                    EndAt: square.String(
-                        "2019-01-25T06:16:00-05:00",
-                    ),
-                    BreakTypeID: "REGS1EQR1TPZ5",
-                    Name: "Tea Break",
-                    ExpectedDuration: "PT5M",
-                    IsPaid: true,
-                },
-            },
-            TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
-            DeclaredCashTipMoney: &square.Money{
+            HourlyRate: &square.Money{
                 Amount: square.Int64(
-                    int64(500),
+                    int64(1100),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
+            TipEligible: square.Bool(
+                true,
+            ),
         },
-    }
-client.Labor.CreateTimecard(
-        context.TODO(),
-        request,
-    )
+        Breaks: []*square.Break{
+            &square.Break{
+                StartAt: "2019-01-25T06:11:00-05:00",
+                EndAt: square.String(
+                    "2019-01-25T06:16:00-05:00",
+                ),
+                BreakTypeID: "REGS1EQR1TPZ5",
+                Name: "Tea Break",
+                ExpectedDuration: "PT5M",
+                IsPaid: true,
+            },
+        },
+        TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
+        DeclaredCashTipMoney: &square.Money{
+            Amount: square.Int64(
+                int64(500),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+    },
 }
+_, err := client.Labor.CreateTimecard(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9669,33 +9561,32 @@ The list can be sorted by:
 
 ```go
 request := &square.SearchTimecardsRequest{
-        Query: &square.TimecardQuery{
-            Filter: &square.TimecardFilter{
-                Workday: &square.TimecardWorkday{
-                    DateRange: &square.DateRange{
-                        StartDate: square.String(
-                            "2019-01-20",
-                        ),
-                        EndDate: square.String(
-                            "2019-02-03",
-                        ),
-                    },
-                    MatchTimecardsBy: square.TimecardWorkdayMatcherStartAt.Ptr(),
-                    DefaultTimezone: square.String(
-                        "America/Los_Angeles",
+    Query: &square.TimecardQuery{
+        Filter: &square.TimecardFilter{
+            Workday: &square.TimecardWorkday{
+                DateRange: &square.DateRange{
+                    StartDate: square.String(
+                        "2019-01-20",
+                    ),
+                    EndDate: square.String(
+                        "2019-02-03",
                     ),
                 },
+                MatchTimecardsBy: square.TimecardWorkdayMatcherStartAt.Ptr(),
+                DefaultTimezone: square.String(
+                    "America/Los_Angeles",
+                ),
             },
         },
-        Limit: square.Int(
-            100,
-        ),
-    }
-client.Labor.SearchTimecards(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        100,
+    ),
 }
+_, err := client.Labor.SearchTimecards(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9766,13 +9657,12 @@ Returns a single `Timecard` specified by `id`.
 
 ```go
 request := &square.RetrieveTimecardRequest{
-        ID: "id",
-    }
-client.Labor.RetrieveTimecard(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.RetrieveTimecard(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9833,60 +9723,59 @@ set on each `Break`.
 
 ```go
 request := &square.UpdateTimecardRequest{
-        ID: "id",
-        Timecard: &square.Timecard{
-            LocationID: "PAA1RJZZKXBFG",
-            StartAt: "2019-01-25T03:11:00-05:00",
-            EndAt: square.String(
-                "2019-01-25T13:11:00-05:00",
+    ID: "id",
+    Timecard: &square.Timecard{
+        LocationID: "PAA1RJZZKXBFG",
+        StartAt: "2019-01-25T03:11:00-05:00",
+        EndAt: square.String(
+            "2019-01-25T13:11:00-05:00",
+        ),
+        Wage: &square.TimecardWage{
+            Title: square.String(
+                "Bartender",
             ),
-            Wage: &square.TimecardWage{
-                Title: square.String(
-                    "Bartender",
-                ),
-                HourlyRate: &square.Money{
-                    Amount: square.Int64(
-                        int64(1500),
-                    ),
-                    Currency: square.CurrencyUsd.Ptr(),
-                },
-                TipEligible: square.Bool(
-                    true,
-                ),
-            },
-            Breaks: []*square.Break{
-                &square.Break{
-                    ID: square.String(
-                        "X7GAQYVVRRG6P",
-                    ),
-                    StartAt: "2019-01-25T06:11:00-05:00",
-                    EndAt: square.String(
-                        "2019-01-25T06:16:00-05:00",
-                    ),
-                    BreakTypeID: "REGS1EQR1TPZ5",
-                    Name: "Tea Break",
-                    ExpectedDuration: "PT5M",
-                    IsPaid: true,
-                },
-            },
-            Status: square.TimecardStatusClosed.Ptr(),
-            Version: square.Int(
-                1,
-            ),
-            TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
-            DeclaredCashTipMoney: &square.Money{
+            HourlyRate: &square.Money{
                 Amount: square.Int64(
-                    int64(500),
+                    int64(1500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
+            TipEligible: square.Bool(
+                true,
+            ),
         },
-    }
-client.Labor.UpdateTimecard(
-        context.TODO(),
-        request,
-    )
+        Breaks: []*square.Break{
+            &square.Break{
+                ID: square.String(
+                    "X7GAQYVVRRG6P",
+                ),
+                StartAt: "2019-01-25T06:11:00-05:00",
+                EndAt: square.String(
+                    "2019-01-25T06:16:00-05:00",
+                ),
+                BreakTypeID: "REGS1EQR1TPZ5",
+                Name: "Tea Break",
+                ExpectedDuration: "PT5M",
+                IsPaid: true,
+            },
+        },
+        Status: square.TimecardStatusClosed.Ptr(),
+        Version: square.Int(
+            1,
+        ),
+        TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
+        DeclaredCashTipMoney: &square.Money{
+            Amount: square.Int64(
+                int64(500),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+    },
 }
+_, err := client.Labor.UpdateTimecard(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -9949,13 +9838,12 @@ Deletes a `Timecard`.
 
 ```go
 request := &square.DeleteTimecardRequest{
-        ID: "id",
-    }
-client.Labor.DeleteTimecard(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.DeleteTimecard(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10011,10 +9899,9 @@ including those with an inactive status. Locations are listed alphabetically by 
 <dd>
 
 ```go
-client.Locations.List(
-        context.TODO(),
-    )
-}
+_, err := client.Locations.List(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -10060,34 +9947,33 @@ each location has a sensible and unique name.
 
 ```go
 request := &square.CreateLocationRequest{
-        Location: &square.Location{
-            Name: square.String(
-                "Midtown",
+    Location: &square.Location{
+        Name: square.String(
+            "Midtown",
+        ),
+        Address: &square.Address{
+            AddressLine1: square.String(
+                "1234 Peachtree St. NE",
             ),
-            Address: &square.Address{
-                AddressLine1: square.String(
-                    "1234 Peachtree St. NE",
-                ),
-                Locality: square.String(
-                    "Atlanta",
-                ),
-                AdministrativeDistrictLevel1: square.String(
-                    "GA",
-                ),
-                PostalCode: square.String(
-                    "30309",
-                ),
-            },
-            Description: square.String(
-                "Midtown Atlanta store",
+            Locality: square.String(
+                "Atlanta",
+            ),
+            AdministrativeDistrictLevel1: square.String(
+                "GA",
+            ),
+            PostalCode: square.String(
+                "30309",
             ),
         },
-    }
-client.Locations.Create(
-        context.TODO(),
-        request,
-    )
+        Description: square.String(
+            "Midtown Atlanta store",
+        ),
+    },
 }
+_, err := client.Locations.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10147,13 +10033,12 @@ as the location ID to retrieve details of the [main location](https://developer.
 
 ```go
 request := &square.GetLocationsRequest{
-        LocationID: "location_id",
-    }
-client.Locations.Get(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
 }
+_, err := client.Locations.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10211,49 +10096,48 @@ Updates a [location](https://developer.squareup.com/docs/locations-api).
 
 ```go
 request := &square.UpdateLocationRequest{
-        LocationID: "location_id",
-        Location: &square.Location{
-            BusinessHours: &square.BusinessHours{
-                Periods: []*square.BusinessHoursPeriod{
-                    &square.BusinessHoursPeriod{
-                        DayOfWeek: square.DayOfWeekFri.Ptr(),
-                        StartLocalTime: square.String(
-                            "07:00",
-                        ),
-                        EndLocalTime: square.String(
-                            "18:00",
-                        ),
-                    },
-                    &square.BusinessHoursPeriod{
-                        DayOfWeek: square.DayOfWeekSat.Ptr(),
-                        StartLocalTime: square.String(
-                            "07:00",
-                        ),
-                        EndLocalTime: square.String(
-                            "18:00",
-                        ),
-                    },
-                    &square.BusinessHoursPeriod{
-                        DayOfWeek: square.DayOfWeekSun.Ptr(),
-                        StartLocalTime: square.String(
-                            "09:00",
-                        ),
-                        EndLocalTime: square.String(
-                            "15:00",
-                        ),
-                    },
+    LocationID: "location_id",
+    Location: &square.Location{
+        BusinessHours: &square.BusinessHours{
+            Periods: []*square.BusinessHoursPeriod{
+                &square.BusinessHoursPeriod{
+                    DayOfWeek: square.DayOfWeekFri.Ptr(),
+                    StartLocalTime: square.String(
+                        "07:00",
+                    ),
+                    EndLocalTime: square.String(
+                        "18:00",
+                    ),
+                },
+                &square.BusinessHoursPeriod{
+                    DayOfWeek: square.DayOfWeekSat.Ptr(),
+                    StartLocalTime: square.String(
+                        "07:00",
+                    ),
+                    EndLocalTime: square.String(
+                        "18:00",
+                    ),
+                },
+                &square.BusinessHoursPeriod{
+                    DayOfWeek: square.DayOfWeekSun.Ptr(),
+                    StartLocalTime: square.String(
+                        "09:00",
+                    ),
+                    EndLocalTime: square.String(
+                        "15:00",
+                    ),
                 },
             },
-            Description: square.String(
-                "Midtown Atlanta store - Open weekends",
-            ),
         },
-    }
-client.Locations.Update(
-        context.TODO(),
-        request,
-    )
+        Description: square.String(
+            "Midtown Atlanta store - Open weekends",
+        ),
+    },
 }
+_, err := client.Locations.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10322,151 +10206,150 @@ For more information, see [Checkout API highlights](https://developer.squareup.c
 
 ```go
 request := &square.CreateCheckoutRequest{
-        LocationID: "location_id",
-        IdempotencyKey: "86ae1696-b1e3-4328-af6d-f1e04d947ad6",
-        Order: &square.CreateOrderRequest{
-            Order: &square.Order{
-                LocationID: "location_id",
-                ReferenceID: square.String(
-                    "reference_id",
-                ),
-                CustomerID: square.String(
-                    "customer_id",
-                ),
-                LineItems: []*square.OrderLineItem{
-                    &square.OrderLineItem{
-                        Name: square.String(
-                            "Printed T Shirt",
-                        ),
-                        Quantity: "2",
-                        AppliedTaxes: []*square.OrderLineItemAppliedTax{
-                            &square.OrderLineItemAppliedTax{
-                                TaxUID: "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
-                            },
-                        },
-                        AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
-                            &square.OrderLineItemAppliedDiscount{
-                                DiscountUID: "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
-                            },
-                        },
-                        BasePriceMoney: &square.Money{
-                            Amount: square.Int64(
-                                int64(1500),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                    },
-                    &square.OrderLineItem{
-                        Name: square.String(
-                            "Slim Jeans",
-                        ),
-                        Quantity: "1",
-                        BasePriceMoney: &square.Money{
-                            Amount: square.Int64(
-                                int64(2500),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                    },
-                    &square.OrderLineItem{
-                        Name: square.String(
-                            "Woven Sweater",
-                        ),
-                        Quantity: "3",
-                        BasePriceMoney: &square.Money{
-                            Amount: square.Int64(
-                                int64(3500),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                    },
-                },
-                Taxes: []*square.OrderLineItemTax{
-                    &square.OrderLineItemTax{
-                        UID: square.String(
-                            "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
-                        ),
-                        Type: square.OrderLineItemTaxTypeInclusive.Ptr(),
-                        Percentage: square.String(
-                            "7.75",
-                        ),
-                        Scope: square.OrderLineItemTaxScopeLineItem.Ptr(),
-                    },
-                },
-                Discounts: []*square.OrderLineItemDiscount{
-                    &square.OrderLineItemDiscount{
-                        UID: square.String(
-                            "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
-                        ),
-                        Type: square.OrderLineItemDiscountTypeFixedAmount.Ptr(),
-                        AmountMoney: &square.Money{
-                            Amount: square.Int64(
-                                int64(100),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                        Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
-                    },
-                },
-            },
-            IdempotencyKey: square.String(
-                "12ae1696-z1e3-4328-af6d-f1e04d947gd4",
+    LocationID: "location_id",
+    IdempotencyKey: "86ae1696-b1e3-4328-af6d-f1e04d947ad6",
+    Order: &square.CreateOrderRequest{
+        Order: &square.Order{
+            LocationID: "location_id",
+            ReferenceID: square.String(
+                "reference_id",
             ),
-        },
-        AskForShippingAddress: square.Bool(
-            true,
-        ),
-        MerchantSupportEmail: square.String(
-            "merchant+support@website.com",
-        ),
-        PrePopulateBuyerEmail: square.String(
-            "example@email.com",
-        ),
-        PrePopulateShippingAddress: &square.Address{
-            AddressLine1: square.String(
-                "1455 Market St.",
+            CustomerID: square.String(
+                "customer_id",
             ),
-            AddressLine2: square.String(
-                "Suite 600",
-            ),
-            Locality: square.String(
-                "San Francisco",
-            ),
-            AdministrativeDistrictLevel1: square.String(
-                "CA",
-            ),
-            PostalCode: square.String(
-                "94103",
-            ),
-            Country: square.CountryUs.Ptr(),
-            FirstName: square.String(
-                "Jane",
-            ),
-            LastName: square.String(
-                "Doe",
-            ),
-        },
-        RedirectURL: square.String(
-            "https://merchant.website.com/order-confirm",
-        ),
-        AdditionalRecipients: []*square.ChargeRequestAdditionalRecipient{
-            &square.ChargeRequestAdditionalRecipient{
-                LocationID: "057P5VYJ4A5X1",
-                Description: "Application fees",
-                AmountMoney: &square.Money{
-                    Amount: square.Int64(
-                        int64(60),
+            LineItems: []*square.OrderLineItem{
+                &square.OrderLineItem{
+                    Name: square.String(
+                        "Printed T Shirt",
                     ),
-                    Currency: square.CurrencyUsd.Ptr(),
+                    Quantity: "2",
+                    AppliedTaxes: []*square.OrderLineItemAppliedTax{
+                        &square.OrderLineItemAppliedTax{
+                            TaxUID: "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
+                        },
+                    },
+                    AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
+                        &square.OrderLineItemAppliedDiscount{
+                            DiscountUID: "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
+                        },
+                    },
+                    BasePriceMoney: &square.Money{
+                        Amount: square.Int64(
+                            int64(1500),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                },
+                &square.OrderLineItem{
+                    Name: square.String(
+                        "Slim Jeans",
+                    ),
+                    Quantity: "1",
+                    BasePriceMoney: &square.Money{
+                        Amount: square.Int64(
+                            int64(2500),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                },
+                &square.OrderLineItem{
+                    Name: square.String(
+                        "Woven Sweater",
+                    ),
+                    Quantity: "3",
+                    BasePriceMoney: &square.Money{
+                        Amount: square.Int64(
+                            int64(3500),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                },
+            },
+            Taxes: []*square.OrderLineItemTax{
+                &square.OrderLineItemTax{
+                    UID: square.String(
+                        "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
+                    ),
+                    Type: square.OrderLineItemTaxTypeInclusive.Ptr(),
+                    Percentage: square.String(
+                        "7.75",
+                    ),
+                    Scope: square.OrderLineItemTaxScopeLineItem.Ptr(),
+                },
+            },
+            Discounts: []*square.OrderLineItemDiscount{
+                &square.OrderLineItemDiscount{
+                    UID: square.String(
+                        "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
+                    ),
+                    Type: square.OrderLineItemDiscountTypeFixedAmount.Ptr(),
+                    AmountMoney: &square.Money{
+                        Amount: square.Int64(
+                            int64(100),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                    Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
                 },
             },
         },
-    }
-client.Locations.Checkouts(
-        context.TODO(),
-        request,
-    )
+        IdempotencyKey: square.String(
+            "12ae1696-z1e3-4328-af6d-f1e04d947gd4",
+        ),
+    },
+    AskForShippingAddress: square.Bool(
+        true,
+    ),
+    MerchantSupportEmail: square.String(
+        "merchant+support@website.com",
+    ),
+    PrePopulateBuyerEmail: square.String(
+        "example@email.com",
+    ),
+    PrePopulateShippingAddress: &square.Address{
+        AddressLine1: square.String(
+            "1455 Market St.",
+        ),
+        AddressLine2: square.String(
+            "Suite 600",
+        ),
+        Locality: square.String(
+            "San Francisco",
+        ),
+        AdministrativeDistrictLevel1: square.String(
+            "CA",
+        ),
+        PostalCode: square.String(
+            "94103",
+        ),
+        Country: square.CountryUs.Ptr(),
+        FirstName: square.String(
+            "Jane",
+        ),
+        LastName: square.String(
+            "Doe",
+        ),
+    },
+    RedirectURL: square.String(
+        "https://merchant.website.com/order-confirm",
+    ),
+    AdditionalRecipients: []*square.ChargeRequestAdditionalRecipient{
+        &square.ChargeRequestAdditionalRecipient{
+            LocationID: "057P5VYJ4A5X1",
+            Description: "Application fees",
+            AmountMoney: &square.Money{
+                Amount: square.Int64(
+                    int64(60),
+                ),
+                Currency: square.CurrencyUsd.Ptr(),
+            },
+        },
+    },
 }
+_, err := client.Locations.Checkouts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10665,22 +10548,21 @@ Search results are sorted by `created_at` in descending order.
 
 ```go
 request := &square.SearchLoyaltyEventsRequest{
-        Query: &square.LoyaltyEventQuery{
-            Filter: &square.LoyaltyEventFilter{
-                OrderFilter: &square.LoyaltyEventOrderFilter{
-                    OrderID: "PyATxhYLfsMqpVkcKJITPydgEYfZY",
-                },
+    Query: &square.LoyaltyEventQuery{
+        Filter: &square.LoyaltyEventFilter{
+            OrderFilter: &square.LoyaltyEventOrderFilter{
+                OrderID: "PyATxhYLfsMqpVkcKJITPydgEYfZY",
             },
         },
-        Limit: square.Int(
-            30,
-        ),
-    }
-client.Loyalty.SearchEvents(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        30,
+    ),
 }
+_, err := client.Loyalty.SearchEvents(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10774,15 +10656,14 @@ endpoint to retrieve the merchant information.
 
 ```go
 request := &square.ListMerchantsRequest{
-        Cursor: square.Int(
-            1,
-        ),
-    }
-client.Merchants.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.Int(
+        1,
+    ),
 }
+_, err := client.Merchants.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10837,13 +10718,12 @@ Retrieves the `Merchant` object for the given `merchant_id`.
 
 ```go
 request := &square.GetMerchantsRequest{
-        MerchantID: "merchant_id",
-    }
-client.Merchants.Get(
-        context.TODO(),
-        request,
-    )
+    MerchantID: "merchant_id",
 }
+_, err := client.Merchants.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10902,13 +10782,12 @@ Retrieves the location-level settings for a Square-hosted checkout page.
 
 ```go
 request := &square.RetrieveLocationSettingsRequest{
-        LocationID: "location_id",
-    }
-client.Checkout.RetrieveLocationSettings(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
 }
+_, err := client.Checkout.RetrieveLocationSettings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -10963,14 +10842,13 @@ Updates the location-level settings for a Square-hosted checkout page.
 
 ```go
 request := &square.UpdateLocationSettingsRequest{
-        LocationID: "location_id",
-        LocationSettings: &square.CheckoutLocationSettings{},
-    }
-client.Checkout.UpdateLocationSettings(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    LocationSettings: &square.CheckoutLocationSettings{},
 }
+_, err := client.Checkout.UpdateLocationSettings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11032,10 +10910,9 @@ Retrieves the merchant-level settings for a Square-hosted checkout page.
 <dd>
 
 ```go
-client.Checkout.RetrieveMerchantSettings(
-        context.TODO(),
-    )
-}
+_, err := client.Checkout.RetrieveMerchantSettings(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -11075,13 +10952,12 @@ Updates the merchant-level settings for a Square-hosted checkout page.
 
 ```go
 request := &square.UpdateMerchantSettingsRequest{
-        MerchantSettings: &square.CheckoutMerchantSettings{},
-    }
-client.Checkout.UpdateMerchantSettings(
-        context.TODO(),
-        request,
-    )
+    MerchantSettings: &square.CheckoutMerchantSettings{},
 }
+_, err := client.Checkout.UpdateMerchantSettings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11143,105 +11019,104 @@ You can modify open orders using the [UpdateOrder](api-endpoint:Orders-UpdateOrd
 
 ```go
 request := &square.CreateOrderRequest{
-        Order: &square.Order{
-            LocationID: "057P5VYJ4A5X1",
-            ReferenceID: square.String(
-                "my-order-001",
-            ),
-            LineItems: []*square.OrderLineItem{
-                &square.OrderLineItem{
-                    Name: square.String(
-                        "New York Strip Steak",
+    Order: &square.Order{
+        LocationID: "057P5VYJ4A5X1",
+        ReferenceID: square.String(
+            "my-order-001",
+        ),
+        LineItems: []*square.OrderLineItem{
+            &square.OrderLineItem{
+                Name: square.String(
+                    "New York Strip Steak",
+                ),
+                Quantity: "1",
+                BasePriceMoney: &square.Money{
+                    Amount: square.Int64(
+                        int64(1599),
                     ),
-                    Quantity: "1",
-                    BasePriceMoney: &square.Money{
-                        Amount: square.Int64(
-                            int64(1599),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
-                },
-                &square.OrderLineItem{
-                    Quantity: "2",
-                    CatalogObjectID: square.String(
-                        "BEMYCSMIJL46OCDV4KYIKXIB",
-                    ),
-                    Modifiers: []*square.OrderLineItemModifier{
-                        &square.OrderLineItemModifier{
-                            CatalogObjectID: square.String(
-                                "CHQX7Y4KY6N5KINJKZCFURPZ",
-                            ),
-                        },
-                    },
-                    AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
-                        &square.OrderLineItemAppliedDiscount{
-                            DiscountUID: "one-dollar-off",
-                        },
-                    },
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
             },
-            Taxes: []*square.OrderLineItemTax{
-                &square.OrderLineItemTax{
-                    UID: square.String(
-                        "state-sales-tax",
-                    ),
-                    Name: square.String(
-                        "State Sales Tax",
-                    ),
-                    Percentage: square.String(
-                        "9",
-                    ),
-                    Scope: square.OrderLineItemTaxScopeOrder.Ptr(),
-                },
-            },
-            Discounts: []*square.OrderLineItemDiscount{
-                &square.OrderLineItemDiscount{
-                    UID: square.String(
-                        "labor-day-sale",
-                    ),
-                    Name: square.String(
-                        "Labor Day Sale",
-                    ),
-                    Percentage: square.String(
-                        "5",
-                    ),
-                    Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
-                },
-                &square.OrderLineItemDiscount{
-                    UID: square.String(
-                        "membership-discount",
-                    ),
-                    CatalogObjectID: square.String(
-                        "DB7L55ZH2BGWI4H23ULIWOQ7",
-                    ),
-                    Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
-                },
-                &square.OrderLineItemDiscount{
-                    UID: square.String(
-                        "one-dollar-off",
-                    ),
-                    Name: square.String(
-                        "Sale - $1.00 off",
-                    ),
-                    AmountMoney: &square.Money{
-                        Amount: square.Int64(
-                            int64(100),
+            &square.OrderLineItem{
+                Quantity: "2",
+                CatalogObjectID: square.String(
+                    "BEMYCSMIJL46OCDV4KYIKXIB",
+                ),
+                Modifiers: []*square.OrderLineItemModifier{
+                    &square.OrderLineItemModifier{
+                        CatalogObjectID: square.String(
+                            "CHQX7Y4KY6N5KINJKZCFURPZ",
                         ),
-                        Currency: square.CurrencyUsd.Ptr(),
                     },
-                    Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
+                },
+                AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
+                    &square.OrderLineItemAppliedDiscount{
+                        DiscountUID: "one-dollar-off",
+                    },
                 },
             },
         },
-        IdempotencyKey: square.String(
-            "8193148c-9586-11e6-99f9-28cfe92138cf",
-        ),
-    }
-client.Orders.Create(
-        context.TODO(),
-        request,
-    )
+        Taxes: []*square.OrderLineItemTax{
+            &square.OrderLineItemTax{
+                UID: square.String(
+                    "state-sales-tax",
+                ),
+                Name: square.String(
+                    "State Sales Tax",
+                ),
+                Percentage: square.String(
+                    "9",
+                ),
+                Scope: square.OrderLineItemTaxScopeOrder.Ptr(),
+            },
+        },
+        Discounts: []*square.OrderLineItemDiscount{
+            &square.OrderLineItemDiscount{
+                UID: square.String(
+                    "labor-day-sale",
+                ),
+                Name: square.String(
+                    "Labor Day Sale",
+                ),
+                Percentage: square.String(
+                    "5",
+                ),
+                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+            },
+            &square.OrderLineItemDiscount{
+                UID: square.String(
+                    "membership-discount",
+                ),
+                CatalogObjectID: square.String(
+                    "DB7L55ZH2BGWI4H23ULIWOQ7",
+                ),
+                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+            },
+            &square.OrderLineItemDiscount{
+                UID: square.String(
+                    "one-dollar-off",
+                ),
+                Name: square.String(
+                    "Sale - $1.00 off",
+                ),
+                AmountMoney: &square.Money{
+                    Amount: square.Int64(
+                        int64(100),
+                    ),
+                    Currency: square.CurrencyUsd.Ptr(),
+                },
+                Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
+            },
+        },
+    },
+    IdempotencyKey: square.String(
+        "8193148c-9586-11e6-99f9-28cfe92138cf",
+    ),
 }
+_, err := client.Orders.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11298,19 +11173,18 @@ If a given order ID does not exist, the ID is ignored instead of generating an e
 
 ```go
 request := &square.BatchGetOrdersRequest{
-        LocationID: square.String(
-            "057P5VYJ4A5X1",
-        ),
-        OrderIDs: []string{
-            "CAISEM82RcpmcFBM0TfOyiHV3es",
-            "CAISENgvlJ6jLWAzERDzjyHVybY",
-        },
-    }
-client.Orders.BatchGet(
-        context.TODO(),
-        request,
-    )
+    LocationID: square.String(
+        "057P5VYJ4A5X1",
+    ),
+    OrderIDs: []string{
+        "CAISEM82RcpmcFBM0TfOyiHV3es",
+        "CAISENgvlJ6jLWAzERDzjyHVybY",
+    },
 }
+_, err := client.Orders.BatchGet(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11376,52 +11250,51 @@ Enables applications to preview order pricing without creating an order.
 
 ```go
 request := &square.CalculateOrderRequest{
-        Order: &square.Order{
-            LocationID: "D7AVYMEAPJ3A3",
-            LineItems: []*square.OrderLineItem{
-                &square.OrderLineItem{
-                    Name: square.String(
-                        "Item 1",
+    Order: &square.Order{
+        LocationID: "D7AVYMEAPJ3A3",
+        LineItems: []*square.OrderLineItem{
+            &square.OrderLineItem{
+                Name: square.String(
+                    "Item 1",
+                ),
+                Quantity: "1",
+                BasePriceMoney: &square.Money{
+                    Amount: square.Int64(
+                        int64(500),
                     ),
-                    Quantity: "1",
-                    BasePriceMoney: &square.Money{
-                        Amount: square.Int64(
-                            int64(500),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
-                },
-                &square.OrderLineItem{
-                    Name: square.String(
-                        "Item 2",
-                    ),
-                    Quantity: "2",
-                    BasePriceMoney: &square.Money{
-                        Amount: square.Int64(
-                            int64(300),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
             },
-            Discounts: []*square.OrderLineItemDiscount{
-                &square.OrderLineItemDiscount{
-                    Name: square.String(
-                        "50% Off",
+            &square.OrderLineItem{
+                Name: square.String(
+                    "Item 2",
+                ),
+                Quantity: "2",
+                BasePriceMoney: &square.Money{
+                    Amount: square.Int64(
+                        int64(300),
                     ),
-                    Percentage: square.String(
-                        "50",
-                    ),
-                    Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
             },
         },
-    }
-client.Orders.Calculate(
-        context.TODO(),
-        request,
-    )
+        Discounts: []*square.OrderLineItemDiscount{
+            &square.OrderLineItemDiscount{
+                Name: square.String(
+                    "50% Off",
+                ),
+                Percentage: square.String(
+                    "50",
+                ),
+                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+            },
+        },
+    },
 }
+_, err := client.Orders.Calculate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11491,19 +11364,18 @@ only the core fields (such as line items, taxes, and discounts) copied from the 
 
 ```go
 request := &square.CloneOrderRequest{
-        OrderID: "ZAISEM52YcpmcWAzERDOyiWS123",
-        Version: square.Int(
-            3,
-        ),
-        IdempotencyKey: square.String(
-            "UNIQUE_STRING",
-        ),
-    }
-client.Orders.Clone(
-        context.TODO(),
-        request,
-    )
+    OrderID: "ZAISEM52YcpmcWAzERDOyiWS123",
+    Version: square.Int(
+        3,
+    ),
+    IdempotencyKey: square.String(
+        "UNIQUE_STRING",
+    ),
 }
+_, err := client.Orders.Clone(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11605,45 +11477,44 @@ created on the Point of Sale device.
 
 ```go
 request := &square.SearchOrdersRequest{
-        LocationIDs: []string{
-            "057P5VYJ4A5X1",
-            "18YC4JDH91E1H",
-        },
-        Query: &square.SearchOrdersQuery{
-            Filter: &square.SearchOrdersFilter{
-                StateFilter: &square.SearchOrdersStateFilter{
-                    States: []square.OrderState{
-                        square.OrderStateCompleted,
-                    },
-                },
-                DateTimeFilter: &square.SearchOrdersDateTimeFilter{
-                    ClosedAt: &square.TimeRange{
-                        StartAt: square.String(
-                            "2018-03-03T20:00:00+00:00",
-                        ),
-                        EndAt: square.String(
-                            "2019-03-04T21:54:45+00:00",
-                        ),
-                    },
+    LocationIDs: []string{
+        "057P5VYJ4A5X1",
+        "18YC4JDH91E1H",
+    },
+    Query: &square.SearchOrdersQuery{
+        Filter: &square.SearchOrdersFilter{
+            StateFilter: &square.SearchOrdersStateFilter{
+                States: []square.OrderState{
+                    square.OrderStateCompleted,
                 },
             },
-            Sort: &square.SearchOrdersSort{
-                SortField: square.SearchOrdersSortFieldClosedAt,
-                SortOrder: square.SortOrderDesc.Ptr(),
+            DateTimeFilter: &square.SearchOrdersDateTimeFilter{
+                ClosedAt: &square.TimeRange{
+                    StartAt: square.String(
+                        "2018-03-03T20:00:00+00:00",
+                    ),
+                    EndAt: square.String(
+                        "2019-03-04T21:54:45+00:00",
+                    ),
+                },
             },
         },
-        Limit: square.Int(
-            3,
-        ),
-        ReturnEntries: square.Bool(
-            true,
-        ),
-    }
-client.Orders.Search(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.SearchOrdersSort{
+            SortField: square.SearchOrdersSortFieldClosedAt,
+            SortOrder: square.SortOrderDesc.Ptr(),
+        },
+    },
+    Limit: square.Int(
+        3,
+    ),
+    ReturnEntries: square.Bool(
+        true,
+    ),
 }
+_, err := client.Orders.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11753,13 +11624,12 @@ Retrieves an [Order](entity:Order) by ID.
 
 ```go
 request := &square.GetOrdersRequest{
-        OrderID: "order_id",
-    }
-client.Orders.Get(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
 }
+_, err := client.Orders.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11828,42 +11698,41 @@ To pay for an order, see
 
 ```go
 request := &square.UpdateOrderRequest{
-        OrderID: "order_id",
-        Order: &square.Order{
-            LocationID: "location_id",
-            LineItems: []*square.OrderLineItem{
-                &square.OrderLineItem{
-                    UID: square.String(
-                        "cookie_uid",
+    OrderID: "order_id",
+    Order: &square.Order{
+        LocationID: "location_id",
+        LineItems: []*square.OrderLineItem{
+            &square.OrderLineItem{
+                UID: square.String(
+                    "cookie_uid",
+                ),
+                Name: square.String(
+                    "COOKIE",
+                ),
+                Quantity: "2",
+                BasePriceMoney: &square.Money{
+                    Amount: square.Int64(
+                        int64(200),
                     ),
-                    Name: square.String(
-                        "COOKIE",
-                    ),
-                    Quantity: "2",
-                    BasePriceMoney: &square.Money{
-                        Amount: square.Int64(
-                            int64(200),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
             },
-            Version: square.Int(
-                1,
-            ),
         },
-        FieldsToClear: []string{
-            "discounts",
-        },
-        IdempotencyKey: square.String(
-            "UNIQUE_STRING",
+        Version: square.Int(
+            1,
         ),
-    }
-client.Orders.Update(
-        context.TODO(),
-        request,
-    )
+    },
+    FieldsToClear: []string{
+        "discounts",
+    },
+    IdempotencyKey: square.String(
+        "UNIQUE_STRING",
+    ),
 }
+_, err := client.Orders.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -11972,18 +11841,17 @@ Using a delayed capture payment with `PayOrder` completes the approved payment.
 
 ```go
 request := &square.PayOrderRequest{
-        OrderID: "order_id",
-        IdempotencyKey: "c043a359-7ad9-4136-82a9-c3f1d66dcbff",
-        PaymentIDs: []string{
-            "EnZdNAlWCmfh6Mt5FMNST1o7taB",
-            "0LRiVlbXVwe8ozu4KbZxd12mvaB",
-        },
-    }
-client.Orders.Pay(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
+    IdempotencyKey: "c043a359-7ad9-4136-82a9-c3f1d66dcbff",
+    PaymentIDs: []string{
+        "EnZdNAlWCmfh6Mt5FMNST1o7taB",
+        "0LRiVlbXVwe8ozu4KbZxd12mvaB",
+    },
 }
+_, err := client.Orders.Pay(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -12077,55 +11945,54 @@ The maximum results per page is 100.
 
 ```go
 request := &square.ListPaymentsRequest{
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        SortOrder: square.String(
-            "sort_order",
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        Total: square.Int64(
-            int64(1000000),
-        ),
-        Last4: square.String(
-            "last_4",
-        ),
-        CardBrand: square.String(
-            "card_brand",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        IsOfflinePayment: square.Bool(
-            true,
-        ),
-        OfflineBeginTime: square.String(
-            "offline_begin_time",
-        ),
-        OfflineEndTime: square.String(
-            "offline_end_time",
-        ),
-        UpdatedAtBeginTime: square.String(
-            "updated_at_begin_time",
-        ),
-        UpdatedAtEndTime: square.String(
-            "updated_at_end_time",
-        ),
-        SortField: square.ListPaymentsRequestSortFieldCreatedAt.Ptr(),
-    }
-client.Payments.List(
-        context.TODO(),
-        request,
-    )
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    SortOrder: square.String(
+        "sort_order",
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    Total: square.Int64(
+        int64(1000000),
+    ),
+    Last4: square.String(
+        "last_4",
+    ),
+    CardBrand: square.String(
+        "card_brand",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    IsOfflinePayment: square.Bool(
+        true,
+    ),
+    OfflineBeginTime: square.String(
+        "offline_begin_time",
+    ),
+    OfflineEndTime: square.String(
+        "offline_end_time",
+    ),
+    UpdatedAtBeginTime: square.String(
+        "updated_at_begin_time",
+    ),
+    UpdatedAtEndTime: square.String(
+        "updated_at_end_time",
+    ),
+    SortField: square.ListPaymentsRequestSortFieldCreatedAt.Ptr(),
 }
+_, err := client.Payments.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -12348,41 +12215,40 @@ The endpoint creates a
 
 ```go
 request := &square.CreatePaymentRequest{
-        SourceID: "ccof:GaJGNaZa8x4OgDJn4GB",
-        IdempotencyKey: "7b0f3ec5-086a-4871-8f13-3c81b3875218",
-        AmountMoney: &square.Money{
-            Amount: square.Int64(
-                int64(1000),
-            ),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        AppFeeMoney: &square.Money{
-            Amount: square.Int64(
-                int64(10),
-            ),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        Autocomplete: square.Bool(
-            true,
+    SourceID: "ccof:GaJGNaZa8x4OgDJn4GB",
+    IdempotencyKey: "7b0f3ec5-086a-4871-8f13-3c81b3875218",
+    AmountMoney: &square.Money{
+        Amount: square.Int64(
+            int64(1000),
         ),
-        CustomerID: square.String(
-            "W92WH6P11H4Z77CTET0RNTGFW8",
+        Currency: square.CurrencyUsd.Ptr(),
+    },
+    AppFeeMoney: &square.Money{
+        Amount: square.Int64(
+            int64(10),
         ),
-        LocationID: square.String(
-            "L88917AVBK2S5",
-        ),
-        ReferenceID: square.String(
-            "123456",
-        ),
-        Note: square.String(
-            "Brief description",
-        ),
-    }
-client.Payments.Create(
-        context.TODO(),
-        request,
-    )
+        Currency: square.CurrencyUsd.Ptr(),
+    },
+    Autocomplete: square.Bool(
+        true,
+    ),
+    CustomerID: square.String(
+        "W92WH6P11H4Z77CTET0RNTGFW8",
+    ),
+    LocationID: square.String(
+        "L88917AVBK2S5",
+    ),
+    ReferenceID: square.String(
+        "123456",
+    ),
+    Note: square.String(
+        "Brief description",
+    ),
 }
+_, err := client.Payments.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -12785,13 +12651,12 @@ returns successfully.
 
 ```go
 request := &square.CancelPaymentByIdempotencyKeyRequest{
-        IdempotencyKey: "a7e36d40-d24b-11e8-b568-0800200c9a66",
-    }
-client.Payments.CancelByIdempotencyKey(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: "a7e36d40-d24b-11e8-b568-0800200c9a66",
 }
+_, err := client.Payments.CancelByIdempotencyKey(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -12846,13 +12711,12 @@ Retrieves details for a specific payment.
 
 ```go
 request := &square.GetPaymentsRequest{
-        PaymentID: "payment_id",
-    }
-client.Payments.Get(
-        context.TODO(),
-        request,
-    )
+    PaymentID: "payment_id",
 }
+_, err := client.Payments.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -12908,31 +12772,30 @@ You can update the `amount_money` and `tip_money` using this endpoint.
 
 ```go
 request := &square.UpdatePaymentRequest{
-        PaymentID: "payment_id",
-        Payment: &square.Payment{
-            AmountMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(1000),
-                ),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-            TipMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(100),
-                ),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-            VersionToken: square.String(
-                "ODhwVQ35xwlzRuoZEwKXucfu7583sPTzK48c5zoGd0g6o",
+    PaymentID: "payment_id",
+    Payment: &square.Payment{
+        AmountMoney: &square.Money{
+            Amount: square.Int64(
+                int64(1000),
             ),
+            Currency: square.CurrencyUsd.Ptr(),
         },
-        IdempotencyKey: "956f8b13-e4ec-45d6-85e8-d1d95ef0c5de",
-    }
-client.Payments.Update(
-        context.TODO(),
-        request,
-    )
+        TipMoney: &square.Money{
+            Amount: square.Int64(
+                int64(100),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+        VersionToken: square.String(
+            "ODhwVQ35xwlzRuoZEwKXucfu7583sPTzK48c5zoGd0g6o",
+        ),
+    },
+    IdempotencyKey: "956f8b13-e4ec-45d6-85e8-d1d95ef0c5de",
 }
+_, err := client.Payments.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13009,13 +12872,12 @@ the APPROVED `status`.
 
 ```go
 request := &square.CancelPaymentsRequest{
-        PaymentID: "payment_id",
-    }
-client.Payments.Cancel(
-        context.TODO(),
-        request,
-    )
+    PaymentID: "payment_id",
 }
+_, err := client.Payments.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13073,13 +12935,12 @@ You can use this endpoint to complete a payment with the APPROVED `status`.
 
 ```go
 request := &square.CompletePaymentRequest{
-        PaymentID: "payment_id",
-    }
-client.Payments.Complete(
-        context.TODO(),
-        request,
-    )
+    PaymentID: "payment_id",
 }
+_, err := client.Payments.Complete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13149,29 +13010,28 @@ To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 
 ```go
 request := &square.ListPayoutsRequest{
-        LocationID: square.String(
-            "location_id",
-        ),
-        Status: square.PayoutStatusSent.Ptr(),
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Payouts.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: square.String(
+        "location_id",
+    ),
+    Status: square.PayoutStatusSent.Ptr(),
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Payouts.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13295,13 +13155,12 @@ To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 
 ```go
 request := &square.GetPayoutsRequest{
-        PayoutID: "payout_id",
-    }
-client.Payouts.Get(
-        context.TODO(),
-        request,
-    )
+    PayoutID: "payout_id",
 }
+_, err := client.Payouts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13357,20 +13216,19 @@ To call this endpoint, set `PAYOUTS_READ` for the OAuth scope.
 
 ```go
 request := &square.ListEntriesPayoutsRequest{
-        PayoutID: "payout_id",
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Payouts.ListEntries(
-        context.TODO(),
-        request,
-    )
+    PayoutID: "payout_id",
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Payouts.ListEntries(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13466,43 +13324,42 @@ The maximum results per page is 100.
 
 ```go
 request := &square.ListRefundsRequest{
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        SortOrder: square.String(
-            "sort_order",
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        Status: square.String(
-            "status",
-        ),
-        SourceType: square.String(
-            "source_type",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        UpdatedAtBeginTime: square.String(
-            "updated_at_begin_time",
-        ),
-        UpdatedAtEndTime: square.String(
-            "updated_at_end_time",
-        ),
-        SortField: square.ListPaymentRefundsRequestSortFieldCreatedAt.Ptr(),
-    }
-client.Refunds.List(
-        context.TODO(),
-        request,
-    )
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    SortOrder: square.String(
+        "sort_order",
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    Status: square.String(
+        "status",
+    ),
+    SourceType: square.String(
+        "source_type",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    UpdatedAtBeginTime: square.String(
+        "updated_at_begin_time",
+    ),
+    UpdatedAtEndTime: square.String(
+        "updated_at_end_time",
+    ),
+    SortField: square.ListPaymentRefundsRequestSortFieldCreatedAt.Ptr(),
 }
+_, err := client.Refunds.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13692,31 +13549,30 @@ refund of a cash or external payment. For more information, see
 
 ```go
 request := &square.RefundPaymentRequest{
-        IdempotencyKey: "9b7f2dcf-49da-4411-b23e-a2d6af21333a",
-        AmountMoney: &square.Money{
-            Amount: square.Int64(
-                int64(1000),
-            ),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        AppFeeMoney: &square.Money{
-            Amount: square.Int64(
-                int64(10),
-            ),
-            Currency: square.CurrencyUsd.Ptr(),
-        },
-        PaymentID: square.String(
-            "R2B3Z8WMVt3EAmzYWLZvz7Y69EbZY",
+    IdempotencyKey: "9b7f2dcf-49da-4411-b23e-a2d6af21333a",
+    AmountMoney: &square.Money{
+        Amount: square.Int64(
+            int64(1000),
         ),
-        Reason: square.String(
-            "Example",
+        Currency: square.CurrencyUsd.Ptr(),
+    },
+    AppFeeMoney: &square.Money{
+        Amount: square.Int64(
+            int64(10),
         ),
-    }
-client.Refunds.RefundPayment(
-        context.TODO(),
-        request,
-    )
+        Currency: square.CurrencyUsd.Ptr(),
+    },
+    PaymentID: square.String(
+        "R2B3Z8WMVt3EAmzYWLZvz7Y69EbZY",
+    ),
+    Reason: square.String(
+        "Example",
+    ),
 }
+_, err := client.Refunds.RefundPayment(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -13944,13 +13800,12 @@ Retrieves a specific refund using the `refund_id`.
 
 ```go
 request := &square.GetRefundsRequest{
-        RefundID: "refund_id",
-    }
-client.Refunds.Get(
-        context.TODO(),
-        request,
-    )
+    RefundID: "refund_id",
 }
+_, err := client.Refunds.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14008,10 +13863,9 @@ __Note:__ Square Online APIs are publicly available as part of an early access p
 <dd>
 
 ```go
-client.Sites.List(
-        context.TODO(),
-    )
-}
+_, err := client.Sites.List(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -14057,13 +13911,12 @@ __Note:__ Square Online APIs are publicly available as part of an early access p
 
 ```go
 request := &square.GetSnippetsRequest{
-        SiteID: "site_id",
-    }
-client.Snippets.Get(
-        context.TODO(),
-        request,
-    )
+    SiteID: "site_id",
 }
+_, err := client.Snippets.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14124,16 +13977,15 @@ __Note:__ Square Online APIs are publicly available as part of an early access p
 
 ```go
 request := &square.UpsertSnippetRequest{
-        SiteID: "site_id",
-        Snippet: &square.Snippet{
-            Content: "<script>var js = 1;</script>",
-        },
-    }
-client.Snippets.Upsert(
-        context.TODO(),
-        request,
-    )
+    SiteID: "site_id",
+    Snippet: &square.Snippet{
+        Content: "<script>var js = 1;</script>",
+    },
 }
+_, err := client.Snippets.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14201,13 +14053,12 @@ __Note:__ Square Online APIs are publicly available as part of an early access p
 
 ```go
 request := &square.DeleteSnippetsRequest{
-        SiteID: "site_id",
-    }
-client.Snippets.Delete(
-        context.TODO(),
-        request,
-    )
+    SiteID: "site_id",
 }
+_, err := client.Snippets.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14270,44 +14121,43 @@ For more information, see [Create a subscription](https://developer.squareup.com
 
 ```go
 request := &square.CreateSubscriptionRequest{
-        IdempotencyKey: square.String(
-            "8193148c-9586-11e6-99f9-28cfe92138cf",
+    IdempotencyKey: square.String(
+        "8193148c-9586-11e6-99f9-28cfe92138cf",
+    ),
+    LocationID: "S8GWD5R9QB376",
+    PlanVariationID: square.String(
+        "6JHXF3B2CW3YKHDV4XEM674H",
+    ),
+    CustomerID: "CHFGVKYY8RSV93M5KCYTG4PN0G",
+    StartDate: square.String(
+        "2023-06-20",
+    ),
+    CardID: square.String(
+        "ccof:qy5x8hHGYsgLrp4Q4GB",
+    ),
+    Timezone: square.String(
+        "America/Los_Angeles",
+    ),
+    Source: &square.SubscriptionSource{
+        Name: square.String(
+            "My Application",
         ),
-        LocationID: "S8GWD5R9QB376",
-        PlanVariationID: square.String(
-            "6JHXF3B2CW3YKHDV4XEM674H",
-        ),
-        CustomerID: "CHFGVKYY8RSV93M5KCYTG4PN0G",
-        StartDate: square.String(
-            "2023-06-20",
-        ),
-        CardID: square.String(
-            "ccof:qy5x8hHGYsgLrp4Q4GB",
-        ),
-        Timezone: square.String(
-            "America/Los_Angeles",
-        ),
-        Source: &square.SubscriptionSource{
-            Name: square.String(
-                "My Application",
+    },
+    Phases: []*square.Phase{
+        &square.Phase{
+            Ordinal: square.Int64(
+                int64(0),
+            ),
+            OrderTemplateID: square.String(
+                "U2NaowWxzXwpsZU697x7ZHOAnCNZY",
             ),
         },
-        Phases: []*square.Phase{
-            &square.Phase{
-                Ordinal: square.Int64(
-                    int64(0),
-                ),
-                OrderTemplateID: square.String(
-                    "U2NaowWxzXwpsZU697x7ZHOAnCNZY",
-                ),
-            },
-        },
-    }
-client.Subscriptions.Create(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Subscriptions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14495,15 +14345,14 @@ variation. For more information, see [Swap Subscription Plan Variations](https:/
 
 ```go
 request := &square.BulkSwapPlanRequest{
-        NewPlanVariationID: "FQ7CDXXWSLUJRPM3GFJSJGZ7",
-        OldPlanVariationID: "6JHXF3B2CW3YKHDV4XEM674H",
-        LocationID: "S8GWD5R9QB376",
-    }
-client.Subscriptions.BulkSwapPlan(
-        context.TODO(),
-        request,
-    )
+    NewPlanVariationID: "FQ7CDXXWSLUJRPM3GFJSJGZ7",
+    OldPlanVariationID: "6JHXF3B2CW3YKHDV4XEM674H",
+    LocationID: "S8GWD5R9QB376",
 }
+_, err := client.Subscriptions.BulkSwapPlan(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14595,25 +14444,24 @@ customer by subscription creation date.
 
 ```go
 request := &square.SearchSubscriptionsRequest{
-        Query: &square.SearchSubscriptionsQuery{
-            Filter: &square.SearchSubscriptionsFilter{
-                CustomerIDs: []string{
-                    "CHFGVKYY8RSV93M5KCYTG4PN0G",
-                },
-                LocationIDs: []string{
-                    "S8GWD5R9QB376",
-                },
-                SourceNames: []string{
-                    "My App",
-                },
+    Query: &square.SearchSubscriptionsQuery{
+        Filter: &square.SearchSubscriptionsFilter{
+            CustomerIDs: []string{
+                "CHFGVKYY8RSV93M5KCYTG4PN0G",
+            },
+            LocationIDs: []string{
+                "S8GWD5R9QB376",
+            },
+            SourceNames: []string{
+                "My App",
             },
         },
-    }
-client.Subscriptions.Search(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Subscriptions.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14711,16 +14559,15 @@ Retrieves a specific subscription.
 
 ```go
 request := &square.GetSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-        Include: square.String(
-            "include",
-        ),
-    }
-client.Subscriptions.Get(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    Include: square.String(
+        "include",
+    ),
 }
+_, err := client.Subscriptions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14790,18 +14637,17 @@ To clear a field, set its value to `null`.
 
 ```go
 request := &square.UpdateSubscriptionRequest{
-        SubscriptionID: "subscription_id",
-        Subscription: &square.Subscription{
-            CardID: square.String(
-                "{NEW CARD ID}",
-            ),
-        },
-    }
-client.Subscriptions.Update(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    Subscription: &square.Subscription{
+        CardID: square.String(
+            "{NEW CARD ID}",
+        ),
+    },
 }
+_, err := client.Subscriptions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14868,14 +14714,13 @@ Deletes a scheduled action for a subscription.
 
 ```go
 request := &square.DeleteActionSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-        ActionID: "action_id",
-    }
-client.Subscriptions.DeleteAction(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    ActionID: "action_id",
 }
+_, err := client.Subscriptions.DeleteAction(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -14939,16 +14784,15 @@ for a subscription.
 
 ```go
 request := &square.ChangeBillingAnchorDateRequest{
-        SubscriptionID: "subscription_id",
-        MonthlyBillingAnchorDate: square.Int(
-            1,
-        ),
-    }
-client.Subscriptions.ChangeBillingAnchorDate(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    MonthlyBillingAnchorDate: square.Int(
+        1,
+    ),
 }
+_, err := client.Subscriptions.ChangeBillingAnchorDate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15027,13 +14871,12 @@ the subscription status changes from ACTIVE to CANCELED.
 
 ```go
 request := &square.CancelSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-    }
-client.Subscriptions.Cancel(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
 }
+_, err := client.Subscriptions.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15088,19 +14931,18 @@ Lists all [events](https://developer.squareup.com/docs/subscriptions-api/actions
 
 ```go
 request := &square.ListEventsSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Subscriptions.ListEvents(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Subscriptions.ListEvents(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15180,13 +15022,12 @@ Schedules a `PAUSE` action to pause an active subscription.
 
 ```go
 request := &square.PauseSubscriptionRequest{
-        SubscriptionID: "subscription_id",
-    }
-client.Subscriptions.Pause(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
 }
+_, err := client.Subscriptions.Pause(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15299,13 +15140,12 @@ Schedules a `RESUME` action to resume a paused or a deactivated subscription.
 
 ```go
 request := &square.ResumeSubscriptionRequest{
-        SubscriptionID: "subscription_id",
-    }
-client.Subscriptions.Resume(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
 }
+_, err := client.Subscriptions.Resume(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15381,24 +15221,23 @@ For more information, see [Swap Subscription Plan Variations](https://developer.
 
 ```go
 request := &square.SwapPlanRequest{
-        SubscriptionID: "subscription_id",
-        NewPlanVariationID: square.String(
-            "FQ7CDXXWSLUJRPM3GFJSJGZ7",
-        ),
-        Phases: []*square.PhaseInput{
-            &square.PhaseInput{
-                Ordinal: int64(0),
-                OrderTemplateID: square.String(
-                    "uhhnjH9osVv3shUADwaC0b3hNxQZY",
-                ),
-            },
+    SubscriptionID: "subscription_id",
+    NewPlanVariationID: square.String(
+        "FQ7CDXXWSLUJRPM3GFJSJGZ7",
+    ),
+    Phases: []*square.PhaseInput{
+        &square.PhaseInput{
+            Ordinal: int64(0),
+            OrderTemplateID: square.String(
+                "uhhnjH9osVv3shUADwaC0b3hNxQZY",
+            ),
         },
-    }
-client.Subscriptions.SwapPlan(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Subscriptions.SwapPlan(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15479,74 +15318,73 @@ Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/t
 
 ```go
 request := &square.CreateTeamMemberRequest{
-        IdempotencyKey: square.String(
-            "idempotency-key-0",
+    IdempotencyKey: square.String(
+        "idempotency-key-0",
+    ),
+    TeamMember: &square.TeamMember{
+        ReferenceID: square.String(
+            "reference_id_1",
         ),
-        TeamMember: &square.TeamMember{
-            ReferenceID: square.String(
-                "reference_id_1",
-            ),
-            Status: square.TeamMemberStatusActive.Ptr(),
-            GivenName: square.String(
-                "Joe",
-            ),
-            FamilyName: square.String(
-                "Doe",
-            ),
-            EmailAddress: square.String(
-                "joe_doe@gmail.com",
-            ),
-            PhoneNumber: square.String(
-                "+14159283333",
-            ),
-            AssignedLocations: &square.TeamMemberAssignedLocations{
-                AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
-                LocationIDs: []string{
-                    "YSGH2WBKG94QZ",
-                    "GA2Y9HSJ8KRYT",
-                },
-            },
-            WageSetting: &square.WageSetting{
-                JobAssignments: []*square.JobAssignment{
-                    &square.JobAssignment{
-                        PayType: square.JobAssignmentPayTypeSalary,
-                        AnnualRate: &square.Money{
-                            Amount: square.Int64(
-                                int64(3000000),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                        WeeklyHours: square.Int(
-                            40,
-                        ),
-                        JobID: square.String(
-                            "FjS8x95cqHiMenw4f1NAUH4P",
-                        ),
-                    },
-                    &square.JobAssignment{
-                        PayType: square.JobAssignmentPayTypeHourly,
-                        HourlyRate: &square.Money{
-                            Amount: square.Int64(
-                                int64(2000),
-                            ),
-                            Currency: square.CurrencyUsd.Ptr(),
-                        },
-                        JobID: square.String(
-                            "VDNpRv8da51NU8qZFC5zDWpF",
-                        ),
-                    },
-                },
-                IsOvertimeExempt: square.Bool(
-                    true,
-                ),
+        Status: square.TeamMemberStatusActive.Ptr(),
+        GivenName: square.String(
+            "Joe",
+        ),
+        FamilyName: square.String(
+            "Doe",
+        ),
+        EmailAddress: square.String(
+            "joe_doe@gmail.com",
+        ),
+        PhoneNumber: square.String(
+            "+14159283333",
+        ),
+        AssignedLocations: &square.TeamMemberAssignedLocations{
+            AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+            LocationIDs: []string{
+                "YSGH2WBKG94QZ",
+                "GA2Y9HSJ8KRYT",
             },
         },
-    }
-client.TeamMembers.Create(
-        context.TODO(),
-        request,
-    )
+        WageSetting: &square.WageSetting{
+            JobAssignments: []*square.JobAssignment{
+                &square.JobAssignment{
+                    PayType: square.JobAssignmentPayTypeSalary,
+                    AnnualRate: &square.Money{
+                        Amount: square.Int64(
+                            int64(3000000),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                    WeeklyHours: square.Int(
+                        40,
+                    ),
+                    JobID: square.String(
+                        "FjS8x95cqHiMenw4f1NAUH4P",
+                    ),
+                },
+                &square.JobAssignment{
+                    PayType: square.JobAssignmentPayTypeHourly,
+                    HourlyRate: &square.Money{
+                        Amount: square.Int64(
+                            int64(2000),
+                        ),
+                        Currency: square.CurrencyUsd.Ptr(),
+                    },
+                    JobID: square.String(
+                        "VDNpRv8da51NU8qZFC5zDWpF",
+                    ),
+                },
+            },
+            IsOvertimeExempt: square.Bool(
+                true,
+            ),
+        },
+    },
 }
+_, err := client.TeamMembers.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15606,62 +15444,61 @@ Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/t
 
 ```go
 request := &square.BatchCreateTeamMembersRequest{
-        TeamMembers: map[string]*square.CreateTeamMemberRequest{
-            "idempotency-key-1": &square.CreateTeamMemberRequest{
-                TeamMember: &square.TeamMember{
-                    ReferenceID: square.String(
-                        "reference_id_1",
-                    ),
-                    GivenName: square.String(
-                        "Joe",
-                    ),
-                    FamilyName: square.String(
-                        "Doe",
-                    ),
-                    EmailAddress: square.String(
-                        "joe_doe@gmail.com",
-                    ),
-                    PhoneNumber: square.String(
-                        "+14159283333",
-                    ),
-                    AssignedLocations: &square.TeamMemberAssignedLocations{
-                        AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
-                        LocationIDs: []string{
-                            "YSGH2WBKG94QZ",
-                            "GA2Y9HSJ8KRYT",
-                        },
-                    },
-                },
-            },
-            "idempotency-key-2": &square.CreateTeamMemberRequest{
-                TeamMember: &square.TeamMember{
-                    ReferenceID: square.String(
-                        "reference_id_2",
-                    ),
-                    GivenName: square.String(
-                        "Jane",
-                    ),
-                    FamilyName: square.String(
-                        "Smith",
-                    ),
-                    EmailAddress: square.String(
-                        "jane_smith@gmail.com",
-                    ),
-                    PhoneNumber: square.String(
-                        "+14159223334",
-                    ),
-                    AssignedLocations: &square.TeamMemberAssignedLocations{
-                        AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
+    TeamMembers: map[string]*square.CreateTeamMemberRequest{
+        "idempotency-key-1": &square.CreateTeamMemberRequest{
+            TeamMember: &square.TeamMember{
+                ReferenceID: square.String(
+                    "reference_id_1",
+                ),
+                GivenName: square.String(
+                    "Joe",
+                ),
+                FamilyName: square.String(
+                    "Doe",
+                ),
+                EmailAddress: square.String(
+                    "joe_doe@gmail.com",
+                ),
+                PhoneNumber: square.String(
+                    "+14159283333",
+                ),
+                AssignedLocations: &square.TeamMemberAssignedLocations{
+                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+                    LocationIDs: []string{
+                        "YSGH2WBKG94QZ",
+                        "GA2Y9HSJ8KRYT",
                     },
                 },
             },
         },
-    }
-client.TeamMembers.BatchCreate(
-        context.TODO(),
-        request,
-    )
+        "idempotency-key-2": &square.CreateTeamMemberRequest{
+            TeamMember: &square.TeamMember{
+                ReferenceID: square.String(
+                    "reference_id_2",
+                ),
+                GivenName: square.String(
+                    "Jane",
+                ),
+                FamilyName: square.String(
+                    "Smith",
+                ),
+                EmailAddress: square.String(
+                    "jane_smith@gmail.com",
+                ),
+                PhoneNumber: square.String(
+                    "+14159223334",
+                ),
+                AssignedLocations: &square.TeamMemberAssignedLocations{
+                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
+                },
+            },
+        },
+    },
 }
+_, err := client.TeamMembers.BatchCreate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15726,70 +15563,69 @@ Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/t
 
 ```go
 request := &square.BatchUpdateTeamMembersRequest{
-        TeamMembers: map[string]*square.UpdateTeamMemberRequest{
-            "AFMwA08kR-MIF-3Vs0OE": &square.UpdateTeamMemberRequest{
-                TeamMember: &square.TeamMember{
-                    ReferenceID: square.String(
-                        "reference_id_2",
-                    ),
-                    IsOwner: square.Bool(
-                        false,
-                    ),
-                    Status: square.TeamMemberStatusActive.Ptr(),
-                    GivenName: square.String(
-                        "Jane",
-                    ),
-                    FamilyName: square.String(
-                        "Smith",
-                    ),
-                    EmailAddress: square.String(
-                        "jane_smith@gmail.com",
-                    ),
-                    PhoneNumber: square.String(
-                        "+14159223334",
-                    ),
-                    AssignedLocations: &square.TeamMemberAssignedLocations{
-                        AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
-                    },
+    TeamMembers: map[string]*square.UpdateTeamMemberRequest{
+        "AFMwA08kR-MIF-3Vs0OE": &square.UpdateTeamMemberRequest{
+            TeamMember: &square.TeamMember{
+                ReferenceID: square.String(
+                    "reference_id_2",
+                ),
+                IsOwner: square.Bool(
+                    false,
+                ),
+                Status: square.TeamMemberStatusActive.Ptr(),
+                GivenName: square.String(
+                    "Jane",
+                ),
+                FamilyName: square.String(
+                    "Smith",
+                ),
+                EmailAddress: square.String(
+                    "jane_smith@gmail.com",
+                ),
+                PhoneNumber: square.String(
+                    "+14159223334",
+                ),
+                AssignedLocations: &square.TeamMemberAssignedLocations{
+                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
                 },
             },
-            "fpgteZNMaf0qOK-a4t6P": &square.UpdateTeamMemberRequest{
-                TeamMember: &square.TeamMember{
-                    ReferenceID: square.String(
-                        "reference_id_1",
-                    ),
-                    IsOwner: square.Bool(
-                        false,
-                    ),
-                    Status: square.TeamMemberStatusActive.Ptr(),
-                    GivenName: square.String(
-                        "Joe",
-                    ),
-                    FamilyName: square.String(
-                        "Doe",
-                    ),
-                    EmailAddress: square.String(
-                        "joe_doe@gmail.com",
-                    ),
-                    PhoneNumber: square.String(
-                        "+14159283333",
-                    ),
-                    AssignedLocations: &square.TeamMemberAssignedLocations{
-                        AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
-                        LocationIDs: []string{
-                            "YSGH2WBKG94QZ",
-                            "GA2Y9HSJ8KRYT",
-                        },
+        },
+        "fpgteZNMaf0qOK-a4t6P": &square.UpdateTeamMemberRequest{
+            TeamMember: &square.TeamMember{
+                ReferenceID: square.String(
+                    "reference_id_1",
+                ),
+                IsOwner: square.Bool(
+                    false,
+                ),
+                Status: square.TeamMemberStatusActive.Ptr(),
+                GivenName: square.String(
+                    "Joe",
+                ),
+                FamilyName: square.String(
+                    "Doe",
+                ),
+                EmailAddress: square.String(
+                    "joe_doe@gmail.com",
+                ),
+                PhoneNumber: square.String(
+                    "+14159283333",
+                ),
+                AssignedLocations: &square.TeamMemberAssignedLocations{
+                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+                    LocationIDs: []string{
+                        "YSGH2WBKG94QZ",
+                        "GA2Y9HSJ8KRYT",
                     },
                 },
             },
         },
-    }
-client.TeamMembers.BatchUpdate(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.TeamMembers.BatchUpdate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15853,23 +15689,22 @@ the team member is the Square account owner.
 
 ```go
 request := &square.SearchTeamMembersRequest{
-        Query: &square.SearchTeamMembersQuery{
-            Filter: &square.SearchTeamMembersFilter{
-                LocationIDs: []string{
-                    "0G5P3VGACMMQZ",
-                },
-                Status: square.TeamMemberStatusActive.Ptr(),
+    Query: &square.SearchTeamMembersQuery{
+        Filter: &square.SearchTeamMembersFilter{
+            LocationIDs: []string{
+                "0G5P3VGACMMQZ",
             },
+            Status: square.TeamMemberStatusActive.Ptr(),
         },
-        Limit: square.Int(
-            10,
-        ),
-    }
-client.TeamMembers.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        10,
+    ),
 }
+_, err := client.TeamMembers.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -15944,13 +15779,12 @@ Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/t
 
 ```go
 request := &square.GetTeamMembersRequest{
-        TeamMemberID: "team_member_id",
-    }
-client.TeamMembers.Get(
-        context.TODO(),
-        request,
-    )
+    TeamMemberID: "team_member_id",
 }
+_, err := client.TeamMembers.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16006,74 +15840,73 @@ Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/t
 
 ```go
 request := &square.UpdateTeamMembersRequest{
-        TeamMemberID: "team_member_id",
-        Body: &square.UpdateTeamMemberRequest{
-            TeamMember: &square.TeamMember{
-                ReferenceID: square.String(
-                    "reference_id_1",
-                ),
-                Status: square.TeamMemberStatusActive.Ptr(),
-                GivenName: square.String(
-                    "Joe",
-                ),
-                FamilyName: square.String(
-                    "Doe",
-                ),
-                EmailAddress: square.String(
-                    "joe_doe@gmail.com",
-                ),
-                PhoneNumber: square.String(
-                    "+14159283333",
-                ),
-                AssignedLocations: &square.TeamMemberAssignedLocations{
-                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
-                    LocationIDs: []string{
-                        "YSGH2WBKG94QZ",
-                        "GA2Y9HSJ8KRYT",
-                    },
-                },
-                WageSetting: &square.WageSetting{
-                    JobAssignments: []*square.JobAssignment{
-                        &square.JobAssignment{
-                            PayType: square.JobAssignmentPayTypeSalary,
-                            AnnualRate: &square.Money{
-                                Amount: square.Int64(
-                                    int64(3000000),
-                                ),
-                                Currency: square.CurrencyUsd.Ptr(),
-                            },
-                            WeeklyHours: square.Int(
-                                40,
-                            ),
-                            JobID: square.String(
-                                "FjS8x95cqHiMenw4f1NAUH4P",
-                            ),
-                        },
-                        &square.JobAssignment{
-                            PayType: square.JobAssignmentPayTypeHourly,
-                            HourlyRate: &square.Money{
-                                Amount: square.Int64(
-                                    int64(1200),
-                                ),
-                                Currency: square.CurrencyUsd.Ptr(),
-                            },
-                            JobID: square.String(
-                                "VDNpRv8da51NU8qZFC5zDWpF",
-                            ),
-                        },
-                    },
-                    IsOvertimeExempt: square.Bool(
-                        true,
-                    ),
+    TeamMemberID: "team_member_id",
+    Body: &square.UpdateTeamMemberRequest{
+        TeamMember: &square.TeamMember{
+            ReferenceID: square.String(
+                "reference_id_1",
+            ),
+            Status: square.TeamMemberStatusActive.Ptr(),
+            GivenName: square.String(
+                "Joe",
+            ),
+            FamilyName: square.String(
+                "Doe",
+            ),
+            EmailAddress: square.String(
+                "joe_doe@gmail.com",
+            ),
+            PhoneNumber: square.String(
+                "+14159283333",
+            ),
+            AssignedLocations: &square.TeamMemberAssignedLocations{
+                AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+                LocationIDs: []string{
+                    "YSGH2WBKG94QZ",
+                    "GA2Y9HSJ8KRYT",
                 },
             },
+            WageSetting: &square.WageSetting{
+                JobAssignments: []*square.JobAssignment{
+                    &square.JobAssignment{
+                        PayType: square.JobAssignmentPayTypeSalary,
+                        AnnualRate: &square.Money{
+                            Amount: square.Int64(
+                                int64(3000000),
+                            ),
+                            Currency: square.CurrencyUsd.Ptr(),
+                        },
+                        WeeklyHours: square.Int(
+                            40,
+                        ),
+                        JobID: square.String(
+                            "FjS8x95cqHiMenw4f1NAUH4P",
+                        ),
+                    },
+                    &square.JobAssignment{
+                        PayType: square.JobAssignmentPayTypeHourly,
+                        HourlyRate: &square.Money{
+                            Amount: square.Int64(
+                                int64(1200),
+                            ),
+                            Currency: square.CurrencyUsd.Ptr(),
+                        },
+                        JobID: square.String(
+                            "VDNpRv8da51NU8qZFC5zDWpF",
+                        ),
+                    },
+                },
+                IsOvertimeExempt: square.Bool(
+                    true,
+                ),
+            },
         },
-    }
-client.TeamMembers.Update(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.TeamMembers.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16137,15 +15970,14 @@ Lists jobs in a seller account. Results are sorted by title in ascending order.
 
 ```go
 request := &square.ListJobsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Team.ListJobs(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Team.ListJobs(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16205,21 +16037,20 @@ compensation is defined in a [job assignment](entity:JobAssignment) in a team me
 
 ```go
 request := &square.CreateJobRequest{
-        Job: &square.Job{
-            Title: square.String(
-                "Cashier",
-            ),
-            IsTipEligible: square.Bool(
-                true,
-            ),
-        },
-        IdempotencyKey: "idempotency-key-0",
-    }
-client.Team.CreateJob(
-        context.TODO(),
-        request,
-    )
+    Job: &square.Job{
+        Title: square.String(
+            "Cashier",
+        ),
+        IsTipEligible: square.Bool(
+            true,
+        ),
+    },
+    IdempotencyKey: "idempotency-key-0",
 }
+_, err := client.Team.CreateJob(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16286,13 +16117,12 @@ Retrieves a specified job.
 
 ```go
 request := &square.RetrieveJobRequest{
-        JobID: "job_id",
-    }
-client.Team.RetrieveJob(
-        context.TODO(),
-        request,
-    )
+    JobID: "job_id",
 }
+_, err := client.Team.RetrieveJob(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16349,21 +16179,20 @@ tip eligibility propagate to all `TeamMemberWage` objects that reference the job
 
 ```go
 request := &square.UpdateJobRequest{
-        JobID: "job_id",
-        Job: &square.Job{
-            Title: square.String(
-                "Cashier 1",
-            ),
-            IsTipEligible: square.Bool(
-                true,
-            ),
-        },
-    }
-client.Team.UpdateJob(
-        context.TODO(),
-        request,
-    )
+    JobID: "job_id",
+    Job: &square.Job{
+        Title: square.String(
+            "Cashier 1",
+        ),
+        IsTipEligible: square.Bool(
+            true,
+        ),
+    },
 }
+_, err := client.Team.UpdateJob(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16432,13 +16261,12 @@ See [Link and Dismiss Actions](https://developer.squareup.com/docs/terminal-api/
 
 ```go
 request := &square.DismissTerminalActionRequest{
-        ActionID: "action_id",
-    }
-client.Terminal.DismissTerminalAction(
-        context.TODO(),
-        request,
-    )
+    ActionID: "action_id",
 }
+_, err := client.Terminal.DismissTerminalAction(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16493,13 +16321,12 @@ Dismisses a Terminal checkout request if the status and type of the request perm
 
 ```go
 request := &square.DismissTerminalCheckoutRequest{
-        CheckoutID: "checkout_id",
-    }
-client.Terminal.DismissTerminalCheckout(
-        context.TODO(),
-        request,
-    )
+    CheckoutID: "checkout_id",
 }
+_, err := client.Terminal.DismissTerminalCheckout(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16554,13 +16381,12 @@ Dismisses a Terminal refund request if the status and type of the request permit
 
 ```go
 request := &square.DismissTerminalRefundRequest{
-        TerminalRefundID: "terminal_refund_id",
-    }
-client.Terminal.DismissTerminalRefund(
-        context.TODO(),
-        request,
-    )
+    TerminalRefundID: "terminal_refund_id",
 }
+_, err := client.Terminal.DismissTerminalRefund(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16635,39 +16461,38 @@ Creates a [transfer_order.created](webhook:transfer_order.created) webhook event
 
 ```go
 request := &square.CreateTransferOrderRequest{
-        IdempotencyKey: "65cc0586-3e82-384s-b524-3885cffd52",
-        TransferOrder: &square.CreateTransferOrderData{
-            SourceLocationID: "EXAMPLE_SOURCE_LOCATION_ID_123",
-            DestinationLocationID: "EXAMPLE_DEST_LOCATION_ID_456",
-            ExpectedAt: square.String(
-                "2025-11-09T05:00:00Z",
-            ),
-            Notes: square.String(
-                "Example transfer order for inventory redistribution between locations",
-            ),
-            TrackingNumber: square.String(
-                "TRACK123456789",
-            ),
-            CreatedByTeamMemberID: square.String(
-                "EXAMPLE_TEAM_MEMBER_ID_789",
-            ),
-            LineItems: []*square.CreateTransferOrderLineData{
-                &square.CreateTransferOrderLineData{
-                    ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_001",
-                    QuantityOrdered: "5",
-                },
-                &square.CreateTransferOrderLineData{
-                    ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_002",
-                    QuantityOrdered: "3",
-                },
+    IdempotencyKey: "65cc0586-3e82-384s-b524-3885cffd52",
+    TransferOrder: &square.CreateTransferOrderData{
+        SourceLocationID: "EXAMPLE_SOURCE_LOCATION_ID_123",
+        DestinationLocationID: "EXAMPLE_DEST_LOCATION_ID_456",
+        ExpectedAt: square.String(
+            "2025-11-09T05:00:00Z",
+        ),
+        Notes: square.String(
+            "Example transfer order for inventory redistribution between locations",
+        ),
+        TrackingNumber: square.String(
+            "TRACK123456789",
+        ),
+        CreatedByTeamMemberID: square.String(
+            "EXAMPLE_TEAM_MEMBER_ID_789",
+        ),
+        LineItems: []*square.CreateTransferOrderLineData{
+            &square.CreateTransferOrderLineData{
+                ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_001",
+                QuantityOrdered: "5",
+            },
+            &square.CreateTransferOrderLineData{
+                ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_002",
+                QuantityOrdered: "3",
             },
         },
-    }
-client.TransferOrders.Create(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.TransferOrders.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16739,36 +16564,35 @@ Common search scenarios:
 
 ```go
 request := &square.SearchTransferOrdersRequest{
-        Query: &square.TransferOrderQuery{
-            Filter: &square.TransferOrderFilter{
-                SourceLocationIDs: []string{
-                    "EXAMPLE_SOURCE_LOCATION_ID_123",
-                },
-                DestinationLocationIDs: []string{
-                    "EXAMPLE_DEST_LOCATION_ID_456",
-                },
-                Statuses: []square.TransferOrderStatus{
-                    square.TransferOrderStatusStarted,
-                    square.TransferOrderStatusPartiallyReceived,
-                },
+    Query: &square.TransferOrderQuery{
+        Filter: &square.TransferOrderFilter{
+            SourceLocationIDs: []string{
+                "EXAMPLE_SOURCE_LOCATION_ID_123",
             },
-            Sort: &square.TransferOrderSort{
-                Field: square.TransferOrderSortFieldUpdatedAt.Ptr(),
-                Order: square.SortOrderDesc.Ptr(),
+            DestinationLocationIDs: []string{
+                "EXAMPLE_DEST_LOCATION_ID_456",
+            },
+            Statuses: []square.TransferOrderStatus{
+                square.TransferOrderStatusStarted,
+                square.TransferOrderStatusPartiallyReceived,
             },
         },
-        Cursor: square.String(
-            "eyJsYXN0X3VwZGF0ZWRfYXQiOjE3NTMxMTg2NjQ4NzN9",
-        ),
-        Limit: square.Int(
-            10,
-        ),
-    }
-client.TransferOrders.Search(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.TransferOrderSort{
+            Field: square.TransferOrderSortFieldUpdatedAt.Ptr(),
+            Order: square.SortOrderDesc.Ptr(),
+        },
+    },
+    Cursor: square.String(
+        "eyJsYXN0X3VwZGF0ZWRfYXQiOjE3NTMxMTg2NjQ4NzN9",
+    ),
+    Limit: square.Int(
+        10,
+    ),
 }
+_, err := client.TransferOrders.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16845,13 +16669,12 @@ order details including:
 
 ```go
 request := &square.GetTransferOrdersRequest{
-        TransferOrderID: "transfer_order_id",
-    }
-client.TransferOrders.Get(
-        context.TODO(),
-        request,
-    )
+    TransferOrderID: "transfer_order_id",
 }
+_, err := client.TransferOrders.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -16909,60 +16732,59 @@ Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event
 
 ```go
 request := &square.UpdateTransferOrderRequest{
-        TransferOrderID: "transfer_order_id",
-        IdempotencyKey: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-        TransferOrder: &square.UpdateTransferOrderData{
-            SourceLocationID: square.String(
-                "EXAMPLE_SOURCE_LOCATION_ID_789",
-            ),
-            DestinationLocationID: square.String(
-                "EXAMPLE_DEST_LOCATION_ID_101",
-            ),
-            ExpectedAt: square.String(
-                "2025-11-10T08:00:00Z",
-            ),
-            Notes: square.String(
-                "Updated: Priority transfer due to low stock at destination",
-            ),
-            TrackingNumber: square.String(
-                "TRACK987654321",
-            ),
-            LineItems: []*square.UpdateTransferOrderLineData{
-                &square.UpdateTransferOrderLineData{
-                    UID: square.String(
-                        "1",
-                    ),
-                    QuantityOrdered: square.String(
-                        "7",
-                    ),
-                },
-                &square.UpdateTransferOrderLineData{
-                    ItemVariationID: square.String(
-                        "EXAMPLE_NEW_ITEM_VARIATION_ID_003",
-                    ),
-                    QuantityOrdered: square.String(
-                        "2",
-                    ),
-                },
-                &square.UpdateTransferOrderLineData{
-                    UID: square.String(
-                        "2",
-                    ),
-                    Remove: square.Bool(
-                        true,
-                    ),
-                },
+    TransferOrderID: "transfer_order_id",
+    IdempotencyKey: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    TransferOrder: &square.UpdateTransferOrderData{
+        SourceLocationID: square.String(
+            "EXAMPLE_SOURCE_LOCATION_ID_789",
+        ),
+        DestinationLocationID: square.String(
+            "EXAMPLE_DEST_LOCATION_ID_101",
+        ),
+        ExpectedAt: square.String(
+            "2025-11-10T08:00:00Z",
+        ),
+        Notes: square.String(
+            "Updated: Priority transfer due to low stock at destination",
+        ),
+        TrackingNumber: square.String(
+            "TRACK987654321",
+        ),
+        LineItems: []*square.UpdateTransferOrderLineData{
+            &square.UpdateTransferOrderLineData{
+                UID: square.String(
+                    "1",
+                ),
+                QuantityOrdered: square.String(
+                    "7",
+                ),
+            },
+            &square.UpdateTransferOrderLineData{
+                ItemVariationID: square.String(
+                    "EXAMPLE_NEW_ITEM_VARIATION_ID_003",
+                ),
+                QuantityOrdered: square.String(
+                    "2",
+                ),
+            },
+            &square.UpdateTransferOrderLineData{
+                UID: square.String(
+                    "2",
+                ),
+                Remove: square.Bool(
+                    true,
+                ),
             },
         },
-        Version: square.Int64(
-            int64(1753109537351),
-        ),
-    }
-client.TransferOrders.Update(
-        context.TODO(),
-        request,
-    )
+    },
+    Version: square.Int64(
+        int64(1753109537351),
+    ),
 }
+_, err := client.TransferOrders.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17045,16 +16867,15 @@ Creates a [transfer_order.deleted](webhook:transfer_order.deleted) webhook event
 
 ```go
 request := &square.DeleteTransferOrdersRequest{
-        TransferOrderID: "transfer_order_id",
-        Version: square.Int64(
-            int64(1000000),
-        ),
-    }
-client.TransferOrders.Delete(
-        context.TODO(),
-        request,
-    )
+    TransferOrderID: "transfer_order_id",
+    Version: square.Int64(
+        int64(1000000),
+    ),
 }
+_, err := client.TransferOrders.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17126,17 +16947,16 @@ Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event
 
 ```go
 request := &square.CancelTransferOrderRequest{
-        TransferOrderID: "transfer_order_id",
-        IdempotencyKey: "65cc0586-3e82-4d08-b524-3885cffd52",
-        Version: square.Int64(
-            int64(1753117449752),
-        ),
-    }
-client.TransferOrders.Cancel(
-        context.TODO(),
-        request,
-    )
+    TransferOrderID: "transfer_order_id",
+    IdempotencyKey: "65cc0586-3e82-4d08-b524-3885cffd52",
+    Version: square.Int64(
+        int64(1753117449752),
+    ),
 }
+_, err := client.TransferOrders.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17225,42 +17045,41 @@ Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event
 
 ```go
 request := &square.ReceiveTransferOrderRequest{
-        TransferOrderID: "transfer_order_id",
-        IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_101",
-        Receipt: &square.TransferOrderGoodsReceipt{
-            LineItems: []*square.TransferOrderGoodsReceiptLineItem{
-                &square.TransferOrderGoodsReceiptLineItem{
-                    TransferOrderLineUID: "1",
-                    QuantityReceived: square.String(
-                        "3",
-                    ),
-                    QuantityDamaged: square.String(
-                        "1",
-                    ),
-                    QuantityCanceled: square.String(
-                        "1",
-                    ),
-                },
-                &square.TransferOrderGoodsReceiptLineItem{
-                    TransferOrderLineUID: "2",
-                    QuantityReceived: square.String(
-                        "2",
-                    ),
-                    QuantityCanceled: square.String(
-                        "1",
-                    ),
-                },
+    TransferOrderID: "transfer_order_id",
+    IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_101",
+    Receipt: &square.TransferOrderGoodsReceipt{
+        LineItems: []*square.TransferOrderGoodsReceiptLineItem{
+            &square.TransferOrderGoodsReceiptLineItem{
+                TransferOrderLineUID: "1",
+                QuantityReceived: square.String(
+                    "3",
+                ),
+                QuantityDamaged: square.String(
+                    "1",
+                ),
+                QuantityCanceled: square.String(
+                    "1",
+                ),
+            },
+            &square.TransferOrderGoodsReceiptLineItem{
+                TransferOrderLineUID: "2",
+                QuantityReceived: square.String(
+                    "2",
+                ),
+                QuantityCanceled: square.String(
+                    "1",
+                ),
             },
         },
-        Version: square.Int64(
-            int64(1753118664873),
-        ),
-    }
-client.TransferOrders.Receive(
-        context.TODO(),
-        request,
-    )
+    },
+    Version: square.Int64(
+        int64(1753118664873),
+    ),
 }
+_, err := client.TransferOrders.Receive(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17346,17 +17165,16 @@ Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event
 
 ```go
 request := &square.StartTransferOrderRequest{
-        TransferOrderID: "transfer_order_id",
-        IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_789",
-        Version: square.Int64(
-            int64(1753109537351),
-        ),
-    }
-client.TransferOrders.Start(
-        context.TODO(),
-        request,
-    )
+    TransferOrderID: "transfer_order_id",
+    IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_789",
+    Version: square.Int64(
+        int64(1753109537351),
+    ),
 }
+_, err := client.TransferOrders.Start(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17431,57 +17249,56 @@ Creates one or more [Vendor](entity:Vendor) objects to represent suppliers to a 
 
 ```go
 request := &square.BatchCreateVendorsRequest{
-        Vendors: map[string]*square.Vendor{
-            "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe": &square.Vendor{
-                Name: square.String(
-                    "Joe's Fresh Seafood",
+    Vendors: map[string]*square.Vendor{
+        "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe": &square.Vendor{
+            Name: square.String(
+                "Joe's Fresh Seafood",
+            ),
+            Address: &square.Address{
+                AddressLine1: square.String(
+                    "505 Electric Ave",
                 ),
-                Address: &square.Address{
-                    AddressLine1: square.String(
-                        "505 Electric Ave",
-                    ),
-                    AddressLine2: square.String(
-                        "Suite 600",
-                    ),
-                    Locality: square.String(
-                        "New York",
-                    ),
-                    AdministrativeDistrictLevel1: square.String(
-                        "NY",
-                    ),
-                    PostalCode: square.String(
-                        "10003",
-                    ),
-                    Country: square.CountryUs.Ptr(),
-                },
-                Contacts: []*square.VendorContact{
-                    &square.VendorContact{
-                        Name: square.String(
-                            "Joe Burrow",
-                        ),
-                        EmailAddress: square.String(
-                            "joe@joesfreshseafood.com",
-                        ),
-                        PhoneNumber: square.String(
-                            "1-212-555-4250",
-                        ),
-                        Ordinal: 1,
-                    },
-                },
-                AccountNumber: square.String(
-                    "4025391",
+                AddressLine2: square.String(
+                    "Suite 600",
                 ),
-                Note: square.String(
-                    "a vendor",
+                Locality: square.String(
+                    "New York",
                 ),
+                AdministrativeDistrictLevel1: square.String(
+                    "NY",
+                ),
+                PostalCode: square.String(
+                    "10003",
+                ),
+                Country: square.CountryUs.Ptr(),
             },
+            Contacts: []*square.VendorContact{
+                &square.VendorContact{
+                    Name: square.String(
+                        "Joe Burrow",
+                    ),
+                    EmailAddress: square.String(
+                        "joe@joesfreshseafood.com",
+                    ),
+                    PhoneNumber: square.String(
+                        "1-212-555-4250",
+                    ),
+                    Ordinal: 1,
+                },
+            },
+            AccountNumber: square.String(
+                "4025391",
+            ),
+            Note: square.String(
+                "a vendor",
+            ),
         },
-    }
-client.Vendors.BatchCreate(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Vendors.BatchCreate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17536,15 +17353,14 @@ Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.
 
 ```go
 request := &square.BatchGetVendorsRequest{
-        VendorIDs: []string{
-            "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
-        },
-    }
-client.Vendors.BatchGet(
-        context.TODO(),
-        request,
-    )
+    VendorIDs: []string{
+        "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
+    },
 }
+_, err := client.Vendors.BatchGet(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17599,20 +17415,19 @@ Updates one or more of existing [Vendor](entity:Vendor) objects as suppliers to 
 
 ```go
 request := &square.BatchUpdateVendorsRequest{
-        Vendors: map[string]*square.UpdateVendorRequest{
-            "FMCYHBWT1TPL8MFH52PBMEN92A": &square.UpdateVendorRequest{
-                Vendor: &square.Vendor{},
-            },
-            "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4": &square.UpdateVendorRequest{
-                Vendor: &square.Vendor{},
-            },
+    Vendors: map[string]*square.UpdateVendorRequest{
+        "FMCYHBWT1TPL8MFH52PBMEN92A": &square.UpdateVendorRequest{
+            Vendor: &square.Vendor{},
         },
-    }
-client.Vendors.BatchUpdate(
-        context.TODO(),
-        request,
-    )
+        "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4": &square.UpdateVendorRequest{
+            Vendor: &square.Vendor{},
+        },
+    },
 }
+_, err := client.Vendors.BatchUpdate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17670,56 +17485,55 @@ Creates a single [Vendor](entity:Vendor) object to represent a supplier to a sel
 
 ```go
 request := &square.CreateVendorRequest{
-        IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
-        Vendor: &square.Vendor{
-            Name: square.String(
-                "Joe's Fresh Seafood",
+    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+    Vendor: &square.Vendor{
+        Name: square.String(
+            "Joe's Fresh Seafood",
+        ),
+        Address: &square.Address{
+            AddressLine1: square.String(
+                "505 Electric Ave",
             ),
-            Address: &square.Address{
-                AddressLine1: square.String(
-                    "505 Electric Ave",
-                ),
-                AddressLine2: square.String(
-                    "Suite 600",
-                ),
-                Locality: square.String(
-                    "New York",
-                ),
-                AdministrativeDistrictLevel1: square.String(
-                    "NY",
-                ),
-                PostalCode: square.String(
-                    "10003",
-                ),
-                Country: square.CountryUs.Ptr(),
-            },
-            Contacts: []*square.VendorContact{
-                &square.VendorContact{
-                    Name: square.String(
-                        "Joe Burrow",
-                    ),
-                    EmailAddress: square.String(
-                        "joe@joesfreshseafood.com",
-                    ),
-                    PhoneNumber: square.String(
-                        "1-212-555-4250",
-                    ),
-                    Ordinal: 1,
-                },
-            },
-            AccountNumber: square.String(
-                "4025391",
+            AddressLine2: square.String(
+                "Suite 600",
             ),
-            Note: square.String(
-                "a vendor",
+            Locality: square.String(
+                "New York",
             ),
+            AdministrativeDistrictLevel1: square.String(
+                "NY",
+            ),
+            PostalCode: square.String(
+                "10003",
+            ),
+            Country: square.CountryUs.Ptr(),
         },
-    }
-client.Vendors.Create(
-        context.TODO(),
-        request,
-    )
+        Contacts: []*square.VendorContact{
+            &square.VendorContact{
+                Name: square.String(
+                    "Joe Burrow",
+                ),
+                EmailAddress: square.String(
+                    "joe@joesfreshseafood.com",
+                ),
+                PhoneNumber: square.String(
+                    "1-212-555-4250",
+                ),
+                Ordinal: 1,
+            },
+        },
+        AccountNumber: square.String(
+            "4025391",
+        ),
+        Note: square.String(
+            "a vendor",
+        ),
+    },
 }
+_, err := client.Vendors.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17788,11 +17602,10 @@ Searches for vendors using a filter against supported [Vendor](entity:Vendor) pr
 
 ```go
 request := &square.SearchVendorsRequest{}
-client.Vendors.Search(
-        context.TODO(),
-        request,
-    )
-}
+_, err := client.Vendors.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17868,13 +17681,12 @@ Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
 
 ```go
 request := &square.GetVendorsRequest{
-        VendorID: "vendor_id",
-    }
-client.Vendors.Get(
-        context.TODO(),
-        request,
-    )
+    VendorID: "vendor_id",
 }
+_, err := client.Vendors.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -17929,30 +17741,29 @@ Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
 
 ```go
 request := &square.UpdateVendorsRequest{
-        VendorID: "vendor_id",
-        Body: &square.UpdateVendorRequest{
-            IdempotencyKey: square.String(
-                "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+    VendorID: "vendor_id",
+    Body: &square.UpdateVendorRequest{
+        IdempotencyKey: square.String(
+            "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+        ),
+        Vendor: &square.Vendor{
+            ID: square.String(
+                "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
             ),
-            Vendor: &square.Vendor{
-                ID: square.String(
-                    "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
-                ),
-                Name: square.String(
-                    "Jack's Chicken Shack",
-                ),
-                Version: square.Int(
-                    1,
-                ),
-                Status: square.VendorStatusActive.Ptr(),
-            },
+            Name: square.String(
+                "Jack's Chicken Shack",
+            ),
+            Version: square.Int(
+                1,
+            ),
+            Status: square.VendorStatusActive.Ptr(),
         },
-    }
-client.Vendors.Update(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Vendors.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18015,10 +17826,9 @@ Describes the data available to query: the cubes, views, measures, dimensions, a
 <dd>
 
 ```go
-client.Reporting.GetMetadata(
-        context.TODO(),
-    )
-}
+_, err := client.Reporting.GetMetadata(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -18058,11 +17868,10 @@ Runs a reporting query against the discovered schema and returns the aggregated 
 
 ```go
 request := &square.LoadRequest{}
-client.Reporting.Load(
-        context.TODO(),
-        request,
-    )
-}
+_, err := client.Reporting.Load(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18137,18 +17946,17 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &bookings.ListCustomAttributeDefinitionsRequest{
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Bookings.CustomAttributeDefinitions.List(
-        context.TODO(),
-        request,
-    )
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Bookings.CustomAttributeDefinitions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18225,13 +18033,12 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.CreateBookingCustomAttributeDefinitionRequest{
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{},
-    }
-client.Bookings.CustomAttributeDefinitions.Create(
-        context.TODO(),
-        request,
-    )
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{},
 }
+_, err := client.Bookings.CustomAttributeDefinitions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18316,16 +18123,15 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &bookings.GetCustomAttributeDefinitionsRequest{
-        Key: "key",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Bookings.CustomAttributeDefinitions.Get(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Bookings.CustomAttributeDefinitions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18402,14 +18208,13 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.UpdateBookingCustomAttributeDefinitionRequest{
-        Key: "key",
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{},
-    }
-client.Bookings.CustomAttributeDefinitions.Update(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{},
 }
+_, err := client.Bookings.CustomAttributeDefinitions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18502,13 +18307,12 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.DeleteCustomAttributeDefinitionsRequest{
-        Key: "key",
-    }
-client.Bookings.CustomAttributeDefinitions.Delete(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
 }
+_, err := client.Bookings.CustomAttributeDefinitions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18570,18 +18374,17 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.BulkDeleteBookingCustomAttributesRequest{
-        Values: map[string]*square.BookingCustomAttributeDeleteRequest{
-            "key": &square.BookingCustomAttributeDeleteRequest{
-                BookingID: "booking_id",
-                Key: "key",
-            },
+    Values: map[string]*square.BookingCustomAttributeDeleteRequest{
+        "key": &square.BookingCustomAttributeDeleteRequest{
+            BookingID: "booking_id",
+            Key: "key",
         },
-    }
-client.Bookings.CustomAttributes.BatchDelete(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Bookings.CustomAttributes.BatchDelete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18646,18 +18449,17 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.BulkUpsertBookingCustomAttributesRequest{
-        Values: map[string]*square.BookingCustomAttributeUpsertRequest{
-            "key": &square.BookingCustomAttributeUpsertRequest{
-                BookingID: "booking_id",
-                CustomAttribute: &square.CustomAttribute{},
-            },
+    Values: map[string]*square.BookingCustomAttributeUpsertRequest{
+        "key": &square.BookingCustomAttributeUpsertRequest{
+            BookingID: "booking_id",
+            CustomAttribute: &square.CustomAttribute{},
         },
-    }
-client.Bookings.CustomAttributes.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Bookings.CustomAttributes.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18719,22 +18521,21 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &bookings.ListCustomAttributesRequest{
-        BookingID: "booking_id",
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        WithDefinitions: square.Bool(
-            true,
-        ),
-    }
-client.Bookings.CustomAttributes.List(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    WithDefinitions: square.Bool(
+        true,
+    ),
 }
+_, err := client.Bookings.CustomAttributes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18828,20 +18629,19 @@ To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ`
 
 ```go
 request := &bookings.GetCustomAttributesRequest{
-        BookingID: "booking_id",
-        Key: "key",
-        WithDefinition: square.Bool(
-            true,
-        ),
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Bookings.CustomAttributes.Get(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
+    Key: "key",
+    WithDefinition: square.Bool(
+        true,
+    ),
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Bookings.CustomAttributes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -18939,15 +18739,14 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.UpsertBookingCustomAttributeRequest{
-        BookingID: "booking_id",
-        Key: "key",
-        CustomAttribute: &square.CustomAttribute{},
-    }
-client.Bookings.CustomAttributes.Upsert(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
+    Key: "key",
+    CustomAttribute: &square.CustomAttribute{},
 }
+_, err := client.Bookings.CustomAttributes.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19048,14 +18847,13 @@ or *Appointments Premium*.
 
 ```go
 request := &bookings.DeleteCustomAttributesRequest{
-        BookingID: "booking_id",
-        Key: "key",
-    }
-client.Bookings.CustomAttributes.Delete(
-        context.TODO(),
-        request,
-    )
+    BookingID: "booking_id",
+    Key: "key",
 }
+_, err := client.Bookings.CustomAttributes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19123,18 +18921,17 @@ Lists location booking profiles of a seller.
 
 ```go
 request := &bookings.ListLocationProfilesRequest{
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Bookings.LocationProfiles.List(
-        context.TODO(),
-        request,
-    )
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Bookings.LocationProfiles.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19198,24 +18995,23 @@ Lists booking profiles for team members.
 
 ```go
 request := &bookings.ListTeamMemberProfilesRequest{
-        BookableOnly: square.Bool(
-            true,
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-    }
-client.Bookings.TeamMemberProfiles.List(
-        context.TODO(),
-        request,
-    )
+    BookableOnly: square.Bool(
+        true,
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
 }
+_, err := client.Bookings.TeamMemberProfiles.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19294,13 +19090,12 @@ Retrieves a team member's booking profile.
 
 ```go
 request := &bookings.GetTeamMemberProfilesRequest{
-        TeamMemberID: "team_member_id",
-    }
-client.Bookings.TeamMemberProfiles.Get(
-        context.TODO(),
-        request,
-    )
+    TeamMemberID: "team_member_id",
 }
+_, err := client.Bookings.TeamMemberProfiles.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19357,26 +19152,25 @@ in a date range.
 
 ```go
 request := &cashdrawers.ListShiftsRequest{
-        LocationID: "location_id",
-        SortOrder: square.SortOrderDesc.Ptr(),
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.CashDrawers.Shifts.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    SortOrder: square.SortOrderDesc.Ptr(),
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.CashDrawers.Shifts.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19478,14 +19272,13 @@ Provides the summary details for a single cash drawer shift. See
 
 ```go
 request := &cashdrawers.GetShiftsRequest{
-        ShiftID: "shift_id",
-        LocationID: "location_id",
-    }
-client.CashDrawers.Shifts.Get(
-        context.TODO(),
-        request,
-    )
+    ShiftID: "shift_id",
+    LocationID: "location_id",
 }
+_, err := client.CashDrawers.Shifts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19548,20 +19341,19 @@ Provides a paginated list of events for a single cash drawer shift.
 
 ```go
 request := &cashdrawers.ListEventsShiftsRequest{
-        ShiftID: "shift_id",
-        LocationID: "location_id",
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.CashDrawers.Shifts.ListEvents(
-        context.TODO(),
-        request,
-    )
+    ShiftID: "shift_id",
+    LocationID: "location_id",
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.CashDrawers.Shifts.ListEvents(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19649,15 +19441,14 @@ JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 
 ```go
 request := &catalog.CreateImagesRequest{
-        ImageFile: strings.NewReader(
-            "",
-        ),
-    }
-client.Catalog.Images.Create(
-        context.TODO(),
-        request,
-    )
+    ImageFile: strings.NewReader(
+        "",
+    ),
 }
+_, err := client.Catalog.Images.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19700,16 +19491,15 @@ JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
 
 ```go
 request := &catalog.UpdateImagesRequest{
-        ImageID: "image_id",
-        ImageFile: strings.NewReader(
-            "",
-        ),
-    }
-client.Catalog.Images.Update(
-        context.TODO(),
-        request,
-    )
+    ImageID: "image_id",
+    ImageFile: strings.NewReader(
+        "",
+    ),
 }
+_, err := client.Catalog.Images.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19773,18 +19563,17 @@ update requests are rejected with the `429` error code.
 
 ```go
 request := &catalog.UpsertCatalogObjectRequest{
-        IdempotencyKey: "af3d1afc-7212-4300-b463-0bfc5314a5ae",
-        Object: &square.CatalogObject{
-            Item: &square.CatalogObjectItem{
-                ID: "id",
-            },
+    IdempotencyKey: "af3d1afc-7212-4300-b463-0bfc5314a5ae",
+    Object: &square.CatalogObject{
+        Item: &square.CatalogObjectItem{
+            ID: "id",
         },
-    }
-client.Catalog.Object.Upsert(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Catalog.Object.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19869,22 +19658,21 @@ any [CatalogTax](entity:CatalogTax) objects that apply to it.
 
 ```go
 request := &catalog.GetObjectRequest{
-        ObjectID: "object_id",
-        IncludeRelatedObjects: square.Bool(
-            true,
-        ),
-        CatalogVersion: square.Int64(
-            int64(1000000),
-        ),
-        IncludeCategoryPathToRoot: square.Bool(
-            true,
-        ),
-    }
-client.Catalog.Object.Get(
-        context.TODO(),
-        request,
-    )
+    ObjectID: "object_id",
+    IncludeRelatedObjects: square.Bool(
+        true,
+    ),
+    CatalogVersion: square.Int64(
+        int64(1000000),
+    ),
+    IncludeCategoryPathToRoot: square.Bool(
+        true,
+    ),
 }
+_, err := client.Catalog.Object.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -19997,13 +19785,12 @@ delete requests are rejected with the `429` error code.
 
 ```go
 request := &catalog.DeleteObjectRequest{
-        ObjectID: "object_id",
-    }
-client.Catalog.Object.Delete(
-        context.TODO(),
-        request,
-    )
+    ObjectID: "object_id",
 }
+_, err := client.Catalog.Object.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20063,18 +19850,17 @@ Lists all payment links.
 
 ```go
 request := &checkout.ListPaymentLinksRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Checkout.PaymentLinks.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Checkout.PaymentLinks.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20148,25 +19934,24 @@ Creates a Square-hosted checkout page. Applications can share the resulting paym
 
 ```go
 request := &checkout.CreatePaymentLinkRequest{
-        IdempotencyKey: square.String(
-            "cd9e25dc-d9f2-4430-aedb-61605070e95f",
-        ),
-        QuickPay: &square.QuickPay{
-            Name: "Auto Detailing",
-            PriceMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(10000),
-                ),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-            LocationID: "A9Y43N9ABXZBP",
+    IdempotencyKey: square.String(
+        "cd9e25dc-d9f2-4430-aedb-61605070e95f",
+    ),
+    QuickPay: &square.QuickPay{
+        Name: "Auto Detailing",
+        PriceMoney: &square.Money{
+            Amount: square.Int64(
+                int64(10000),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
         },
-    }
-client.Checkout.PaymentLinks.Create(
-        context.TODO(),
-        request,
-    )
+        LocationID: "A9Y43N9ABXZBP",
+    },
 }
+_, err := client.Checkout.PaymentLinks.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20253,7 +20038,7 @@ For more information, see [Prepopulate the shipping address](https://developer.s
 <dl>
 <dd>
 
-**paymentNote:** `*string` — A note for the payment. After processing the payment, Square adds this note to the resulting `Payment`.
+**paymentNote:** `*string` — A note for the payment. After processing the payment, Square adds this note to the resulting `Payment` as well as the post payment confirmation email.
     
 </dd>
 </dl>
@@ -20293,13 +20078,12 @@ Retrieves a payment link.
 
 ```go
 request := &checkout.GetPaymentLinksRequest{
-        ID: "id",
-    }
-client.Checkout.PaymentLinks.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Checkout.PaymentLinks.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20356,21 +20140,20 @@ You cannot update other fields such as the `order_id`, `version`, `URL`, or `tim
 
 ```go
 request := &checkout.UpdatePaymentLinkRequest{
-        ID: "id",
-        PaymentLink: &square.PaymentLink{
-            Version: 1,
-            CheckoutOptions: &square.CheckoutOptions{
-                AskForShippingAddress: square.Bool(
-                    true,
-                ),
-            },
+    ID: "id",
+    PaymentLink: &square.PaymentLink{
+        Version: 1,
+        CheckoutOptions: &square.CheckoutOptions{
+            AskForShippingAddress: square.Bool(
+                true,
+            ),
         },
-    }
-client.Checkout.PaymentLinks.Update(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Checkout.PaymentLinks.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20436,13 +20219,12 @@ Deletes a payment link.
 
 ```go
 request := &checkout.DeletePaymentLinksRequest{
-        ID: "id",
-    }
-client.Checkout.PaymentLinks.Delete(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Checkout.PaymentLinks.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20503,18 +20285,17 @@ seller-defined custom attributes (also known as custom fields) are always set to
 
 ```go
 request := &customers.ListCustomAttributeDefinitionsRequest{
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Customers.CustomAttributeDefinitions.List(
-        context.TODO(),
-        request,
-    )
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Customers.CustomAttributeDefinitions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20595,27 +20376,26 @@ Sellers can view all custom attributes in exported customer data, including thos
 
 ```go
 request := &customers.CreateCustomerCustomAttributeDefinitionRequest{
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Key: square.String(
-                "favoritemovie",
-            ),
-            Schema: map[string]any{
-                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
-            },
-            Name: square.String(
-                "Favorite Movie",
-            ),
-            Description: square.String(
-                "The favorite movie of the customer.",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityHidden.Ptr(),
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Key: square.String(
+            "favoritemovie",
+        ),
+        Schema: map[string]any{
+            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
         },
-    }
-client.Customers.CustomAttributeDefinitions.Create(
-        context.TODO(),
-        request,
-    )
+        Name: square.String(
+            "Favorite Movie",
+        ),
+        Description: square.String(
+            "The favorite movie of the customer.",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityHidden.Ptr(),
+    },
 }
+_, err := client.Customers.CustomAttributeDefinitions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20692,16 +20472,15 @@ setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note t
 
 ```go
 request := &customers.GetCustomAttributeDefinitionsRequest{
-        Key: "key",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Customers.CustomAttributeDefinitions.Get(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Customers.CustomAttributeDefinitions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20778,19 +20557,18 @@ all custom attributes in exported customer data, including those set to `VISIBIL
 
 ```go
 request := &customers.UpdateCustomerCustomAttributeDefinitionRequest{
-        Key: "key",
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Description: square.String(
-                "Update the description as desired.",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
-        },
-    }
-client.Customers.CustomAttributeDefinitions.Update(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Description: square.String(
+            "Update the description as desired.",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+    },
 }
+_, err := client.Customers.CustomAttributeDefinitions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20885,13 +20663,12 @@ Only the definition owner can delete a custom attribute definition.
 
 ```go
 request := &customers.DeleteCustomAttributeDefinitionsRequest{
-        Key: "key",
-    }
-client.Customers.CustomAttributeDefinitions.Delete(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
 }
+_, err := client.Customers.CustomAttributeDefinitions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -20959,59 +20736,58 @@ must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attribut
 
 ```go
 request := &customers.BatchUpsertCustomerCustomAttributesRequest{
-        Values: map[string]*square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-            "id1": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-                CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "favoritemovie",
-                    ),
-                    Value: "Dune",
-                },
-            },
-            "id2": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-                CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "ownsmovie",
-                    ),
-                    Value: false,
-                },
-            },
-            "id3": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-                CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "favoritemovie",
-                    ),
-                    Value: "Star Wars",
-                },
-            },
-            "id4": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-                CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "square:a0f1505a-2aa1-490d-91a8-8d31ff181808",
-                    ),
-                    Value: "10.5",
-                },
-            },
-            "id5": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
-                CustomerID: "70548QG1HN43B05G0KCZ4MMC1G",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "sq0ids-0evKIskIGaY45fCyNL66aw:backupemail",
-                    ),
-                    Value: "fake-email@squareup.com",
-                },
+    Values: map[string]*square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+        "id1": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+            CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "favoritemovie",
+                ),
+                Value: "Dune",
             },
         },
-    }
-client.Customers.CustomAttributeDefinitions.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+        "id2": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+            CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "ownsmovie",
+                ),
+                Value: false,
+            },
+        },
+        "id3": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+            CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "favoritemovie",
+                ),
+                Value: "Star Wars",
+            },
+        },
+        "id4": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+            CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "square:a0f1505a-2aa1-490d-91a8-8d31ff181808",
+                ),
+                Value: "10.5",
+            },
+        },
+        "id5": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+            CustomerID: "70548QG1HN43B05G0KCZ4MMC1G",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "sq0ids-0evKIskIGaY45fCyNL66aw:backupemail",
+                ),
+                Value: "fake-email@squareup.com",
+            },
+        },
+    },
 }
+_, err := client.Customers.CustomAttributeDefinitions.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21071,18 +20847,17 @@ Retrieves the list of customer groups of a business.
 
 ```go
 request := &customers.ListGroupsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Customers.Groups.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Customers.Groups.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21157,15 +20932,14 @@ The request must include the `name` value of the group.
 
 ```go
 request := &customers.CreateCustomerGroupRequest{
-        Group: &square.CustomerGroup{
-            Name: "Loyal Customers",
-        },
-    }
-client.Customers.Groups.Create(
-        context.TODO(),
-        request,
-    )
+    Group: &square.CustomerGroup{
+        Name: "Loyal Customers",
+    },
 }
+_, err := client.Customers.Groups.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21228,13 +21002,12 @@ Retrieves a specific customer group as identified by the `group_id` value.
 
 ```go
 request := &customers.GetGroupsRequest{
-        GroupID: "group_id",
-    }
-client.Customers.Groups.Get(
-        context.TODO(),
-        request,
-    )
+    GroupID: "group_id",
 }
+_, err := client.Customers.Groups.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21289,16 +21062,15 @@ Updates a customer group as identified by the `group_id` value.
 
 ```go
 request := &customers.UpdateCustomerGroupRequest{
-        GroupID: "group_id",
-        Group: &square.CustomerGroup{
-            Name: "Loyal Customers",
-        },
-    }
-client.Customers.Groups.Update(
-        context.TODO(),
-        request,
-    )
+    GroupID: "group_id",
+    Group: &square.CustomerGroup{
+        Name: "Loyal Customers",
+    },
 }
+_, err := client.Customers.Groups.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21361,13 +21133,12 @@ Deletes a customer group as identified by the `group_id` value.
 
 ```go
 request := &customers.DeleteGroupsRequest{
-        GroupID: "group_id",
-    }
-client.Customers.Groups.Delete(
-        context.TODO(),
-        request,
-    )
+    GroupID: "group_id",
 }
+_, err := client.Customers.Groups.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21425,14 +21196,13 @@ and the customer group is identified by the `group_id` value.
 
 ```go
 request := &customers.AddGroupsRequest{
-        CustomerID: "customer_id",
-        GroupID: "group_id",
-    }
-client.Customers.Groups.Add(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    GroupID: "group_id",
 }
+_, err := client.Customers.Groups.Add(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21498,14 +21268,13 @@ and the customer group is identified by the `group_id` value.
 
 ```go
 request := &customers.RemoveGroupsRequest{
-        CustomerID: "customer_id",
-        GroupID: "group_id",
-    }
-client.Customers.Groups.Remove(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    GroupID: "group_id",
 }
+_, err := client.Customers.Groups.Remove(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21569,18 +21338,17 @@ Retrieves the list of customer segments of a business.
 
 ```go
 request := &customers.ListSegmentsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Customers.Segments.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Customers.Segments.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21653,13 +21421,12 @@ Retrieves a specific customer segment as identified by the `segment_id` value.
 
 ```go
 request := &customers.GetSegmentsRequest{
-        SegmentID: "segment_id",
-    }
-client.Customers.Segments.Get(
-        context.TODO(),
-        request,
-    )
+    SegmentID: "segment_id",
 }
+_, err := client.Customers.Segments.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21719,35 +21486,34 @@ with the provided nonce during the _first_ call.
 
 ```go
 request := &customers.CreateCustomerCardRequest{
-        CustomerID: "customer_id",
-        CardNonce: "YOUR_CARD_NONCE",
-        BillingAddress: &square.Address{
-            AddressLine1: square.String(
-                "500 Electric Ave",
-            ),
-            AddressLine2: square.String(
-                "Suite 600",
-            ),
-            Locality: square.String(
-                "New York",
-            ),
-            AdministrativeDistrictLevel1: square.String(
-                "NY",
-            ),
-            PostalCode: square.String(
-                "10003",
-            ),
-            Country: square.CountryUs.Ptr(),
-        },
-        CardholderName: square.String(
-            "Amelia Earhart",
+    CustomerID: "customer_id",
+    CardNonce: "YOUR_CARD_NONCE",
+    BillingAddress: &square.Address{
+        AddressLine1: square.String(
+            "500 Electric Ave",
         ),
-    }
-client.Customers.Cards.Create(
-        context.TODO(),
-        request,
-    )
+        AddressLine2: square.String(
+            "Suite 600",
+        ),
+        Locality: square.String(
+            "New York",
+        ),
+        AdministrativeDistrictLevel1: square.String(
+            "NY",
+        ),
+        PostalCode: square.String(
+            "10003",
+        ),
+        Country: square.CountryUs.Ptr(),
+    },
+    CardholderName: square.String(
+        "Amelia Earhart",
+    ),
 }
+_, err := client.Customers.Cards.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21853,14 +21619,13 @@ Removes a card on file from a customer.
 
 ```go
 request := &customers.DeleteCardsRequest{
-        CustomerID: "customer_id",
-        CardID: "card_id",
-    }
-client.Customers.Cards.Delete(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    CardID: "card_id",
 }
+_, err := client.Customers.Cards.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -21931,22 +21696,21 @@ and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &customers.ListCustomAttributesRequest{
-        CustomerID: "customer_id",
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        WithDefinitions: square.Bool(
-            true,
-        ),
-    }
-client.Customers.CustomAttributes.List(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    WithDefinitions: square.Bool(
+        true,
+    ),
 }
+_, err := client.Customers.CustomAttributes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22044,20 +21808,19 @@ To retrieve a custom attribute owned by another application, the `visibility` se
 
 ```go
 request := &customers.GetCustomAttributesRequest{
-        CustomerID: "customer_id",
-        Key: "key",
-        WithDefinition: square.Bool(
-            true,
-        ),
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Customers.CustomAttributes.Get(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    Key: "key",
+    WithDefinition: square.Bool(
+        true,
+    ),
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Customers.CustomAttributes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22157,17 +21920,16 @@ must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attribut
 
 ```go
 request := &customers.UpsertCustomerCustomAttributeRequest{
-        CustomerID: "customer_id",
-        Key: "key",
-        CustomAttribute: &square.CustomAttribute{
-            Value: "Dune",
-        },
-    }
-client.Customers.CustomAttributes.Upsert(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    Key: "key",
+    CustomAttribute: &square.CustomAttribute{
+        Value: "Dune",
+    },
 }
+_, err := client.Customers.CustomAttributes.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22266,14 +22028,13 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &customers.DeleteCustomAttributesRequest{
-        CustomerID: "customer_id",
-        Key: "key",
-    }
-client.Customers.CustomAttributes.Delete(
-        context.TODO(),
-        request,
-    )
+    CustomerID: "customer_id",
+    Key: "key",
 }
+_, err := client.Customers.CustomAttributes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22341,22 +22102,21 @@ Lists all DeviceCodes associated with the merchant.
 
 ```go
 request := &devices.ListCodesRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        ProductType: square.String(
-            "TERMINAL_API",
-        ),
-        Status: square.DeviceCodeStatusUnknown.Ptr(),
-    }
-client.Devices.Codes.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    ProductType: square.String(
+        "TERMINAL_API",
+    ),
+    Status: square.DeviceCodeStatusUnknown.Ptr(),
 }
+_, err := client.Devices.Codes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22450,24 +22210,23 @@ terminal mode.
 
 ```go
 request := &devices.CreateDeviceCodeRequest{
-        IdempotencyKey: "01bb00a6-0c86-4770-94ed-f5fca973cd56",
-        DeviceCode: &square.DeviceCode{
-            Name: square.String(
-                "Counter 1",
-            ),
-            ProductType: square.ProductType(
-                "TERMINAL_API",
-            ),
-            LocationID: square.String(
-                "B5E4484SHHNYH",
-            ),
-        },
-    }
-client.Devices.Codes.Create(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: "01bb00a6-0c86-4770-94ed-f5fca973cd56",
+    DeviceCode: &square.DeviceCode{
+        Name: square.String(
+            "Counter 1",
+        ),
+        ProductType: square.ProductType(
+            "TERMINAL_API",
+        ),
+        LocationID: square.String(
+            "B5E4484SHHNYH",
+        ),
+    },
 }
+_, err := client.Devices.Codes.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22535,13 +22294,12 @@ Retrieves DeviceCode with the associated ID.
 
 ```go
 request := &devices.GetCodesRequest{
-        ID: "id",
-    }
-client.Devices.Codes.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Devices.Codes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22597,16 +22355,15 @@ Returns a list of evidence associated with a dispute.
 
 ```go
 request := &disputes.ListEvidenceRequest{
-        DisputeID: "dispute_id",
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Disputes.Evidence.List(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Disputes.Evidence.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22675,14 +22432,13 @@ You must maintain a copy of any evidence uploaded if you want to reference it la
 
 ```go
 request := &disputes.GetEvidenceRequest{
-        DisputeID: "dispute_id",
-        EvidenceID: "evidence_id",
-    }
-client.Disputes.Evidence.Get(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
+    EvidenceID: "evidence_id",
 }
+_, err := client.Disputes.Evidence.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22746,14 +22502,13 @@ Square does not send the bank any evidence that is removed.
 
 ```go
 request := &disputes.DeleteEvidenceRequest{
-        DisputeID: "dispute_id",
-        EvidenceID: "evidence_id",
-    }
-client.Disputes.Evidence.Delete(
-        context.TODO(),
-        request,
-    )
+    DisputeID: "dispute_id",
+    EvidenceID: "evidence_id",
 }
+_, err := client.Disputes.Evidence.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22820,36 +22575,35 @@ for all gift cards in a specific region, or for activities within a time window.
 
 ```go
 request := &giftcards.ListActivitiesRequest{
-        GiftCardID: square.String(
-            "gift_card_id",
-        ),
-        Type: square.String(
-            "type",
-        ),
-        LocationID: square.String(
-            "location_id",
-        ),
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        SortOrder: square.String(
-            "sort_order",
-        ),
-    }
-client.GiftCards.Activities.List(
-        context.TODO(),
-        request,
-    )
+    GiftCardID: square.String(
+        "gift_card_id",
+    ),
+    Type: square.String(
+        "type",
+    ),
+    LocationID: square.String(
+        "location_id",
+    ),
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    SortOrder: square.String(
+        "sort_order",
+    ),
 }
+_, err := client.GiftCards.Activities.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -22990,28 +22744,27 @@ For example, create an `ACTIVATE` activity to activate a gift card with an initi
 
 ```go
 request := &giftcards.CreateGiftCardActivityRequest{
-        IdempotencyKey: "U16kfr-kA70er-q4Rsym-7U7NnY",
-        GiftCardActivity: &square.GiftCardActivity{
-            Type: square.GiftCardActivityTypeActivate,
-            LocationID: "81FN9BNFZTKS4",
-            GiftCardID: square.String(
-                "gftc:6d55a72470d940c6ba09c0ab8ad08d20",
+    IdempotencyKey: "U16kfr-kA70er-q4Rsym-7U7NnY",
+    GiftCardActivity: &square.GiftCardActivity{
+        Type: square.GiftCardActivityTypeActivate,
+        LocationID: "81FN9BNFZTKS4",
+        GiftCardID: square.String(
+            "gftc:6d55a72470d940c6ba09c0ab8ad08d20",
+        ),
+        ActivateActivityDetails: &square.GiftCardActivityActivate{
+            OrderID: square.String(
+                "jJNGHm4gLI6XkFbwtiSLqK72KkAZY",
             ),
-            ActivateActivityDetails: &square.GiftCardActivityActivate{
-                OrderID: square.String(
-                    "jJNGHm4gLI6XkFbwtiSLqK72KkAZY",
-                ),
-                LineItemUID: square.String(
-                    "eIWl7X0nMuO9Ewbh0ChIx",
-                ),
-            },
+            LineItemUID: square.String(
+                "eIWl7X0nMuO9Ewbh0ChIx",
+            ),
         },
-    }
-client.GiftCards.Activities.Create(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.GiftCards.Activities.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23078,21 +22831,20 @@ Returns a paginated list of `BreakType` instances for a business.
 
 ```go
 request := &labor.ListBreakTypesRequest{
-        LocationID: square.String(
-            "location_id",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Labor.BreakTypes.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: square.String(
+        "location_id",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Labor.BreakTypes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23182,21 +22934,20 @@ is returned.
 
 ```go
 request := &labor.CreateBreakTypeRequest{
-        IdempotencyKey: square.String(
-            "PAD3NG5KSN2GL",
-        ),
-        BreakType: &square.BreakType{
-            LocationID: "CGJN03P1D08GF",
-            BreakName: "Lunch Break",
-            ExpectedDuration: "PT30M",
-            IsPaid: true,
-        },
-    }
-client.Labor.BreakTypes.Create(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: square.String(
+        "PAD3NG5KSN2GL",
+    ),
+    BreakType: &square.BreakType{
+        LocationID: "CGJN03P1D08GF",
+        BreakName: "Lunch Break",
+        ExpectedDuration: "PT30M",
+        IsPaid: true,
+    },
 }
+_, err := client.Labor.BreakTypes.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23259,13 +23010,12 @@ Returns a single `BreakType` specified by `id`.
 
 ```go
 request := &labor.GetBreakTypesRequest{
-        ID: "id",
-    }
-client.Labor.BreakTypes.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.BreakTypes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23320,22 +23070,21 @@ Updates an existing `BreakType`.
 
 ```go
 request := &labor.UpdateBreakTypeRequest{
-        ID: "id",
-        BreakType: &square.BreakType{
-            LocationID: "26M7H24AZ9N6R",
-            BreakName: "Lunch",
-            ExpectedDuration: "PT50M",
-            IsPaid: true,
-            Version: square.Int(
-                1,
-            ),
-        },
-    }
-client.Labor.BreakTypes.Update(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
+    BreakType: &square.BreakType{
+        LocationID: "26M7H24AZ9N6R",
+        BreakName: "Lunch",
+        ExpectedDuration: "PT50M",
+        IsPaid: true,
+        Version: square.Int(
+            1,
+        ),
+    },
 }
+_, err := client.Labor.BreakTypes.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23400,13 +23149,12 @@ A `BreakType` can be deleted even if it is referenced from a `Shift`.
 
 ```go
 request := &labor.DeleteBreakTypesRequest{
-        ID: "id",
-    }
-client.Labor.BreakTypes.Delete(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.BreakTypes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23462,21 +23210,20 @@ Returns a paginated list of `EmployeeWage` instances for a business.
 
 ```go
 request := &labor.ListEmployeeWagesRequest{
-        EmployeeID: square.String(
-            "employee_id",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Labor.EmployeeWages.List(
-        context.TODO(),
-        request,
-    )
+    EmployeeID: square.String(
+        "employee_id",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Labor.EmployeeWages.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23550,13 +23297,12 @@ Returns a single `EmployeeWage` specified by `id`.
 
 ```go
 request := &labor.GetEmployeeWagesRequest{
-        ID: "id",
-    }
-client.Labor.EmployeeWages.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.EmployeeWages.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23629,57 +23375,56 @@ the `Shift.end_at`, or both.
 
 ```go
 request := &labor.CreateShiftRequest{
-        IdempotencyKey: square.String(
-            "HIDSNG5KS478L",
+    IdempotencyKey: square.String(
+        "HIDSNG5KS478L",
+    ),
+    Shift: &square.Shift{
+        LocationID: "PAA1RJZZKXBFG",
+        StartAt: "2019-01-25T03:11:00-05:00",
+        EndAt: square.String(
+            "2019-01-25T13:11:00-05:00",
         ),
-        Shift: &square.Shift{
-            LocationID: "PAA1RJZZKXBFG",
-            StartAt: "2019-01-25T03:11:00-05:00",
-            EndAt: square.String(
-                "2019-01-25T13:11:00-05:00",
+        Wage: &square.ShiftWage{
+            Title: square.String(
+                "Barista",
             ),
-            Wage: &square.ShiftWage{
-                Title: square.String(
-                    "Barista",
-                ),
-                HourlyRate: &square.Money{
-                    Amount: square.Int64(
-                        int64(1100),
-                    ),
-                    Currency: square.CurrencyUsd.Ptr(),
-                },
-                TipEligible: square.Bool(
-                    true,
-                ),
-            },
-            Breaks: []*square.Break{
-                &square.Break{
-                    StartAt: "2019-01-25T06:11:00-05:00",
-                    EndAt: square.String(
-                        "2019-01-25T06:16:00-05:00",
-                    ),
-                    BreakTypeID: "REGS1EQR1TPZ5",
-                    Name: "Tea Break",
-                    ExpectedDuration: "PT5M",
-                    IsPaid: true,
-                },
-            },
-            TeamMemberID: square.String(
-                "ormj0jJJZ5OZIzxrZYJI",
-            ),
-            DeclaredCashTipMoney: &square.Money{
+            HourlyRate: &square.Money{
                 Amount: square.Int64(
-                    int64(500),
+                    int64(1100),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
+            TipEligible: square.Bool(
+                true,
+            ),
         },
-    }
-client.Labor.Shifts.Create(
-        context.TODO(),
-        request,
-    )
+        Breaks: []*square.Break{
+            &square.Break{
+                StartAt: "2019-01-25T06:11:00-05:00",
+                EndAt: square.String(
+                    "2019-01-25T06:16:00-05:00",
+                ),
+                BreakTypeID: "REGS1EQR1TPZ5",
+                Name: "Tea Break",
+                ExpectedDuration: "PT5M",
+                IsPaid: true,
+            },
+        },
+        TeamMemberID: square.String(
+            "ormj0jJJZ5OZIzxrZYJI",
+        ),
+        DeclaredCashTipMoney: &square.Money{
+            Amount: square.Int64(
+                int64(500),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+    },
 }
+_, err := client.Labor.Shifts.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23755,33 +23500,32 @@ The list can be sorted by:
 
 ```go
 request := &labor.SearchShiftsRequest{
-        Query: &square.ShiftQuery{
-            Filter: &square.ShiftFilter{
-                Workday: &square.ShiftWorkday{
-                    DateRange: &square.DateRange{
-                        StartDate: square.String(
-                            "2019-01-20",
-                        ),
-                        EndDate: square.String(
-                            "2019-02-03",
-                        ),
-                    },
-                    MatchShiftsBy: square.ShiftWorkdayMatcherStartAt.Ptr(),
-                    DefaultTimezone: square.String(
-                        "America/Los_Angeles",
+    Query: &square.ShiftQuery{
+        Filter: &square.ShiftFilter{
+            Workday: &square.ShiftWorkday{
+                DateRange: &square.DateRange{
+                    StartDate: square.String(
+                        "2019-01-20",
+                    ),
+                    EndDate: square.String(
+                        "2019-02-03",
                     ),
                 },
+                MatchShiftsBy: square.ShiftWorkdayMatcherStartAt.Ptr(),
+                DefaultTimezone: square.String(
+                    "America/Los_Angeles",
+                ),
             },
         },
-        Limit: square.Int(
-            100,
-        ),
-    }
-client.Labor.Shifts.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        100,
+    ),
 }
+_, err := client.Labor.Shifts.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23852,13 +23596,12 @@ Returns a single `Shift` specified by `id`.
 
 ```go
 request := &labor.GetShiftsRequest{
-        ID: "id",
-    }
-client.Labor.Shifts.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.Shifts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -23919,61 +23662,60 @@ set on each `Break`.
 
 ```go
 request := &labor.UpdateShiftRequest{
-        ID: "id",
-        Shift: &square.Shift{
-            LocationID: "PAA1RJZZKXBFG",
-            StartAt: "2019-01-25T03:11:00-05:00",
-            EndAt: square.String(
-                "2019-01-25T13:11:00-05:00",
+    ID: "id",
+    Shift: &square.Shift{
+        LocationID: "PAA1RJZZKXBFG",
+        StartAt: "2019-01-25T03:11:00-05:00",
+        EndAt: square.String(
+            "2019-01-25T13:11:00-05:00",
+        ),
+        Wage: &square.ShiftWage{
+            Title: square.String(
+                "Bartender",
             ),
-            Wage: &square.ShiftWage{
-                Title: square.String(
-                    "Bartender",
-                ),
-                HourlyRate: &square.Money{
-                    Amount: square.Int64(
-                        int64(1500),
-                    ),
-                    Currency: square.CurrencyUsd.Ptr(),
-                },
-                TipEligible: square.Bool(
-                    true,
-                ),
-            },
-            Breaks: []*square.Break{
-                &square.Break{
-                    ID: square.String(
-                        "X7GAQYVVRRG6P",
-                    ),
-                    StartAt: "2019-01-25T06:11:00-05:00",
-                    EndAt: square.String(
-                        "2019-01-25T06:16:00-05:00",
-                    ),
-                    BreakTypeID: "REGS1EQR1TPZ5",
-                    Name: "Tea Break",
-                    ExpectedDuration: "PT5M",
-                    IsPaid: true,
-                },
-            },
-            Version: square.Int(
-                1,
-            ),
-            TeamMemberID: square.String(
-                "ormj0jJJZ5OZIzxrZYJI",
-            ),
-            DeclaredCashTipMoney: &square.Money{
+            HourlyRate: &square.Money{
                 Amount: square.Int64(
-                    int64(500),
+                    int64(1500),
                 ),
                 Currency: square.CurrencyUsd.Ptr(),
             },
+            TipEligible: square.Bool(
+                true,
+            ),
         },
-    }
-client.Labor.Shifts.Update(
-        context.TODO(),
-        request,
-    )
+        Breaks: []*square.Break{
+            &square.Break{
+                ID: square.String(
+                    "X7GAQYVVRRG6P",
+                ),
+                StartAt: "2019-01-25T06:11:00-05:00",
+                EndAt: square.String(
+                    "2019-01-25T06:16:00-05:00",
+                ),
+                BreakTypeID: "REGS1EQR1TPZ5",
+                Name: "Tea Break",
+                ExpectedDuration: "PT5M",
+                IsPaid: true,
+            },
+        },
+        Version: square.Int(
+            1,
+        ),
+        TeamMemberID: square.String(
+            "ormj0jJJZ5OZIzxrZYJI",
+        ),
+        DeclaredCashTipMoney: &square.Money{
+            Amount: square.Int64(
+                int64(500),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+    },
 }
+_, err := client.Labor.Shifts.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24036,13 +23778,12 @@ Deletes a `Shift`.
 
 ```go
 request := &labor.DeleteShiftsRequest{
-        ID: "id",
-    }
-client.Labor.Shifts.Delete(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.Shifts.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24098,21 +23839,20 @@ Returns a paginated list of `TeamMemberWage` instances for a business.
 
 ```go
 request := &labor.ListTeamMemberWagesRequest{
-        TeamMemberID: square.String(
-            "team_member_id",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Labor.TeamMemberWages.List(
-        context.TODO(),
-        request,
-    )
+    TeamMemberID: square.String(
+        "team_member_id",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Labor.TeamMemberWages.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24189,13 +23929,12 @@ Returns a single `TeamMemberWage` specified by `id`.
 
 ```go
 request := &labor.GetTeamMemberWagesRequest{
-        ID: "id",
-    }
-client.Labor.TeamMemberWages.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
 }
+_, err := client.Labor.TeamMemberWages.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24251,18 +23990,17 @@ Returns a list of `WorkweekConfig` instances for a business.
 
 ```go
 request := &labor.ListWorkweekConfigsRequest{
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Labor.WorkweekConfigs.List(
-        context.TODO(),
-        request,
-    )
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Labor.WorkweekConfigs.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24325,20 +24063,19 @@ Updates a `WorkweekConfig`.
 
 ```go
 request := &labor.UpdateWorkweekConfigRequest{
-        ID: "id",
-        WorkweekConfig: &square.WorkweekConfig{
-            StartOfWeek: square.WeekdayMon,
-            StartOfDayLocalTime: "10:00",
-            Version: square.Int(
-                10,
-            ),
-        },
-    }
-client.Labor.WorkweekConfigs.Get(
-        context.TODO(),
-        request,
-    )
+    ID: "id",
+    WorkweekConfig: &square.WorkweekConfig{
+        StartOfWeek: square.WeekdayMon,
+        StartOfDayLocalTime: "10:00",
+        Version: square.Int(
+            10,
+        ),
+    },
 }
+_, err := client.Labor.WorkweekConfigs.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24405,19 +24142,18 @@ applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`
 
 ```go
 request := &locations.ListCustomAttributeDefinitionsRequest{
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Locations.CustomAttributeDefinitions.List(
-        context.TODO(),
-        request,
-    )
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Locations.CustomAttributeDefinitions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24502,27 +24238,26 @@ to set the custom attribute for locations.
 
 ```go
 request := &locations.CreateLocationCustomAttributeDefinitionRequest{
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Key: square.String(
-                "bestseller",
-            ),
-            Schema: map[string]any{
-                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
-            },
-            Name: square.String(
-                "Bestseller",
-            ),
-            Description: square.String(
-                "Bestselling item at location",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Key: square.String(
+            "bestseller",
+        ),
+        Schema: map[string]any{
+            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
         },
-    }
-client.Locations.CustomAttributeDefinitions.Create(
-        context.TODO(),
-        request,
-    )
+        Name: square.String(
+            "Bestseller",
+        ),
+        Description: square.String(
+            "Bestselling item at location",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
+    },
 }
+_, err := client.Locations.CustomAttributeDefinitions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24596,16 +24331,15 @@ setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &locations.GetCustomAttributeDefinitionsRequest{
-        Key: "key",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Locations.CustomAttributeDefinitions.Get(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Locations.CustomAttributeDefinitions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24679,19 +24413,18 @@ Only the definition owner can update a custom attribute definition.
 
 ```go
 request := &locations.UpdateLocationCustomAttributeDefinitionRequest{
-        Key: "key",
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Description: square.String(
-                "Update the description as desired.",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
-        },
-    }
-client.Locations.CustomAttributeDefinitions.Update(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Description: square.String(
+            "Update the description as desired.",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+    },
 }
+_, err := client.Locations.CustomAttributeDefinitions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24783,13 +24516,12 @@ Only the definition owner can delete a custom attribute definition.
 
 ```go
 request := &locations.DeleteCustomAttributeDefinitionsRequest{
-        Key: "key",
-    }
-client.Locations.CustomAttributeDefinitions.Delete(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
 }
+_, err := client.Locations.CustomAttributeDefinitions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24847,29 +24579,28 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &locations.BulkDeleteLocationCustomAttributesRequest{
-        Values: map[string]*square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
-            "id1": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
-                Key: square.String(
-                    "bestseller",
-                ),
-            },
-            "id2": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
-                Key: square.String(
-                    "bestseller",
-                ),
-            },
-            "id3": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
-                Key: square.String(
-                    "phone-number",
-                ),
-            },
+    Values: map[string]*square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
+        "id1": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
+            Key: square.String(
+                "bestseller",
+            ),
         },
-    }
-client.Locations.CustomAttributes.BatchDelete(
-        context.TODO(),
-        request,
-    )
+        "id2": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
+            Key: square.String(
+                "bestseller",
+            ),
+        },
+        "id3": &square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
+            Key: square.String(
+                "phone-number",
+            ),
+        },
+    },
 }
+_, err := client.Locations.CustomAttributes.BatchDelete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -24936,41 +24667,40 @@ must be `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &locations.BulkUpsertLocationCustomAttributesRequest{
-        Values: map[string]*square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
-            "id1": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
-                LocationID: "L0TBCBTB7P8RQ",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "bestseller",
-                    ),
-                    Value: "hot cocoa",
-                },
-            },
-            "id2": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
-                LocationID: "L9XMD04V3STJX",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "bestseller",
-                    ),
-                    Value: "berry smoothie",
-                },
-            },
-            "id3": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
-                LocationID: "L0TBCBTB7P8RQ",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "phone-number",
-                    ),
-                    Value: "+12223334444",
-                },
+    Values: map[string]*square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
+        "id1": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
+            LocationID: "L0TBCBTB7P8RQ",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "bestseller",
+                ),
+                Value: "hot cocoa",
             },
         },
-    }
-client.Locations.CustomAttributes.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+        "id2": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
+            LocationID: "L9XMD04V3STJX",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "bestseller",
+                ),
+                Value: "berry smoothie",
+            },
+        },
+        "id3": &square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
+            LocationID: "L0TBCBTB7P8RQ",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "phone-number",
+                ),
+                Value: "+12223334444",
+            },
+        },
+    },
 }
+_, err := client.Locations.CustomAttributes.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25034,23 +24764,22 @@ and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &locations.ListCustomAttributesRequest{
-        LocationID: "location_id",
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        WithDefinitions: square.Bool(
-            true,
-        ),
-    }
-client.Locations.CustomAttributes.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    WithDefinitions: square.Bool(
+        true,
+    ),
 }
+_, err := client.Locations.CustomAttributes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25153,20 +24882,19 @@ To retrieve a custom attribute owned by another application, the `visibility` se
 
 ```go
 request := &locations.GetCustomAttributesRequest{
-        LocationID: "location_id",
-        Key: "key",
-        WithDefinition: square.Bool(
-            true,
-        ),
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Locations.CustomAttributes.Get(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    Key: "key",
+    WithDefinition: square.Bool(
+        true,
+    ),
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Locations.CustomAttributes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25263,17 +24991,16 @@ must be `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &locations.UpsertLocationCustomAttributeRequest{
-        LocationID: "location_id",
-        Key: "key",
-        CustomAttribute: &square.CustomAttribute{
-            Value: "hot cocoa",
-        },
-    }
-client.Locations.CustomAttributes.Upsert(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    Key: "key",
+    CustomAttribute: &square.CustomAttribute{
+        Value: "hot cocoa",
+    },
 }
+_, err := client.Locations.CustomAttributes.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25368,14 +25095,13 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &locations.DeleteCustomAttributesRequest{
-        LocationID: "location_id",
-        Key: "key",
-    }
-client.Locations.CustomAttributes.Delete(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    Key: "key",
 }
+_, err := client.Locations.CustomAttributes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25448,23 +25174,22 @@ Max results per [page](https://developer.squareup.com/docs/working-with-apis/pag
 
 ```go
 request := &locations.ListTransactionsRequest{
-        LocationID: "location_id",
-        BeginTime: square.String(
-            "begin_time",
-        ),
-        EndTime: square.String(
-            "end_time",
-        ),
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Locations.Transactions.List(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    BeginTime: square.String(
+        "begin_time",
+    ),
+    EndTime: square.String(
+        "end_time",
+    ),
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Locations.Transactions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25573,14 +25298,13 @@ Retrieves details for a single transaction.
 
 ```go
 request := &locations.GetTransactionsRequest{
-        LocationID: "location_id",
-        TransactionID: "transaction_id",
-    }
-client.Locations.Transactions.Get(
-        context.TODO(),
-        request,
-    )
+    LocationID: "location_id",
+    TransactionID: "transaction_id",
 }
+_, err := client.Locations.Transactions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25644,21 +25368,20 @@ Creates a loyalty account. To create a loyalty account, you must provide the `pr
 
 ```go
 request := &loyalty.CreateLoyaltyAccountRequest{
-        LoyaltyAccount: &square.LoyaltyAccount{
-            ProgramID: "d619f755-2d17-41f3-990d-c04ecedd64dd",
-            Mapping: &square.LoyaltyAccountMapping{
-                PhoneNumber: square.String(
-                    "+14155551234",
-                ),
-            },
+    LoyaltyAccount: &square.LoyaltyAccount{
+        ProgramID: "d619f755-2d17-41f3-990d-c04ecedd64dd",
+        Mapping: &square.LoyaltyAccountMapping{
+            PhoneNumber: square.String(
+                "+14155551234",
+            ),
         },
-        IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
-    }
-client.Loyalty.Accounts.Create(
-        context.TODO(),
-        request,
-    )
+    },
+    IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
 }
+_, err := client.Loyalty.Accounts.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25728,24 +25451,23 @@ Search results are sorted by `created_at` in ascending order.
 
 ```go
 request := &loyalty.SearchLoyaltyAccountsRequest{
-        Query: &square.SearchLoyaltyAccountsRequestLoyaltyAccountQuery{
-            Mappings: []*square.LoyaltyAccountMapping{
-                &square.LoyaltyAccountMapping{
-                    PhoneNumber: square.String(
-                        "+14155551234",
-                    ),
-                },
+    Query: &square.SearchLoyaltyAccountsRequestLoyaltyAccountQuery{
+        Mappings: []*square.LoyaltyAccountMapping{
+            &square.LoyaltyAccountMapping{
+                PhoneNumber: square.String(
+                    "+14155551234",
+                ),
             },
         },
-        Limit: square.Int(
-            10,
-        ),
-    }
-client.Loyalty.Accounts.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        10,
+    ),
 }
+_, err := client.Loyalty.Accounts.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25823,13 +25545,12 @@ Retrieves a loyalty account.
 
 ```go
 request := &loyalty.GetAccountsRequest{
-        AccountID: "account_id",
-    }
-client.Loyalty.Accounts.Get(
-        context.TODO(),
-        request,
-    )
+    AccountID: "account_id",
 }
+_, err := client.Loyalty.Accounts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -25897,20 +25618,19 @@ to compute the points earned from the base loyalty program. For information abou
 
 ```go
 request := &loyalty.AccumulateLoyaltyPointsRequest{
-        AccountID: "account_id",
-        AccumulatePoints: &square.LoyaltyEventAccumulatePoints{
-            OrderID: square.String(
-                "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
-            ),
-        },
-        IdempotencyKey: "58b90739-c3e8-4b11-85f7-e636d48d72cb",
-        LocationID: "P034NEENMD09F",
-    }
-client.Loyalty.Accounts.AccumulatePoints(
-        context.TODO(),
-        request,
-    )
+    AccountID: "account_id",
+    AccumulatePoints: &square.LoyaltyEventAccumulatePoints{
+        OrderID: square.String(
+            "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+        ),
+    },
+    IdempotencyKey: "58b90739-c3e8-4b11-85f7-e636d48d72cb",
+    LocationID: "P034NEENMD09F",
 }
+_, err := client.Loyalty.Accounts.AccumulatePoints(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26000,20 +25720,19 @@ to add points when a buyer pays for the purchase.
 
 ```go
 request := &loyalty.AdjustLoyaltyPointsRequest{
-        AccountID: "account_id",
-        IdempotencyKey: "bc29a517-3dc9-450e-aa76-fae39ee849d1",
-        AdjustPoints: &square.LoyaltyEventAdjustPoints{
-            Points: 10,
-            Reason: square.String(
-                "Complimentary points",
-            ),
-        },
-    }
-client.Loyalty.Accounts.Adjust(
-        context.TODO(),
-        request,
-    )
+    AccountID: "account_id",
+    IdempotencyKey: "bc29a517-3dc9-450e-aa76-fae39ee849d1",
+    AdjustPoints: &square.LoyaltyEventAdjustPoints{
+        Points: 10,
+        Reason: square.String(
+            "Complimentary points",
+        ),
+    },
 }
+_, err := client.Loyalty.Accounts.Adjust(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26106,10 +25825,9 @@ Replaced with [RetrieveLoyaltyProgram](api-endpoint:Loyalty-RetrieveLoyaltyProgr
 <dd>
 
 ```go
-client.Loyalty.Programs.List(
-        context.TODO(),
-    )
-}
+_, err := client.Loyalty.Programs.List(
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -26151,13 +25869,12 @@ Loyalty programs define how buyers can earn points and redeem points for rewards
 
 ```go
 request := &loyalty.GetProgramsRequest{
-        ProgramID: "program_id",
-    }
-client.Loyalty.Programs.Get(
-        context.TODO(),
-        request,
-    )
+    ProgramID: "program_id",
 }
+_, err := client.Loyalty.Programs.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26226,19 +25943,18 @@ to calculate whether the purchase also qualifies for promotion points. For more 
 
 ```go
 request := &loyalty.CalculateLoyaltyPointsRequest{
-        ProgramID: "program_id",
-        OrderID: square.String(
-            "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
-        ),
-        LoyaltyAccountID: square.String(
-            "79b807d2-d786-46a9-933b-918028d7a8c5",
-        ),
-    }
-client.Loyalty.Programs.Calculate(
-        context.TODO(),
-        request,
-    )
+    ProgramID: "program_id",
+    OrderID: square.String(
+        "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+    ),
+    LoyaltyAccountID: square.String(
+        "79b807d2-d786-46a9-933b-918028d7a8c5",
+    ),
 }
+_, err := client.Loyalty.Programs.Calculate(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26342,20 +26058,19 @@ not available for the buyer to redeem another reward.
 
 ```go
 request := &loyalty.CreateLoyaltyRewardRequest{
-        Reward: &square.LoyaltyReward{
-            LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
-            RewardTierID: "e1b39225-9da5-43d1-a5db-782cdd8ad94f",
-            OrderID: square.String(
-                "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
-            ),
-        },
-        IdempotencyKey: "18c2e5ea-a620-4b1f-ad60-7b167285e451",
-    }
-client.Loyalty.Rewards.Create(
-        context.TODO(),
-        request,
-    )
+    Reward: &square.LoyaltyReward{
+        LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
+        RewardTierID: "e1b39225-9da5-43d1-a5db-782cdd8ad94f",
+        OrderID: square.String(
+            "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+        ),
+    },
+    IdempotencyKey: "18c2e5ea-a620-4b1f-ad60-7b167285e451",
 }
+_, err := client.Loyalty.Rewards.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26427,18 +26142,17 @@ Search results are sorted by `updated_at` in descending order.
 
 ```go
 request := &loyalty.SearchLoyaltyRewardsRequest{
-        Query: &square.SearchLoyaltyRewardsRequestLoyaltyRewardQuery{
-            LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
-        },
-        Limit: square.Int(
-            10,
-        ),
-    }
-client.Loyalty.Rewards.Search(
-        context.TODO(),
-        request,
-    )
+    Query: &square.SearchLoyaltyRewardsRequestLoyaltyRewardQuery{
+        LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
+    },
+    Limit: square.Int(
+        10,
+    ),
 }
+_, err := client.Loyalty.Rewards.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26518,13 +26232,12 @@ Retrieves a loyalty reward.
 
 ```go
 request := &loyalty.GetRewardsRequest{
-        RewardID: "reward_id",
-    }
-client.Loyalty.Rewards.Get(
-        context.TODO(),
-        request,
-    )
+    RewardID: "reward_id",
 }
+_, err := client.Loyalty.Rewards.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26587,13 +26300,12 @@ You cannot delete a reward that has reached the terminal state (REDEEMED).
 
 ```go
 request := &loyalty.DeleteRewardsRequest{
-        RewardID: "reward_id",
-    }
-client.Loyalty.Rewards.Delete(
-        context.TODO(),
-        request,
-    )
+    RewardID: "reward_id",
 }
+_, err := client.Loyalty.Rewards.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26658,15 +26370,14 @@ to the account.
 
 ```go
 request := &loyalty.RedeemLoyaltyRewardRequest{
-        RewardID: "reward_id",
-        IdempotencyKey: "98adc7f7-6963-473b-b29c-f3c9cdd7d994",
-        LocationID: "P034NEENMD09F",
-    }
-client.Loyalty.Rewards.Redeem(
-        context.TODO(),
-        request,
-    )
+    RewardID: "reward_id",
+    IdempotencyKey: "98adc7f7-6963-473b-b29c-f3c9cdd7d994",
+    LocationID: "P034NEENMD09F",
 }
+_, err := client.Loyalty.Rewards.Redeem(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26742,20 +26453,19 @@ Results are sorted by the `created_at` date in descending order (newest to oldes
 
 ```go
 request := &programs.ListPromotionsRequest{
-        ProgramID: "program_id",
-        Status: square.LoyaltyPromotionStatusActive.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Loyalty.Programs.Promotions.List(
-        context.TODO(),
-        request,
-    )
+    ProgramID: "program_id",
+    Status: square.LoyaltyPromotionStatusActive.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Loyalty.Programs.Promotions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26854,47 +26564,46 @@ This endpoint sets the loyalty promotion to the `ACTIVE` or `SCHEDULED` status, 
 
 ```go
 request := &programs.CreateLoyaltyPromotionRequest{
-        ProgramID: "program_id",
-        LoyaltyPromotion: &square.LoyaltyPromotion{
-            Name: "Tuesday Happy Hour Promo",
-            Incentive: &square.LoyaltyPromotionIncentive{
-                Type: square.LoyaltyPromotionIncentiveTypePointsMultiplier,
-                PointsMultiplierData: &square.LoyaltyPromotionIncentivePointsMultiplierData{
-                    Multiplier: square.String(
-                        "3.0",
-                    ),
-                },
-            },
-            AvailableTime: &square.LoyaltyPromotionAvailableTimeData{
-                TimePeriods: []string{
-                    `BEGIN:VEVENT
-                    DTSTART:20220816T160000
-                    DURATION:PT2H
-                    RRULE:FREQ=WEEKLY;BYDAY=TU
-                    END:VEVENT`,
-                },
-            },
-            TriggerLimit: &square.LoyaltyPromotionTriggerLimit{
-                Times: 1,
-                Interval: square.LoyaltyPromotionTriggerLimitIntervalDay.Ptr(),
-            },
-            MinimumSpendAmountMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(2000),
+    ProgramID: "program_id",
+    LoyaltyPromotion: &square.LoyaltyPromotion{
+        Name: "Tuesday Happy Hour Promo",
+        Incentive: &square.LoyaltyPromotionIncentive{
+            Type: square.LoyaltyPromotionIncentiveTypePointsMultiplier,
+            PointsMultiplierData: &square.LoyaltyPromotionIncentivePointsMultiplierData{
+                Multiplier: square.String(
+                    "3.0",
                 ),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-            QualifyingCategoryIDs: []string{
-                "XTQPYLR3IIU9C44VRCB3XD12",
             },
         },
-        IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
-    }
-client.Loyalty.Programs.Promotions.Create(
-        context.TODO(),
-        request,
-    )
+        AvailableTime: &square.LoyaltyPromotionAvailableTimeData{
+            TimePeriods: []string{
+                `BEGIN:VEVENT
+                DTSTART:20220816T160000
+                DURATION:PT2H
+                RRULE:FREQ=WEEKLY;BYDAY=TU
+                END:VEVENT`,
+            },
+        },
+        TriggerLimit: &square.LoyaltyPromotionTriggerLimit{
+            Times: 1,
+            Interval: square.LoyaltyPromotionTriggerLimitIntervalDay.Ptr(),
+        },
+        MinimumSpendAmountMoney: &square.Money{
+            Amount: square.Int64(
+                int64(2000),
+            ),
+            Currency: square.CurrencyUsd.Ptr(),
+        },
+        QualifyingCategoryIDs: []string{
+            "XTQPYLR3IIU9C44VRCB3XD12",
+        },
+    },
+    IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
 }
+_, err := client.Loyalty.Programs.Promotions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -26972,14 +26681,13 @@ Retrieves a loyalty promotion.
 
 ```go
 request := &programs.GetPromotionsRequest{
-        ProgramID: "program_id",
-        PromotionID: "promotion_id",
-    }
-client.Loyalty.Programs.Promotions.Get(
-        context.TODO(),
-        request,
-    )
+    ProgramID: "program_id",
+    PromotionID: "promotion_id",
 }
+_, err := client.Loyalty.Programs.Promotions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27050,14 +26758,13 @@ This endpoint sets the loyalty promotion to the `CANCELED` state
 
 ```go
 request := &programs.CancelPromotionsRequest{
-        ProgramID: "program_id",
-        PromotionID: "promotion_id",
-    }
-client.Loyalty.Programs.Promotions.Cancel(
-        context.TODO(),
-        request,
-    )
+    ProgramID: "program_id",
+    PromotionID: "promotion_id",
 }
+_, err := client.Loyalty.Programs.Promotions.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27127,19 +26834,18 @@ applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`
 
 ```go
 request := &merchants.ListCustomAttributeDefinitionsRequest{
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-    }
-client.Merchants.CustomAttributeDefinitions.List(
-        context.TODO(),
-        request,
-    )
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
 }
+_, err := client.Merchants.CustomAttributeDefinitions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27224,27 +26930,26 @@ to set the custom attribute for a merchant.
 
 ```go
 request := &merchants.CreateMerchantCustomAttributeDefinitionRequest{
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Key: square.String(
-                "alternative_seller_name",
-            ),
-            Schema: map[string]any{
-                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
-            },
-            Name: square.String(
-                "Alternative Merchant Name",
-            ),
-            Description: square.String(
-                "This is the other name this merchant goes by.",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Key: square.String(
+            "alternative_seller_name",
+        ),
+        Schema: map[string]any{
+            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
         },
-    }
-client.Merchants.CustomAttributeDefinitions.Create(
-        context.TODO(),
-        request,
-    )
+        Name: square.String(
+            "Alternative Merchant Name",
+        ),
+        Description: square.String(
+            "This is the other name this merchant goes by.",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+    },
 }
+_, err := client.Merchants.CustomAttributeDefinitions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27318,16 +27023,15 @@ setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &merchants.GetCustomAttributeDefinitionsRequest{
-        Key: "key",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Merchants.CustomAttributeDefinitions.Get(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Merchants.CustomAttributeDefinitions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27401,19 +27105,18 @@ Only the definition owner can update a custom attribute definition.
 
 ```go
 request := &merchants.UpdateMerchantCustomAttributeDefinitionRequest{
-        Key: "key",
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Description: square.String(
-                "Update the description as desired.",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
-        },
-    }
-client.Merchants.CustomAttributeDefinitions.Update(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Description: square.String(
+            "Update the description as desired.",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+    },
 }
+_, err := client.Merchants.CustomAttributeDefinitions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27504,13 +27207,12 @@ Only the definition owner can delete a custom attribute definition.
 
 ```go
 request := &merchants.DeleteCustomAttributeDefinitionsRequest{
-        Key: "key",
-    }
-client.Merchants.CustomAttributeDefinitions.Delete(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
 }
+_, err := client.Merchants.CustomAttributeDefinitions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27568,24 +27270,23 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &merchants.BulkDeleteMerchantCustomAttributesRequest{
-        Values: map[string]*square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
-            "id1": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
-                Key: square.String(
-                    "alternative_seller_name",
-                ),
-            },
-            "id2": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
-                Key: square.String(
-                    "has_seen_tutorial",
-                ),
-            },
+    Values: map[string]*square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+        "id1": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+            Key: square.String(
+                "alternative_seller_name",
+            ),
         },
-    }
-client.Merchants.CustomAttributes.BatchDelete(
-        context.TODO(),
-        request,
-    )
+        "id2": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+            Key: square.String(
+                "has_seen_tutorial",
+            ),
+        },
+    },
 }
+_, err := client.Merchants.CustomAttributes.BatchDelete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27652,32 +27353,31 @@ must be `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &merchants.BulkUpsertMerchantCustomAttributesRequest{
-        Values: map[string]*square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
-            "id1": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
-                MerchantID: "DM7VKY8Q63GNP",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "alternative_seller_name",
-                    ),
-                    Value: "Ultimate Sneaker Store",
-                },
-            },
-            "id2": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
-                MerchantID: "DM7VKY8Q63GNP",
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "has_seen_tutorial",
-                    ),
-                    Value: true,
-                },
+    Values: map[string]*square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+        "id1": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+            MerchantID: "DM7VKY8Q63GNP",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "alternative_seller_name",
+                ),
+                Value: "Ultimate Sneaker Store",
             },
         },
-    }
-client.Merchants.CustomAttributes.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+        "id2": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+            MerchantID: "DM7VKY8Q63GNP",
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "has_seen_tutorial",
+                ),
+                Value: true,
+            },
+        },
+    },
 }
+_, err := client.Merchants.CustomAttributes.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27741,23 +27441,22 @@ and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &merchants.ListCustomAttributesRequest{
-        MerchantID: "merchant_id",
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-        Cursor: square.String(
-            "cursor",
-        ),
-        WithDefinitions: square.Bool(
-            true,
-        ),
-    }
-client.Merchants.CustomAttributes.List(
-        context.TODO(),
-        request,
-    )
+    MerchantID: "merchant_id",
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
+    Cursor: square.String(
+        "cursor",
+    ),
+    WithDefinitions: square.Bool(
+        true,
+    ),
 }
+_, err := client.Merchants.CustomAttributes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27860,20 +27559,19 @@ To retrieve a custom attribute owned by another application, the `visibility` se
 
 ```go
 request := &merchants.GetCustomAttributesRequest{
-        MerchantID: "merchant_id",
-        Key: "key",
-        WithDefinition: square.Bool(
-            true,
-        ),
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Merchants.CustomAttributes.Get(
-        context.TODO(),
-        request,
-    )
+    MerchantID: "merchant_id",
+    Key: "key",
+    WithDefinition: square.Bool(
+        true,
+    ),
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Merchants.CustomAttributes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -27970,17 +27668,16 @@ must be `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &merchants.UpsertMerchantCustomAttributeRequest{
-        MerchantID: "merchant_id",
-        Key: "key",
-        CustomAttribute: &square.CustomAttribute{
-            Value: "Ultimate Sneaker Store",
-        },
-    }
-client.Merchants.CustomAttributes.Upsert(
-        context.TODO(),
-        request,
-    )
+    MerchantID: "merchant_id",
+    Key: "key",
+    CustomAttribute: &square.CustomAttribute{
+        Value: "Ultimate Sneaker Store",
+    },
 }
+_, err := client.Merchants.CustomAttributes.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28075,14 +27772,13 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &merchants.DeleteCustomAttributesRequest{
-        MerchantID: "merchant_id",
-        Key: "key",
-    }
-client.Merchants.CustomAttributes.Delete(
-        context.TODO(),
-        request,
-    )
+    MerchantID: "merchant_id",
+    Key: "key",
 }
+_, err := client.Merchants.CustomAttributes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28155,19 +27851,18 @@ seller-defined custom attributes (also known as custom fields) are always set to
 
 ```go
 request := &orders.ListCustomAttributeDefinitionsRequest{
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Orders.CustomAttributeDefinitions.List(
-        context.TODO(),
-        request,
-    )
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Orders.CustomAttributeDefinitions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28251,30 +27946,29 @@ in the Square seller account.
 
 ```go
 request := &orders.CreateOrderCustomAttributeDefinitionRequest{
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Key: square.String(
-                "cover-count",
-            ),
-            Schema: map[string]any{
-                "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.Number",
-            },
-            Name: square.String(
-                "Cover count",
-            ),
-            Description: square.String(
-                "The number of people seated at a table",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
-        },
-        IdempotencyKey: square.String(
-            "IDEMPOTENCY_KEY",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Key: square.String(
+            "cover-count",
         ),
-    }
-client.Orders.CustomAttributeDefinitions.Create(
-        context.TODO(),
-        request,
-    )
+        Schema: map[string]any{
+            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.Number",
+        },
+        Name: square.String(
+            "Cover count",
+        ),
+        Description: square.String(
+            "The number of people seated at a table",
+        ),
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
+    },
+    IdempotencyKey: square.String(
+        "IDEMPOTENCY_KEY",
+    ),
 }
+_, err := client.Orders.CustomAttributeDefinitions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28351,16 +28045,15 @@ setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note t
 
 ```go
 request := &orders.GetCustomAttributeDefinitionsRequest{
-        Key: "key",
-        Version: square.Int(
-            1,
-        ),
-    }
-client.Orders.CustomAttributeDefinitions.Get(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
+    Version: square.Int(
+        1,
+    ),
 }
+_, err := client.Orders.CustomAttributeDefinitions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28428,25 +28121,24 @@ Only the definition owner can update a custom attribute definition. Note that se
 
 ```go
 request := &orders.UpdateOrderCustomAttributeDefinitionRequest{
-        Key: "key",
-        CustomAttributeDefinition: &square.CustomAttributeDefinition{
-            Key: square.String(
-                "cover-count",
-            ),
-            Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
-            Version: square.Int(
-                1,
-            ),
-        },
-        IdempotencyKey: square.String(
-            "IDEMPOTENCY_KEY",
+    Key: "key",
+    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+        Key: square.String(
+            "cover-count",
         ),
-    }
-client.Orders.CustomAttributeDefinitions.Update(
-        context.TODO(),
-        request,
-    )
+        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+        Version: square.Int(
+            1,
+        ),
+    },
+    IdempotencyKey: square.String(
+        "IDEMPOTENCY_KEY",
+    ),
 }
+_, err := client.Orders.CustomAttributeDefinitions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28528,13 +28220,12 @@ Only the definition owner can delete a custom attribute definition.
 
 ```go
 request := &orders.DeleteCustomAttributeDefinitionsRequest{
-        Key: "key",
-    }
-client.Orders.CustomAttributeDefinitions.Delete(
-        context.TODO(),
-        request,
-    )
+    Key: "key",
 }
+_, err := client.Orders.CustomAttributeDefinitions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28603,26 +28294,25 @@ must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attribut
 
 ```go
 request := &orders.BulkDeleteOrderCustomAttributesRequest{
-        Values: map[string]*square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
-            "cover-count": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
-                Key: square.String(
-                    "cover-count",
-                ),
-                OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
-            },
-            "table-number": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
-                Key: square.String(
-                    "table-number",
-                ),
-                OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
-            },
+    Values: map[string]*square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+        "cover-count": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+            Key: square.String(
+                "cover-count",
+            ),
+            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
         },
-    }
-client.Orders.CustomAttributes.BatchDelete(
-        context.TODO(),
-        request,
-    )
+        "table-number": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+            Key: square.String(
+                "table-number",
+            ),
+            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+        },
+    },
 }
+_, err := client.Orders.CustomAttributes.BatchDelete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28690,38 +28380,37 @@ must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attribut
 
 ```go
 request := &orders.BulkUpsertOrderCustomAttributesRequest{
-        Values: map[string]*square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
-            "cover-count": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "cover-count",
-                    ),
-                    Value: "6",
-                    Version: square.Int(
-                        2,
-                    ),
-                },
-                OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+    Values: map[string]*square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+        "cover-count": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "cover-count",
+                ),
+                Value: "6",
+                Version: square.Int(
+                    2,
+                ),
             },
-            "table-number": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
-                CustomAttribute: &square.CustomAttribute{
-                    Key: square.String(
-                        "table-number",
-                    ),
-                    Value: "11",
-                    Version: square.Int(
-                        4,
-                    ),
-                },
-                OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
-            },
+            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
         },
-    }
-client.Orders.CustomAttributes.BatchUpsert(
-        context.TODO(),
-        request,
-    )
+        "table-number": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+            CustomAttribute: &square.CustomAttribute{
+                Key: square.String(
+                    "table-number",
+                ),
+                Value: "11",
+                Version: square.Int(
+                    4,
+                ),
+            },
+            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+        },
+    },
 }
+_, err := client.Orders.CustomAttributes.BatchUpsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28783,23 +28472,22 @@ and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &orders.ListCustomAttributesRequest{
-        OrderID: "order_id",
-        VisibilityFilter: square.VisibilityFilterAll.Ptr(),
-        Cursor: square.String(
-            "cursor",
-        ),
-        Limit: square.Int(
-            1,
-        ),
-        WithDefinitions: square.Bool(
-            true,
-        ),
-    }
-client.Orders.CustomAttributes.List(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
+    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+    Cursor: square.String(
+        "cursor",
+    ),
+    Limit: square.Int(
+        1,
+    ),
+    WithDefinitions: square.Bool(
+        true,
+    ),
 }
+_, err := client.Orders.CustomAttributes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -28906,20 +28594,19 @@ also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
 
 ```go
 request := &orders.GetCustomAttributesRequest{
-        OrderID: "order_id",
-        CustomAttributeKey: "custom_attribute_key",
-        Version: square.Int(
-            1,
-        ),
-        WithDefinition: square.Bool(
-            true,
-        ),
-    }
-client.Orders.CustomAttributes.Get(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
+    CustomAttributeKey: "custom_attribute_key",
+    Version: square.Int(
+        1,
+    ),
+    WithDefinition: square.Bool(
+        true,
+    ),
 }
+_, err := client.Orders.CustomAttributes.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29016,23 +28703,22 @@ must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attribut
 
 ```go
 request := &orders.UpsertOrderCustomAttributeRequest{
-        OrderID: "order_id",
-        CustomAttributeKey: "custom_attribute_key",
-        CustomAttribute: &square.CustomAttribute{
-            Key: square.String(
-                "table-number",
-            ),
-            Value: "42",
-            Version: square.Int(
-                1,
-            ),
-        },
-    }
-client.Orders.CustomAttributes.Upsert(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
+    CustomAttributeKey: "custom_attribute_key",
+    CustomAttribute: &square.CustomAttribute{
+        Key: square.String(
+            "table-number",
+        ),
+        Value: "42",
+        Version: square.Int(
+            1,
+        ),
+    },
 }
+_, err := client.Orders.CustomAttributes.Upsert(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29129,14 +28815,13 @@ To delete a custom attribute owned by another application, the `visibility` sett
 
 ```go
 request := &orders.DeleteCustomAttributesRequest{
-        OrderID: "order_id",
-        CustomAttributeKey: "custom_attribute_key",
-    }
-client.Orders.CustomAttributes.Delete(
-        context.TODO(),
-        request,
-    )
+    OrderID: "order_id",
+    CustomAttributeKey: "custom_attribute_key",
 }
+_, err := client.Orders.CustomAttributes.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29208,13 +28893,12 @@ to get this information directly from the `TeamMember.wage_setting` field.
 
 ```go
 request := &teammembers.GetWageSettingRequest{
-        TeamMemberID: "team_member_id",
-    }
-client.TeamMembers.WageSetting.Get(
-        context.TODO(),
-        request,
-    )
+    TeamMemberID: "team_member_id",
 }
+_, err := client.TeamMembers.WageSetting.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29276,47 +28960,46 @@ to manage the `TeamMember.wage_setting` field directly.
 
 ```go
 request := &teammembers.UpdateWageSettingRequest{
-        TeamMemberID: "team_member_id",
-        WageSetting: &square.WageSetting{
-            JobAssignments: []*square.JobAssignment{
-                &square.JobAssignment{
-                    JobTitle: square.String(
-                        "Manager",
+    TeamMemberID: "team_member_id",
+    WageSetting: &square.WageSetting{
+        JobAssignments: []*square.JobAssignment{
+            &square.JobAssignment{
+                JobTitle: square.String(
+                    "Manager",
+                ),
+                PayType: square.JobAssignmentPayTypeSalary,
+                AnnualRate: &square.Money{
+                    Amount: square.Int64(
+                        int64(3000000),
                     ),
-                    PayType: square.JobAssignmentPayTypeSalary,
-                    AnnualRate: &square.Money{
-                        Amount: square.Int64(
-                            int64(3000000),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
-                    WeeklyHours: square.Int(
-                        40,
-                    ),
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
-                &square.JobAssignment{
-                    JobTitle: square.String(
-                        "Cashier",
+                WeeklyHours: square.Int(
+                    40,
+                ),
+            },
+            &square.JobAssignment{
+                JobTitle: square.String(
+                    "Cashier",
+                ),
+                PayType: square.JobAssignmentPayTypeHourly,
+                HourlyRate: &square.Money{
+                    Amount: square.Int64(
+                        int64(2000),
                     ),
-                    PayType: square.JobAssignmentPayTypeHourly,
-                    HourlyRate: &square.Money{
-                        Amount: square.Int64(
-                            int64(2000),
-                        ),
-                        Currency: square.CurrencyUsd.Ptr(),
-                    },
+                    Currency: square.CurrencyUsd.Ptr(),
                 },
             },
-            IsOvertimeExempt: square.Bool(
-                true,
-            ),
         },
-    }
-client.TeamMembers.WageSetting.Update(
-        context.TODO(),
-        request,
-    )
+        IsOvertimeExempt: square.Bool(
+            true,
+        ),
+    },
 }
+_, err := client.TeamMembers.WageSetting.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29386,28 +29069,27 @@ Creates a Terminal action request and sends it to the specified device.
 
 ```go
 request := &terminal.CreateTerminalActionRequest{
-        IdempotencyKey: "thahn-70e75c10-47f7-4ab6-88cc-aaa4076d065e",
-        Action: &square.TerminalAction{
-            DeviceID: square.String(
-                "{{DEVICE_ID}}",
+    IdempotencyKey: "thahn-70e75c10-47f7-4ab6-88cc-aaa4076d065e",
+    Action: &square.TerminalAction{
+        DeviceID: square.String(
+            "{{DEVICE_ID}}",
+        ),
+        DeadlineDuration: square.String(
+            "PT5M",
+        ),
+        Type: square.TerminalActionActionTypeSaveCard.Ptr(),
+        SaveCardOptions: &square.SaveCardOptions{
+            CustomerID: "{{CUSTOMER_ID}}",
+            ReferenceID: square.String(
+                "user-id-1",
             ),
-            DeadlineDuration: square.String(
-                "PT5M",
-            ),
-            Type: square.TerminalActionActionTypeSaveCard.Ptr(),
-            SaveCardOptions: &square.SaveCardOptions{
-                CustomerID: "{{CUSTOMER_ID}}",
-                ReferenceID: square.String(
-                    "user-id-1",
-                ),
-            },
         },
-    }
-client.Terminal.Actions.Create(
-        context.TODO(),
-        request,
-    )
+    },
 }
+_, err := client.Terminal.Actions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29476,27 +29158,26 @@ Retrieves a filtered list of Terminal action requests created by the account mak
 
 ```go
 request := &terminal.SearchTerminalActionsRequest{
-        Query: &square.TerminalActionQuery{
-            Filter: &square.TerminalActionQueryFilter{
-                CreatedAt: &square.TimeRange{
-                    StartAt: square.String(
-                        "2022-04-01T00:00:00.000Z",
-                    ),
-                },
-            },
-            Sort: &square.TerminalActionQuerySort{
-                SortOrder: square.SortOrderDesc.Ptr(),
+    Query: &square.TerminalActionQuery{
+        Filter: &square.TerminalActionQueryFilter{
+            CreatedAt: &square.TimeRange{
+                StartAt: square.String(
+                    "2022-04-01T00:00:00.000Z",
+                ),
             },
         },
-        Limit: square.Int(
-            2,
-        ),
-    }
-client.Terminal.Actions.Search(
-        context.TODO(),
-        request,
-    )
+        Sort: &square.TerminalActionQuerySort{
+            SortOrder: square.SortOrderDesc.Ptr(),
+        },
+    },
+    Limit: square.Int(
+        2,
+    ),
 }
+_, err := client.Terminal.Actions.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29575,13 +29256,12 @@ Retrieves a Terminal action request by `action_id`. Terminal action requests are
 
 ```go
 request := &terminal.GetActionsRequest{
-        ActionID: "action_id",
-    }
-client.Terminal.Actions.Get(
-        context.TODO(),
-        request,
-    )
+    ActionID: "action_id",
 }
+_, err := client.Terminal.Actions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29636,13 +29316,12 @@ Cancels a Terminal action request if the status of the request permits it.
 
 ```go
 request := &terminal.CancelActionsRequest{
-        ActionID: "action_id",
-    }
-client.Terminal.Actions.Cancel(
-        context.TODO(),
-        request,
-    )
+    ActionID: "action_id",
 }
+_, err := client.Terminal.Actions.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29699,30 +29378,29 @@ for the requested amount.
 
 ```go
 request := &terminal.CreateTerminalCheckoutRequest{
-        IdempotencyKey: "28a0c3bc-7839-11ea-bc55-0242ac130003",
-        Checkout: &square.TerminalCheckout{
-            AmountMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(2610),
-                ),
-                Currency: square.CurrencyUsd.Ptr(),
-            },
-            ReferenceID: square.String(
-                "id11572",
+    IdempotencyKey: "28a0c3bc-7839-11ea-bc55-0242ac130003",
+    Checkout: &square.TerminalCheckout{
+        AmountMoney: &square.Money{
+            Amount: square.Int64(
+                int64(2610),
             ),
-            Note: square.String(
-                "A brief note",
-            ),
-            DeviceOptions: &square.DeviceCheckoutOptions{
-                DeviceID: "dbb5d83a-7838-11ea-bc55-0242ac130003",
-            },
+            Currency: square.CurrencyUsd.Ptr(),
         },
-    }
-client.Terminal.Checkouts.Create(
-        context.TODO(),
-        request,
-    )
+        ReferenceID: square.String(
+            "id11572",
+        ),
+        Note: square.String(
+            "A brief note",
+        ),
+        DeviceOptions: &square.DeviceCheckoutOptions{
+            DeviceID: "dbb5d83a-7838-11ea-bc55-0242ac130003",
+        },
+    },
 }
+_, err := client.Terminal.Checkouts.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29790,22 +29468,21 @@ Returns a filtered list of Terminal checkout requests created by the application
 
 ```go
 request := &terminal.SearchTerminalCheckoutsRequest{
-        Query: &square.TerminalCheckoutQuery{
-            Filter: &square.TerminalCheckoutQueryFilter{
-                Status: square.String(
-                    "COMPLETED",
-                ),
-            },
+    Query: &square.TerminalCheckoutQuery{
+        Filter: &square.TerminalCheckoutQueryFilter{
+            Status: square.String(
+                "COMPLETED",
+            ),
         },
-        Limit: square.Int(
-            2,
-        ),
-    }
-client.Terminal.Checkouts.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        2,
+    ),
 }
+_, err := client.Terminal.Checkouts.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29883,13 +29560,12 @@ Retrieves a Terminal checkout request by `checkout_id`. Terminal checkout reques
 
 ```go
 request := &terminal.GetCheckoutsRequest{
-        CheckoutID: "checkout_id",
-    }
-client.Terminal.Checkouts.Get(
-        context.TODO(),
-        request,
-    )
+    CheckoutID: "checkout_id",
 }
+_, err := client.Terminal.Checkouts.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -29944,13 +29620,12 @@ Cancels a Terminal checkout request if the status of the request permits it.
 
 ```go
 request := &terminal.CancelCheckoutsRequest{
-        CheckoutID: "checkout_id",
-    }
-client.Terminal.Checkouts.Cancel(
-        context.TODO(),
-        request,
-    )
+    CheckoutID: "checkout_id",
 }
+_, err := client.Terminal.Checkouts.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30006,24 +29681,23 @@ Creates a request to refund an Interac payment completed on a Square Terminal. R
 
 ```go
 request := &terminal.CreateTerminalRefundRequest{
-        IdempotencyKey: "402a640b-b26f-401f-b406-46f839590c04",
-        Refund: &square.TerminalRefund{
-            PaymentID: "5O5OvgkcNUhl7JBuINflcjKqUzXZY",
-            AmountMoney: &square.Money{
-                Amount: square.Int64(
-                    int64(111),
-                ),
-                Currency: square.CurrencyCad.Ptr(),
-            },
-            Reason: "Returning items",
-            DeviceID: "f72dfb8e-4d65-4e56-aade-ec3fb8d33291",
+    IdempotencyKey: "402a640b-b26f-401f-b406-46f839590c04",
+    Refund: &square.TerminalRefund{
+        PaymentID: "5O5OvgkcNUhl7JBuINflcjKqUzXZY",
+        AmountMoney: &square.Money{
+            Amount: square.Int64(
+                int64(111),
+            ),
+            Currency: square.CurrencyCad.Ptr(),
         },
-    }
-client.Terminal.Refunds.Create(
-        context.TODO(),
-        request,
-    )
+        Reason: "Returning items",
+        DeviceID: "f72dfb8e-4d65-4e56-aade-ec3fb8d33291",
+    },
 }
+_, err := client.Terminal.Refunds.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30091,22 +29765,21 @@ Retrieves a filtered list of Interac Terminal refund requests created by the sel
 
 ```go
 request := &terminal.SearchTerminalRefundsRequest{
-        Query: &square.TerminalRefundQuery{
-            Filter: &square.TerminalRefundQueryFilter{
-                Status: square.String(
-                    "COMPLETED",
-                ),
-            },
+    Query: &square.TerminalRefundQuery{
+        Filter: &square.TerminalRefundQueryFilter{
+            Status: square.String(
+                "COMPLETED",
+            ),
         },
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Terminal.Refunds.Search(
-        context.TODO(),
-        request,
-    )
+    },
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Terminal.Refunds.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30184,13 +29857,12 @@ Retrieves an Interac Terminal refund object by ID. Terminal refund objects are a
 
 ```go
 request := &terminal.GetRefundsRequest{
-        TerminalRefundID: "terminal_refund_id",
-    }
-client.Terminal.Refunds.Get(
-        context.TODO(),
-        request,
-    )
+    TerminalRefundID: "terminal_refund_id",
 }
+_, err := client.Terminal.Refunds.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30245,13 +29917,12 @@ Cancels an Interac Terminal refund request by refund request ID if the status of
 
 ```go
 request := &terminal.CancelRefundsRequest{
-        TerminalRefundID: "terminal_refund_id",
-    }
-client.Terminal.Refunds.Cancel(
-        context.TODO(),
-        request,
-    )
+    TerminalRefundID: "terminal_refund_id",
 }
+_, err := client.Terminal.Refunds.Cancel(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30307,15 +29978,14 @@ Lists all webhook event types that can be subscribed to.
 
 ```go
 request := &webhooks.ListEventTypesRequest{
-        APIVersion: square.String(
-            "api_version",
-        ),
-    }
-client.Webhooks.EventTypes.List(
-        context.TODO(),
-        request,
-    )
+    APIVersion: square.String(
+        "api_version",
+    ),
 }
+_, err := client.Webhooks.EventTypes.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30371,22 +30041,21 @@ Lists all webhook subscriptions owned by your application.
 
 ```go
 request := &webhooks.ListSubscriptionsRequest{
-        Cursor: square.String(
-            "cursor",
-        ),
-        IncludeDisabled: square.Bool(
-            true,
-        ),
-        SortOrder: square.SortOrderDesc.Ptr(),
-        Limit: square.Int(
-            1,
-        ),
-    }
-client.Webhooks.Subscriptions.List(
-        context.TODO(),
-        request,
-    )
+    Cursor: square.String(
+        "cursor",
+    ),
+    IncludeDisabled: square.Bool(
+        true,
+    ),
+    SortOrder: square.SortOrderDesc.Ptr(),
+    Limit: square.Int(
+        1,
+    ),
 }
+_, err := client.Webhooks.Subscriptions.List(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30482,30 +30151,29 @@ Creates a webhook subscription.
 
 ```go
 request := &webhooks.CreateWebhookSubscriptionRequest{
-        IdempotencyKey: square.String(
-            "63f84c6c-2200-4c99-846c-2670a1311fbf",
+    IdempotencyKey: square.String(
+        "63f84c6c-2200-4c99-846c-2670a1311fbf",
+    ),
+    Subscription: &square.WebhookSubscription{
+        Name: square.String(
+            "Example Webhook Subscription",
         ),
-        Subscription: &square.WebhookSubscription{
-            Name: square.String(
-                "Example Webhook Subscription",
-            ),
-            EventTypes: []string{
-                "payment.created",
-                "payment.updated",
-            },
-            NotificationURL: square.String(
-                "https://example-webhook-url.com",
-            ),
-            APIVersion: square.String(
-                "2021-12-15",
-            ),
+        EventTypes: []string{
+            "payment.created",
+            "payment.updated",
         },
-    }
-client.Webhooks.Subscriptions.Create(
-        context.TODO(),
-        request,
-    )
+        NotificationURL: square.String(
+            "https://example-webhook-url.com",
+        ),
+        APIVersion: square.String(
+            "2021-12-15",
+        ),
+    },
 }
+_, err := client.Webhooks.Subscriptions.Create(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30568,13 +30236,12 @@ Retrieves a webhook subscription identified by its ID.
 
 ```go
 request := &webhooks.GetSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-    }
-client.Webhooks.Subscriptions.Get(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
 }
+_, err := client.Webhooks.Subscriptions.Get(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30629,21 +30296,20 @@ Updates a webhook subscription.
 
 ```go
 request := &webhooks.UpdateWebhookSubscriptionRequest{
-        SubscriptionID: "subscription_id",
-        Subscription: &square.WebhookSubscription{
-            Name: square.String(
-                "Updated Example Webhook Subscription",
-            ),
-            Enabled: square.Bool(
-                false,
-            ),
-        },
-    }
-client.Webhooks.Subscriptions.Update(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    Subscription: &square.WebhookSubscription{
+        Name: square.String(
+            "Updated Example Webhook Subscription",
+        ),
+        Enabled: square.Bool(
+            false,
+        ),
+    },
 }
+_, err := client.Webhooks.Subscriptions.Update(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30706,13 +30372,12 @@ Deletes a webhook subscription.
 
 ```go
 request := &webhooks.DeleteSubscriptionsRequest{
-        SubscriptionID: "subscription_id",
-    }
-client.Webhooks.Subscriptions.Delete(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
 }
+_, err := client.Webhooks.Subscriptions.Delete(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30767,16 +30432,15 @@ Updates a webhook subscription by replacing the existing signature key with a ne
 
 ```go
 request := &webhooks.UpdateWebhookSubscriptionSignatureKeyRequest{
-        SubscriptionID: "subscription_id",
-        IdempotencyKey: square.String(
-            "ed80ae6b-0654-473b-bbab-a39aee89a60d",
-        ),
-    }
-client.Webhooks.Subscriptions.UpdateSignatureKey(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    IdempotencyKey: square.String(
+        "ed80ae6b-0654-473b-bbab-a39aee89a60d",
+    ),
 }
+_, err := client.Webhooks.Subscriptions.UpdateSignatureKey(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -30839,16 +30503,15 @@ Tests a webhook subscription by sending a test event to the notification URL.
 
 ```go
 request := &webhooks.TestWebhookSubscriptionRequest{
-        SubscriptionID: "subscription_id",
-        EventType: square.String(
-            "payment.created",
-        ),
-    }
-client.Webhooks.Subscriptions.Test(
-        context.TODO(),
-        request,
-    )
+    SubscriptionID: "subscription_id",
+    EventType: square.String(
+        "payment.created",
+    ),
 }
+_, err := client.Webhooks.Subscriptions.Test(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>

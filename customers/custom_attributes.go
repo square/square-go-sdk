@@ -27,10 +27,12 @@ type DeleteCustomAttributesRequest struct {
 }
 
 func (d *DeleteCustomAttributesRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -76,10 +78,12 @@ type GetCustomAttributesRequest struct {
 }
 
 func (g *GetCustomAttributesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -138,10 +142,12 @@ type ListCustomAttributesRequest struct {
 }
 
 func (l *ListCustomAttributesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -204,10 +210,12 @@ type UpsertCustomerCustomAttributeRequest struct {
 }
 
 func (u *UpsertCustomerCustomAttributeRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;

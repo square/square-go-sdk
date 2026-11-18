@@ -4,12 +4,13 @@ package rewards
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	loyalty "github.com/square/square-go-sdk/v5/loyalty"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -48,6 +50,23 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // After a reward is created, the points are locked and
 // not available for the buyer to redeem another reward.
+//
+// Example:
+//
+//	request := &loyalty.CreateLoyaltyRewardRequest{
+//	    Reward: &square.LoyaltyReward{
+//	        LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
+//	        RewardTierID: "e1b39225-9da5-43d1-a5db-782cdd8ad94f",
+//	        OrderID: square.String(
+//	            "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+//	        ),
+//	    },
+//	    IdempotencyKey: "18c2e5ea-a620-4b1f-ad60-7b167285e451",
+//	}
+//	_, err := client.Loyalty.Rewards.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyRewardRequest,
@@ -71,6 +90,21 @@ func (c *Client) Create(
 // [RetrieveLoyaltyReward](api-endpoint:Loyalty-RetrieveLoyaltyReward) endpoint.
 //
 // Search results are sorted by `updated_at` in descending order.
+//
+// Example:
+//
+//	request := &loyalty.SearchLoyaltyRewardsRequest{
+//	    Query: &square.SearchLoyaltyRewardsRequestLoyaltyRewardQuery{
+//	        LoyaltyAccountID: "5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd",
+//	    },
+//	    Limit: square.Int(
+//	        10,
+//	    ),
+//	}
+//	_, err := client.Loyalty.Rewards.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyRewardsRequest,
@@ -88,6 +122,16 @@ func (c *Client) Search(
 }
 
 // Retrieves a loyalty reward.
+//
+// Example:
+//
+//	request := &loyalty.GetRewardsRequest{
+//	    RewardID: "reward_id",
+//	}
+//	_, err := client.Loyalty.Rewards.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.GetRewardsRequest,
@@ -113,6 +157,16 @@ func (c *Client) Get(
 // discounts.
 //
 // You cannot delete a reward that has reached the terminal state (REDEEMED).
+//
+// Example:
+//
+//	request := &loyalty.DeleteRewardsRequest{
+//	    RewardID: "reward_id",
+//	}
+//	_, err := client.Loyalty.Rewards.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *loyalty.DeleteRewardsRequest,
@@ -140,6 +194,18 @@ func (c *Client) Delete(
 // After the reward reaches the terminal state, it cannot be deleted.
 // In other words, points used for the reward cannot be returned
 // to the account.
+//
+// Example:
+//
+//	request := &loyalty.RedeemLoyaltyRewardRequest{
+//	    RewardID: "reward_id",
+//	    IdempotencyKey: "98adc7f7-6963-473b-b29c-f3c9cdd7d994",
+//	    LocationID: "P034NEENMD09F",
+//	}
+//	_, err := client.Loyalty.Rewards.Redeem(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Redeem(
 	ctx context.Context,
 	request *loyalty.RedeemLoyaltyRewardRequest,

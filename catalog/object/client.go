@@ -4,12 +4,13 @@ package object
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	catalog "github.com/square/square-go-sdk/v5/catalog"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -49,6 +51,21 @@ func NewClient(options *core.RequestOptions) *Client {
 // To ensure consistency, only one update request is processed at a time per seller account.
 // While one (batch or non-batch) update request is being processed, other (batched and non-batched)
 // update requests are rejected with the `429` error code.
+//
+// Example:
+//
+//	request := &catalog.UpsertCatalogObjectRequest{
+//	    IdempotencyKey: "af3d1afc-7212-4300-b463-0bfc5314a5ae",
+//	    Object: &square.CatalogObject{
+//	        Item: &square.CatalogObjectItem{
+//	            ID: "id",
+//	        },
+//	    },
+//	}
+//	_, err := client.Catalog.Object.Upsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *catalog.UpsertCatalogObjectRequest,
@@ -72,6 +89,25 @@ func (c *Client) Upsert(
 // children, references to its
 // [CatalogModifierList](entity:CatalogModifierList) objects, and the ids of
 // any [CatalogTax](entity:CatalogTax) objects that apply to it.
+//
+// Example:
+//
+//	request := &catalog.GetObjectRequest{
+//	    ObjectID: "object_id",
+//	    IncludeRelatedObjects: square.Bool(
+//	        true,
+//	    ),
+//	    CatalogVersion: square.Int64(
+//	        int64(1000000),
+//	    ),
+//	    IncludeCategoryPathToRoot: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Catalog.Object.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *catalog.GetObjectRequest,
@@ -98,6 +134,16 @@ func (c *Client) Get(
 // To ensure consistency, only one delete request is processed at a time per seller account.
 // While one (batch or non-batch) delete request is being processed, other (batched and non-batched)
 // delete requests are rejected with the `429` error code.
+//
+// Example:
+//
+//	request := &catalog.DeleteObjectRequest{
+//	    ObjectID: "object_id",
+//	}
+//	_, err := client.Catalog.Object.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *catalog.DeleteObjectRequest,

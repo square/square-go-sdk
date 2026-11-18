@@ -22,10 +22,12 @@ type DeleteSnippetsRequest struct {
 }
 
 func (d *DeleteSnippetsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetSiteID sets the SiteID field and marks it as non-optional;
@@ -48,10 +50,12 @@ type GetSnippetsRequest struct {
 }
 
 func (g *GetSnippetsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetSiteID sets the SiteID field and marks it as non-optional;
@@ -61,11 +65,11 @@ func (g *GetSnippetsRequest) SetSiteID(siteID string) {
 	g.require(getSnippetsRequestFieldSiteID)
 }
 
-// Represents a `DeleteSnippet` response.
 var (
 	deleteSnippetResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// Represents a `DeleteSnippet` response.
 type DeleteSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -92,10 +96,12 @@ func (d *DeleteSnippetResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeleteSnippetResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -147,12 +153,12 @@ func (d *DeleteSnippetResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a `RetrieveSnippet` response. The response can include either `snippet` or `errors`.
 var (
 	getSnippetResponseFieldErrors  = big.NewInt(1 << 0)
 	getSnippetResponseFieldSnippet = big.NewInt(1 << 1)
 )
 
+// Represents a `RetrieveSnippet` response. The response can include either `snippet` or `errors`.
 type GetSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -188,10 +194,12 @@ func (g *GetSnippetResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetSnippetResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -250,7 +258,6 @@ func (g *GetSnippetResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents the snippet that is added to a Square Online site. The snippet code is injected into the `head` element of all pages on the site, except for checkout pages.
 var (
 	snippetFieldID        = big.NewInt(1 << 0)
 	snippetFieldSiteID    = big.NewInt(1 << 1)
@@ -259,6 +266,7 @@ var (
 	snippetFieldUpdatedAt = big.NewInt(1 << 4)
 )
 
+// Represents the snippet that is added to a Square Online site. The snippet code is injected into the `head` element of all pages on the site, except for checkout pages.
 type Snippet struct {
 	// The Square-assigned ID for the snippet.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -321,10 +329,12 @@ func (s *Snippet) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *Snippet) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -404,12 +414,12 @@ func (s *Snippet) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents an `UpsertSnippet` response. The response can include either `snippet` or `errors`.
 var (
 	upsertSnippetResponseFieldErrors  = big.NewInt(1 << 0)
 	upsertSnippetResponseFieldSnippet = big.NewInt(1 << 1)
 )
 
+// Represents an `UpsertSnippet` response. The response can include either `snippet` or `errors`.
 type UpsertSnippetResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -445,10 +455,12 @@ func (u *UpsertSnippetResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpsertSnippetResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -523,10 +535,12 @@ type UpsertSnippetRequest struct {
 }
 
 func (u *UpsertSnippetRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetSiteID sets the SiteID field and marks it as non-optional;

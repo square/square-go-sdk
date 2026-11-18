@@ -4,13 +4,14 @@ package customattributes
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	merchants "github.com/square/square-go-sdk/v5/merchants"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -44,6 +46,27 @@ func NewClient(options *core.RequestOptions) *Client {
 // Deletes [custom attributes](entity:CustomAttribute) for a merchant as a bulk operation.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.BulkDeleteMerchantCustomAttributesRequest{
+//	    Values: map[string]*square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+//	        "id1": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+//	            Key: square.String(
+//	                "alternative_seller_name",
+//	            ),
+//	        },
+//	        "id2": &square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
+//	            Key: square.String(
+//	                "has_seen_tutorial",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Merchants.CustomAttributes.BatchDelete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *merchants.BulkDeleteMerchantCustomAttributesRequest,
@@ -70,6 +93,35 @@ func (c *Client) BatchDelete(
 // of the corresponding request.
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.BulkUpsertMerchantCustomAttributesRequest{
+//	    Values: map[string]*square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+//	        "id1": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+//	            MerchantID: "DM7VKY8Q63GNP",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "alternative_seller_name",
+//	                ),
+//	                Value: "Ultimate Sneaker Store",
+//	            },
+//	        },
+//	        "id2": &square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
+//	            MerchantID: "DM7VKY8Q63GNP",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "has_seen_tutorial",
+//	                ),
+//	                Value: true,
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Merchants.CustomAttributes.BatchUpsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *merchants.BulkUpsertMerchantCustomAttributesRequest,
@@ -92,6 +144,26 @@ func (c *Client) BatchUpsert(
 // When all response pages are retrieved, the results include all custom attributes that are
 // visible to the requesting application, including those that are owned by other applications
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.ListCustomAttributesRequest{
+//	    MerchantID: "merchant_id",
+//	    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    WithDefinitions: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Merchants.CustomAttributes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *merchants.ListCustomAttributesRequest,
@@ -128,6 +200,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -142,7 +215,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -158,6 +231,23 @@ func (c *Client) List(
 // in the same call.
 // To retrieve a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.GetCustomAttributesRequest{
+//	    MerchantID: "merchant_id",
+//	    Key: "key",
+//	    WithDefinition: square.Bool(
+//	        true,
+//	    ),
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Merchants.CustomAttributes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *merchants.GetCustomAttributesRequest,
@@ -180,6 +270,20 @@ func (c *Client) Get(
 // is created using the [CreateMerchantCustomAttributeDefinition](api-endpoint:MerchantCustomAttributes-CreateMerchantCustomAttributeDefinition) endpoint.
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.UpsertMerchantCustomAttributeRequest{
+//	    MerchantID: "merchant_id",
+//	    Key: "key",
+//	    CustomAttribute: &square.CustomAttribute{
+//	        Value: "Ultimate Sneaker Store",
+//	    },
+//	}
+//	_, err := client.Merchants.CustomAttributes.Upsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *merchants.UpsertMerchantCustomAttributeRequest,
@@ -199,6 +303,17 @@ func (c *Client) Upsert(
 // Deletes a [custom attribute](entity:CustomAttribute) associated with a merchant.
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.DeleteCustomAttributesRequest{
+//	    MerchantID: "merchant_id",
+//	    Key: "key",
+//	}
+//	_, err := client.Merchants.CustomAttributes.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *merchants.DeleteCustomAttributesRequest,

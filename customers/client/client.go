@@ -4,6 +4,9 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	cards "github.com/square/square-go-sdk/v5/customers/cards"
@@ -13,8 +16,6 @@ import (
 	segments "github.com/square/square-go-sdk/v5/customers/segments"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -48,8 +49,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -60,6 +62,26 @@ func NewClient(options *core.RequestOptions) *Client {
 // Under normal operating conditions, newly created or updated customer profiles become available
 // for the listing operation in well under 30 seconds. Occasionally, propagation of the new or updated
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
+//
+// Example:
+//
+//	request := &square.ListCustomersRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    SortField: square.CustomerSortFieldDefault.Ptr(),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Count: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Customers.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListCustomersRequest,
@@ -93,6 +115,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -107,7 +130,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -128,6 +151,51 @@ func (c *Client) List(
 // - `company_name`
 // - `email_address`
 // - `phone_number`
+//
+// Example:
+//
+//	request := &square.CreateCustomerRequest{
+//	    GivenName: square.String(
+//	        "Amelia",
+//	    ),
+//	    FamilyName: square.String(
+//	        "Earhart",
+//	    ),
+//	    EmailAddress: square.String(
+//	        "Amelia.Earhart@example.com",
+//	    ),
+//	    Address: &square.Address{
+//	        AddressLine1: square.String(
+//	            "500 Electric Ave",
+//	        ),
+//	        AddressLine2: square.String(
+//	            "Suite 600",
+//	        ),
+//	        Locality: square.String(
+//	            "New York",
+//	        ),
+//	        AdministrativeDistrictLevel1: square.String(
+//	            "NY",
+//	        ),
+//	        PostalCode: square.String(
+//	            "10003",
+//	        ),
+//	        Country: square.CountryUs.Ptr(),
+//	    },
+//	    PhoneNumber: square.String(
+//	        "+1-212-555-4240",
+//	    ),
+//	    ReferenceID: square.String(
+//	        "YOUR_REFERENCE_ID",
+//	    ),
+//	    Note: square.String(
+//	        "a customer",
+//	    ),
+//	}
+//	_, err := client.Customers.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateCustomerRequest,
@@ -155,6 +223,93 @@ func (c *Client) Create(
 // - `company_name`
 // - `email_address`
 // - `phone_number`
+//
+// Example:
+//
+//	request := &square.BulkCreateCustomersRequest{
+//	    Customers: map[string]*square.BulkCreateCustomerData{
+//	        "8bb76c4f-e35d-4c5b-90de-1194cd9179f0": &square.BulkCreateCustomerData{
+//	            GivenName: square.String(
+//	                "Amelia",
+//	            ),
+//	            FamilyName: square.String(
+//	                "Earhart",
+//	            ),
+//	            EmailAddress: square.String(
+//	                "Amelia.Earhart@example.com",
+//	            ),
+//	            Address: &square.Address{
+//	                AddressLine1: square.String(
+//	                    "500 Electric Ave",
+//	                ),
+//	                AddressLine2: square.String(
+//	                    "Suite 600",
+//	                ),
+//	                Locality: square.String(
+//	                    "New York",
+//	                ),
+//	                AdministrativeDistrictLevel1: square.String(
+//	                    "NY",
+//	                ),
+//	                PostalCode: square.String(
+//	                    "10003",
+//	                ),
+//	                Country: square.CountryUs.Ptr(),
+//	            },
+//	            PhoneNumber: square.String(
+//	                "+1-212-555-4240",
+//	            ),
+//	            ReferenceID: square.String(
+//	                "YOUR_REFERENCE_ID",
+//	            ),
+//	            Note: square.String(
+//	                "a customer",
+//	            ),
+//	        },
+//	        "d1689f23-b25d-4932-b2f0-aed00f5e2029": &square.BulkCreateCustomerData{
+//	            GivenName: square.String(
+//	                "Marie",
+//	            ),
+//	            FamilyName: square.String(
+//	                "Curie",
+//	            ),
+//	            EmailAddress: square.String(
+//	                "Marie.Curie@example.com",
+//	            ),
+//	            Address: &square.Address{
+//	                AddressLine1: square.String(
+//	                    "500 Electric Ave",
+//	                ),
+//	                AddressLine2: square.String(
+//	                    "Suite 601",
+//	                ),
+//	                Locality: square.String(
+//	                    "New York",
+//	                ),
+//	                AdministrativeDistrictLevel1: square.String(
+//	                    "NY",
+//	                ),
+//	                PostalCode: square.String(
+//	                    "10003",
+//	                ),
+//	                Country: square.CountryUs.Ptr(),
+//	            },
+//	            PhoneNumber: square.String(
+//	                "+1-212-444-4240",
+//	            ),
+//	            ReferenceID: square.String(
+//	                "YOUR_REFERENCE_ID",
+//	            ),
+//	            Note: square.String(
+//	                "another customer",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Customers.BatchCreate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchCreate(
 	ctx context.Context,
 	request *square.BulkCreateCustomersRequest,
@@ -174,6 +329,20 @@ func (c *Client) BatchCreate(
 // Deletes multiple customer profiles.
 //
 // The endpoint takes a list of customer IDs and returns a map of responses.
+//
+// Example:
+//
+//	request := &square.BulkDeleteCustomersRequest{
+//	    CustomerIDs: []string{
+//	        "8DDA5NZVBZFGAX0V3HPF81HHE0",
+//	        "N18CPRVXR5214XPBBA6BZQWF3C",
+//	        "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
+//	    },
+//	}
+//	_, err := client.Customers.BulkDeleteCustomers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkDeleteCustomers(
 	ctx context.Context,
 	request *square.BulkDeleteCustomersRequest,
@@ -193,6 +362,20 @@ func (c *Client) BulkDeleteCustomers(
 // Retrieves multiple customer profiles.
 //
 // This endpoint takes a list of customer IDs and returns a map of responses.
+//
+// Example:
+//
+//	request := &square.BulkRetrieveCustomersRequest{
+//	    CustomerIDs: []string{
+//	        "8DDA5NZVBZFGAX0V3HPF81HHE0",
+//	        "N18CPRVXR5214XPBBA6BZQWF3C",
+//	        "2GYD7WNXF7BJZW1PMGNXZ3Y8M8",
+//	    },
+//	}
+//	_, err := client.Customers.BulkRetrieveCustomers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkRetrieveCustomers(
 	ctx context.Context,
 	request *square.BulkRetrieveCustomersRequest,
@@ -212,6 +395,39 @@ func (c *Client) BulkRetrieveCustomers(
 // Updates multiple customer profiles.
 //
 // This endpoint takes a map of individual update requests and returns a map of responses.
+//
+// Example:
+//
+//	request := &square.BulkUpdateCustomersRequest{
+//	    Customers: map[string]*square.BulkUpdateCustomerData{
+//	        "8DDA5NZVBZFGAX0V3HPF81HHE0": &square.BulkUpdateCustomerData{
+//	            EmailAddress: square.String(
+//	                "New.Amelia.Earhart@example.com",
+//	            ),
+//	            Note: square.String(
+//	                "updated customer note",
+//	            ),
+//	            Version: square.Int64(
+//	                int64(2),
+//	            ),
+//	        },
+//	        "N18CPRVXR5214XPBBA6BZQWF3C": &square.BulkUpdateCustomerData{
+//	            GivenName: square.String(
+//	                "Marie",
+//	            ),
+//	            FamilyName: square.String(
+//	                "Curie",
+//	            ),
+//	            Version: square.Int64(
+//	                int64(0),
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Customers.BulkUpdateCustomers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkUpdateCustomers(
 	ctx context.Context,
 	request *square.BulkUpdateCustomersRequest,
@@ -237,6 +453,50 @@ func (c *Client) BulkUpdateCustomers(
 // Under normal operating conditions, newly created or updated customer profiles become available
 // for the search operation in well under 30 seconds. Occasionally, propagation of the new or updated
 // profiles can take closer to one minute or longer, especially during network incidents and outages.
+//
+// Example:
+//
+//	request := &square.SearchCustomersRequest{
+//	    Limit: square.Int64(
+//	        int64(2),
+//	    ),
+//	    Query: &square.CustomerQuery{
+//	        Filter: &square.CustomerFilter{
+//	            CreationSource: &square.CustomerCreationSourceFilter{
+//	                Values: []square.CustomerCreationSource{
+//	                    square.CustomerCreationSourceThirdParty,
+//	                },
+//	                Rule: square.CustomerInclusionExclusionInclude.Ptr(),
+//	            },
+//	            CreatedAt: &square.TimeRange{
+//	                StartAt: square.String(
+//	                    "2018-01-01T00:00:00-00:00",
+//	                ),
+//	                EndAt: square.String(
+//	                    "2018-02-01T00:00:00-00:00",
+//	                ),
+//	            },
+//	            EmailAddress: &square.CustomerTextFilter{
+//	                Fuzzy: square.String(
+//	                    "example.com",
+//	                ),
+//	            },
+//	            GroupIDs: &square.FilterValue{
+//	                All: []string{
+//	                    "545AXB44B4XXWMVQ4W8SBT3HHF",
+//	                },
+//	            },
+//	        },
+//	        Sort: &square.CustomerSort{
+//	            Field: square.CustomerSortFieldCreatedAt.Ptr(),
+//	            Order: square.SortOrderAsc.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Customers.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchCustomersRequest,
@@ -254,6 +514,16 @@ func (c *Client) Search(
 }
 
 // Returns details for a single customer.
+//
+// Example:
+//
+//	request := &square.GetCustomersRequest{
+//	    CustomerID: "customer_id",
+//	}
+//	_, err := client.Customers.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetCustomersRequest,
@@ -274,6 +544,25 @@ func (c *Client) Get(
 // To add or update a field, specify the new value. To remove a field, specify `null`.
 //
 // To update a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
+//
+// Example:
+//
+//	request := &square.UpdateCustomerRequest{
+//	    CustomerID: "customer_id",
+//	    EmailAddress: square.String(
+//	        "New.Amelia.Earhart@example.com",
+//	    ),
+//	    Note: square.String(
+//	        "updated customer note",
+//	    ),
+//	    Version: square.Int64(
+//	        int64(2),
+//	    ),
+//	}
+//	_, err := client.Customers.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateCustomerRequest,
@@ -293,6 +582,19 @@ func (c *Client) Update(
 // Deletes a customer profile from a business.
 //
 // To delete a customer profile that was created by merging existing profiles, you must use the ID of the newly created profile.
+//
+// Example:
+//
+//	request := &square.DeleteCustomersRequest{
+//	    CustomerID: "customer_id",
+//	    Version: square.Int64(
+//	        int64(1000000),
+//	    ),
+//	}
+//	_, err := client.Customers.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *square.DeleteCustomersRequest,

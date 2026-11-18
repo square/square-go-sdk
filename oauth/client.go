@@ -4,11 +4,12 @@ package oauth
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,8 +33,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -53,6 +55,21 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // Replace `APPLICATION_SECRET` with the application secret on the **OAuth**
 // page for your application in the Developer Dashboard.
+//
+// Example:
+//
+//	request := &square.RevokeTokenRequest{
+//	    ClientID: square.String(
+//	        "CLIENT_ID",
+//	    ),
+//	    AccessToken: square.String(
+//	        "ACCESS_TOKEN",
+//	    ),
+//	}
+//	_, err := client.OAuth.RevokeToken(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RevokeToken(
 	ctx context.Context,
 	request *square.RevokeTokenRequest,
@@ -90,6 +107,23 @@ func (c *Client) RevokeToken(
 //
 // __Important:__ OAuth tokens should be encrypted and stored on a secure server.
 // Application clients should never interact directly with OAuth tokens.
+//
+// Example:
+//
+//	request := &square.ObtainTokenRequest{
+//	    ClientID: "sq0idp-uaPHILoPzWZk3tlJqlML0g",
+//	    ClientSecret: square.String(
+//	        "sq0csp-30a-4C_tVOnTh14Piza2BfTPBXyLafLPWSzY1qAjeBfM",
+//	    ),
+//	    Code: square.String(
+//	        "sq0cgb-l0SBqxs4uwxErTVyYOdemg",
+//	    ),
+//	    GrantType: "authorization_code",
+//	}
+//	_, err := client.OAuth.ObtainToken(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ObtainToken(
 	ctx context.Context,
 	request *square.ObtainTokenRequest,
@@ -120,6 +154,12 @@ func (c *Client) ObtainToken(
 // [valid production authorization credential](https://developer.squareup.com/docs/build-basics/access-tokens).
 //
 // If the access token is expired or not a valid access token, the endpoint returns an `UNAUTHORIZED` error.
+//
+// Example:
+//
+//	_, err := client.OAuth.RetrieveTokenStatus(
+//	    context.TODO(),
+//	)
 func (c *Client) RetrieveTokenStatus(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -134,6 +174,11 @@ func (c *Client) RetrieveTokenStatus(
 	return response.Body, nil
 }
 
+// Example:
+//
+//	err := client.OAuth.Authorize(
+//	    context.TODO(),
+//	)
 func (c *Client) Authorize(
 	ctx context.Context,
 	opts ...option.RequestOption,

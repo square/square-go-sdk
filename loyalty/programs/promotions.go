@@ -26,10 +26,12 @@ type CancelPromotionsRequest struct {
 }
 
 func (c *CancelPromotionsRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;
@@ -68,10 +70,12 @@ type CreateLoyaltyPromotionRequest struct {
 }
 
 func (c *CreateLoyaltyPromotionRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;
@@ -133,10 +137,12 @@ type GetPromotionsRequest struct {
 }
 
 func (g *GetPromotionsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;
@@ -182,10 +188,12 @@ type ListPromotionsRequest struct {
 }
 
 func (l *ListPromotionsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;

@@ -4,12 +4,13 @@ package transactions
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	locations "github.com/square/square-go-sdk/v5/locations"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -46,6 +48,26 @@ func NewClient(options *core.RequestOptions) *Client {
 // information from returns and exchanges.
 //
 // Max results per [page](https://developer.squareup.com/docs/working-with-apis/pagination): 50
+//
+// Example:
+//
+//	request := &locations.ListTransactionsRequest{
+//	    LocationID: "location_id",
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Locations.Transactions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *locations.ListTransactionsRequest,
@@ -63,6 +85,17 @@ func (c *Client) List(
 }
 
 // Retrieves details for a single transaction.
+//
+// Example:
+//
+//	request := &locations.GetTransactionsRequest{
+//	    LocationID: "location_id",
+//	    TransactionID: "transaction_id",
+//	}
+//	_, err := client.Locations.Transactions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *locations.GetTransactionsRequest,

@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestSubscriptionsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateSubscriptionRequest{
 		IdempotencyKey: square.String(
@@ -127,6 +143,7 @@ func TestSubscriptionsBulkSwapPlanWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BulkSwapPlanRequest{
 		NewPlanVariationID: "FQ7CDXXWSLUJRPM3GFJSJGZ7",
@@ -154,6 +171,7 @@ func TestSubscriptionsSearchWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SearchSubscriptionsRequest{
 		Query: &square.SearchSubscriptionsQuery{
@@ -191,6 +209,7 @@ func TestSubscriptionsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetSubscriptionsRequest{
 		SubscriptionID: "subscription_id",
@@ -207,7 +226,7 @@ func TestSubscriptionsGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestSubscriptionsGetWithWireMock", "GET", "/v2/subscriptions/subscription_id", map[string]string{"include": "include"}, 1)
+	VerifyRequestCount(t, "TestSubscriptionsGetWithWireMock", "GET", "/v2/subscriptions/subscription_id", map[string]interface{}{"include": "include"}, 1)
 }
 
 func TestSubscriptionsUpdateWithWireMock(
@@ -219,6 +238,7 @@ func TestSubscriptionsUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateSubscriptionRequest{
 		SubscriptionID: "subscription_id",
@@ -249,6 +269,7 @@ func TestSubscriptionsDeleteActionWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeleteActionSubscriptionsRequest{
 		SubscriptionID: "subscription_id",
@@ -275,6 +296,7 @@ func TestSubscriptionsChangeBillingAnchorDateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ChangeBillingAnchorDateRequest{
 		SubscriptionID: "subscription_id",
@@ -303,6 +325,7 @@ func TestSubscriptionsCancelWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CancelSubscriptionsRequest{
 		SubscriptionID: "subscription_id",
@@ -328,6 +351,7 @@ func TestSubscriptionsListEventsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListEventsSubscriptionsRequest{
 		SubscriptionID: "subscription_id",
@@ -347,7 +371,7 @@ func TestSubscriptionsListEventsWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestSubscriptionsListEventsWithWireMock", "GET", "/v2/subscriptions/subscription_id/events", map[string]string{"cursor": "cursor", "limit": "1"}, 1)
+	VerifyRequestCount(t, "TestSubscriptionsListEventsWithWireMock", "GET", "/v2/subscriptions/subscription_id/events", map[string]interface{}{"cursor": "cursor", "limit": "1"}, 1)
 }
 
 func TestSubscriptionsPauseWithWireMock(
@@ -359,6 +383,7 @@ func TestSubscriptionsPauseWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.PauseSubscriptionRequest{
 		SubscriptionID: "subscription_id",
@@ -384,6 +409,7 @@ func TestSubscriptionsResumeWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ResumeSubscriptionRequest{
 		SubscriptionID: "subscription_id",
@@ -409,6 +435,7 @@ func TestSubscriptionsSwapPlanWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SwapPlanRequest{
 		SubscriptionID: "subscription_id",

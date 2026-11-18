@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	customattributedefinitions "github.com/square/square-go-sdk/v5/orders/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v5/orders/customattributes"
-	os "os"
 )
 
 type Client struct {
@@ -38,8 +39,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -52,6 +54,108 @@ func NewClient(options *core.RequestOptions) *Client {
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
 //
 // You can modify open orders using the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
+//
+// Example:
+//
+//	request := &square.CreateOrderRequest{
+//	    Order: &square.Order{
+//	        LocationID: "057P5VYJ4A5X1",
+//	        ReferenceID: square.String(
+//	            "my-order-001",
+//	        ),
+//	        LineItems: []*square.OrderLineItem{
+//	            &square.OrderLineItem{
+//	                Name: square.String(
+//	                    "New York Strip Steak",
+//	                ),
+//	                Quantity: "1",
+//	                BasePriceMoney: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(1599),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	            },
+//	            &square.OrderLineItem{
+//	                Quantity: "2",
+//	                CatalogObjectID: square.String(
+//	                    "BEMYCSMIJL46OCDV4KYIKXIB",
+//	                ),
+//	                Modifiers: []*square.OrderLineItemModifier{
+//	                    &square.OrderLineItemModifier{
+//	                        CatalogObjectID: square.String(
+//	                            "CHQX7Y4KY6N5KINJKZCFURPZ",
+//	                        ),
+//	                    },
+//	                },
+//	                AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
+//	                    &square.OrderLineItemAppliedDiscount{
+//	                        DiscountUID: "one-dollar-off",
+//	                    },
+//	                },
+//	            },
+//	        },
+//	        Taxes: []*square.OrderLineItemTax{
+//	            &square.OrderLineItemTax{
+//	                UID: square.String(
+//	                    "state-sales-tax",
+//	                ),
+//	                Name: square.String(
+//	                    "State Sales Tax",
+//	                ),
+//	                Percentage: square.String(
+//	                    "9",
+//	                ),
+//	                Scope: square.OrderLineItemTaxScopeOrder.Ptr(),
+//	            },
+//	        },
+//	        Discounts: []*square.OrderLineItemDiscount{
+//	            &square.OrderLineItemDiscount{
+//	                UID: square.String(
+//	                    "labor-day-sale",
+//	                ),
+//	                Name: square.String(
+//	                    "Labor Day Sale",
+//	                ),
+//	                Percentage: square.String(
+//	                    "5",
+//	                ),
+//	                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+//	            },
+//	            &square.OrderLineItemDiscount{
+//	                UID: square.String(
+//	                    "membership-discount",
+//	                ),
+//	                CatalogObjectID: square.String(
+//	                    "DB7L55ZH2BGWI4H23ULIWOQ7",
+//	                ),
+//	                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+//	            },
+//	            &square.OrderLineItemDiscount{
+//	                UID: square.String(
+//	                    "one-dollar-off",
+//	                ),
+//	                Name: square.String(
+//	                    "Sale - $1.00 off",
+//	                ),
+//	                AmountMoney: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(100),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	                Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
+//	            },
+//	        },
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "8193148c-9586-11e6-99f9-28cfe92138cf",
+//	    ),
+//	}
+//	_, err := client.Orders.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateOrderRequest,
@@ -71,6 +175,22 @@ func (c *Client) Create(
 // Retrieves a set of [orders](entity:Order) by their IDs.
 //
 // If a given order ID does not exist, the ID is ignored instead of generating an error.
+//
+// Example:
+//
+//	request := &square.BatchGetOrdersRequest{
+//	    LocationID: square.String(
+//	        "057P5VYJ4A5X1",
+//	    ),
+//	    OrderIDs: []string{
+//	        "CAISEM82RcpmcFBM0TfOyiHV3es",
+//	        "CAISENgvlJ6jLWAzERDzjyHVybY",
+//	    },
+//	}
+//	_, err := client.Orders.BatchGet(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchGet(
 	ctx context.Context,
 	request *square.BatchGetOrdersRequest,
@@ -88,6 +208,55 @@ func (c *Client) BatchGet(
 }
 
 // Enables applications to preview order pricing without creating an order.
+//
+// Example:
+//
+//	request := &square.CalculateOrderRequest{
+//	    Order: &square.Order{
+//	        LocationID: "D7AVYMEAPJ3A3",
+//	        LineItems: []*square.OrderLineItem{
+//	            &square.OrderLineItem{
+//	                Name: square.String(
+//	                    "Item 1",
+//	                ),
+//	                Quantity: "1",
+//	                BasePriceMoney: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(500),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	            },
+//	            &square.OrderLineItem{
+//	                Name: square.String(
+//	                    "Item 2",
+//	                ),
+//	                Quantity: "2",
+//	                BasePriceMoney: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(300),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	            },
+//	        },
+//	        Discounts: []*square.OrderLineItemDiscount{
+//	            &square.OrderLineItemDiscount{
+//	                Name: square.String(
+//	                    "50% Off",
+//	                ),
+//	                Percentage: square.String(
+//	                    "50",
+//	                ),
+//	                Scope: square.OrderLineItemDiscountScopeOrder.Ptr(),
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Orders.Calculate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Calculate(
 	ctx context.Context,
 	request *square.CalculateOrderRequest,
@@ -106,6 +275,22 @@ func (c *Client) Calculate(
 
 // Creates a new order, in the `DRAFT` state, by duplicating an existing order. The newly created order has
 // only the core fields (such as line items, taxes, and discounts) copied from the original order.
+//
+// Example:
+//
+//	request := &square.CloneOrderRequest{
+//	    OrderID: "ZAISEM52YcpmcWAzERDOyiWS123",
+//	    Version: square.Int(
+//	        3,
+//	    ),
+//	    IdempotencyKey: square.String(
+//	        "UNIQUE_STRING",
+//	    ),
+//	}
+//	_, err := client.Orders.Clone(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Clone(
 	ctx context.Context,
 	request *square.CloneOrderRequest,
@@ -141,6 +326,48 @@ func (c *Client) Clone(
 // orders have a `created_at` value that reflects the time the order was
 // transmitted to Square and created server-side, not the time the order was
 // created on the Point of Sale device.
+//
+// Example:
+//
+//	request := &square.SearchOrdersRequest{
+//	    LocationIDs: []string{
+//	        "057P5VYJ4A5X1",
+//	        "18YC4JDH91E1H",
+//	    },
+//	    Query: &square.SearchOrdersQuery{
+//	        Filter: &square.SearchOrdersFilter{
+//	            StateFilter: &square.SearchOrdersStateFilter{
+//	                States: []square.OrderState{
+//	                    square.OrderStateCompleted,
+//	                },
+//	            },
+//	            DateTimeFilter: &square.SearchOrdersDateTimeFilter{
+//	                ClosedAt: &square.TimeRange{
+//	                    StartAt: square.String(
+//	                        "2018-03-03T20:00:00+00:00",
+//	                    ),
+//	                    EndAt: square.String(
+//	                        "2019-03-04T21:54:45+00:00",
+//	                    ),
+//	                },
+//	            },
+//	        },
+//	        Sort: &square.SearchOrdersSort{
+//	            SortField: square.SearchOrdersSortFieldClosedAt,
+//	            SortOrder: square.SortOrderDesc.Ptr(),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        3,
+//	    ),
+//	    ReturnEntries: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Orders.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchOrdersRequest,
@@ -158,6 +385,16 @@ func (c *Client) Search(
 }
 
 // Retrieves an [Order](entity:Order) by ID.
+//
+// Example:
+//
+//	request := &square.GetOrdersRequest{
+//	    OrderID: "order_id",
+//	}
+//	_, err := client.Orders.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetOrdersRequest,
@@ -189,6 +426,45 @@ func (c *Client) Get(
 //
 // To pay for an order, see
 // [Pay for Orders](https://developer.squareup.com/docs/orders-api/pay-for-orders).
+//
+// Example:
+//
+//	request := &square.UpdateOrderRequest{
+//	    OrderID: "order_id",
+//	    Order: &square.Order{
+//	        LocationID: "location_id",
+//	        LineItems: []*square.OrderLineItem{
+//	            &square.OrderLineItem{
+//	                UID: square.String(
+//	                    "cookie_uid",
+//	                ),
+//	                Name: square.String(
+//	                    "COOKIE",
+//	                ),
+//	                Quantity: "2",
+//	                BasePriceMoney: &square.Money{
+//	                    Amount: square.Int64(
+//	                        int64(200),
+//	                    ),
+//	                    Currency: square.CurrencyUsd.Ptr(),
+//	                },
+//	            },
+//	        },
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	    },
+//	    FieldsToClear: []string{
+//	        "discounts",
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "UNIQUE_STRING",
+//	    ),
+//	}
+//	_, err := client.Orders.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateOrderRequest,
@@ -219,6 +495,21 @@ func (c *Client) Update(
 // `payment_ids` is canceled.
 // - Be approved with [delayed capture](https://developer.squareup.com/docs/payments-api/take-payments/card-payments/delayed-capture).
 // Using a delayed capture payment with `PayOrder` completes the approved payment.
+//
+// Example:
+//
+//	request := &square.PayOrderRequest{
+//	    OrderID: "order_id",
+//	    IdempotencyKey: "c043a359-7ad9-4136-82a9-c3f1d66dcbff",
+//	    PaymentIDs: []string{
+//	        "EnZdNAlWCmfh6Mt5FMNST1o7taB",
+//	        "0LRiVlbXVwe8ozu4KbZxd12mvaB",
+//	    },
+//	}
+//	_, err := client.Orders.Pay(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Pay(
 	ctx context.Context,
 	request *square.PayOrderRequest,

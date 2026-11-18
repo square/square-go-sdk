@@ -22,10 +22,12 @@ type GetEmployeesRequest struct {
 }
 
 func (g *GetEmployeesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -56,10 +58,12 @@ type ListEmployeesRequest struct {
 }
 
 func (l *ListEmployeesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -90,9 +94,6 @@ func (l *ListEmployeesRequest) SetCursor(cursor *string) {
 	l.require(listEmployeesRequestFieldCursor)
 }
 
-// An employee object that is used by the external API.
-//
-// DEPRECATED at version 2020-08-26. Replaced by [TeamMember](entity:TeamMember).
 var (
 	employeeFieldID          = big.NewInt(1 << 0)
 	employeeFieldFirstName   = big.NewInt(1 << 1)
@@ -106,6 +107,19 @@ var (
 	employeeFieldUpdatedAt   = big.NewInt(1 << 9)
 )
 
+// employeeNullableFields maps the wire names of Employee's nullable fields (required or optional) to their field bits.
+var employeeNullableFields = map[string]*big.Int{
+	"first_name":   employeeFieldFirstName,
+	"last_name":    employeeFieldLastName,
+	"email":        employeeFieldEmail,
+	"phone_number": employeeFieldPhoneNumber,
+	"location_ids": employeeFieldLocationIDs,
+	"is_owner":     employeeFieldIsOwner,
+}
+
+// An employee object that is used by the external API.
+//
+// DEPRECATED at version 2020-08-26. Replaced by [TeamMember](entity:TeamMember).
 type Employee struct {
 	// UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -216,10 +230,12 @@ func (e *Employee) GetExtraProperties() map[string]interface{} {
 }
 
 func (e *Employee) require(field *big.Int) {
-	if e.explicitFields == nil {
-		e.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if e.explicitFields != nil {
+		next.Set(e.explicitFields)
 	}
-	e.explicitFields.Or(e.explicitFields, field)
+	next.Or(next, field)
+	e.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -304,6 +320,13 @@ func (e *Employee) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	e.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, employeeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		e.require(presentFields)
+	}
 	e.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -398,10 +421,12 @@ func (g *GetEmployeeResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetEmployeeResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetEmployee sets the Employee field and marks it as non-optional;
@@ -509,10 +534,12 @@ func (l *ListEmployeesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListEmployeesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetEmployees sets the Employees field and marks it as non-optional;

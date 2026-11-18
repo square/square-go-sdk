@@ -38,10 +38,12 @@ type ListEntriesPayoutsRequest struct {
 }
 
 func (l *ListEntriesPayoutsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetPayoutID sets the PayoutID field and marks it as non-optional;
@@ -85,10 +87,12 @@ type GetPayoutsRequest struct {
 }
 
 func (g *GetPayoutsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetPayoutID sets the PayoutID field and marks it as non-optional;
@@ -139,10 +143,12 @@ type ListPayoutsRequest struct {
 }
 
 func (l *ListPayoutsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -384,12 +390,12 @@ func (a ActivityType) Ptr() *ActivityType {
 	return &a
 }
 
-// Information about the destination against which the payout was made.
 var (
 	destinationFieldType = big.NewInt(1 << 0)
 	destinationFieldID   = big.NewInt(1 << 1)
 )
 
+// Information about the destination against which the payout was made.
 type Destination struct {
 	// Type of the destination such as a bank account or debit card.
 	// See [DestinationType](#type-destinationtype) for possible values
@@ -426,10 +432,12 @@ func (d *Destination) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *Destination) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -557,10 +565,12 @@ func (g *GetPayoutResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetPayoutResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetPayout sets the Payout field and marks it as non-optional;
@@ -619,13 +629,13 @@ func (g *GetPayoutResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// The response to retrieve payout records entries.
 var (
 	listPayoutEntriesResponseFieldPayoutEntries = big.NewInt(1 << 0)
 	listPayoutEntriesResponseFieldCursor        = big.NewInt(1 << 1)
 	listPayoutEntriesResponseFieldErrors        = big.NewInt(1 << 2)
 )
 
+// The response to retrieve payout records entries.
 type ListPayoutEntriesResponse struct {
 	// The requested list of payout entries, ordered with the given or default sort order.
 	PayoutEntries []*PayoutEntry `json:"payout_entries,omitempty" url:"payout_entries,omitempty"`
@@ -671,10 +681,12 @@ func (l *ListPayoutEntriesResponse) GetExtraProperties() map[string]interface{} 
 }
 
 func (l *ListPayoutEntriesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetPayoutEntries sets the PayoutEntries field and marks it as non-optional;
@@ -740,13 +752,13 @@ func (l *ListPayoutEntriesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// The response to retrieve payout records entries.
 var (
 	listPayoutsResponseFieldPayouts = big.NewInt(1 << 0)
 	listPayoutsResponseFieldCursor  = big.NewInt(1 << 1)
 	listPayoutsResponseFieldErrors  = big.NewInt(1 << 2)
 )
 
+// The response to retrieve payout records entries.
 type ListPayoutsResponse struct {
 	// The requested list of payouts.
 	Payouts []*Payout `json:"payouts,omitempty" url:"payouts,omitempty"`
@@ -792,10 +804,12 @@ func (l *ListPayoutsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListPayoutsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetPayouts sets the Payouts field and marks it as non-optional;
@@ -867,6 +881,13 @@ var (
 	paymentBalanceActivityAppFeeRefundDetailFieldLocationID = big.NewInt(1 << 2)
 )
 
+// paymentBalanceActivityAppFeeRefundDetailNullableFields maps the wire names of PaymentBalanceActivityAppFeeRefundDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityAppFeeRefundDetailNullableFields = map[string]*big.Int{
+	"payment_id":  paymentBalanceActivityAppFeeRefundDetailFieldPaymentID,
+	"refund_id":   paymentBalanceActivityAppFeeRefundDetailFieldRefundID,
+	"location_id": paymentBalanceActivityAppFeeRefundDetailFieldLocationID,
+}
+
 type PaymentBalanceActivityAppFeeRefundDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -911,10 +932,12 @@ func (p *PaymentBalanceActivityAppFeeRefundDetail) GetExtraProperties() map[stri
 }
 
 func (p *PaymentBalanceActivityAppFeeRefundDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -950,6 +973,13 @@ func (p *PaymentBalanceActivityAppFeeRefundDetail) UnmarshalJSON(data []byte) er
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityAppFeeRefundDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -984,6 +1014,12 @@ var (
 	paymentBalanceActivityAppFeeRevenueDetailFieldPaymentID  = big.NewInt(1 << 0)
 	paymentBalanceActivityAppFeeRevenueDetailFieldLocationID = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityAppFeeRevenueDetailNullableFields maps the wire names of PaymentBalanceActivityAppFeeRevenueDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityAppFeeRevenueDetailNullableFields = map[string]*big.Int{
+	"payment_id":  paymentBalanceActivityAppFeeRevenueDetailFieldPaymentID,
+	"location_id": paymentBalanceActivityAppFeeRevenueDetailFieldLocationID,
+}
 
 type PaymentBalanceActivityAppFeeRevenueDetail struct {
 	// The ID of the payment associated with this activity.
@@ -1020,10 +1056,12 @@ func (p *PaymentBalanceActivityAppFeeRevenueDetail) GetExtraProperties() map[str
 }
 
 func (p *PaymentBalanceActivityAppFeeRevenueDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1052,6 +1090,13 @@ func (p *PaymentBalanceActivityAppFeeRevenueDetail) UnmarshalJSON(data []byte) e
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityAppFeeRevenueDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1086,6 +1131,12 @@ var (
 	paymentBalanceActivityAutomaticSavingsDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityAutomaticSavingsDetailFieldPayoutID  = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityAutomaticSavingsDetailNullableFields maps the wire names of PaymentBalanceActivityAutomaticSavingsDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityAutomaticSavingsDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityAutomaticSavingsDetailFieldPaymentID,
+	"payout_id":  paymentBalanceActivityAutomaticSavingsDetailFieldPayoutID,
+}
 
 type PaymentBalanceActivityAutomaticSavingsDetail struct {
 	// The ID of the payment associated with this activity.
@@ -1122,10 +1173,12 @@ func (p *PaymentBalanceActivityAutomaticSavingsDetail) GetExtraProperties() map[
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1154,6 +1207,13 @@ func (p *PaymentBalanceActivityAutomaticSavingsDetail) UnmarshalJSON(data []byte
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityAutomaticSavingsDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1188,6 +1248,12 @@ var (
 	paymentBalanceActivityAutomaticSavingsReversedDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityAutomaticSavingsReversedDetailFieldPayoutID  = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityAutomaticSavingsReversedDetailNullableFields maps the wire names of PaymentBalanceActivityAutomaticSavingsReversedDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityAutomaticSavingsReversedDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityAutomaticSavingsReversedDetailFieldPaymentID,
+	"payout_id":  paymentBalanceActivityAutomaticSavingsReversedDetailFieldPayoutID,
+}
 
 type PaymentBalanceActivityAutomaticSavingsReversedDetail struct {
 	// The ID of the payment associated with this activity.
@@ -1224,10 +1290,12 @@ func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) GetExtraPropertie
 }
 
 func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1256,6 +1324,13 @@ func (p *PaymentBalanceActivityAutomaticSavingsReversedDetail) UnmarshalJSON(dat
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityAutomaticSavingsReversedDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1290,6 +1365,11 @@ var (
 	paymentBalanceActivityChargeDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityChargeDetailNullableFields maps the wire names of PaymentBalanceActivityChargeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityChargeDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityChargeDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityChargeDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -1316,10 +1396,12 @@ func (p *PaymentBalanceActivityChargeDetail) GetExtraProperties() map[string]int
 }
 
 func (p *PaymentBalanceActivityChargeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1341,6 +1423,13 @@ func (p *PaymentBalanceActivityChargeDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityChargeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1375,6 +1464,11 @@ var (
 	paymentBalanceActivityDepositFeeDetailFieldPayoutID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityDepositFeeDetailNullableFields maps the wire names of PaymentBalanceActivityDepositFeeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityDepositFeeDetailNullableFields = map[string]*big.Int{
+	"payout_id": paymentBalanceActivityDepositFeeDetailFieldPayoutID,
+}
+
 type PaymentBalanceActivityDepositFeeDetail struct {
 	// The ID of the payout that triggered this deposit fee activity.
 	PayoutID *string `json:"payout_id,omitempty" url:"payout_id,omitempty"`
@@ -1401,10 +1495,12 @@ func (p *PaymentBalanceActivityDepositFeeDetail) GetExtraProperties() map[string
 }
 
 func (p *PaymentBalanceActivityDepositFeeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPayoutID sets the PayoutID field and marks it as non-optional;
@@ -1426,6 +1522,13 @@ func (p *PaymentBalanceActivityDepositFeeDetail) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityDepositFeeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1460,6 +1563,11 @@ var (
 	paymentBalanceActivityDepositFeeReversedDetailFieldPayoutID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityDepositFeeReversedDetailNullableFields maps the wire names of PaymentBalanceActivityDepositFeeReversedDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityDepositFeeReversedDetailNullableFields = map[string]*big.Int{
+	"payout_id": paymentBalanceActivityDepositFeeReversedDetailFieldPayoutID,
+}
+
 type PaymentBalanceActivityDepositFeeReversedDetail struct {
 	// The ID of the payout that triggered this deposit fee activity.
 	PayoutID *string `json:"payout_id,omitempty" url:"payout_id,omitempty"`
@@ -1486,10 +1594,12 @@ func (p *PaymentBalanceActivityDepositFeeReversedDetail) GetExtraProperties() ma
 }
 
 func (p *PaymentBalanceActivityDepositFeeReversedDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPayoutID sets the PayoutID field and marks it as non-optional;
@@ -1511,6 +1621,13 @@ func (p *PaymentBalanceActivityDepositFeeReversedDetail) UnmarshalJSON(data []by
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityDepositFeeReversedDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1545,6 +1662,12 @@ var (
 	paymentBalanceActivityDisputeDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityDisputeDetailFieldDisputeID = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityDisputeDetailNullableFields maps the wire names of PaymentBalanceActivityDisputeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityDisputeDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityDisputeDetailFieldPaymentID,
+	"dispute_id": paymentBalanceActivityDisputeDetailFieldDisputeID,
+}
 
 type PaymentBalanceActivityDisputeDetail struct {
 	// The ID of the payment associated with this activity.
@@ -1581,10 +1704,12 @@ func (p *PaymentBalanceActivityDisputeDetail) GetExtraProperties() map[string]in
 }
 
 func (p *PaymentBalanceActivityDisputeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1613,6 +1738,13 @@ func (p *PaymentBalanceActivityDisputeDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityDisputeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1647,6 +1779,11 @@ var (
 	paymentBalanceActivityFeeDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityFeeDetailNullableFields maps the wire names of PaymentBalanceActivityFeeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityFeeDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityFeeDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityFeeDetail struct {
 	// The ID of the payment associated with this activity
 	// This will only be populated when a principal LedgerEntryToken is also populated.
@@ -1676,10 +1813,12 @@ func (p *PaymentBalanceActivityFeeDetail) GetExtraProperties() map[string]interf
 }
 
 func (p *PaymentBalanceActivityFeeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1701,6 +1840,13 @@ func (p *PaymentBalanceActivityFeeDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityFeeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1735,6 +1881,11 @@ var (
 	paymentBalanceActivityFreeProcessingDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityFreeProcessingDetailNullableFields maps the wire names of PaymentBalanceActivityFreeProcessingDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityFreeProcessingDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityFreeProcessingDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityFreeProcessingDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -1761,10 +1912,12 @@ func (p *PaymentBalanceActivityFreeProcessingDetail) GetExtraProperties() map[st
 }
 
 func (p *PaymentBalanceActivityFreeProcessingDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1786,6 +1939,13 @@ func (p *PaymentBalanceActivityFreeProcessingDetail) UnmarshalJSON(data []byte) 
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityFreeProcessingDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1820,6 +1980,11 @@ var (
 	paymentBalanceActivityHoldAdjustmentDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityHoldAdjustmentDetailNullableFields maps the wire names of PaymentBalanceActivityHoldAdjustmentDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityHoldAdjustmentDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityHoldAdjustmentDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityHoldAdjustmentDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -1846,10 +2011,12 @@ func (p *PaymentBalanceActivityHoldAdjustmentDetail) GetExtraProperties() map[st
 }
 
 func (p *PaymentBalanceActivityHoldAdjustmentDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1871,6 +2038,13 @@ func (p *PaymentBalanceActivityHoldAdjustmentDetail) UnmarshalJSON(data []byte) 
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityHoldAdjustmentDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1905,6 +2079,12 @@ var (
 	paymentBalanceActivityOpenDisputeDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityOpenDisputeDetailFieldDisputeID = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityOpenDisputeDetailNullableFields maps the wire names of PaymentBalanceActivityOpenDisputeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityOpenDisputeDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityOpenDisputeDetailFieldPaymentID,
+	"dispute_id": paymentBalanceActivityOpenDisputeDetailFieldDisputeID,
+}
 
 type PaymentBalanceActivityOpenDisputeDetail struct {
 	// The ID of the payment associated with this activity.
@@ -1941,10 +2121,12 @@ func (p *PaymentBalanceActivityOpenDisputeDetail) GetExtraProperties() map[strin
 }
 
 func (p *PaymentBalanceActivityOpenDisputeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1973,6 +2155,13 @@ func (p *PaymentBalanceActivityOpenDisputeDetail) UnmarshalJSON(data []byte) err
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityOpenDisputeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2007,6 +2196,11 @@ var (
 	paymentBalanceActivityOtherAdjustmentDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityOtherAdjustmentDetailNullableFields maps the wire names of PaymentBalanceActivityOtherAdjustmentDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityOtherAdjustmentDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityOtherAdjustmentDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityOtherAdjustmentDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2033,10 +2227,12 @@ func (p *PaymentBalanceActivityOtherAdjustmentDetail) GetExtraProperties() map[s
 }
 
 func (p *PaymentBalanceActivityOtherAdjustmentDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2058,6 +2254,13 @@ func (p *PaymentBalanceActivityOtherAdjustmentDetail) UnmarshalJSON(data []byte)
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityOtherAdjustmentDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2092,6 +2295,11 @@ var (
 	paymentBalanceActivityOtherDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityOtherDetailNullableFields maps the wire names of PaymentBalanceActivityOtherDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityOtherDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityOtherDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityOtherDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2118,10 +2326,12 @@ func (p *PaymentBalanceActivityOtherDetail) GetExtraProperties() map[string]inte
 }
 
 func (p *PaymentBalanceActivityOtherDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2143,6 +2353,13 @@ func (p *PaymentBalanceActivityOtherDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityOtherDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2177,6 +2394,12 @@ var (
 	paymentBalanceActivityRefundDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityRefundDetailFieldRefundID  = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityRefundDetailNullableFields maps the wire names of PaymentBalanceActivityRefundDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityRefundDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityRefundDetailFieldPaymentID,
+	"refund_id":  paymentBalanceActivityRefundDetailFieldRefundID,
+}
 
 type PaymentBalanceActivityRefundDetail struct {
 	// The ID of the payment associated with this activity.
@@ -2213,10 +2436,12 @@ func (p *PaymentBalanceActivityRefundDetail) GetExtraProperties() map[string]int
 }
 
 func (p *PaymentBalanceActivityRefundDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2245,6 +2470,13 @@ func (p *PaymentBalanceActivityRefundDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityRefundDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2279,6 +2511,11 @@ var (
 	paymentBalanceActivityReleaseAdjustmentDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityReleaseAdjustmentDetailNullableFields maps the wire names of PaymentBalanceActivityReleaseAdjustmentDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityReleaseAdjustmentDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityReleaseAdjustmentDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityReleaseAdjustmentDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2305,10 +2542,12 @@ func (p *PaymentBalanceActivityReleaseAdjustmentDetail) GetExtraProperties() map
 }
 
 func (p *PaymentBalanceActivityReleaseAdjustmentDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2330,6 +2569,13 @@ func (p *PaymentBalanceActivityReleaseAdjustmentDetail) UnmarshalJSON(data []byt
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityReleaseAdjustmentDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2364,6 +2610,11 @@ var (
 	paymentBalanceActivityReserveHoldDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityReserveHoldDetailNullableFields maps the wire names of PaymentBalanceActivityReserveHoldDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityReserveHoldDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityReserveHoldDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityReserveHoldDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2390,10 +2641,12 @@ func (p *PaymentBalanceActivityReserveHoldDetail) GetExtraProperties() map[strin
 }
 
 func (p *PaymentBalanceActivityReserveHoldDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2415,6 +2668,13 @@ func (p *PaymentBalanceActivityReserveHoldDetail) UnmarshalJSON(data []byte) err
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityReserveHoldDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2449,6 +2709,11 @@ var (
 	paymentBalanceActivityReserveReleaseDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityReserveReleaseDetailNullableFields maps the wire names of PaymentBalanceActivityReserveReleaseDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityReserveReleaseDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityReserveReleaseDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityReserveReleaseDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2475,10 +2740,12 @@ func (p *PaymentBalanceActivityReserveReleaseDetail) GetExtraProperties() map[st
 }
 
 func (p *PaymentBalanceActivityReserveReleaseDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2500,6 +2767,13 @@ func (p *PaymentBalanceActivityReserveReleaseDetail) UnmarshalJSON(data []byte) 
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityReserveReleaseDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2534,6 +2808,11 @@ var (
 	paymentBalanceActivitySquareCapitalPaymentDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivitySquareCapitalPaymentDetailNullableFields maps the wire names of PaymentBalanceActivitySquareCapitalPaymentDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivitySquareCapitalPaymentDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivitySquareCapitalPaymentDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivitySquareCapitalPaymentDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2560,10 +2839,12 @@ func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) GetExtraProperties() 
 }
 
 func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2585,6 +2866,13 @@ func (p *PaymentBalanceActivitySquareCapitalPaymentDetail) UnmarshalJSON(data []
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivitySquareCapitalPaymentDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2619,6 +2907,11 @@ var (
 	paymentBalanceActivitySquareCapitalReversedPaymentDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivitySquareCapitalReversedPaymentDetailNullableFields maps the wire names of PaymentBalanceActivitySquareCapitalReversedPaymentDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivitySquareCapitalReversedPaymentDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivitySquareCapitalReversedPaymentDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivitySquareCapitalReversedPaymentDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2645,10 +2938,12 @@ func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) GetExtraPrope
 }
 
 func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2670,6 +2965,13 @@ func (p *PaymentBalanceActivitySquareCapitalReversedPaymentDetail) UnmarshalJSON
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivitySquareCapitalReversedPaymentDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2704,6 +3006,11 @@ var (
 	paymentBalanceActivitySquarePayrollTransferDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivitySquarePayrollTransferDetailNullableFields maps the wire names of PaymentBalanceActivitySquarePayrollTransferDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivitySquarePayrollTransferDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivitySquarePayrollTransferDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivitySquarePayrollTransferDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2730,10 +3037,12 @@ func (p *PaymentBalanceActivitySquarePayrollTransferDetail) GetExtraProperties()
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2755,6 +3064,13 @@ func (p *PaymentBalanceActivitySquarePayrollTransferDetail) UnmarshalJSON(data [
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivitySquarePayrollTransferDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2789,6 +3105,11 @@ var (
 	paymentBalanceActivitySquarePayrollTransferReversedDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivitySquarePayrollTransferReversedDetailNullableFields maps the wire names of PaymentBalanceActivitySquarePayrollTransferReversedDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivitySquarePayrollTransferReversedDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivitySquarePayrollTransferReversedDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivitySquarePayrollTransferReversedDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -2815,10 +3136,12 @@ func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) GetExtraProp
 }
 
 func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2840,6 +3163,13 @@ func (p *PaymentBalanceActivitySquarePayrollTransferReversedDetail) UnmarshalJSO
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivitySquarePayrollTransferReversedDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2874,6 +3204,12 @@ var (
 	paymentBalanceActivityTaxOnFeeDetailFieldPaymentID          = big.NewInt(1 << 0)
 	paymentBalanceActivityTaxOnFeeDetailFieldTaxRateDescription = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityTaxOnFeeDetailNullableFields maps the wire names of PaymentBalanceActivityTaxOnFeeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityTaxOnFeeDetailNullableFields = map[string]*big.Int{
+	"payment_id":           paymentBalanceActivityTaxOnFeeDetailFieldPaymentID,
+	"tax_rate_description": paymentBalanceActivityTaxOnFeeDetailFieldTaxRateDescription,
+}
 
 type PaymentBalanceActivityTaxOnFeeDetail struct {
 	// The ID of the payment associated with this activity.
@@ -2910,10 +3246,12 @@ func (p *PaymentBalanceActivityTaxOnFeeDetail) GetExtraProperties() map[string]i
 }
 
 func (p *PaymentBalanceActivityTaxOnFeeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -2942,6 +3280,13 @@ func (p *PaymentBalanceActivityTaxOnFeeDetail) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityTaxOnFeeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2976,6 +3321,11 @@ var (
 	paymentBalanceActivityThirdPartyFeeDetailFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// paymentBalanceActivityThirdPartyFeeDetailNullableFields maps the wire names of PaymentBalanceActivityThirdPartyFeeDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityThirdPartyFeeDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityThirdPartyFeeDetailFieldPaymentID,
+}
+
 type PaymentBalanceActivityThirdPartyFeeDetail struct {
 	// The ID of the payment associated with this activity.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -3002,10 +3352,12 @@ func (p *PaymentBalanceActivityThirdPartyFeeDetail) GetExtraProperties() map[str
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -3027,6 +3379,13 @@ func (p *PaymentBalanceActivityThirdPartyFeeDetail) UnmarshalJSON(data []byte) e
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityThirdPartyFeeDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3061,6 +3420,12 @@ var (
 	paymentBalanceActivityThirdPartyFeeRefundDetailFieldPaymentID = big.NewInt(1 << 0)
 	paymentBalanceActivityThirdPartyFeeRefundDetailFieldRefundID  = big.NewInt(1 << 1)
 )
+
+// paymentBalanceActivityThirdPartyFeeRefundDetailNullableFields maps the wire names of PaymentBalanceActivityThirdPartyFeeRefundDetail's nullable fields (required or optional) to their field bits.
+var paymentBalanceActivityThirdPartyFeeRefundDetailNullableFields = map[string]*big.Int{
+	"payment_id": paymentBalanceActivityThirdPartyFeeRefundDetailFieldPaymentID,
+	"refund_id":  paymentBalanceActivityThirdPartyFeeRefundDetailFieldRefundID,
+}
 
 type PaymentBalanceActivityThirdPartyFeeRefundDetail struct {
 	// The ID of the payment associated with this activity.
@@ -3097,10 +3462,12 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) GetExtraProperties() m
 }
 
 func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -3129,6 +3496,13 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) UnmarshalJSON(data []b
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentBalanceActivityThirdPartyFeeRefundDetailNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3159,8 +3533,6 @@ func (p *PaymentBalanceActivityThirdPartyFeeRefundDetail) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// An accounting of the amount owed the seller and record of the actual transfer to their
-// external bank account or to the Square balance.
 var (
 	payoutFieldID          = big.NewInt(1 << 0)
 	payoutFieldStatus      = big.NewInt(1 << 1)
@@ -3176,6 +3548,15 @@ var (
 	payoutFieldEndToEndID  = big.NewInt(1 << 11)
 )
 
+// payoutNullableFields maps the wire names of Payout's nullable fields (required or optional) to their field bits.
+var payoutNullableFields = map[string]*big.Int{
+	"payout_fee":    payoutFieldPayoutFee,
+	"arrival_date":  payoutFieldArrivalDate,
+	"end_to_end_id": payoutFieldEndToEndID,
+}
+
+// An accounting of the amount owed the seller and record of the actual transfer to their
+// external bank account or to the Square balance.
 type Payout struct {
 	// A unique ID for the payout.
 	ID string `json:"id" url:"id"`
@@ -3305,10 +3686,12 @@ func (p *Payout) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *Payout) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3407,6 +3790,13 @@ func (p *Payout) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, payoutNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3437,8 +3827,6 @@ func (p *Payout) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// One or more PayoutEntries that make up a Payout. Each one has a date, amount, and type of activity.
-// The total amount of the payout will equal the sum of the payout entries for a batch payout
 var (
 	payoutEntryFieldID                                       = big.NewInt(1 << 0)
 	payoutEntryFieldPayoutID                                 = big.NewInt(1 << 1)
@@ -3474,6 +3862,13 @@ var (
 	payoutEntryFieldTypeSquarePayrollTransferReversedDetails = big.NewInt(1 << 31)
 )
 
+// payoutEntryNullableFields maps the wire names of PayoutEntry's nullable fields (required or optional) to their field bits.
+var payoutEntryNullableFields = map[string]*big.Int{
+	"effective_at": payoutEntryFieldEffectiveAt,
+}
+
+// One or more PayoutEntries that make up a Payout. Each one has a date, amount, and type of activity.
+// The total amount of the payout will equal the sum of the payout entries for a batch payout
 type PayoutEntry struct {
 	// A unique ID for the payout entry.
 	ID string `json:"id" url:"id"`
@@ -3780,10 +4175,12 @@ func (p *PayoutEntry) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PayoutEntry) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -4022,6 +4419,13 @@ func (p *PayoutEntry) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, payoutEntryNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4052,13 +4456,18 @@ func (p *PayoutEntry) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Represents a payout fee that can incur as part of a payout.
 var (
 	payoutFeeFieldAmountMoney = big.NewInt(1 << 0)
 	payoutFeeFieldEffectiveAt = big.NewInt(1 << 1)
 	payoutFeeFieldType        = big.NewInt(1 << 2)
 )
 
+// payoutFeeNullableFields maps the wire names of PayoutFee's nullable fields (required or optional) to their field bits.
+var payoutFeeNullableFields = map[string]*big.Int{
+	"effective_at": payoutFeeFieldEffectiveAt,
+}
+
+// Represents a payout fee that can incur as part of a payout.
 type PayoutFee struct {
 	// The money amount of the payout fee.
 	AmountMoney *Money `json:"amount_money,omitempty" url:"amount_money,omitempty"`
@@ -4104,10 +4513,12 @@ func (p *PayoutFee) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PayoutFee) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetAmountMoney sets the AmountMoney field and marks it as non-optional;
@@ -4143,6 +4554,13 @@ func (p *PayoutFee) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, payoutFeeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }

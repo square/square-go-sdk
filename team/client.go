@@ -4,11 +4,12 @@ package team
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,14 +33,27 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists jobs in a seller account. Results are sorted by title in ascending order.
+//
+// Example:
+//
+//	request := &square.ListJobsRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Team.ListJobs(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListJobs(
 	ctx context.Context,
 	request *square.ListJobsRequest,
@@ -58,6 +72,24 @@ func (c *Client) ListJobs(
 
 // Creates a job in a seller account. A job defines a title and tip eligibility. Note that
 // compensation is defined in a [job assignment](entity:JobAssignment) in a team member's wage setting.
+//
+// Example:
+//
+//	request := &square.CreateJobRequest{
+//	    Job: &square.Job{
+//	        Title: square.String(
+//	            "Cashier",
+//	        ),
+//	        IsTipEligible: square.Bool(
+//	            true,
+//	        ),
+//	    },
+//	    IdempotencyKey: "idempotency-key-0",
+//	}
+//	_, err := client.Team.CreateJob(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateJob(
 	ctx context.Context,
 	request *square.CreateJobRequest,
@@ -75,6 +107,16 @@ func (c *Client) CreateJob(
 }
 
 // Retrieves a specified job.
+//
+// Example:
+//
+//	request := &square.RetrieveJobRequest{
+//	    JobID: "job_id",
+//	}
+//	_, err := client.Team.RetrieveJob(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveJob(
 	ctx context.Context,
 	request *square.RetrieveJobRequest,
@@ -94,6 +136,24 @@ func (c *Client) RetrieveJob(
 // Updates the title or tip eligibility of a job. Changes to the title propagate to all
 // `JobAssignment`, `Shift`, and `TeamMemberWage` objects that reference the job ID. Changes to
 // tip eligibility propagate to all `TeamMemberWage` objects that reference the job ID.
+//
+// Example:
+//
+//	request := &square.UpdateJobRequest{
+//	    JobID: "job_id",
+//	    Job: &square.Job{
+//	        Title: square.String(
+//	            "Cashier 1",
+//	        ),
+//	        IsTipEligible: square.Bool(
+//	            true,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Team.UpdateJob(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateJob(
 	ctx context.Context,
 	request *square.UpdateJobRequest,

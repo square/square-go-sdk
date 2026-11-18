@@ -4,13 +4,14 @@ package customattributes
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	bookings "github.com/square/square-go-sdk/v5/bookings"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -48,6 +50,21 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.BulkDeleteBookingCustomAttributesRequest{
+//	    Values: map[string]*square.BookingCustomAttributeDeleteRequest{
+//	        "key": &square.BookingCustomAttributeDeleteRequest{
+//	            BookingID: "booking_id",
+//	            Key: "key",
+//	        },
+//	    },
+//	}
+//	_, err := client.Bookings.CustomAttributes.BatchDelete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *bookings.BulkDeleteBookingCustomAttributesRequest,
@@ -71,6 +88,21 @@ func (c *Client) BatchDelete(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.BulkUpsertBookingCustomAttributesRequest{
+//	    Values: map[string]*square.BookingCustomAttributeUpsertRequest{
+//	        "key": &square.BookingCustomAttributeUpsertRequest{
+//	            BookingID: "booking_id",
+//	            CustomAttribute: &square.CustomAttribute{},
+//	        },
+//	    },
+//	}
+//	_, err := client.Bookings.CustomAttributes.BatchUpsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *bookings.BulkUpsertBookingCustomAttributesRequest,
@@ -91,6 +123,25 @@ func (c *Client) BatchUpsert(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &bookings.ListCustomAttributesRequest{
+//	    BookingID: "booking_id",
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    WithDefinitions: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Bookings.CustomAttributes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *bookings.ListCustomAttributesRequest,
@@ -127,6 +178,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -141,7 +193,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -156,6 +208,23 @@ func (c *Client) List(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &bookings.GetCustomAttributesRequest{
+//	    BookingID: "booking_id",
+//	    Key: "key",
+//	    WithDefinition: square.Bool(
+//	        true,
+//	    ),
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Bookings.CustomAttributes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.GetCustomAttributesRequest,
@@ -179,6 +248,18 @@ func (c *Client) Get(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.UpsertBookingCustomAttributeRequest{
+//	    BookingID: "booking_id",
+//	    Key: "key",
+//	    CustomAttribute: &square.CustomAttribute{},
+//	}
+//	_, err := client.Bookings.CustomAttributes.Upsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *bookings.UpsertBookingCustomAttributeRequest,
@@ -202,6 +283,17 @@ func (c *Client) Upsert(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.DeleteCustomAttributesRequest{
+//	    BookingID: "booking_id",
+//	    Key: "key",
+//	}
+//	_, err := client.Bookings.CustomAttributes.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *bookings.DeleteCustomAttributesRequest,

@@ -4,6 +4,9 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	customattributedefinitions "github.com/square/square-go-sdk/v5/bookings/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v5/bookings/customattributes"
@@ -12,8 +15,6 @@ import (
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -45,8 +46,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -56,6 +58,36 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.ListBookingsRequest{
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    CustomerID: square.String(
+//	        "customer_id",
+//	    ),
+//	    TeamMemberID: square.String(
+//	        "team_member_id",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    StartAtMin: square.String(
+//	        "start_at_min",
+//	    ),
+//	    StartAtMax: square.String(
+//	        "start_at_max",
+//	    ),
+//	}
+//	_, err := client.Bookings.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListBookingsRequest,
@@ -89,6 +121,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -103,7 +136,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -128,6 +161,16 @@ func (c *Client) List(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &square.CreateBookingRequest{
+//	    Booking: &square.Booking{},
+//	}
+//	_, err := client.Bookings.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateBookingRequest,
@@ -148,6 +191,20 @@ func (c *Client) Create(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.SearchAvailabilityRequest{
+//	    Query: &square.SearchAvailabilityQuery{
+//	        Filter: &square.SearchAvailabilityFilter{
+//	            StartAtRange: &square.TimeRange{},
+//	        },
+//	    },
+//	}
+//	_, err := client.Bookings.SearchAvailability(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchAvailability(
 	ctx context.Context,
 	request *square.SearchAvailabilityRequest,
@@ -168,6 +225,18 @@ func (c *Client) SearchAvailability(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.BulkRetrieveBookingsRequest{
+//	    BookingIDs: []string{
+//	        "booking_ids",
+//	    },
+//	}
+//	_, err := client.Bookings.BulkRetrieveBookings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkRetrieveBookings(
 	ctx context.Context,
 	request *square.BulkRetrieveBookingsRequest,
@@ -185,6 +254,12 @@ func (c *Client) BulkRetrieveBookings(
 }
 
 // Retrieves a seller's booking profile.
+//
+// Example:
+//
+//	_, err := client.Bookings.GetBusinessProfile(
+//	    context.TODO(),
+//	)
 func (c *Client) GetBusinessProfile(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -200,6 +275,16 @@ func (c *Client) GetBusinessProfile(
 }
 
 // Retrieves a seller's location booking profile.
+//
+// Example:
+//
+//	request := &square.RetrieveLocationBookingProfileRequest{
+//	    LocationID: "location_id",
+//	}
+//	_, err := client.Bookings.RetrieveLocationBookingProfile(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveLocationBookingProfile(
 	ctx context.Context,
 	request *square.RetrieveLocationBookingProfileRequest,
@@ -217,6 +302,18 @@ func (c *Client) RetrieveLocationBookingProfile(
 }
 
 // Retrieves one or more team members' booking profiles.
+//
+// Example:
+//
+//	request := &square.BulkRetrieveTeamMemberBookingProfilesRequest{
+//	    TeamMemberIDs: []string{
+//	        "team_member_ids",
+//	    },
+//	}
+//	_, err := client.Bookings.BulkRetrieveTeamMemberBookingProfiles(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 	ctx context.Context,
 	request *square.BulkRetrieveTeamMemberBookingProfilesRequest,
@@ -237,6 +334,16 @@ func (c *Client) BulkRetrieveTeamMemberBookingProfiles(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &square.GetBookingsRequest{
+//	    BookingID: "booking_id",
+//	}
+//	_, err := client.Bookings.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetBookingsRequest,
@@ -260,6 +367,17 @@ func (c *Client) Get(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &square.UpdateBookingRequest{
+//	    BookingID: "booking_id",
+//	    Booking: &square.Booking{},
+//	}
+//	_, err := client.Bookings.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateBookingRequest,
@@ -283,6 +401,16 @@ func (c *Client) Update(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &square.CancelBookingRequest{
+//	    BookingID: "booking_id",
+//	}
+//	_, err := client.Bookings.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *square.CancelBookingRequest,

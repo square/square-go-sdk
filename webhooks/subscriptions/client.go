@@ -4,13 +4,14 @@ package subscriptions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	webhooks "github.com/square/square-go-sdk/v5/webhooks"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,34 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists all webhook subscriptions owned by your application.
+//
+// Example:
+//
+//	request := &webhooks.ListSubscriptionsRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    IncludeDisabled: square.Bool(
+//	        true,
+//	    ),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Webhooks.Subscriptions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *webhooks.ListSubscriptionsRequest,
@@ -75,6 +96,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +111,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -101,6 +123,33 @@ func (c *Client) List(
 }
 
 // Creates a webhook subscription.
+//
+// Example:
+//
+//	request := &webhooks.CreateWebhookSubscriptionRequest{
+//	    IdempotencyKey: square.String(
+//	        "63f84c6c-2200-4c99-846c-2670a1311fbf",
+//	    ),
+//	    Subscription: &square.WebhookSubscription{
+//	        Name: square.String(
+//	            "Example Webhook Subscription",
+//	        ),
+//	        EventTypes: []string{
+//	            "payment.created",
+//	            "payment.updated",
+//	        },
+//	        NotificationURL: square.String(
+//	            "https://example-webhook-url.com",
+//	        ),
+//	        APIVersion: square.String(
+//	            "2021-12-15",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Webhooks.Subscriptions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *webhooks.CreateWebhookSubscriptionRequest,
@@ -118,6 +167,16 @@ func (c *Client) Create(
 }
 
 // Retrieves a webhook subscription identified by its ID.
+//
+// Example:
+//
+//	request := &webhooks.GetSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	}
+//	_, err := client.Webhooks.Subscriptions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *webhooks.GetSubscriptionsRequest,
@@ -135,6 +194,24 @@ func (c *Client) Get(
 }
 
 // Updates a webhook subscription.
+//
+// Example:
+//
+//	request := &webhooks.UpdateWebhookSubscriptionRequest{
+//	    SubscriptionID: "subscription_id",
+//	    Subscription: &square.WebhookSubscription{
+//	        Name: square.String(
+//	            "Updated Example Webhook Subscription",
+//	        ),
+//	        Enabled: square.Bool(
+//	            false,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Webhooks.Subscriptions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionRequest,
@@ -152,6 +229,16 @@ func (c *Client) Update(
 }
 
 // Deletes a webhook subscription.
+//
+// Example:
+//
+//	request := &webhooks.DeleteSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	}
+//	_, err := client.Webhooks.Subscriptions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *webhooks.DeleteSubscriptionsRequest,
@@ -169,6 +256,19 @@ func (c *Client) Delete(
 }
 
 // Updates a webhook subscription by replacing the existing signature key with a new one.
+//
+// Example:
+//
+//	request := &webhooks.UpdateWebhookSubscriptionSignatureKeyRequest{
+//	    SubscriptionID: "subscription_id",
+//	    IdempotencyKey: square.String(
+//	        "ed80ae6b-0654-473b-bbab-a39aee89a60d",
+//	    ),
+//	}
+//	_, err := client.Webhooks.Subscriptions.UpdateSignatureKey(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateSignatureKey(
 	ctx context.Context,
 	request *webhooks.UpdateWebhookSubscriptionSignatureKeyRequest,
@@ -186,6 +286,19 @@ func (c *Client) UpdateSignatureKey(
 }
 
 // Tests a webhook subscription by sending a test event to the notification URL.
+//
+// Example:
+//
+//	request := &webhooks.TestWebhookSubscriptionRequest{
+//	    SubscriptionID: "subscription_id",
+//	    EventType: square.String(
+//	        "payment.created",
+//	    ),
+//	}
+//	_, err := client.Webhooks.Subscriptions.Test(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Test(
 	ctx context.Context,
 	request *webhooks.TestWebhookSubscriptionRequest,

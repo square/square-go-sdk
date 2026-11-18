@@ -22,10 +22,12 @@ type BulkDeleteCustomersRequest struct {
 }
 
 func (b *BulkDeleteCustomersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
@@ -69,10 +71,12 @@ type BulkRetrieveCustomersRequest struct {
 }
 
 func (b *BulkRetrieveCustomersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
@@ -123,10 +127,12 @@ type BulkUpdateCustomersRequest struct {
 }
 
 func (b *BulkUpdateCustomersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCustomers sets the Customers field and marks it as non-optional;
@@ -175,10 +181,12 @@ type BulkCreateCustomersRequest struct {
 }
 
 func (b *BulkCreateCustomersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCustomers sets the Customers field and marks it as non-optional;
@@ -277,10 +285,12 @@ type CreateCustomerRequest struct {
 }
 
 func (c *CreateCustomerRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -406,10 +416,12 @@ type DeleteCustomersRequest struct {
 }
 
 func (d *DeleteCustomersRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -439,10 +451,12 @@ type GetCustomersRequest struct {
 }
 
 func (g *GetCustomersRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;
@@ -490,10 +504,12 @@ type ListCustomersRequest struct {
 }
 
 func (l *ListCustomersRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -562,10 +578,12 @@ type SearchCustomersRequest struct {
 }
 
 func (s *SearchCustomersRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -617,8 +635,6 @@ func (s *SearchCustomersRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Defines the customer data provided in individual create requests for a
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
 var (
 	bulkCreateCustomerDataFieldGivenName    = big.NewInt(1 << 0)
 	bulkCreateCustomerDataFieldFamilyName   = big.NewInt(1 << 1)
@@ -633,6 +649,21 @@ var (
 	bulkCreateCustomerDataFieldTaxIDs       = big.NewInt(1 << 10)
 )
 
+// bulkCreateCustomerDataNullableFields maps the wire names of BulkCreateCustomerData's nullable fields (required or optional) to their field bits.
+var bulkCreateCustomerDataNullableFields = map[string]*big.Int{
+	"given_name":    bulkCreateCustomerDataFieldGivenName,
+	"family_name":   bulkCreateCustomerDataFieldFamilyName,
+	"company_name":  bulkCreateCustomerDataFieldCompanyName,
+	"nickname":      bulkCreateCustomerDataFieldNickname,
+	"email_address": bulkCreateCustomerDataFieldEmailAddress,
+	"phone_number":  bulkCreateCustomerDataFieldPhoneNumber,
+	"reference_id":  bulkCreateCustomerDataFieldReferenceID,
+	"note":          bulkCreateCustomerDataFieldNote,
+	"birthday":      bulkCreateCustomerDataFieldBirthday,
+}
+
+// Defines the customer data provided in individual create requests for a
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) operation.
 type BulkCreateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -759,10 +790,12 @@ func (b *BulkCreateCustomerData) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BulkCreateCustomerData) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetGivenName sets the GivenName field and marks it as non-optional;
@@ -854,6 +887,13 @@ func (b *BulkCreateCustomerData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, bulkCreateCustomerDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -884,13 +924,13 @@ func (b *BulkCreateCustomerData) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the fields included in the response body from the
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
 var (
 	bulkCreateCustomersResponseFieldResponses = big.NewInt(1 << 0)
 	bulkCreateCustomersResponseFieldErrors    = big.NewInt(1 << 1)
 )
 
+// Defines the fields included in the response body from the
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
 type BulkCreateCustomersResponse struct {
 	// A map of responses that correspond to individual create requests, represented by
 	// key-value pairs.
@@ -932,10 +972,12 @@ func (b *BulkCreateCustomersResponse) GetExtraProperties() map[string]interface{
 }
 
 func (b *BulkCreateCustomersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetResponses sets the Responses field and marks it as non-optional;
@@ -994,13 +1036,13 @@ func (b *BulkCreateCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the fields included in the response body from the
-// [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
 var (
 	bulkDeleteCustomersResponseFieldResponses = big.NewInt(1 << 0)
 	bulkDeleteCustomersResponseFieldErrors    = big.NewInt(1 << 1)
 )
 
+// Defines the fields included in the response body from the
+// [BulkDeleteCustomers](api-endpoint:Customers-BulkDeleteCustomers) endpoint.
 type BulkDeleteCustomersResponse struct {
 	// A map of responses that correspond to individual delete requests, represented by
 	// key-value pairs.
@@ -1042,10 +1084,12 @@ func (b *BulkDeleteCustomersResponse) GetExtraProperties() map[string]interface{
 }
 
 func (b *BulkDeleteCustomersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetResponses sets the Responses field and marks it as non-optional;
@@ -1104,13 +1148,13 @@ func (b *BulkDeleteCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the fields included in the response body from the
-// [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
 var (
 	bulkRetrieveCustomersResponseFieldResponses = big.NewInt(1 << 0)
 	bulkRetrieveCustomersResponseFieldErrors    = big.NewInt(1 << 1)
 )
 
+// Defines the fields included in the response body from the
+// [BulkRetrieveCustomers](api-endpoint:Customers-BulkRetrieveCustomers) endpoint.
 type BulkRetrieveCustomersResponse struct {
 	// A map of responses that correspond to individual retrieve requests, represented by
 	// key-value pairs.
@@ -1152,10 +1196,12 @@ func (b *BulkRetrieveCustomersResponse) GetExtraProperties() map[string]interfac
 }
 
 func (b *BulkRetrieveCustomersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetResponses sets the Responses field and marks it as non-optional;
@@ -1214,8 +1260,6 @@ func (b *BulkRetrieveCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the customer data provided in individual update requests for a
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
 var (
 	bulkUpdateCustomerDataFieldGivenName    = big.NewInt(1 << 0)
 	bulkUpdateCustomerDataFieldFamilyName   = big.NewInt(1 << 1)
@@ -1231,6 +1275,21 @@ var (
 	bulkUpdateCustomerDataFieldVersion      = big.NewInt(1 << 11)
 )
 
+// bulkUpdateCustomerDataNullableFields maps the wire names of BulkUpdateCustomerData's nullable fields (required or optional) to their field bits.
+var bulkUpdateCustomerDataNullableFields = map[string]*big.Int{
+	"given_name":    bulkUpdateCustomerDataFieldGivenName,
+	"family_name":   bulkUpdateCustomerDataFieldFamilyName,
+	"company_name":  bulkUpdateCustomerDataFieldCompanyName,
+	"nickname":      bulkUpdateCustomerDataFieldNickname,
+	"email_address": bulkUpdateCustomerDataFieldEmailAddress,
+	"phone_number":  bulkUpdateCustomerDataFieldPhoneNumber,
+	"reference_id":  bulkUpdateCustomerDataFieldReferenceID,
+	"note":          bulkUpdateCustomerDataFieldNote,
+	"birthday":      bulkUpdateCustomerDataFieldBirthday,
+}
+
+// Defines the customer data provided in individual update requests for a
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) operation.
 type BulkUpdateCustomerData struct {
 	// The given name (that is, the first name) associated with the customer profile.
 	GivenName *string `json:"given_name,omitempty" url:"given_name,omitempty"`
@@ -1370,10 +1429,12 @@ func (b *BulkUpdateCustomerData) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BulkUpdateCustomerData) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetGivenName sets the GivenName field and marks it as non-optional;
@@ -1472,6 +1533,13 @@ func (b *BulkUpdateCustomerData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, bulkUpdateCustomerDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1502,13 +1570,13 @@ func (b *BulkUpdateCustomerData) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the fields included in the response body from the
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
 var (
 	bulkUpdateCustomersResponseFieldResponses = big.NewInt(1 << 0)
 	bulkUpdateCustomersResponseFieldErrors    = big.NewInt(1 << 1)
 )
 
+// Defines the fields included in the response body from the
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
 type BulkUpdateCustomersResponse struct {
 	// A map of responses that correspond to individual update requests, represented by
 	// key-value pairs.
@@ -1550,10 +1618,12 @@ func (b *BulkUpdateCustomersResponse) GetExtraProperties() map[string]interface{
 }
 
 func (b *BulkUpdateCustomersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetResponses sets the Responses field and marks it as non-optional;
@@ -1612,16 +1682,16 @@ func (b *BulkUpdateCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [CreateCustomer](api-endpoint:Customers-CreateCustomer) or
-// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
-//
-// Either `errors` or `customer` is present in a given response (never both).
 var (
 	createCustomerResponseFieldErrors   = big.NewInt(1 << 0)
 	createCustomerResponseFieldCustomer = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [CreateCustomer](api-endpoint:Customers-CreateCustomer) or
+// [BulkCreateCustomers](api-endpoint:Customers-BulkCreateCustomers) endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
 type CreateCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1657,10 +1727,12 @@ func (c *CreateCustomerResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateCustomerResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1719,7 +1791,6 @@ func (c *CreateCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a Square customer profile in the Customer Directory of a Square seller.
 var (
 	customerFieldID             = big.NewInt(1 << 0)
 	customerFieldCreatedAt      = big.NewInt(1 << 1)
@@ -1742,6 +1813,22 @@ var (
 	customerFieldTaxIDs         = big.NewInt(1 << 18)
 )
 
+// customerNullableFields maps the wire names of Customer's nullable fields (required or optional) to their field bits.
+var customerNullableFields = map[string]*big.Int{
+	"given_name":    customerFieldGivenName,
+	"family_name":   customerFieldFamilyName,
+	"nickname":      customerFieldNickname,
+	"company_name":  customerFieldCompanyName,
+	"email_address": customerFieldEmailAddress,
+	"phone_number":  customerFieldPhoneNumber,
+	"birthday":      customerFieldBirthday,
+	"reference_id":  customerFieldReferenceID,
+	"note":          customerFieldNote,
+	"group_ids":     customerFieldGroupIDs,
+	"segment_ids":   customerFieldSegmentIDs,
+}
+
+// Represents a Square customer profile in the Customer Directory of a Square seller.
 type Customer struct {
 	// A unique Square-assigned ID for the customer profile.
 	//
@@ -1937,10 +2024,12 @@ func (c *Customer) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Customer) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -2088,6 +2177,13 @@ func (c *Customer) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2118,13 +2214,13 @@ func (c *Customer) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
-// searching by an `Address`-type custom attribute.
 var (
 	customerAddressFilterFieldPostalCode = big.NewInt(1 << 0)
 	customerAddressFilterFieldCountry    = big.NewInt(1 << 1)
 )
 
+// The customer address filter. This filter is used in a [CustomerCustomAttributeFilterValue](entity:CustomerCustomAttributeFilterValue) filter when
+// searching by an `Address`-type custom attribute.
 type CustomerAddressFilter struct {
 	// The postal code to search for. Only an `exact` match is supported.
 	PostalCode *CustomerTextFilter `json:"postal_code,omitempty" url:"postal_code,omitempty"`
@@ -2161,10 +2257,12 @@ func (c *CustomerAddressFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerAddressFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetPostalCode sets the PostalCode field and marks it as non-optional;
@@ -2297,15 +2395,20 @@ func (c CustomerCreationSource) Ptr() *CustomerCreationSource {
 	return &c
 }
 
-// The creation source filter.
-//
-// If one or more creation sources are set, customer profiles are included in,
-// or excluded from, the result if they match at least one of the filter criteria.
 var (
 	customerCreationSourceFilterFieldValues = big.NewInt(1 << 0)
 	customerCreationSourceFilterFieldRule   = big.NewInt(1 << 1)
 )
 
+// customerCreationSourceFilterNullableFields maps the wire names of CustomerCreationSourceFilter's nullable fields (required or optional) to their field bits.
+var customerCreationSourceFilterNullableFields = map[string]*big.Int{
+	"values": customerCreationSourceFilterFieldValues,
+}
+
+// The creation source filter.
+//
+// If one or more creation sources are set, customer profiles are included in,
+// or excluded from, the result if they match at least one of the filter criteria.
 type CustomerCreationSourceFilter struct {
 	// The list of creation sources used as filtering criteria.
 	// See [CustomerCreationSource](#type-customercreationsource) for possible values
@@ -2346,10 +2449,12 @@ func (c *CustomerCreationSourceFilter) GetExtraProperties() map[string]interface
 }
 
 func (c *CustomerCreationSourceFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetValues sets the Values field and marks it as non-optional;
@@ -2378,6 +2483,13 @@ func (c *CustomerCreationSourceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerCreationSourceFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2408,14 +2520,14 @@ func (c *CustomerCreationSourceFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
-// based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
 var (
 	customerCustomAttributeFilterFieldKey       = big.NewInt(1 << 0)
 	customerCustomAttributeFilterFieldFilter    = big.NewInt(1 << 1)
 	customerCustomAttributeFilterFieldUpdatedAt = big.NewInt(1 << 2)
 )
 
+// The custom attribute filter. Use this filter in a set of [custom attribute filters](entity:CustomerCustomAttributeFilters) to search
+// based on the value or last updated date of a customer-related [custom attribute](entity:CustomAttribute).
 type CustomerCustomAttributeFilter struct {
 	// The `key` of the [custom attribute](entity:CustomAttribute) to filter by. The key is the identifier of the custom attribute
 	// (and the corresponding custom attribute definition) and can be retrieved using the [Customer Custom Attributes API](api:CustomerCustomAttributes).
@@ -2468,10 +2580,12 @@ func (c *CustomerCustomAttributeFilter) GetExtraProperties() map[string]interfac
 }
 
 func (c *CustomerCustomAttributeFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetKey sets the Key field and marks it as non-optional;
@@ -2537,8 +2651,6 @@ func (c *CustomerCustomAttributeFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
-// of a customer-related [custom attribute](entity:CustomAttribute).
 var (
 	customerCustomAttributeFilterValueFieldEmail     = big.NewInt(1 << 0)
 	customerCustomAttributeFilterValueFieldPhone     = big.NewInt(1 << 1)
@@ -2550,6 +2662,13 @@ var (
 	customerCustomAttributeFilterValueFieldAddress   = big.NewInt(1 << 7)
 )
 
+// customerCustomAttributeFilterValueNullableFields maps the wire names of CustomerCustomAttributeFilterValue's nullable fields (required or optional) to their field bits.
+var customerCustomAttributeFilterValueNullableFields = map[string]*big.Int{
+	"boolean": customerCustomAttributeFilterValueFieldBoolean,
+}
+
+// A type-specific filter used in a [custom attribute filter](entity:CustomerCustomAttributeFilter) to search based on the value
+// of a customer-related [custom attribute](entity:CustomAttribute).
 type CustomerCustomAttributeFilterValue struct {
 	// A filter for a query based on the value of an `Email`-type custom attribute. This filter is case-insensitive and can
 	// include `exact` or `fuzzy`, but not both.
@@ -2680,10 +2799,12 @@ func (c *CustomerCustomAttributeFilterValue) GetExtraProperties() map[string]int
 }
 
 func (c *CustomerCustomAttributeFilterValue) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEmail sets the Email field and marks it as non-optional;
@@ -2754,6 +2875,13 @@ func (c *CustomerCustomAttributeFilterValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerCustomAttributeFilterValueNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2784,13 +2912,18 @@ func (c *CustomerCustomAttributeFilterValue) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
-// to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
-// [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
 var (
 	customerCustomAttributeFiltersFieldFilters = big.NewInt(1 << 0)
 )
 
+// customerCustomAttributeFiltersNullableFields maps the wire names of CustomerCustomAttributeFilters's nullable fields (required or optional) to their field bits.
+var customerCustomAttributeFiltersNullableFields = map[string]*big.Int{
+	"filters": customerCustomAttributeFiltersFieldFilters,
+}
+
+// The custom attribute filters in a set of [customer filters](entity:CustomerFilter) used in a search query. Use this filter
+// to search based on [custom attributes](entity:CustomAttribute) that are assigned to customer profiles. For more information, see
+// [Search by custom attribute](https://developer.squareup.com/docs/customers-api/use-the-api/search-customers#search-by-custom-attribute).
 type CustomerCustomAttributeFilters struct {
 	// The custom attribute filters. Each filter must specify `key` and include the `filter` field with a type-specific filter,
 	// the `updated_at` field, or both. The provided keys must be unique within the list of custom attribute filters.
@@ -2818,10 +2951,12 @@ func (c *CustomerCustomAttributeFilters) GetExtraProperties() map[string]interfa
 }
 
 func (c *CustomerCustomAttributeFilters) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetFilters sets the Filters field and marks it as non-optional;
@@ -2843,6 +2978,13 @@ func (c *CustomerCustomAttributeFilters) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerCustomAttributeFiltersNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2873,8 +3015,6 @@ func (c *CustomerCustomAttributeFilters) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
-// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 var (
 	customerFilterFieldCreationSource  = big.NewInt(1 << 0)
 	customerFilterFieldCreatedAt       = big.NewInt(1 << 1)
@@ -2887,6 +3027,8 @@ var (
 	customerFilterFieldSegmentIDs      = big.NewInt(1 << 8)
 )
 
+// Represents the filtering criteria in a [search query](entity:CustomerQuery) that defines how to filter
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 type CustomerFilter struct {
 	// A filter to select customers based on their creation source.
 	CreationSource *CustomerCreationSourceFilter `json:"creation_source,omitempty" url:"creation_source,omitempty"`
@@ -3070,10 +3212,12 @@ func (c *CustomerFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCreationSource sets the CreationSource field and marks it as non-optional;
@@ -3205,11 +3349,16 @@ func (c CustomerInclusionExclusion) Ptr() *CustomerInclusionExclusion {
 	return &c
 }
 
-// Represents communication preferences for the customer profile.
 var (
 	customerPreferencesFieldEmailUnsubscribed = big.NewInt(1 << 0)
 )
 
+// customerPreferencesNullableFields maps the wire names of CustomerPreferences's nullable fields (required or optional) to their field bits.
+var customerPreferencesNullableFields = map[string]*big.Int{
+	"email_unsubscribed": customerPreferencesFieldEmailUnsubscribed,
+}
+
+// Represents communication preferences for the customer profile.
 type CustomerPreferences struct {
 	// Indicates whether the customer has unsubscribed from marketing campaign emails. A value of `true` means that the customer chose to opt out of email marketing from the current Square seller or from all Square sellers. This value is read-only from the Customers API.
 	EmailUnsubscribed *bool `json:"email_unsubscribed,omitempty" url:"email_unsubscribed,omitempty"`
@@ -3236,10 +3385,12 @@ func (c *CustomerPreferences) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerPreferences) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEmailUnsubscribed sets the EmailUnsubscribed field and marks it as non-optional;
@@ -3261,6 +3412,13 @@ func (c *CustomerPreferences) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerPreferencesNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3291,12 +3449,12 @@ func (c *CustomerPreferences) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
 var (
 	customerQueryFieldFilter = big.NewInt(1 << 0)
 	customerQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Represents filtering and sorting criteria for a [SearchCustomers](api-endpoint:Customers-SearchCustomers) request.
 type CustomerQuery struct {
 	// The filtering criteria for the search query. A query can contain multiple filters in any combination.
 	// Multiple filters are combined as `AND` statements.
@@ -3337,10 +3495,12 @@ func (c *CustomerQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerQuery) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -3399,13 +3559,13 @@ func (c *CustomerQuery) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
-// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 var (
 	customerSortFieldField = big.NewInt(1 << 0)
 	customerSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Represents the sorting criteria in a [search query](entity:CustomerQuery) that defines how to sort
+// customer profiles returned in [SearchCustomers](api-endpoint:Customers-SearchCustomers) results.
 type CustomerSort struct {
 	// Indicates the fields to use as the sort key, which is either the default set of fields or `created_at`.
 	//
@@ -3449,10 +3609,12 @@ func (c *CustomerSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerSort) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -3534,12 +3696,17 @@ func (c CustomerSortField) Ptr() *CustomerSortField {
 	return &c
 }
 
-// Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
-// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 var (
 	customerTaxIDsFieldEuVat = big.NewInt(1 << 0)
 )
 
+// customerTaxIDsNullableFields maps the wire names of CustomerTaxIDs's nullable fields (required or optional) to their field bits.
+var customerTaxIDsNullableFields = map[string]*big.Int{
+	"eu_vat": customerTaxIDsFieldEuVat,
+}
+
+// Represents the tax ID associated with a [customer profile](entity:Customer). The corresponding `tax_ids` field is available only for customers of sellers in EU countries or the United Kingdom.
+// For more information, see [Customer tax IDs](https://developer.squareup.com/docs/customers-api/what-it-does#customer-tax-ids).
 type CustomerTaxIDs struct {
 	// The EU VAT identification number for the customer. For example, `IE3426675K`. The ID can contain alphanumeric characters only.
 	EuVat *string `json:"eu_vat,omitempty" url:"eu_vat,omitempty"`
@@ -3566,10 +3733,12 @@ func (c *CustomerTaxIDs) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerTaxIDs) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEuVat sets the EuVat field and marks it as non-optional;
@@ -3591,6 +3760,13 @@ func (c *CustomerTaxIDs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerTaxIDsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3621,14 +3797,20 @@ func (c *CustomerTaxIDs) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A filter to select customers based on exact or fuzzy matching of
-// customer attributes against a specified query. Depending on the customer attributes,
-// the filter can be case-sensitive. This filter can be exact or fuzzy, but it cannot be both.
 var (
 	customerTextFilterFieldExact = big.NewInt(1 << 0)
 	customerTextFilterFieldFuzzy = big.NewInt(1 << 1)
 )
 
+// customerTextFilterNullableFields maps the wire names of CustomerTextFilter's nullable fields (required or optional) to their field bits.
+var customerTextFilterNullableFields = map[string]*big.Int{
+	"exact": customerTextFilterFieldExact,
+	"fuzzy": customerTextFilterFieldFuzzy,
+}
+
+// A filter to select customers based on exact or fuzzy matching of
+// customer attributes against a specified query. Depending on the customer attributes,
+// the filter can be case-sensitive. This filter can be exact or fuzzy, but it cannot be both.
 type CustomerTextFilter struct {
 	// Use the exact filter to select customers whose attributes match exactly the specified query.
 	Exact *string `json:"exact,omitempty" url:"exact,omitempty"`
@@ -3667,10 +3849,12 @@ func (c *CustomerTextFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomerTextFilter) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetExact sets the Exact field and marks it as non-optional;
@@ -3699,6 +3883,13 @@ func (c *CustomerTextFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, customerTextFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3729,12 +3920,12 @@ func (c *CustomerTextFilter) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `DeleteCustomer` endpoint.
 var (
 	deleteCustomerResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `DeleteCustomer` endpoint.
 type DeleteCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3761,10 +3952,12 @@ func (d *DeleteCustomerResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeleteCustomerResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3816,12 +4009,18 @@ func (d *DeleteCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Specifies a decimal number range.
 var (
 	floatNumberRangeFieldStartAt = big.NewInt(1 << 0)
 	floatNumberRangeFieldEndAt   = big.NewInt(1 << 1)
 )
 
+// floatNumberRangeNullableFields maps the wire names of FloatNumberRange's nullable fields (required or optional) to their field bits.
+var floatNumberRangeNullableFields = map[string]*big.Int{
+	"start_at": floatNumberRangeFieldStartAt,
+	"end_at":   floatNumberRangeFieldEndAt,
+}
+
+// Specifies a decimal number range.
 type FloatNumberRange struct {
 	// A decimal value indicating where the range starts.
 	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
@@ -3857,10 +4056,12 @@ func (f *FloatNumberRange) GetExtraProperties() map[string]interface{} {
 }
 
 func (f *FloatNumberRange) require(field *big.Int) {
-	if f.explicitFields == nil {
-		f.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if f.explicitFields != nil {
+		next.Set(f.explicitFields)
 	}
-	f.explicitFields.Or(f.explicitFields, field)
+	next.Or(next, field)
+	f.explicitFields = next
 }
 
 // SetStartAt sets the StartAt field and marks it as non-optional;
@@ -3889,6 +4090,13 @@ func (f *FloatNumberRange) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	f.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, floatNumberRangeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		f.require(presentFields)
+	}
 	f.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3919,15 +4127,15 @@ func (f *FloatNumberRange) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `RetrieveCustomer` endpoint.
-//
-// Either `errors` or `customer` is present in a given response (never both).
 var (
 	getCustomerResponseFieldErrors   = big.NewInt(1 << 0)
 	getCustomerResponseFieldCustomer = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `RetrieveCustomer` endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
 type GetCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3963,10 +4171,12 @@ func (g *GetCustomerResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetCustomerResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4025,10 +4235,6 @@ func (g *GetCustomerResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `ListCustomers` endpoint.
-//
-// Either `errors` or `customers` is present in a given response (never both).
 var (
 	listCustomersResponseFieldErrors    = big.NewInt(1 << 0)
 	listCustomersResponseFieldCustomers = big.NewInt(1 << 1)
@@ -4036,6 +4242,10 @@ var (
 	listCustomersResponseFieldCount     = big.NewInt(1 << 3)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `ListCustomers` endpoint.
+//
+// Either `errors` or `customers` is present in a given response (never both).
 type ListCustomersResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4097,10 +4307,12 @@ func (l *ListCustomersResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListCustomersResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4173,10 +4385,6 @@ func (l *ListCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `SearchCustomers` endpoint.
-//
-// Either `errors` or `customers` is present in a given response (never both).
 var (
 	searchCustomersResponseFieldErrors    = big.NewInt(1 << 0)
 	searchCustomersResponseFieldCustomers = big.NewInt(1 << 1)
@@ -4184,6 +4392,10 @@ var (
 	searchCustomersResponseFieldCount     = big.NewInt(1 << 3)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `SearchCustomers` endpoint.
+//
+// Either `errors` or `customers` is present in a given response (never both).
 type SearchCustomersResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4246,10 +4458,12 @@ func (s *SearchCustomersResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchCustomersResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4322,16 +4536,16 @@ func (s *SearchCustomersResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [UpdateCustomer](api-endpoint:Customers-UpdateCustomer) or
-// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
-//
-// Either `errors` or `customer` is present in a given response (never both).
 var (
 	updateCustomerResponseFieldErrors   = big.NewInt(1 << 0)
 	updateCustomerResponseFieldCustomer = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [UpdateCustomer](api-endpoint:Customers-UpdateCustomer) or
+// [BulkUpdateCustomers](api-endpoint:Customers-BulkUpdateCustomers) endpoint.
+//
+// Either `errors` or `customer` is present in a given response (never both).
 type UpdateCustomerResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4367,10 +4581,12 @@ func (u *UpdateCustomerResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateCustomerResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4502,10 +4718,12 @@ type UpdateCustomerRequest struct {
 }
 
 func (u *UpdateCustomerRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetCustomerID sets the CustomerID field and marks it as non-optional;

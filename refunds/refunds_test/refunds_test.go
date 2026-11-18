@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestRefundsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListRefundsRequest{
 		BeginTime: square.String(
@@ -114,7 +130,7 @@ func TestRefundsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestRefundsListWithWireMock", "GET", "/v2/refunds", map[string]string{"begin_time": "begin_time", "end_time": "end_time", "sort_order": "sort_order", "cursor": "cursor", "location_id": "location_id", "status": "status", "source_type": "source_type", "limit": "1", "updated_at_begin_time": "updated_at_begin_time", "updated_at_end_time": "updated_at_end_time", "sort_field": "CREATED_AT"}, 1)
+	VerifyRequestCount(t, "TestRefundsListWithWireMock", "GET", "/v2/refunds", map[string]interface{}{"begin_time": "begin_time", "end_time": "end_time", "sort_order": "sort_order", "cursor": "cursor", "location_id": "location_id", "status": "status", "source_type": "source_type", "limit": "1", "updated_at_begin_time": "updated_at_begin_time", "updated_at_end_time": "updated_at_end_time", "sort_field": "CREATED_AT"}, 1)
 }
 
 func TestRefundsRefundPaymentWithWireMock(
@@ -126,6 +142,7 @@ func TestRefundsRefundPaymentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.RefundPaymentRequest{
 		IdempotencyKey: "9b7f2dcf-49da-4411-b23e-a2d6af21333a",
@@ -169,6 +186,7 @@ func TestRefundsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetRefundsRequest{
 		RefundID: "refund_id",

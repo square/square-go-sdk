@@ -26,10 +26,12 @@ type BatchCreateTeamMembersRequest struct {
 }
 
 func (b *BatchCreateTeamMembersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMembers sets the TeamMembers field and marks it as non-optional;
@@ -78,10 +80,12 @@ type BatchUpdateTeamMembersRequest struct {
 }
 
 func (b *BatchUpdateTeamMembersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMembers sets the TeamMembers field and marks it as non-optional;
@@ -125,10 +129,12 @@ type GetTeamMembersRequest struct {
 }
 
 func (g *GetTeamMembersRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
@@ -158,10 +164,12 @@ type SearchTeamMembersRequest struct {
 }
 
 func (s *SearchTeamMembersRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -206,12 +214,12 @@ func (s *SearchTeamMembersRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Represents a response from a bulk create request containing the created `TeamMember` objects or error messages.
 var (
 	batchCreateTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
 	batchCreateTeamMembersResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
+// Represents a response from a bulk create request containing the created `TeamMember` objects or error messages.
 type BatchCreateTeamMembersResponse struct {
 	// The successfully created `TeamMember` objects. Each key is the `idempotency_key` that maps to the `CreateTeamMemberRequest`.
 	TeamMembers map[string]*CreateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
@@ -247,10 +255,12 @@ func (b *BatchCreateTeamMembersResponse) GetExtraProperties() map[string]interfa
 }
 
 func (b *BatchCreateTeamMembersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMembers sets the TeamMembers field and marks it as non-optional;
@@ -309,12 +319,12 @@ func (b *BatchCreateTeamMembersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a response from a bulk update request containing the updated `TeamMember` objects or error messages.
 var (
 	batchUpdateTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
 	batchUpdateTeamMembersResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
+// Represents a response from a bulk update request containing the updated `TeamMember` objects or error messages.
 type BatchUpdateTeamMembersResponse struct {
 	// The successfully updated `TeamMember` objects. Each key is the `team_member_id` that maps to the `UpdateTeamMemberRequest`.
 	TeamMembers map[string]*UpdateTeamMemberResponse `json:"team_members,omitempty" url:"team_members,omitempty"`
@@ -350,10 +360,12 @@ func (b *BatchUpdateTeamMembersResponse) GetExtraProperties() map[string]interfa
 }
 
 func (b *BatchUpdateTeamMembersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMembers sets the TeamMembers field and marks it as non-optional;
@@ -412,12 +424,12 @@ func (b *BatchUpdateTeamMembersResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a create request for a `TeamMember` object.
 var (
 	createTeamMemberRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createTeamMemberRequestFieldTeamMember     = big.NewInt(1 << 1)
 )
 
+// Represents a create request for a `TeamMember` object.
 type CreateTeamMemberRequest struct {
 	// A unique string that identifies this `CreateTeamMember` request.
 	// Keys can be any valid string, but must be unique for every request.
@@ -458,10 +470,12 @@ func (c *CreateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateTeamMemberRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -520,12 +534,12 @@ func (c *CreateTeamMemberRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a response from a create request containing the created `TeamMember` object or error messages.
 var (
 	createTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
 	createTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
 )
 
+// Represents a response from a create request containing the created `TeamMember` object or error messages.
 type CreateTeamMemberResponse struct {
 	// The successfully created `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
@@ -561,10 +575,12 @@ func (c *CreateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateTeamMemberResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTeamMember sets the TeamMember field and marks it as non-optional;
@@ -623,12 +639,12 @@ func (c *CreateTeamMemberResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a response from a retrieve request containing a `TeamMember` object or error messages.
 var (
 	getTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
 	getTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
 )
 
+// Represents a response from a retrieve request containing a `TeamMember` object or error messages.
 type GetTeamMemberResponse struct {
 	// The successfully retrieved `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
@@ -664,10 +680,12 @@ func (g *GetTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetTeamMemberResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetTeamMember sets the TeamMember field and marks it as non-optional;
@@ -726,6 +744,18 @@ func (g *GetTeamMemberResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+var (
+	searchTeamMembersFilterFieldLocationIDs = big.NewInt(1 << 0)
+	searchTeamMembersFilterFieldStatus      = big.NewInt(1 << 1)
+	searchTeamMembersFilterFieldIsOwner     = big.NewInt(1 << 2)
+)
+
+// searchTeamMembersFilterNullableFields maps the wire names of SearchTeamMembersFilter's nullable fields (required or optional) to their field bits.
+var searchTeamMembersFilterNullableFields = map[string]*big.Int{
+	"location_ids": searchTeamMembersFilterFieldLocationIDs,
+	"is_owner":     searchTeamMembersFilterFieldIsOwner,
+}
+
 // Represents a filter used in a search for `TeamMember` objects. `AND` logic is applied
 // between the individual fields, and `OR` logic is applied within list-based fields.
 // For example, setting this filter value:
@@ -733,12 +763,6 @@ func (g *GetTeamMemberResponse) String() string {
 // filter = (locations_ids = ["A", "B"], status = ACTIVE)
 // ```
 // returns only active team members assigned to either location "A" or "B".
-var (
-	searchTeamMembersFilterFieldLocationIDs = big.NewInt(1 << 0)
-	searchTeamMembersFilterFieldStatus      = big.NewInt(1 << 1)
-	searchTeamMembersFilterFieldIsOwner     = big.NewInt(1 << 2)
-)
-
 type SearchTeamMembersFilter struct {
 	// When present, filters by team members assigned to the specified locations.
 	// When empty, includes team members assigned to any location.
@@ -786,10 +810,12 @@ func (s *SearchTeamMembersFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchTeamMembersFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -825,6 +851,13 @@ func (s *SearchTeamMembersFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchTeamMembersFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -855,11 +888,11 @@ func (s *SearchTeamMembersFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents the parameters in a search for `TeamMember` objects.
 var (
 	searchTeamMembersQueryFieldFilter = big.NewInt(1 << 0)
 )
 
+// Represents the parameters in a search for `TeamMember` objects.
 type SearchTeamMembersQuery struct {
 	// The options to filter by.
 	Filter *SearchTeamMembersFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -886,10 +919,12 @@ func (s *SearchTeamMembersQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchTeamMembersQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -941,13 +976,13 @@ func (s *SearchTeamMembersQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents a response from a search request containing a filtered list of `TeamMember` objects.
 var (
 	searchTeamMembersResponseFieldTeamMembers = big.NewInt(1 << 0)
 	searchTeamMembersResponseFieldCursor      = big.NewInt(1 << 1)
 	searchTeamMembersResponseFieldErrors      = big.NewInt(1 << 2)
 )
 
+// Represents a response from a search request containing a filtered list of `TeamMember` objects.
 type SearchTeamMembersResponse struct {
 	// The filtered list of `TeamMember` objects.
 	TeamMembers []*TeamMember `json:"team_members,omitempty" url:"team_members,omitempty"`
@@ -993,10 +1028,12 @@ func (s *SearchTeamMembersResponse) GetExtraProperties() map[string]interface{} 
 }
 
 func (s *SearchTeamMembersResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTeamMembers sets the TeamMembers field and marks it as non-optional;
@@ -1062,7 +1099,6 @@ func (s *SearchTeamMembersResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// A record representing an individual team member for a business.
 var (
 	teamMemberFieldID                = big.NewInt(1 << 0)
 	teamMemberFieldReferenceID       = big.NewInt(1 << 1)
@@ -1078,6 +1114,16 @@ var (
 	teamMemberFieldWageSetting       = big.NewInt(1 << 11)
 )
 
+// teamMemberNullableFields maps the wire names of TeamMember's nullable fields (required or optional) to their field bits.
+var teamMemberNullableFields = map[string]*big.Int{
+	"reference_id":  teamMemberFieldReferenceID,
+	"given_name":    teamMemberFieldGivenName,
+	"family_name":   teamMemberFieldFamilyName,
+	"email_address": teamMemberFieldEmailAddress,
+	"phone_number":  teamMemberFieldPhoneNumber,
+}
+
+// A record representing an individual team member for a business.
 type TeamMember struct {
 	// The unique ID for the team member.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1207,10 +1253,12 @@ func (t *TeamMember) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TeamMember) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1309,6 +1357,13 @@ func (t *TeamMember) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, teamMemberNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1339,12 +1394,17 @@ func (t *TeamMember) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// An object that represents a team member's assignment to locations.
 var (
 	teamMemberAssignedLocationsFieldAssignmentType = big.NewInt(1 << 0)
 	teamMemberAssignedLocationsFieldLocationIDs    = big.NewInt(1 << 1)
 )
 
+// teamMemberAssignedLocationsNullableFields maps the wire names of TeamMemberAssignedLocations's nullable fields (required or optional) to their field bits.
+var teamMemberAssignedLocationsNullableFields = map[string]*big.Int{
+	"location_ids": teamMemberAssignedLocationsFieldLocationIDs,
+}
+
+// An object that represents a team member's assignment to locations.
 type TeamMemberAssignedLocations struct {
 	// The current assignment type of the team member.
 	// See [TeamMemberAssignedLocationsAssignmentType](#type-teammemberassignedlocationsassignmenttype) for possible values
@@ -1381,10 +1441,12 @@ func (t *TeamMemberAssignedLocations) GetExtraProperties() map[string]interface{
 }
 
 func (t *TeamMemberAssignedLocations) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetAssignmentType sets the AssignmentType field and marks it as non-optional;
@@ -1413,6 +1475,13 @@ func (t *TeamMemberAssignedLocations) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, teamMemberAssignedLocationsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1489,11 +1558,11 @@ func (t TeamMemberStatus) Ptr() *TeamMemberStatus {
 	return &t
 }
 
-// Represents an update request for a `TeamMember` object.
 var (
 	updateTeamMemberRequestFieldTeamMember = big.NewInt(1 << 0)
 )
 
+// Represents an update request for a `TeamMember` object.
 type UpdateTeamMemberRequest struct {
 	// The team member fields to add, change, or clear. Fields can be cleared using a null value. To update
 	// `wage_setting.job_assignments`, you must provide the complete list of job assignments. If needed, call
@@ -1522,10 +1591,12 @@ func (u *UpdateTeamMemberRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateTeamMemberRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTeamMember sets the TeamMember field and marks it as non-optional;
@@ -1577,12 +1648,12 @@ func (u *UpdateTeamMemberRequest) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents a response from an update request containing the updated `TeamMember` object or error messages.
 var (
 	updateTeamMemberResponseFieldTeamMember = big.NewInt(1 << 0)
 	updateTeamMemberResponseFieldErrors     = big.NewInt(1 << 1)
 )
 
+// Represents a response from an update request containing the updated `TeamMember` object or error messages.
 type UpdateTeamMemberResponse struct {
 	// The successfully updated `TeamMember` object.
 	TeamMember *TeamMember `json:"team_member,omitempty" url:"team_member,omitempty"`
@@ -1618,10 +1689,12 @@ func (u *UpdateTeamMemberResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateTeamMemberResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTeamMember sets the TeamMember field and marks it as non-optional;
@@ -1694,10 +1767,12 @@ type UpdateTeamMembersRequest struct {
 }
 
 func (u *UpdateTeamMembersRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;

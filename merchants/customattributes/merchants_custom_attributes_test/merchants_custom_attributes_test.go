@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	merchants "github.com/square/square-go-sdk/v5/merchants"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestMerchantsCustomAttributesBatchDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.BulkDeleteMerchantCustomAttributesRequest{
 		Values: map[string]*square.BulkDeleteMerchantCustomAttributesRequestMerchantCustomAttributeDeleteRequest{
@@ -108,6 +124,7 @@ func TestMerchantsCustomAttributesBatchUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.BulkUpsertMerchantCustomAttributesRequest{
 		Values: map[string]*square.BulkUpsertMerchantCustomAttributesRequestMerchantCustomAttributeUpsertRequest{
@@ -152,6 +169,7 @@ func TestMerchantsCustomAttributesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.ListCustomAttributesRequest{
 		MerchantID:       "merchant_id",
@@ -175,7 +193,7 @@ func TestMerchantsCustomAttributesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestMerchantsCustomAttributesListWithWireMock", "GET", "/v2/merchants/merchant_id/custom-attributes", map[string]string{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
+	VerifyRequestCount(t, "TestMerchantsCustomAttributesListWithWireMock", "GET", "/v2/merchants/merchant_id/custom-attributes", map[string]interface{}{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
 }
 
 func TestMerchantsCustomAttributesGetWithWireMock(
@@ -187,6 +205,7 @@ func TestMerchantsCustomAttributesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.GetCustomAttributesRequest{
 		MerchantID: "merchant_id",
@@ -207,7 +226,7 @@ func TestMerchantsCustomAttributesGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestMerchantsCustomAttributesGetWithWireMock", "GET", "/v2/merchants/merchant_id/custom-attributes/key", map[string]string{"with_definition": "true", "version": "1"}, 1)
+	VerifyRequestCount(t, "TestMerchantsCustomAttributesGetWithWireMock", "GET", "/v2/merchants/merchant_id/custom-attributes/key", map[string]interface{}{"with_definition": "true", "version": "1"}, 1)
 }
 
 func TestMerchantsCustomAttributesUpsertWithWireMock(
@@ -219,6 +238,7 @@ func TestMerchantsCustomAttributesUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.UpsertMerchantCustomAttributeRequest{
 		MerchantID: "merchant_id",
@@ -248,6 +268,7 @@ func TestMerchantsCustomAttributesDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.DeleteCustomAttributesRequest{
 		MerchantID: "merchant_id",

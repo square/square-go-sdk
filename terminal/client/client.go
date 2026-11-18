@@ -4,6 +4,8 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
@@ -11,7 +13,6 @@ import (
 	actions "github.com/square/square-go-sdk/v5/terminal/actions"
 	checkouts "github.com/square/square-go-sdk/v5/terminal/checkouts"
 	refunds "github.com/square/square-go-sdk/v5/terminal/refunds"
-	os "os"
 )
 
 type Client struct {
@@ -41,8 +42,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -51,6 +53,16 @@ func NewClient(options *core.RequestOptions) *Client {
 // Dismisses a Terminal action request if the status and type of the request permits it.
 //
 // See [Link and Dismiss Actions](https://developer.squareup.com/docs/terminal-api/advanced-features/custom-workflows/link-and-dismiss-actions) for more details.
+//
+// Example:
+//
+//	request := &square.DismissTerminalActionRequest{
+//	    ActionID: "action_id",
+//	}
+//	_, err := client.Terminal.DismissTerminalAction(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DismissTerminalAction(
 	ctx context.Context,
 	request *square.DismissTerminalActionRequest,
@@ -68,6 +80,16 @@ func (c *Client) DismissTerminalAction(
 }
 
 // Dismisses a Terminal checkout request if the status and type of the request permits it.
+//
+// Example:
+//
+//	request := &square.DismissTerminalCheckoutRequest{
+//	    CheckoutID: "checkout_id",
+//	}
+//	_, err := client.Terminal.DismissTerminalCheckout(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DismissTerminalCheckout(
 	ctx context.Context,
 	request *square.DismissTerminalCheckoutRequest,
@@ -85,6 +107,16 @@ func (c *Client) DismissTerminalCheckout(
 }
 
 // Dismisses a Terminal refund request if the status and type of the request permits it.
+//
+// Example:
+//
+//	request := &square.DismissTerminalRefundRequest{
+//	    TerminalRefundID: "terminal_refund_id",
+//	}
+//	_, err := client.Terminal.DismissTerminalRefund(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DismissTerminalRefund(
 	ctx context.Context,
 	request *square.DismissTerminalRefundRequest,

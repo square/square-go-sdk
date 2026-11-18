@@ -22,10 +22,12 @@ type RetrieveLocationSettingsRequest struct {
 }
 
 func (r *RetrieveLocationSettingsRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -51,10 +53,12 @@ type UpdateLocationSettingsRequest struct {
 }
 
 func (u *UpdateLocationSettingsRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -105,10 +109,12 @@ type UpdateMerchantSettingsRequest struct {
 }
 
 func (u *UpdateMerchantSettingsRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetMerchantSettings sets the MerchantSettings field and marks it as non-optional;
@@ -148,6 +154,13 @@ var (
 	checkoutLocationSettingsFieldCoupons              = big.NewInt(1 << 5)
 	checkoutLocationSettingsFieldUpdatedAt            = big.NewInt(1 << 6)
 )
+
+// checkoutLocationSettingsNullableFields maps the wire names of CheckoutLocationSettings's nullable fields (required or optional) to their field bits.
+var checkoutLocationSettingsNullableFields = map[string]*big.Int{
+	"location_id":            checkoutLocationSettingsFieldLocationID,
+	"customer_notes_enabled": checkoutLocationSettingsFieldCustomerNotesEnabled,
+	"policies":               checkoutLocationSettingsFieldPolicies,
+}
 
 type CheckoutLocationSettings struct {
 	// The ID of the location that these settings apply to.
@@ -233,10 +246,12 @@ func (c *CheckoutLocationSettings) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CheckoutLocationSettings) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -300,6 +315,13 @@ func (c *CheckoutLocationSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutLocationSettingsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -335,6 +357,11 @@ var (
 	checkoutLocationSettingsBrandingFieldButtonColor = big.NewInt(1 << 1)
 	checkoutLocationSettingsBrandingFieldButtonShape = big.NewInt(1 << 2)
 )
+
+// checkoutLocationSettingsBrandingNullableFields maps the wire names of CheckoutLocationSettingsBranding's nullable fields (required or optional) to their field bits.
+var checkoutLocationSettingsBrandingNullableFields = map[string]*big.Int{
+	"button_color": checkoutLocationSettingsBrandingFieldButtonColor,
+}
 
 type CheckoutLocationSettingsBranding struct {
 	// Show the location logo on the checkout page.
@@ -382,10 +409,12 @@ func (c *CheckoutLocationSettingsBranding) GetExtraProperties() map[string]inter
 }
 
 func (c *CheckoutLocationSettingsBranding) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetHeaderType sets the HeaderType field and marks it as non-optional;
@@ -421,6 +450,13 @@ func (c *CheckoutLocationSettingsBranding) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutLocationSettingsBrandingNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -505,6 +541,11 @@ var (
 	checkoutLocationSettingsCouponsFieldEnabled = big.NewInt(1 << 0)
 )
 
+// checkoutLocationSettingsCouponsNullableFields maps the wire names of CheckoutLocationSettingsCoupons's nullable fields (required or optional) to their field bits.
+var checkoutLocationSettingsCouponsNullableFields = map[string]*big.Int{
+	"enabled": checkoutLocationSettingsCouponsFieldEnabled,
+}
+
 type CheckoutLocationSettingsCoupons struct {
 	// Indicates whether coupons are enabled for this location.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
@@ -531,10 +572,12 @@ func (c *CheckoutLocationSettingsCoupons) GetExtraProperties() map[string]interf
 }
 
 func (c *CheckoutLocationSettingsCoupons) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;
@@ -556,6 +599,13 @@ func (c *CheckoutLocationSettingsCoupons) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutLocationSettingsCouponsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -591,6 +641,13 @@ var (
 	checkoutLocationSettingsPolicyFieldTitle       = big.NewInt(1 << 1)
 	checkoutLocationSettingsPolicyFieldDescription = big.NewInt(1 << 2)
 )
+
+// checkoutLocationSettingsPolicyNullableFields maps the wire names of CheckoutLocationSettingsPolicy's nullable fields (required or optional) to their field bits.
+var checkoutLocationSettingsPolicyNullableFields = map[string]*big.Int{
+	"uid":         checkoutLocationSettingsPolicyFieldUID,
+	"title":       checkoutLocationSettingsPolicyFieldTitle,
+	"description": checkoutLocationSettingsPolicyFieldDescription,
+}
 
 type CheckoutLocationSettingsPolicy struct {
 	// A unique ID to identify the policy when making changes. You must set the UID for policy updates, but it’s optional when setting new policies.
@@ -636,10 +693,12 @@ func (c *CheckoutLocationSettingsPolicy) GetExtraProperties() map[string]interfa
 }
 
 func (c *CheckoutLocationSettingsPolicy) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -675,6 +734,13 @@ func (c *CheckoutLocationSettingsPolicy) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutLocationSettingsPolicyNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -712,6 +778,14 @@ var (
 	checkoutLocationSettingsTippingFieldSmartTips           = big.NewInt(1 << 3)
 	checkoutLocationSettingsTippingFieldDefaultSmartTip     = big.NewInt(1 << 4)
 )
+
+// checkoutLocationSettingsTippingNullableFields maps the wire names of CheckoutLocationSettingsTipping's nullable fields (required or optional) to their field bits.
+var checkoutLocationSettingsTippingNullableFields = map[string]*big.Int{
+	"percentages":           checkoutLocationSettingsTippingFieldPercentages,
+	"smart_tipping_enabled": checkoutLocationSettingsTippingFieldSmartTippingEnabled,
+	"default_percent":       checkoutLocationSettingsTippingFieldDefaultPercent,
+	"smart_tips":            checkoutLocationSettingsTippingFieldSmartTips,
+}
 
 type CheckoutLocationSettingsTipping struct {
 	// Set three custom percentage amounts that buyers can select at checkout. If Smart Tip is enabled, this only applies to transactions totaling $10 or more.
@@ -778,10 +852,12 @@ func (c *CheckoutLocationSettingsTipping) GetExtraProperties() map[string]interf
 }
 
 func (c *CheckoutLocationSettingsTipping) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetPercentages sets the Percentages field and marks it as non-optional;
@@ -831,6 +907,13 @@ func (c *CheckoutLocationSettingsTipping) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutLocationSettingsTippingNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -904,10 +987,12 @@ func (c *CheckoutMerchantSettings) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CheckoutMerchantSettings) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetPaymentMethods sets the PaymentMethods field and marks it as non-optional;
@@ -970,13 +1055,21 @@ var (
 	checkoutMerchantSettingsPaymentMethodsFieldApplePay         = big.NewInt(1 << 0)
 	checkoutMerchantSettingsPaymentMethodsFieldGooglePay        = big.NewInt(1 << 1)
 	checkoutMerchantSettingsPaymentMethodsFieldCashApp          = big.NewInt(1 << 2)
-	checkoutMerchantSettingsPaymentMethodsFieldAfterpayClearpay = big.NewInt(1 << 3)
+	checkoutMerchantSettingsPaymentMethodsFieldBankAccount      = big.NewInt(1 << 3)
+	checkoutMerchantSettingsPaymentMethodsFieldAfterpayClearpay = big.NewInt(1 << 4)
 )
 
 type CheckoutMerchantSettingsPaymentMethods struct {
-	ApplePay         *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"apple_pay,omitempty" url:"apple_pay,omitempty"`
-	GooglePay        *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"google_pay,omitempty" url:"google_pay,omitempty"`
-	CashApp          *CheckoutMerchantSettingsPaymentMethodsPaymentMethod    `json:"cash_app,omitempty" url:"cash_app,omitempty"`
+	// Apple Pay.
+	ApplePay *CheckoutMerchantSettingsPaymentMethodsPaymentMethod `json:"apple_pay,omitempty" url:"apple_pay,omitempty"`
+	// Google Pay.
+	GooglePay *CheckoutMerchantSettingsPaymentMethodsPaymentMethod `json:"google_pay,omitempty" url:"google_pay,omitempty"`
+	// Cash App Pay.
+	CashApp *CheckoutMerchantSettingsPaymentMethodsPaymentMethod `json:"cash_app,omitempty" url:"cash_app,omitempty"`
+	// Bank account (ACH). Enabled by default for eligible sellers who have
+	// not saved an ACH preference. A saved enabled or disabled choice takes precedence.
+	BankAccount *CheckoutMerchantSettingsPaymentMethodsPaymentMethod `json:"bank_account,omitempty" url:"bank_account,omitempty"`
+	// Afterpay/Clearpay.
 	AfterpayClearpay *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay `json:"afterpay_clearpay,omitempty" url:"afterpay_clearpay,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1007,6 +1100,13 @@ func (c *CheckoutMerchantSettingsPaymentMethods) GetCashApp() *CheckoutMerchantS
 	return c.CashApp
 }
 
+func (c *CheckoutMerchantSettingsPaymentMethods) GetBankAccount() *CheckoutMerchantSettingsPaymentMethodsPaymentMethod {
+	if c == nil {
+		return nil
+	}
+	return c.BankAccount
+}
+
 func (c *CheckoutMerchantSettingsPaymentMethods) GetAfterpayClearpay() *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay {
 	if c == nil {
 		return nil
@@ -1022,10 +1122,12 @@ func (c *CheckoutMerchantSettingsPaymentMethods) GetExtraProperties() map[string
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethods) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetApplePay sets the ApplePay field and marks it as non-optional;
@@ -1047,6 +1149,13 @@ func (c *CheckoutMerchantSettingsPaymentMethods) SetGooglePay(googlePay *Checkou
 func (c *CheckoutMerchantSettingsPaymentMethods) SetCashApp(cashApp *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) {
 	c.CashApp = cashApp
 	c.require(checkoutMerchantSettingsPaymentMethodsFieldCashApp)
+}
+
+// SetBankAccount sets the BankAccount field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckoutMerchantSettingsPaymentMethods) SetBankAccount(bankAccount *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) {
+	c.BankAccount = bankAccount
+	c.require(checkoutMerchantSettingsPaymentMethodsFieldBankAccount)
 }
 
 // SetAfterpayClearpay sets the AfterpayClearpay field and marks it as non-optional;
@@ -1098,13 +1207,13 @@ func (c *CheckoutMerchantSettingsPaymentMethods) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The settings allowed for AfterpayClearpay.
 var (
 	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldOrderEligibilityRange = big.NewInt(1 << 0)
 	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldItemEligibilityRange  = big.NewInt(1 << 1)
 	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayFieldEnabled               = big.NewInt(1 << 2)
 )
 
+// The settings allowed for AfterpayClearpay.
 type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay struct {
 	// Afterpay is shown as an option for order totals falling within the configured range.
 	OrderEligibilityRange *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange `json:"order_eligibility_range,omitempty" url:"order_eligibility_range,omitempty"`
@@ -1149,10 +1258,12 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) GetExtraPropert
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrderEligibilityRange sets the OrderEligibilityRange field and marks it as non-optional;
@@ -1218,14 +1329,16 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpay) String() string
 	return fmt.Sprintf("%#v", c)
 }
 
-// A range of purchase price that qualifies.
 var (
 	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMin = big.NewInt(1 << 0)
 	checkoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRangeFieldMax = big.NewInt(1 << 1)
 )
 
+// A range of purchase price that qualifies.
 type CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange struct {
+	// The lower bound of the range.
 	Min *Money `json:"min" url:"min"`
+	// The upper bound of the range.
 	Max *Money `json:"max" url:"max"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1257,10 +1370,12 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetMin sets the Min field and marks it as non-optional;
@@ -1319,11 +1434,16 @@ func (c *CheckoutMerchantSettingsPaymentMethodsAfterpayClearpayEligibilityRange)
 	return fmt.Sprintf("%#v", c)
 }
 
-// The settings allowed for a payment method.
 var (
 	checkoutMerchantSettingsPaymentMethodsPaymentMethodFieldEnabled = big.NewInt(1 << 0)
 )
 
+// checkoutMerchantSettingsPaymentMethodsPaymentMethodNullableFields maps the wire names of CheckoutMerchantSettingsPaymentMethodsPaymentMethod's nullable fields (required or optional) to their field bits.
+var checkoutMerchantSettingsPaymentMethodsPaymentMethodNullableFields = map[string]*big.Int{
+	"enabled": checkoutMerchantSettingsPaymentMethodsPaymentMethodFieldEnabled,
+}
+
+// The settings allowed for a payment method.
 type CheckoutMerchantSettingsPaymentMethodsPaymentMethod struct {
 	// Indicates whether the payment method is enabled for the account.
 	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
@@ -1350,10 +1470,12 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) GetExtraProperties
 }
 
 func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetEnabled sets the Enabled field and marks it as non-optional;
@@ -1375,6 +1497,13 @@ func (c *CheckoutMerchantSettingsPaymentMethodsPaymentMethod) UnmarshalJSON(data
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutMerchantSettingsPaymentMethodsPaymentMethodNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1445,10 +1574,12 @@ func (r *RetrieveLocationSettingsResponse) GetExtraProperties() map[string]inter
 }
 
 func (r *RetrieveLocationSettingsResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1547,10 +1678,12 @@ func (r *RetrieveMerchantSettingsResponse) GetExtraProperties() map[string]inter
 }
 
 func (r *RetrieveMerchantSettingsResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1649,10 +1782,12 @@ func (u *UpdateLocationSettingsResponse) GetExtraProperties() map[string]interfa
 }
 
 func (u *UpdateLocationSettingsResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1751,10 +1886,12 @@ func (u *UpdateMerchantSettingsResponse) GetExtraProperties() map[string]interfa
 }
 
 func (u *UpdateMerchantSettingsResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

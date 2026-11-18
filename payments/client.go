@@ -4,12 +4,13 @@ package payments
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -46,6 +48,58 @@ func NewClient(options *core.RequestOptions) *Client {
 // seconds to appear.
 //
 // The maximum results per page is 100.
+//
+// Example:
+//
+//	request := &square.ListPaymentsRequest{
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    SortOrder: square.String(
+//	        "sort_order",
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    Total: square.Int64(
+//	        int64(1000000),
+//	    ),
+//	    Last4: square.String(
+//	        "last_4",
+//	    ),
+//	    CardBrand: square.String(
+//	        "card_brand",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    IsOfflinePayment: square.Bool(
+//	        true,
+//	    ),
+//	    OfflineBeginTime: square.String(
+//	        "offline_begin_time",
+//	    ),
+//	    OfflineEndTime: square.String(
+//	        "offline_end_time",
+//	    ),
+//	    UpdatedAtBeginTime: square.String(
+//	        "updated_at_begin_time",
+//	    ),
+//	    UpdatedAtEndTime: square.String(
+//	        "updated_at_end_time",
+//	    ),
+//	    SortField: square.ListPaymentsRequestSortFieldCreatedAt.Ptr(),
+//	}
+//	_, err := client.Payments.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListPaymentsRequest,
@@ -79,6 +133,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -93,7 +148,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -112,6 +167,44 @@ func (c *Client) List(
 //
 // The endpoint creates a
 // `Payment` object and returns it in the response.
+//
+// Example:
+//
+//	request := &square.CreatePaymentRequest{
+//	    SourceID: "ccof:GaJGNaZa8x4OgDJn4GB",
+//	    IdempotencyKey: "7b0f3ec5-086a-4871-8f13-3c81b3875218",
+//	    AmountMoney: &square.Money{
+//	        Amount: square.Int64(
+//	            int64(1000),
+//	        ),
+//	        Currency: square.CurrencyUsd.Ptr(),
+//	    },
+//	    AppFeeMoney: &square.Money{
+//	        Amount: square.Int64(
+//	            int64(10),
+//	        ),
+//	        Currency: square.CurrencyUsd.Ptr(),
+//	    },
+//	    Autocomplete: square.Bool(
+//	        true,
+//	    ),
+//	    CustomerID: square.String(
+//	        "W92WH6P11H4Z77CTET0RNTGFW8",
+//	    ),
+//	    LocationID: square.String(
+//	        "L88917AVBK2S5",
+//	    ),
+//	    ReferenceID: square.String(
+//	        "123456",
+//	    ),
+//	    Note: square.String(
+//	        "Brief description",
+//	    ),
+//	}
+//	_, err := client.Payments.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreatePaymentRequest,
@@ -139,6 +232,16 @@ func (c *Client) Create(
 //
 // Note that if no payment with the specified idempotency key is found, no action is taken and the endpoint
 // returns successfully.
+//
+// Example:
+//
+//	request := &square.CancelPaymentByIdempotencyKeyRequest{
+//	    IdempotencyKey: "a7e36d40-d24b-11e8-b568-0800200c9a66",
+//	}
+//	_, err := client.Payments.CancelByIdempotencyKey(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CancelByIdempotencyKey(
 	ctx context.Context,
 	request *square.CancelPaymentByIdempotencyKeyRequest,
@@ -156,6 +259,16 @@ func (c *Client) CancelByIdempotencyKey(
 }
 
 // Retrieves details for a specific payment.
+//
+// Example:
+//
+//	request := &square.GetPaymentsRequest{
+//	    PaymentID: "payment_id",
+//	}
+//	_, err := client.Payments.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetPaymentsRequest,
@@ -174,6 +287,34 @@ func (c *Client) Get(
 
 // Updates a payment with the APPROVED status.
 // You can update the `amount_money` and `tip_money` using this endpoint.
+//
+// Example:
+//
+//	request := &square.UpdatePaymentRequest{
+//	    PaymentID: "payment_id",
+//	    Payment: &square.Payment{
+//	        AmountMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(1000),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	        TipMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(100),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	        VersionToken: square.String(
+//	            "ODhwVQ35xwlzRuoZEwKXucfu7583sPTzK48c5zoGd0g6o",
+//	        ),
+//	    },
+//	    IdempotencyKey: "956f8b13-e4ec-45d6-85e8-d1d95ef0c5de",
+//	}
+//	_, err := client.Payments.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdatePaymentRequest,
@@ -192,6 +333,16 @@ func (c *Client) Update(
 
 // Cancels (voids) a payment. You can use this endpoint to cancel a payment with
 // the APPROVED `status`.
+//
+// Example:
+//
+//	request := &square.CancelPaymentsRequest{
+//	    PaymentID: "payment_id",
+//	}
+//	_, err := client.Payments.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *square.CancelPaymentsRequest,
@@ -212,6 +363,16 @@ func (c *Client) Cancel(
 // By default, payments are set to complete immediately after they are created.
 //
 // You can use this endpoint to complete a payment with the APPROVED `status`.
+//
+// Example:
+//
+//	request := &square.CompletePaymentRequest{
+//	    PaymentID: "payment_id",
+//	}
+//	_, err := client.Payments.Complete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Complete(
 	ctx context.Context,
 	request *square.CompletePaymentRequest,

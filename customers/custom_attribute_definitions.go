@@ -24,10 +24,12 @@ type BatchUpsertCustomerCustomAttributesRequest struct {
 }
 
 func (b *BatchUpsertCustomerCustomAttributesRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetValues sets the Values field and marks it as non-optional;
@@ -80,10 +82,12 @@ type CreateCustomerCustomAttributeDefinitionRequest struct {
 }
 
 func (c *CreateCustomerCustomAttributeDefinitionRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCustomAttributeDefinition sets the CustomAttributeDefinition field and marks it as non-optional;
@@ -134,10 +138,12 @@ type DeleteCustomAttributeDefinitionsRequest struct {
 }
 
 func (d *DeleteCustomAttributeDefinitionsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetKey sets the Key field and marks it as non-optional;
@@ -167,10 +173,12 @@ type GetCustomAttributeDefinitionsRequest struct {
 }
 
 func (g *GetCustomAttributeDefinitionsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetKey sets the Key field and marks it as non-optional;
@@ -207,10 +215,12 @@ type ListCustomAttributeDefinitionsRequest struct {
 }
 
 func (l *ListCustomAttributeDefinitionsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;
@@ -261,10 +271,12 @@ type UpdateCustomerCustomAttributeDefinitionRequest struct {
 }
 
 func (u *UpdateCustomerCustomAttributeDefinitionRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetKey sets the Key field and marks it as non-optional;

@@ -21,10 +21,12 @@ type BulkRetrieveChannelsRequest struct {
 }
 
 func (b *BulkRetrieveChannelsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetChannelIDs sets the ChannelIDs field and marks it as non-optional;
@@ -68,10 +70,12 @@ type GetChannelsRequest struct {
 }
 
 func (g *GetChannelsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetChannelID sets the ChannelID field and marks it as non-optional;
@@ -107,10 +111,12 @@ type ListChannelsRequest struct {
 }
 
 func (l *ListChannelsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetReferenceType sets the ReferenceType field and marks it as non-optional;
@@ -148,13 +154,13 @@ func (l *ListChannelsRequest) SetLimit(limit *int) {
 	l.require(listChannelsRequestFieldLimit)
 }
 
-// Defines the fields that are included in the request body for the
-// [BulkRetrieveChannels](api-endpoint:Channels-BulkRetrieveChannels) endpoint.
 var (
 	bulkRetrieveChannelsResponseFieldErrors    = big.NewInt(1 << 0)
 	bulkRetrieveChannelsResponseFieldResponses = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the request body for the
+// [BulkRetrieveChannels](api-endpoint:Channels-BulkRetrieveChannels) endpoint.
 type BulkRetrieveChannelsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -193,10 +199,12 @@ func (b *BulkRetrieveChannelsResponse) GetExtraProperties() map[string]interface
 }
 
 func (b *BulkRetrieveChannelsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -265,6 +273,11 @@ var (
 	channelFieldCreatedAt  = big.NewInt(1 << 6)
 	channelFieldUpdatedAt  = big.NewInt(1 << 7)
 )
+
+// channelNullableFields maps the wire names of Channel's nullable fields (required or optional) to their field bits.
+var channelNullableFields = map[string]*big.Int{
+	"name": channelFieldName,
+}
 
 type Channel struct {
 	// The channel's unique ID.
@@ -358,10 +371,12 @@ func (c *Channel) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Channel) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -432,6 +447,13 @@ func (c *Channel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, channelNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -534,10 +556,12 @@ func (l *ListChannelsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListChannelsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -644,10 +668,12 @@ func (r *Reference) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *Reference) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -808,10 +834,12 @@ func (r *RetrieveChannelResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RetrieveChannelResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

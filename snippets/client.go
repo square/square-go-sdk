@@ -4,11 +4,12 @@ package snippets
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,8 +33,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -44,6 +46,16 @@ func NewClient(options *core.RequestOptions) *Client {
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+//
+// Example:
+//
+//	request := &square.GetSnippetsRequest{
+//	    SiteID: "site_id",
+//	}
+//	_, err := client.Snippets.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetSnippetsRequest,
@@ -66,6 +78,19 @@ func (c *Client) Get(
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+//
+// Example:
+//
+//	request := &square.UpsertSnippetRequest{
+//	    SiteID: "site_id",
+//	    Snippet: &square.Snippet{
+//	        Content: "<script>var js = 1;</script>",
+//	    },
+//	}
+//	_, err := client.Snippets.Upsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *square.UpsertSnippetRequest,
@@ -87,6 +112,16 @@ func (c *Client) Upsert(
 // You can call [ListSites](api-endpoint:Sites-ListSites) to get the IDs of the sites that belong to a seller.
 //
 // __Note:__ Square Online APIs are publicly available as part of an early access program. For more information, see [Early access program for Square Online APIs](https://developer.squareup.com/docs/online-api#early-access-program-for-square-online-apis).
+//
+// Example:
+//
+//	request := &square.DeleteSnippetsRequest{
+//	    SiteID: "site_id",
+//	}
+//	_, err := client.Snippets.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *square.DeleteSnippetsRequest,

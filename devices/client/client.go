@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	codes "github.com/square/square-go-sdk/v5/devices/codes"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -36,8 +37,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,25 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // List devices associated with the merchant. Currently, only Terminal API
 // devices are supported.
+//
+// Example:
+//
+//	request := &square.ListDevicesRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	}
+//	_, err := client.Devices.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListDevicesRequest,
@@ -78,6 +99,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +114,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -104,6 +126,16 @@ func (c *Client) List(
 }
 
 // Retrieves Device with the associated `device_id`.
+//
+// Example:
+//
+//	request := &square.GetDevicesRequest{
+//	    DeviceID: "device_id",
+//	}
+//	_, err := client.Devices.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetDevicesRequest,

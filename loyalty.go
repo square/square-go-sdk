@@ -35,10 +35,12 @@ type SearchLoyaltyEventsRequest struct {
 }
 
 func (s *SearchLoyaltyEventsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -83,11 +85,11 @@ func (s *SearchLoyaltyEventsRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Filter events by date time range.
 var (
 	loyaltyEventDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
 )
 
+// Filter events by date time range.
 type LoyaltyEventDateTimeFilter struct {
 	// The `created_at` date time range used to filter the result.
 	CreatedAt *TimeRange `json:"created_at" url:"created_at"`
@@ -114,10 +116,12 @@ func (l *LoyaltyEventDateTimeFilter) GetExtraProperties() map[string]interface{}
 }
 
 func (l *LoyaltyEventDateTimeFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
@@ -169,8 +173,6 @@ func (l *LoyaltyEventDateTimeFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// The filtering criteria. If the request specifies multiple filters,
-// the endpoint uses a logical AND to evaluate them.
 var (
 	loyaltyEventFilterFieldLoyaltyAccountFilter = big.NewInt(1 << 0)
 	loyaltyEventFilterFieldTypeFilter           = big.NewInt(1 << 1)
@@ -179,6 +181,8 @@ var (
 	loyaltyEventFilterFieldOrderFilter          = big.NewInt(1 << 4)
 )
 
+// The filtering criteria. If the request specifies multiple filters,
+// the endpoint uses a logical AND to evaluate them.
 type LoyaltyEventFilter struct {
 	// Filter events by loyalty account.
 	LoyaltyAccountFilter *LoyaltyEventLoyaltyAccountFilter `json:"loyalty_account_filter,omitempty" url:"loyalty_account_filter,omitempty"`
@@ -243,10 +247,12 @@ func (l *LoyaltyEventFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoyaltyEventFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLoyaltyAccountFilter sets the LoyaltyAccountFilter field and marks it as non-optional;
@@ -326,11 +332,11 @@ func (l *LoyaltyEventFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Filter events by location.
 var (
 	loyaltyEventLocationFilterFieldLocationIDs = big.NewInt(1 << 0)
 )
 
+// Filter events by location.
 type LoyaltyEventLocationFilter struct {
 	// The [location](entity:Location) IDs for loyalty events to query.
 	// If multiple values are specified, the endpoint uses
@@ -359,10 +365,12 @@ func (l *LoyaltyEventLocationFilter) GetExtraProperties() map[string]interface{}
 }
 
 func (l *LoyaltyEventLocationFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -414,11 +422,11 @@ func (l *LoyaltyEventLocationFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Filter events by loyalty account.
 var (
 	loyaltyEventLoyaltyAccountFilterFieldLoyaltyAccountID = big.NewInt(1 << 0)
 )
 
+// Filter events by loyalty account.
 type LoyaltyEventLoyaltyAccountFilter struct {
 	// The ID of the [loyalty account](entity:LoyaltyAccount) associated with loyalty events.
 	LoyaltyAccountID string `json:"loyalty_account_id" url:"loyalty_account_id"`
@@ -445,10 +453,12 @@ func (l *LoyaltyEventLoyaltyAccountFilter) GetExtraProperties() map[string]inter
 }
 
 func (l *LoyaltyEventLoyaltyAccountFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLoyaltyAccountID sets the LoyaltyAccountID field and marks it as non-optional;
@@ -500,11 +510,11 @@ func (l *LoyaltyEventLoyaltyAccountFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Filter events by the order associated with the event.
 var (
 	loyaltyEventOrderFilterFieldOrderID = big.NewInt(1 << 0)
 )
 
+// Filter events by the order associated with the event.
 type LoyaltyEventOrderFilter struct {
 	// The ID of the [order](entity:Order) associated with the event.
 	OrderID string `json:"order_id" url:"order_id"`
@@ -531,10 +541,12 @@ func (l *LoyaltyEventOrderFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoyaltyEventOrderFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;
@@ -586,11 +598,11 @@ func (l *LoyaltyEventOrderFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a query used to search for loyalty events.
 var (
 	loyaltyEventQueryFieldFilter = big.NewInt(1 << 0)
 )
 
+// Represents a query used to search for loyalty events.
 type LoyaltyEventQuery struct {
 	// The query filter criteria.
 	Filter *LoyaltyEventFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -617,10 +629,12 @@ func (l *LoyaltyEventQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoyaltyEventQuery) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -672,11 +686,11 @@ func (l *LoyaltyEventQuery) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Filter events by event type.
 var (
 	loyaltyEventTypeFilterFieldTypes = big.NewInt(1 << 0)
 )
 
+// Filter events by event type.
 type LoyaltyEventTypeFilter struct {
 	// The loyalty event types used to filter the result.
 	// If multiple values are specified, the endpoint uses a
@@ -706,10 +720,12 @@ func (l *LoyaltyEventTypeFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoyaltyEventTypeFilter) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetTypes sets the Types field and marks it as non-optional;
@@ -761,14 +777,14 @@ func (l *LoyaltyEventTypeFilter) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// A response that contains loyalty events that satisfy the search
-// criteria, in order by the `created_at` date.
 var (
 	searchLoyaltyEventsResponseFieldErrors = big.NewInt(1 << 0)
 	searchLoyaltyEventsResponseFieldEvents = big.NewInt(1 << 1)
 	searchLoyaltyEventsResponseFieldCursor = big.NewInt(1 << 2)
 )
 
+// A response that contains loyalty events that satisfy the search
+// criteria, in order by the `created_at` date.
 type SearchLoyaltyEventsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -816,10 +832,12 @@ func (s *SearchLoyaltyEventsResponse) GetExtraProperties() map[string]interface{
 }
 
 func (s *SearchLoyaltyEventsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

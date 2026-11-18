@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestBankAccountsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListBankAccountsRequest{
 		Cursor: square.String(
@@ -95,7 +111,7 @@ func TestBankAccountsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestBankAccountsListWithWireMock", "GET", "/v2/bank-accounts", map[string]string{"cursor": "cursor", "limit": "1", "location_id": "location_id", "customer_id": "customer_id"}, 1)
+	VerifyRequestCount(t, "TestBankAccountsListWithWireMock", "GET", "/v2/bank-accounts", map[string]interface{}{"cursor": "cursor", "limit": "1", "location_id": "location_id", "customer_id": "customer_id"}, 1)
 }
 
 func TestBankAccountsCreateBankAccountWithWireMock(
@@ -107,6 +123,7 @@ func TestBankAccountsCreateBankAccountWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateBankAccountRequest{
 		IdempotencyKey: "4e43559a-f0fd-47d3-9da2-7ea1f97d94be",
@@ -136,6 +153,7 @@ func TestBankAccountsGetByV1IDWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetByV1IDBankAccountsRequest{
 		V1BankAccountID: "v1_bank_account_id",
@@ -161,6 +179,7 @@ func TestBankAccountsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetBankAccountsRequest{
 		BankAccountID: "bank_account_id",
@@ -186,6 +205,7 @@ func TestBankAccountsDisableBankAccountWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DisableBankAccountRequest{
 		BankAccountID: "bank_account_id",

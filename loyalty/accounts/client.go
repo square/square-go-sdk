@@ -4,12 +4,13 @@ package accounts
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	loyalty "github.com/square/square-go-sdk/v5/loyalty"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,14 +34,33 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Creates a loyalty account. To create a loyalty account, you must provide the `program_id` and a `mapping` with the `phone_number` of the buyer.
+//
+// Example:
+//
+//	request := &loyalty.CreateLoyaltyAccountRequest{
+//	    LoyaltyAccount: &square.LoyaltyAccount{
+//	        ProgramID: "d619f755-2d17-41f3-990d-c04ecedd64dd",
+//	        Mapping: &square.LoyaltyAccountMapping{
+//	            PhoneNumber: square.String(
+//	                "+14155551234",
+//	            ),
+//	        },
+//	    },
+//	    IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
+//	}
+//	_, err := client.Loyalty.Accounts.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *loyalty.CreateLoyaltyAccountRequest,
@@ -62,6 +82,27 @@ func (c *Client) Create(
 // You can search for a loyalty account using the phone number or customer ID associated with the account. To return all loyalty accounts, specify an empty `query` object or omit it entirely.
 //
 // Search results are sorted by `created_at` in ascending order.
+//
+// Example:
+//
+//	request := &loyalty.SearchLoyaltyAccountsRequest{
+//	    Query: &square.SearchLoyaltyAccountsRequestLoyaltyAccountQuery{
+//	        Mappings: []*square.LoyaltyAccountMapping{
+//	            &square.LoyaltyAccountMapping{
+//	                PhoneNumber: square.String(
+//	                    "+14155551234",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        10,
+//	    ),
+//	}
+//	_, err := client.Loyalty.Accounts.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *loyalty.SearchLoyaltyAccountsRequest,
@@ -79,6 +120,16 @@ func (c *Client) Search(
 }
 
 // Retrieves a loyalty account.
+//
+// Example:
+//
+//	request := &loyalty.GetAccountsRequest{
+//	    AccountID: "account_id",
+//	}
+//	_, err := client.Loyalty.Accounts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *loyalty.GetAccountsRequest,
@@ -109,6 +160,23 @@ func (c *Client) Get(
 // loyalty promotion. For spend-based and visit-based programs, you can call [CalculateLoyaltyPoints](api-endpoint:Loyalty-CalculateLoyaltyPoints)
 // to compute the points earned from the base loyalty program. For information about computing points earned from a loyalty promotion, see
 // [Calculating promotion points](https://developer.squareup.com/docs/loyalty-api/loyalty-promotions#calculate-promotion-points).
+//
+// Example:
+//
+//	request := &loyalty.AccumulateLoyaltyPointsRequest{
+//	    AccountID: "account_id",
+//	    AccumulatePoints: &square.LoyaltyEventAccumulatePoints{
+//	        OrderID: square.String(
+//	            "RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY",
+//	        ),
+//	    },
+//	    IdempotencyKey: "58b90739-c3e8-4b11-85f7-e636d48d72cb",
+//	    LocationID: "P034NEENMD09F",
+//	}
+//	_, err := client.Loyalty.Accounts.AccumulatePoints(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) AccumulatePoints(
 	ctx context.Context,
 	request *loyalty.AccumulateLoyaltyPointsRequest,
@@ -130,6 +198,23 @@ func (c *Client) AccumulatePoints(
 // Use this endpoint only when you need to manually adjust points. Otherwise, in your application flow, you call
 // [AccumulateLoyaltyPoints](api-endpoint:Loyalty-AccumulateLoyaltyPoints)
 // to add points when a buyer pays for the purchase.
+//
+// Example:
+//
+//	request := &loyalty.AdjustLoyaltyPointsRequest{
+//	    AccountID: "account_id",
+//	    IdempotencyKey: "bc29a517-3dc9-450e-aa76-fae39ee849d1",
+//	    AdjustPoints: &square.LoyaltyEventAdjustPoints{
+//	        Points: 10,
+//	        Reason: square.String(
+//	            "Complimentary points",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Loyalty.Accounts.Adjust(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Adjust(
 	ctx context.Context,
 	request *loyalty.AdjustLoyaltyPointsRequest,

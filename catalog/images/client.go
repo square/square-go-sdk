@@ -4,12 +4,13 @@ package images
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	catalog "github.com/square/square-go-sdk/v5/catalog"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -46,6 +48,18 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // This `CreateCatalogImage` endpoint accepts HTTP multipart/form-data requests with a JSON part and an image file part in
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
+//
+// Example:
+//
+//	request := &catalog.CreateImagesRequest{
+//	    ImageFile: strings.NewReader(
+//	        "",
+//	    ),
+//	}
+//	_, err := client.Catalog.Images.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *catalog.CreateImagesRequest,
@@ -66,6 +80,19 @@ func (c *Client) Create(
 //
 // This `UpdateCatalogImage` endpoint accepts HTTP multipart/form-data requests with a JSON part and an image file part in
 // JPEG, PJPEG, PNG, or GIF format. The maximum file size is 15MB.
+//
+// Example:
+//
+//	request := &catalog.UpdateImagesRequest{
+//	    ImageID: "image_id",
+//	    ImageFile: strings.NewReader(
+//	        "",
+//	    ),
+//	}
+//	_, err := client.Catalog.Images.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *catalog.UpdateImagesRequest,

@@ -4,11 +4,12 @@ package applepay
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,8 +33,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -53,6 +55,16 @@ func NewClient(options *core.RequestOptions) *Client {
 // long-lived caches that might not keep in sync with the correct file version.
 //
 // To learn more about the Web Payments SDK and how to add Apple Pay, see [Take an Apple Pay Payment](https://developer.squareup.com/docs/web-payments/apple-pay).
+//
+// Example:
+//
+//	request := &square.RegisterDomainRequest{
+//	    DomainName: "example.com",
+//	}
+//	_, err := client.ApplePay.RegisterDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RegisterDomain(
 	ctx context.Context,
 	request *square.RegisterDomainRequest,

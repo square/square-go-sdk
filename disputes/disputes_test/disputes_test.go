@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v5"
-	client "github.com/square/square-go-sdk/v5/client"
-	option "github.com/square/square-go-sdk/v5/option"
-	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
 	strings "strings"
 	testing "testing"
+
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	option "github.com/square/square-go-sdk/v5/option"
+	require "github.com/stretchr/testify/require"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestDisputesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListDisputesRequest{
 		Cursor: square.String(
@@ -91,7 +107,7 @@ func TestDisputesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestDisputesListWithWireMock", "GET", "/v2/disputes", map[string]string{"cursor": "cursor", "states": "INQUIRY_EVIDENCE_REQUIRED", "location_id": "location_id"}, 1)
+	VerifyRequestCount(t, "TestDisputesListWithWireMock", "GET", "/v2/disputes", map[string]interface{}{"cursor": "cursor", "states": "INQUIRY_EVIDENCE_REQUIRED", "location_id": "location_id"}, 1)
 }
 
 func TestDisputesGetWithWireMock(
@@ -103,6 +119,7 @@ func TestDisputesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetDisputesRequest{
 		DisputeID: "dispute_id",
@@ -128,6 +145,7 @@ func TestDisputesAcceptWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.AcceptDisputesRequest{
 		DisputeID: "dispute_id",
@@ -153,6 +171,7 @@ func TestDisputesCreateEvidenceFileWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateEvidenceFileDisputesRequest{
 		DisputeID: "dispute_id",
@@ -181,6 +200,7 @@ func TestDisputesCreateEvidenceTextWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateDisputeEvidenceTextRequest{
 		DisputeID:      "dispute_id",
@@ -209,6 +229,7 @@ func TestDisputesSubmitEvidenceWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SubmitEvidenceDisputesRequest{
 		DisputeID: "dispute_id",

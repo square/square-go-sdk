@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
-	square "github.com/square/square-go-sdk/v5"
-	client "github.com/square/square-go-sdk/v5/client"
-	option "github.com/square/square-go-sdk/v5/option"
-	require "github.com/stretchr/testify/require"
 	http "net/http"
 	os "os"
 	strings "strings"
 	testing "testing"
+
+	square "github.com/square/square-go-sdk/v5"
+	client "github.com/square/square-go-sdk/v5/client"
+	option "github.com/square/square-go-sdk/v5/option"
+	require "github.com/stretchr/testify/require"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestInvoicesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListInvoicesRequest{
 		LocationID: "location_id",
@@ -91,7 +107,7 @@ func TestInvoicesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInvoicesListWithWireMock", "GET", "/v2/invoices", map[string]string{"location_id": "location_id", "cursor": "cursor", "limit": "1"}, 1)
+	VerifyRequestCount(t, "TestInvoicesListWithWireMock", "GET", "/v2/invoices", map[string]interface{}{"location_id": "location_id", "cursor": "cursor", "limit": "1"}, 1)
 }
 
 func TestInvoicesCreateWithWireMock(
@@ -103,6 +119,7 @@ func TestInvoicesCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateInvoiceRequest{
 		Invoice: &square.Invoice{
@@ -221,6 +238,7 @@ func TestInvoicesSearchWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SearchInvoicesRequest{
 		Query: &square.InvoiceQuery{
@@ -264,6 +282,7 @@ func TestInvoicesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetInvoicesRequest{
 		InvoiceID: "invoice_id",
@@ -289,6 +308,7 @@ func TestInvoicesUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateInvoiceRequest{
 		InvoiceID: "invoice_id",
@@ -332,6 +352,7 @@ func TestInvoicesDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeleteInvoicesRequest{
 		InvoiceID: "invoice_id",
@@ -348,7 +369,7 @@ func TestInvoicesDeleteWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInvoicesDeleteWithWireMock", "DELETE", "/v2/invoices/invoice_id", map[string]string{"version": "1"}, 1)
+	VerifyRequestCount(t, "TestInvoicesDeleteWithWireMock", "DELETE", "/v2/invoices/invoice_id", map[string]interface{}{"version": "1"}, 1)
 }
 
 func TestInvoicesCreateInvoiceAttachmentWithWireMock(
@@ -360,6 +381,7 @@ func TestInvoicesCreateInvoiceAttachmentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateInvoiceAttachmentRequest{
 		InvoiceID: "invoice_id",
@@ -388,6 +410,7 @@ func TestInvoicesDeleteInvoiceAttachmentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeleteInvoiceAttachmentRequest{
 		InvoiceID:    "invoice_id",
@@ -414,6 +437,7 @@ func TestInvoicesCancelWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CancelInvoiceRequest{
 		InvoiceID: "invoice_id",
@@ -440,6 +464,7 @@ func TestInvoicesPublishWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.PublishInvoiceRequest{
 		InvoiceID: "invoice_id",

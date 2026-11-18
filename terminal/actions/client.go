@@ -4,12 +4,13 @@ package actions
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	terminal "github.com/square/square-go-sdk/v5/terminal"
-	os "os"
 )
 
 type Client struct {
@@ -33,14 +34,40 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Creates a Terminal action request and sends it to the specified device.
+//
+// Example:
+//
+//	request := &terminal.CreateTerminalActionRequest{
+//	    IdempotencyKey: "thahn-70e75c10-47f7-4ab6-88cc-aaa4076d065e",
+//	    Action: &square.TerminalAction{
+//	        DeviceID: square.String(
+//	            "{{DEVICE_ID}}",
+//	        ),
+//	        DeadlineDuration: square.String(
+//	            "PT5M",
+//	        ),
+//	        Type: square.TerminalActionActionTypeSaveCard.Ptr(),
+//	        SaveCardOptions: &square.SaveCardOptions{
+//	            CustomerID: "{{CUSTOMER_ID}}",
+//	            ReferenceID: square.String(
+//	                "user-id-1",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Terminal.Actions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *terminal.CreateTerminalActionRequest,
@@ -58,6 +85,30 @@ func (c *Client) Create(
 }
 
 // Retrieves a filtered list of Terminal action requests created by the account making the request. Terminal action requests are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.SearchTerminalActionsRequest{
+//	    Query: &square.TerminalActionQuery{
+//	        Filter: &square.TerminalActionQueryFilter{
+//	            CreatedAt: &square.TimeRange{
+//	                StartAt: square.String(
+//	                    "2022-04-01T00:00:00.000Z",
+//	                ),
+//	            },
+//	        },
+//	        Sort: &square.TerminalActionQuerySort{
+//	            SortOrder: square.SortOrderDesc.Ptr(),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        2,
+//	    ),
+//	}
+//	_, err := client.Terminal.Actions.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *terminal.SearchTerminalActionsRequest,
@@ -75,6 +126,16 @@ func (c *Client) Search(
 }
 
 // Retrieves a Terminal action request by `action_id`. Terminal action requests are available for 30 days.
+//
+// Example:
+//
+//	request := &terminal.GetActionsRequest{
+//	    ActionID: "action_id",
+//	}
+//	_, err := client.Terminal.Actions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *terminal.GetActionsRequest,
@@ -92,6 +153,16 @@ func (c *Client) Get(
 }
 
 // Cancels a Terminal action request if the status of the request permits it.
+//
+// Example:
+//
+//	request := &terminal.CancelActionsRequest{
+//	    ActionID: "action_id",
+//	}
+//	_, err := client.Terminal.Actions.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *terminal.CancelActionsRequest,

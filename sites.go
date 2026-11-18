@@ -9,12 +9,12 @@ import (
 	big "math/big"
 )
 
-// Represents a `ListSites` response. The response can include either `sites` or `errors`.
 var (
 	listSitesResponseFieldErrors = big.NewInt(1 << 0)
 	listSitesResponseFieldSites  = big.NewInt(1 << 1)
 )
 
+// Represents a `ListSites` response. The response can include either `sites` or `errors`.
 type ListSitesResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -50,10 +50,12 @@ func (l *ListSitesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListSitesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -112,7 +114,6 @@ func (l *ListSitesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a Square Online site, which is an online store for a Square seller.
 var (
 	siteFieldID          = big.NewInt(1 << 0)
 	siteFieldSiteTitle   = big.NewInt(1 << 1)
@@ -122,6 +123,14 @@ var (
 	siteFieldUpdatedAt   = big.NewInt(1 << 5)
 )
 
+// siteNullableFields maps the wire names of Site's nullable fields (required or optional) to their field bits.
+var siteNullableFields = map[string]*big.Int{
+	"site_title":   siteFieldSiteTitle,
+	"domain":       siteFieldDomain,
+	"is_published": siteFieldIsPublished,
+}
+
+// Represents a Square Online site, which is an online store for a Square seller.
 type Site struct {
 	// The Square-assigned ID of the site.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -193,10 +202,12 @@ func (s *Site) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *Site) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -253,6 +264,13 @@ func (s *Site) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, siteNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }

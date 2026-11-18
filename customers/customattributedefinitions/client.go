@@ -4,13 +4,14 @@ package customattributedefinitions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	customers "github.com/square/square-go-sdk/v5/customers"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -47,6 +49,21 @@ func NewClient(options *core.RequestOptions) *Client {
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that
 // seller-defined custom attributes (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &customers.ListCustomAttributeDefinitionsRequest{
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *customers.ListCustomAttributeDefinitionsRequest,
@@ -80,6 +97,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -94,7 +112,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -116,6 +134,30 @@ func (c *Client) List(
 //
 // Sellers can view all custom attributes in exported customer data, including those set to
 // `VISIBILITY_HIDDEN`.
+//
+// Example:
+//
+//	request := &customers.CreateCustomerCustomAttributeDefinitionRequest{
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Key: square.String(
+//	            "favoritemovie",
+//	        ),
+//	        Schema: map[string]any{
+//	            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+//	        },
+//	        Name: square.String(
+//	            "Favorite Movie",
+//	        ),
+//	        Description: square.String(
+//	            "The favorite movie of the customer.",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityHidden.Ptr(),
+//	    },
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerCustomAttributeDefinitionRequest,
@@ -137,6 +179,19 @@ func (c *Client) Create(
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &customers.GetCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *customers.GetCustomAttributeDefinitionsRequest,
@@ -160,6 +215,22 @@ func (c *Client) Get(
 //
 // Only the definition owner can update a custom attribute definition. Note that sellers can view
 // all custom attributes in exported customer data, including those set to `VISIBILITY_HIDDEN`.
+//
+// Example:
+//
+//	request := &customers.UpdateCustomerCustomAttributeDefinitionRequest{
+//	    Key: "key",
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Description: square.String(
+//	            "Update the description as desired.",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+//	    },
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *customers.UpdateCustomerCustomAttributeDefinitionRequest,
@@ -182,6 +253,16 @@ func (c *Client) Update(
 // all customer profiles in the seller's Customer Directory.
 //
 // Only the definition owner can delete a custom attribute definition.
+//
+// Example:
+//
+//	request := &customers.DeleteCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *customers.DeleteCustomAttributeDefinitionsRequest,
@@ -212,6 +293,62 @@ func (c *Client) Delete(
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &customers.BatchUpsertCustomerCustomAttributesRequest{
+//	    Values: map[string]*square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	        "id1": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	            CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "favoritemovie",
+//	                ),
+//	                Value: "Dune",
+//	            },
+//	        },
+//	        "id2": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	            CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "ownsmovie",
+//	                ),
+//	                Value: false,
+//	            },
+//	        },
+//	        "id3": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	            CustomerID: "SY8EMWRNDN3TQDP2H4KS1QWMMM",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "favoritemovie",
+//	                ),
+//	                Value: "Star Wars",
+//	            },
+//	        },
+//	        "id4": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	            CustomerID: "N3NCVYY3WS27HF0HKANA3R9FP8",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "square:a0f1505a-2aa1-490d-91a8-8d31ff181808",
+//	                ),
+//	                Value: "10.5",
+//	            },
+//	        },
+//	        "id5": &square.BatchUpsertCustomerCustomAttributesRequestCustomerCustomAttributeUpsertRequest{
+//	            CustomerID: "70548QG1HN43B05G0KCZ4MMC1G",
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "sq0ids-0evKIskIGaY45fCyNL66aw:backupemail",
+//	                ),
+//	                Value: "fake-email@squareup.com",
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Customers.CustomAttributeDefinitions.BatchUpsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *customers.BatchUpsertCustomerCustomAttributesRequest,

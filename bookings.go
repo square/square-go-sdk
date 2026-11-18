@@ -22,10 +22,12 @@ type BulkRetrieveBookingsRequest struct {
 }
 
 func (b *BulkRetrieveBookingsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetBookingIDs sets the BookingIDs field and marks it as non-optional;
@@ -69,10 +71,12 @@ type BulkRetrieveTeamMemberBookingProfilesRequest struct {
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMemberIDs sets the TeamMemberIDs field and marks it as non-optional;
@@ -116,10 +120,12 @@ type RetrieveLocationBookingProfileRequest struct {
 }
 
 func (r *RetrieveLocationBookingProfileRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -142,10 +148,12 @@ type SearchAvailabilityRequest struct {
 }
 
 func (s *SearchAvailabilityRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -195,10 +203,12 @@ type CancelBookingRequest struct {
 }
 
 func (c *CancelBookingRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;
@@ -259,10 +269,12 @@ type CreateBookingRequest struct {
 }
 
 func (c *CreateBookingRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -313,10 +325,12 @@ type GetBookingsRequest struct {
 }
 
 func (g *GetBookingsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;
@@ -357,10 +371,12 @@ type ListBookingsRequest struct {
 }
 
 func (l *ListBookingsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;
@@ -412,7 +428,6 @@ func (l *ListBookingsRequest) SetStartAtMax(startAtMax *string) {
 	l.require(listBookingsRequestFieldStartAtMax)
 }
 
-// Defines an appointment segment of a booking.
 var (
 	appointmentSegmentFieldDurationMinutes         = big.NewInt(1 << 0)
 	appointmentSegmentFieldServiceVariationID      = big.NewInt(1 << 1)
@@ -423,6 +438,14 @@ var (
 	appointmentSegmentFieldResourceIDs             = big.NewInt(1 << 6)
 )
 
+// appointmentSegmentNullableFields maps the wire names of AppointmentSegment's nullable fields (required or optional) to their field bits.
+var appointmentSegmentNullableFields = map[string]*big.Int{
+	"duration_minutes":          appointmentSegmentFieldDurationMinutes,
+	"service_variation_id":      appointmentSegmentFieldServiceVariationID,
+	"service_variation_version": appointmentSegmentFieldServiceVariationVersion,
+}
+
+// Defines an appointment segment of a booking.
 type AppointmentSegment struct {
 	// The time span in minutes of an appointment segment.
 	DurationMinutes *int `json:"duration_minutes,omitempty" url:"duration_minutes,omitempty"`
@@ -503,10 +526,12 @@ func (a *AppointmentSegment) GetExtraProperties() map[string]interface{} {
 }
 
 func (a *AppointmentSegment) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
 	}
-	a.explicitFields.Or(a.explicitFields, field)
+	next.Or(next, field)
+	a.explicitFields = next
 }
 
 // SetDurationMinutes sets the DurationMinutes field and marks it as non-optional;
@@ -570,6 +595,13 @@ func (a *AppointmentSegment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	a.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, appointmentSegmentNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		a.require(presentFields)
+	}
 	a.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -600,13 +632,19 @@ func (a *AppointmentSegment) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
 var (
 	availabilityFieldStartAt             = big.NewInt(1 << 0)
 	availabilityFieldLocationID          = big.NewInt(1 << 1)
 	availabilityFieldAppointmentSegments = big.NewInt(1 << 2)
 )
 
+// availabilityNullableFields maps the wire names of Availability's nullable fields (required or optional) to their field bits.
+var availabilityNullableFields = map[string]*big.Int{
+	"start_at":             availabilityFieldStartAt,
+	"appointment_segments": availabilityFieldAppointmentSegments,
+}
+
+// Defines an appointment slot that encapsulates the appointment segments, location and starting time available for booking.
 type Availability struct {
 	// The RFC 3339 timestamp specifying the beginning time of the slot available for booking.
 	StartAt *string `json:"start_at,omitempty" url:"start_at,omitempty"`
@@ -651,10 +689,12 @@ func (a *Availability) GetExtraProperties() map[string]interface{} {
 }
 
 func (a *Availability) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
 	}
-	a.explicitFields.Or(a.explicitFields, field)
+	next.Or(next, field)
+	a.explicitFields = next
 }
 
 // SetStartAt sets the StartAt field and marks it as non-optional;
@@ -690,6 +730,13 @@ func (a *Availability) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	a.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, availabilityNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		a.require(presentFields)
+	}
 	a.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -720,8 +767,6 @@ func (a *Availability) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Represents a booking as a time-bound service contract for a seller's staff member to provide a specified service
-// at a given location to a requesting customer in one or more appointment segments.
 var (
 	bookingFieldID                    = big.NewInt(1 << 0)
 	bookingFieldVersion               = big.NewInt(1 << 1)
@@ -742,6 +787,18 @@ var (
 	bookingFieldAddress               = big.NewInt(1 << 16)
 )
 
+// bookingNullableFields maps the wire names of Booking's nullable fields (required or optional) to their field bits.
+var bookingNullableFields = map[string]*big.Int{
+	"start_at":             bookingFieldStartAt,
+	"location_id":          bookingFieldLocationID,
+	"customer_id":          bookingFieldCustomerID,
+	"customer_note":        bookingFieldCustomerNote,
+	"seller_note":          bookingFieldSellerNote,
+	"appointment_segments": bookingFieldAppointmentSegments,
+}
+
+// Represents a booking as a time-bound service contract for a seller's staff member to provide a specified service
+// at a given location to a requesting customer in one or more appointment segments.
 type Booking struct {
 	// A unique ID of this object representing a booking.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -918,10 +975,12 @@ func (b *Booking) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *Booking) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1055,6 +1114,13 @@ func (b *Booking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, bookingNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1114,13 +1180,13 @@ func (b BookingBookingSource) Ptr() *BookingBookingSource {
 	return &b
 }
 
-// Information about a booking creator.
 var (
 	bookingCreatorDetailsFieldCreatorType  = big.NewInt(1 << 0)
 	bookingCreatorDetailsFieldTeamMemberID = big.NewInt(1 << 1)
 	bookingCreatorDetailsFieldCustomerID   = big.NewInt(1 << 2)
 )
 
+// Information about a booking creator.
 type BookingCreatorDetails struct {
 	// The seller-accessible type of the creator of the booking.
 	// See [BookingCreatorDetailsCreatorType](#type-bookingcreatordetailscreatortype) for possible values
@@ -1168,10 +1234,12 @@ func (b *BookingCreatorDetails) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BookingCreatorDetails) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCreatorType sets the CreatorType field and marks it as non-optional;
@@ -1295,12 +1363,12 @@ func (b BookingStatus) Ptr() *BookingStatus {
 	return &b
 }
 
-// Response payload for bulk retrieval of bookings.
 var (
 	bulkRetrieveBookingsResponseFieldBookings = big.NewInt(1 << 0)
 	bulkRetrieveBookingsResponseFieldErrors   = big.NewInt(1 << 1)
 )
 
+// Response payload for bulk retrieval of bookings.
 type BulkRetrieveBookingsResponse struct {
 	// Requested bookings returned as a map containing `booking_id` as the key and `RetrieveBookingResponse` as the value.
 	Bookings map[string]*GetBookingResponse `json:"bookings,omitempty" url:"bookings,omitempty"`
@@ -1336,10 +1404,12 @@ func (b *BulkRetrieveBookingsResponse) GetExtraProperties() map[string]interface
 }
 
 func (b *BulkRetrieveBookingsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetBookings sets the Bookings field and marks it as non-optional;
@@ -1398,12 +1468,12 @@ func (b *BulkRetrieveBookingsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
 var (
 	bulkRetrieveTeamMemberBookingProfilesResponseFieldTeamMemberBookingProfiles = big.NewInt(1 << 0)
 	bulkRetrieveTeamMemberBookingProfilesResponseFieldErrors                    = big.NewInt(1 << 1)
 )
 
+// Response payload for the [BulkRetrieveTeamMemberBookingProfiles](api-endpoint:Bookings-BulkRetrieveTeamMemberBookingProfiles) endpoint.
 type BulkRetrieveTeamMemberBookingProfilesResponse struct {
 	// The returned team members' booking profiles, as a map with `team_member_id` as the key and [TeamMemberBookingProfile](entity:TeamMemberBookingProfile) the value.
 	TeamMemberBookingProfiles map[string]*GetTeamMemberBookingProfileResponse `json:"team_member_booking_profiles,omitempty" url:"team_member_booking_profiles,omitempty"`
@@ -1439,10 +1509,12 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) GetExtraProperties() map
 }
 
 func (b *BulkRetrieveTeamMemberBookingProfilesResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetTeamMemberBookingProfiles sets the TeamMemberBookingProfiles field and marks it as non-optional;
@@ -1501,7 +1573,6 @@ func (b *BulkRetrieveTeamMemberBookingProfilesResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// The service appointment settings, including where and how the service is provided.
 var (
 	businessAppointmentSettingsFieldLocationTypes                  = big.NewInt(1 << 0)
 	businessAppointmentSettingsFieldAlignmentTime                  = big.NewInt(1 << 1)
@@ -1518,6 +1589,20 @@ var (
 	businessAppointmentSettingsFieldSkipBookingFlowStaffSelection  = big.NewInt(1 << 12)
 )
 
+// businessAppointmentSettingsNullableFields maps the wire names of BusinessAppointmentSettings's nullable fields (required or optional) to their field bits.
+var businessAppointmentSettingsNullableFields = map[string]*big.Int{
+	"location_types":                    businessAppointmentSettingsFieldLocationTypes,
+	"min_booking_lead_time_seconds":     businessAppointmentSettingsFieldMinBookingLeadTimeSeconds,
+	"max_booking_lead_time_seconds":     businessAppointmentSettingsFieldMaxBookingLeadTimeSeconds,
+	"any_team_member_booking_enabled":   businessAppointmentSettingsFieldAnyTeamMemberBookingEnabled,
+	"multiple_service_booking_enabled":  businessAppointmentSettingsFieldMultipleServiceBookingEnabled,
+	"max_appointments_per_day_limit":    businessAppointmentSettingsFieldMaxAppointmentsPerDayLimit,
+	"cancellation_window_seconds":       businessAppointmentSettingsFieldCancellationWindowSeconds,
+	"cancellation_policy_text":          businessAppointmentSettingsFieldCancellationPolicyText,
+	"skip_booking_flow_staff_selection": businessAppointmentSettingsFieldSkipBookingFlowStaffSelection,
+}
+
+// The service appointment settings, including where and how the service is provided.
 type BusinessAppointmentSettings struct {
 	// Types of the location allowed for bookings.
 	// See [BusinessAppointmentSettingsBookingLocationType](#type-businessappointmentsettingsbookinglocationtype) for possible values
@@ -1658,10 +1743,12 @@ func (b *BusinessAppointmentSettings) GetExtraProperties() map[string]interface{
 }
 
 func (b *BusinessAppointmentSettings) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetLocationTypes sets the LocationTypes field and marks it as non-optional;
@@ -1767,6 +1854,13 @@ func (b *BusinessAppointmentSettings) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, businessAppointmentSettingsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1898,7 +1992,6 @@ func (b BusinessAppointmentSettingsMaxAppointmentsPerDayLimitType) Ptr() *Busine
 	return &b
 }
 
-// A seller's business booking profile, including booking policy, appointment settings, etc.
 var (
 	businessBookingProfileFieldSellerID                    = big.NewInt(1 << 0)
 	businessBookingProfileFieldCreatedAt                   = big.NewInt(1 << 1)
@@ -1910,6 +2003,15 @@ var (
 	businessBookingProfileFieldSupportSellerLevelWrites    = big.NewInt(1 << 7)
 )
 
+// businessBookingProfileNullableFields maps the wire names of BusinessBookingProfile's nullable fields (required or optional) to their field bits.
+var businessBookingProfileNullableFields = map[string]*big.Int{
+	"seller_id":                   businessBookingProfileFieldSellerID,
+	"booking_enabled":             businessBookingProfileFieldBookingEnabled,
+	"allow_user_cancel":           businessBookingProfileFieldAllowUserCancel,
+	"support_seller_level_writes": businessBookingProfileFieldSupportSellerLevelWrites,
+}
+
+// A seller's business booking profile, including booking policy, appointment settings, etc.
 type BusinessBookingProfile struct {
 	// The ID of the seller, obtainable using the Merchants API.
 	SellerID *string `json:"seller_id,omitempty" url:"seller_id,omitempty"`
@@ -2003,10 +2105,12 @@ func (b *BusinessBookingProfile) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BusinessBookingProfile) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetSellerID sets the SellerID field and marks it as non-optional;
@@ -2077,6 +2181,13 @@ func (b *BusinessBookingProfile) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, businessBookingProfileNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2193,10 +2304,12 @@ func (c *CancelBookingResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CancelBookingResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetBooking sets the Booking field and marks it as non-optional;
@@ -2295,10 +2408,12 @@ func (c *CreateBookingResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateBookingResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetBooking sets the Booking field and marks it as non-optional;
@@ -2397,10 +2512,12 @@ func (g *GetBookingResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetBookingResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBooking sets the Booking field and marks it as non-optional;
@@ -2499,10 +2616,12 @@ func (g *GetBusinessBookingProfileResponse) GetExtraProperties() map[string]inte
 }
 
 func (g *GetBusinessBookingProfileResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBusinessBookingProfile sets the BusinessBookingProfile field and marks it as non-optional;
@@ -2611,10 +2730,12 @@ func (l *ListBookingsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListBookingsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetBookings sets the Bookings field and marks it as non-optional;
@@ -2720,10 +2841,12 @@ func (r *RetrieveLocationBookingProfileResponse) GetExtraProperties() map[string
 }
 
 func (r *RetrieveLocationBookingProfileResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetLocationBookingProfile sets the LocationBookingProfile field and marks it as non-optional;
@@ -2782,7 +2905,6 @@ func (r *RetrieveLocationBookingProfileResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// A query filter to search for buyer-accessible availabilities by.
 var (
 	searchAvailabilityFilterFieldStartAtRange   = big.NewInt(1 << 0)
 	searchAvailabilityFilterFieldLocationID     = big.NewInt(1 << 1)
@@ -2790,6 +2912,14 @@ var (
 	searchAvailabilityFilterFieldBookingID      = big.NewInt(1 << 3)
 )
 
+// searchAvailabilityFilterNullableFields maps the wire names of SearchAvailabilityFilter's nullable fields (required or optional) to their field bits.
+var searchAvailabilityFilterNullableFields = map[string]*big.Int{
+	"location_id":     searchAvailabilityFilterFieldLocationID,
+	"segment_filters": searchAvailabilityFilterFieldSegmentFilters,
+	"booking_id":      searchAvailabilityFilterFieldBookingID,
+}
+
+// A query filter to search for buyer-accessible availabilities by.
 type SearchAvailabilityFilter struct {
 	// The query expression to search for buy-accessible availabilities with their starting times falling within the specified time range.
 	// The time range must be at least 24 hours and at most 32 days long.
@@ -2851,10 +2981,12 @@ func (s *SearchAvailabilityFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchAvailabilityFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetStartAtRange sets the StartAtRange field and marks it as non-optional;
@@ -2897,6 +3029,13 @@ func (s *SearchAvailabilityFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchAvailabilityFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2927,11 +3066,11 @@ func (s *SearchAvailabilityFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// The query used to search for buyer-accessible availabilities of bookings.
 var (
 	searchAvailabilityQueryFieldFilter = big.NewInt(1 << 0)
 )
 
+// The query used to search for buyer-accessible availabilities of bookings.
 type SearchAvailabilityQuery struct {
 	// The query filter to search for buyer-accessible availabilities of existing bookings.
 	Filter *SearchAvailabilityFilter `json:"filter" url:"filter"`
@@ -2958,10 +3097,12 @@ func (s *SearchAvailabilityQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchAvailabilityQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -3053,10 +3194,12 @@ func (s *SearchAvailabilityResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (s *SearchAvailabilityResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetAvailabilities sets the Availabilities field and marks it as non-optional;
@@ -3115,12 +3258,12 @@ func (s *SearchAvailabilityResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// A query filter to search for buyer-accessible appointment segments by.
 var (
 	segmentFilterFieldServiceVariationID = big.NewInt(1 << 0)
 	segmentFilterFieldTeamMemberIDFilter = big.NewInt(1 << 1)
 )
 
+// A query filter to search for buyer-accessible appointment segments by.
 type SegmentFilter struct {
 	// The ID of the [CatalogItemVariation](entity:CatalogItemVariation) object representing the service booked in this segment.
 	ServiceVariationID string `json:"service_variation_id" url:"service_variation_id"`
@@ -3161,10 +3304,12 @@ func (s *SegmentFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SegmentFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetServiceVariationID sets the ServiceVariationID field and marks it as non-optional;
@@ -3263,10 +3408,12 @@ func (u *UpdateBookingResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateBookingResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetBooking sets the Booking field and marks it as non-optional;
@@ -3344,10 +3491,12 @@ type UpdateBookingRequest struct {
 }
 
 func (u *UpdateBookingRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;

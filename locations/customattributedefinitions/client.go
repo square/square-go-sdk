@@ -4,13 +4,14 @@ package customattributedefinitions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	locations "github.com/square/square-go-sdk/v5/locations"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,22 @@ func NewClient(options *core.RequestOptions) *Client {
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &locations.ListCustomAttributeDefinitionsRequest{
+//	    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Locations.CustomAttributeDefinitions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *locations.ListCustomAttributeDefinitionsRequest,
@@ -78,6 +96,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +111,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,6 +129,30 @@ func (c *Client) List(
 // [UpsertLocationCustomAttribute](api-endpoint:LocationCustomAttributes-UpsertLocationCustomAttribute) or
 // [BulkUpsertLocationCustomAttributes](api-endpoint:LocationCustomAttributes-BulkUpsertLocationCustomAttributes)
 // to set the custom attribute for locations.
+//
+// Example:
+//
+//	request := &locations.CreateLocationCustomAttributeDefinitionRequest{
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Key: square.String(
+//	            "bestseller",
+//	        ),
+//	        Schema: map[string]any{
+//	            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+//	        },
+//	        Name: square.String(
+//	            "Bestseller",
+//	        ),
+//	        Description: square.String(
+//	            "Bestselling item at location",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
+//	    },
+//	}
+//	_, err := client.Locations.CustomAttributeDefinitions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *locations.CreateLocationCustomAttributeDefinitionRequest,
@@ -129,6 +172,19 @@ func (c *Client) Create(
 // Retrieves a location-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &locations.GetCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Locations.CustomAttributeDefinitions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *locations.GetCustomAttributeDefinitionsRequest,
@@ -149,6 +205,22 @@ func (c *Client) Get(
 // Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
 // `schema` for a `Selection` data type.
 // Only the definition owner can update a custom attribute definition.
+//
+// Example:
+//
+//	request := &locations.UpdateLocationCustomAttributeDefinitionRequest{
+//	    Key: "key",
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Description: square.String(
+//	            "Update the description as desired.",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+//	    },
+//	}
+//	_, err := client.Locations.CustomAttributeDefinitions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *locations.UpdateLocationCustomAttributeDefinitionRequest,
@@ -169,6 +241,16 @@ func (c *Client) Update(
 // Deleting a custom attribute definition also deletes the corresponding custom attribute from
 // all locations.
 // Only the definition owner can delete a custom attribute definition.
+//
+// Example:
+//
+//	request := &locations.DeleteCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	}
+//	_, err := client.Locations.CustomAttributeDefinitions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *locations.DeleteCustomAttributeDefinitionsRequest,

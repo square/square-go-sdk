@@ -3942,6 +3942,155 @@ func TestJSONMarshalingV1Tender(t *testing.T) {
 	})
 }
 
+func TestOptionalNullableRoundTripV1Money(t *testing.T) {
+	optionalNullableKeys := []string{
+		"amount",
+	}
+	marshalToMap := func(t *testing.T, obj *V1Money) map[string]json.RawMessage {
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		var result map[string]json.RawMessage
+		require.NoError(t, json.Unmarshal(data, &result), "marshaled data should be a JSON object")
+		return result
+	}
+
+	t.Run("NullPreserved", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Money
+		require.NoError(t, json.Unmarshal([]byte(`{"amount":null}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			value, ok := result[key]
+			require.True(t, ok, "optional nullable field %q received as null should be present in the output", key)
+			assert.Equal(t, "null", string(value), "optional nullable field %q received as null should be null in the output", key)
+		}
+	})
+
+	t.Run("AbsentStaysAbsent", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Money
+		require.NoError(t, json.Unmarshal([]byte(`{}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q absent from the input should be absent from the output", key)
+		}
+	})
+
+	t.Run("FreshValueOmits", func(t *testing.T) {
+		t.Parallel()
+		result := marshalToMap(t, &V1Money{})
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q should be omitted from a freshly constructed value", key)
+		}
+	})
+}
+
+func TestOptionalNullableRoundTripV1Order(t *testing.T) {
+	optionalNullableKeys := []string{
+		"errors",
+		"buyer_email",
+		"recipient_name",
+		"recipient_phone_number",
+		"expires_at",
+		"payment_id",
+		"buyer_note",
+		"completed_note",
+		"refunded_note",
+		"canceled_note",
+		"order_history",
+		"promo_code",
+		"btc_receive_address",
+		"btc_price_satoshi",
+	}
+	marshalToMap := func(t *testing.T, obj *V1Order) map[string]json.RawMessage {
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		var result map[string]json.RawMessage
+		require.NoError(t, json.Unmarshal(data, &result), "marshaled data should be a JSON object")
+		return result
+	}
+
+	t.Run("NullPreserved", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Order
+		require.NoError(t, json.Unmarshal([]byte(`{"errors":null,"buyer_email":null,"recipient_name":null,"recipient_phone_number":null,"expires_at":null,"payment_id":null,"buyer_note":null,"completed_note":null,"refunded_note":null,"canceled_note":null,"order_history":null,"promo_code":null,"btc_receive_address":null,"btc_price_satoshi":null}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			value, ok := result[key]
+			require.True(t, ok, "optional nullable field %q received as null should be present in the output", key)
+			assert.Equal(t, "null", string(value), "optional nullable field %q received as null should be null in the output", key)
+		}
+	})
+
+	t.Run("AbsentStaysAbsent", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Order
+		require.NoError(t, json.Unmarshal([]byte(`{}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q absent from the input should be absent from the output", key)
+		}
+	})
+
+	t.Run("FreshValueOmits", func(t *testing.T) {
+		t.Parallel()
+		result := marshalToMap(t, &V1Order{})
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q should be omitted from a freshly constructed value", key)
+		}
+	})
+}
+
+func TestOptionalNullableRoundTripV1Tender(t *testing.T) {
+	optionalNullableKeys := []string{
+		"name",
+		"employee_id",
+		"receipt_url",
+		"pan_suffix",
+		"payment_note",
+		"tendered_at",
+		"settled_at",
+		"is_exchange",
+	}
+	marshalToMap := func(t *testing.T, obj *V1Tender) map[string]json.RawMessage {
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		var result map[string]json.RawMessage
+		require.NoError(t, json.Unmarshal(data, &result), "marshaled data should be a JSON object")
+		return result
+	}
+
+	t.Run("NullPreserved", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Tender
+		require.NoError(t, json.Unmarshal([]byte(`{"name":null,"employee_id":null,"receipt_url":null,"pan_suffix":null,"payment_note":null,"tendered_at":null,"settled_at":null,"is_exchange":null}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			value, ok := result[key]
+			require.True(t, ok, "optional nullable field %q received as null should be present in the output", key)
+			assert.Equal(t, "null", string(value), "optional nullable field %q received as null should be null in the output", key)
+		}
+	})
+
+	t.Run("AbsentStaysAbsent", func(t *testing.T) {
+		t.Parallel()
+		var obj V1Tender
+		require.NoError(t, json.Unmarshal([]byte(`{}`), &obj))
+		result := marshalToMap(t, &obj)
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q absent from the input should be absent from the output", key)
+		}
+	})
+
+	t.Run("FreshValueOmits", func(t *testing.T) {
+		t.Parallel()
+		result := marshalToMap(t, &V1Tender{})
+		for _, key := range optionalNullableKeys {
+			assert.NotContains(t, result, key, "optional nullable field %q should be omitted from a freshly constructed value", key)
+		}
+	})
+}
+
 func TestStringV1Money(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
