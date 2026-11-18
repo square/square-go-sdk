@@ -65,7 +65,7 @@ type RefundPaymentRequest struct {
 	// The sum of the amounts in the app_fee_allocations must equal the app_fee_money amount, if
 	// present. If populated, an allocation must be present for every party that expects to contribute
 	// a portion of the refunded application fee, including the application developer.
-	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"-"`
+	AppFeeAllocations []any `json:"app_fee_allocations,omitempty" url:"-"`
 	// The unique ID of the payment being refunded.
 	// Required when unlinked=false, otherwise must not be set.
 	PaymentID *string `json:"payment_id,omitempty" url:"-"`
@@ -110,10 +110,12 @@ type RefundPaymentRequest struct {
 }
 
 func (r *RefundPaymentRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -139,7 +141,7 @@ func (r *RefundPaymentRequest) SetAppFeeMoney(appFeeMoney *Money) {
 
 // SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (r *RefundPaymentRequest) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+func (r *RefundPaymentRequest) SetAppFeeAllocations(appFeeAllocations []any) {
 	r.AppFeeAllocations = appFeeAllocations
 	r.require(refundPaymentRequestFieldAppFeeAllocations)
 }
@@ -248,10 +250,12 @@ type GetRefundsRequest struct {
 }
 
 func (g *GetRefundsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetRefundID sets the RefundID field and marks it as non-optional;
@@ -336,10 +340,12 @@ type ListRefundsRequest struct {
 }
 
 func (l *ListRefundsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetBeginTime sets the BeginTime field and marks it as non-optional;
@@ -419,13 +425,13 @@ func (l *ListRefundsRequest) SetSortField(sortField *ListPaymentRefundsRequestSo
 	l.require(listRefundsRequestFieldSortField)
 }
 
-// Details about a refund's destination.
 var (
 	destinationDetailsFieldCardDetails     = big.NewInt(1 << 0)
 	destinationDetailsFieldCashDetails     = big.NewInt(1 << 1)
 	destinationDetailsFieldExternalDetails = big.NewInt(1 << 2)
 )
 
+// Details about a refund's destination.
 type DestinationDetails struct {
 	// Details about a card refund. Only populated if the destination_type is `CARD`.
 	CardDetails *DestinationDetailsCardRefundDetails `json:"card_details,omitempty" url:"card_details,omitempty"`
@@ -470,10 +476,12 @@ func (d *DestinationDetails) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DestinationDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCardDetails sets the CardDetails field and marks it as non-optional;
@@ -545,6 +553,12 @@ var (
 	destinationDetailsCardRefundDetailsFieldAuthResultCode = big.NewInt(1 << 2)
 )
 
+// destinationDetailsCardRefundDetailsNullableFields maps the wire names of DestinationDetailsCardRefundDetails's nullable fields (required or optional) to their field bits.
+var destinationDetailsCardRefundDetailsNullableFields = map[string]*big.Int{
+	"entry_method":     destinationDetailsCardRefundDetailsFieldEntryMethod,
+	"auth_result_code": destinationDetailsCardRefundDetailsFieldAuthResultCode,
+}
+
 type DestinationDetailsCardRefundDetails struct {
 	// The card's non-confidential details.
 	Card *Card `json:"card,omitempty" url:"card,omitempty"`
@@ -590,10 +604,12 @@ func (d *DestinationDetailsCardRefundDetails) GetExtraProperties() map[string]in
 }
 
 func (d *DestinationDetailsCardRefundDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCard sets the Card field and marks it as non-optional;
@@ -629,6 +645,13 @@ func (d *DestinationDetailsCardRefundDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, destinationDetailsCardRefundDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -659,12 +682,12 @@ func (d *DestinationDetailsCardRefundDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Stores details about a cash refund. Contains only non-confidential information.
 var (
 	destinationDetailsCashRefundDetailsFieldSellerSuppliedMoney = big.NewInt(1 << 0)
 	destinationDetailsCashRefundDetailsFieldChangeBackMoney     = big.NewInt(1 << 1)
 )
 
+// Stores details about a cash refund. Contains only non-confidential information.
 type DestinationDetailsCashRefundDetails struct {
 	// The amount and currency of the money supplied by the seller.
 	SellerSuppliedMoney *Money `json:"seller_supplied_money" url:"seller_supplied_money"`
@@ -702,10 +725,12 @@ func (d *DestinationDetailsCashRefundDetails) GetExtraProperties() map[string]in
 }
 
 func (d *DestinationDetailsCashRefundDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetSellerSuppliedMoney sets the SellerSuppliedMoney field and marks it as non-optional;
@@ -764,13 +789,18 @@ func (d *DestinationDetailsCashRefundDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Stores details about an external refund. Contains only non-confidential information.
 var (
 	destinationDetailsExternalRefundDetailsFieldType     = big.NewInt(1 << 0)
 	destinationDetailsExternalRefundDetailsFieldSource   = big.NewInt(1 << 1)
 	destinationDetailsExternalRefundDetailsFieldSourceID = big.NewInt(1 << 2)
 )
 
+// destinationDetailsExternalRefundDetailsNullableFields maps the wire names of DestinationDetailsExternalRefundDetails's nullable fields (required or optional) to their field bits.
+var destinationDetailsExternalRefundDetailsNullableFields = map[string]*big.Int{
+	"source_id": destinationDetailsExternalRefundDetailsFieldSourceID,
+}
+
+// Stores details about an external refund. Contains only non-confidential information.
 type DestinationDetailsExternalRefundDetails struct {
 	// The type of external refund the seller paid to the buyer. It can be one of the
 	// following:
@@ -829,10 +859,12 @@ func (d *DestinationDetailsExternalRefundDetails) GetExtraProperties() map[strin
 }
 
 func (d *DestinationDetailsExternalRefundDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -868,6 +900,13 @@ func (d *DestinationDetailsExternalRefundDetails) UnmarshalJSON(data []byte) err
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, destinationDetailsExternalRefundDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -898,15 +937,15 @@ func (d *DestinationDetailsExternalRefundDetails) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines the response returned by [GetRefund](api-endpoint:Refunds-GetPaymentRefund).
-//
-// Note: If there are errors processing the request, the refund field might not be
-// present or it might be present in a FAILED state.
 var (
 	getPaymentRefundResponseFieldErrors = big.NewInt(1 << 0)
 	getPaymentRefundResponseFieldRefund = big.NewInt(1 << 1)
 )
 
+// Defines the response returned by [GetRefund](api-endpoint:Refunds-GetPaymentRefund).
+//
+// Note: If there are errors processing the request, the refund field might not be
+// present or it might be present in a FAILED state.
 type GetPaymentRefundResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -942,10 +981,12 @@ func (g *GetPaymentRefundResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetPaymentRefundResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1026,15 +1067,15 @@ func (l ListPaymentRefundsRequestSortField) Ptr() *ListPaymentRefundsRequestSort
 	return &l
 }
 
-// Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
-//
-// Either `errors` or `refunds` is present in a given response (never both).
 var (
 	listPaymentRefundsResponseFieldErrors  = big.NewInt(1 << 0)
 	listPaymentRefundsResponseFieldRefunds = big.NewInt(1 << 1)
 	listPaymentRefundsResponseFieldCursor  = big.NewInt(1 << 2)
 )
 
+// Defines the response returned by [ListPaymentRefunds](api-endpoint:Refunds-ListPaymentRefunds).
+//
+// Either `errors` or `refunds` is present in a given response (never both).
 type ListPaymentRefundsResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1082,10 +1123,12 @@ func (l *ListPaymentRefundsResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (l *ListPaymentRefundsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1151,8 +1194,6 @@ func (l *ListPaymentRefundsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a refund of a payment made using Square. Contains information about
-// the original payment and the amount of money refunded.
 var (
 	paymentRefundFieldID                 = big.NewInt(1 << 0)
 	paymentRefundFieldStatus             = big.NewInt(1 << 1)
@@ -1173,6 +1214,19 @@ var (
 	paymentRefundFieldTerminalRefundID   = big.NewInt(1 << 16)
 )
 
+// paymentRefundNullableFields maps the wire names of PaymentRefund's nullable fields (required or optional) to their field bits.
+var paymentRefundNullableFields = map[string]*big.Int{
+	"status":           paymentRefundFieldStatus,
+	"location_id":      paymentRefundFieldLocationID,
+	"destination_type": paymentRefundFieldDestinationType,
+	"processing_fee":   paymentRefundFieldProcessingFee,
+	"payment_id":       paymentRefundFieldPaymentID,
+	"order_id":         paymentRefundFieldOrderID,
+	"reason":           paymentRefundFieldReason,
+}
+
+// Represents a refund of a payment made using Square. Contains information about
+// the original payment and the amount of money refunded.
 type PaymentRefund struct {
 	// The unique ID for this refund, generated by Square.
 	ID string `json:"id" url:"id"`
@@ -1203,7 +1257,7 @@ type PaymentRefund struct {
 	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty" url:"app_fee_money,omitempty"`
 	// Details pertaining to contributors to the refund of the application fee.
-	AppFeeAllocations []interface{} `json:"app_fee_allocations,omitempty" url:"app_fee_allocations,omitempty"`
+	AppFeeAllocations []any `json:"app_fee_allocations,omitempty" url:"app_fee_allocations,omitempty"`
 	// Processing fees and fee adjustments assessed by Square for this refund.
 	ProcessingFee []*ProcessingFee `json:"processing_fee,omitempty" url:"processing_fee,omitempty"`
 	// The ID of the payment associated with this refund.
@@ -1284,7 +1338,7 @@ func (p *PaymentRefund) GetAppFeeMoney() *Money {
 	return p.AppFeeMoney
 }
 
-func (p *PaymentRefund) GetAppFeeAllocations() []interface{} {
+func (p *PaymentRefund) GetAppFeeAllocations() []any {
 	if p == nil {
 		return nil
 	}
@@ -1355,10 +1409,12 @@ func (p *PaymentRefund) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PaymentRefund) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1419,7 +1475,7 @@ func (p *PaymentRefund) SetAppFeeMoney(appFeeMoney *Money) {
 
 // SetAppFeeAllocations sets the AppFeeAllocations field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (p *PaymentRefund) SetAppFeeAllocations(appFeeAllocations []interface{}) {
+func (p *PaymentRefund) SetAppFeeAllocations(appFeeAllocations []any) {
 	p.AppFeeAllocations = appFeeAllocations
 	p.require(paymentRefundFieldAppFeeAllocations)
 }
@@ -1492,6 +1548,13 @@ func (p *PaymentRefund) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, paymentRefundNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1522,16 +1585,16 @@ func (p *PaymentRefund) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Defines the response returned by
-// [RefundPayment](api-endpoint:Refunds-RefundPayment).
-//
-// If there are errors processing the request, the `refund` field might not be
-// present, or it might be present with a status of `FAILED`.
 var (
 	refundPaymentResponseFieldErrors = big.NewInt(1 << 0)
 	refundPaymentResponseFieldRefund = big.NewInt(1 << 1)
 )
 
+// Defines the response returned by
+// [RefundPayment](api-endpoint:Refunds-RefundPayment).
+//
+// If there are errors processing the request, the `refund` field might not be
+// present, or it might be present with a status of `FAILED`.
 type RefundPaymentResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1567,10 +1630,12 @@ func (r *RefundPaymentResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RefundPaymentResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

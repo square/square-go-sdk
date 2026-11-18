@@ -5,14 +5,15 @@ package client
 import (
 	context "context"
 	fmt "fmt"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	customattributedefinitions "github.com/square/square-go-sdk/v5/merchants/customattributedefinitions"
 	customattributes "github.com/square/square-go-sdk/v5/merchants/customattributes"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -40,8 +41,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -57,6 +59,18 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // If you know the merchant ID, you can also use the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant)
 // endpoint to retrieve the merchant information.
+//
+// Example:
+//
+//	request := &square.ListMerchantsRequest{
+//	    Cursor: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Merchants.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListMerchantsRequest,
@@ -90,6 +104,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -116,6 +131,16 @@ func (c *Client) List(
 }
 
 // Retrieves the `Merchant` object for the given `merchant_id`.
+//
+// Example:
+//
+//	request := &square.GetMerchantsRequest{
+//	    MerchantID: "merchant_id",
+//	}
+//	_, err := client.Merchants.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetMerchantsRequest,

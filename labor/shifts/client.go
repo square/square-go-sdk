@@ -4,12 +4,13 @@ package shifts
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	labor "github.com/square/square-go-sdk/v5/labor"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -58,6 +60,60 @@ func NewClient(options *core.RequestOptions) *Client {
 // - The `Break` instances are set in the request and a break `start_at`
 // is before the `Shift.start_at`, a break `end_at` is after
 // the `Shift.end_at`, or both.
+//
+// Example:
+//
+//	request := &labor.CreateShiftRequest{
+//	    IdempotencyKey: square.String(
+//	        "HIDSNG5KS478L",
+//	    ),
+//	    Shift: &square.Shift{
+//	        LocationID: "PAA1RJZZKXBFG",
+//	        StartAt: "2019-01-25T03:11:00-05:00",
+//	        EndAt: square.String(
+//	            "2019-01-25T13:11:00-05:00",
+//	        ),
+//	        Wage: &square.ShiftWage{
+//	            Title: square.String(
+//	                "Barista",
+//	            ),
+//	            HourlyRate: &square.Money{
+//	                Amount: square.Int64(
+//	                    int64(1100),
+//	                ),
+//	                Currency: square.CurrencyUsd.Ptr(),
+//	            },
+//	            TipEligible: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	        Breaks: []*square.Break{
+//	            &square.Break{
+//	                StartAt: "2019-01-25T06:11:00-05:00",
+//	                EndAt: square.String(
+//	                    "2019-01-25T06:16:00-05:00",
+//	                ),
+//	                BreakTypeID: "REGS1EQR1TPZ5",
+//	                Name: "Tea Break",
+//	                ExpectedDuration: "PT5M",
+//	                IsPaid: true,
+//	            },
+//	        },
+//	        TeamMemberID: square.String(
+//	            "ormj0jJJZ5OZIzxrZYJI",
+//	        ),
+//	        DeclaredCashTipMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(500),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Labor.Shifts.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *labor.CreateShiftRequest,
@@ -88,6 +144,36 @@ func (c *Client) Create(
 // - `END_AT`
 // - `CREATED_AT`
 // - `UPDATED_AT`
+//
+// Example:
+//
+//	request := &labor.SearchShiftsRequest{
+//	    Query: &square.ShiftQuery{
+//	        Filter: &square.ShiftFilter{
+//	            Workday: &square.ShiftWorkday{
+//	                DateRange: &square.DateRange{
+//	                    StartDate: square.String(
+//	                        "2019-01-20",
+//	                    ),
+//	                    EndDate: square.String(
+//	                        "2019-02-03",
+//	                    ),
+//	                },
+//	                MatchShiftsBy: square.ShiftWorkdayMatcherStartAt.Ptr(),
+//	                DefaultTimezone: square.String(
+//	                    "America/Los_Angeles",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        100,
+//	    ),
+//	}
+//	_, err := client.Labor.Shifts.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *labor.SearchShiftsRequest,
@@ -105,6 +191,16 @@ func (c *Client) Search(
 }
 
 // Returns a single `Shift` specified by `id`.
+//
+// Example:
+//
+//	request := &labor.GetShiftsRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.Shifts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *labor.GetShiftsRequest,
@@ -128,6 +224,64 @@ func (c *Client) Get(
 //
 // When closing a `Shift`, all `Break` instances in the `Shift` must be complete with `end_at`
 // set on each `Break`.
+//
+// Example:
+//
+//	request := &labor.UpdateShiftRequest{
+//	    ID: "id",
+//	    Shift: &square.Shift{
+//	        LocationID: "PAA1RJZZKXBFG",
+//	        StartAt: "2019-01-25T03:11:00-05:00",
+//	        EndAt: square.String(
+//	            "2019-01-25T13:11:00-05:00",
+//	        ),
+//	        Wage: &square.ShiftWage{
+//	            Title: square.String(
+//	                "Bartender",
+//	            ),
+//	            HourlyRate: &square.Money{
+//	                Amount: square.Int64(
+//	                    int64(1500),
+//	                ),
+//	                Currency: square.CurrencyUsd.Ptr(),
+//	            },
+//	            TipEligible: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	        Breaks: []*square.Break{
+//	            &square.Break{
+//	                ID: square.String(
+//	                    "X7GAQYVVRRG6P",
+//	                ),
+//	                StartAt: "2019-01-25T06:11:00-05:00",
+//	                EndAt: square.String(
+//	                    "2019-01-25T06:16:00-05:00",
+//	                ),
+//	                BreakTypeID: "REGS1EQR1TPZ5",
+//	                Name: "Tea Break",
+//	                ExpectedDuration: "PT5M",
+//	                IsPaid: true,
+//	            },
+//	        },
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	        TeamMemberID: square.String(
+//	            "ormj0jJJZ5OZIzxrZYJI",
+//	        ),
+//	        DeclaredCashTipMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(500),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Labor.Shifts.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *labor.UpdateShiftRequest,
@@ -145,6 +299,16 @@ func (c *Client) Update(
 }
 
 // Deletes a `Shift`.
+//
+// Example:
+//
+//	request := &labor.DeleteShiftsRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.Shifts.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *labor.DeleteShiftsRequest,

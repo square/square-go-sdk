@@ -4,13 +4,14 @@ package codes
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	devices "github.com/square/square-go-sdk/v5/devices"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,34 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists all DeviceCodes associated with the merchant.
+//
+// Example:
+//
+//	request := &devices.ListCodesRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    ProductType: square.String(
+//	        "TERMINAL_API",
+//	    ),
+//	    Status: square.DeviceCodeStatusUnknown.Ptr(),
+//	}
+//	_, err := client.Devices.Codes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *devices.ListCodesRequest,
@@ -75,6 +96,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +111,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -102,6 +124,27 @@ func (c *Client) List(
 
 // Creates a DeviceCode that can be used to login to a Square Terminal device to enter the connected
 // terminal mode.
+//
+// Example:
+//
+//	request := &devices.CreateDeviceCodeRequest{
+//	    IdempotencyKey: "01bb00a6-0c86-4770-94ed-f5fca973cd56",
+//	    DeviceCode: &square.DeviceCode{
+//	        Name: square.String(
+//	            "Counter 1",
+//	        ),
+//	        ProductType: square.ProductType(
+//	            "TERMINAL_API",
+//	        ),
+//	        LocationID: square.String(
+//	            "B5E4484SHHNYH",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Devices.Codes.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *devices.CreateDeviceCodeRequest,
@@ -119,6 +162,16 @@ func (c *Client) Create(
 }
 
 // Retrieves DeviceCode with the associated ID.
+//
+// Example:
+//
+//	request := &devices.GetCodesRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Devices.Codes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *devices.GetCodesRequest,

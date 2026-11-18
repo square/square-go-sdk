@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	orders "github.com/square/square-go-sdk/v5/orders"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestOrdersCustomAttributesBatchDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.BulkDeleteOrderCustomAttributesRequest{
 		Values: map[string]*square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
@@ -110,6 +126,7 @@ func TestOrdersCustomAttributesBatchUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.BulkUpsertOrderCustomAttributesRequest{
 		Values: map[string]*square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
@@ -160,6 +177,7 @@ func TestOrdersCustomAttributesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.ListCustomAttributesRequest{
 		OrderID:          "order_id",
@@ -183,7 +201,7 @@ func TestOrdersCustomAttributesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCustomAttributesListWithWireMock", "GET", "/v2/orders/order_id/custom-attributes", map[string]string{"visibility_filter": "ALL", "cursor": "cursor", "limit": "1", "with_definitions": "true"}, 1)
+	VerifyRequestCount(t, "TestOrdersCustomAttributesListWithWireMock", "GET", "/v2/orders/order_id/custom-attributes", map[string]interface{}{"visibility_filter": "ALL", "cursor": "cursor", "limit": "1", "with_definitions": "true"}, 1)
 }
 
 func TestOrdersCustomAttributesGetWithWireMock(
@@ -195,6 +213,7 @@ func TestOrdersCustomAttributesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.GetCustomAttributesRequest{
 		OrderID:            "order_id",
@@ -215,7 +234,7 @@ func TestOrdersCustomAttributesGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCustomAttributesGetWithWireMock", "GET", "/v2/orders/order_id/custom-attributes/custom_attribute_key", map[string]string{"version": "1", "with_definition": "true"}, 1)
+	VerifyRequestCount(t, "TestOrdersCustomAttributesGetWithWireMock", "GET", "/v2/orders/order_id/custom-attributes/custom_attribute_key", map[string]interface{}{"version": "1", "with_definition": "true"}, 1)
 }
 
 func TestOrdersCustomAttributesUpsertWithWireMock(
@@ -227,6 +246,7 @@ func TestOrdersCustomAttributesUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.UpsertOrderCustomAttributeRequest{
 		OrderID:            "order_id",
@@ -262,6 +282,7 @@ func TestOrdersCustomAttributesDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.DeleteCustomAttributesRequest{
 		OrderID:            "order_id",

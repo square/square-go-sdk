@@ -22,10 +22,12 @@ type CancelActionsRequest struct {
 }
 
 func (c *CancelActionsRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetActionID sets the ActionID field and marks it as non-optional;
@@ -55,10 +57,12 @@ type CreateTerminalActionRequest struct {
 }
 
 func (c *CreateTerminalActionRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -109,10 +113,12 @@ type GetActionsRequest struct {
 }
 
 func (g *GetActionsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetActionID sets the ActionID field and marks it as non-optional;
@@ -145,10 +151,12 @@ type SearchTerminalActionsRequest struct {
 }
 
 func (s *SearchTerminalActionsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;

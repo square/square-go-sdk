@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	devices "github.com/square/square-go-sdk/v5/devices"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestDevicesCodesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &devices.ListCodesRequest{
 		Cursor: square.String(
@@ -94,7 +110,7 @@ func TestDevicesCodesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestDevicesCodesListWithWireMock", "GET", "/v2/devices/codes", map[string]string{"cursor": "cursor", "location_id": "location_id", "product_type": "TERMINAL_API", "status": "UNKNOWN"}, 1)
+	VerifyRequestCount(t, "TestDevicesCodesListWithWireMock", "GET", "/v2/devices/codes", map[string]interface{}{"cursor": "cursor", "location_id": "location_id", "product_type": "TERMINAL_API", "status": "UNKNOWN"}, 1)
 }
 
 func TestDevicesCodesCreateWithWireMock(
@@ -106,6 +122,7 @@ func TestDevicesCodesCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &devices.CreateDeviceCodeRequest{
 		IdempotencyKey: "01bb00a6-0c86-4770-94ed-f5fca973cd56",
@@ -142,6 +159,7 @@ func TestDevicesCodesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &devices.GetCodesRequest{
 		ID: "id",

@@ -4,12 +4,13 @@ package channels
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,13 +34,33 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
+// Example:
+//
+//	request := &square.ListChannelsRequest{
+//	    ReferenceType: square.ReferenceTypeUnknownType.Ptr(),
+//	    ReferenceID: square.String(
+//	        "reference_id",
+//	    ),
+//	    Status: square.ChannelStatusActive.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Channels.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListChannelsRequest,
@@ -73,6 +94,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -87,7 +109,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -98,6 +120,19 @@ func (c *Client) List(
 	return pager.GetPage(ctx, request.Cursor)
 }
 
+// Example:
+//
+//	request := &square.BulkRetrieveChannelsRequest{
+//	    ChannelIDs: []string{
+//	        "CH_9C03D0B59",
+//	        "CH_6X139B5MN",
+//	        "NOT_EXISTING",
+//	    },
+//	}
+//	_, err := client.Channels.BulkRetrieve(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkRetrieve(
 	ctx context.Context,
 	request *square.BulkRetrieveChannelsRequest,
@@ -114,6 +149,15 @@ func (c *Client) BulkRetrieve(
 	return response.Body, nil
 }
 
+// Example:
+//
+//	request := &square.GetChannelsRequest{
+//	    ChannelID: "channel_id",
+//	}
+//	_, err := client.Channels.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetChannelsRequest,

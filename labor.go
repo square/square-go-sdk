@@ -32,10 +32,12 @@ type BulkPublishScheduledShiftsRequest struct {
 }
 
 func (b *BulkPublishScheduledShiftsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetScheduledShifts sets the ScheduledShifts field and marks it as non-optional;
@@ -97,10 +99,12 @@ type CreateScheduledShiftRequest struct {
 }
 
 func (c *CreateScheduledShiftRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -154,10 +158,12 @@ type CreateTimecardRequest struct {
 }
 
 func (c *CreateTimecardRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -208,10 +214,12 @@ type DeleteTimecardRequest struct {
 }
 
 func (d *DeleteTimecardRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -249,10 +257,12 @@ type PublishScheduledShiftRequest struct {
 }
 
 func (p *PublishScheduledShiftRequest) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -317,10 +327,12 @@ type RetrieveScheduledShiftRequest struct {
 }
 
 func (r *RetrieveScheduledShiftRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -343,10 +355,12 @@ type RetrieveTimecardRequest struct {
 }
 
 func (r *RetrieveTimecardRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -377,10 +391,12 @@ type SearchScheduledShiftsRequest struct {
 }
 
 func (s *SearchScheduledShiftsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -444,10 +460,12 @@ type SearchTimecardsRequest struct {
 }
 
 func (s *SearchTimecardsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -520,10 +538,12 @@ type UpdateScheduledShiftRequest struct {
 }
 
 func (u *UpdateScheduledShiftRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -577,10 +597,12 @@ type UpdateTimecardRequest struct {
 }
 
 func (u *UpdateTimecardRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -618,13 +640,13 @@ func (u *UpdateTimecardRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Represents options for an individual publish request in a
-// [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts)
-// operation, provided as the value in a key-value pair.
 var (
 	bulkPublishScheduledShiftsDataFieldVersion = big.NewInt(1 << 0)
 )
 
+// Represents options for an individual publish request in a
+// [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts)
+// operation, provided as the value in a key-value pair.
 type BulkPublishScheduledShiftsData struct {
 	// The current version of the scheduled shift, used to enable [optimistic concurrency](https://developer.squareup.com/docs/build-basics/common-api-patterns/optimistic-concurrency)
 	// control. If the provided version doesn't match the server version, the request fails.
@@ -653,10 +675,12 @@ func (b *BulkPublishScheduledShiftsData) GetExtraProperties() map[string]interfa
 }
 
 func (b *BulkPublishScheduledShiftsData) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetVersion sets the Version field and marks it as non-optional;
@@ -708,13 +732,13 @@ func (b *BulkPublishScheduledShiftsData) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts) response.
-// Either `scheduled_shifts` or `errors` is present in the response.
 var (
 	bulkPublishScheduledShiftsResponseFieldResponses = big.NewInt(1 << 0)
 	bulkPublishScheduledShiftsResponseFieldErrors    = big.NewInt(1 << 1)
 )
 
+// Represents a [BulkPublishScheduledShifts](api-endpoint:Labor-BulkPublishScheduledShifts) response.
+// Either `scheduled_shifts` or `errors` is present in the response.
 type BulkPublishScheduledShiftsResponse struct {
 	// A map of key-value pairs that represent responses for individual publish requests.
 	// The order of responses might differ from the order in which the requests were provided.
@@ -756,10 +780,12 @@ func (b *BulkPublishScheduledShiftsResponse) GetExtraProperties() map[string]int
 }
 
 func (b *BulkPublishScheduledShiftsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetResponses sets the Responses field and marks it as non-optional;
@@ -818,13 +844,13 @@ func (b *BulkPublishScheduledShiftsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a [CreateScheduledShift](api-endpoint:Labor-CreateScheduledShift) response.
-// Either `scheduled_shift` or `errors` is present in the response.
 var (
 	createScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
 	createScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
 )
 
+// Represents a [CreateScheduledShift](api-endpoint:Labor-CreateScheduledShift) response.
+// Either `scheduled_shift` or `errors` is present in the response.
 type CreateScheduledShiftResponse struct {
 	// The new scheduled shift. To make the shift public, call
 	// [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) or
@@ -862,10 +888,12 @@ func (c *CreateScheduledShiftResponse) GetExtraProperties() map[string]interface
 }
 
 func (c *CreateScheduledShiftResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
@@ -924,14 +952,14 @@ func (c *CreateScheduledShiftResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response to a request to create a `Timecard`. The response contains
-// the created `Timecard` object and might contain a set of `Error` objects if
-// the request resulted in errors.
 var (
 	createTimecardResponseFieldTimecard = big.NewInt(1 << 0)
 	createTimecardResponseFieldErrors   = big.NewInt(1 << 1)
 )
 
+// The response to a request to create a `Timecard`. The response contains
+// the created `Timecard` object and might contain a set of `Error` objects if
+// the request resulted in errors.
 type CreateTimecardResponse struct {
 	// The `Timecard` that was created on the request.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
@@ -967,10 +995,12 @@ func (c *CreateTimecardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateTimecardResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTimecard sets the Timecard field and marks it as non-optional;
@@ -1029,12 +1059,12 @@ func (c *CreateTimecardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response to a request to delete a `Timecard`. The response might contain a set of
-// `Error` objects if the request resulted in errors.
 var (
 	deleteTimecardResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// The response to a request to delete a `Timecard`. The response might contain a set of
+// `Error` objects if the request resulted in errors.
 type DeleteTimecardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1061,10 +1091,12 @@ func (d *DeleteTimecardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeleteTimecardResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1116,13 +1148,13 @@ func (d *DeleteTimecardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Represents a [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) response.
-// Either `scheduled_shift` or `errors` is present in the response.
 var (
 	publishScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
 	publishScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
 )
 
+// Represents a [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) response.
+// Either `scheduled_shift` or `errors` is present in the response.
 type PublishScheduledShiftResponse struct {
 	// The published scheduled shift.
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
@@ -1158,10 +1190,12 @@ func (p *PublishScheduledShiftResponse) GetExtraProperties() map[string]interfac
 }
 
 func (p *PublishScheduledShiftResponse) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
@@ -1220,13 +1254,13 @@ func (p *PublishScheduledShiftResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Represents a [RetrieveScheduledShift](api-endpoint:Labor-RetrieveScheduledShift) response.
-// Either `scheduled_shift` or `errors` is present in the response.
 var (
 	retrieveScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
 	retrieveScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
 )
 
+// Represents a [RetrieveScheduledShift](api-endpoint:Labor-RetrieveScheduledShift) response.
+// Either `scheduled_shift` or `errors` is present in the response.
 type RetrieveScheduledShiftResponse struct {
 	// The requested scheduled shift.
 	ScheduledShift *ScheduledShift `json:"scheduled_shift,omitempty" url:"scheduled_shift,omitempty"`
@@ -1262,10 +1296,12 @@ func (r *RetrieveScheduledShiftResponse) GetExtraProperties() map[string]interfa
 }
 
 func (r *RetrieveScheduledShiftResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
@@ -1324,14 +1360,14 @@ func (r *RetrieveScheduledShiftResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// A response to a request to get a `Timecard`. The response contains
-// the requested `Timecard` object and might contain a set of `Error` objects if
-// the request resulted in errors.
 var (
 	retrieveTimecardResponseFieldTimecard = big.NewInt(1 << 0)
 	retrieveTimecardResponseFieldErrors   = big.NewInt(1 << 1)
 )
 
+// A response to a request to get a `Timecard`. The response contains
+// the requested `Timecard` object and might contain a set of `Error` objects if
+// the request resulted in errors.
 type RetrieveTimecardResponse struct {
 	// The requested `Timecard`.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
@@ -1367,10 +1403,12 @@ func (r *RetrieveTimecardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RetrieveTimecardResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetTimecard sets the Timecard field and marks it as non-optional;
@@ -1429,9 +1467,6 @@ func (r *RetrieveTimecardResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a specific time slot in a work schedule. This object is used to manage the
-// lifecycle of a scheduled shift from the draft to published state. A scheduled shift contains
-// the latest draft shift details and current published shift details.
 var (
 	scheduledShiftFieldID                    = big.NewInt(1 << 0)
 	scheduledShiftFieldDraftShiftDetails     = big.NewInt(1 << 1)
@@ -1441,6 +1476,9 @@ var (
 	scheduledShiftFieldUpdatedAt             = big.NewInt(1 << 5)
 )
 
+// Represents a specific time slot in a work schedule. This object is used to manage the
+// lifecycle of a scheduled shift from the draft to published state. A scheduled shift contains
+// the latest draft shift details and current published shift details.
 type ScheduledShift struct {
 	// **Read only** The Square-issued ID of the scheduled shift.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1516,10 +1554,12 @@ func (s *ScheduledShift) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShift) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1606,8 +1646,6 @@ func (s *ScheduledShift) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents shift details for draft and published versions of a [scheduled shift](entity:ScheduledShift),
-// such as job ID, team member assignment, and start and end times.
 var (
 	scheduledShiftDetailsFieldTeamMemberID = big.NewInt(1 << 0)
 	scheduledShiftDetailsFieldLocationID   = big.NewInt(1 << 1)
@@ -1619,6 +1657,19 @@ var (
 	scheduledShiftDetailsFieldTimezone     = big.NewInt(1 << 7)
 )
 
+// scheduledShiftDetailsNullableFields maps the wire names of ScheduledShiftDetails's nullable fields (required or optional) to their field bits.
+var scheduledShiftDetailsNullableFields = map[string]*big.Int{
+	"team_member_id": scheduledShiftDetailsFieldTeamMemberID,
+	"location_id":    scheduledShiftDetailsFieldLocationID,
+	"job_id":         scheduledShiftDetailsFieldJobID,
+	"start_at":       scheduledShiftDetailsFieldStartAt,
+	"end_at":         scheduledShiftDetailsFieldEndAt,
+	"notes":          scheduledShiftDetailsFieldNotes,
+	"is_deleted":     scheduledShiftDetailsFieldIsDeleted,
+}
+
+// Represents shift details for draft and published versions of a [scheduled shift](entity:ScheduledShift),
+// such as job ID, team member assignment, and start and end times.
 type ScheduledShiftDetails struct {
 	// The ID of the [team member](entity:TeamMember) scheduled for the shift.
 	TeamMemberID *string `json:"team_member_id,omitempty" url:"team_member_id,omitempty"`
@@ -1715,10 +1766,12 @@ func (s *ScheduledShiftDetails) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShiftDetails) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTeamMemberID sets the TeamMemberID field and marks it as non-optional;
@@ -1789,6 +1842,13 @@ func (s *ScheduledShiftDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, scheduledShiftDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1819,8 +1879,6 @@ func (s *ScheduledShiftDetails) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines filter criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
-// request. Multiple filters in a query are combined as an `AND` operation.
 var (
 	scheduledShiftFilterFieldLocationIDs            = big.NewInt(1 << 0)
 	scheduledShiftFilterFieldStart                  = big.NewInt(1 << 1)
@@ -1831,6 +1889,15 @@ var (
 	scheduledShiftFilterFieldScheduledShiftStatuses = big.NewInt(1 << 6)
 )
 
+// scheduledShiftFilterNullableFields maps the wire names of ScheduledShiftFilter's nullable fields (required or optional) to their field bits.
+var scheduledShiftFilterNullableFields = map[string]*big.Int{
+	"location_ids":             scheduledShiftFilterFieldLocationIDs,
+	"team_member_ids":          scheduledShiftFilterFieldTeamMemberIDs,
+	"scheduled_shift_statuses": scheduledShiftFilterFieldScheduledShiftStatuses,
+}
+
+// Defines filter criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
+// request. Multiple filters in a query are combined as an `AND` operation.
 type ScheduledShiftFilter struct {
 	// Return shifts for the specified locations. When omitted, shifts for all
 	// locations are returned. If needed, call [ListLocations](api-endpoint:Locations-ListLocations)
@@ -1931,10 +1998,12 @@ func (s *ScheduledShiftFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShiftFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -1998,6 +2067,13 @@ func (s *ScheduledShiftFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, scheduledShiftFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2105,13 +2181,13 @@ func (s ScheduledShiftNotificationAudience) Ptr() *ScheduledShiftNotificationAud
 	return &s
 }
 
-// Represents filter and sort criteria for the `query` field in a
-// [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) request.
 var (
 	scheduledShiftQueryFieldFilter = big.NewInt(1 << 0)
 	scheduledShiftQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Represents filter and sort criteria for the `query` field in a
+// [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) request.
 type ScheduledShiftQuery struct {
 	// Filtering options for the query.
 	Filter *ScheduledShiftFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -2147,10 +2223,12 @@ func (s *ScheduledShiftQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShiftQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -2209,13 +2287,13 @@ func (s *ScheduledShiftQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines sort criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
-// request.
 var (
 	scheduledShiftSortFieldField = big.NewInt(1 << 0)
 	scheduledShiftSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Defines sort criteria for a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts)
+// request.
 type ScheduledShiftSort struct {
 	// The field to sort on. The default value is `START_AT`.
 	// See [ScheduledShiftSortField](#type-scheduledshiftsortfield) for possible values
@@ -2253,10 +2331,12 @@ func (s *ScheduledShiftSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShiftSort) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -2345,14 +2425,19 @@ func (s ScheduledShiftSortField) Ptr() *ScheduledShiftSortField {
 	return &s
 }
 
-// A `ScheduledShift` search query filter parameter that sets a range of days that
-// a `Shift` must start or end in before passing the filter condition.
 var (
 	scheduledShiftWorkdayFieldDateRange              = big.NewInt(1 << 0)
 	scheduledShiftWorkdayFieldMatchScheduledShiftsBy = big.NewInt(1 << 1)
 	scheduledShiftWorkdayFieldDefaultTimezone        = big.NewInt(1 << 2)
 )
 
+// scheduledShiftWorkdayNullableFields maps the wire names of ScheduledShiftWorkday's nullable fields (required or optional) to their field bits.
+var scheduledShiftWorkdayNullableFields = map[string]*big.Int{
+	"default_timezone": scheduledShiftWorkdayFieldDefaultTimezone,
+}
+
+// A `ScheduledShift` search query filter parameter that sets a range of days that
+// a `Shift` must start or end in before passing the filter condition.
 type ScheduledShiftWorkday struct {
 	// Dates for fetching the scheduled shifts.
 	DateRange *DateRange `json:"date_range,omitempty" url:"date_range,omitempty"`
@@ -2401,10 +2486,12 @@ func (s *ScheduledShiftWorkday) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *ScheduledShiftWorkday) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetDateRange sets the DateRange field and marks it as non-optional;
@@ -2440,6 +2527,13 @@ func (s *ScheduledShiftWorkday) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, scheduledShiftWorkdayNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2496,14 +2590,14 @@ func (s ScheduledShiftWorkdayMatcher) Ptr() *ScheduledShiftWorkdayMatcher {
 	return &s
 }
 
-// Represents a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) response.
-// Either `scheduled_shifts` or `errors` is present in the response.
 var (
 	searchScheduledShiftsResponseFieldScheduledShifts = big.NewInt(1 << 0)
 	searchScheduledShiftsResponseFieldCursor          = big.NewInt(1 << 1)
 	searchScheduledShiftsResponseFieldErrors          = big.NewInt(1 << 2)
 )
 
+// Represents a [SearchScheduledShifts](api-endpoint:Labor-SearchScheduledShifts) response.
+// Either `scheduled_shifts` or `errors` is present in the response.
 type SearchScheduledShiftsResponse struct {
 	// A paginated list of scheduled shifts that match the query conditions.
 	ScheduledShifts []*ScheduledShift `json:"scheduled_shifts,omitempty" url:"scheduled_shifts,omitempty"`
@@ -2549,10 +2643,12 @@ func (s *SearchScheduledShiftsResponse) GetExtraProperties() map[string]interfac
 }
 
 func (s *SearchScheduledShiftsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetScheduledShifts sets the ScheduledShifts field and marks it as non-optional;
@@ -2618,15 +2714,15 @@ func (s *SearchScheduledShiftsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// The response to a request for `Timecard` objects. The response contains
-// the requested `Timecard` objects and might contain a set of `Error` objects if
-// the request resulted in errors.
 var (
 	searchTimecardsResponseFieldTimecards = big.NewInt(1 << 0)
 	searchTimecardsResponseFieldCursor    = big.NewInt(1 << 1)
 	searchTimecardsResponseFieldErrors    = big.NewInt(1 << 2)
 )
 
+// The response to a request for `Timecard` objects. The response contains
+// the requested `Timecard` objects and might contain a set of `Error` objects if
+// the request resulted in errors.
 type SearchTimecardsResponse struct {
 	// Timecards.
 	Timecards []*Timecard `json:"timecards,omitempty" url:"timecards,omitempty"`
@@ -2671,10 +2767,12 @@ func (s *SearchTimecardsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchTimecardsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTimecards sets the Timecards field and marks it as non-optional;
@@ -2740,9 +2838,6 @@ func (s *SearchTimecardsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// A record of the hourly rate, start time, and end time of a single timecard (shift)
-// for a team member. This might include a record of the start and end times of breaks
-// taken during the shift.
 var (
 	timecardFieldID                   = big.NewInt(1 << 0)
 	timecardFieldLocationID           = big.NewInt(1 << 1)
@@ -2759,6 +2854,16 @@ var (
 	timecardFieldDeclaredCashTipMoney = big.NewInt(1 << 12)
 )
 
+// timecardNullableFields maps the wire names of Timecard's nullable fields (required or optional) to their field bits.
+var timecardNullableFields = map[string]*big.Int{
+	"timezone": timecardFieldTimezone,
+	"end_at":   timecardFieldEndAt,
+	"breaks":   timecardFieldBreaks,
+}
+
+// A record of the hourly rate, start time, and end time of a single timecard (shift)
+// for a team member. This might include a record of the start and end times of breaks
+// taken during the shift.
 type Timecard struct {
 	// **Read only** The Square-issued UUID for this object.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -2903,10 +3008,12 @@ func (t *Timecard) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *Timecard) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3012,6 +3119,13 @@ func (t *Timecard) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, timecardNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3042,8 +3156,6 @@ func (t *Timecard) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Defines a filter used in a search for `Timecard` records. `AND` logic is
-// used by Square's servers to apply each filter property specified.
 var (
 	timecardFilterFieldLocationIDs   = big.NewInt(1 << 0)
 	timecardFilterFieldStatus        = big.NewInt(1 << 1)
@@ -3053,6 +3165,14 @@ var (
 	timecardFilterFieldTeamMemberIDs = big.NewInt(1 << 5)
 )
 
+// timecardFilterNullableFields maps the wire names of TimecardFilter's nullable fields (required or optional) to their field bits.
+var timecardFilterNullableFields = map[string]*big.Int{
+	"location_ids":    timecardFilterFieldLocationIDs,
+	"team_member_ids": timecardFilterFieldTeamMemberIDs,
+}
+
+// Defines a filter used in a search for `Timecard` records. `AND` logic is
+// used by Square's servers to apply each filter property specified.
 type TimecardFilter struct {
 	// Fetch timecards for the specified location.
 	LocationIDs []string `json:"location_ids,omitempty" url:"location_ids,omitempty"`
@@ -3125,10 +3245,12 @@ func (t *TimecardFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimecardFilter) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -3185,6 +3307,13 @@ func (t *TimecardFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, timecardFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3238,12 +3367,12 @@ func (t TimecardFilterStatus) Ptr() *TimecardFilterStatus {
 	return &t
 }
 
-// The parameters of a `Timecard` search query, which includes filter and sort options.
 var (
 	timecardQueryFieldFilter = big.NewInt(1 << 0)
 	timecardQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// The parameters of a `Timecard` search query, which includes filter and sort options.
 type TimecardQuery struct {
 	// Query filter options.
 	Filter *TimecardFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -3279,10 +3408,12 @@ func (t *TimecardQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimecardQuery) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -3341,12 +3472,12 @@ func (t *TimecardQuery) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Sets the sort order of search results.
 var (
 	timecardSortFieldField = big.NewInt(1 << 0)
 	timecardSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Sets the sort order of search results.
 type TimecardSort struct {
 	// The field to sort on.
 	// See [TimecardSortField](#type-timecardsortfield) for possible values
@@ -3384,10 +3515,12 @@ func (t *TimecardSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimecardSort) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -3498,7 +3631,6 @@ func (t TimecardStatus) Ptr() *TimecardStatus {
 	return &t
 }
 
-// The hourly wage rate used to compensate a team member for a [timecard](entity:Timecard).
 var (
 	timecardWageFieldTitle       = big.NewInt(1 << 0)
 	timecardWageFieldHourlyRate  = big.NewInt(1 << 1)
@@ -3506,6 +3638,13 @@ var (
 	timecardWageFieldTipEligible = big.NewInt(1 << 3)
 )
 
+// timecardWageNullableFields maps the wire names of TimecardWage's nullable fields (required or optional) to their field bits.
+var timecardWageNullableFields = map[string]*big.Int{
+	"title":        timecardWageFieldTitle,
+	"tip_eligible": timecardWageFieldTipEligible,
+}
+
+// The hourly wage rate used to compensate a team member for a [timecard](entity:Timecard).
 type TimecardWage struct {
 	// The name of the job performed during this timecard.
 	Title *string `json:"title,omitempty" url:"title,omitempty"`
@@ -3561,10 +3700,12 @@ func (t *TimecardWage) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimecardWage) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetTitle sets the Title field and marks it as non-optional;
@@ -3607,6 +3748,13 @@ func (t *TimecardWage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, timecardWageNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3637,14 +3785,19 @@ func (t *TimecardWage) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// A `Timecard` search query filter parameter that sets a range of days that
-// a `Timecard` must start or end in before passing the filter condition.
 var (
 	timecardWorkdayFieldDateRange        = big.NewInt(1 << 0)
 	timecardWorkdayFieldMatchTimecardsBy = big.NewInt(1 << 1)
 	timecardWorkdayFieldDefaultTimezone  = big.NewInt(1 << 2)
 )
 
+// timecardWorkdayNullableFields maps the wire names of TimecardWorkday's nullable fields (required or optional) to their field bits.
+var timecardWorkdayNullableFields = map[string]*big.Int{
+	"default_timezone": timecardWorkdayFieldDefaultTimezone,
+}
+
+// A `Timecard` search query filter parameter that sets a range of days that
+// a `Timecard` must start or end in before passing the filter condition.
 type TimecardWorkday struct {
 	// Dates for fetching the timecards.
 	DateRange *DateRange `json:"date_range,omitempty" url:"date_range,omitempty"`
@@ -3693,10 +3846,12 @@ func (t *TimecardWorkday) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimecardWorkday) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetDateRange sets the DateRange field and marks it as non-optional;
@@ -3732,6 +3887,13 @@ func (t *TimecardWorkday) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, timecardWorkdayNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3788,13 +3950,13 @@ func (t TimecardWorkdayMatcher) Ptr() *TimecardWorkdayMatcher {
 	return &t
 }
 
-// Represents an [UpdateScheduledShift](api-endpoint:Labor-UpdateScheduledShift) response.
-// Either `scheduled_shift` or `errors` is present in the response.
 var (
 	updateScheduledShiftResponseFieldScheduledShift = big.NewInt(1 << 0)
 	updateScheduledShiftResponseFieldErrors         = big.NewInt(1 << 1)
 )
 
+// Represents an [UpdateScheduledShift](api-endpoint:Labor-UpdateScheduledShift) response.
+// Either `scheduled_shift` or `errors` is present in the response.
 type UpdateScheduledShiftResponse struct {
 	// The updated scheduled shift. To make the changes public, call
 	// [PublishScheduledShift](api-endpoint:Labor-PublishScheduledShift) or
@@ -3832,10 +3994,12 @@ func (u *UpdateScheduledShiftResponse) GetExtraProperties() map[string]interface
 }
 
 func (u *UpdateScheduledShiftResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetScheduledShift sets the ScheduledShift field and marks it as non-optional;
@@ -3894,14 +4058,14 @@ func (u *UpdateScheduledShiftResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// The response to a request to update a `Timecard`. The response contains
-// the updated `Timecard` object and might contain a set of `Error` objects if
-// the request resulted in errors.
 var (
 	updateTimecardResponseFieldTimecard = big.NewInt(1 << 0)
 	updateTimecardResponseFieldErrors   = big.NewInt(1 << 1)
 )
 
+// The response to a request to update a `Timecard`. The response contains
+// the updated `Timecard` object and might contain a set of `Error` objects if
+// the request resulted in errors.
 type UpdateTimecardResponse struct {
 	// The updated `Timecard`.
 	Timecard *Timecard `json:"timecard,omitempty" url:"timecard,omitempty"`
@@ -3937,10 +4101,12 @@ func (u *UpdateTimecardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateTimecardResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTimecard sets the Timecard field and marks it as non-optional;

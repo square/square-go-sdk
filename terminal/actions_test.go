@@ -4,6 +4,7 @@ package terminal
 
 import (
 	json "encoding/json"
+	v5 "github.com/square/square-go-sdk/v5"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -63,6 +64,14 @@ func TestSettersCreateTerminalActionRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetAction", func(t *testing.T) {
+		obj := &CreateTerminalActionRequest{}
+		var fernTestValueAction *v5.TerminalAction
+		obj.SetAction(fernTestValueAction)
+		assert.Equal(t, fernTestValueAction, obj.Action)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestSettersMarkExplicitCreateTerminalActionRequest(t *testing.T) {
@@ -74,6 +83,37 @@ func TestSettersMarkExplicitCreateTerminalActionRequest(t *testing.T) {
 
 		// Act
 		obj.SetIdempotencyKey(fernTestValueIdempotencyKey)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetAction_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateTerminalActionRequest{}
+		var fernTestValueAction *v5.TerminalAction
+
+		// Act
+		obj.SetAction(fernTestValueAction)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -145,6 +185,14 @@ func TestSettersMarkExplicitGetActionsRequest(t *testing.T) {
 }
 
 func TestSettersSearchTerminalActionsRequest(t *testing.T) {
+	t.Run("SetQuery", func(t *testing.T) {
+		obj := &SearchTerminalActionsRequest{}
+		var fernTestValueQuery *v5.TerminalActionQuery
+		obj.SetQuery(fernTestValueQuery)
+		assert.Equal(t, fernTestValueQuery, obj.Query)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetCursor", func(t *testing.T) {
 		obj := &SearchTerminalActionsRequest{}
 		var fernTestValueCursor *string
@@ -164,6 +212,37 @@ func TestSettersSearchTerminalActionsRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitSearchTerminalActionsRequest(t *testing.T) {
+	t.Run("SetQuery_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &SearchTerminalActionsRequest{}
+		var fernTestValueQuery *v5.TerminalActionQuery
+
+		// Act
+		obj.SetQuery(fernTestValueQuery)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetCursor_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange

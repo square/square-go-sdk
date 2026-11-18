@@ -40,10 +40,12 @@ type CreateCardRequest struct {
 }
 
 func (c *CreateCardRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -108,10 +110,12 @@ type DisableCardsRequest struct {
 }
 
 func (d *DisableCardsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCardID sets the CardID field and marks it as non-optional;
@@ -134,10 +138,12 @@ type GetCardsRequest struct {
 }
 
 func (g *GetCardsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetCardID sets the CardID field and marks it as non-optional;
@@ -178,10 +184,12 @@ type ListCardsRequest struct {
 }
 
 func (l *ListCardsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -219,16 +227,16 @@ func (l *ListCardsRequest) SetSortOrder(sortOrder *SortOrder) {
 	l.require(listCardsRequestFieldSortOrder)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [CreateCard](api-endpoint:Cards-CreateCard) endpoint.
-//
-// Note: if there are errors processing the request, the card field will not be
-// present.
 var (
 	createCardResponseFieldErrors = big.NewInt(1 << 0)
 	createCardResponseFieldCard   = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [CreateCard](api-endpoint:Cards-CreateCard) endpoint.
+//
+// Note: if there are errors processing the request, the card field will not be
+// present.
 type CreateCardResponse struct {
 	// Errors resulting from the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -264,10 +272,12 @@ func (c *CreateCardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateCardResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -326,16 +336,16 @@ func (c *CreateCardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [DisableCard](api-endpoint:Cards-DisableCard) endpoint.
-//
-// Note: if there are errors processing the request, the card field will not be
-// present.
 var (
 	disableCardResponseFieldErrors = big.NewInt(1 << 0)
 	disableCardResponseFieldCard   = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [DisableCard](api-endpoint:Cards-DisableCard) endpoint.
+//
+// Note: if there are errors processing the request, the card field will not be
+// present.
 type DisableCardResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -371,10 +381,12 @@ func (d *DisableCardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DisableCardResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -433,16 +445,16 @@ func (d *DisableCardResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [RetrieveCard](api-endpoint:Cards-RetrieveCard) endpoint.
-//
-// Note: if there are errors processing the request, the card field will not be
-// present.
 var (
 	getCardResponseFieldErrors = big.NewInt(1 << 0)
 	getCardResponseFieldCard   = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [RetrieveCard](api-endpoint:Cards-RetrieveCard) endpoint.
+//
+// Note: if there are errors processing the request, the card field will not be
+// present.
 type GetCardResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -478,10 +490,12 @@ func (g *GetCardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetCardResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -540,17 +554,17 @@ func (g *GetCardResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [ListCards](api-endpoint:Cards-ListCards) endpoint.
-//
-// Note: if there are errors processing the request, the card field will not be
-// present.
 var (
 	listCardsResponseFieldErrors = big.NewInt(1 << 0)
 	listCardsResponseFieldCards  = big.NewInt(1 << 1)
 	listCardsResponseFieldCursor = big.NewInt(1 << 2)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [ListCards](api-endpoint:Cards-ListCards) endpoint.
+//
+// Note: if there are errors processing the request, the card field will not be
+// present.
 type ListCardsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -598,10 +612,12 @@ func (l *ListCardsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListCardsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

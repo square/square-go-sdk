@@ -4,13 +4,14 @@ package customattributedefinitions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	bookings "github.com/square/square-go-sdk/v5/bookings"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,21 @@ func NewClient(options *core.RequestOptions) *Client {
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &bookings.ListCustomAttributeDefinitionsRequest{
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Bookings.CustomAttributeDefinitions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *bookings.ListCustomAttributeDefinitionsRequest,
@@ -78,6 +95,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +110,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,6 +128,16 @@ func (c *Client) List(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.CreateBookingCustomAttributeDefinitionRequest{
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{},
+//	}
+//	_, err := client.Bookings.CustomAttributeDefinitions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *bookings.CreateBookingCustomAttributeDefinitionRequest,
@@ -130,6 +158,19 @@ func (c *Client) Create(
 //
 // To call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.
 // To call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.
+//
+// Example:
+//
+//	request := &bookings.GetCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Bookings.CustomAttributeDefinitions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.GetCustomAttributeDefinitionsRequest,
@@ -153,6 +194,17 @@ func (c *Client) Get(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.UpdateBookingCustomAttributeDefinitionRequest{
+//	    Key: "key",
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{},
+//	}
+//	_, err := client.Bookings.CustomAttributeDefinitions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *bookings.UpdateBookingCustomAttributeDefinitionRequest,
@@ -176,6 +228,16 @@ func (c *Client) Update(
 //
 // For calls to this endpoint with seller-level permissions to succeed, the seller must have subscribed to *Appointments Plus*
 // or *Appointments Premium*.
+//
+// Example:
+//
+//	request := &bookings.DeleteCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	}
+//	_, err := client.Bookings.CustomAttributeDefinitions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *bookings.DeleteCustomAttributeDefinitionsRequest,

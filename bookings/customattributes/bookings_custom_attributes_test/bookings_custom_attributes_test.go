@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	bookings "github.com/square/square-go-sdk/v5/bookings"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestBookingsCustomAttributesBatchDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.BulkDeleteBookingCustomAttributesRequest{
 		Values: map[string]*square.BookingCustomAttributeDeleteRequest{
@@ -102,6 +118,7 @@ func TestBookingsCustomAttributesBatchUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.BulkUpsertBookingCustomAttributesRequest{
 		Values: map[string]*square.BookingCustomAttributeUpsertRequest{
@@ -132,6 +149,7 @@ func TestBookingsCustomAttributesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.ListCustomAttributesRequest{
 		BookingID: "booking_id",
@@ -154,7 +172,7 @@ func TestBookingsCustomAttributesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestBookingsCustomAttributesListWithWireMock", "GET", "/v2/bookings/booking_id/custom-attributes", map[string]string{"limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
+	VerifyRequestCount(t, "TestBookingsCustomAttributesListWithWireMock", "GET", "/v2/bookings/booking_id/custom-attributes", map[string]interface{}{"limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
 }
 
 func TestBookingsCustomAttributesGetWithWireMock(
@@ -166,6 +184,7 @@ func TestBookingsCustomAttributesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.GetCustomAttributesRequest{
 		BookingID: "booking_id",
@@ -186,7 +205,7 @@ func TestBookingsCustomAttributesGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestBookingsCustomAttributesGetWithWireMock", "GET", "/v2/bookings/booking_id/custom-attributes/key", map[string]string{"with_definition": "true", "version": "1"}, 1)
+	VerifyRequestCount(t, "TestBookingsCustomAttributesGetWithWireMock", "GET", "/v2/bookings/booking_id/custom-attributes/key", map[string]interface{}{"with_definition": "true", "version": "1"}, 1)
 }
 
 func TestBookingsCustomAttributesUpsertWithWireMock(
@@ -198,6 +217,7 @@ func TestBookingsCustomAttributesUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.UpsertBookingCustomAttributeRequest{
 		BookingID:       "booking_id",
@@ -225,6 +245,7 @@ func TestBookingsCustomAttributesDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &bookings.DeleteCustomAttributesRequest{
 		BookingID: "booking_id",

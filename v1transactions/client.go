@@ -4,11 +4,12 @@ package v1transactions
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,14 +33,32 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Provides summary information for a merchant's online store orders.
+//
+// Example:
+//
+//	request := &square.V1ListOrdersRequest{
+//	    LocationID: "location_id",
+//	    Order: square.SortOrderDesc.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    BatchToken: square.String(
+//	        "batch_token",
+//	    ),
+//	}
+//	_, err := client.V1Transactions.V1ListOrders(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) V1ListOrders(
 	ctx context.Context,
 	request *square.V1ListOrdersRequest,
@@ -57,6 +76,17 @@ func (c *Client) V1ListOrders(
 }
 
 // Provides comprehensive information for a single online store order, including the order's history.
+//
+// Example:
+//
+//	request := &square.V1RetrieveOrderRequest{
+//	    LocationID: "location_id",
+//	    OrderID: "order_id",
+//	}
+//	_, err := client.V1Transactions.V1RetrieveOrder(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) V1RetrieveOrder(
 	ctx context.Context,
 	request *square.V1RetrieveOrderRequest,
@@ -74,6 +104,18 @@ func (c *Client) V1RetrieveOrder(
 }
 
 // Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:
+//
+// Example:
+//
+//	request := &square.V1UpdateOrderRequest{
+//	    LocationID: "location_id",
+//	    OrderID: "order_id",
+//	    Action: square.V1UpdateOrderRequestActionComplete,
+//	}
+//	_, err := client.V1Transactions.V1UpdateOrder(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) V1UpdateOrder(
 	ctx context.Context,
 	request *square.V1UpdateOrderRequest,

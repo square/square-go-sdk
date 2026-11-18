@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestInventoryListInventoryAdjustmentReasonsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListInventoryAdjustmentReasonsRequest{
 		IncludeDeleted: square.Bool(
@@ -89,7 +105,7 @@ func TestInventoryListInventoryAdjustmentReasonsWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInventoryListInventoryAdjustmentReasonsWithWireMock", "GET", "/v2/inventory/adjustment-reasons", map[string]string{"include_deleted": "true", "include_system_codes": "true"}, 1)
+	VerifyRequestCount(t, "TestInventoryListInventoryAdjustmentReasonsWithWireMock", "GET", "/v2/inventory/adjustment-reasons", map[string]interface{}{"include_deleted": "true", "include_system_codes": "true"}, 1)
 }
 
 func TestInventoryCreateInventoryAdjustmentReasonWithWireMock(
@@ -101,6 +117,7 @@ func TestInventoryCreateInventoryAdjustmentReasonWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateInventoryAdjustmentReasonRequest{
 		IdempotencyKey: "27b2f2b1-1c2a-4b9e-8f3a-0d9c3a1e5b47",
@@ -135,6 +152,7 @@ func TestInventoryDeleteInventoryAdjustmentReasonWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeleteInventoryAdjustmentReasonRequest{
 		ReasonID: &square.InventoryAdjustmentReasonID{
@@ -165,6 +183,7 @@ func TestInventoryRestoreInventoryAdjustmentReasonWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.RestoreInventoryAdjustmentReasonRequest{
 		ReasonID: &square.InventoryAdjustmentReasonID{
@@ -195,6 +214,7 @@ func TestInventoryRetrieveInventoryAdjustmentReasonWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.RetrieveInventoryAdjustmentReasonRequest{
 		ReasonID: &square.InventoryAdjustmentReasonID{
@@ -225,6 +245,7 @@ func TestInventoryUpdateInventoryAdjustmentReasonWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateInventoryAdjustmentReasonRequest{
 		ReasonID: &square.InventoryAdjustmentReasonID{
@@ -266,6 +287,7 @@ func TestInventoryDeprecatedGetAdjustmentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeprecatedGetAdjustmentInventoryRequest{
 		AdjustmentID: "adjustment_id",
@@ -291,6 +313,7 @@ func TestInventoryUpdateInventoryAdjustmentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateInventoryAdjustmentRequest{
 		IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
@@ -317,6 +340,7 @@ func TestInventoryGetAdjustmentWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetAdjustmentInventoryRequest{
 		AdjustmentID: "adjustment_id",
@@ -342,6 +366,7 @@ func TestInventoryDeprecatedBatchChangeWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchChangeInventoryRequest{
 		IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
@@ -396,6 +421,7 @@ func TestInventoryDeprecatedBatchGetChangesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchRetrieveInventoryChangesRequest{
 		CatalogObjectIDs: []string{
@@ -438,6 +464,7 @@ func TestInventoryDeprecatedBatchGetCountsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchGetInventoryCountsRequest{
 		CatalogObjectIDs: []string{
@@ -471,6 +498,7 @@ func TestInventoryBatchCreateChangesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchChangeInventoryRequest{
 		IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
@@ -525,6 +553,7 @@ func TestInventoryBatchGetChangesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchRetrieveInventoryChangesRequest{
 		CatalogObjectIDs: []string{
@@ -567,6 +596,7 @@ func TestInventoryBatchGetCountsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchGetInventoryCountsRequest{
 		CatalogObjectIDs: []string{
@@ -600,6 +630,7 @@ func TestInventoryDeprecatedGetPhysicalCountWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DeprecatedGetPhysicalCountInventoryRequest{
 		PhysicalCountID: "physical_count_id",
@@ -625,6 +656,7 @@ func TestInventoryGetPhysicalCountWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetPhysicalCountInventoryRequest{
 		PhysicalCountID: "physical_count_id",
@@ -650,6 +682,7 @@ func TestInventoryGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetInventoryRequest{
 		CatalogObjectID: "catalog_object_id",
@@ -669,7 +702,7 @@ func TestInventoryGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInventoryGetWithWireMock", "GET", "/v2/inventory/catalog_object_id", map[string]string{"location_ids": "location_ids", "cursor": "cursor"}, 1)
+	VerifyRequestCount(t, "TestInventoryGetWithWireMock", "GET", "/v2/inventory/catalog_object_id", map[string]interface{}{"location_ids": "location_ids", "cursor": "cursor"}, 1)
 }
 
 func TestInventoryChangesWithWireMock(
@@ -681,6 +714,7 @@ func TestInventoryChangesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ChangesInventoryRequest{
 		CatalogObjectID: "catalog_object_id",
@@ -700,5 +734,5 @@ func TestInventoryChangesWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestInventoryChangesWithWireMock", "GET", "/v2/inventory/catalog_object_id/changes", map[string]string{"location_ids": "location_ids", "cursor": "cursor"}, 1)
+	VerifyRequestCount(t, "TestInventoryChangesWithWireMock", "GET", "/v2/inventory/catalog_object_id/changes", map[string]interface{}{"location_ids": "location_ids", "cursor": "cursor"}, 1)
 }

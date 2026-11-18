@@ -4,11 +4,12 @@ package vendors
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,14 +33,69 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Creates one or more [Vendor](entity:Vendor) objects to represent suppliers to a seller.
+//
+// Example:
+//
+//	request := &square.BatchCreateVendorsRequest{
+//	    Vendors: map[string]*square.Vendor{
+//	        "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe": &square.Vendor{
+//	            Name: square.String(
+//	                "Joe's Fresh Seafood",
+//	            ),
+//	            Address: &square.Address{
+//	                AddressLine1: square.String(
+//	                    "505 Electric Ave",
+//	                ),
+//	                AddressLine2: square.String(
+//	                    "Suite 600",
+//	                ),
+//	                Locality: square.String(
+//	                    "New York",
+//	                ),
+//	                AdministrativeDistrictLevel1: square.String(
+//	                    "NY",
+//	                ),
+//	                PostalCode: square.String(
+//	                    "10003",
+//	                ),
+//	                Country: square.CountryUs.Ptr(),
+//	            },
+//	            Contacts: []*square.VendorContact{
+//	                &square.VendorContact{
+//	                    Name: square.String(
+//	                        "Joe Burrow",
+//	                    ),
+//	                    EmailAddress: square.String(
+//	                        "joe@joesfreshseafood.com",
+//	                    ),
+//	                    PhoneNumber: square.String(
+//	                        "1-212-555-4250",
+//	                    ),
+//	                    Ordinal: 1,
+//	                },
+//	            },
+//	            AccountNumber: square.String(
+//	                "4025391",
+//	            ),
+//	            Note: square.String(
+//	                "a vendor",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Vendors.BatchCreate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchCreate(
 	ctx context.Context,
 	request *square.BatchCreateVendorsRequest,
@@ -57,6 +113,18 @@ func (c *Client) BatchCreate(
 }
 
 // Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.
+//
+// Example:
+//
+//	request := &square.BatchGetVendorsRequest{
+//	    VendorIDs: []string{
+//	        "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
+//	    },
+//	}
+//	_, err := client.Vendors.BatchGet(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchGet(
 	ctx context.Context,
 	request *square.BatchGetVendorsRequest,
@@ -74,6 +142,23 @@ func (c *Client) BatchGet(
 }
 
 // Updates one or more of existing [Vendor](entity:Vendor) objects as suppliers to a seller.
+//
+// Example:
+//
+//	request := &square.BatchUpdateVendorsRequest{
+//	    Vendors: map[string]*square.UpdateVendorRequest{
+//	        "FMCYHBWT1TPL8MFH52PBMEN92A": &square.UpdateVendorRequest{
+//	            Vendor: &square.Vendor{},
+//	        },
+//	        "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4": &square.UpdateVendorRequest{
+//	            Vendor: &square.Vendor{},
+//	        },
+//	    },
+//	}
+//	_, err := client.Vendors.BatchUpdate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpdate(
 	ctx context.Context,
 	request *square.BatchUpdateVendorsRequest,
@@ -91,6 +176,59 @@ func (c *Client) BatchUpdate(
 }
 
 // Creates a single [Vendor](entity:Vendor) object to represent a supplier to a seller.
+//
+// Example:
+//
+//	request := &square.CreateVendorRequest{
+//	    IdempotencyKey: "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+//	    Vendor: &square.Vendor{
+//	        Name: square.String(
+//	            "Joe's Fresh Seafood",
+//	        ),
+//	        Address: &square.Address{
+//	            AddressLine1: square.String(
+//	                "505 Electric Ave",
+//	            ),
+//	            AddressLine2: square.String(
+//	                "Suite 600",
+//	            ),
+//	            Locality: square.String(
+//	                "New York",
+//	            ),
+//	            AdministrativeDistrictLevel1: square.String(
+//	                "NY",
+//	            ),
+//	            PostalCode: square.String(
+//	                "10003",
+//	            ),
+//	            Country: square.CountryUs.Ptr(),
+//	        },
+//	        Contacts: []*square.VendorContact{
+//	            &square.VendorContact{
+//	                Name: square.String(
+//	                    "Joe Burrow",
+//	                ),
+//	                EmailAddress: square.String(
+//	                    "joe@joesfreshseafood.com",
+//	                ),
+//	                PhoneNumber: square.String(
+//	                    "1-212-555-4250",
+//	                ),
+//	                Ordinal: 1,
+//	            },
+//	        },
+//	        AccountNumber: square.String(
+//	            "4025391",
+//	        ),
+//	        Note: square.String(
+//	            "a vendor",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Vendors.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateVendorRequest,
@@ -108,6 +246,14 @@ func (c *Client) Create(
 }
 
 // Searches for vendors using a filter against supported [Vendor](entity:Vendor) properties and a supported sorter.
+//
+// Example:
+//
+//	request := &square.SearchVendorsRequest{}
+//	_, err := client.Vendors.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchVendorsRequest,
@@ -125,6 +271,16 @@ func (c *Client) Search(
 }
 
 // Retrieves the vendor of a specified [Vendor](entity:Vendor) ID.
+//
+// Example:
+//
+//	request := &square.GetVendorsRequest{
+//	    VendorID: "vendor_id",
+//	}
+//	_, err := client.Vendors.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetVendorsRequest,
@@ -142,6 +298,33 @@ func (c *Client) Get(
 }
 
 // Updates an existing [Vendor](entity:Vendor) object as a supplier to a seller.
+//
+// Example:
+//
+//	request := &square.UpdateVendorsRequest{
+//	    VendorID: "vendor_id",
+//	    Body: &square.UpdateVendorRequest{
+//	        IdempotencyKey: square.String(
+//	            "8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe",
+//	        ),
+//	        Vendor: &square.Vendor{
+//	            ID: square.String(
+//	                "INV_V_JDKYHBWT1D4F8MFH63DBMEN8Y4",
+//	            ),
+//	            Name: square.String(
+//	                "Jack's Chicken Shack",
+//	            ),
+//	            Version: square.Int(
+//	                1,
+//	            ),
+//	            Status: square.VendorStatusActive.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Vendors.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateVendorsRequest,

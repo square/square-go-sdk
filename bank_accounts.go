@@ -30,10 +30,12 @@ type CreateBankAccountRequest struct {
 }
 
 func (c *CreateBankAccountRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -91,10 +93,12 @@ type DisableBankAccountRequest struct {
 }
 
 func (d *DisableBankAccountRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetBankAccountID sets the BankAccountID field and marks it as non-optional;
@@ -118,10 +122,12 @@ type GetByV1IDBankAccountsRequest struct {
 }
 
 func (g *GetByV1IDBankAccountsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetV1BankAccountID sets the V1BankAccountID field and marks it as non-optional;
@@ -144,10 +150,12 @@ type GetBankAccountsRequest struct {
 }
 
 func (g *GetBankAccountsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBankAccountID sets the BankAccountID field and marks it as non-optional;
@@ -187,10 +195,12 @@ type ListBankAccountsRequest struct {
 }
 
 func (l *ListBankAccountsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -221,9 +231,6 @@ func (l *ListBankAccountsRequest) SetCustomerID(customerID *string) {
 	l.require(listBankAccountsRequestFieldCustomerID)
 }
 
-// Represents a bank account. For more information about
-// linking a bank account to a Square account, see
-// [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
 var (
 	bankAccountFieldID                                = big.NewInt(1 << 0)
 	bankAccountFieldAccountNumberSuffix               = big.NewInt(1 << 1)
@@ -245,6 +252,19 @@ var (
 	bankAccountFieldCustomerID                        = big.NewInt(1 << 17)
 )
 
+// bankAccountNullableFields maps the wire names of BankAccount's nullable fields (required or optional) to their field bits.
+var bankAccountNullableFields = map[string]*big.Int{
+	"secondary_bank_identification_number": bankAccountFieldSecondaryBankIdentificationNumber,
+	"debit_mandate_reference_id":           bankAccountFieldDebitMandateReferenceID,
+	"reference_id":                         bankAccountFieldReferenceID,
+	"location_id":                          bankAccountFieldLocationID,
+	"fingerprint":                          bankAccountFieldFingerprint,
+	"bank_name":                            bankAccountFieldBankName,
+}
+
+// Represents a bank account. For more information about
+// linking a bank account to a Square account, see
+// [Bank Accounts API](https://developer.squareup.com/docs/bank-accounts-api).
 type BankAccount struct {
 	// The unique, Square-issued identifier for the bank account.
 	ID string `json:"id" url:"id"`
@@ -439,10 +459,12 @@ func (b *BankAccount) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BankAccount) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -583,6 +605,13 @@ func (b *BankAccount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, bankAccountNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -671,12 +700,12 @@ func (b BankAccountType) Ptr() *BankAccountType {
 	return &b
 }
 
-// Response object returned by CreateBankAccount.
 var (
 	createBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
 	createBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
+// Response object returned by CreateBankAccount.
 type CreateBankAccountResponse struct {
 	// The 'BankAccount' that was created.
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
@@ -712,10 +741,12 @@ func (c *CreateBankAccountResponse) GetExtraProperties() map[string]interface{} 
 }
 
 func (c *CreateBankAccountResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetBankAccount sets the BankAccount field and marks it as non-optional;
@@ -774,12 +805,12 @@ func (c *CreateBankAccountResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Response object returned by `DisableBankAccount`.
 var (
 	disableBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
 	disableBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
+// Response object returned by `DisableBankAccount`.
 type DisableBankAccountResponse struct {
 	// The disabled 'BankAccount'
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
@@ -815,10 +846,12 @@ func (d *DisableBankAccountResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (d *DisableBankAccountResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetBankAccount sets the BankAccount field and marks it as non-optional;
@@ -877,12 +910,12 @@ func (d *DisableBankAccountResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Response object returned by GetBankAccountByV1Id.
 var (
 	getBankAccountByV1IDResponseFieldErrors      = big.NewInt(1 << 0)
 	getBankAccountByV1IDResponseFieldBankAccount = big.NewInt(1 << 1)
 )
 
+// Response object returned by GetBankAccountByV1Id.
 type GetBankAccountByV1IDResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -918,10 +951,12 @@ func (g *GetBankAccountByV1IDResponse) GetExtraProperties() map[string]interface
 }
 
 func (g *GetBankAccountByV1IDResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -980,12 +1015,12 @@ func (g *GetBankAccountByV1IDResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Response object returned by `GetBankAccount`.
 var (
 	getBankAccountResponseFieldBankAccount = big.NewInt(1 << 0)
 	getBankAccountResponseFieldErrors      = big.NewInt(1 << 1)
 )
 
+// Response object returned by `GetBankAccount`.
 type GetBankAccountResponse struct {
 	// The requested `BankAccount` object.
 	BankAccount *BankAccount `json:"bank_account,omitempty" url:"bank_account,omitempty"`
@@ -1021,10 +1056,12 @@ func (g *GetBankAccountResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetBankAccountResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBankAccount sets the BankAccount field and marks it as non-optional;
@@ -1083,13 +1120,13 @@ func (g *GetBankAccountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Response object returned by ListBankAccounts.
 var (
 	listBankAccountsResponseFieldBankAccounts = big.NewInt(1 << 0)
 	listBankAccountsResponseFieldErrors       = big.NewInt(1 << 1)
 	listBankAccountsResponseFieldCursor       = big.NewInt(1 << 2)
 )
 
+// Response object returned by ListBankAccounts.
 type ListBankAccountsResponse struct {
 	// List of BankAccounts associated with this account.
 	BankAccounts []*BankAccount `json:"bank_accounts,omitempty" url:"bank_accounts,omitempty"`
@@ -1138,10 +1175,12 @@ func (l *ListBankAccountsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListBankAccountsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetBankAccounts sets the BankAccounts field and marks it as non-optional;

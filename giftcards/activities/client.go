@@ -4,13 +4,14 @@ package activities
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	giftcards "github.com/square/square-go-sdk/v5/giftcards"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,39 @@ func NewClient(options *core.RequestOptions) *Client {
 // gift cards in the seller's account. You can optionally specify query parameters to
 // filter the list. For example, you can get a list of gift card activities for a gift card,
 // for all gift cards in a specific region, or for activities within a time window.
+//
+// Example:
+//
+//	request := &giftcards.ListActivitiesRequest{
+//	    GiftCardID: square.String(
+//	        "gift_card_id",
+//	    ),
+//	    Type: square.String(
+//	        "type",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    SortOrder: square.String(
+//	        "sort_order",
+//	    ),
+//	}
+//	_, err := client.GiftCards.Activities.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *giftcards.ListActivitiesRequest,
@@ -78,6 +113,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +128,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -105,6 +141,31 @@ func (c *Client) List(
 
 // Creates a gift card activity to manage the balance or state of a [gift card](entity:GiftCard).
 // For example, create an `ACTIVATE` activity to activate a gift card with an initial balance before first use.
+//
+// Example:
+//
+//	request := &giftcards.CreateGiftCardActivityRequest{
+//	    IdempotencyKey: "U16kfr-kA70er-q4Rsym-7U7NnY",
+//	    GiftCardActivity: &square.GiftCardActivity{
+//	        Type: square.GiftCardActivityTypeActivate,
+//	        LocationID: "81FN9BNFZTKS4",
+//	        GiftCardID: square.String(
+//	            "gftc:6d55a72470d940c6ba09c0ab8ad08d20",
+//	        ),
+//	        ActivateActivityDetails: &square.GiftCardActivityActivate{
+//	            OrderID: square.String(
+//	                "jJNGHm4gLI6XkFbwtiSLqK72KkAZY",
+//	            ),
+//	            LineItemUID: square.String(
+//	                "eIWl7X0nMuO9Ewbh0ChIx",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.GiftCards.Activities.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *giftcards.CreateGiftCardActivityRequest,

@@ -23,10 +23,12 @@ type GetMerchantsRequest struct {
 }
 
 func (g *GetMerchantsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetMerchantID sets the MerchantID field and marks it as non-optional;
@@ -49,10 +51,12 @@ type ListMerchantsRequest struct {
 }
 
 func (l *ListMerchantsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -62,12 +66,12 @@ func (l *ListMerchantsRequest) SetCursor(cursor *int) {
 	l.require(listMerchantsRequestFieldCursor)
 }
 
-// The response object returned by the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant) endpoint.
 var (
 	getMerchantResponseFieldErrors   = big.NewInt(1 << 0)
 	getMerchantResponseFieldMerchant = big.NewInt(1 << 1)
 )
 
+// The response object returned by the [RetrieveMerchant](api-endpoint:Merchants-RetrieveMerchant) endpoint.
 type GetMerchantResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -103,10 +107,12 @@ func (g *GetMerchantResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetMerchantResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -165,13 +171,13 @@ func (g *GetMerchantResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// The response object returned by the [ListMerchant](api-endpoint:Merchants-ListMerchants) endpoint.
 var (
 	listMerchantsResponseFieldErrors   = big.NewInt(1 << 0)
 	listMerchantsResponseFieldMerchant = big.NewInt(1 << 1)
 	listMerchantsResponseFieldCursor   = big.NewInt(1 << 2)
 )
 
+// The response object returned by the [ListMerchant](api-endpoint:Merchants-ListMerchants) endpoint.
 type ListMerchantsResponse struct {
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -216,10 +222,12 @@ func (l *ListMerchantsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListMerchantsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -285,7 +293,6 @@ func (l *ListMerchantsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a business that sells with Square.
 var (
 	merchantFieldID             = big.NewInt(1 << 0)
 	merchantFieldBusinessName   = big.NewInt(1 << 1)
@@ -297,6 +304,14 @@ var (
 	merchantFieldCreatedAt      = big.NewInt(1 << 7)
 )
 
+// merchantNullableFields maps the wire names of Merchant's nullable fields (required or optional) to their field bits.
+var merchantNullableFields = map[string]*big.Int{
+	"business_name":    merchantFieldBusinessName,
+	"language_code":    merchantFieldLanguageCode,
+	"main_location_id": merchantFieldMainLocationID,
+}
+
+// Represents a business that sells with Square.
 type Merchant struct {
 	// The Square-issued ID of the merchant.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -391,10 +406,12 @@ func (m *Merchant) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *Merchant) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -465,6 +482,13 @@ func (m *Merchant) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	m.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, merchantNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		m.require(presentFields)
+	}
 	m.rawJSON = json.RawMessage(data)
 	return nil
 }

@@ -4,12 +4,13 @@ package cards
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	customers "github.com/square/square-go-sdk/v5/customers"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,38 @@ func NewClient(options *core.RequestOptions) *Client {
 // As with charges, calls to `CreateCustomerCard` are idempotent. Multiple
 // calls with the same card nonce return the same card record that was created
 // with the provided nonce during the _first_ call.
+//
+// Example:
+//
+//	request := &customers.CreateCustomerCardRequest{
+//	    CustomerID: "customer_id",
+//	    CardNonce: "YOUR_CARD_NONCE",
+//	    BillingAddress: &square.Address{
+//	        AddressLine1: square.String(
+//	            "500 Electric Ave",
+//	        ),
+//	        AddressLine2: square.String(
+//	            "Suite 600",
+//	        ),
+//	        Locality: square.String(
+//	            "New York",
+//	        ),
+//	        AdministrativeDistrictLevel1: square.String(
+//	            "NY",
+//	        ),
+//	        PostalCode: square.String(
+//	            "10003",
+//	        ),
+//	        Country: square.CountryUs.Ptr(),
+//	    },
+//	    CardholderName: square.String(
+//	        "Amelia Earhart",
+//	    ),
+//	}
+//	_, err := client.Customers.Cards.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerCardRequest,
@@ -62,6 +96,17 @@ func (c *Client) Create(
 }
 
 // Removes a card on file from a customer.
+//
+// Example:
+//
+//	request := &customers.DeleteCardsRequest{
+//	    CustomerID: "customer_id",
+//	    CardID: "card_id",
+//	}
+//	_, err := client.Customers.Cards.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *customers.DeleteCardsRequest,

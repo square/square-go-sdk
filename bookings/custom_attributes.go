@@ -24,10 +24,12 @@ type BulkDeleteBookingCustomAttributesRequest struct {
 }
 
 func (b *BulkDeleteBookingCustomAttributesRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetValues sets the Values field and marks it as non-optional;
@@ -73,10 +75,12 @@ type BulkUpsertBookingCustomAttributesRequest struct {
 }
 
 func (b *BulkUpsertBookingCustomAttributesRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetValues sets the Values field and marks it as non-optional;
@@ -125,10 +129,12 @@ type DeleteCustomAttributesRequest struct {
 }
 
 func (d *DeleteCustomAttributesRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;
@@ -174,10 +180,12 @@ type GetCustomAttributesRequest struct {
 }
 
 func (g *GetCustomAttributesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;
@@ -236,10 +244,12 @@ type ListCustomAttributesRequest struct {
 }
 
 func (l *ListCustomAttributesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;
@@ -302,10 +312,12 @@ type UpsertBookingCustomAttributeRequest struct {
 }
 
 func (u *UpsertBookingCustomAttributeRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetBookingID sets the BookingID field and marks it as non-optional;

@@ -42,10 +42,12 @@ type CalculateLoyaltyPointsRequest struct {
 }
 
 func (c *CalculateLoyaltyPointsRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;
@@ -110,10 +112,12 @@ type GetProgramsRequest struct {
 }
 
 func (g *GetProgramsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetProgramID sets the ProgramID field and marks it as non-optional;

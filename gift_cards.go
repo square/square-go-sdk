@@ -25,10 +25,12 @@ type LinkCustomerToGiftCardRequest struct {
 }
 
 func (l *LinkCustomerToGiftCardRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetGiftCardID sets the GiftCardID field and marks it as non-optional;
@@ -82,10 +84,12 @@ type UnlinkCustomerFromGiftCardRequest struct {
 }
 
 func (u *UnlinkCustomerFromGiftCardRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetGiftCardID sets the GiftCardID field and marks it as non-optional;
@@ -159,10 +163,12 @@ type CreateGiftCardRequest struct {
 }
 
 func (c *CreateGiftCardRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -220,10 +226,12 @@ type GetGiftCardsRequest struct {
 }
 
 func (g *GetGiftCardsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -248,10 +256,12 @@ type GetGiftCardFromGanRequest struct {
 }
 
 func (g *GetGiftCardFromGanRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetGan sets the Gan field and marks it as non-optional;
@@ -296,10 +306,12 @@ type GetGiftCardFromNonceRequest struct {
 }
 
 func (g *GetGiftCardFromNonceRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetNonce sets the Nonce field and marks it as non-optional;
@@ -362,10 +374,12 @@ type ListGiftCardsRequest struct {
 }
 
 func (l *ListGiftCardsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -403,13 +417,13 @@ func (l *ListGiftCardsRequest) SetCustomerID(customerID *string) {
 	l.require(listGiftCardsRequestFieldCustomerID)
 }
 
-// A response that contains a `GiftCard`. The response might contain a set of `Error` objects if the request
-// resulted in errors.
 var (
 	createGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
 	createGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains a `GiftCard`. The response might contain a set of `Error` objects if the request
+// resulted in errors.
 type CreateGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -445,10 +459,12 @@ func (c *CreateGiftCardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateGiftCardResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -507,13 +523,13 @@ func (c *CreateGiftCardResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// A response that contains a `GiftCard`. This response might contain a set of `Error` objects
-// if the request resulted in errors.
 var (
 	getGiftCardFromGanResponseFieldErrors   = big.NewInt(1 << 0)
 	getGiftCardFromGanResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains a `GiftCard`. This response might contain a set of `Error` objects
+// if the request resulted in errors.
 type GetGiftCardFromGanResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -549,10 +565,12 @@ func (g *GetGiftCardFromGanResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (g *GetGiftCardFromGanResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -611,13 +629,13 @@ func (g *GetGiftCardFromGanResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// A response that contains a `GiftCard` object. If the request resulted in errors,
-// the response contains a set of `Error` objects.
 var (
 	getGiftCardFromNonceResponseFieldErrors   = big.NewInt(1 << 0)
 	getGiftCardFromNonceResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains a `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
 type GetGiftCardFromNonceResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -653,10 +671,12 @@ func (g *GetGiftCardFromNonceResponse) GetExtraProperties() map[string]interface
 }
 
 func (g *GetGiftCardFromNonceResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -715,13 +735,13 @@ func (g *GetGiftCardFromNonceResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// A response that contains a `GiftCard`. The response might contain a set of `Error` objects
-// if the request resulted in errors.
 var (
 	getGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
 	getGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains a `GiftCard`. The response might contain a set of `Error` objects
+// if the request resulted in errors.
 type GetGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -757,10 +777,12 @@ func (g *GetGiftCardResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetGiftCardResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -819,7 +841,6 @@ func (g *GetGiftCardResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a Square gift card.
 var (
 	giftCardFieldID           = big.NewInt(1 << 0)
 	giftCardFieldType         = big.NewInt(1 << 1)
@@ -831,6 +852,12 @@ var (
 	giftCardFieldCustomerIDs  = big.NewInt(1 << 7)
 )
 
+// giftCardNullableFields maps the wire names of GiftCard's nullable fields (required or optional) to their field bits.
+var giftCardNullableFields = map[string]*big.Int{
+	"gan": giftCardFieldGan,
+}
+
+// Represents a Square gift card.
 type GiftCard struct {
 	// The Square-assigned ID of the gift card.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -928,10 +955,12 @@ func (g *GiftCard) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GiftCard) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1002,6 +1031,13 @@ func (g *GiftCard) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	g.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, giftCardNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		g.require(presentFields)
+	}
 	g.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1108,13 +1144,13 @@ func (g GiftCardType) Ptr() *GiftCardType {
 	return &g
 }
 
-// A response that contains the linked `GiftCard` object. If the request resulted in errors,
-// the response contains a set of `Error` objects.
 var (
 	linkCustomerToGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
 	linkCustomerToGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains the linked `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
 type LinkCustomerToGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1150,10 +1186,12 @@ func (l *LinkCustomerToGiftCardResponse) GetExtraProperties() map[string]interfa
 }
 
 func (l *LinkCustomerToGiftCardResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1212,14 +1250,14 @@ func (l *LinkCustomerToGiftCardResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// A response that contains a list of `GiftCard` objects. If the request resulted in errors,
-// the response contains a set of `Error` objects.
 var (
 	listGiftCardsResponseFieldErrors    = big.NewInt(1 << 0)
 	listGiftCardsResponseFieldGiftCards = big.NewInt(1 << 1)
 	listGiftCardsResponseFieldCursor    = big.NewInt(1 << 2)
 )
 
+// A response that contains a list of `GiftCard` objects. If the request resulted in errors,
+// the response contains a set of `Error` objects.
 type ListGiftCardsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1267,10 +1305,12 @@ func (l *ListGiftCardsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListGiftCardsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1336,13 +1376,13 @@ func (l *ListGiftCardsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// A response that contains the unlinked `GiftCard` object. If the request resulted in errors,
-// the response contains a set of `Error` objects.
 var (
 	unlinkCustomerFromGiftCardResponseFieldErrors   = big.NewInt(1 << 0)
 	unlinkCustomerFromGiftCardResponseFieldGiftCard = big.NewInt(1 << 1)
 )
 
+// A response that contains the unlinked `GiftCard` object. If the request resulted in errors,
+// the response contains a set of `Error` objects.
 type UnlinkCustomerFromGiftCardResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1379,10 +1419,12 @@ func (u *UnlinkCustomerFromGiftCardResponse) GetExtraProperties() map[string]int
 }
 
 func (u *UnlinkCustomerFromGiftCardResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

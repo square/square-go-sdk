@@ -4,13 +4,14 @@ package customattributedefinitions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	orders "github.com/square/square-go-sdk/v5/orders"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -47,6 +49,22 @@ func NewClient(options *core.RequestOptions) *Client {
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that
 // seller-defined custom attributes (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.ListCustomAttributeDefinitionsRequest{
+//	    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributeDefinitions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *orders.ListCustomAttributeDefinitionsRequest,
@@ -80,6 +98,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -94,7 +113,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,6 +129,33 @@ func (c *Client) List(
 //
 // After creating a custom attribute definition, you can set the custom attribute for orders
 // in the Square seller account.
+//
+// Example:
+//
+//	request := &orders.CreateOrderCustomAttributeDefinitionRequest{
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Key: square.String(
+//	            "cover-count",
+//	        ),
+//	        Schema: map[string]any{
+//	            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.Number",
+//	        },
+//	        Name: square.String(
+//	            "Cover count",
+//	        ),
+//	        Description: square.String(
+//	            "The number of people seated at a table",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadWriteValues.Ptr(),
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "IDEMPOTENCY_KEY",
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributeDefinitions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *orders.CreateOrderCustomAttributeDefinitionRequest,
@@ -131,6 +177,19 @@ func (c *Client) Create(
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.GetCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributeDefinitions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *orders.GetCustomAttributeDefinitionsRequest,
@@ -150,6 +209,28 @@ func (c *Client) Get(
 // Updates an order-related custom attribute definition for a Square seller account.
 //
 // Only the definition owner can update a custom attribute definition. Note that sellers can view all custom attributes in exported customer data, including those set to `VISIBILITY_HIDDEN`.
+//
+// Example:
+//
+//	request := &orders.UpdateOrderCustomAttributeDefinitionRequest{
+//	    Key: "key",
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Key: square.String(
+//	            "cover-count",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "IDEMPOTENCY_KEY",
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributeDefinitions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *orders.UpdateOrderCustomAttributeDefinitionRequest,
@@ -169,6 +250,16 @@ func (c *Client) Update(
 // Deletes an order-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 //
 // Only the definition owner can delete a custom attribute definition.
+//
+// Example:
+//
+//	request := &orders.DeleteCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	}
+//	_, err := client.Orders.CustomAttributeDefinitions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *orders.DeleteCustomAttributeDefinitionsRequest,

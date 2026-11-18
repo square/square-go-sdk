@@ -4,12 +4,13 @@ package cards
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -42,6 +44,28 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Retrieves a list of cards owned by the account making the request.
 // A max of 25 cards will be returned.
+//
+// Example:
+//
+//	request := &square.ListCardsRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    CustomerID: square.String(
+//	        "customer_id",
+//	    ),
+//	    IncludeDisabled: square.Bool(
+//	        true,
+//	    ),
+//	    ReferenceID: square.String(
+//	        "reference_id",
+//	    ),
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	}
+//	_, err := client.Cards.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListCardsRequest,
@@ -75,6 +99,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +114,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -101,6 +126,46 @@ func (c *Client) List(
 }
 
 // Adds a card on file to an existing merchant.
+//
+// Example:
+//
+//	request := &square.CreateCardRequest{
+//	    IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
+//	    SourceID: "cnon:uIbfJXhXETSP197M3GB",
+//	    Card: &square.Card{
+//	        CardholderName: square.String(
+//	            "Amelia Earhart",
+//	        ),
+//	        BillingAddress: &square.Address{
+//	            AddressLine1: square.String(
+//	                "500 Electric Ave",
+//	            ),
+//	            AddressLine2: square.String(
+//	                "Suite 600",
+//	            ),
+//	            Locality: square.String(
+//	                "New York",
+//	            ),
+//	            AdministrativeDistrictLevel1: square.String(
+//	                "NY",
+//	            ),
+//	            PostalCode: square.String(
+//	                "10003",
+//	            ),
+//	            Country: square.CountryUs.Ptr(),
+//	        },
+//	        CustomerID: square.String(
+//	            "VDKXEEKPJN48QDG3BGGFAK05P8",
+//	        ),
+//	        ReferenceID: square.String(
+//	            "user-id-1",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Cards.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateCardRequest,
@@ -118,6 +183,16 @@ func (c *Client) Create(
 }
 
 // Retrieves details for a specific Card.
+//
+// Example:
+//
+//	request := &square.GetCardsRequest{
+//	    CardID: "card_id",
+//	}
+//	_, err := client.Cards.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetCardsRequest,
@@ -136,6 +211,16 @@ func (c *Client) Get(
 
 // Disables the card, preventing any further updates or charges.
 // Disabling an already disabled card is allowed but has no effect.
+//
+// Example:
+//
+//	request := &square.DisableCardsRequest{
+//	    CardID: "card_id",
+//	}
+//	_, err := client.Cards.Disable(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Disable(
 	ctx context.Context,
 	request *square.DisableCardsRequest,

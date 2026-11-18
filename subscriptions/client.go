@@ -4,12 +4,13 @@ package subscriptions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -48,6 +50,47 @@ func NewClient(options *core.RequestOptions) *Client {
 // the optional `start_date`. Each individual subscription is associated with a particular location.
 //
 // For more information, see [Create a subscription](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions#create-a-subscription).
+//
+// Example:
+//
+//	request := &square.CreateSubscriptionRequest{
+//	    IdempotencyKey: square.String(
+//	        "8193148c-9586-11e6-99f9-28cfe92138cf",
+//	    ),
+//	    LocationID: "S8GWD5R9QB376",
+//	    PlanVariationID: square.String(
+//	        "6JHXF3B2CW3YKHDV4XEM674H",
+//	    ),
+//	    CustomerID: "CHFGVKYY8RSV93M5KCYTG4PN0G",
+//	    StartDate: square.String(
+//	        "2023-06-20",
+//	    ),
+//	    CardID: square.String(
+//	        "ccof:qy5x8hHGYsgLrp4Q4GB",
+//	    ),
+//	    Timezone: square.String(
+//	        "America/Los_Angeles",
+//	    ),
+//	    Source: &square.SubscriptionSource{
+//	        Name: square.String(
+//	            "My Application",
+//	        ),
+//	    },
+//	    Phases: []*square.Phase{
+//	        &square.Phase{
+//	            Ordinal: square.Int64(
+//	                int64(0),
+//	            ),
+//	            OrderTemplateID: square.String(
+//	                "U2NaowWxzXwpsZU697x7ZHOAnCNZY",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Subscriptions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateSubscriptionRequest,
@@ -66,6 +109,18 @@ func (c *Client) Create(
 
 // Schedules a plan variation change for all active subscriptions under a given plan
 // variation. For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
+//
+// Example:
+//
+//	request := &square.BulkSwapPlanRequest{
+//	    NewPlanVariationID: "FQ7CDXXWSLUJRPM3GFJSJGZ7",
+//	    OldPlanVariationID: "6JHXF3B2CW3YKHDV4XEM674H",
+//	    LocationID: "S8GWD5R9QB376",
+//	}
+//	_, err := client.Subscriptions.BulkSwapPlan(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkSwapPlan(
 	ctx context.Context,
 	request *square.BulkSwapPlanRequest,
@@ -96,6 +151,28 @@ func (c *Client) BulkSwapPlan(
 // If the request specifies customer IDs, the endpoint orders results
 // first by location, within location by customer ID, and within
 // customer by subscription creation date.
+//
+// Example:
+//
+//	request := &square.SearchSubscriptionsRequest{
+//	    Query: &square.SearchSubscriptionsQuery{
+//	        Filter: &square.SearchSubscriptionsFilter{
+//	            CustomerIDs: []string{
+//	                "CHFGVKYY8RSV93M5KCYTG4PN0G",
+//	            },
+//	            LocationIDs: []string{
+//	                "S8GWD5R9QB376",
+//	            },
+//	            SourceNames: []string{
+//	                "My App",
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Subscriptions.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchSubscriptionsRequest,
@@ -113,6 +190,19 @@ func (c *Client) Search(
 }
 
 // Retrieves a specific subscription.
+//
+// Example:
+//
+//	request := &square.GetSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	    Include: square.String(
+//	        "include",
+//	    ),
+//	}
+//	_, err := client.Subscriptions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetSubscriptionsRequest,
@@ -131,6 +221,21 @@ func (c *Client) Get(
 
 // Updates a subscription by modifying or clearing `subscription` field values.
 // To clear a field, set its value to `null`.
+//
+// Example:
+//
+//	request := &square.UpdateSubscriptionRequest{
+//	    SubscriptionID: "subscription_id",
+//	    Subscription: &square.Subscription{
+//	        CardID: square.String(
+//	            "{NEW CARD ID}",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Subscriptions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateSubscriptionRequest,
@@ -148,6 +253,17 @@ func (c *Client) Update(
 }
 
 // Deletes a scheduled action for a subscription.
+//
+// Example:
+//
+//	request := &square.DeleteActionSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	    ActionID: "action_id",
+//	}
+//	_, err := client.Subscriptions.DeleteAction(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteAction(
 	ctx context.Context,
 	request *square.DeleteActionSubscriptionsRequest,
@@ -166,6 +282,19 @@ func (c *Client) DeleteAction(
 
 // Changes the [billing anchor date](https://developer.squareup.com/docs/subscriptions-api/subscription-billing#billing-dates)
 // for a subscription.
+//
+// Example:
+//
+//	request := &square.ChangeBillingAnchorDateRequest{
+//	    SubscriptionID: "subscription_id",
+//	    MonthlyBillingAnchorDate: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Subscriptions.ChangeBillingAnchorDate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ChangeBillingAnchorDate(
 	ctx context.Context,
 	request *square.ChangeBillingAnchorDateRequest,
@@ -185,6 +314,16 @@ func (c *Client) ChangeBillingAnchorDate(
 // Schedules a `CANCEL` action to cancel an active subscription. This
 // sets the `canceled_date` field to the end of the active billing period. After this date,
 // the subscription status changes from ACTIVE to CANCELED.
+//
+// Example:
+//
+//	request := &square.CancelSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	}
+//	_, err := client.Subscriptions.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *square.CancelSubscriptionsRequest,
@@ -202,6 +341,22 @@ func (c *Client) Cancel(
 }
 
 // Lists all [events](https://developer.squareup.com/docs/subscriptions-api/actions-events) for a specific subscription.
+//
+// Example:
+//
+//	request := &square.ListEventsSubscriptionsRequest{
+//	    SubscriptionID: "subscription_id",
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Subscriptions.ListEvents(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListEvents(
 	ctx context.Context,
 	request *square.ListEventsSubscriptionsRequest,
@@ -238,6 +393,7 @@ func (c *Client) ListEvents(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -252,7 +408,7 @@ func (c *Client) ListEvents(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -264,6 +420,16 @@ func (c *Client) ListEvents(
 }
 
 // Schedules a `PAUSE` action to pause an active subscription.
+//
+// Example:
+//
+//	request := &square.PauseSubscriptionRequest{
+//	    SubscriptionID: "subscription_id",
+//	}
+//	_, err := client.Subscriptions.Pause(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Pause(
 	ctx context.Context,
 	request *square.PauseSubscriptionRequest,
@@ -281,6 +447,16 @@ func (c *Client) Pause(
 }
 
 // Schedules a `RESUME` action to resume a paused or a deactivated subscription.
+//
+// Example:
+//
+//	request := &square.ResumeSubscriptionRequest{
+//	    SubscriptionID: "subscription_id",
+//	}
+//	_, err := client.Subscriptions.Resume(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Resume(
 	ctx context.Context,
 	request *square.ResumeSubscriptionRequest,
@@ -299,6 +475,27 @@ func (c *Client) Resume(
 
 // Schedules a `SWAP_PLAN` action to swap a subscription plan variation in an existing subscription.
 // For more information, see [Swap Subscription Plan Variations](https://developer.squareup.com/docs/subscriptions-api/swap-plan-variations).
+//
+// Example:
+//
+//	request := &square.SwapPlanRequest{
+//	    SubscriptionID: "subscription_id",
+//	    NewPlanVariationID: square.String(
+//	        "FQ7CDXXWSLUJRPM3GFJSJGZ7",
+//	    ),
+//	    Phases: []*square.PhaseInput{
+//	        &square.PhaseInput{
+//	            Ordinal: int64(0),
+//	            OrderTemplateID: square.String(
+//	                "uhhnjH9osVv3shUADwaC0b3hNxQZY",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Subscriptions.SwapPlan(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SwapPlan(
 	ctx context.Context,
 	request *square.SwapPlanRequest,

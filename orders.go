@@ -26,10 +26,12 @@ type BatchGetOrdersRequest struct {
 }
 
 func (b *BatchGetOrdersRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -87,10 +89,12 @@ type CalculateOrderRequest struct {
 }
 
 func (c *CalculateOrderRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -157,10 +161,12 @@ type CloneOrderRequest struct {
 }
 
 func (c *CloneOrderRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;
@@ -218,10 +224,12 @@ type GetOrdersRequest struct {
 }
 
 func (g *GetOrdersRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;
@@ -258,10 +266,12 @@ type PayOrderRequest struct {
 }
 
 func (p *PayOrderRequest) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;
@@ -351,10 +361,12 @@ type SearchOrdersRequest struct {
 }
 
 func (s *SearchOrdersRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetLocationIDs sets the LocationIDs field and marks it as non-optional;
@@ -413,13 +425,13 @@ func (s *SearchOrdersRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `BatchRetrieveOrders` endpoint.
 var (
 	batchGetOrdersResponseFieldOrders = big.NewInt(1 << 0)
 	batchGetOrdersResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `BatchRetrieveOrders` endpoint.
 type BatchGetOrdersResponse struct {
 	// The requested orders. This will omit any requested orders that do not exist.
 	Orders []*Order `json:"orders,omitempty" url:"orders,omitempty"`
@@ -455,10 +467,12 @@ func (b *BatchGetOrdersResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BatchGetOrdersResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetOrders sets the Orders field and marks it as non-optional;
@@ -557,10 +571,12 @@ func (c *CalculateOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CalculateOrderResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -619,13 +635,13 @@ func (c *CalculateOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [CloneOrder](api-endpoint:Orders-CloneOrder) endpoint.
 var (
 	cloneOrderResponseFieldOrder  = big.NewInt(1 << 0)
 	cloneOrderResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [CloneOrder](api-endpoint:Orders-CloneOrder) endpoint.
 type CloneOrderResponse struct {
 	// The cloned order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -661,10 +677,12 @@ func (c *CloneOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CloneOrderResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -723,15 +741,15 @@ func (c *CloneOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `CreateOrder` endpoint.
-//
-// Either `errors` or `order` is present in a given response, but never both.
 var (
 	createOrderResponseFieldOrder  = big.NewInt(1 << 0)
 	createOrderResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `CreateOrder` endpoint.
+//
+// Either `errors` or `order` is present in a given response, but never both.
 type CreateOrderResponse struct {
 	// The newly created order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -767,10 +785,12 @@ func (c *CreateOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateOrderResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -869,10 +889,12 @@ func (g *GetOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetOrderResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -931,14 +953,20 @@ func (g *GetOrderResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// A lightweight description of an [order](entity:Order) that is returned when
-// `returned_entries` is `true` on a [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 var (
 	orderEntryFieldOrderID    = big.NewInt(1 << 0)
 	orderEntryFieldVersion    = big.NewInt(1 << 1)
 	orderEntryFieldLocationID = big.NewInt(1 << 2)
 )
 
+// orderEntryNullableFields maps the wire names of OrderEntry's nullable fields (required or optional) to their field bits.
+var orderEntryNullableFields = map[string]*big.Int{
+	"order_id":    orderEntryFieldOrderID,
+	"location_id": orderEntryFieldLocationID,
+}
+
+// A lightweight description of an [order](entity:Order) that is returned when
+// `returned_entries` is `true` on a [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 type OrderEntry struct {
 	// The ID of the order.
 	OrderID *string `json:"order_id,omitempty" url:"order_id,omitempty"`
@@ -987,10 +1015,12 @@ func (o *OrderEntry) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrderEntry) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;
@@ -1026,6 +1056,13 @@ func (o *OrderEntry) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	o.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, orderEntryNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		o.require(presentFields)
+	}
 	o.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1056,13 +1093,13 @@ func (o *OrderEntry) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// Defines the fields that are included in the response body of a request to the
-// [PayOrder](api-endpoint:Orders-PayOrder) endpoint.
 var (
 	payOrderResponseFieldErrors = big.NewInt(1 << 0)
 	payOrderResponseFieldOrder  = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of a request to the
+// [PayOrder](api-endpoint:Orders-PayOrder) endpoint.
 type PayOrderResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1098,10 +1135,12 @@ func (p *PayOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PayOrderResponse) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1160,13 +1199,18 @@ func (p *PayOrderResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// A filter based on the order `customer_id` and any tender `customer_id`
-// associated with the order. It does not filter based on the
-// [FulfillmentRecipient](entity:FulfillmentRecipient) `customer_id`.
 var (
 	searchOrdersCustomerFilterFieldCustomerIDs = big.NewInt(1 << 0)
 )
 
+// searchOrdersCustomerFilterNullableFields maps the wire names of SearchOrdersCustomerFilter's nullable fields (required or optional) to their field bits.
+var searchOrdersCustomerFilterNullableFields = map[string]*big.Int{
+	"customer_ids": searchOrdersCustomerFilterFieldCustomerIDs,
+}
+
+// A filter based on the order `customer_id` and any tender `customer_id`
+// associated with the order. It does not filter based on the
+// [FulfillmentRecipient](entity:FulfillmentRecipient) `customer_id`.
 type SearchOrdersCustomerFilter struct {
 	// A list of customer IDs to filter by.
 	//
@@ -1195,10 +1239,12 @@ func (s *SearchOrdersCustomerFilter) GetExtraProperties() map[string]interface{}
 }
 
 func (s *SearchOrdersCustomerFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
@@ -1220,6 +1266,13 @@ func (s *SearchOrdersCustomerFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchOrdersCustomerFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1250,6 +1303,12 @@ func (s *SearchOrdersCustomerFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+var (
+	searchOrdersDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
+	searchOrdersDateTimeFilterFieldUpdatedAt = big.NewInt(1 << 1)
+	searchOrdersDateTimeFilterFieldClosedAt  = big.NewInt(1 << 2)
+)
+
 // Filter for `Order` objects based on whether their `CREATED_AT`,
 // `CLOSED_AT`, or `UPDATED_AT` timestamps fall within a specified time range.
 // You can specify the time range and which timestamp to filter for. You can filter
@@ -1264,12 +1323,6 @@ func (s *SearchOrdersCustomerFilter) String() string {
 // in `DateTimeFilter`, you must set the `sort_field` in `SearchOrdersSort` to
 // `CLOSED_AT`. Otherwise, `SearchOrders` throws an error.
 // [Learn more about filtering orders by time range.](https://developer.squareup.com/docs/orders-api/manage-orders/search-orders#important-note-about-filtering-orders-by-time-range)
-var (
-	searchOrdersDateTimeFilterFieldCreatedAt = big.NewInt(1 << 0)
-	searchOrdersDateTimeFilterFieldUpdatedAt = big.NewInt(1 << 1)
-	searchOrdersDateTimeFilterFieldClosedAt  = big.NewInt(1 << 2)
-)
-
 type SearchOrdersDateTimeFilter struct {
 	// The time range for filtering on the `created_at` timestamp. If you use this
 	// value, you must set the `sort_field` in the `OrdersSearchSort` object to
@@ -1320,10 +1373,12 @@ func (s *SearchOrdersDateTimeFilter) GetExtraProperties() map[string]interface{}
 }
 
 func (s *SearchOrdersDateTimeFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCreatedAt sets the CreatedAt field and marks it as non-optional;
@@ -1389,8 +1444,6 @@ func (s *SearchOrdersDateTimeFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Filtering criteria to use for a `SearchOrders` request. Multiple filters
-// are ANDed together.
 var (
 	searchOrdersFilterFieldStateFilter       = big.NewInt(1 << 0)
 	searchOrdersFilterFieldDateTimeFilter    = big.NewInt(1 << 1)
@@ -1399,6 +1452,8 @@ var (
 	searchOrdersFilterFieldCustomerFilter    = big.NewInt(1 << 4)
 )
 
+// Filtering criteria to use for a `SearchOrders` request. Multiple filters
+// are ANDed together.
 type SearchOrdersFilter struct {
 	// Filter by [OrderState](entity:OrderState).
 	StateFilter *SearchOrdersStateFilter `json:"state_filter,omitempty" url:"state_filter,omitempty"`
@@ -1465,10 +1520,12 @@ func (s *SearchOrdersFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetStateFilter sets the StateFilter field and marks it as non-optional;
@@ -1548,12 +1605,18 @@ func (s *SearchOrdersFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Filter based on [order fulfillment](entity:Fulfillment) information.
 var (
 	searchOrdersFulfillmentFilterFieldFulfillmentTypes  = big.NewInt(1 << 0)
 	searchOrdersFulfillmentFilterFieldFulfillmentStates = big.NewInt(1 << 1)
 )
 
+// searchOrdersFulfillmentFilterNullableFields maps the wire names of SearchOrdersFulfillmentFilter's nullable fields (required or optional) to their field bits.
+var searchOrdersFulfillmentFilterNullableFields = map[string]*big.Int{
+	"fulfillment_types":  searchOrdersFulfillmentFilterFieldFulfillmentTypes,
+	"fulfillment_states": searchOrdersFulfillmentFilterFieldFulfillmentStates,
+}
+
+// Filter based on [order fulfillment](entity:Fulfillment) information.
 type SearchOrdersFulfillmentFilter struct {
 	// A list of [fulfillment types](entity:FulfillmentType) to filter
 	// for. The list returns orders if any of its fulfillments match any of the fulfillment types
@@ -1595,10 +1658,12 @@ func (s *SearchOrdersFulfillmentFilter) GetExtraProperties() map[string]interfac
 }
 
 func (s *SearchOrdersFulfillmentFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFulfillmentTypes sets the FulfillmentTypes field and marks it as non-optional;
@@ -1627,6 +1692,13 @@ func (s *SearchOrdersFulfillmentFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchOrdersFulfillmentFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1657,12 +1729,12 @@ func (s *SearchOrdersFulfillmentFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Contains query criteria for the search.
 var (
 	searchOrdersQueryFieldFilter = big.NewInt(1 << 0)
 	searchOrdersQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Contains query criteria for the search.
 type SearchOrdersQuery struct {
 	// Criteria to filter results by.
 	Filter *SearchOrdersFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -1698,10 +1770,12 @@ func (s *SearchOrdersQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -1760,8 +1834,6 @@ func (s *SearchOrdersQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Either the `order_entries` or `orders` field is set, depending on whether
-// `return_entries` is set on the [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 var (
 	searchOrdersResponseFieldOrderEntries = big.NewInt(1 << 0)
 	searchOrdersResponseFieldOrders       = big.NewInt(1 << 1)
@@ -1769,6 +1841,8 @@ var (
 	searchOrdersResponseFieldErrors       = big.NewInt(1 << 3)
 )
 
+// Either the `order_entries` or `orders` field is set, depending on whether
+// `return_entries` is set on the [SearchOrdersRequest](api-endpoint:Orders-SearchOrders).
 type SearchOrdersResponse struct {
 	// A list of [OrderEntries](entity:OrderEntry) that fit the query
 	// conditions. The list is populated only if `return_entries` is set to `true` in the request.
@@ -1827,10 +1901,12 @@ func (s *SearchOrdersResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetOrderEntries sets the OrderEntries field and marks it as non-optional;
@@ -1903,13 +1979,13 @@ func (s *SearchOrdersResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Sorting criteria for a `SearchOrders` request. Results can only be sorted
-// by a timestamp field.
 var (
 	searchOrdersSortFieldSortField = big.NewInt(1 << 0)
 	searchOrdersSortFieldSortOrder = big.NewInt(1 << 1)
 )
 
+// Sorting criteria for a `SearchOrders` request. Results can only be sorted
+// by a timestamp field.
 type SearchOrdersSort struct {
 	// The field to sort by.
 	//
@@ -1956,10 +2032,12 @@ func (s *SearchOrdersSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersSort) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetSortField sets the SortField field and marks it as non-optional;
@@ -2044,11 +2122,16 @@ func (s SearchOrdersSortField) Ptr() *SearchOrdersSortField {
 	return &s
 }
 
-// A filter based on order `source` information.
 var (
 	searchOrdersSourceFilterFieldSourceNames = big.NewInt(1 << 0)
 )
 
+// searchOrdersSourceFilterNullableFields maps the wire names of SearchOrdersSourceFilter's nullable fields (required or optional) to their field bits.
+var searchOrdersSourceFilterNullableFields = map[string]*big.Int{
+	"source_names": searchOrdersSourceFilterFieldSourceNames,
+}
+
+// A filter based on order `source` information.
 type SearchOrdersSourceFilter struct {
 	// Filters by the [Source](entity:OrderSource) `name`. The filter returns any orders
 	// with a `source.name` that matches any of the listed source names.
@@ -2078,10 +2161,12 @@ func (s *SearchOrdersSourceFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersSourceFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetSourceNames sets the SourceNames field and marks it as non-optional;
@@ -2103,6 +2188,13 @@ func (s *SearchOrdersSourceFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchOrdersSourceFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2133,11 +2225,11 @@ func (s *SearchOrdersSourceFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Filter by the current order `state`.
 var (
 	searchOrdersStateFilterFieldStates = big.NewInt(1 << 0)
 )
 
+// Filter by the current order `state`.
 type SearchOrdersStateFilter struct {
 	// States to filter for.
 	// See [OrderState](#type-orderstate) for possible values
@@ -2165,10 +2257,12 @@ func (s *SearchOrdersStateFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchOrdersStateFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetStates sets the States field and marks it as non-optional;
@@ -2220,13 +2314,13 @@ func (s *SearchOrdersStateFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 var (
 	updateOrderResponseFieldOrder  = big.NewInt(1 << 0)
 	updateOrderResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the [UpdateOrder](api-endpoint:Orders-UpdateOrder) endpoint.
 type UpdateOrderResponse struct {
 	// The updated order.
 	Order *Order `json:"order,omitempty" url:"order,omitempty"`
@@ -2262,10 +2356,12 @@ func (u *UpdateOrderResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateOrderResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetOrder sets the Order field and marks it as non-optional;
@@ -2357,10 +2453,12 @@ type UpdateOrderRequest struct {
 }
 
 func (u *UpdateOrderRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;

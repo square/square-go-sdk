@@ -4,12 +4,13 @@ package invoices
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -43,6 +45,22 @@ func NewClient(options *core.RequestOptions) *Client {
 // Returns a list of invoices for a given location. The response
 // is paginated. If truncated, the response includes a `cursor` that you
 // use in a subsequent request to retrieve the next set of invoices.
+//
+// Example:
+//
+//	request := &square.ListInvoicesRequest{
+//	    LocationID: "location_id",
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Invoices.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListInvoicesRequest,
@@ -76,6 +94,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -90,7 +109,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,6 +125,109 @@ func (c *Client) List(
 //
 // A draft invoice remains in your account and no action is taken.
 // You must publish the invoice before Square can process it (send it to the customer's email address or charge the customer’s card on file).
+//
+// Example:
+//
+//	request := &square.CreateInvoiceRequest{
+//	    Invoice: &square.Invoice{
+//	        LocationID: square.String(
+//	            "ES0RJRZYEC39A",
+//	        ),
+//	        OrderID: square.String(
+//	            "CAISENgvlJ6jLWAzERDzjyHVybY",
+//	        ),
+//	        PrimaryRecipient: &square.InvoiceRecipient{
+//	            CustomerID: square.String(
+//	                "JDKYHBWT1D4F8MFH63DBMEN8Y4",
+//	            ),
+//	        },
+//	        PaymentRequests: []*square.InvoicePaymentRequest{
+//	            &square.InvoicePaymentRequest{
+//	                RequestType: square.InvoiceRequestTypeBalance.Ptr(),
+//	                DueDate: square.String(
+//	                    "2030-01-24",
+//	                ),
+//	                TippingEnabled: square.Bool(
+//	                    true,
+//	                ),
+//	                AutomaticPaymentSource: square.InvoiceAutomaticPaymentSourceNone.Ptr(),
+//	                Reminders: []*square.InvoicePaymentReminder{
+//	                    &square.InvoicePaymentReminder{
+//	                        RelativeScheduledDays: square.Int(
+//	                            -1,
+//	                        ),
+//	                        Message: square.String(
+//	                            "Your invoice is due tomorrow",
+//	                        ),
+//	                    },
+//	                },
+//	            },
+//	        },
+//	        DeliveryMethod: square.InvoiceDeliveryMethodEmail.Ptr(),
+//	        InvoiceNumber: square.String(
+//	            "inv-100",
+//	        ),
+//	        Title: square.String(
+//	            "Event Planning Services",
+//	        ),
+//	        Description: square.String(
+//	            "We appreciate your business!",
+//	        ),
+//	        ScheduledAt: square.String(
+//	            "2030-01-13T10:00:00Z",
+//	        ),
+//	        AcceptedPaymentMethods: &square.InvoiceAcceptedPaymentMethods{
+//	            Card: square.Bool(
+//	                true,
+//	            ),
+//	            SquareGiftCard: square.Bool(
+//	                false,
+//	            ),
+//	            BankAccount: square.Bool(
+//	                false,
+//	            ),
+//	            BuyNowPayLater: square.Bool(
+//	                false,
+//	            ),
+//	            CashAppPay: square.Bool(
+//	                false,
+//	            ),
+//	        },
+//	        CustomFields: []*square.InvoiceCustomField{
+//	            &square.InvoiceCustomField{
+//	                Label: square.String(
+//	                    "Event Reference Number",
+//	                ),
+//	                Value: square.String(
+//	                    "Ref. #1234",
+//	                ),
+//	                Placement: square.InvoiceCustomFieldPlacementAboveLineItems.Ptr(),
+//	            },
+//	            &square.InvoiceCustomField{
+//	                Label: square.String(
+//	                    "Terms of Service",
+//	                ),
+//	                Value: square.String(
+//	                    "The terms of service are...",
+//	                ),
+//	                Placement: square.InvoiceCustomFieldPlacementBelowLineItems.Ptr(),
+//	            },
+//	        },
+//	        SaleOrServiceDate: square.String(
+//	            "2030-01-24",
+//	        ),
+//	        StorePaymentMethodEnabled: square.Bool(
+//	            false,
+//	        ),
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "ce3748f9-5fc1-4762-aa12-aae5e843f1f4",
+//	    ),
+//	}
+//	_, err := client.Invoices.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateInvoiceRequest,
@@ -129,6 +251,34 @@ func (c *Client) Create(
 //
 // The response is paginated. If truncated, the response includes a `cursor`
 // that you use in a subsequent request to retrieve the next set of invoices.
+//
+// Example:
+//
+//	request := &square.SearchInvoicesRequest{
+//	    Query: &square.InvoiceQuery{
+//	        Filter: &square.InvoiceFilter{
+//	            LocationIDs: []string{
+//	                "ES0RJRZYEC39A",
+//	            },
+//	            CustomerIDs: []string{
+//	                "JDKYHBWT1D4F8MFH63DBMEN8Y4",
+//	            },
+//	        },
+//	        Sort: &square.InvoiceSort{
+//	            Field: square.InvoiceSortField(
+//	                "INVOICE_SORT_DATE",
+//	            ),
+//	            Order: square.SortOrderDesc.Ptr(),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        100,
+//	    ),
+//	}
+//	_, err := client.Invoices.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchInvoicesRequest,
@@ -146,6 +296,16 @@ func (c *Client) Search(
 }
 
 // Retrieves an invoice by invoice ID.
+//
+// Example:
+//
+//	request := &square.GetInvoicesRequest{
+//	    InvoiceID: "invoice_id",
+//	}
+//	_, err := client.Invoices.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetInvoicesRequest,
@@ -166,6 +326,34 @@ func (c *Client) Get(
 // to specify the fields you want to change along with the required `version` field.
 // Some restrictions apply to updating invoices. For example, you cannot change the
 // `order_id` or `location_id` field.
+//
+// Example:
+//
+//	request := &square.UpdateInvoiceRequest{
+//	    InvoiceID: "invoice_id",
+//	    Invoice: &square.Invoice{
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	        PaymentRequests: []*square.InvoicePaymentRequest{
+//	            &square.InvoicePaymentRequest{
+//	                UID: square.String(
+//	                    "2da7964f-f3d2-4f43-81e8-5aa220bf3355",
+//	                ),
+//	                TippingEnabled: square.Bool(
+//	                    false,
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    IdempotencyKey: square.String(
+//	        "4ee82288-0910-499e-ab4c-5d0071dad1be",
+//	    ),
+//	}
+//	_, err := client.Invoices.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateInvoiceRequest,
@@ -185,6 +373,19 @@ func (c *Client) Update(
 // Deletes the specified invoice. When an invoice is deleted, the
 // associated order status changes to CANCELED. You can only delete a draft
 // invoice (you cannot delete a published invoice, including one that is scheduled for processing).
+//
+// Example:
+//
+//	request := &square.DeleteInvoicesRequest{
+//	    InvoiceID: "invoice_id",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Invoices.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *square.DeleteInvoicesRequest,
@@ -209,6 +410,19 @@ func (c *Client) Delete(
 // in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
 //
 // __NOTE:__ When testing in the Sandbox environment, the total file size is limited to 1 KB.
+//
+// Example:
+//
+//	request := &square.CreateInvoiceAttachmentRequest{
+//	    InvoiceID: "invoice_id",
+//	    ImageFile: strings.NewReader(
+//	        "",
+//	    ),
+//	}
+//	_, err := client.Invoices.CreateInvoiceAttachment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateInvoiceAttachment(
 	ctx context.Context,
 	request *square.CreateInvoiceAttachmentRequest,
@@ -227,6 +441,17 @@ func (c *Client) CreateInvoiceAttachment(
 
 // Removes an attachment from an invoice and permanently deletes the file. Attachments can be removed only
 // from invoices in the `DRAFT`, `SCHEDULED`, `UNPAID`, or `PARTIALLY_PAID` state.
+//
+// Example:
+//
+//	request := &square.DeleteInvoiceAttachmentRequest{
+//	    InvoiceID: "invoice_id",
+//	    AttachmentID: "attachment_id",
+//	}
+//	_, err := client.Invoices.DeleteInvoiceAttachment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteInvoiceAttachment(
 	ctx context.Context,
 	request *square.DeleteInvoiceAttachmentRequest,
@@ -247,6 +472,17 @@ func (c *Client) DeleteInvoiceAttachment(
 // the canceled invoice.
 //
 // You cannot cancel an invoice in the `DRAFT` state or in a terminal state: `PAID`, `REFUNDED`, `CANCELED`, or `FAILED`.
+//
+// Example:
+//
+//	request := &square.CancelInvoiceRequest{
+//	    InvoiceID: "invoice_id",
+//	    Version: 0,
+//	}
+//	_, err := client.Invoices.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *square.CancelInvoiceRequest,
@@ -277,6 +513,20 @@ func (c *Client) Cancel(
 //
 // In addition to the required `ORDERS_WRITE` and `INVOICES_WRITE` permissions, `CUSTOMERS_READ`
 // and `PAYMENTS_WRITE` are required when publishing invoices configured for card-on-file payments.
+//
+// Example:
+//
+//	request := &square.PublishInvoiceRequest{
+//	    InvoiceID: "invoice_id",
+//	    Version: 1,
+//	    IdempotencyKey: square.String(
+//	        "32da42d0-1997-41b0-826b-f09464fc2c2e",
+//	    ),
+//	}
+//	_, err := client.Invoices.Publish(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Publish(
 	ctx context.Context,
 	request *square.PublishInvoiceRequest,

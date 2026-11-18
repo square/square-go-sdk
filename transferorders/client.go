@@ -4,11 +4,12 @@ package transferorders
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,8 +33,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -59,6 +61,42 @@ func NewClient(options *core.RequestOptions) *Client {
 // - Initialize transfers from inventory optimization systems
 //
 // Creates a [transfer_order.created](webhook:transfer_order.created) webhook event.
+//
+// Example:
+//
+//	request := &square.CreateTransferOrderRequest{
+//	    IdempotencyKey: "65cc0586-3e82-384s-b524-3885cffd52",
+//	    TransferOrder: &square.CreateTransferOrderData{
+//	        SourceLocationID: "EXAMPLE_SOURCE_LOCATION_ID_123",
+//	        DestinationLocationID: "EXAMPLE_DEST_LOCATION_ID_456",
+//	        ExpectedAt: square.String(
+//	            "2025-11-09T05:00:00Z",
+//	        ),
+//	        Notes: square.String(
+//	            "Example transfer order for inventory redistribution between locations",
+//	        ),
+//	        TrackingNumber: square.String(
+//	            "TRACK123456789",
+//	        ),
+//	        CreatedByTeamMemberID: square.String(
+//	            "EXAMPLE_TEAM_MEMBER_ID_789",
+//	        ),
+//	        LineItems: []*square.CreateTransferOrderLineData{
+//	            &square.CreateTransferOrderLineData{
+//	                ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_001",
+//	                QuantityOrdered: "5",
+//	            },
+//	            &square.CreateTransferOrderLineData{
+//	                ItemVariationID: "EXAMPLE_ITEM_VARIATION_ID_002",
+//	                QuantityOrdered: "3",
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.TransferOrders.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateTransferOrderRequest,
@@ -82,6 +120,39 @@ func (c *Client) Create(
 // - Find orders for a source [Location](entity:Location)
 // - Find orders for a destination [Location](entity:Location)
 // - Find orders in a particular [TransferOrderStatus](entity:TransferOrderStatus)
+//
+// Example:
+//
+//	request := &square.SearchTransferOrdersRequest{
+//	    Query: &square.TransferOrderQuery{
+//	        Filter: &square.TransferOrderFilter{
+//	            SourceLocationIDs: []string{
+//	                "EXAMPLE_SOURCE_LOCATION_ID_123",
+//	            },
+//	            DestinationLocationIDs: []string{
+//	                "EXAMPLE_DEST_LOCATION_ID_456",
+//	            },
+//	            Statuses: []square.TransferOrderStatus{
+//	                square.TransferOrderStatusStarted,
+//	                square.TransferOrderStatusPartiallyReceived,
+//	            },
+//	        },
+//	        Sort: &square.TransferOrderSort{
+//	            Field: square.TransferOrderSortFieldUpdatedAt.Ptr(),
+//	            Order: square.SortOrderDesc.Ptr(),
+//	        },
+//	    },
+//	    Cursor: square.String(
+//	        "eyJsYXN0X3VwZGF0ZWRfYXQiOjE3NTMxMTg2NjQ4NzN9",
+//	    ),
+//	    Limit: square.Int(
+//	        10,
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchTransferOrdersRequest,
@@ -105,6 +176,16 @@ func (c *Client) Search(
 // - Line items with ordered and received quantities
 // - Source and destination [Location](entity:Location)s
 // - Tracking information (if available)
+//
+// Example:
+//
+//	request := &square.GetTransferOrdersRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	}
+//	_, err := client.TransferOrders.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetTransferOrdersRequest,
@@ -125,6 +206,63 @@ func (c *Client) Get(
 // allowing you to modify specific fields without affecting others.
 //
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
+//
+// Example:
+//
+//	request := &square.UpdateTransferOrderRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	    IdempotencyKey: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+//	    TransferOrder: &square.UpdateTransferOrderData{
+//	        SourceLocationID: square.String(
+//	            "EXAMPLE_SOURCE_LOCATION_ID_789",
+//	        ),
+//	        DestinationLocationID: square.String(
+//	            "EXAMPLE_DEST_LOCATION_ID_101",
+//	        ),
+//	        ExpectedAt: square.String(
+//	            "2025-11-10T08:00:00Z",
+//	        ),
+//	        Notes: square.String(
+//	            "Updated: Priority transfer due to low stock at destination",
+//	        ),
+//	        TrackingNumber: square.String(
+//	            "TRACK987654321",
+//	        ),
+//	        LineItems: []*square.UpdateTransferOrderLineData{
+//	            &square.UpdateTransferOrderLineData{
+//	                UID: square.String(
+//	                    "1",
+//	                ),
+//	                QuantityOrdered: square.String(
+//	                    "7",
+//	                ),
+//	            },
+//	            &square.UpdateTransferOrderLineData{
+//	                ItemVariationID: square.String(
+//	                    "EXAMPLE_NEW_ITEM_VARIATION_ID_003",
+//	                ),
+//	                QuantityOrdered: square.String(
+//	                    "2",
+//	                ),
+//	            },
+//	            &square.UpdateTransferOrderLineData{
+//	                UID: square.String(
+//	                    "2",
+//	                ),
+//	                Remove: square.Bool(
+//	                    true,
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    Version: square.Int64(
+//	        int64(1753109537351),
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateTransferOrderRequest,
@@ -146,6 +284,19 @@ func (c *Client) Update(
 // [StartTransferOrder](api-endpoint:TransferOrders-StartTransferOrder), it can no longer be deleted.
 //
 // Creates a [transfer_order.deleted](webhook:transfer_order.deleted) webhook event.
+//
+// Example:
+//
+//	request := &square.DeleteTransferOrdersRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	    Version: square.Int64(
+//	        int64(1000000),
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *square.DeleteTransferOrdersRequest,
@@ -172,6 +323,20 @@ func (c *Client) Delete(
 // - Order created in error
 //
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
+//
+// Example:
+//
+//	request := &square.CancelTransferOrderRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	    IdempotencyKey: "65cc0586-3e82-4d08-b524-3885cffd52",
+//	    Version: square.Int64(
+//	        int64(1753117449752),
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *square.CancelTransferOrderRequest,
@@ -204,6 +369,45 @@ func (c *Client) Cancel(
 // [COMPLETED](entity:TransferOrderStatus) status.
 //
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
+//
+// Example:
+//
+//	request := &square.ReceiveTransferOrderRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	    IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_101",
+//	    Receipt: &square.TransferOrderGoodsReceipt{
+//	        LineItems: []*square.TransferOrderGoodsReceiptLineItem{
+//	            &square.TransferOrderGoodsReceiptLineItem{
+//	                TransferOrderLineUID: "1",
+//	                QuantityReceived: square.String(
+//	                    "3",
+//	                ),
+//	                QuantityDamaged: square.String(
+//	                    "1",
+//	                ),
+//	                QuantityCanceled: square.String(
+//	                    "1",
+//	                ),
+//	            },
+//	            &square.TransferOrderGoodsReceiptLineItem{
+//	                TransferOrderLineUID: "2",
+//	                QuantityReceived: square.String(
+//	                    "2",
+//	                ),
+//	                QuantityCanceled: square.String(
+//	                    "1",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    Version: square.Int64(
+//	        int64(1753118664873),
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Receive(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Receive(
 	ctx context.Context,
 	request *square.ReceiveTransferOrderRequest,
@@ -228,6 +432,20 @@ func (c *Client) Receive(
 // [CancelTransferOrder](api-endpoint:TransferOrders-CancelTransferOrder).
 //
 // Creates a [transfer_order.updated](webhook:transfer_order.updated) webhook event.
+//
+// Example:
+//
+//	request := &square.StartTransferOrderRequest{
+//	    TransferOrderID: "transfer_order_id",
+//	    IdempotencyKey: "EXAMPLE_IDEMPOTENCY_KEY_789",
+//	    Version: square.Int64(
+//	        int64(1753109537351),
+//	    ),
+//	}
+//	_, err := client.TransferOrders.Start(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Start(
 	ctx context.Context,
 	request *square.StartTransferOrderRequest,

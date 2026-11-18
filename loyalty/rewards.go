@@ -26,10 +26,12 @@ type CreateLoyaltyRewardRequest struct {
 }
 
 func (c *CreateLoyaltyRewardRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetReward sets the Reward field and marks it as non-optional;
@@ -80,10 +82,12 @@ type DeleteRewardsRequest struct {
 }
 
 func (d *DeleteRewardsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetRewardID sets the RewardID field and marks it as non-optional;
@@ -106,10 +110,12 @@ type GetRewardsRequest struct {
 }
 
 func (g *GetRewardsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetRewardID sets the RewardID field and marks it as non-optional;
@@ -139,10 +145,12 @@ type RedeemLoyaltyRewardRequest struct {
 }
 
 func (r *RedeemLoyaltyRewardRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetRewardID sets the RewardID field and marks it as non-optional;
@@ -211,10 +219,12 @@ type SearchLoyaltyRewardsRequest struct {
 }
 
 func (s *SearchLoyaltyRewardsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;

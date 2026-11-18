@@ -22,10 +22,12 @@ type ListLocationProfilesRequest struct {
 }
 
 func (l *ListLocationProfilesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLimit sets the Limit field and marks it as non-optional;

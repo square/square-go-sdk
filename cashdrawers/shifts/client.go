@@ -4,13 +4,14 @@ package shifts
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	cashdrawers "github.com/square/square-go-sdk/v5/cashdrawers"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -43,6 +45,29 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Provides the details for all of the cash drawer shifts for a location
 // in a date range.
+//
+// Example:
+//
+//	request := &cashdrawers.ListShiftsRequest{
+//	    LocationID: "location_id",
+//	    SortOrder: square.SortOrderDesc.Ptr(),
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.CashDrawers.Shifts.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *cashdrawers.ListShiftsRequest,
@@ -76,6 +101,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -90,7 +116,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -103,6 +129,17 @@ func (c *Client) List(
 
 // Provides the summary details for a single cash drawer shift. See
 // [ListCashDrawerShiftEvents](api-endpoint:CashDrawers-ListCashDrawerShiftEvents) for a list of cash drawer shift events.
+//
+// Example:
+//
+//	request := &cashdrawers.GetShiftsRequest{
+//	    ShiftID: "shift_id",
+//	    LocationID: "location_id",
+//	}
+//	_, err := client.CashDrawers.Shifts.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *cashdrawers.GetShiftsRequest,
@@ -120,6 +157,23 @@ func (c *Client) Get(
 }
 
 // Provides a paginated list of events for a single cash drawer shift.
+//
+// Example:
+//
+//	request := &cashdrawers.ListEventsShiftsRequest{
+//	    ShiftID: "shift_id",
+//	    LocationID: "location_id",
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.CashDrawers.Shifts.ListEvents(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListEvents(
 	ctx context.Context,
 	request *cashdrawers.ListEventsShiftsRequest,
@@ -156,6 +210,7 @@ func (c *Client) ListEvents(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -170,7 +225,7 @@ func (c *Client) ListEvents(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(

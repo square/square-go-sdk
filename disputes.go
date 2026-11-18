@@ -25,10 +25,12 @@ type CreateEvidenceFileDisputesRequest struct {
 }
 
 func (c *CreateEvidenceFileDisputesRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -82,10 +84,12 @@ type CreateDisputeEvidenceTextRequest struct {
 }
 
 func (c *CreateDisputeEvidenceTextRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -150,10 +154,12 @@ type SubmitEvidenceDisputesRequest struct {
 }
 
 func (s *SubmitEvidenceDisputesRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -176,10 +182,12 @@ type AcceptDisputesRequest struct {
 }
 
 func (a *AcceptDisputesRequest) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
 	}
-	a.explicitFields.Or(a.explicitFields, field)
+	next.Or(next, field)
+	a.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -202,10 +210,12 @@ type GetDisputesRequest struct {
 }
 
 func (g *GetDisputesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -237,10 +247,12 @@ type ListDisputesRequest struct {
 }
 
 func (l *ListDisputesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -264,12 +276,12 @@ func (l *ListDisputesRequest) SetLocationID(locationID *string) {
 	l.require(listDisputesRequestFieldLocationID)
 }
 
-// Defines the fields in an `AcceptDispute` response.
 var (
 	acceptDisputeResponseFieldErrors  = big.NewInt(1 << 0)
 	acceptDisputeResponseFieldDispute = big.NewInt(1 << 1)
 )
 
+// Defines the fields in an `AcceptDispute` response.
 type AcceptDisputeResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -305,10 +317,12 @@ func (a *AcceptDisputeResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (a *AcceptDisputeResponse) require(field *big.Int) {
-	if a.explicitFields == nil {
-		a.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if a.explicitFields != nil {
+		next.Set(a.explicitFields)
 	}
-	a.explicitFields.Or(a.explicitFields, field)
+	next.Or(next, field)
+	a.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -367,13 +381,13 @@ func (a *AcceptDisputeResponse) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// Defines the parameters for a `CreateDisputeEvidenceFile` request.
 var (
 	createDisputeEvidenceFileRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	createDisputeEvidenceFileRequestFieldEvidenceType   = big.NewInt(1 << 1)
 	createDisputeEvidenceFileRequestFieldContentType    = big.NewInt(1 << 2)
 )
 
+// Defines the parameters for a `CreateDisputeEvidenceFile` request.
 type CreateDisputeEvidenceFileRequest struct {
 	// A unique key identifying the request. For more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	IdempotencyKey string `json:"idempotency_key" url:"idempotency_key"`
@@ -420,10 +434,12 @@ func (c *CreateDisputeEvidenceFileRequest) GetExtraProperties() map[string]inter
 }
 
 func (c *CreateDisputeEvidenceFileRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -489,12 +505,12 @@ func (c *CreateDisputeEvidenceFileRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields in a `CreateDisputeEvidenceFile` response.
 var (
 	createDisputeEvidenceFileResponseFieldErrors   = big.NewInt(1 << 0)
 	createDisputeEvidenceFileResponseFieldEvidence = big.NewInt(1 << 1)
 )
 
+// Defines the fields in a `CreateDisputeEvidenceFile` response.
 type CreateDisputeEvidenceFileResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -530,10 +546,12 @@ func (c *CreateDisputeEvidenceFileResponse) GetExtraProperties() map[string]inte
 }
 
 func (c *CreateDisputeEvidenceFileResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -592,12 +610,12 @@ func (c *CreateDisputeEvidenceFileResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields in a `CreateDisputeEvidenceText` response.
 var (
 	createDisputeEvidenceTextResponseFieldErrors   = big.NewInt(1 << 0)
 	createDisputeEvidenceTextResponseFieldEvidence = big.NewInt(1 << 1)
 )
 
+// Defines the fields in a `CreateDisputeEvidenceText` response.
 type CreateDisputeEvidenceTextResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -633,10 +651,12 @@ func (c *CreateDisputeEvidenceTextResponse) GetExtraProperties() map[string]inte
 }
 
 func (c *CreateDisputeEvidenceTextResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -695,7 +715,6 @@ func (c *CreateDisputeEvidenceTextResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a [dispute](https://developer.squareup.com/docs/disputes-api/overview) a cardholder initiated with their bank.
 var (
 	disputeFieldDisputeID       = big.NewInt(1 << 0)
 	disputeFieldID              = big.NewInt(1 << 1)
@@ -715,6 +734,18 @@ var (
 	disputeFieldLocationID      = big.NewInt(1 << 15)
 )
 
+// disputeNullableFields maps the wire names of Dispute's nullable fields (required or optional) to their field bits.
+var disputeNullableFields = map[string]*big.Int{
+	"dispute_id":       disputeFieldDisputeID,
+	"due_at":           disputeFieldDueAt,
+	"evidence_ids":     disputeFieldEvidenceIDs,
+	"brand_dispute_id": disputeFieldBrandDisputeID,
+	"reported_date":    disputeFieldReportedDate,
+	"reported_at":      disputeFieldReportedAt,
+	"location_id":      disputeFieldLocationID,
+}
+
+// Represents a [dispute](https://developer.squareup.com/docs/disputes-api/overview) a cardholder initiated with their bank.
 type Dispute struct {
 	// The unique ID for this `Dispute`, generated by Square.
 	DisputeID *string `json:"dispute_id,omitempty" url:"dispute_id,omitempty"`
@@ -880,10 +911,12 @@ func (d *Dispute) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *Dispute) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetDisputeID sets the DisputeID field and marks it as non-optional;
@@ -1010,6 +1043,13 @@ func (d *Dispute) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, disputeNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1126,11 +1166,16 @@ func (d DisputeState) Ptr() *DisputeState {
 	return &d
 }
 
-// The payment the cardholder disputed.
 var (
 	disputedPaymentFieldPaymentID = big.NewInt(1 << 0)
 )
 
+// disputedPaymentNullableFields maps the wire names of DisputedPayment's nullable fields (required or optional) to their field bits.
+var disputedPaymentNullableFields = map[string]*big.Int{
+	"payment_id": disputedPaymentFieldPaymentID,
+}
+
+// The payment the cardholder disputed.
 type DisputedPayment struct {
 	// Square-generated unique ID of the payment being disputed.
 	PaymentID *string `json:"payment_id,omitempty" url:"payment_id,omitempty"`
@@ -1157,10 +1202,12 @@ func (d *DisputedPayment) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DisputedPayment) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetPaymentID sets the PaymentID field and marks it as non-optional;
@@ -1182,6 +1229,13 @@ func (d *DisputedPayment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, disputedPaymentNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1212,12 +1266,12 @@ func (d *DisputedPayment) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines fields in a `RetrieveDispute` response.
 var (
 	getDisputeResponseFieldErrors  = big.NewInt(1 << 0)
 	getDisputeResponseFieldDispute = big.NewInt(1 << 1)
 )
 
+// Defines fields in a `RetrieveDispute` response.
 type GetDisputeResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1253,10 +1307,12 @@ func (g *GetDisputeResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetDisputeResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1315,13 +1371,13 @@ func (g *GetDisputeResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines fields in a `ListDisputes` response.
 var (
 	listDisputesResponseFieldErrors   = big.NewInt(1 << 0)
 	listDisputesResponseFieldDisputes = big.NewInt(1 << 1)
 	listDisputesResponseFieldCursor   = big.NewInt(1 << 2)
 )
 
+// Defines fields in a `ListDisputes` response.
 type ListDisputesResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1367,10 +1423,12 @@ func (l *ListDisputesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListDisputesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1436,12 +1494,12 @@ func (l *ListDisputesResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Defines the fields in a `SubmitEvidence` response.
 var (
 	submitEvidenceResponseFieldErrors  = big.NewInt(1 << 0)
 	submitEvidenceResponseFieldDispute = big.NewInt(1 << 1)
 )
 
+// Defines the fields in a `SubmitEvidence` response.
 type SubmitEvidenceResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1477,10 +1535,12 @@ func (s *SubmitEvidenceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SubmitEvidenceResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

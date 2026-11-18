@@ -25,10 +25,12 @@ type LoadRequest struct {
 }
 
 func (l *LoadRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetQueryType sets the QueryType field and marks it as non-optional;
@@ -118,18 +120,18 @@ var (
 )
 
 type Cube struct {
-	Name          string                 `json:"name" url:"name"`
-	Title         *string                `json:"title,omitempty" url:"title,omitempty"`
-	Type          CubeType               `json:"type" url:"type"`
-	Meta          map[string]interface{} `json:"meta,omitempty" url:"meta,omitempty"`
-	Description   *string                `json:"description,omitempty" url:"description,omitempty"`
-	Measures      []*Measure             `json:"measures" url:"measures"`
-	Dimensions    []*Dimension           `json:"dimensions" url:"dimensions"`
-	Segments      []*Segment             `json:"segments" url:"segments"`
-	Joins         []*CubeJoin            `json:"joins,omitempty" url:"joins,omitempty"`
-	Folders       []*Folder              `json:"folders,omitempty" url:"folders,omitempty"`
-	NestedFolders []*NestedFolder        `json:"nestedFolders,omitempty" url:"nestedFolders,omitempty"`
-	Hierarchies   []*Hierarchy           `json:"hierarchies,omitempty" url:"hierarchies,omitempty"`
+	Name          string          `json:"name" url:"name"`
+	Title         *string         `json:"title,omitempty" url:"title,omitempty"`
+	Type          CubeType        `json:"type" url:"type"`
+	Meta          map[string]any  `json:"meta,omitempty" url:"meta,omitempty"`
+	Description   *string         `json:"description,omitempty" url:"description,omitempty"`
+	Measures      []*Measure      `json:"measures" url:"measures"`
+	Dimensions    []*Dimension    `json:"dimensions" url:"dimensions"`
+	Segments      []*Segment      `json:"segments" url:"segments"`
+	Joins         []*CubeJoin     `json:"joins,omitempty" url:"joins,omitempty"`
+	Folders       []*Folder       `json:"folders,omitempty" url:"folders,omitempty"`
+	NestedFolders []*NestedFolder `json:"nestedFolders,omitempty" url:"nestedFolders,omitempty"`
+	Hierarchies   []*Hierarchy    `json:"hierarchies,omitempty" url:"hierarchies,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -159,7 +161,7 @@ func (c *Cube) GetType() CubeType {
 	return c.Type
 }
 
-func (c *Cube) GetMeta() map[string]interface{} {
+func (c *Cube) GetMeta() map[string]any {
 	if c == nil {
 		return nil
 	}
@@ -230,10 +232,12 @@ func (c *Cube) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Cube) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -259,7 +263,7 @@ func (c *Cube) SetType(type_ CubeType) {
 
 // SetMeta sets the Meta field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *Cube) SetMeta(meta map[string]interface{}) {
+func (c *Cube) SetMeta(meta map[string]any) {
 	c.Meta = meta
 	c.require(cubeFieldMeta)
 }
@@ -400,10 +404,12 @@ func (c *CubeJoin) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CubeJoin) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -485,12 +491,12 @@ func (c CubeType) Ptr() *CubeType {
 	return &c
 }
 
-// Custom numeric format for numeric measures and dimensions
 var (
 	customNumericFormatFieldValue = big.NewInt(1 << 0)
 	customNumericFormatFieldAlias = big.NewInt(1 << 1)
 )
 
+// Custom numeric format for numeric measures and dimensions
 type CustomNumericFormat struct {
 	// d3-format specifier string (e.g., '.2f', ',.0f', '$,.2f', '.0%', '.2s'). See https://d3js.org/d3-format
 	Value string `json:"value" url:"value"`
@@ -531,10 +537,12 @@ func (c *CustomNumericFormat) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomNumericFormat) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetValue sets the Value field and marks it as non-optional;
@@ -604,11 +612,11 @@ func (c *CustomNumericFormat) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Custom time format for time dimensions
 var (
 	customTimeFormatFieldValue = big.NewInt(1 << 0)
 )
 
+// Custom time format for time dimensions
 type CustomTimeFormat struct {
 	// POSIX strftime format string (IEEE Std 1003.1 / POSIX.1) with d3-time-format extensions (e.g., '%Y-%m-%d', '%d/%m/%Y %H:%M:%S'). See https://pubs.opengroup.org/onlinepubs/009695399/functions/strptime.html and https://d3js.org/d3-time-format
 	Value string `json:"value" url:"value"`
@@ -640,10 +648,12 @@ func (c *CustomTimeFormat) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CustomTimeFormat) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetValue sets the Value field and marks it as non-optional;
@@ -731,7 +741,7 @@ type Dimension struct {
 	// When dimension is defined in View, it keeps the original path: Cube.dimension
 	AliasMember       *string                 `json:"aliasMember,omitempty" url:"aliasMember,omitempty"`
 	Granularities     []*DimensionGranularity `json:"granularities,omitempty" url:"granularities,omitempty"`
-	Meta              map[string]interface{}  `json:"meta,omitempty" url:"meta,omitempty"`
+	Meta              map[string]any          `json:"meta,omitempty" url:"meta,omitempty"`
 	Format            *Format                 `json:"format,omitempty" url:"format,omitempty"`
 	FormatDescription *FormatDescription      `json:"formatDescription,omitempty" url:"formatDescription,omitempty"`
 	// ISO 4217 currency code in uppercase (3 characters, e.g. USD, EUR)
@@ -796,7 +806,7 @@ func (d *Dimension) GetGranularities() []*DimensionGranularity {
 	return d.Granularities
 }
 
-func (d *Dimension) GetMeta() map[string]interface{} {
+func (d *Dimension) GetMeta() map[string]any {
 	if d == nil {
 		return nil
 	}
@@ -846,10 +856,12 @@ func (d *Dimension) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *Dimension) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -903,7 +915,7 @@ func (d *Dimension) SetGranularities(granularities []*DimensionGranularity) {
 
 // SetMeta sets the Meta field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (d *Dimension) SetMeta(meta map[string]interface{}) {
+func (d *Dimension) SetMeta(meta map[string]any) {
 	d.Meta = meta
 	d.require(dimensionFieldMeta)
 }
@@ -1059,10 +1071,12 @@ func (d *DimensionGranularity) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DimensionGranularity) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -1209,10 +1223,12 @@ func (f *Folder) GetExtraProperties() map[string]interface{} {
 }
 
 func (f *Folder) require(field *big.Int) {
-	if f.explicitFields == nil {
-		f.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if f.explicitFields != nil {
+		next.Set(f.explicitFields)
 	}
-	f.explicitFields.Or(f.explicitFields, field)
+	next.Or(next, field)
+	f.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -1316,6 +1332,54 @@ func (f *Format) UnmarshalJSON(data []byte) error {
 		f.SimpleFormat = valueSimpleFormat
 		return nil
 	}
+	if internal.MatchesObjectKeys(data, []string{"label", "type"}, []string{"label", "type"}) {
+		valueLinkFormat := new(LinkFormat)
+		if err := json.Unmarshal(data, &valueLinkFormat); err == nil {
+			f.typ = "LinkFormat"
+			f.LinkFormat = valueLinkFormat
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"type", "value"}, []string{"type", "value"}) {
+		valueCustomTimeFormat := new(CustomTimeFormat)
+		if err := json.Unmarshal(data, &valueCustomTimeFormat); err == nil {
+			f.typ = "CustomTimeFormat"
+			f.CustomTimeFormat = valueCustomTimeFormat
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"type", "value", "alias"}, []string{"type", "value"}) {
+		valueCustomNumericFormat := new(CustomNumericFormat)
+		if err := json.Unmarshal(data, &valueCustomNumericFormat); err == nil {
+			f.typ = "CustomNumericFormat"
+			f.CustomNumericFormat = valueCustomNumericFormat
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"label", "type"}) {
+		valueLinkFormat := new(LinkFormat)
+		if err := json.Unmarshal(data, &valueLinkFormat); err == nil {
+			f.typ = "LinkFormat"
+			f.LinkFormat = valueLinkFormat
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"type", "value"}) {
+		valueCustomTimeFormat := new(CustomTimeFormat)
+		if err := json.Unmarshal(data, &valueCustomTimeFormat); err == nil {
+			f.typ = "CustomTimeFormat"
+			f.CustomTimeFormat = valueCustomTimeFormat
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"type", "value"}) {
+		valueCustomNumericFormat := new(CustomNumericFormat)
+		if err := json.Unmarshal(data, &valueCustomNumericFormat); err == nil {
+			f.typ = "CustomNumericFormat"
+			f.CustomNumericFormat = valueCustomNumericFormat
+			return nil
+		}
+	}
 	valueLinkFormat := new(LinkFormat)
 	if err := json.Unmarshal(data, &valueLinkFormat); err == nil {
 		f.typ = "LinkFormat"
@@ -1376,13 +1440,13 @@ func (f *Format) Accept(visitor FormatVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", f)
 }
 
-// Resolved format description with the predefined name and d3-format specifier
 var (
 	formatDescriptionFieldName      = big.NewInt(1 << 0)
 	formatDescriptionFieldSpecifier = big.NewInt(1 << 1)
 	formatDescriptionFieldCurrency  = big.NewInt(1 << 2)
 )
 
+// Resolved format description with the predefined name and d3-format specifier
 type FormatDescription struct {
 	// Predefined format name (e.g., 'percent_2', 'currency_1') or a base name like 'number', or 'custom' for ad-hoc specifiers
 	Name string `json:"name" url:"name"`
@@ -1427,10 +1491,12 @@ func (f *FormatDescription) GetExtraProperties() map[string]interface{} {
 }
 
 func (f *FormatDescription) require(field *big.Int) {
-	if f.explicitFields == nil {
-		f.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if f.explicitFields != nil {
+		next.Set(f.explicitFields)
 	}
-	f.explicitFields.Or(f.explicitFields, field)
+	next.Or(next, field)
+	f.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -1553,10 +1619,12 @@ func (h *Hierarchy) GetExtraProperties() map[string]interface{} {
 }
 
 func (h *Hierarchy) require(field *big.Int) {
-	if h.explicitFields == nil {
-		h.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if h.explicitFields != nil {
+		next.Set(h.explicitFields)
 	}
-	h.explicitFields.Or(h.explicitFields, field)
+	next.Or(next, field)
+	h.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -1687,10 +1755,12 @@ func (j *JoinSubquery) GetExtraProperties() map[string]interface{} {
 }
 
 func (j *JoinSubquery) require(field *big.Int) {
-	if j.explicitFields == nil {
-		j.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if j.explicitFields != nil {
+		next.Set(j.explicitFields)
 	}
-	j.explicitFields.Or(j.explicitFields, field)
+	next.Or(next, field)
+	j.explicitFields = next
 }
 
 // SetSQL sets the SQL field and marks it as non-optional;
@@ -1763,11 +1833,11 @@ func (j *JoinSubquery) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
-// Link format with label and type
 var (
 	linkFormatFieldLabel = big.NewInt(1 << 0)
 )
 
+// Link format with label and type
 type LinkFormat struct {
 	// Label for the link
 	Label string `json:"label" url:"label"`
@@ -1799,10 +1869,12 @@ func (l *LinkFormat) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LinkFormat) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLabel sets the Label field and marks it as non-optional;
@@ -1880,17 +1952,17 @@ var (
 )
 
 type LoadResponse struct {
-	DataSource       *string                  `json:"dataSource,omitempty" url:"dataSource,omitempty"`
-	Annotation       *LoadResultAnnotation    `json:"annotation,omitempty" url:"annotation,omitempty"`
-	Data             *LoadResultData          `json:"data,omitempty" url:"data,omitempty"`
-	LastRefreshTime  *string                  `json:"lastRefreshTime,omitempty" url:"lastRefreshTime,omitempty"`
-	Query            map[string]interface{}   `json:"query,omitempty" url:"query,omitempty"`
-	SlowQuery        *bool                    `json:"slowQuery,omitempty" url:"slowQuery,omitempty"`
-	External         *bool                    `json:"external,omitempty" url:"external,omitempty"`
-	DbType           *string                  `json:"dbType,omitempty" url:"dbType,omitempty"`
-	RefreshKeyValues []map[string]interface{} `json:"refreshKeyValues,omitempty" url:"refreshKeyValues,omitempty"`
-	PivotQuery       map[string]interface{}   `json:"pivotQuery,omitempty" url:"pivotQuery,omitempty"`
-	QueryType        *string                  `json:"queryType,omitempty" url:"queryType,omitempty"`
+	DataSource       *string               `json:"dataSource,omitempty" url:"dataSource,omitempty"`
+	Annotation       *LoadResultAnnotation `json:"annotation,omitempty" url:"annotation,omitempty"`
+	Data             *LoadResultData       `json:"data,omitempty" url:"data,omitempty"`
+	LastRefreshTime  *string               `json:"lastRefreshTime,omitempty" url:"lastRefreshTime,omitempty"`
+	Query            map[string]any        `json:"query,omitempty" url:"query,omitempty"`
+	SlowQuery        *bool                 `json:"slowQuery,omitempty" url:"slowQuery,omitempty"`
+	External         *bool                 `json:"external,omitempty" url:"external,omitempty"`
+	DbType           *string               `json:"dbType,omitempty" url:"dbType,omitempty"`
+	RefreshKeyValues []map[string]any      `json:"refreshKeyValues,omitempty" url:"refreshKeyValues,omitempty"`
+	PivotQuery       map[string]any        `json:"pivotQuery,omitempty" url:"pivotQuery,omitempty"`
+	QueryType        *string               `json:"queryType,omitempty" url:"queryType,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1927,7 +1999,7 @@ func (l *LoadResponse) GetLastRefreshTime() *string {
 	return l.LastRefreshTime
 }
 
-func (l *LoadResponse) GetQuery() map[string]interface{} {
+func (l *LoadResponse) GetQuery() map[string]any {
 	if l == nil {
 		return nil
 	}
@@ -1955,14 +2027,14 @@ func (l *LoadResponse) GetDbType() *string {
 	return l.DbType
 }
 
-func (l *LoadResponse) GetRefreshKeyValues() []map[string]interface{} {
+func (l *LoadResponse) GetRefreshKeyValues() []map[string]any {
 	if l == nil {
 		return nil
 	}
 	return l.RefreshKeyValues
 }
 
-func (l *LoadResponse) GetPivotQuery() map[string]interface{} {
+func (l *LoadResponse) GetPivotQuery() map[string]any {
 	if l == nil {
 		return nil
 	}
@@ -1984,10 +2056,12 @@ func (l *LoadResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoadResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetDataSource sets the DataSource field and marks it as non-optional;
@@ -2020,7 +2094,7 @@ func (l *LoadResponse) SetLastRefreshTime(lastRefreshTime *string) {
 
 // SetQuery sets the Query field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResponse) SetQuery(query map[string]interface{}) {
+func (l *LoadResponse) SetQuery(query map[string]any) {
 	l.Query = query
 	l.require(loadResponseFieldQuery)
 }
@@ -2048,14 +2122,14 @@ func (l *LoadResponse) SetDbType(dbType *string) {
 
 // SetRefreshKeyValues sets the RefreshKeyValues field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResponse) SetRefreshKeyValues(refreshKeyValues []map[string]interface{}) {
+func (l *LoadResponse) SetRefreshKeyValues(refreshKeyValues []map[string]any) {
 	l.RefreshKeyValues = refreshKeyValues
 	l.require(loadResponseFieldRefreshKeyValues)
 }
 
 // SetPivotQuery sets the PivotQuery field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResponse) SetPivotQuery(pivotQuery map[string]interface{}) {
+func (l *LoadResponse) SetPivotQuery(pivotQuery map[string]any) {
 	l.PivotQuery = pivotQuery
 	l.require(loadResponseFieldPivotQuery)
 }
@@ -2117,10 +2191,10 @@ var (
 )
 
 type LoadResultAnnotation struct {
-	Measures       map[string]interface{} `json:"measures" url:"measures"`
-	Dimensions     map[string]interface{} `json:"dimensions" url:"dimensions"`
-	Segments       map[string]interface{} `json:"segments" url:"segments"`
-	TimeDimensions map[string]interface{} `json:"timeDimensions" url:"timeDimensions"`
+	Measures       map[string]any `json:"measures" url:"measures"`
+	Dimensions     map[string]any `json:"dimensions" url:"dimensions"`
+	Segments       map[string]any `json:"segments" url:"segments"`
+	TimeDimensions map[string]any `json:"timeDimensions" url:"timeDimensions"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2129,28 +2203,28 @@ type LoadResultAnnotation struct {
 	rawJSON         json.RawMessage
 }
 
-func (l *LoadResultAnnotation) GetMeasures() map[string]interface{} {
+func (l *LoadResultAnnotation) GetMeasures() map[string]any {
 	if l == nil {
 		return nil
 	}
 	return l.Measures
 }
 
-func (l *LoadResultAnnotation) GetDimensions() map[string]interface{} {
+func (l *LoadResultAnnotation) GetDimensions() map[string]any {
 	if l == nil {
 		return nil
 	}
 	return l.Dimensions
 }
 
-func (l *LoadResultAnnotation) GetSegments() map[string]interface{} {
+func (l *LoadResultAnnotation) GetSegments() map[string]any {
 	if l == nil {
 		return nil
 	}
 	return l.Segments
 }
 
-func (l *LoadResultAnnotation) GetTimeDimensions() map[string]interface{} {
+func (l *LoadResultAnnotation) GetTimeDimensions() map[string]any {
 	if l == nil {
 		return nil
 	}
@@ -2165,36 +2239,38 @@ func (l *LoadResultAnnotation) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoadResultAnnotation) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetMeasures sets the Measures field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultAnnotation) SetMeasures(measures map[string]interface{}) {
+func (l *LoadResultAnnotation) SetMeasures(measures map[string]any) {
 	l.Measures = measures
 	l.require(loadResultAnnotationFieldMeasures)
 }
 
 // SetDimensions sets the Dimensions field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultAnnotation) SetDimensions(dimensions map[string]interface{}) {
+func (l *LoadResultAnnotation) SetDimensions(dimensions map[string]any) {
 	l.Dimensions = dimensions
 	l.require(loadResultAnnotationFieldDimensions)
 }
 
 // SetSegments sets the Segments field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultAnnotation) SetSegments(segments map[string]interface{}) {
+func (l *LoadResultAnnotation) SetSegments(segments map[string]any) {
 	l.Segments = segments
 	l.require(loadResultAnnotationFieldSegments)
 }
 
 // SetTimeDimensions sets the TimeDimensions field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultAnnotation) SetTimeDimensions(timeDimensions map[string]interface{}) {
+func (l *LoadResultAnnotation) SetTimeDimensions(timeDimensions map[string]any) {
 	l.TimeDimensions = timeDimensions
 	l.require(loadResultAnnotationFieldTimeDimensions)
 }
@@ -2278,6 +2354,38 @@ func (l *LoadResultData) UnmarshalJSON(data []byte) error {
 		l.LoadResultDataRow = valueLoadResultDataRow
 		return nil
 	}
+	if internal.MatchesObjectKeys(data, []string{"members", "dataset"}, []string{"members", "dataset"}) {
+		valueLoadResultDataCompact := new(LoadResultDataCompact)
+		if err := json.Unmarshal(data, &valueLoadResultDataCompact); err == nil {
+			l.typ = "LoadResultDataCompact"
+			l.LoadResultDataCompact = valueLoadResultDataCompact
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"members", "columns"}, []string{"members", "columns"}) {
+		valueLoadResultDataColumnar := new(LoadResultDataColumnar)
+		if err := json.Unmarshal(data, &valueLoadResultDataColumnar); err == nil {
+			l.typ = "LoadResultDataColumnar"
+			l.LoadResultDataColumnar = valueLoadResultDataColumnar
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"members", "dataset"}) {
+		valueLoadResultDataCompact := new(LoadResultDataCompact)
+		if err := json.Unmarshal(data, &valueLoadResultDataCompact); err == nil {
+			l.typ = "LoadResultDataCompact"
+			l.LoadResultDataCompact = valueLoadResultDataCompact
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"members", "columns"}) {
+		valueLoadResultDataColumnar := new(LoadResultDataColumnar)
+		if err := json.Unmarshal(data, &valueLoadResultDataColumnar); err == nil {
+			l.typ = "LoadResultDataColumnar"
+			l.LoadResultDataColumnar = valueLoadResultDataColumnar
+			return nil
+		}
+	}
 	valueLoadResultDataCompact := new(LoadResultDataCompact)
 	if err := json.Unmarshal(data, &valueLoadResultDataCompact); err == nil {
 		l.typ = "LoadResultDataCompact"
@@ -2325,17 +2433,17 @@ func (l *LoadResultData) Accept(visitor LoadResultDataVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", l)
 }
 
-// Columnar data format - members list paired with one primitive array per column. Returned when `responseFormat=columnar` is requested.
 var (
 	loadResultDataColumnarFieldMembers = big.NewInt(1 << 0)
 	loadResultDataColumnarFieldColumns = big.NewInt(1 << 1)
 )
 
+// Columnar data format - members list paired with one primitive array per column. Returned when `responseFormat=columnar` is requested.
 type LoadResultDataColumnar struct {
 	// Ordered list of member names. Element `i` of `columns` holds the values for `members[i]` across all rows.
 	Members []string `json:"members" url:"members"`
 	// One array per member, in the same order as `members`. Each inner array contains the primitive value of that member for every row (null, boolean, number, string).
-	Columns [][]interface{} `json:"columns" url:"columns"`
+	Columns [][]any `json:"columns" url:"columns"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2351,7 +2459,7 @@ func (l *LoadResultDataColumnar) GetMembers() []string {
 	return l.Members
 }
 
-func (l *LoadResultDataColumnar) GetColumns() [][]interface{} {
+func (l *LoadResultDataColumnar) GetColumns() [][]any {
 	if l == nil {
 		return nil
 	}
@@ -2366,10 +2474,12 @@ func (l *LoadResultDataColumnar) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoadResultDataColumnar) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetMembers sets the Members field and marks it as non-optional;
@@ -2381,7 +2491,7 @@ func (l *LoadResultDataColumnar) SetMembers(members []string) {
 
 // SetColumns sets the Columns field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultDataColumnar) SetColumns(columns [][]interface{}) {
+func (l *LoadResultDataColumnar) SetColumns(columns [][]any) {
 	l.Columns = columns
 	l.require(loadResultDataColumnarFieldColumns)
 }
@@ -2428,17 +2538,17 @@ func (l *LoadResultDataColumnar) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Compact data format - a single object with the members list and a dataset of primitive arrays. Returned when `responseFormat=compact` is requested.
 var (
 	loadResultDataCompactFieldMembers = big.NewInt(1 << 0)
 	loadResultDataCompactFieldDataset = big.NewInt(1 << 1)
 )
 
+// Compact data format - a single object with the members list and a dataset of primitive arrays. Returned when `responseFormat=compact` is requested.
 type LoadResultDataCompact struct {
 	// Ordered list of member names that correspond to each cell position in `dataset` rows.
 	Members []string `json:"members" url:"members"`
 	// Array of rows, where each row is an array of primitive values (null, boolean, number, string) aligned with `members`.
-	Dataset [][]interface{} `json:"dataset" url:"dataset"`
+	Dataset [][]any `json:"dataset" url:"dataset"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -2454,7 +2564,7 @@ func (l *LoadResultDataCompact) GetMembers() []string {
 	return l.Members
 }
 
-func (l *LoadResultDataCompact) GetDataset() [][]interface{} {
+func (l *LoadResultDataCompact) GetDataset() [][]any {
 	if l == nil {
 		return nil
 	}
@@ -2469,10 +2579,12 @@ func (l *LoadResultDataCompact) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *LoadResultDataCompact) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetMembers sets the Members field and marks it as non-optional;
@@ -2484,7 +2596,7 @@ func (l *LoadResultDataCompact) SetMembers(members []string) {
 
 // SetDataset sets the Dataset field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (l *LoadResultDataCompact) SetDataset(dataset [][]interface{}) {
+func (l *LoadResultDataCompact) SetDataset(dataset [][]any) {
 	l.Dataset = dataset
 	l.require(loadResultDataCompactFieldDataset)
 }
@@ -2532,7 +2644,7 @@ func (l *LoadResultDataCompact) String() string {
 }
 
 // Row-oriented (default) data format - an array of rows, each row is an object keyed by member name.
-type LoadResultDataRow = []map[string]interface{}
+type LoadResultDataRow = []map[string]any
 
 var (
 	measureFieldName              = big.NewInt(1 << 0)
@@ -2549,15 +2661,15 @@ var (
 )
 
 type Measure struct {
-	Name              string                 `json:"name" url:"name"`
-	Title             *string                `json:"title,omitempty" url:"title,omitempty"`
-	ShortTitle        *string                `json:"shortTitle,omitempty" url:"shortTitle,omitempty"`
-	Description       *string                `json:"description,omitempty" url:"description,omitempty"`
-	Type              string                 `json:"type" url:"type"`
-	AggType           *string                `json:"aggType,omitempty" url:"aggType,omitempty"`
-	Meta              map[string]interface{} `json:"meta,omitempty" url:"meta,omitempty"`
-	Format            *Format                `json:"format,omitempty" url:"format,omitempty"`
-	FormatDescription *FormatDescription     `json:"formatDescription,omitempty" url:"formatDescription,omitempty"`
+	Name              string             `json:"name" url:"name"`
+	Title             *string            `json:"title,omitempty" url:"title,omitempty"`
+	ShortTitle        *string            `json:"shortTitle,omitempty" url:"shortTitle,omitempty"`
+	Description       *string            `json:"description,omitempty" url:"description,omitempty"`
+	Type              string             `json:"type" url:"type"`
+	AggType           *string            `json:"aggType,omitempty" url:"aggType,omitempty"`
+	Meta              map[string]any     `json:"meta,omitempty" url:"meta,omitempty"`
+	Format            *Format            `json:"format,omitempty" url:"format,omitempty"`
+	FormatDescription *FormatDescription `json:"formatDescription,omitempty" url:"formatDescription,omitempty"`
 	// ISO 4217 currency code in uppercase (3 characters, e.g. USD, EUR)
 	Currency *string `json:"currency,omitempty" url:"currency,omitempty"`
 	// When measure is defined in View, it keeps the original path: Cube.measure
@@ -2612,7 +2724,7 @@ func (m *Measure) GetAggType() *string {
 	return m.AggType
 }
 
-func (m *Measure) GetMeta() map[string]interface{} {
+func (m *Measure) GetMeta() map[string]any {
 	if m == nil {
 		return nil
 	}
@@ -2655,10 +2767,12 @@ func (m *Measure) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *Measure) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -2705,7 +2819,7 @@ func (m *Measure) SetAggType(aggType *string) {
 
 // SetMeta sets the Meta field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (m *Measure) SetMeta(meta map[string]interface{}) {
+func (m *Measure) SetMeta(meta map[string]any) {
 	m.Meta = meta
 	m.require(measureFieldMeta)
 }
@@ -2818,10 +2932,12 @@ func (m *MetadataResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *MetadataResponse) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if m.explicitFields != nil {
+		next.Set(m.explicitFields)
 	}
-	m.explicitFields.Or(m.explicitFields, field)
+	next.Or(next, field)
+	m.explicitFields = next
 }
 
 // SetCubes sets the Cubes field and marks it as non-optional;
@@ -2918,10 +3034,12 @@ func (n *NestedFolder) GetExtraProperties() map[string]interface{} {
 }
 
 func (n *NestedFolder) require(field *big.Int) {
-	if n.explicitFields == nil {
-		n.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if n.explicitFields != nil {
+		next.Set(n.explicitFields)
 	}
-	n.explicitFields.Or(n.explicitFields, field)
+	next.Or(next, field)
+	n.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -3108,10 +3226,12 @@ func (q *Query) GetExtraProperties() map[string]interface{} {
 }
 
 func (q *Query) require(field *big.Int) {
-	if q.explicitFields == nil {
-		q.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if q.explicitFields != nil {
+		next.Set(q.explicitFields)
 	}
-	q.explicitFields.Or(q.explicitFields, field)
+	next.Or(next, field)
+	q.explicitFields = next
 }
 
 // SetMeasures sets the Measures field and marks it as non-optional;
@@ -3270,6 +3390,54 @@ func (q *QueryFilter) GetQueryFilterAnd() *QueryFilterAnd {
 }
 
 func (q *QueryFilter) UnmarshalJSON(data []byte) error {
+	if internal.MatchesObjectKeys(data, []string{"member", "operator", "values"}, []string{"member", "operator"}) {
+		valueQueryFilterCondition := new(QueryFilterCondition)
+		if err := json.Unmarshal(data, &valueQueryFilterCondition); err == nil {
+			q.typ = "QueryFilterCondition"
+			q.QueryFilterCondition = valueQueryFilterCondition
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"or"}, []string{"or"}) {
+		valueQueryFilterOr := new(QueryFilterOr)
+		if err := json.Unmarshal(data, &valueQueryFilterOr); err == nil {
+			q.typ = "QueryFilterOr"
+			q.QueryFilterOr = valueQueryFilterOr
+			return nil
+		}
+	}
+	if internal.MatchesObjectKeys(data, []string{"and"}, []string{"and"}) {
+		valueQueryFilterAnd := new(QueryFilterAnd)
+		if err := json.Unmarshal(data, &valueQueryFilterAnd); err == nil {
+			q.typ = "QueryFilterAnd"
+			q.QueryFilterAnd = valueQueryFilterAnd
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"member", "operator"}) {
+		valueQueryFilterCondition := new(QueryFilterCondition)
+		if err := json.Unmarshal(data, &valueQueryFilterCondition); err == nil {
+			q.typ = "QueryFilterCondition"
+			q.QueryFilterCondition = valueQueryFilterCondition
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"or"}) {
+		valueQueryFilterOr := new(QueryFilterOr)
+		if err := json.Unmarshal(data, &valueQueryFilterOr); err == nil {
+			q.typ = "QueryFilterOr"
+			q.QueryFilterOr = valueQueryFilterOr
+			return nil
+		}
+	}
+	if internal.HasObjectKeys(data, []string{"and"}) {
+		valueQueryFilterAnd := new(QueryFilterAnd)
+		if err := json.Unmarshal(data, &valueQueryFilterAnd); err == nil {
+			q.typ = "QueryFilterAnd"
+			q.QueryFilterAnd = valueQueryFilterAnd
+			return nil
+		}
+	}
 	valueQueryFilterCondition := new(QueryFilterCondition)
 	if err := json.Unmarshal(data, &valueQueryFilterCondition); err == nil {
 		q.typ = "QueryFilterCondition"
@@ -3328,7 +3496,7 @@ var (
 )
 
 type QueryFilterAnd struct {
-	And []map[string]interface{} `json:"and" url:"and"`
+	And []map[string]any `json:"and" url:"and"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3337,7 +3505,7 @@ type QueryFilterAnd struct {
 	rawJSON         json.RawMessage
 }
 
-func (q *QueryFilterAnd) GetAnd() []map[string]interface{} {
+func (q *QueryFilterAnd) GetAnd() []map[string]any {
 	if q == nil {
 		return nil
 	}
@@ -3352,15 +3520,17 @@ func (q *QueryFilterAnd) GetExtraProperties() map[string]interface{} {
 }
 
 func (q *QueryFilterAnd) require(field *big.Int) {
-	if q.explicitFields == nil {
-		q.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if q.explicitFields != nil {
+		next.Set(q.explicitFields)
 	}
-	q.explicitFields.Or(q.explicitFields, field)
+	next.Or(next, field)
+	q.explicitFields = next
 }
 
 // SetAnd sets the And field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (q *QueryFilterAnd) SetAnd(and []map[string]interface{}) {
+func (q *QueryFilterAnd) SetAnd(and []map[string]any) {
 	q.And = and
 	q.require(queryFilterAndFieldAnd)
 }
@@ -3454,10 +3624,12 @@ func (q *QueryFilterCondition) GetExtraProperties() map[string]interface{} {
 }
 
 func (q *QueryFilterCondition) require(field *big.Int) {
-	if q.explicitFields == nil {
-		q.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if q.explicitFields != nil {
+		next.Set(q.explicitFields)
 	}
-	q.explicitFields.Or(q.explicitFields, field)
+	next.Or(next, field)
+	q.explicitFields = next
 }
 
 // SetMember sets the Member field and marks it as non-optional;
@@ -3528,7 +3700,7 @@ var (
 )
 
 type QueryFilterOr struct {
-	Or []map[string]interface{} `json:"or" url:"or"`
+	Or []map[string]any `json:"or" url:"or"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3537,7 +3709,7 @@ type QueryFilterOr struct {
 	rawJSON         json.RawMessage
 }
 
-func (q *QueryFilterOr) GetOr() []map[string]interface{} {
+func (q *QueryFilterOr) GetOr() []map[string]any {
 	if q == nil {
 		return nil
 	}
@@ -3552,15 +3724,17 @@ func (q *QueryFilterOr) GetExtraProperties() map[string]interface{} {
 }
 
 func (q *QueryFilterOr) require(field *big.Int) {
-	if q.explicitFields == nil {
-		q.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if q.explicitFields != nil {
+		next.Set(q.explicitFields)
 	}
-	q.explicitFields.Or(q.explicitFields, field)
+	next.Or(next, field)
+	q.explicitFields = next
 }
 
 // SetOr sets the Or field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (q *QueryFilterOr) SetOr(or []map[string]interface{}) {
+func (q *QueryFilterOr) SetOr(or []map[string]any) {
 	q.Or = or
 	q.require(queryFilterOrFieldOr)
 }
@@ -3616,11 +3790,11 @@ var (
 )
 
 type Segment struct {
-	Name        string                 `json:"name" url:"name"`
-	Title       string                 `json:"title" url:"title"`
-	Description *string                `json:"description,omitempty" url:"description,omitempty"`
-	ShortTitle  string                 `json:"shortTitle" url:"shortTitle"`
-	Meta        map[string]interface{} `json:"meta,omitempty" url:"meta,omitempty"`
+	Name        string         `json:"name" url:"name"`
+	Title       string         `json:"title" url:"title"`
+	Description *string        `json:"description,omitempty" url:"description,omitempty"`
+	ShortTitle  string         `json:"shortTitle" url:"shortTitle"`
+	Meta        map[string]any `json:"meta,omitempty" url:"meta,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -3657,7 +3831,7 @@ func (s *Segment) GetShortTitle() string {
 	return s.ShortTitle
 }
 
-func (s *Segment) GetMeta() map[string]interface{} {
+func (s *Segment) GetMeta() map[string]any {
 	if s == nil {
 		return nil
 	}
@@ -3672,10 +3846,12 @@ func (s *Segment) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *Segment) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -3708,7 +3884,7 @@ func (s *Segment) SetShortTitle(shortTitle string) {
 
 // SetMeta sets the Meta field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (s *Segment) SetMeta(meta map[string]interface{}) {
+func (s *Segment) SetMeta(meta map[string]any) {
 	s.Meta = meta
 	s.require(segmentFieldMeta)
 }
@@ -3837,10 +4013,12 @@ func (t *TimeDimension) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TimeDimension) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetDimension sets the Dimension field and marks it as non-optional;
@@ -3909,7 +4087,7 @@ func (t *TimeDimension) String() string {
 type TimeDimensionDateRange struct {
 	String           string
 	StringList       []string
-	StringUnknownMap map[string]interface{}
+	StringUnknownMap map[string]any
 
 	typ string
 }
@@ -3928,7 +4106,7 @@ func (t *TimeDimensionDateRange) GetStringList() []string {
 	return t.StringList
 }
 
-func (t *TimeDimensionDateRange) GetStringUnknownMap() map[string]interface{} {
+func (t *TimeDimensionDateRange) GetStringUnknownMap() map[string]any {
 	if t == nil {
 		return nil
 	}
@@ -3948,7 +4126,7 @@ func (t *TimeDimensionDateRange) UnmarshalJSON(data []byte) error {
 		t.StringList = valueStringList
 		return nil
 	}
-	var valueStringUnknownMap map[string]interface{}
+	var valueStringUnknownMap map[string]any
 	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
 		t.typ = "StringUnknownMap"
 		t.StringUnknownMap = valueStringUnknownMap
@@ -3973,7 +4151,7 @@ func (t TimeDimensionDateRange) MarshalJSON() ([]byte, error) {
 type TimeDimensionDateRangeVisitor interface {
 	VisitString(string) error
 	VisitStringList([]string) error
-	VisitStringUnknownMap(map[string]interface{}) error
+	VisitStringUnknownMap(map[string]any) error
 }
 
 func (t *TimeDimensionDateRange) Accept(visitor TimeDimensionDateRangeVisitor) error {

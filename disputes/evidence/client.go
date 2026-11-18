@@ -4,13 +4,14 @@ package evidence
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	disputes "github.com/square/square-go-sdk/v5/disputes"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,28 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Returns a list of evidence associated with a dispute.
+//
+// Example:
+//
+//	request := &disputes.ListEvidenceRequest{
+//	    DisputeID: "dispute_id",
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Disputes.Evidence.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *disputes.ListEvidenceRequest,
@@ -78,6 +93,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +108,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -106,6 +122,17 @@ func (c *Client) List(
 // Returns the metadata for the evidence specified in the request URL path.
 //
 // You must maintain a copy of any evidence uploaded if you want to reference it later. Evidence cannot be downloaded after you upload it.
+//
+// Example:
+//
+//	request := &disputes.GetEvidenceRequest{
+//	    DisputeID: "dispute_id",
+//	    EvidenceID: "evidence_id",
+//	}
+//	_, err := client.Disputes.Evidence.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *disputes.GetEvidenceRequest,
@@ -124,6 +151,17 @@ func (c *Client) Get(
 
 // Removes specified evidence from a dispute.
 // Square does not send the bank any evidence that is removed.
+//
+// Example:
+//
+//	request := &disputes.DeleteEvidenceRequest{
+//	    DisputeID: "dispute_id",
+//	    EvidenceID: "evidence_id",
+//	}
+//	_, err := client.Disputes.Evidence.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *disputes.DeleteEvidenceRequest,

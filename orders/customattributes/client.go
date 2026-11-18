@@ -4,13 +4,14 @@ package customattributes
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	orders "github.com/square/square-go-sdk/v5/orders"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -55,6 +57,29 @@ func NewClient(options *core.RequestOptions) *Client {
 // To delete a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.BulkDeleteOrderCustomAttributesRequest{
+//	    Values: map[string]*square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+//	        "cover-count": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+//	            Key: square.String(
+//	                "cover-count",
+//	            ),
+//	            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+//	        },
+//	        "table-number": &square.BulkDeleteOrderCustomAttributesRequestDeleteCustomAttribute{
+//	            Key: square.String(
+//	                "table-number",
+//	            ),
+//	            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+//	        },
+//	    },
+//	}
+//	_, err := client.Orders.CustomAttributes.BatchDelete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *orders.BulkDeleteOrderCustomAttributesRequest,
@@ -85,6 +110,41 @@ func (c *Client) BatchDelete(
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.BulkUpsertOrderCustomAttributesRequest{
+//	    Values: map[string]*square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+//	        "cover-count": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "cover-count",
+//	                ),
+//	                Value: "6",
+//	                Version: square.Int(
+//	                    2,
+//	                ),
+//	            },
+//	            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+//	        },
+//	        "table-number": &square.BulkUpsertOrderCustomAttributesRequestUpsertCustomAttribute{
+//	            CustomAttribute: &square.CustomAttribute{
+//	                Key: square.String(
+//	                    "table-number",
+//	                ),
+//	                Value: "11",
+//	                Version: square.Int(
+//	                    4,
+//	                ),
+//	            },
+//	            OrderID: "7BbXGEIWNldxAzrtGf9GPVZTwZ4F",
+//	        },
+//	    },
+//	}
+//	_, err := client.Orders.CustomAttributes.BatchUpsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *orders.BulkUpsertOrderCustomAttributesRequest,
@@ -109,6 +169,26 @@ func (c *Client) BatchUpsert(
 // When all response pages are retrieved, the results include all custom attributes that are
 // visible to the requesting application, including those that are owned by other applications
 // and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.ListCustomAttributesRequest{
+//	    OrderID: "order_id",
+//	    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    WithDefinitions: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *orders.ListCustomAttributesRequest,
@@ -145,6 +225,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -159,7 +240,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -178,6 +259,23 @@ func (c *Client) List(
 // To retrieve a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.GetCustomAttributesRequest{
+//	    OrderID: "order_id",
+//	    CustomAttributeKey: "custom_attribute_key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	    WithDefinition: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Orders.CustomAttributes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *orders.GetCustomAttributesRequest,
@@ -203,6 +301,26 @@ func (c *Client) Get(
 // To create or update a custom attribute owned by another application, the `visibility` setting
 // must be `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.UpsertOrderCustomAttributeRequest{
+//	    OrderID: "order_id",
+//	    CustomAttributeKey: "custom_attribute_key",
+//	    CustomAttribute: &square.CustomAttribute{
+//	        Key: square.String(
+//	            "table-number",
+//	        ),
+//	        Value: "42",
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Orders.CustomAttributes.Upsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Upsert(
 	ctx context.Context,
 	request *orders.UpsertOrderCustomAttributeRequest,
@@ -224,6 +342,17 @@ func (c *Client) Upsert(
 // To delete a custom attribute owned by another application, the `visibility` setting must be
 // `VISIBILITY_READ_WRITE_VALUES`. Note that seller-defined custom attributes
 // (also known as custom fields) are always set to `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &orders.DeleteCustomAttributesRequest{
+//	    OrderID: "order_id",
+//	    CustomAttributeKey: "custom_attribute_key",
+//	}
+//	_, err := client.Orders.CustomAttributes.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *orders.DeleteCustomAttributesRequest,

@@ -22,10 +22,12 @@ type GetDevicesRequest struct {
 }
 
 func (g *GetDevicesRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetDeviceID sets the DeviceID field and marks it as non-optional;
@@ -61,10 +63,12 @@ type ListDevicesRequest struct {
 }
 
 func (l *ListDevicesRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -97,7 +101,6 @@ func (l *ListDevicesRequest) SetLocationID(locationID *string) {
 
 type ApplicationType = string
 
-// The wrapper object for the component entries of a given component type.
 var (
 	componentFieldType               = big.NewInt(1 << 0)
 	componentFieldApplicationDetails = big.NewInt(1 << 1)
@@ -107,6 +110,7 @@ var (
 	componentFieldEthernetDetails    = big.NewInt(1 << 5)
 )
 
+// The wrapper object for the component entries of a given component type.
 type Component struct {
 	// The type of this component. Each component type has expected properties expressed
 	// in a structured format within its corresponding `*_details` field.
@@ -180,10 +184,12 @@ func (c *Component) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Component) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -312,6 +318,11 @@ var (
 	deviceFieldStatus     = big.NewInt(1 << 3)
 )
 
+// deviceNullableFields maps the wire names of Device's nullable fields (required or optional) to their field bits.
+var deviceNullableFields = map[string]*big.Int{
+	"components": deviceFieldComponents,
+}
+
 type Device struct {
 	// A synthetic identifier for the device. The identifier includes a standardized prefix and
 	// is otherwise an opaque id generated from key device fields.
@@ -366,10 +377,12 @@ func (d *Device) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *Device) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -412,6 +425,13 @@ func (d *Device) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -452,6 +472,14 @@ var (
 	deviceAttributesFieldVersion         = big.NewInt(1 << 6)
 	deviceAttributesFieldMerchantToken   = big.NewInt(1 << 7)
 )
+
+// deviceAttributesNullableFields maps the wire names of DeviceAttributes's nullable fields (required or optional) to their field bits.
+var deviceAttributesNullableFields = map[string]*big.Int{
+	"model":            deviceAttributesFieldModel,
+	"name":             deviceAttributesFieldName,
+	"manufacturers_id": deviceAttributesFieldManufacturersID,
+	"merchant_token":   deviceAttributesFieldMerchantToken,
+}
 
 type DeviceAttributes struct {
 	// The device type.
@@ -545,10 +573,12 @@ func (d *DeviceAttributes) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeviceAttributes) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -619,6 +649,13 @@ func (d *DeviceAttributes) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceAttributesNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -679,6 +716,12 @@ var (
 	deviceComponentDetailsApplicationDetailsFieldDeviceCodeID    = big.NewInt(1 << 3)
 )
 
+// deviceComponentDetailsApplicationDetailsNullableFields maps the wire names of DeviceComponentDetailsApplicationDetails's nullable fields (required or optional) to their field bits.
+var deviceComponentDetailsApplicationDetailsNullableFields = map[string]*big.Int{
+	"session_location": deviceComponentDetailsApplicationDetailsFieldSessionLocation,
+	"device_code_id":   deviceComponentDetailsApplicationDetailsFieldDeviceCodeID,
+}
+
 type DeviceComponentDetailsApplicationDetails struct {
 	// The type of application.
 	// See [ApplicationType](#type-applicationtype) for possible values
@@ -726,10 +769,12 @@ func (d *DeviceComponentDetailsApplicationDetails) GetExtraProperties() map[stri
 }
 
 func (d *DeviceComponentDetailsApplicationDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetApplicationType sets the ApplicationType field and marks it as non-optional;
@@ -772,6 +817,13 @@ func (d *DeviceComponentDetailsApplicationDetails) UnmarshalJSON(data []byte) er
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceComponentDetailsApplicationDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -806,6 +858,11 @@ var (
 	deviceComponentDetailsBatteryDetailsFieldVisiblePercent = big.NewInt(1 << 0)
 	deviceComponentDetailsBatteryDetailsFieldExternalPower  = big.NewInt(1 << 1)
 )
+
+// deviceComponentDetailsBatteryDetailsNullableFields maps the wire names of DeviceComponentDetailsBatteryDetails's nullable fields (required or optional) to their field bits.
+var deviceComponentDetailsBatteryDetailsNullableFields = map[string]*big.Int{
+	"visible_percent": deviceComponentDetailsBatteryDetailsFieldVisiblePercent,
+}
 
 type DeviceComponentDetailsBatteryDetails struct {
 	// The battery charge percentage as displayed on the device.
@@ -843,10 +900,12 @@ func (d *DeviceComponentDetailsBatteryDetails) GetExtraProperties() map[string]i
 }
 
 func (d *DeviceComponentDetailsBatteryDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetVisiblePercent sets the VisiblePercent field and marks it as non-optional;
@@ -875,6 +934,13 @@ func (d *DeviceComponentDetailsBatteryDetails) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceComponentDetailsBatteryDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -935,10 +1001,12 @@ func (d *DeviceComponentDetailsCardReaderDetails) GetExtraProperties() map[strin
 }
 
 func (d *DeviceComponentDetailsCardReaderDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetVersion sets the Version field and marks it as non-optional;
@@ -996,6 +1064,13 @@ var (
 	deviceComponentDetailsEthernetDetailsFieldMacAddress  = big.NewInt(1 << 2)
 )
 
+// deviceComponentDetailsEthernetDetailsNullableFields maps the wire names of DeviceComponentDetailsEthernetDetails's nullable fields (required or optional) to their field bits.
+var deviceComponentDetailsEthernetDetailsNullableFields = map[string]*big.Int{
+	"active":        deviceComponentDetailsEthernetDetailsFieldActive,
+	"ip_address_v4": deviceComponentDetailsEthernetDetailsFieldIPAddressV4,
+	"mac_address":   deviceComponentDetailsEthernetDetailsFieldMacAddress,
+}
+
 type DeviceComponentDetailsEthernetDetails struct {
 	// A boolean to represent whether the Ethernet interface is currently active.
 	Active *bool `json:"active,omitempty" url:"active,omitempty"`
@@ -1040,10 +1115,12 @@ func (d *DeviceComponentDetailsEthernetDetails) GetExtraProperties() map[string]
 }
 
 func (d *DeviceComponentDetailsEthernetDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetActive sets the Active field and marks it as non-optional;
@@ -1079,6 +1156,13 @@ func (d *DeviceComponentDetailsEthernetDetails) UnmarshalJSON(data []byte) error
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceComponentDetailsEthernetDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1138,11 +1222,16 @@ func (d DeviceComponentDetailsExternalPower) Ptr() *DeviceComponentDetailsExtern
 	return &d
 }
 
-// A value qualified by unit of measure.
 var (
 	deviceComponentDetailsMeasurementFieldValue = big.NewInt(1 << 0)
 )
 
+// deviceComponentDetailsMeasurementNullableFields maps the wire names of DeviceComponentDetailsMeasurement's nullable fields (required or optional) to their field bits.
+var deviceComponentDetailsMeasurementNullableFields = map[string]*big.Int{
+	"value": deviceComponentDetailsMeasurementFieldValue,
+}
+
+// A value qualified by unit of measure.
 type DeviceComponentDetailsMeasurement struct {
 	// Value of measure.
 	Value *int `json:"value,omitempty" url:"value,omitempty"`
@@ -1169,10 +1258,12 @@ func (d *DeviceComponentDetailsMeasurement) GetExtraProperties() map[string]inte
 }
 
 func (d *DeviceComponentDetailsMeasurement) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetValue sets the Value field and marks it as non-optional;
@@ -1194,6 +1285,13 @@ func (d *DeviceComponentDetailsMeasurement) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceComponentDetailsMeasurementNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1232,6 +1330,15 @@ var (
 	deviceComponentDetailsWiFiDetailsFieldSignalStrength   = big.NewInt(1 << 4)
 	deviceComponentDetailsWiFiDetailsFieldMacAddress       = big.NewInt(1 << 5)
 )
+
+// deviceComponentDetailsWiFiDetailsNullableFields maps the wire names of DeviceComponentDetailsWiFiDetails's nullable fields (required or optional) to their field bits.
+var deviceComponentDetailsWiFiDetailsNullableFields = map[string]*big.Int{
+	"active":            deviceComponentDetailsWiFiDetailsFieldActive,
+	"ssid":              deviceComponentDetailsWiFiDetailsFieldSsid,
+	"ip_address_v4":     deviceComponentDetailsWiFiDetailsFieldIPAddressV4,
+	"secure_connection": deviceComponentDetailsWiFiDetailsFieldSecureConnection,
+	"mac_address":       deviceComponentDetailsWiFiDetailsFieldMacAddress,
+}
 
 type DeviceComponentDetailsWiFiDetails struct {
 	// A boolean to represent whether the WiFI interface is currently active.
@@ -1305,10 +1412,12 @@ func (d *DeviceComponentDetailsWiFiDetails) GetExtraProperties() map[string]inte
 }
 
 func (d *DeviceComponentDetailsWiFiDetails) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetActive sets the Active field and marks it as non-optional;
@@ -1365,6 +1474,13 @@ func (d *DeviceComponentDetailsWiFiDetails) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	d.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, deviceComponentDetailsWiFiDetailsNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		d.require(presentFields)
+	}
 	d.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1426,10 +1542,12 @@ func (d *DeviceStatus) GetExtraProperties() map[string]interface{} {
 }
 
 func (d *DeviceStatus) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCategory sets the Category field and marks it as non-optional;
@@ -1546,10 +1664,12 @@ func (g *GetDeviceResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetDeviceResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1660,10 +1780,12 @@ func (l *ListDevicesResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListDevicesResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

@@ -4,13 +4,14 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	evidence "github.com/square/square-go-sdk/v5/disputes/evidence"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -36,14 +37,31 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Returns a list of disputes associated with a particular account.
+//
+// Example:
+//
+//	request := &square.ListDisputesRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    States: square.DisputeStateInquiryEvidenceRequired.Ptr(),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	}
+//	_, err := client.Disputes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListDisputesRequest,
@@ -77,6 +95,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -91,7 +110,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -103,6 +122,16 @@ func (c *Client) List(
 }
 
 // Returns details about a specific dispute.
+//
+// Example:
+//
+//	request := &square.GetDisputesRequest{
+//	    DisputeID: "dispute_id",
+//	}
+//	_, err := client.Disputes.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetDisputesRequest,
@@ -124,6 +153,16 @@ func (c *Client) Get(
 //
 // Square debits the disputed amount from the seller’s Square account. If the Square account
 // does not have sufficient funds, Square debits the associated bank account.
+//
+// Example:
+//
+//	request := &square.AcceptDisputesRequest{
+//	    DisputeID: "dispute_id",
+//	}
+//	_, err := client.Disputes.Accept(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Accept(
 	ctx context.Context,
 	request *square.AcceptDisputesRequest,
@@ -142,6 +181,19 @@ func (c *Client) Accept(
 
 // Uploads a file to use as evidence in a dispute challenge. The endpoint accepts HTTP
 // multipart/form-data file uploads in HEIC, HEIF, JPEG, PDF, PNG, and TIFF formats.
+//
+// Example:
+//
+//	request := &square.CreateEvidenceFileDisputesRequest{
+//	    DisputeID: "dispute_id",
+//	    ImageFile: strings.NewReader(
+//	        "",
+//	    ),
+//	}
+//	_, err := client.Disputes.CreateEvidenceFile(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateEvidenceFile(
 	ctx context.Context,
 	request *square.CreateEvidenceFileDisputesRequest,
@@ -159,6 +211,19 @@ func (c *Client) CreateEvidenceFile(
 }
 
 // Uploads text to use as evidence for a dispute challenge.
+//
+// Example:
+//
+//	request := &square.CreateDisputeEvidenceTextRequest{
+//	    DisputeID: "dispute_id",
+//	    IdempotencyKey: "ed3ee3933d946f1514d505d173c82648",
+//	    EvidenceType: square.DisputeEvidenceTypeTrackingNumber.Ptr(),
+//	    EvidenceText: "1Z8888888888888888",
+//	}
+//	_, err := client.Disputes.CreateEvidenceText(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateEvidenceText(
 	ctx context.Context,
 	request *square.CreateDisputeEvidenceTextRequest,
@@ -182,6 +247,16 @@ func (c *Client) CreateEvidenceText(
 // [CreateDisputeEvidenceText](api-endpoint:Disputes-CreateDisputeEvidenceText) endpoints and
 // evidence automatically provided by Square, when available. Evidence cannot be removed from
 // a dispute after submission.
+//
+// Example:
+//
+//	request := &square.SubmitEvidenceDisputesRequest{
+//	    DisputeID: "dispute_id",
+//	}
+//	_, err := client.Disputes.SubmitEvidence(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SubmitEvidence(
 	ctx context.Context,
 	request *square.SubmitEvidenceDisputesRequest,

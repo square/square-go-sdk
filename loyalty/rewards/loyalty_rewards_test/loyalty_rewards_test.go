@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	loyalty "github.com/square/square-go-sdk/v5/loyalty"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestLoyaltyRewardsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &loyalty.CreateLoyaltyRewardRequest{
 		Reward: &square.LoyaltyReward{
@@ -104,6 +120,7 @@ func TestLoyaltyRewardsSearchWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &loyalty.SearchLoyaltyRewardsRequest{
 		Query: &square.SearchLoyaltyRewardsRequestLoyaltyRewardQuery{
@@ -134,6 +151,7 @@ func TestLoyaltyRewardsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &loyalty.GetRewardsRequest{
 		RewardID: "reward_id",
@@ -159,6 +177,7 @@ func TestLoyaltyRewardsDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &loyalty.DeleteRewardsRequest{
 		RewardID: "reward_id",
@@ -184,6 +203,7 @@ func TestLoyaltyRewardsRedeemWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &loyalty.RedeemLoyaltyRewardRequest{
 		RewardID:       "reward_id",

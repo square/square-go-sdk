@@ -28,10 +28,12 @@ type CreateInventoryAdjustmentReasonRequest struct {
 }
 
 func (c *CreateInventoryAdjustmentReasonRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -82,10 +84,12 @@ type DeleteInventoryAdjustmentReasonRequest struct {
 }
 
 func (d *DeleteInventoryAdjustmentReasonRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetReasonID sets the ReasonID field and marks it as non-optional;
@@ -129,10 +133,12 @@ type DeprecatedGetAdjustmentInventoryRequest struct {
 }
 
 func (d *DeprecatedGetAdjustmentInventoryRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetAdjustmentID sets the AdjustmentID field and marks it as non-optional;
@@ -162,10 +168,12 @@ type ListInventoryAdjustmentReasonsRequest struct {
 }
 
 func (l *ListInventoryAdjustmentReasonsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetIncludeDeleted sets the IncludeDeleted field and marks it as non-optional;
@@ -196,10 +204,12 @@ type RestoreInventoryAdjustmentReasonRequest struct {
 }
 
 func (r *RestoreInventoryAdjustmentReasonRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetReasonID sets the ReasonID field and marks it as non-optional;
@@ -243,10 +253,12 @@ type RetrieveInventoryAdjustmentReasonRequest struct {
 }
 
 func (r *RetrieveInventoryAdjustmentReasonRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetReasonID sets the ReasonID field and marks it as non-optional;
@@ -309,10 +321,12 @@ type UpdateInventoryAdjustmentRequest struct {
 }
 
 func (u *UpdateInventoryAdjustmentRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -369,10 +383,12 @@ type UpdateInventoryAdjustmentReasonRequest struct {
 }
 
 func (u *UpdateInventoryAdjustmentReasonRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetReasonID sets the ReasonID field and marks it as non-optional;
@@ -433,10 +449,12 @@ type ChangesInventoryRequest struct {
 }
 
 func (c *ChangesInventoryRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
@@ -474,10 +492,12 @@ type DeprecatedGetPhysicalCountInventoryRequest struct {
 }
 
 func (d *DeprecatedGetPhysicalCountInventoryRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetPhysicalCountID sets the PhysicalCountID field and marks it as non-optional;
@@ -510,10 +530,12 @@ type GetInventoryRequest struct {
 }
 
 func (g *GetInventoryRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
@@ -550,10 +572,12 @@ type GetAdjustmentInventoryRequest struct {
 }
 
 func (g *GetAdjustmentInventoryRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetAdjustmentID sets the AdjustmentID field and marks it as non-optional;
@@ -577,10 +601,12 @@ type GetPhysicalCountInventoryRequest struct {
 }
 
 func (g *GetPhysicalCountInventoryRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetPhysicalCountID sets the PhysicalCountID field and marks it as non-optional;
@@ -595,6 +621,12 @@ var (
 	batchChangeInventoryRequestFieldChanges               = big.NewInt(1 << 1)
 	batchChangeInventoryRequestFieldIgnoreUnchangedCounts = big.NewInt(1 << 2)
 )
+
+// batchChangeInventoryRequestNullableFields maps the wire names of BatchChangeInventoryRequest's nullable fields (required or optional) to their field bits.
+var batchChangeInventoryRequestNullableFields = map[string]*big.Int{
+	"changes":                 batchChangeInventoryRequestFieldChanges,
+	"ignore_unchanged_counts": batchChangeInventoryRequestFieldIgnoreUnchangedCounts,
+}
 
 type BatchChangeInventoryRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
@@ -648,10 +680,12 @@ func (b *BatchChangeInventoryRequest) GetExtraProperties() map[string]interface{
 }
 
 func (b *BatchChangeInventoryRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -687,6 +721,13 @@ func (b *BatchChangeInventoryRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, batchChangeInventoryRequestNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -767,10 +808,12 @@ func (b *BatchChangeInventoryResponse) GetExtraProperties() map[string]interface
 }
 
 func (b *BatchChangeInventoryResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -889,10 +932,12 @@ func (b *BatchGetInventoryChangesResponse) GetExtraProperties() map[string]inter
 }
 
 func (b *BatchGetInventoryChangesResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -966,6 +1011,16 @@ var (
 	batchGetInventoryCountsRequestFieldStates           = big.NewInt(1 << 4)
 	batchGetInventoryCountsRequestFieldLimit            = big.NewInt(1 << 5)
 )
+
+// batchGetInventoryCountsRequestNullableFields maps the wire names of BatchGetInventoryCountsRequest's nullable fields (required or optional) to their field bits.
+var batchGetInventoryCountsRequestNullableFields = map[string]*big.Int{
+	"catalog_object_ids": batchGetInventoryCountsRequestFieldCatalogObjectIDs,
+	"location_ids":       batchGetInventoryCountsRequestFieldLocationIDs,
+	"updated_after":      batchGetInventoryCountsRequestFieldUpdatedAfter,
+	"cursor":             batchGetInventoryCountsRequestFieldCursor,
+	"states":             batchGetInventoryCountsRequestFieldStates,
+	"limit":              batchGetInventoryCountsRequestFieldLimit,
+}
 
 type BatchGetInventoryCountsRequest struct {
 	// The filter to return results by `CatalogObject` ID.
@@ -1047,10 +1102,12 @@ func (b *BatchGetInventoryCountsRequest) GetExtraProperties() map[string]interfa
 }
 
 func (b *BatchGetInventoryCountsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCatalogObjectIDs sets the CatalogObjectIDs field and marks it as non-optional;
@@ -1107,6 +1164,13 @@ func (b *BatchGetInventoryCountsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, batchGetInventoryCountsRequestNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1191,10 +1255,12 @@ func (b *BatchGetInventoryCountsResponse) GetExtraProperties() map[string]interf
 }
 
 func (b *BatchGetInventoryCountsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1272,6 +1338,19 @@ var (
 	batchRetrieveInventoryChangesRequestFieldSort             = big.NewInt(1 << 8)
 	batchRetrieveInventoryChangesRequestFieldReasonIDs        = big.NewInt(1 << 9)
 )
+
+// batchRetrieveInventoryChangesRequestNullableFields maps the wire names of BatchRetrieveInventoryChangesRequest's nullable fields (required or optional) to their field bits.
+var batchRetrieveInventoryChangesRequestNullableFields = map[string]*big.Int{
+	"catalog_object_ids": batchRetrieveInventoryChangesRequestFieldCatalogObjectIDs,
+	"location_ids":       batchRetrieveInventoryChangesRequestFieldLocationIDs,
+	"types":              batchRetrieveInventoryChangesRequestFieldTypes,
+	"states":             batchRetrieveInventoryChangesRequestFieldStates,
+	"updated_after":      batchRetrieveInventoryChangesRequestFieldUpdatedAfter,
+	"updated_before":     batchRetrieveInventoryChangesRequestFieldUpdatedBefore,
+	"cursor":             batchRetrieveInventoryChangesRequestFieldCursor,
+	"limit":              batchRetrieveInventoryChangesRequestFieldLimit,
+	"reason_ids":         batchRetrieveInventoryChangesRequestFieldReasonIDs,
+}
 
 type BatchRetrieveInventoryChangesRequest struct {
 	// The filter to return results by `CatalogObject` ID.
@@ -1397,10 +1476,12 @@ func (b *BatchRetrieveInventoryChangesRequest) GetExtraProperties() map[string]i
 }
 
 func (b *BatchRetrieveInventoryChangesRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetCatalogObjectIDs sets the CatalogObjectIDs field and marks it as non-optional;
@@ -1485,6 +1566,13 @@ func (b *BatchRetrieveInventoryChangesRequest) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, batchRetrieveInventoryChangesRequestNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1550,10 +1638,12 @@ func (b *BatchRetrieveInventoryChangesSort) GetExtraProperties() map[string]inte
 }
 
 func (b *BatchRetrieveInventoryChangesSort) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -1614,12 +1704,12 @@ func (b *BatchRetrieveInventoryChangesSort) String() string {
 
 type BatchRetrieveInventoryChangesSortField = string
 
-// Represents an output from a call to [CreateInventoryAdjustmentReason](api-endpoint:Inventory-CreateInventoryAdjustmentReason).
 var (
 	createInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
 	createInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [CreateInventoryAdjustmentReason](api-endpoint:Inventory-CreateInventoryAdjustmentReason).
 type CreateInventoryAdjustmentReasonResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1655,10 +1745,12 @@ func (c *CreateInventoryAdjustmentReasonResponse) GetExtraProperties() map[strin
 }
 
 func (c *CreateInventoryAdjustmentReasonResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1717,12 +1809,12 @@ func (c *CreateInventoryAdjustmentReasonResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents an output from a call to [DeleteInventoryAdjustmentReason](api-endpoint:Inventory-DeleteInventoryAdjustmentReason).
 var (
 	deleteInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
 	deleteInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [DeleteInventoryAdjustmentReason](api-endpoint:Inventory-DeleteInventoryAdjustmentReason).
 type DeleteInventoryAdjustmentReasonResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1758,10 +1850,12 @@ func (d *DeleteInventoryAdjustmentReasonResponse) GetExtraProperties() map[strin
 }
 
 func (d *DeleteInventoryAdjustmentReasonResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1860,10 +1954,12 @@ func (g *GetInventoryAdjustmentResponse) GetExtraProperties() map[string]interfa
 }
 
 func (g *GetInventoryAdjustmentResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1975,10 +2071,12 @@ func (g *GetInventoryChangesResponse) GetExtraProperties() map[string]interface{
 }
 
 func (g *GetInventoryChangesResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2098,10 +2196,12 @@ func (g *GetInventoryCountResponse) GetExtraProperties() map[string]interface{} 
 }
 
 func (g *GetInventoryCountResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2207,10 +2307,12 @@ func (g *GetInventoryPhysicalCountResponse) GetExtraProperties() map[string]inte
 }
 
 func (g *GetInventoryPhysicalCountResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2269,8 +2371,6 @@ func (g *GetInventoryPhysicalCountResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Represents a change in state or quantity of product inventory at a
-// particular time and location.
 var (
 	inventoryAdjustmentFieldID                = big.NewInt(1 << 0)
 	inventoryAdjustmentFieldReferenceID       = big.NewInt(1 << 1)
@@ -2298,6 +2398,22 @@ var (
 	inventoryAdjustmentFieldReasonID          = big.NewInt(1 << 23)
 )
 
+// inventoryAdjustmentNullableFields maps the wire names of InventoryAdjustment's nullable fields (required or optional) to their field bits.
+var inventoryAdjustmentNullableFields = map[string]*big.Int{
+	"reference_id":        inventoryAdjustmentFieldReferenceID,
+	"from_location_id":    inventoryAdjustmentFieldFromLocationID,
+	"to_location_id":      inventoryAdjustmentFieldToLocationID,
+	"catalog_object_id":   inventoryAdjustmentFieldCatalogObjectID,
+	"catalog_object_type": inventoryAdjustmentFieldCatalogObjectType,
+	"quantity":            inventoryAdjustmentFieldQuantity,
+	"occurred_at":         inventoryAdjustmentFieldOccurredAt,
+	"employee_id":         inventoryAdjustmentFieldEmployeeID,
+	"team_member_id":      inventoryAdjustmentFieldTeamMemberID,
+	"vendor_id":           inventoryAdjustmentFieldVendorID,
+}
+
+// Represents a change in state or quantity of product inventory at a
+// particular time and location.
 type InventoryAdjustment struct {
 	// A unique ID generated by Square for the
 	// `InventoryAdjustment`.
@@ -2567,10 +2683,12 @@ func (i *InventoryAdjustment) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InventoryAdjustment) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -2753,6 +2871,13 @@ func (i *InventoryAdjustment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, inventoryAdjustmentNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2850,10 +2975,12 @@ func (i *InventoryAdjustmentGroup) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InventoryAdjustmentGroup) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -2926,7 +3053,6 @@ func (i *InventoryAdjustmentGroup) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents an inventory adjustment reason.
 var (
 	inventoryAdjustmentReasonFieldID        = big.NewInt(1 << 0)
 	inventoryAdjustmentReasonFieldName      = big.NewInt(1 << 1)
@@ -2936,6 +3062,13 @@ var (
 	inventoryAdjustmentReasonFieldIsDeleted = big.NewInt(1 << 5)
 )
 
+// inventoryAdjustmentReasonNullableFields maps the wire names of InventoryAdjustmentReason's nullable fields (required or optional) to their field bits.
+var inventoryAdjustmentReasonNullableFields = map[string]*big.Int{
+	"name":       inventoryAdjustmentReasonFieldName,
+	"is_deleted": inventoryAdjustmentReasonFieldIsDeleted,
+}
+
+// Represents an inventory adjustment reason.
 type InventoryAdjustmentReason struct {
 	// The identifier for this inventory adjustment reason.
 	ID *InventoryAdjustmentReasonID `json:"id" url:"id"`
@@ -3022,10 +3155,12 @@ func (i *InventoryAdjustmentReason) GetExtraProperties() map[string]interface{} 
 }
 
 func (i *InventoryAdjustmentReason) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3082,6 +3217,13 @@ func (i *InventoryAdjustmentReason) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, inventoryAdjustmentReasonNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3134,12 +3276,17 @@ func (i InventoryAdjustmentReasonDirection) Ptr() *InventoryAdjustmentReasonDire
 	return &i
 }
 
-// Identifies a standard or custom inventory adjustment reason.
 var (
 	inventoryAdjustmentReasonIDFieldType           = big.NewInt(1 << 0)
 	inventoryAdjustmentReasonIDFieldCustomReasonID = big.NewInt(1 << 1)
 )
 
+// inventoryAdjustmentReasonIDNullableFields maps the wire names of InventoryAdjustmentReasonID's nullable fields (required or optional) to their field bits.
+var inventoryAdjustmentReasonIDNullableFields = map[string]*big.Int{
+	"custom_reason_id": inventoryAdjustmentReasonIDFieldCustomReasonID,
+}
+
+// Identifies a standard or custom inventory adjustment reason.
 type InventoryAdjustmentReasonID struct {
 	// The adjustment reason type.
 	// See [Type](#type-type) for possible values
@@ -3177,10 +3324,12 @@ func (i *InventoryAdjustmentReasonID) GetExtraProperties() map[string]interface{
 }
 
 func (i *InventoryAdjustmentReasonID) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -3209,6 +3358,13 @@ func (i *InventoryAdjustmentReasonID) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, inventoryAdjustmentReasonIDNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3319,9 +3475,6 @@ func (i InventoryAdjustmentReasonIDType) Ptr() *InventoryAdjustmentReasonIDType 
 	return &i
 }
 
-// Represents a single physical count, inventory, adjustment, or transfer
-// that is part of the history of inventory changes for a particular
-// [CatalogObject](entity:CatalogObject) instance.
 var (
 	inventoryChangeFieldType              = big.NewInt(1 << 0)
 	inventoryChangeFieldPhysicalCount     = big.NewInt(1 << 1)
@@ -3330,6 +3483,9 @@ var (
 	inventoryChangeFieldMeasurementUnitID = big.NewInt(1 << 4)
 )
 
+// Represents a single physical count, inventory, adjustment, or transfer
+// that is part of the history of inventory changes for a particular
+// [CatalogObject](entity:CatalogObject) instance.
 type InventoryChange struct {
 	// Indicates how the inventory change is applied. See
 	// [InventoryChangeType](entity:InventoryChangeType) for all possible values.
@@ -3396,10 +3552,12 @@ func (i *InventoryChange) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InventoryChange) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetType sets the Type field and marks it as non-optional;
@@ -3502,10 +3660,6 @@ func (i InventoryChangeType) Ptr() *InventoryChangeType {
 	return &i
 }
 
-// Represents Square-estimated quantity of items in a particular state at a
-// particular seller location based on the known history of physical counts and
-// inventory adjustments. The absence of an inventory count indicates that the
-// catalog object hasn't interacted with the given inventory state at the given location.
 var (
 	inventoryCountFieldCatalogObjectID   = big.NewInt(1 << 0)
 	inventoryCountFieldCatalogObjectType = big.NewInt(1 << 1)
@@ -3516,6 +3670,18 @@ var (
 	inventoryCountFieldIsEstimated       = big.NewInt(1 << 6)
 )
 
+// inventoryCountNullableFields maps the wire names of InventoryCount's nullable fields (required or optional) to their field bits.
+var inventoryCountNullableFields = map[string]*big.Int{
+	"catalog_object_id":   inventoryCountFieldCatalogObjectID,
+	"catalog_object_type": inventoryCountFieldCatalogObjectType,
+	"location_id":         inventoryCountFieldLocationID,
+	"quantity":            inventoryCountFieldQuantity,
+}
+
+// Represents Square-estimated quantity of items in a particular state at a
+// particular seller location based on the known history of physical counts and
+// inventory adjustments. The absence of an inventory count indicates that the
+// catalog object hasn't interacted with the given inventory state at the given location.
 type InventoryCount struct {
 	// The Square-generated ID of the
 	// [CatalogObject](entity:CatalogObject) being tracked.
@@ -3609,10 +3775,12 @@ func (i *InventoryCount) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InventoryCount) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetCatalogObjectID sets the CatalogObjectID field and marks it as non-optional;
@@ -3676,6 +3844,13 @@ func (i *InventoryCount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, inventoryCountNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3706,10 +3881,6 @@ func (i *InventoryCount) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// Represents the quantity of an item variation that is physically present
-// at a specific location, verified by a seller or a seller's employee. For example,
-// a physical count might come from an employee counting the item variations on
-// hand or from syncing with an external system.
 var (
 	inventoryPhysicalCountFieldID                = big.NewInt(1 << 0)
 	inventoryPhysicalCountFieldReferenceID       = big.NewInt(1 << 1)
@@ -3726,6 +3897,22 @@ var (
 	inventoryPhysicalCountFieldAdjustmentID      = big.NewInt(1 << 12)
 )
 
+// inventoryPhysicalCountNullableFields maps the wire names of InventoryPhysicalCount's nullable fields (required or optional) to their field bits.
+var inventoryPhysicalCountNullableFields = map[string]*big.Int{
+	"reference_id":        inventoryPhysicalCountFieldReferenceID,
+	"catalog_object_id":   inventoryPhysicalCountFieldCatalogObjectID,
+	"catalog_object_type": inventoryPhysicalCountFieldCatalogObjectType,
+	"location_id":         inventoryPhysicalCountFieldLocationID,
+	"quantity":            inventoryPhysicalCountFieldQuantity,
+	"employee_id":         inventoryPhysicalCountFieldEmployeeID,
+	"team_member_id":      inventoryPhysicalCountFieldTeamMemberID,
+	"occurred_at":         inventoryPhysicalCountFieldOccurredAt,
+}
+
+// Represents the quantity of an item variation that is physically present
+// at a specific location, verified by a seller or a seller's employee. For example,
+// a physical count might come from an employee counting the item variations on
+// hand or from syncing with an external system.
 type InventoryPhysicalCount struct {
 	// A unique Square-generated ID for the
 	// [InventoryPhysicalCount](entity:InventoryPhysicalCount).
@@ -3879,10 +4066,12 @@ func (i *InventoryPhysicalCount) GetExtraProperties() map[string]interface{} {
 }
 
 func (i *InventoryPhysicalCount) require(field *big.Int) {
-	if i.explicitFields == nil {
-		i.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if i.explicitFields != nil {
+		next.Set(i.explicitFields)
 	}
-	i.explicitFields.Or(i.explicitFields, field)
+	next.Or(next, field)
+	i.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3988,6 +4177,13 @@ func (i *InventoryPhysicalCount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	i.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, inventoryPhysicalCountNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		i.require(presentFields)
+	}
 	i.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4086,12 +4282,12 @@ func (i InventoryState) Ptr() *InventoryState {
 	return &i
 }
 
-// Represents an output from a call to [ListInventoryAdjustmentReasons](api-endpoint:Inventory-ListInventoryAdjustmentReasons).
 var (
 	listInventoryAdjustmentReasonsResponseFieldErrors            = big.NewInt(1 << 0)
 	listInventoryAdjustmentReasonsResponseFieldAdjustmentReasons = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [ListInventoryAdjustmentReasons](api-endpoint:Inventory-ListInventoryAdjustmentReasons).
 type ListInventoryAdjustmentReasonsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4128,10 +4324,12 @@ func (l *ListInventoryAdjustmentReasonsResponse) GetExtraProperties() map[string
 }
 
 func (l *ListInventoryAdjustmentReasonsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4190,12 +4388,12 @@ func (l *ListInventoryAdjustmentReasonsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents an output from a call to [RestoreInventoryAdjustmentReason](api-endpoint:Inventory-RestoreInventoryAdjustmentReason).
 var (
 	restoreInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
 	restoreInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [RestoreInventoryAdjustmentReason](api-endpoint:Inventory-RestoreInventoryAdjustmentReason).
 type RestoreInventoryAdjustmentReasonResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4231,10 +4429,12 @@ func (r *RestoreInventoryAdjustmentReasonResponse) GetExtraProperties() map[stri
 }
 
 func (r *RestoreInventoryAdjustmentReasonResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4293,12 +4493,12 @@ func (r *RestoreInventoryAdjustmentReasonResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an output from a call to [RetrieveInventoryAdjustmentReason](api-endpoint:Inventory-RetrieveInventoryAdjustmentReason).
 var (
 	retrieveInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
 	retrieveInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [RetrieveInventoryAdjustmentReason](api-endpoint:Inventory-RetrieveInventoryAdjustmentReason).
 type RetrieveInventoryAdjustmentReasonResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4335,10 +4535,12 @@ func (r *RetrieveInventoryAdjustmentReasonResponse) GetExtraProperties() map[str
 }
 
 func (r *RetrieveInventoryAdjustmentReasonResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4397,12 +4599,12 @@ func (r *RetrieveInventoryAdjustmentReasonResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an output from a call to [UpdateInventoryAdjustmentReason](api-endpoint:Inventory-UpdateInventoryAdjustmentReason).
 var (
 	updateInventoryAdjustmentReasonResponseFieldErrors           = big.NewInt(1 << 0)
 	updateInventoryAdjustmentReasonResponseFieldAdjustmentReason = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [UpdateInventoryAdjustmentReason](api-endpoint:Inventory-UpdateInventoryAdjustmentReason).
 type UpdateInventoryAdjustmentReasonResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -4438,10 +4640,12 @@ func (u *UpdateInventoryAdjustmentReasonResponse) GetExtraProperties() map[strin
 }
 
 func (u *UpdateInventoryAdjustmentReasonResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -4540,10 +4744,12 @@ func (u *UpdateInventoryAdjustmentResponse) GetExtraProperties() map[string]inte
 }
 
 func (u *UpdateInventoryAdjustmentResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

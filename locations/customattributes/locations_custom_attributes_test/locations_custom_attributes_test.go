@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	locations "github.com/square/square-go-sdk/v5/locations"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestLocationsCustomAttributesBatchDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.BulkDeleteLocationCustomAttributesRequest{
 		Values: map[string]*square.BulkDeleteLocationCustomAttributesRequestLocationCustomAttributeDeleteRequest{
@@ -113,6 +129,7 @@ func TestLocationsCustomAttributesBatchUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.BulkUpsertLocationCustomAttributesRequest{
 		Values: map[string]*square.BulkUpsertLocationCustomAttributesRequestLocationCustomAttributeUpsertRequest{
@@ -166,6 +183,7 @@ func TestLocationsCustomAttributesListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.ListCustomAttributesRequest{
 		LocationID:       "location_id",
@@ -189,7 +207,7 @@ func TestLocationsCustomAttributesListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsCustomAttributesListWithWireMock", "GET", "/v2/locations/location_id/custom-attributes", map[string]string{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
+	VerifyRequestCount(t, "TestLocationsCustomAttributesListWithWireMock", "GET", "/v2/locations/location_id/custom-attributes", map[string]interface{}{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor", "with_definitions": "true"}, 1)
 }
 
 func TestLocationsCustomAttributesGetWithWireMock(
@@ -201,6 +219,7 @@ func TestLocationsCustomAttributesGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.GetCustomAttributesRequest{
 		LocationID: "location_id",
@@ -221,7 +240,7 @@ func TestLocationsCustomAttributesGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestLocationsCustomAttributesGetWithWireMock", "GET", "/v2/locations/location_id/custom-attributes/key", map[string]string{"with_definition": "true", "version": "1"}, 1)
+	VerifyRequestCount(t, "TestLocationsCustomAttributesGetWithWireMock", "GET", "/v2/locations/location_id/custom-attributes/key", map[string]interface{}{"with_definition": "true", "version": "1"}, 1)
 }
 
 func TestLocationsCustomAttributesUpsertWithWireMock(
@@ -233,6 +252,7 @@ func TestLocationsCustomAttributesUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.UpsertLocationCustomAttributeRequest{
 		LocationID: "location_id",
@@ -262,6 +282,7 @@ func TestLocationsCustomAttributesDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &locations.DeleteCustomAttributesRequest{
 		LocationID: "location_id",

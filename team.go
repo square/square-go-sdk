@@ -27,10 +27,12 @@ type CreateJobRequest struct {
 }
 
 func (c *CreateJobRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetJob sets the Job field and marks it as non-optional;
@@ -83,10 +85,12 @@ type ListJobsRequest struct {
 }
 
 func (l *ListJobsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -109,10 +113,12 @@ type RetrieveJobRequest struct {
 }
 
 func (r *RetrieveJobRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetJobID sets the JobID field and marks it as non-optional;
@@ -139,10 +145,12 @@ type UpdateJobRequest struct {
 }
 
 func (u *UpdateJobRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetJobID sets the JobID field and marks it as non-optional;
@@ -180,13 +188,13 @@ func (u *UpdateJobRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Represents a [CreateJob](api-endpoint:Team-CreateJob) response. Either `job` or `errors`
-// is present in the response.
 var (
 	createJobResponseFieldJob    = big.NewInt(1 << 0)
 	createJobResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Represents a [CreateJob](api-endpoint:Team-CreateJob) response. Either `job` or `errors`
+// is present in the response.
 type CreateJobResponse struct {
 	// The new job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
@@ -222,10 +230,12 @@ func (c *CreateJobResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateJobResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetJob sets the Job field and marks it as non-optional;
@@ -284,9 +294,6 @@ func (c *CreateJobResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents a job that can be assigned to [team members](entity:TeamMember). This object defines the
-// job's title and tip eligibility. Compensation is defined in a [job assignment](entity:JobAssignment)
-// in a team member's wage setting.
 var (
 	jobFieldID            = big.NewInt(1 << 0)
 	jobFieldTitle         = big.NewInt(1 << 1)
@@ -296,6 +303,15 @@ var (
 	jobFieldVersion       = big.NewInt(1 << 5)
 )
 
+// jobNullableFields maps the wire names of Job's nullable fields (required or optional) to their field bits.
+var jobNullableFields = map[string]*big.Int{
+	"title":           jobFieldTitle,
+	"is_tip_eligible": jobFieldIsTipEligible,
+}
+
+// Represents a job that can be assigned to [team members](entity:TeamMember). This object defines the
+// job's title and tip eligibility. Compensation is defined in a [job assignment](entity:JobAssignment)
+// in a team member's wage setting.
 type Job struct {
 	// **Read only** The unique Square-assigned ID of the job. If you need a job ID for an API request,
 	// call [ListJobs](api-endpoint:Team-ListJobs) or use the ID returned when you created the job.
@@ -372,10 +388,12 @@ func (j *Job) GetExtraProperties() map[string]interface{} {
 }
 
 func (j *Job) require(field *big.Int) {
-	if j.explicitFields == nil {
-		j.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if j.explicitFields != nil {
+		next.Set(j.explicitFields)
 	}
-	j.explicitFields.Or(j.explicitFields, field)
+	next.Or(next, field)
+	j.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -432,6 +450,13 @@ func (j *Job) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	j.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, jobNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		j.require(presentFields)
+	}
 	j.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -462,14 +487,14 @@ func (j *Job) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
-// Represents a [ListJobs](api-endpoint:Team-ListJobs) response. Either `jobs` or `errors`
-// is present in the response. If additional results are available, the `cursor` field is also present.
 var (
 	listJobsResponseFieldJobs   = big.NewInt(1 << 0)
 	listJobsResponseFieldCursor = big.NewInt(1 << 1)
 	listJobsResponseFieldErrors = big.NewInt(1 << 2)
 )
 
+// Represents a [ListJobs](api-endpoint:Team-ListJobs) response. Either `jobs` or `errors`
+// is present in the response. If additional results are available, the `cursor` field is also present.
 type ListJobsResponse struct {
 	// The retrieved jobs. A single paged response contains up to 100 jobs.
 	Jobs []*Job `json:"jobs,omitempty" url:"jobs,omitempty"`
@@ -516,10 +541,12 @@ func (l *ListJobsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListJobsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetJobs sets the Jobs field and marks it as non-optional;
@@ -585,13 +612,13 @@ func (l *ListJobsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents a [RetrieveJob](api-endpoint:Team-RetrieveJob) response. Either `job` or `errors`
-// is present in the response.
 var (
 	retrieveJobResponseFieldJob    = big.NewInt(1 << 0)
 	retrieveJobResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Represents a [RetrieveJob](api-endpoint:Team-RetrieveJob) response. Either `job` or `errors`
+// is present in the response.
 type RetrieveJobResponse struct {
 	// The retrieved job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
@@ -627,10 +654,12 @@ func (r *RetrieveJobResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RetrieveJobResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetJob sets the Job field and marks it as non-optional;
@@ -689,13 +718,13 @@ func (r *RetrieveJobResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents an [UpdateJob](api-endpoint:Team-UpdateJob) response. Either `job` or `errors`
-// is present in the response.
 var (
 	updateJobResponseFieldJob    = big.NewInt(1 << 0)
 	updateJobResponseFieldErrors = big.NewInt(1 << 1)
 )
 
+// Represents an [UpdateJob](api-endpoint:Team-UpdateJob) response. Either `job` or `errors`
+// is present in the response.
 type UpdateJobResponse struct {
 	// The updated job.
 	Job *Job `json:"job,omitempty" url:"job,omitempty"`
@@ -731,10 +760,12 @@ func (u *UpdateJobResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateJobResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetJob sets the Job field and marks it as non-optional;

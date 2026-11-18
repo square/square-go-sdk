@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	merchants "github.com/square/square-go-sdk/v5/merchants"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestMerchantsCustomAttributeDefinitionsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.ListCustomAttributeDefinitionsRequest{
 		VisibilityFilter: square.VisibilityFilterAll.Ptr(),
@@ -91,7 +107,7 @@ func TestMerchantsCustomAttributeDefinitionsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestMerchantsCustomAttributeDefinitionsListWithWireMock", "GET", "/v2/merchants/custom-attribute-definitions", map[string]string{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor"}, 1)
+	VerifyRequestCount(t, "TestMerchantsCustomAttributeDefinitionsListWithWireMock", "GET", "/v2/merchants/custom-attribute-definitions", map[string]interface{}{"visibility_filter": "ALL", "limit": "1", "cursor": "cursor"}, 1)
 }
 
 func TestMerchantsCustomAttributeDefinitionsCreateWithWireMock(
@@ -103,6 +119,7 @@ func TestMerchantsCustomAttributeDefinitionsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.CreateMerchantCustomAttributeDefinitionRequest{
 		CustomAttributeDefinition: &square.CustomAttributeDefinition{
@@ -142,6 +159,7 @@ func TestMerchantsCustomAttributeDefinitionsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.GetCustomAttributeDefinitionsRequest{
 		Key: "key",
@@ -158,7 +176,7 @@ func TestMerchantsCustomAttributeDefinitionsGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestMerchantsCustomAttributeDefinitionsGetWithWireMock", "GET", "/v2/merchants/custom-attribute-definitions/key", map[string]string{"version": "1"}, 1)
+	VerifyRequestCount(t, "TestMerchantsCustomAttributeDefinitionsGetWithWireMock", "GET", "/v2/merchants/custom-attribute-definitions/key", map[string]interface{}{"version": "1"}, 1)
 }
 
 func TestMerchantsCustomAttributeDefinitionsUpdateWithWireMock(
@@ -170,6 +188,7 @@ func TestMerchantsCustomAttributeDefinitionsUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.UpdateMerchantCustomAttributeDefinitionRequest{
 		Key: "key",
@@ -201,6 +220,7 @@ func TestMerchantsCustomAttributeDefinitionsDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &merchants.DeleteCustomAttributeDefinitionsRequest{
 		Key: "key",

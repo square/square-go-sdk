@@ -29,10 +29,12 @@ type CancelTransferOrderRequest struct {
 }
 
 func (c *CancelTransferOrderRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
@@ -94,10 +96,12 @@ type CreateTransferOrderRequest struct {
 }
 
 func (c *CreateTransferOrderRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -151,10 +155,12 @@ type DeleteTransferOrdersRequest struct {
 }
 
 func (d *DeleteTransferOrdersRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
@@ -184,10 +190,12 @@ type GetTransferOrdersRequest struct {
 }
 
 func (g *GetTransferOrdersRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
@@ -219,10 +227,12 @@ type ReceiveTransferOrderRequest struct {
 }
 
 func (r *ReceiveTransferOrderRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
@@ -293,10 +303,12 @@ type SearchTransferOrdersRequest struct {
 }
 
 func (s *SearchTransferOrdersRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetQuery sets the Query field and marks it as non-optional;
@@ -361,10 +373,12 @@ type StartTransferOrderRequest struct {
 }
 
 func (s *StartTransferOrderRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;
@@ -409,12 +423,12 @@ func (s *StartTransferOrderRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Response for canceling a transfer order
 var (
 	cancelTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	cancelTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response for canceling a transfer order
 type CancelTransferOrderResponse struct {
 	// The updated transfer order with status changed to CANCELED
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -450,10 +464,12 @@ func (c *CancelTransferOrderResponse) GetExtraProperties() map[string]interface{
 }
 
 func (c *CancelTransferOrderResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -512,9 +528,6 @@ func (c *CancelTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Data for creating a new transfer order to move [CatalogItemVariation](entity:CatalogItemVariation)s
-// between [Location](entity:Location)s. Used with the [CreateTransferOrder](api-endpoint:TransferOrders-CreateTransferOrder)
-// endpoint.
 var (
 	createTransferOrderDataFieldSourceLocationID      = big.NewInt(1 << 0)
 	createTransferOrderDataFieldDestinationLocationID = big.NewInt(1 << 1)
@@ -525,6 +538,18 @@ var (
 	createTransferOrderDataFieldLineItems             = big.NewInt(1 << 6)
 )
 
+// createTransferOrderDataNullableFields maps the wire names of CreateTransferOrderData's nullable fields (required or optional) to their field bits.
+var createTransferOrderDataNullableFields = map[string]*big.Int{
+	"expected_at":               createTransferOrderDataFieldExpectedAt,
+	"notes":                     createTransferOrderDataFieldNotes,
+	"tracking_number":           createTransferOrderDataFieldTrackingNumber,
+	"created_by_team_member_id": createTransferOrderDataFieldCreatedByTeamMemberID,
+	"line_items":                createTransferOrderDataFieldLineItems,
+}
+
+// Data for creating a new transfer order to move [CatalogItemVariation](entity:CatalogItemVariation)s
+// between [Location](entity:Location)s. Used with the [CreateTransferOrder](api-endpoint:TransferOrders-CreateTransferOrder)
+// endpoint.
 type CreateTransferOrderData struct {
 	// The source [Location](entity:Location) that will send the items. Must be an active location
 	// in your Square account with sufficient inventory of the requested items.
@@ -608,10 +633,12 @@ func (c *CreateTransferOrderData) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateTransferOrderData) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetSourceLocationID sets the SourceLocationID field and marks it as non-optional;
@@ -675,6 +702,13 @@ func (c *CreateTransferOrderData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, createTransferOrderDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -705,13 +739,13 @@ func (c *CreateTransferOrderData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Data for creating a new transfer order line item. Each line item specifies a
-// [CatalogItemVariation](entity:CatalogItemVariation) and quantity to transfer.
 var (
 	createTransferOrderLineDataFieldItemVariationID = big.NewInt(1 << 0)
 	createTransferOrderLineDataFieldQuantityOrdered = big.NewInt(1 << 1)
 )
 
+// Data for creating a new transfer order line item. Each line item specifies a
+// [CatalogItemVariation](entity:CatalogItemVariation) and quantity to transfer.
 type CreateTransferOrderLineData struct {
 	// ID of the [CatalogItemVariation](entity:CatalogItemVariation) to transfer. Must reference a valid
 	// item variation in the [Catalog](api:Catalog). The item variation must be:
@@ -751,10 +785,12 @@ func (c *CreateTransferOrderLineData) GetExtraProperties() map[string]interface{
 }
 
 func (c *CreateTransferOrderLineData) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetItemVariationID sets the ItemVariationID field and marks it as non-optional;
@@ -813,12 +849,12 @@ func (c *CreateTransferOrderLineData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Response for creating a transfer order.
 var (
 	createTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	createTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response for creating a transfer order.
 type CreateTransferOrderResponse struct {
 	// The created transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -854,10 +890,12 @@ func (c *CreateTransferOrderResponse) GetExtraProperties() map[string]interface{
 }
 
 func (c *CreateTransferOrderResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -916,11 +954,11 @@ func (c *CreateTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Response for deleting a transfer order
 var (
 	deleteTransferOrderResponseFieldErrors = big.NewInt(1 << 0)
 )
 
+// Response for deleting a transfer order
 type DeleteTransferOrderResponse struct {
 	// Any errors that occurred during the request
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -947,10 +985,12 @@ func (d *DeleteTransferOrderResponse) GetExtraProperties() map[string]interface{
 }
 
 func (d *DeleteTransferOrderResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1002,12 +1042,12 @@ func (d *DeleteTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Response for receiving items for a transfer order
 var (
 	receiveTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	receiveTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response for receiving items for a transfer order
 type ReceiveTransferOrderResponse struct {
 	// The updated transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -1043,10 +1083,12 @@ func (r *ReceiveTransferOrderResponse) GetExtraProperties() map[string]interface
 }
 
 func (r *ReceiveTransferOrderResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -1105,12 +1147,12 @@ func (r *ReceiveTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Response containing the requested transfer order
 var (
 	retrieveTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	retrieveTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response containing the requested transfer order
 type RetrieveTransferOrderResponse struct {
 	// The requested transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -1146,10 +1188,12 @@ func (r *RetrieveTransferOrderResponse) GetExtraProperties() map[string]interfac
 }
 
 func (r *RetrieveTransferOrderResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -1208,13 +1252,13 @@ func (r *RetrieveTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Response for searching transfer orders
 var (
 	searchTransferOrdersResponseFieldTransferOrders = big.NewInt(1 << 0)
 	searchTransferOrdersResponseFieldCursor         = big.NewInt(1 << 1)
 	searchTransferOrdersResponseFieldErrors         = big.NewInt(1 << 2)
 )
 
+// Response for searching transfer orders
 type SearchTransferOrdersResponse struct {
 	// List of transfer orders matching the search criteria
 	TransferOrders []*TransferOrder `json:"transfer_orders,omitempty" url:"transfer_orders,omitempty"`
@@ -1259,10 +1303,12 @@ func (s *SearchTransferOrdersResponse) GetExtraProperties() map[string]interface
 }
 
 func (s *SearchTransferOrdersResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTransferOrders sets the TransferOrders field and marks it as non-optional;
@@ -1328,12 +1374,12 @@ func (s *SearchTransferOrdersResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Response for starting a transfer order.
 var (
 	startTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	startTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response for starting a transfer order.
 type StartTransferOrderResponse struct {
 	// The updated transfer order with status changed to STARTED
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -1369,10 +1415,12 @@ func (s *StartTransferOrderResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (s *StartTransferOrderResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -1431,20 +1479,6 @@ func (s *StartTransferOrderResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents a transfer order for moving [CatalogItemVariation](entity:CatalogItemVariation)s
-// between [Location](entity:Location)s. Transfer orders track the entire lifecycle of an inventory
-// transfer, including:
-// - What items and quantities are being moved
-// - Source and destination locations
-// - Current [TransferOrderStatus](entity:TransferOrderStatus)
-// - Shipping information and tracking
-// - Which [TeamMember](entity:TeamMember) initiated the transfer
-//
-// This object is commonly used to:
-// - Track [CatalogItemVariation](entity:CatalogItemVariation) movements between [Location](entity:Location)s
-// - Reconcile expected vs received quantities
-// - Monitor transfer progress and shipping status
-// - Audit inventory movement history
 var (
 	transferOrderFieldID                    = big.NewInt(1 << 0)
 	transferOrderFieldSourceLocationID      = big.NewInt(1 << 1)
@@ -1461,6 +1495,30 @@ var (
 	transferOrderFieldVersion               = big.NewInt(1 << 12)
 )
 
+// transferOrderNullableFields maps the wire names of TransferOrder's nullable fields (required or optional) to their field bits.
+var transferOrderNullableFields = map[string]*big.Int{
+	"source_location_id":      transferOrderFieldSourceLocationID,
+	"destination_location_id": transferOrderFieldDestinationLocationID,
+	"expected_at":             transferOrderFieldExpectedAt,
+	"notes":                   transferOrderFieldNotes,
+	"tracking_number":         transferOrderFieldTrackingNumber,
+	"line_items":              transferOrderFieldLineItems,
+}
+
+// Represents a transfer order for moving [CatalogItemVariation](entity:CatalogItemVariation)s
+// between [Location](entity:Location)s. Transfer orders track the entire lifecycle of an inventory
+// transfer, including:
+// - What items and quantities are being moved
+// - Source and destination locations
+// - Current [TransferOrderStatus](entity:TransferOrderStatus)
+// - Shipping information and tracking
+// - Which [TeamMember](entity:TeamMember) initiated the transfer
+//
+// This object is commonly used to:
+// - Track [CatalogItemVariation](entity:CatalogItemVariation) movements between [Location](entity:Location)s
+// - Reconcile expected vs received quantities
+// - Monitor transfer progress and shipping status
+// - Audit inventory movement history
 type TransferOrder struct {
 	// Unique system-generated identifier for this transfer order. Use this ID for:
 	// - Retrieving transfer order details
@@ -1635,10 +1693,12 @@ func (t *TransferOrder) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TransferOrder) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1744,6 +1804,13 @@ func (t *TransferOrder) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, transferOrderNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1774,13 +1841,20 @@ func (t *TransferOrder) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Filter criteria for searching transfer orders
 var (
 	transferOrderFilterFieldSourceLocationIDs      = big.NewInt(1 << 0)
 	transferOrderFilterFieldDestinationLocationIDs = big.NewInt(1 << 1)
 	transferOrderFilterFieldStatuses               = big.NewInt(1 << 2)
 )
 
+// transferOrderFilterNullableFields maps the wire names of TransferOrderFilter's nullable fields (required or optional) to their field bits.
+var transferOrderFilterNullableFields = map[string]*big.Int{
+	"source_location_ids":      transferOrderFilterFieldSourceLocationIDs,
+	"destination_location_ids": transferOrderFilterFieldDestinationLocationIDs,
+	"statuses":                 transferOrderFilterFieldStatuses,
+}
+
+// Filter criteria for searching transfer orders
 type TransferOrderFilter struct {
 	// Filter by source location IDs
 	SourceLocationIDs []string `json:"source_location_ids,omitempty" url:"source_location_ids,omitempty"`
@@ -1826,10 +1900,12 @@ func (t *TransferOrderFilter) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TransferOrderFilter) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetSourceLocationIDs sets the SourceLocationIDs field and marks it as non-optional;
@@ -1865,6 +1941,13 @@ func (t *TransferOrderFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, transferOrderFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1895,6 +1978,15 @@ func (t *TransferOrderFilter) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+var (
+	transferOrderGoodsReceiptFieldLineItems = big.NewInt(1 << 0)
+)
+
+// transferOrderGoodsReceiptNullableFields maps the wire names of TransferOrderGoodsReceipt's nullable fields (required or optional) to their field bits.
+var transferOrderGoodsReceiptNullableFields = map[string]*big.Int{
+	"line_items": transferOrderGoodsReceiptFieldLineItems,
+}
+
 // The goods receipt details for a transfer order. This object represents a single receipt
 // of goods against a transfer order, tracking:
 //
@@ -1913,10 +2005,6 @@ func (t *TransferOrderFilter) String() string {
 // - Updates the transfer order status
 // - Adjusts received quantities
 // - Updates inventory levels at both source and destination [Location](entity:Location)s
-var (
-	transferOrderGoodsReceiptFieldLineItems = big.NewInt(1 << 0)
-)
-
 type TransferOrderGoodsReceipt struct {
 	// Line items being received. Each line item specifies:
 	// - The item being received
@@ -1953,10 +2041,12 @@ func (t *TransferOrderGoodsReceipt) GetExtraProperties() map[string]interface{} 
 }
 
 func (t *TransferOrderGoodsReceipt) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetLineItems sets the LineItems field and marks it as non-optional;
@@ -1978,6 +2068,13 @@ func (t *TransferOrderGoodsReceipt) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, transferOrderGoodsReceiptNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2008,7 +2105,6 @@ func (t *TransferOrderGoodsReceipt) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// A simplified line item for goods receipts in transfer orders
 var (
 	transferOrderGoodsReceiptLineItemFieldTransferOrderLineUID = big.NewInt(1 << 0)
 	transferOrderGoodsReceiptLineItemFieldQuantityReceived     = big.NewInt(1 << 1)
@@ -2016,6 +2112,14 @@ var (
 	transferOrderGoodsReceiptLineItemFieldQuantityCanceled     = big.NewInt(1 << 3)
 )
 
+// transferOrderGoodsReceiptLineItemNullableFields maps the wire names of TransferOrderGoodsReceiptLineItem's nullable fields (required or optional) to their field bits.
+var transferOrderGoodsReceiptLineItemNullableFields = map[string]*big.Int{
+	"quantity_received": transferOrderGoodsReceiptLineItemFieldQuantityReceived,
+	"quantity_damaged":  transferOrderGoodsReceiptLineItemFieldQuantityDamaged,
+	"quantity_canceled": transferOrderGoodsReceiptLineItemFieldQuantityCanceled,
+}
+
+// A simplified line item for goods receipts in transfer orders
 type TransferOrderGoodsReceiptLineItem struct {
 	// The unique identifier of the Transfer Order line being received
 	TransferOrderLineUID string `json:"transfer_order_line_uid" url:"transfer_order_line_uid"`
@@ -2071,10 +2175,12 @@ func (t *TransferOrderGoodsReceiptLineItem) GetExtraProperties() map[string]inte
 }
 
 func (t *TransferOrderGoodsReceiptLineItem) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetTransferOrderLineUID sets the TransferOrderLineUID field and marks it as non-optional;
@@ -2117,6 +2223,13 @@ func (t *TransferOrderGoodsReceiptLineItem) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	t.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, transferOrderGoodsReceiptLineItemNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		t.require(presentFields)
+	}
 	t.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2147,9 +2260,6 @@ func (t *TransferOrderGoodsReceiptLineItem) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Represents a line item in a transfer order. Each line item tracks a specific
-// [CatalogItemVariation](entity:CatalogItemVariation) being transferred, including ordered quantities
-// and receipt status.
 var (
 	transferOrderLineFieldUID              = big.NewInt(1 << 0)
 	transferOrderLineFieldItemVariationID  = big.NewInt(1 << 1)
@@ -2160,6 +2270,9 @@ var (
 	transferOrderLineFieldQuantityCanceled = big.NewInt(1 << 6)
 )
 
+// Represents a line item in a transfer order. Each line item tracks a specific
+// [CatalogItemVariation](entity:CatalogItemVariation) being transferred, including ordered quantities
+// and receipt status.
 type TransferOrderLine struct {
 	// Unique system-generated identifier for the line item. Provide when updating/removing a line via [UpdateTransferOrder](api-endpoint:TransferOrders-UpdateTransferOrder).
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -2251,10 +2364,12 @@ func (t *TransferOrderLine) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TransferOrderLine) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -2348,12 +2463,12 @@ func (t *TransferOrderLine) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Query parameters for searching transfer orders
 var (
 	transferOrderQueryFieldFilter = big.NewInt(1 << 0)
 	transferOrderQueryFieldSort   = big.NewInt(1 << 1)
 )
 
+// Query parameters for searching transfer orders
 type TransferOrderQuery struct {
 	// Filter criteria
 	Filter *TransferOrderFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -2389,10 +2504,12 @@ func (t *TransferOrderQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TransferOrderQuery) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -2451,12 +2568,12 @@ func (t *TransferOrderQuery) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Sort configuration for search results
 var (
 	transferOrderSortFieldField = big.NewInt(1 << 0)
 	transferOrderSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Sort configuration for search results
 type TransferOrderSort struct {
 	// Field to sort by
 	// See [TransferOrderSortField](#type-transferordersortfield) for possible values
@@ -2494,10 +2611,12 @@ func (t *TransferOrderSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TransferOrderSort) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -2615,7 +2734,6 @@ func (t TransferOrderStatus) Ptr() *TransferOrderStatus {
 	return &t
 }
 
-// Data model for updating a transfer order. All fields are optional.
 var (
 	updateTransferOrderDataFieldSourceLocationID      = big.NewInt(1 << 0)
 	updateTransferOrderDataFieldDestinationLocationID = big.NewInt(1 << 1)
@@ -2625,6 +2743,17 @@ var (
 	updateTransferOrderDataFieldLineItems             = big.NewInt(1 << 5)
 )
 
+// updateTransferOrderDataNullableFields maps the wire names of UpdateTransferOrderData's nullable fields (required or optional) to their field bits.
+var updateTransferOrderDataNullableFields = map[string]*big.Int{
+	"source_location_id":      updateTransferOrderDataFieldSourceLocationID,
+	"destination_location_id": updateTransferOrderDataFieldDestinationLocationID,
+	"expected_at":             updateTransferOrderDataFieldExpectedAt,
+	"notes":                   updateTransferOrderDataFieldNotes,
+	"tracking_number":         updateTransferOrderDataFieldTrackingNumber,
+	"line_items":              updateTransferOrderDataFieldLineItems,
+}
+
+// Data model for updating a transfer order. All fields are optional.
 type UpdateTransferOrderData struct {
 	// The source [Location](entity:Location) that will send the items. Must be an active location
 	// in your Square account with sufficient inventory of the requested items.
@@ -2698,10 +2827,12 @@ func (u *UpdateTransferOrderData) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateTransferOrderData) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetSourceLocationID sets the SourceLocationID field and marks it as non-optional;
@@ -2758,6 +2889,13 @@ func (u *UpdateTransferOrderData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	u.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, updateTransferOrderDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		u.require(presentFields)
+	}
 	u.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2788,7 +2926,6 @@ func (u *UpdateTransferOrderData) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents a line item update in a transfer order
 var (
 	updateTransferOrderLineDataFieldUID             = big.NewInt(1 << 0)
 	updateTransferOrderLineDataFieldItemVariationID = big.NewInt(1 << 1)
@@ -2796,6 +2933,15 @@ var (
 	updateTransferOrderLineDataFieldRemove          = big.NewInt(1 << 3)
 )
 
+// updateTransferOrderLineDataNullableFields maps the wire names of UpdateTransferOrderLineData's nullable fields (required or optional) to their field bits.
+var updateTransferOrderLineDataNullableFields = map[string]*big.Int{
+	"uid":               updateTransferOrderLineDataFieldUID,
+	"item_variation_id": updateTransferOrderLineDataFieldItemVariationID,
+	"quantity_ordered":  updateTransferOrderLineDataFieldQuantityOrdered,
+	"remove":            updateTransferOrderLineDataFieldRemove,
+}
+
+// Represents a line item update in a transfer order
 type UpdateTransferOrderLineData struct {
 	// Line item id being updated. Required for updating/removing existing line items, but should not be set for new line items.
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -2851,10 +2997,12 @@ func (u *UpdateTransferOrderLineData) GetExtraProperties() map[string]interface{
 }
 
 func (u *UpdateTransferOrderLineData) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -2897,6 +3045,13 @@ func (u *UpdateTransferOrderLineData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	u.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, updateTransferOrderLineDataNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		u.require(presentFields)
+	}
 	u.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2927,12 +3082,12 @@ func (u *UpdateTransferOrderLineData) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Response for updating a transfer order
 var (
 	updateTransferOrderResponseFieldTransferOrder = big.NewInt(1 << 0)
 	updateTransferOrderResponseFieldErrors        = big.NewInt(1 << 1)
 )
 
+// Response for updating a transfer order
 type UpdateTransferOrderResponse struct {
 	// The updated transfer order
 	TransferOrder *TransferOrder `json:"transfer_order,omitempty" url:"transfer_order,omitempty"`
@@ -2968,10 +3123,12 @@ func (u *UpdateTransferOrderResponse) GetExtraProperties() map[string]interface{
 }
 
 func (u *UpdateTransferOrderResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTransferOrder sets the TransferOrder field and marks it as non-optional;
@@ -3052,10 +3209,12 @@ type UpdateTransferOrderRequest struct {
 }
 
 func (u *UpdateTransferOrderRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetTransferOrderID sets the TransferOrderID field and marks it as non-optional;

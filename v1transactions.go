@@ -32,10 +32,12 @@ type V1ListOrdersRequest struct {
 }
 
 func (v *V1ListOrdersRequest) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -82,10 +84,12 @@ type V1RetrieveOrderRequest struct {
 }
 
 func (v *V1RetrieveOrderRequest) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -134,10 +138,12 @@ type V1UpdateOrderRequest struct {
 }
 
 func (v *V1UpdateOrderRequest) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -215,6 +221,11 @@ var (
 	v1MoneyFieldCurrencyCode = big.NewInt(1 << 1)
 )
 
+// v1MoneyNullableFields maps the wire names of V1Money's nullable fields (required or optional) to their field bits.
+var v1MoneyNullableFields = map[string]*big.Int{
+	"amount": v1MoneyFieldAmount,
+}
+
 type V1Money struct {
 	// Amount in the lowest denominated value of this Currency. E.g. in USD
 	// these are cents, in JPY they are Yen (which do not have a 'cent' concept).
@@ -251,10 +262,12 @@ func (v *V1Money) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *V1Money) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetAmount sets the Amount field and marks it as non-optional;
@@ -283,6 +296,13 @@ func (v *V1Money) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	v.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, v1MoneyNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		v.require(presentFields)
+	}
 	v.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -313,7 +333,6 @@ func (v *V1Money) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// V1Order
 var (
 	v1OrderFieldErrors               = big.NewInt(1 << 0)
 	v1OrderFieldID                   = big.NewInt(1 << 1)
@@ -342,6 +361,25 @@ var (
 	v1OrderFieldBtcPriceSatoshi      = big.NewInt(1 << 24)
 )
 
+// v1OrderNullableFields maps the wire names of V1Order's nullable fields (required or optional) to their field bits.
+var v1OrderNullableFields = map[string]*big.Int{
+	"errors":                 v1OrderFieldErrors,
+	"buyer_email":            v1OrderFieldBuyerEmail,
+	"recipient_name":         v1OrderFieldRecipientName,
+	"recipient_phone_number": v1OrderFieldRecipientPhoneNumber,
+	"expires_at":             v1OrderFieldExpiresAt,
+	"payment_id":             v1OrderFieldPaymentID,
+	"buyer_note":             v1OrderFieldBuyerNote,
+	"completed_note":         v1OrderFieldCompletedNote,
+	"refunded_note":          v1OrderFieldRefundedNote,
+	"canceled_note":          v1OrderFieldCanceledNote,
+	"order_history":          v1OrderFieldOrderHistory,
+	"promo_code":             v1OrderFieldPromoCode,
+	"btc_receive_address":    v1OrderFieldBtcReceiveAddress,
+	"btc_price_satoshi":      v1OrderFieldBtcPriceSatoshi,
+}
+
+// V1Order
 type V1Order struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -585,10 +623,12 @@ func (v *V1Order) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *V1Order) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -778,6 +818,13 @@ func (v *V1Order) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	v.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, v1OrderNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		v.require(presentFields)
+	}
 	v.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -808,12 +855,12 @@ func (v *V1Order) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// V1OrderHistoryEntry
 var (
 	v1OrderHistoryEntryFieldAction    = big.NewInt(1 << 0)
 	v1OrderHistoryEntryFieldCreatedAt = big.NewInt(1 << 1)
 )
 
+// V1OrderHistoryEntry
 type V1OrderHistoryEntry struct {
 	// The type of action performed on the order.
 	// See [V1OrderHistoryEntryAction](#type-v1orderhistoryentryaction) for possible values
@@ -850,10 +897,12 @@ func (v *V1OrderHistoryEntry) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *V1OrderHistoryEntry) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetAction sets the Action field and marks it as non-optional;
@@ -983,6 +1032,37 @@ func (v V1OrderState) Ptr() *V1OrderState {
 	return &v
 }
 
+var (
+	v1TenderFieldID              = big.NewInt(1 << 0)
+	v1TenderFieldType            = big.NewInt(1 << 1)
+	v1TenderFieldName            = big.NewInt(1 << 2)
+	v1TenderFieldEmployeeID      = big.NewInt(1 << 3)
+	v1TenderFieldReceiptURL      = big.NewInt(1 << 4)
+	v1TenderFieldCardBrand       = big.NewInt(1 << 5)
+	v1TenderFieldPanSuffix       = big.NewInt(1 << 6)
+	v1TenderFieldEntryMethod     = big.NewInt(1 << 7)
+	v1TenderFieldPaymentNote     = big.NewInt(1 << 8)
+	v1TenderFieldTotalMoney      = big.NewInt(1 << 9)
+	v1TenderFieldTenderedMoney   = big.NewInt(1 << 10)
+	v1TenderFieldTenderedAt      = big.NewInt(1 << 11)
+	v1TenderFieldSettledAt       = big.NewInt(1 << 12)
+	v1TenderFieldChangeBackMoney = big.NewInt(1 << 13)
+	v1TenderFieldRefundedMoney   = big.NewInt(1 << 14)
+	v1TenderFieldIsExchange      = big.NewInt(1 << 15)
+)
+
+// v1TenderNullableFields maps the wire names of V1Tender's nullable fields (required or optional) to their field bits.
+var v1TenderNullableFields = map[string]*big.Int{
+	"name":         v1TenderFieldName,
+	"employee_id":  v1TenderFieldEmployeeID,
+	"receipt_url":  v1TenderFieldReceiptURL,
+	"pan_suffix":   v1TenderFieldPanSuffix,
+	"payment_note": v1TenderFieldPaymentNote,
+	"tendered_at":  v1TenderFieldTenderedAt,
+	"settled_at":   v1TenderFieldSettledAt,
+	"is_exchange":  v1TenderFieldIsExchange,
+}
+
 // A tender represents a discrete monetary exchange. Square represents this
 // exchange as a money object with a specific currency and amount, where the
 // amount is given in the smallest denomination of the given currency.
@@ -1005,25 +1085,6 @@ func (v V1OrderState) Ptr() *V1OrderState {
 // reduced and the merchant receives no funds. A `Tender` object with a type of
 // `SQUARE_GIFT_CARD` indicates a gift card was used for some or all of the
 // associated payment.
-var (
-	v1TenderFieldID              = big.NewInt(1 << 0)
-	v1TenderFieldType            = big.NewInt(1 << 1)
-	v1TenderFieldName            = big.NewInt(1 << 2)
-	v1TenderFieldEmployeeID      = big.NewInt(1 << 3)
-	v1TenderFieldReceiptURL      = big.NewInt(1 << 4)
-	v1TenderFieldCardBrand       = big.NewInt(1 << 5)
-	v1TenderFieldPanSuffix       = big.NewInt(1 << 6)
-	v1TenderFieldEntryMethod     = big.NewInt(1 << 7)
-	v1TenderFieldPaymentNote     = big.NewInt(1 << 8)
-	v1TenderFieldTotalMoney      = big.NewInt(1 << 9)
-	v1TenderFieldTenderedMoney   = big.NewInt(1 << 10)
-	v1TenderFieldTenderedAt      = big.NewInt(1 << 11)
-	v1TenderFieldSettledAt       = big.NewInt(1 << 12)
-	v1TenderFieldChangeBackMoney = big.NewInt(1 << 13)
-	v1TenderFieldRefundedMoney   = big.NewInt(1 << 14)
-	v1TenderFieldIsExchange      = big.NewInt(1 << 15)
-)
-
 type V1Tender struct {
 	// The tender's unique ID.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1188,10 +1249,12 @@ func (v *V1Tender) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *V1Tender) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1318,6 +1381,13 @@ func (v *V1Tender) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	v.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, v1TenderNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		v.require(presentFields)
+	}
 	v.rawJSON = json.RawMessage(data)
 	return nil
 }

@@ -6,14 +6,15 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	orders "github.com/square/square-go-sdk/v5/orders"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -21,7 +22,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -46,9 +47,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -72,6 +87,7 @@ func TestOrdersCustomAttributeDefinitionsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.ListCustomAttributeDefinitionsRequest{
 		VisibilityFilter: square.VisibilityFilterAll.Ptr(),
@@ -91,7 +107,7 @@ func TestOrdersCustomAttributeDefinitionsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCustomAttributeDefinitionsListWithWireMock", "GET", "/v2/orders/custom-attribute-definitions", map[string]string{"visibility_filter": "ALL", "cursor": "cursor", "limit": "1"}, 1)
+	VerifyRequestCount(t, "TestOrdersCustomAttributeDefinitionsListWithWireMock", "GET", "/v2/orders/custom-attribute-definitions", map[string]interface{}{"visibility_filter": "ALL", "cursor": "cursor", "limit": "1"}, 1)
 }
 
 func TestOrdersCustomAttributeDefinitionsCreateWithWireMock(
@@ -103,6 +119,7 @@ func TestOrdersCustomAttributeDefinitionsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.CreateOrderCustomAttributeDefinitionRequest{
 		CustomAttributeDefinition: &square.CustomAttributeDefinition{
@@ -145,6 +162,7 @@ func TestOrdersCustomAttributeDefinitionsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.GetCustomAttributeDefinitionsRequest{
 		Key: "key",
@@ -161,7 +179,7 @@ func TestOrdersCustomAttributeDefinitionsGetWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestOrdersCustomAttributeDefinitionsGetWithWireMock", "GET", "/v2/orders/custom-attribute-definitions/key", map[string]string{"version": "1"}, 1)
+	VerifyRequestCount(t, "TestOrdersCustomAttributeDefinitionsGetWithWireMock", "GET", "/v2/orders/custom-attribute-definitions/key", map[string]interface{}{"version": "1"}, 1)
 }
 
 func TestOrdersCustomAttributeDefinitionsUpdateWithWireMock(
@@ -173,6 +191,7 @@ func TestOrdersCustomAttributeDefinitionsUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.UpdateOrderCustomAttributeDefinitionRequest{
 		Key: "key",
@@ -210,6 +229,7 @@ func TestOrdersCustomAttributeDefinitionsDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &orders.DeleteCustomAttributeDefinitionsRequest{
 		Key: "key",

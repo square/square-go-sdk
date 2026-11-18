@@ -4,6 +4,7 @@ package loyalty
 
 import (
 	json "encoding/json"
+	v5 "github.com/square/square-go-sdk/v5"
 	assert "github.com/stretchr/testify/assert"
 	require "github.com/stretchr/testify/require"
 	testing "testing"
@@ -15,6 +16,14 @@ func TestSettersAccumulateLoyaltyPointsRequest(t *testing.T) {
 		var fernTestValueAccountID string
 		obj.SetAccountID(fernTestValueAccountID)
 		assert.Equal(t, fernTestValueAccountID, obj.AccountID)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetAccumulatePoints", func(t *testing.T) {
+		obj := &AccumulateLoyaltyPointsRequest{}
+		var fernTestValueAccumulatePoints *v5.LoyaltyEventAccumulatePoints
+		obj.SetAccumulatePoints(fernTestValueAccumulatePoints)
+		assert.Equal(t, fernTestValueAccumulatePoints, obj.AccumulatePoints)
 		assert.NotNil(t, obj.explicitFields)
 	})
 
@@ -45,6 +54,37 @@ func TestSettersMarkExplicitAccumulateLoyaltyPointsRequest(t *testing.T) {
 
 		// Act
 		obj.SetAccountID(fernTestValueAccountID)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetAccumulatePoints_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccumulateLoyaltyPointsRequest{}
+		var fernTestValueAccumulatePoints *v5.LoyaltyEventAccumulatePoints
+
+		// Act
+		obj.SetAccumulatePoints(fernTestValueAccumulatePoints)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -149,6 +189,14 @@ func TestSettersAdjustLoyaltyPointsRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetAdjustPoints", func(t *testing.T) {
+		obj := &AdjustLoyaltyPointsRequest{}
+		var fernTestValueAdjustPoints *v5.LoyaltyEventAdjustPoints
+		obj.SetAdjustPoints(fernTestValueAdjustPoints)
+		assert.Equal(t, fernTestValueAdjustPoints, obj.AdjustPoints)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetAllowNegativeBalance", func(t *testing.T) {
 		obj := &AdjustLoyaltyPointsRequest{}
 		var fernTestValueAllowNegativeBalance *bool
@@ -222,6 +270,37 @@ func TestSettersMarkExplicitAdjustLoyaltyPointsRequest(t *testing.T) {
 		// It verifies that setting a field via setter allows successful JSON round-trip
 	})
 
+	t.Run("SetAdjustPoints_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AdjustLoyaltyPointsRequest{}
+		var fernTestValueAdjustPoints *v5.LoyaltyEventAdjustPoints
+
+		// Act
+		obj.SetAdjustPoints(fernTestValueAdjustPoints)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetAllowNegativeBalance_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -256,6 +335,14 @@ func TestSettersMarkExplicitAdjustLoyaltyPointsRequest(t *testing.T) {
 }
 
 func TestSettersCreateLoyaltyAccountRequest(t *testing.T) {
+	t.Run("SetLoyaltyAccount", func(t *testing.T) {
+		obj := &CreateLoyaltyAccountRequest{}
+		var fernTestValueLoyaltyAccount *v5.LoyaltyAccount
+		obj.SetLoyaltyAccount(fernTestValueLoyaltyAccount)
+		assert.Equal(t, fernTestValueLoyaltyAccount, obj.LoyaltyAccount)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetIdempotencyKey", func(t *testing.T) {
 		obj := &CreateLoyaltyAccountRequest{}
 		var fernTestValueIdempotencyKey string
@@ -267,6 +354,37 @@ func TestSettersCreateLoyaltyAccountRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitCreateLoyaltyAccountRequest(t *testing.T) {
+	t.Run("SetLoyaltyAccount_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &CreateLoyaltyAccountRequest{}
+		var fernTestValueLoyaltyAccount *v5.LoyaltyAccount
+
+		// Act
+		obj.SetLoyaltyAccount(fernTestValueLoyaltyAccount)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetIdempotencyKey_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -346,6 +464,14 @@ func TestSettersMarkExplicitGetAccountsRequest(t *testing.T) {
 }
 
 func TestSettersSearchLoyaltyAccountsRequest(t *testing.T) {
+	t.Run("SetQuery", func(t *testing.T) {
+		obj := &SearchLoyaltyAccountsRequest{}
+		var fernTestValueQuery *v5.SearchLoyaltyAccountsRequestLoyaltyAccountQuery
+		obj.SetQuery(fernTestValueQuery)
+		assert.Equal(t, fernTestValueQuery, obj.Query)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetLimit", func(t *testing.T) {
 		obj := &SearchLoyaltyAccountsRequest{}
 		var fernTestValueLimit *int
@@ -365,6 +491,37 @@ func TestSettersSearchLoyaltyAccountsRequest(t *testing.T) {
 }
 
 func TestSettersMarkExplicitSearchLoyaltyAccountsRequest(t *testing.T) {
+	t.Run("SetQuery_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &SearchLoyaltyAccountsRequest{}
+		var fernTestValueQuery *v5.SearchLoyaltyAccountsRequestLoyaltyAccountQuery
+
+		// Act
+		obj.SetQuery(fernTestValueQuery)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetLimit_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange

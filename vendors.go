@@ -22,10 +22,12 @@ type BatchCreateVendorsRequest struct {
 }
 
 func (b *BatchCreateVendorsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetVendors sets the Vendors field and marks it as non-optional;
@@ -69,10 +71,12 @@ type BatchGetVendorsRequest struct {
 }
 
 func (b *BatchGetVendorsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetVendorIDs sets the VendorIDs field and marks it as non-optional;
@@ -117,10 +121,12 @@ type BatchUpdateVendorsRequest struct {
 }
 
 func (b *BatchUpdateVendorsRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetVendors sets the Vendors field and marks it as non-optional;
@@ -171,10 +177,12 @@ type CreateVendorRequest struct {
 }
 
 func (c *CreateVendorRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -225,10 +233,12 @@ type GetVendorsRequest struct {
 }
 
 func (g *GetVendorsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetVendorID sets the VendorID field and marks it as non-optional;
@@ -260,10 +270,12 @@ type SearchVendorsRequest struct {
 }
 
 func (s *SearchVendorsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -308,12 +320,12 @@ func (s *SearchVendorsRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
 var (
 	batchCreateVendorsResponseFieldErrors    = big.NewInt(1 << 0)
 	batchCreateVendorsResponseFieldResponses = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [BulkCreateVendors](api-endpoint:Vendors-BulkCreateVendors).
 type BatchCreateVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -352,10 +364,12 @@ func (b *BatchCreateVendorsResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (b *BatchCreateVendorsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -414,12 +428,12 @@ func (b *BatchCreateVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkRetrieveVendors](api-endpoint:Vendors-BulkRetrieveVendors).
 var (
 	batchGetVendorsResponseFieldErrors    = big.NewInt(1 << 0)
 	batchGetVendorsResponseFieldResponses = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [BulkRetrieveVendors](api-endpoint:Vendors-BulkRetrieveVendors).
 type BatchGetVendorsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -457,10 +471,12 @@ func (b *BatchGetVendorsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BatchGetVendorsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -519,12 +535,12 @@ func (b *BatchGetVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [BulkUpdateVendors](api-endpoint:Vendors-BulkUpdateVendors).
 var (
 	batchUpdateVendorsResponseFieldErrors    = big.NewInt(1 << 0)
 	batchUpdateVendorsResponseFieldResponses = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [BulkUpdateVendors](api-endpoint:Vendors-BulkUpdateVendors).
 type BatchUpdateVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -562,10 +578,12 @@ func (b *BatchUpdateVendorsResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (b *BatchUpdateVendorsResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -624,12 +642,12 @@ func (b *BatchUpdateVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an output from a call to [CreateVendor](api-endpoint:Vendors-CreateVendor).
 var (
 	createVendorResponseFieldErrors = big.NewInt(1 << 0)
 	createVendorResponseFieldVendor = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [CreateVendor](api-endpoint:Vendors-CreateVendor).
 type CreateVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -665,10 +683,12 @@ func (c *CreateVendorResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateVendorResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -727,12 +747,12 @@ func (c *CreateVendorResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Represents an output from a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
 var (
 	getVendorResponseFieldErrors = big.NewInt(1 << 0)
 	getVendorResponseFieldVendor = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [RetrieveVendor](api-endpoint:Vendors-RetrieveVendor).
 type GetVendorResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -768,10 +788,12 @@ func (g *GetVendorResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetVendorResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -830,12 +852,18 @@ func (g *GetVendorResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines supported query expressions to search for vendors by.
 var (
 	searchVendorsRequestFilterFieldName   = big.NewInt(1 << 0)
 	searchVendorsRequestFilterFieldStatus = big.NewInt(1 << 1)
 )
 
+// searchVendorsRequestFilterNullableFields maps the wire names of SearchVendorsRequestFilter's nullable fields (required or optional) to their field bits.
+var searchVendorsRequestFilterNullableFields = map[string]*big.Int{
+	"name":   searchVendorsRequestFilterFieldName,
+	"status": searchVendorsRequestFilterFieldStatus,
+}
+
+// Defines supported query expressions to search for vendors by.
 type SearchVendorsRequestFilter struct {
 	// The names of the [Vendor](entity:Vendor) objects to retrieve.
 	Name []string `json:"name,omitempty" url:"name,omitempty"`
@@ -872,10 +900,12 @@ func (s *SearchVendorsRequestFilter) GetExtraProperties() map[string]interface{}
 }
 
 func (s *SearchVendorsRequestFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -904,6 +934,13 @@ func (s *SearchVendorsRequestFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchVendorsRequestFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -934,12 +971,12 @@ func (s *SearchVendorsRequestFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines a sorter used to sort results from [SearchVendors](api-endpoint:Vendors-SearchVendors).
 var (
 	searchVendorsRequestSortFieldField = big.NewInt(1 << 0)
 	searchVendorsRequestSortFieldOrder = big.NewInt(1 << 1)
 )
 
+// Defines a sorter used to sort results from [SearchVendors](api-endpoint:Vendors-SearchVendors).
 type SearchVendorsRequestSort struct {
 	// Specifies the sort key to sort the returned vendors.
 	// See [Field](#type-field) for possible values
@@ -977,10 +1014,12 @@ func (s *SearchVendorsRequestSort) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchVendorsRequestSort) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetField sets the Field field and marks it as non-optional;
@@ -1062,13 +1101,13 @@ func (s SearchVendorsRequestSortField) Ptr() *SearchVendorsRequestSortField {
 	return &s
 }
 
-// Represents an output from a call to [SearchVendors](api-endpoint:Vendors-SearchVendors).
 var (
 	searchVendorsResponseFieldErrors  = big.NewInt(1 << 0)
 	searchVendorsResponseFieldVendors = big.NewInt(1 << 1)
 	searchVendorsResponseFieldCursor  = big.NewInt(1 << 2)
 )
 
+// Represents an output from a call to [SearchVendors](api-endpoint:Vendors-SearchVendors).
 type SearchVendorsResponse struct {
 	// Errors encountered when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1116,10 +1155,12 @@ func (s *SearchVendorsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchVendorsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1185,12 +1226,17 @@ func (s *SearchVendorsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents an input to a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 var (
 	updateVendorRequestFieldIdempotencyKey = big.NewInt(1 << 0)
 	updateVendorRequestFieldVendor         = big.NewInt(1 << 1)
 )
 
+// updateVendorRequestNullableFields maps the wire names of UpdateVendorRequest's nullable fields (required or optional) to their field bits.
+var updateVendorRequestNullableFields = map[string]*big.Int{
+	"idempotency_key": updateVendorRequestFieldIdempotencyKey,
+}
+
+// Represents an input to a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 type UpdateVendorRequest struct {
 	// A client-supplied, universally unique identifier (UUID) for the
 	// request.
@@ -1231,10 +1277,12 @@ func (u *UpdateVendorRequest) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateVendorRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -1263,6 +1311,13 @@ func (u *UpdateVendorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	u.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, updateVendorRequestNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		u.require(presentFields)
+	}
 	u.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1293,12 +1348,12 @@ func (u *UpdateVendorRequest) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents an output from a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 var (
 	updateVendorResponseFieldErrors = big.NewInt(1 << 0)
 	updateVendorResponseFieldVendor = big.NewInt(1 << 1)
 )
 
+// Represents an output from a call to [UpdateVendor](api-endpoint:Vendors-UpdateVendor).
 type UpdateVendorResponse struct {
 	// Errors occurred when the request fails.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1334,10 +1389,12 @@ func (u *UpdateVendorResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateVendorResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1396,7 +1453,6 @@ func (u *UpdateVendorResponse) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
-// Represents a supplier to a seller.
 var (
 	vendorFieldID            = big.NewInt(1 << 0)
 	vendorFieldCreatedAt     = big.NewInt(1 << 1)
@@ -1410,6 +1466,15 @@ var (
 	vendorFieldStatus        = big.NewInt(1 << 9)
 )
 
+// vendorNullableFields maps the wire names of Vendor's nullable fields (required or optional) to their field bits.
+var vendorNullableFields = map[string]*big.Int{
+	"name":           vendorFieldName,
+	"contacts":       vendorFieldContacts,
+	"account_number": vendorFieldAccountNumber,
+	"note":           vendorFieldNote,
+}
+
+// Represents a supplier to a seller.
 type Vendor struct {
 	// A unique Square-generated ID for the [Vendor](entity:Vendor).
 	// This field is required when attempting to update a [Vendor](entity:Vendor).
@@ -1522,10 +1587,12 @@ func (v *Vendor) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *Vendor) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1610,6 +1677,13 @@ func (v *Vendor) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	v.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, vendorNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		v.require(presentFields)
+	}
 	v.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1640,7 +1714,6 @@ func (v *Vendor) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// Represents a contact of a [Vendor](entity:Vendor).
 var (
 	vendorContactFieldID           = big.NewInt(1 << 0)
 	vendorContactFieldName         = big.NewInt(1 << 1)
@@ -1650,6 +1723,15 @@ var (
 	vendorContactFieldOrdinal      = big.NewInt(1 << 5)
 )
 
+// vendorContactNullableFields maps the wire names of VendorContact's nullable fields (required or optional) to their field bits.
+var vendorContactNullableFields = map[string]*big.Int{
+	"name":          vendorContactFieldName,
+	"email_address": vendorContactFieldEmailAddress,
+	"phone_number":  vendorContactFieldPhoneNumber,
+	"removed":       vendorContactFieldRemoved,
+}
+
+// Represents a contact of a [Vendor](entity:Vendor).
 type VendorContact struct {
 	// A unique Square-generated ID for the [VendorContact](entity:VendorContact).
 	// This field is required when attempting to update a [VendorContact](entity:VendorContact).
@@ -1723,10 +1805,12 @@ func (v *VendorContact) GetExtraProperties() map[string]interface{} {
 }
 
 func (v *VendorContact) require(field *big.Int) {
-	if v.explicitFields == nil {
-		v.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if v.explicitFields != nil {
+		next.Set(v.explicitFields)
 	}
-	v.explicitFields.Or(v.explicitFields, field)
+	next.Or(next, field)
+	v.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1783,6 +1867,13 @@ func (v *VendorContact) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	v.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, vendorContactNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		v.require(presentFields)
+	}
 	v.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1851,10 +1942,12 @@ type UpdateVendorsRequest struct {
 }
 
 func (u *UpdateVendorsRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetVendorID sets the VendorID field and marks it as non-optional;

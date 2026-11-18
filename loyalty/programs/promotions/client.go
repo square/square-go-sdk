@@ -4,13 +4,14 @@ package promotions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	programs "github.com/square/square-go-sdk/v5/loyalty/programs"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -43,6 +45,23 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Lists the loyalty promotions associated with a [loyalty program](entity:LoyaltyProgram).
 // Results are sorted by the `created_at` date in descending order (newest to oldest).
+//
+// Example:
+//
+//	request := &programs.ListPromotionsRequest{
+//	    ProgramID: "program_id",
+//	    Status: square.LoyaltyPromotionStatusActive.Ptr(),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Loyalty.Programs.Promotions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *programs.ListPromotionsRequest,
@@ -79,6 +98,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -93,7 +113,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,6 +130,50 @@ func (c *Client) List(
 // This endpoint sets the loyalty promotion to the `ACTIVE` or `SCHEDULED` status, depending on the
 // `available_time` setting. A loyalty program can have a maximum of 10 loyalty promotions with an
 // `ACTIVE` or `SCHEDULED` status.
+//
+// Example:
+//
+//	request := &programs.CreateLoyaltyPromotionRequest{
+//	    ProgramID: "program_id",
+//	    LoyaltyPromotion: &square.LoyaltyPromotion{
+//	        Name: "Tuesday Happy Hour Promo",
+//	        Incentive: &square.LoyaltyPromotionIncentive{
+//	            Type: square.LoyaltyPromotionIncentiveTypePointsMultiplier,
+//	            PointsMultiplierData: &square.LoyaltyPromotionIncentivePointsMultiplierData{
+//	                Multiplier: square.String(
+//	                    "3.0",
+//	                ),
+//	            },
+//	        },
+//	        AvailableTime: &square.LoyaltyPromotionAvailableTimeData{
+//	            TimePeriods: []string{
+//	                `BEGIN:VEVENT
+//	                DTSTART:20220816T160000
+//	                DURATION:PT2H
+//	                RRULE:FREQ=WEEKLY;BYDAY=TU
+//	                END:VEVENT`,
+//	            },
+//	        },
+//	        TriggerLimit: &square.LoyaltyPromotionTriggerLimit{
+//	            Times: 1,
+//	            Interval: square.LoyaltyPromotionTriggerLimitIntervalDay.Ptr(),
+//	        },
+//	        MinimumSpendAmountMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(2000),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	        QualifyingCategoryIDs: []string{
+//	            "XTQPYLR3IIU9C44VRCB3XD12",
+//	        },
+//	    },
+//	    IdempotencyKey: "ec78c477-b1c3-4899-a209-a4e71337c996",
+//	}
+//	_, err := client.Loyalty.Programs.Promotions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *programs.CreateLoyaltyPromotionRequest,
@@ -127,6 +191,17 @@ func (c *Client) Create(
 }
 
 // Retrieves a loyalty promotion.
+//
+// Example:
+//
+//	request := &programs.GetPromotionsRequest{
+//	    ProgramID: "program_id",
+//	    PromotionID: "promotion_id",
+//	}
+//	_, err := client.Loyalty.Programs.Promotions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *programs.GetPromotionsRequest,
@@ -148,7 +223,18 @@ func (c *Client) Get(
 // Because updating a promotion is not supported, you can also use this endpoint to cancel a promotion before
 // you create a new one.
 //
-// This endpoint sets the loyalty promotion to the `CANCELED` state
+// # This endpoint sets the loyalty promotion to the `CANCELED` state
+//
+// Example:
+//
+//	request := &programs.CancelPromotionsRequest{
+//	    ProgramID: "program_id",
+//	    PromotionID: "promotion_id",
+//	}
+//	_, err := client.Loyalty.Programs.Promotions.Cancel(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Cancel(
 	ctx context.Context,
 	request *programs.CancelPromotionsRequest,

@@ -4,13 +4,14 @@ package teammemberprofiles
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	bookings "github.com/square/square-go-sdk/v5/bookings"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,36 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists booking profiles for team members.
+//
+// Example:
+//
+//	request := &bookings.ListTeamMemberProfilesRequest{
+//	    BookableOnly: square.Bool(
+//	        true,
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	}
+//	_, err := client.Bookings.TeamMemberProfiles.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *bookings.ListTeamMemberProfilesRequest,
@@ -75,6 +98,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +113,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -101,6 +125,16 @@ func (c *Client) List(
 }
 
 // Retrieves a team member's booking profile.
+//
+// Example:
+//
+//	request := &bookings.GetTeamMemberProfilesRequest{
+//	    TeamMemberID: "team_member_id",
+//	}
+//	_, err := client.Bookings.TeamMemberProfiles.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *bookings.GetTeamMemberProfilesRequest,

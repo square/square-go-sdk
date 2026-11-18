@@ -4,12 +4,13 @@ package eventtypes
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	webhooks "github.com/square/square-go-sdk/v5/webhooks"
-	os "os"
 )
 
 type Client struct {
@@ -33,14 +34,27 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Lists all webhook event types that can be subscribed to.
+//
+// Example:
+//
+//	request := &webhooks.ListEventTypesRequest{
+//	    APIVersion: square.String(
+//	        "api_version",
+//	    ),
+//	}
+//	_, err := client.Webhooks.EventTypes.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *webhooks.ListEventTypesRequest,

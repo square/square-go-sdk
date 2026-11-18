@@ -44,7 +44,7 @@ type CreatePaymentLinkRequest struct {
 	// Describes fields to prepopulate in the resulting checkout page.
 	// For more information, see [Prepopulate the shipping address](https://developer.squareup.com/docs/checkout-api/optional-checkout-configurations#prepopulate-the-shipping-address).
 	PrePopulatedData *v5.PrePopulatedData `json:"pre_populated_data,omitempty" url:"-"`
-	// A note for the payment. After processing the payment, Square adds this note to the resulting `Payment`.
+	// A note for the payment. After processing the payment, Square adds this note to the resulting `Payment` as well as the post payment confirmation email.
 	PaymentNote *string `json:"payment_note,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -52,10 +52,12 @@ type CreatePaymentLinkRequest struct {
 }
 
 func (c *CreatePaymentLinkRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -141,10 +143,12 @@ type DeletePaymentLinksRequest struct {
 }
 
 func (d *DeletePaymentLinksRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -167,10 +171,12 @@ type GetPaymentLinksRequest struct {
 }
 
 func (g *GetPaymentLinksRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -203,10 +209,12 @@ type ListPaymentLinksRequest struct {
 }
 
 func (l *ListPaymentLinksRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -240,10 +248,12 @@ type UpdatePaymentLinkRequest struct {
 }
 
 func (u *UpdatePaymentLinkRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;

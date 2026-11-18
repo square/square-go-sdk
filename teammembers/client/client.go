@@ -4,12 +4,13 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
 	wagesetting "github.com/square/square-go-sdk/v5/teammembers/wagesetting"
-	os "os"
 )
 
 type Client struct {
@@ -35,8 +36,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -48,6 +50,77 @@ func NewClient(options *core.RequestOptions) *Client {
 // - `family_name`
 //
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#createteammember).
+//
+// Example:
+//
+//	request := &square.CreateTeamMemberRequest{
+//	    IdempotencyKey: square.String(
+//	        "idempotency-key-0",
+//	    ),
+//	    TeamMember: &square.TeamMember{
+//	        ReferenceID: square.String(
+//	            "reference_id_1",
+//	        ),
+//	        Status: square.TeamMemberStatusActive.Ptr(),
+//	        GivenName: square.String(
+//	            "Joe",
+//	        ),
+//	        FamilyName: square.String(
+//	            "Doe",
+//	        ),
+//	        EmailAddress: square.String(
+//	            "joe_doe@gmail.com",
+//	        ),
+//	        PhoneNumber: square.String(
+//	            "+14159283333",
+//	        ),
+//	        AssignedLocations: &square.TeamMemberAssignedLocations{
+//	            AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+//	            LocationIDs: []string{
+//	                "YSGH2WBKG94QZ",
+//	                "GA2Y9HSJ8KRYT",
+//	            },
+//	        },
+//	        WageSetting: &square.WageSetting{
+//	            JobAssignments: []*square.JobAssignment{
+//	                &square.JobAssignment{
+//	                    PayType: square.JobAssignmentPayTypeSalary,
+//	                    AnnualRate: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(3000000),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                    WeeklyHours: square.Int(
+//	                        40,
+//	                    ),
+//	                    JobID: square.String(
+//	                        "FjS8x95cqHiMenw4f1NAUH4P",
+//	                    ),
+//	                },
+//	                &square.JobAssignment{
+//	                    PayType: square.JobAssignmentPayTypeHourly,
+//	                    HourlyRate: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(2000),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                    JobID: square.String(
+//	                        "VDNpRv8da51NU8qZFC5zDWpF",
+//	                    ),
+//	                },
+//	            },
+//	            IsOvertimeExempt: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.TeamMembers.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateTeamMemberRequest,
@@ -70,6 +143,65 @@ func (c *Client) Create(
 // contains explicit error information for the failed create.
 //
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-create-team-members).
+//
+// Example:
+//
+//	request := &square.BatchCreateTeamMembersRequest{
+//	    TeamMembers: map[string]*square.CreateTeamMemberRequest{
+//	        "idempotency-key-1": &square.CreateTeamMemberRequest{
+//	            TeamMember: &square.TeamMember{
+//	                ReferenceID: square.String(
+//	                    "reference_id_1",
+//	                ),
+//	                GivenName: square.String(
+//	                    "Joe",
+//	                ),
+//	                FamilyName: square.String(
+//	                    "Doe",
+//	                ),
+//	                EmailAddress: square.String(
+//	                    "joe_doe@gmail.com",
+//	                ),
+//	                PhoneNumber: square.String(
+//	                    "+14159283333",
+//	                ),
+//	                AssignedLocations: &square.TeamMemberAssignedLocations{
+//	                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+//	                    LocationIDs: []string{
+//	                        "YSGH2WBKG94QZ",
+//	                        "GA2Y9HSJ8KRYT",
+//	                    },
+//	                },
+//	            },
+//	        },
+//	        "idempotency-key-2": &square.CreateTeamMemberRequest{
+//	            TeamMember: &square.TeamMember{
+//	                ReferenceID: square.String(
+//	                    "reference_id_2",
+//	                ),
+//	                GivenName: square.String(
+//	                    "Jane",
+//	                ),
+//	                FamilyName: square.String(
+//	                    "Smith",
+//	                ),
+//	                EmailAddress: square.String(
+//	                    "jane_smith@gmail.com",
+//	                ),
+//	                PhoneNumber: square.String(
+//	                    "+14159223334",
+//	                ),
+//	                AssignedLocations: &square.TeamMemberAssignedLocations{
+//	                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
+//	                },
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.TeamMembers.BatchCreate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchCreate(
 	ctx context.Context,
 	request *square.BatchCreateTeamMembersRequest,
@@ -91,6 +223,73 @@ func (c *Client) BatchCreate(
 // the request cannot be successfully processed, the request is not marked as failed, but the body of the response
 // contains explicit error information for the failed update.
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#bulk-update-team-members).
+//
+// Example:
+//
+//	request := &square.BatchUpdateTeamMembersRequest{
+//	    TeamMembers: map[string]*square.UpdateTeamMemberRequest{
+//	        "AFMwA08kR-MIF-3Vs0OE": &square.UpdateTeamMemberRequest{
+//	            TeamMember: &square.TeamMember{
+//	                ReferenceID: square.String(
+//	                    "reference_id_2",
+//	                ),
+//	                IsOwner: square.Bool(
+//	                    false,
+//	                ),
+//	                Status: square.TeamMemberStatusActive.Ptr(),
+//	                GivenName: square.String(
+//	                    "Jane",
+//	                ),
+//	                FamilyName: square.String(
+//	                    "Smith",
+//	                ),
+//	                EmailAddress: square.String(
+//	                    "jane_smith@gmail.com",
+//	                ),
+//	                PhoneNumber: square.String(
+//	                    "+14159223334",
+//	                ),
+//	                AssignedLocations: &square.TeamMemberAssignedLocations{
+//	                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeAllCurrentAndFutureLocations.Ptr(),
+//	                },
+//	            },
+//	        },
+//	        "fpgteZNMaf0qOK-a4t6P": &square.UpdateTeamMemberRequest{
+//	            TeamMember: &square.TeamMember{
+//	                ReferenceID: square.String(
+//	                    "reference_id_1",
+//	                ),
+//	                IsOwner: square.Bool(
+//	                    false,
+//	                ),
+//	                Status: square.TeamMemberStatusActive.Ptr(),
+//	                GivenName: square.String(
+//	                    "Joe",
+//	                ),
+//	                FamilyName: square.String(
+//	                    "Doe",
+//	                ),
+//	                EmailAddress: square.String(
+//	                    "joe_doe@gmail.com",
+//	                ),
+//	                PhoneNumber: square.String(
+//	                    "+14159283333",
+//	                ),
+//	                AssignedLocations: &square.TeamMemberAssignedLocations{
+//	                    AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+//	                    LocationIDs: []string{
+//	                        "YSGH2WBKG94QZ",
+//	                        "GA2Y9HSJ8KRYT",
+//	                    },
+//	                },
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.TeamMembers.BatchUpdate(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpdate(
 	ctx context.Context,
 	request *square.BatchUpdateTeamMembersRequest,
@@ -110,6 +309,26 @@ func (c *Client) BatchUpdate(
 // Returns a paginated list of `TeamMember` objects for a business.
 // The list can be filtered by location IDs, `ACTIVE` or `INACTIVE` status, or whether
 // the team member is the Square account owner.
+//
+// Example:
+//
+//	request := &square.SearchTeamMembersRequest{
+//	    Query: &square.SearchTeamMembersQuery{
+//	        Filter: &square.SearchTeamMembersFilter{
+//	            LocationIDs: []string{
+//	                "0G5P3VGACMMQZ",
+//	            },
+//	            Status: square.TeamMemberStatusActive.Ptr(),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        10,
+//	    ),
+//	}
+//	_, err := client.TeamMembers.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchTeamMembersRequest,
@@ -128,6 +347,16 @@ func (c *Client) Search(
 
 // Retrieves a `TeamMember` object for the given `TeamMember.id`.
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#retrieve-a-team-member).
+//
+// Example:
+//
+//	request := &square.GetTeamMembersRequest{
+//	    TeamMemberID: "team_member_id",
+//	}
+//	_, err := client.TeamMembers.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetTeamMembersRequest,
@@ -146,6 +375,77 @@ func (c *Client) Get(
 
 // Updates a single `TeamMember` object. The `TeamMember` object is returned on successful updates.
 // Learn about [Troubleshooting the Team API](https://developer.squareup.com/docs/team/troubleshooting#update-a-team-member).
+//
+// Example:
+//
+//	request := &square.UpdateTeamMembersRequest{
+//	    TeamMemberID: "team_member_id",
+//	    Body: &square.UpdateTeamMemberRequest{
+//	        TeamMember: &square.TeamMember{
+//	            ReferenceID: square.String(
+//	                "reference_id_1",
+//	            ),
+//	            Status: square.TeamMemberStatusActive.Ptr(),
+//	            GivenName: square.String(
+//	                "Joe",
+//	            ),
+//	            FamilyName: square.String(
+//	                "Doe",
+//	            ),
+//	            EmailAddress: square.String(
+//	                "joe_doe@gmail.com",
+//	            ),
+//	            PhoneNumber: square.String(
+//	                "+14159283333",
+//	            ),
+//	            AssignedLocations: &square.TeamMemberAssignedLocations{
+//	                AssignmentType: square.TeamMemberAssignedLocationsAssignmentTypeExplicitLocations.Ptr(),
+//	                LocationIDs: []string{
+//	                    "YSGH2WBKG94QZ",
+//	                    "GA2Y9HSJ8KRYT",
+//	                },
+//	            },
+//	            WageSetting: &square.WageSetting{
+//	                JobAssignments: []*square.JobAssignment{
+//	                    &square.JobAssignment{
+//	                        PayType: square.JobAssignmentPayTypeSalary,
+//	                        AnnualRate: &square.Money{
+//	                            Amount: square.Int64(
+//	                                int64(3000000),
+//	                            ),
+//	                            Currency: square.CurrencyUsd.Ptr(),
+//	                        },
+//	                        WeeklyHours: square.Int(
+//	                            40,
+//	                        ),
+//	                        JobID: square.String(
+//	                            "FjS8x95cqHiMenw4f1NAUH4P",
+//	                        ),
+//	                    },
+//	                    &square.JobAssignment{
+//	                        PayType: square.JobAssignmentPayTypeHourly,
+//	                        HourlyRate: &square.Money{
+//	                            Amount: square.Int64(
+//	                                int64(1200),
+//	                            ),
+//	                            Currency: square.CurrencyUsd.Ptr(),
+//	                        },
+//	                        JobID: square.String(
+//	                            "VDNpRv8da51NU8qZFC5zDWpF",
+//	                        ),
+//	                    },
+//	                },
+//	                IsOvertimeExempt: square.Bool(
+//	                    true,
+//	                ),
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.TeamMembers.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateTeamMembersRequest,

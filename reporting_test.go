@@ -159,7 +159,7 @@ func TestSettersCube(t *testing.T) {
 
 	t.Run("SetMeta", func(t *testing.T) {
 		obj := &Cube{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 		obj.SetMeta(fernTestValueMeta)
 		assert.Equal(t, fernTestValueMeta, obj.Meta)
 		assert.NotNil(t, obj.explicitFields)
@@ -315,7 +315,7 @@ func TestGettersCube(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Cube{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Meta = expected
 
 		// Act & Assert
@@ -708,7 +708,7 @@ func TestSettersMarkExplicitCube(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Cube{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 
 		// Act
 		obj.SetMeta(fernTestValueMeta)
@@ -1391,7 +1391,7 @@ func TestSettersDimension(t *testing.T) {
 
 	t.Run("SetMeta", func(t *testing.T) {
 		obj := &Dimension{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 		obj.SetMeta(fernTestValueMeta)
 		assert.Equal(t, fernTestValueMeta, obj.Meta)
 		assert.NotNil(t, obj.explicitFields)
@@ -1655,7 +1655,7 @@ func TestGettersDimension(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Dimension{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Meta = expected
 
 		// Act & Assert
@@ -2073,7 +2073,7 @@ func TestSettersMarkExplicitDimension(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Dimension{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 
 		// Act
 		obj.SetMeta(fernTestValueMeta)
@@ -3801,7 +3801,7 @@ func TestSettersLoadResponse(t *testing.T) {
 
 	t.Run("SetQuery", func(t *testing.T) {
 		obj := &LoadResponse{}
-		var fernTestValueQuery map[string]interface{}
+		var fernTestValueQuery map[string]any
 		obj.SetQuery(fernTestValueQuery)
 		assert.Equal(t, fernTestValueQuery, obj.Query)
 		assert.NotNil(t, obj.explicitFields)
@@ -3833,7 +3833,7 @@ func TestSettersLoadResponse(t *testing.T) {
 
 	t.Run("SetRefreshKeyValues", func(t *testing.T) {
 		obj := &LoadResponse{}
-		var fernTestValueRefreshKeyValues []map[string]interface{}
+		var fernTestValueRefreshKeyValues []map[string]any
 		obj.SetRefreshKeyValues(fernTestValueRefreshKeyValues)
 		assert.Equal(t, fernTestValueRefreshKeyValues, obj.RefreshKeyValues)
 		assert.NotNil(t, obj.explicitFields)
@@ -3841,7 +3841,7 @@ func TestSettersLoadResponse(t *testing.T) {
 
 	t.Run("SetPivotQuery", func(t *testing.T) {
 		obj := &LoadResponse{}
-		var fernTestValuePivotQuery map[string]interface{}
+		var fernTestValuePivotQuery map[string]any
 		obj.SetPivotQuery(fernTestValuePivotQuery)
 		assert.Equal(t, fernTestValuePivotQuery, obj.PivotQuery)
 		assert.NotNil(t, obj.explicitFields)
@@ -3994,7 +3994,7 @@ func TestGettersLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Query = expected
 
 		// Act & Assert
@@ -4126,7 +4126,7 @@ func TestGettersLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var expected []map[string]interface{}
+		var expected []map[string]any
 		obj.RefreshKeyValues = expected
 
 		// Act & Assert
@@ -4159,7 +4159,7 @@ func TestGettersLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.PivotQuery = expected
 
 		// Act & Assert
@@ -4352,7 +4352,7 @@ func TestSettersMarkExplicitLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var fernTestValueQuery map[string]interface{}
+		var fernTestValueQuery map[string]any
 
 		// Act
 		obj.SetQuery(fernTestValueQuery)
@@ -4476,7 +4476,7 @@ func TestSettersMarkExplicitLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var fernTestValueRefreshKeyValues []map[string]interface{}
+		var fernTestValueRefreshKeyValues []map[string]any
 
 		// Act
 		obj.SetRefreshKeyValues(fernTestValueRefreshKeyValues)
@@ -4507,7 +4507,7 @@ func TestSettersMarkExplicitLoadResponse(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResponse{}
-		var fernTestValuePivotQuery map[string]interface{}
+		var fernTestValuePivotQuery map[string]any
 
 		// Act
 		obj.SetPivotQuery(fernTestValuePivotQuery)
@@ -4570,7 +4570,7 @@ func TestSettersMarkExplicitLoadResponse(t *testing.T) {
 func TestSettersLoadResultAnnotation(t *testing.T) {
 	t.Run("SetMeasures", func(t *testing.T) {
 		obj := &LoadResultAnnotation{}
-		var fernTestValueMeasures map[string]interface{}
+		var fernTestValueMeasures map[string]any
 		obj.SetMeasures(fernTestValueMeasures)
 		assert.Equal(t, fernTestValueMeasures, obj.Measures)
 		assert.NotNil(t, obj.explicitFields)
@@ -4578,7 +4578,7 @@ func TestSettersLoadResultAnnotation(t *testing.T) {
 
 	t.Run("SetDimensions", func(t *testing.T) {
 		obj := &LoadResultAnnotation{}
-		var fernTestValueDimensions map[string]interface{}
+		var fernTestValueDimensions map[string]any
 		obj.SetDimensions(fernTestValueDimensions)
 		assert.Equal(t, fernTestValueDimensions, obj.Dimensions)
 		assert.NotNil(t, obj.explicitFields)
@@ -4586,7 +4586,7 @@ func TestSettersLoadResultAnnotation(t *testing.T) {
 
 	t.Run("SetSegments", func(t *testing.T) {
 		obj := &LoadResultAnnotation{}
-		var fernTestValueSegments map[string]interface{}
+		var fernTestValueSegments map[string]any
 		obj.SetSegments(fernTestValueSegments)
 		assert.Equal(t, fernTestValueSegments, obj.Segments)
 		assert.NotNil(t, obj.explicitFields)
@@ -4594,7 +4594,7 @@ func TestSettersLoadResultAnnotation(t *testing.T) {
 
 	t.Run("SetTimeDimensions", func(t *testing.T) {
 		obj := &LoadResultAnnotation{}
-		var fernTestValueTimeDimensions map[string]interface{}
+		var fernTestValueTimeDimensions map[string]any
 		obj.SetTimeDimensions(fernTestValueTimeDimensions)
 		assert.Equal(t, fernTestValueTimeDimensions, obj.TimeDimensions)
 		assert.NotNil(t, obj.explicitFields)
@@ -4607,7 +4607,7 @@ func TestGettersLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Measures = expected
 
 		// Act & Assert
@@ -4640,7 +4640,7 @@ func TestGettersLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Dimensions = expected
 
 		// Act & Assert
@@ -4673,7 +4673,7 @@ func TestGettersLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Segments = expected
 
 		// Act & Assert
@@ -4706,7 +4706,7 @@ func TestGettersLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.TimeDimensions = expected
 
 		// Act & Assert
@@ -4742,7 +4742,7 @@ func TestSettersMarkExplicitLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var fernTestValueMeasures map[string]interface{}
+		var fernTestValueMeasures map[string]any
 
 		// Act
 		obj.SetMeasures(fernTestValueMeasures)
@@ -4773,7 +4773,7 @@ func TestSettersMarkExplicitLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var fernTestValueDimensions map[string]interface{}
+		var fernTestValueDimensions map[string]any
 
 		// Act
 		obj.SetDimensions(fernTestValueDimensions)
@@ -4804,7 +4804,7 @@ func TestSettersMarkExplicitLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var fernTestValueSegments map[string]interface{}
+		var fernTestValueSegments map[string]any
 
 		// Act
 		obj.SetSegments(fernTestValueSegments)
@@ -4835,7 +4835,7 @@ func TestSettersMarkExplicitLoadResultAnnotation(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultAnnotation{}
-		var fernTestValueTimeDimensions map[string]interface{}
+		var fernTestValueTimeDimensions map[string]any
 
 		// Act
 		obj.SetTimeDimensions(fernTestValueTimeDimensions)
@@ -4967,7 +4967,7 @@ func TestSettersLoadResultDataColumnar(t *testing.T) {
 
 	t.Run("SetColumns", func(t *testing.T) {
 		obj := &LoadResultDataColumnar{}
-		var fernTestValueColumns [][]interface{}
+		var fernTestValueColumns [][]any
 		obj.SetColumns(fernTestValueColumns)
 		assert.Equal(t, fernTestValueColumns, obj.Columns)
 		assert.NotNil(t, obj.explicitFields)
@@ -5013,7 +5013,7 @@ func TestGettersLoadResultDataColumnar(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultDataColumnar{}
-		var expected [][]interface{}
+		var expected [][]any
 		obj.Columns = expected
 
 		// Act & Assert
@@ -5080,7 +5080,7 @@ func TestSettersMarkExplicitLoadResultDataColumnar(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultDataColumnar{}
-		var fernTestValueColumns [][]interface{}
+		var fernTestValueColumns [][]any
 
 		// Act
 		obj.SetColumns(fernTestValueColumns)
@@ -5120,7 +5120,7 @@ func TestSettersLoadResultDataCompact(t *testing.T) {
 
 	t.Run("SetDataset", func(t *testing.T) {
 		obj := &LoadResultDataCompact{}
-		var fernTestValueDataset [][]interface{}
+		var fernTestValueDataset [][]any
 		obj.SetDataset(fernTestValueDataset)
 		assert.Equal(t, fernTestValueDataset, obj.Dataset)
 		assert.NotNil(t, obj.explicitFields)
@@ -5166,7 +5166,7 @@ func TestGettersLoadResultDataCompact(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultDataCompact{}
-		var expected [][]interface{}
+		var expected [][]any
 		obj.Dataset = expected
 
 		// Act & Assert
@@ -5233,7 +5233,7 @@ func TestSettersMarkExplicitLoadResultDataCompact(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &LoadResultDataCompact{}
-		var fernTestValueDataset [][]interface{}
+		var fernTestValueDataset [][]any
 
 		// Act
 		obj.SetDataset(fernTestValueDataset)
@@ -5313,7 +5313,7 @@ func TestSettersMeasure(t *testing.T) {
 
 	t.Run("SetMeta", func(t *testing.T) {
 		obj := &Measure{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 		obj.SetMeta(fernTestValueMeta)
 		assert.Equal(t, fernTestValueMeta, obj.Meta)
 		assert.NotNil(t, obj.explicitFields)
@@ -5536,7 +5536,7 @@ func TestGettersMeasure(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Measure{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Meta = expected
 
 		// Act & Assert
@@ -5890,7 +5890,7 @@ func TestSettersMarkExplicitMeasure(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Measure{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 
 		// Act
 		obj.SetMeta(fernTestValueMeta)
@@ -7317,7 +7317,7 @@ func TestGettersQueryFilter(t *testing.T) {
 func TestSettersQueryFilterAnd(t *testing.T) {
 	t.Run("SetAnd", func(t *testing.T) {
 		obj := &QueryFilterAnd{}
-		var fernTestValueAnd []map[string]interface{}
+		var fernTestValueAnd []map[string]any
 		obj.SetAnd(fernTestValueAnd)
 		assert.Equal(t, fernTestValueAnd, obj.And)
 		assert.NotNil(t, obj.explicitFields)
@@ -7330,7 +7330,7 @@ func TestGettersQueryFilterAnd(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &QueryFilterAnd{}
-		var expected []map[string]interface{}
+		var expected []map[string]any
 		obj.And = expected
 
 		// Act & Assert
@@ -7366,7 +7366,7 @@ func TestSettersMarkExplicitQueryFilterAnd(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &QueryFilterAnd{}
-		var fernTestValueAnd []map[string]interface{}
+		var fernTestValueAnd []map[string]any
 
 		// Act
 		obj.SetAnd(fernTestValueAnd)
@@ -7603,7 +7603,7 @@ func TestSettersMarkExplicitQueryFilterCondition(t *testing.T) {
 func TestSettersQueryFilterOr(t *testing.T) {
 	t.Run("SetOr", func(t *testing.T) {
 		obj := &QueryFilterOr{}
-		var fernTestValueOr []map[string]interface{}
+		var fernTestValueOr []map[string]any
 		obj.SetOr(fernTestValueOr)
 		assert.Equal(t, fernTestValueOr, obj.Or)
 		assert.NotNil(t, obj.explicitFields)
@@ -7616,7 +7616,7 @@ func TestGettersQueryFilterOr(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &QueryFilterOr{}
-		var expected []map[string]interface{}
+		var expected []map[string]any
 		obj.Or = expected
 
 		// Act & Assert
@@ -7652,7 +7652,7 @@ func TestSettersMarkExplicitQueryFilterOr(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &QueryFilterOr{}
-		var fernTestValueOr []map[string]interface{}
+		var fernTestValueOr []map[string]any
 
 		// Act
 		obj.SetOr(fernTestValueOr)
@@ -7716,7 +7716,7 @@ func TestSettersSegment(t *testing.T) {
 
 	t.Run("SetMeta", func(t *testing.T) {
 		obj := &Segment{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 		obj.SetMeta(fernTestValueMeta)
 		assert.Equal(t, fernTestValueMeta, obj.Meta)
 		assert.NotNil(t, obj.explicitFields)
@@ -7831,7 +7831,7 @@ func TestGettersSegment(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Segment{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.Meta = expected
 
 		// Act & Assert
@@ -7991,7 +7991,7 @@ func TestSettersMarkExplicitSegment(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &Segment{}
-		var fernTestValueMeta map[string]interface{}
+		var fernTestValueMeta map[string]any
 
 		// Act
 		obj.SetMeta(fernTestValueMeta)
@@ -8296,7 +8296,7 @@ func TestGettersTimeDimensionDateRange(t *testing.T) {
 		t.Parallel()
 		// Arrange
 		obj := &TimeDimensionDateRange{}
-		var expected map[string]interface{}
+		var expected map[string]any
 		obj.StringUnknownMap = expected
 
 		// Act & Assert

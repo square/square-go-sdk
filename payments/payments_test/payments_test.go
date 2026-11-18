@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestPaymentsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListPaymentsRequest{
 		BeginTime: square.String(
@@ -126,7 +142,7 @@ func TestPaymentsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestPaymentsListWithWireMock", "GET", "/v2/payments", map[string]string{"begin_time": "begin_time", "end_time": "end_time", "sort_order": "sort_order", "cursor": "cursor", "location_id": "location_id", "total": "1000000", "last_4": "last_4", "card_brand": "card_brand", "limit": "1", "is_offline_payment": "true", "offline_begin_time": "offline_begin_time", "offline_end_time": "offline_end_time", "updated_at_begin_time": "updated_at_begin_time", "updated_at_end_time": "updated_at_end_time", "sort_field": "CREATED_AT"}, 1)
+	VerifyRequestCount(t, "TestPaymentsListWithWireMock", "GET", "/v2/payments", map[string]interface{}{"begin_time": "begin_time", "end_time": "end_time", "sort_order": "sort_order", "cursor": "cursor", "location_id": "location_id", "total": "1000000", "last_4": "last_4", "card_brand": "card_brand", "limit": "1", "is_offline_payment": "true", "offline_begin_time": "offline_begin_time", "offline_end_time": "offline_end_time", "updated_at_begin_time": "updated_at_begin_time", "updated_at_end_time": "updated_at_end_time", "sort_field": "CREATED_AT"}, 1)
 }
 
 func TestPaymentsCreateWithWireMock(
@@ -138,6 +154,7 @@ func TestPaymentsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreatePaymentRequest{
 		SourceID:       "ccof:GaJGNaZa8x4OgDJn4GB",
@@ -191,6 +208,7 @@ func TestPaymentsCancelByIdempotencyKeyWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CancelPaymentByIdempotencyKeyRequest{
 		IdempotencyKey: "a7e36d40-d24b-11e8-b568-0800200c9a66",
@@ -216,6 +234,7 @@ func TestPaymentsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetPaymentsRequest{
 		PaymentID: "payment_id",
@@ -241,6 +260,7 @@ func TestPaymentsUpdateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdatePaymentRequest{
 		PaymentID: "payment_id",
@@ -284,6 +304,7 @@ func TestPaymentsCancelWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CancelPaymentsRequest{
 		PaymentID: "payment_id",
@@ -309,6 +330,7 @@ func TestPaymentsCompleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CompletePaymentRequest{
 		PaymentID: "payment_id",

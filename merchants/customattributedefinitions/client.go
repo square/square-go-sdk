@@ -4,13 +4,14 @@ package customattributedefinitions
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	merchants "github.com/square/square-go-sdk/v5/merchants"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,8 +35,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -45,6 +47,22 @@ func NewClient(options *core.RequestOptions) *Client {
 // When all response pages are retrieved, the results include all custom attribute definitions
 // that are visible to the requesting application, including those that are created by other
 // applications and set to `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.ListCustomAttributeDefinitionsRequest{
+//	    VisibilityFilter: square.VisibilityFilterAll.Ptr(),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Merchants.CustomAttributeDefinitions.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *merchants.ListCustomAttributeDefinitionsRequest,
@@ -78,6 +96,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -92,7 +111,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -110,6 +129,30 @@ func (c *Client) List(
 // [UpsertMerchantCustomAttribute](api-endpoint:MerchantCustomAttributes-UpsertMerchantCustomAttribute) or
 // [BulkUpsertMerchantCustomAttributes](api-endpoint:MerchantCustomAttributes-BulkUpsertMerchantCustomAttributes)
 // to set the custom attribute for a merchant.
+//
+// Example:
+//
+//	request := &merchants.CreateMerchantCustomAttributeDefinitionRequest{
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Key: square.String(
+//	            "alternative_seller_name",
+//	        ),
+//	        Schema: map[string]any{
+//	            "$ref": "https://developer-production-s.squarecdn.com/schemas/v1/common.json#squareup.common.String",
+//	        },
+//	        Name: square.String(
+//	            "Alternative Merchant Name",
+//	        ),
+//	        Description: square.String(
+//	            "This is the other name this merchant goes by.",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+//	    },
+//	}
+//	_, err := client.Merchants.CustomAttributeDefinitions.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *merchants.CreateMerchantCustomAttributeDefinitionRequest,
@@ -129,6 +172,19 @@ func (c *Client) Create(
 // Retrieves a merchant-related [custom attribute definition](entity:CustomAttributeDefinition) from a Square seller account.
 // To retrieve a custom attribute definition created by another application, the `visibility`
 // setting must be `VISIBILITY_READ_ONLY` or `VISIBILITY_READ_WRITE_VALUES`.
+//
+// Example:
+//
+//	request := &merchants.GetCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	    Version: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Merchants.CustomAttributeDefinitions.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *merchants.GetCustomAttributeDefinitionsRequest,
@@ -149,6 +205,22 @@ func (c *Client) Get(
 // Use this endpoint to update the following fields: `name`, `description`, `visibility`, or the
 // `schema` for a `Selection` data type.
 // Only the definition owner can update a custom attribute definition.
+//
+// Example:
+//
+//	request := &merchants.UpdateMerchantCustomAttributeDefinitionRequest{
+//	    Key: "key",
+//	    CustomAttributeDefinition: &square.CustomAttributeDefinition{
+//	        Description: square.String(
+//	            "Update the description as desired.",
+//	        ),
+//	        Visibility: square.CustomAttributeDefinitionVisibilityVisibilityReadOnly.Ptr(),
+//	    },
+//	}
+//	_, err := client.Merchants.CustomAttributeDefinitions.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *merchants.UpdateMerchantCustomAttributeDefinitionRequest,
@@ -169,6 +241,16 @@ func (c *Client) Update(
 // Deleting a custom attribute definition also deletes the corresponding custom attribute from
 // the merchant.
 // Only the definition owner can delete a custom attribute definition.
+//
+// Example:
+//
+//	request := &merchants.DeleteCustomAttributeDefinitionsRequest{
+//	    Key: "key",
+//	}
+//	_, err := client.Merchants.CustomAttributeDefinitions.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *merchants.DeleteCustomAttributeDefinitionsRequest,

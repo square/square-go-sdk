@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestCardsListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListCardsRequest{
 		Cursor: square.String(
@@ -96,7 +112,7 @@ func TestCardsListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestCardsListWithWireMock", "GET", "/v2/cards", map[string]string{"cursor": "cursor", "customer_id": "customer_id", "include_disabled": "true", "reference_id": "reference_id", "sort_order": "DESC"}, 1)
+	VerifyRequestCount(t, "TestCardsListWithWireMock", "GET", "/v2/cards", map[string]interface{}{"cursor": "cursor", "customer_id": "customer_id", "include_disabled": "true", "reference_id": "reference_id", "sort_order": "DESC"}, 1)
 }
 
 func TestCardsCreateWithWireMock(
@@ -108,6 +124,7 @@ func TestCardsCreateWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.CreateCardRequest{
 		IdempotencyKey: "4935a656-a929-4792-b97c-8848be85c27c",
@@ -163,6 +180,7 @@ func TestCardsGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.GetCardsRequest{
 		CardID: "card_id",
@@ -188,6 +206,7 @@ func TestCardsDisableWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.DisableCardsRequest{
 		CardID: "card_id",

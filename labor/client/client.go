@@ -4,6 +4,8 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
@@ -13,7 +15,6 @@ import (
 	teammemberwages "github.com/square/square-go-sdk/v5/labor/teammemberwages"
 	workweekconfigs "github.com/square/square-go-sdk/v5/labor/workweekconfigs"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -47,8 +48,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -62,6 +64,43 @@ func NewClient(options *core.RequestOptions) *Client {
 // - `job_id`
 // - `start_at`
 // - `end_at`
+//
+// Example:
+//
+//	request := &square.CreateScheduledShiftRequest{
+//	    IdempotencyKey: square.String(
+//	        "HIDSNG5KS478L",
+//	    ),
+//	    ScheduledShift: &square.ScheduledShift{
+//	        DraftShiftDetails: &square.ScheduledShiftDetails{
+//	            TeamMemberID: square.String(
+//	                "ormj0jJJZ5OZIzxrZYJI",
+//	            ),
+//	            LocationID: square.String(
+//	                "PAA1RJZZKXBFG",
+//	            ),
+//	            JobID: square.String(
+//	                "FzbJAtt9qEWncK1BWgVCxQ6M",
+//	            ),
+//	            StartAt: square.String(
+//	                "2019-01-25T03:11:00-05:00",
+//	            ),
+//	            EndAt: square.String(
+//	                "2019-01-25T13:11:00-05:00",
+//	            ),
+//	            Notes: square.String(
+//	                "Dont forget to prep the vegetables",
+//	            ),
+//	            IsDeleted: square.Bool(
+//	                false,
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Labor.CreateScheduledShift(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateScheduledShift(
 	ctx context.Context,
 	request *square.CreateScheduledShiftRequest,
@@ -84,6 +123,19 @@ func (c *Client) CreateScheduledShift(
 //
 // The minimum `start_at` and maximum `end_at` timestamps of all shifts in a
 // `BulkPublishScheduledShifts` request must fall within a two-week period.
+//
+// Example:
+//
+//	request := &square.BulkPublishScheduledShiftsRequest{
+//	    ScheduledShifts: map[string]*square.BulkPublishScheduledShiftsData{
+//	        "key": &square.BulkPublishScheduledShiftsData{},
+//	    },
+//	    ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAffected.Ptr(),
+//	}
+//	_, err := client.Labor.BulkPublishScheduledShifts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BulkPublishScheduledShifts(
 	ctx context.Context,
 	request *square.BulkPublishScheduledShiftsRequest,
@@ -102,6 +154,30 @@ func (c *Client) BulkPublishScheduledShifts(
 
 // Returns a paginated list of scheduled shifts, with optional filter and sort settings.
 // By default, results are sorted by `start_at` in ascending order.
+//
+// Example:
+//
+//	request := &square.SearchScheduledShiftsRequest{
+//	    Query: &square.ScheduledShiftQuery{
+//	        Filter: &square.ScheduledShiftFilter{
+//	            AssignmentStatus: square.ScheduledShiftFilterAssignmentStatusAssigned.Ptr(),
+//	        },
+//	        Sort: &square.ScheduledShiftSort{
+//	            Field: square.ScheduledShiftSortFieldCreatedAt.Ptr(),
+//	            Order: square.SortOrderAsc.Ptr(),
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        2,
+//	    ),
+//	    Cursor: square.String(
+//	        "xoxp-1234-5678-90123",
+//	    ),
+//	}
+//	_, err := client.Labor.SearchScheduledShifts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchScheduledShifts(
 	ctx context.Context,
 	request *square.SearchScheduledShiftsRequest,
@@ -119,6 +195,16 @@ func (c *Client) SearchScheduledShifts(
 }
 
 // Retrieves a scheduled shift by ID.
+//
+// Example:
+//
+//	request := &square.RetrieveScheduledShiftRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.RetrieveScheduledShift(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveScheduledShift(
 	ctx context.Context,
 	request *square.RetrieveScheduledShiftRequest,
@@ -145,6 +231,44 @@ func (c *Client) RetrieveScheduledShift(
 // set the value to null.
 // - Change the `is_deleted` field. To delete a scheduled shift, set `is_deleted` to true
 // and then publish the shift.
+//
+// Example:
+//
+//	request := &square.UpdateScheduledShiftRequest{
+//	    ID: "id",
+//	    ScheduledShift: &square.ScheduledShift{
+//	        DraftShiftDetails: &square.ScheduledShiftDetails{
+//	            TeamMemberID: square.String(
+//	                "ormj0jJJZ5OZIzxrZYJI",
+//	            ),
+//	            LocationID: square.String(
+//	                "PAA1RJZZKXBFG",
+//	            ),
+//	            JobID: square.String(
+//	                "FzbJAtt9qEWncK1BWgVCxQ6M",
+//	            ),
+//	            StartAt: square.String(
+//	                "2019-03-25T03:11:00-05:00",
+//	            ),
+//	            EndAt: square.String(
+//	                "2019-03-25T13:18:00-05:00",
+//	            ),
+//	            Notes: square.String(
+//	                "Dont forget to prep the vegetables",
+//	            ),
+//	            IsDeleted: square.Bool(
+//	                false,
+//	            ),
+//	        },
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Labor.UpdateScheduledShift(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateScheduledShift(
 	ctx context.Context,
 	request *square.UpdateScheduledShiftRequest,
@@ -163,6 +287,21 @@ func (c *Client) UpdateScheduledShift(
 
 // Publishes a scheduled shift. When a scheduled shift is published, Square keeps the
 // `draft_shift_details` field as is and copies it to the `published_shift_details` field.
+//
+// Example:
+//
+//	request := &square.PublishScheduledShiftRequest{
+//	    ID: "id",
+//	    IdempotencyKey: "HIDSNG5KS478L",
+//	    Version: square.Int(
+//	        2,
+//	    ),
+//	    ScheduledShiftNotificationAudience: square.ScheduledShiftNotificationAudienceAll.Ptr(),
+//	}
+//	_, err := client.Labor.PublishScheduledShift(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) PublishScheduledShift(
 	ctx context.Context,
 	request *square.PublishScheduledShiftRequest,
@@ -197,6 +336,58 @@ func (c *Client) PublishScheduledShift(
 // - The `Break` instances are set in the request and a break `start_at`
 // is before the `Timecard.start_at`, a break `end_at` is after
 // the `Timecard.end_at`, or both.
+//
+// Example:
+//
+//	request := &square.CreateTimecardRequest{
+//	    IdempotencyKey: square.String(
+//	        "HIDSNG5KS478L",
+//	    ),
+//	    Timecard: &square.Timecard{
+//	        LocationID: "PAA1RJZZKXBFG",
+//	        StartAt: "2019-01-25T03:11:00-05:00",
+//	        EndAt: square.String(
+//	            "2019-01-25T13:11:00-05:00",
+//	        ),
+//	        Wage: &square.TimecardWage{
+//	            Title: square.String(
+//	                "Barista",
+//	            ),
+//	            HourlyRate: &square.Money{
+//	                Amount: square.Int64(
+//	                    int64(1100),
+//	                ),
+//	                Currency: square.CurrencyUsd.Ptr(),
+//	            },
+//	            TipEligible: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	        Breaks: []*square.Break{
+//	            &square.Break{
+//	                StartAt: "2019-01-25T06:11:00-05:00",
+//	                EndAt: square.String(
+//	                    "2019-01-25T06:16:00-05:00",
+//	                ),
+//	                BreakTypeID: "REGS1EQR1TPZ5",
+//	                Name: "Tea Break",
+//	                ExpectedDuration: "PT5M",
+//	                IsPaid: true,
+//	            },
+//	        },
+//	        TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
+//	        DeclaredCashTipMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(500),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Labor.CreateTimecard(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateTimecard(
 	ctx context.Context,
 	request *square.CreateTimecardRequest,
@@ -227,6 +418,36 @@ func (c *Client) CreateTimecard(
 // - `END_AT`
 // - `CREATED_AT`
 // - `UPDATED_AT`
+//
+// Example:
+//
+//	request := &square.SearchTimecardsRequest{
+//	    Query: &square.TimecardQuery{
+//	        Filter: &square.TimecardFilter{
+//	            Workday: &square.TimecardWorkday{
+//	                DateRange: &square.DateRange{
+//	                    StartDate: square.String(
+//	                        "2019-01-20",
+//	                    ),
+//	                    EndDate: square.String(
+//	                        "2019-02-03",
+//	                    ),
+//	                },
+//	                MatchTimecardsBy: square.TimecardWorkdayMatcherStartAt.Ptr(),
+//	                DefaultTimezone: square.String(
+//	                    "America/Los_Angeles",
+//	                ),
+//	            },
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        100,
+//	    ),
+//	}
+//	_, err := client.Labor.SearchTimecards(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchTimecards(
 	ctx context.Context,
 	request *square.SearchTimecardsRequest,
@@ -244,6 +465,16 @@ func (c *Client) SearchTimecards(
 }
 
 // Returns a single `Timecard` specified by `id`.
+//
+// Example:
+//
+//	request := &square.RetrieveTimecardRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.RetrieveTimecard(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RetrieveTimecard(
 	ctx context.Context,
 	request *square.RetrieveTimecardRequest,
@@ -267,6 +498,63 @@ func (c *Client) RetrieveTimecard(
 //
 // When closing a `Timecard`, all `Break` instances in the `Timecard` must be complete with `end_at`
 // set on each `Break`.
+//
+// Example:
+//
+//	request := &square.UpdateTimecardRequest{
+//	    ID: "id",
+//	    Timecard: &square.Timecard{
+//	        LocationID: "PAA1RJZZKXBFG",
+//	        StartAt: "2019-01-25T03:11:00-05:00",
+//	        EndAt: square.String(
+//	            "2019-01-25T13:11:00-05:00",
+//	        ),
+//	        Wage: &square.TimecardWage{
+//	            Title: square.String(
+//	                "Bartender",
+//	            ),
+//	            HourlyRate: &square.Money{
+//	                Amount: square.Int64(
+//	                    int64(1500),
+//	                ),
+//	                Currency: square.CurrencyUsd.Ptr(),
+//	            },
+//	            TipEligible: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	        Breaks: []*square.Break{
+//	            &square.Break{
+//	                ID: square.String(
+//	                    "X7GAQYVVRRG6P",
+//	                ),
+//	                StartAt: "2019-01-25T06:11:00-05:00",
+//	                EndAt: square.String(
+//	                    "2019-01-25T06:16:00-05:00",
+//	                ),
+//	                BreakTypeID: "REGS1EQR1TPZ5",
+//	                Name: "Tea Break",
+//	                ExpectedDuration: "PT5M",
+//	                IsPaid: true,
+//	            },
+//	        },
+//	        Status: square.TimecardStatusClosed.Ptr(),
+//	        Version: square.Int(
+//	            1,
+//	        ),
+//	        TeamMemberID: "ormj0jJJZ5OZIzxrZYJI",
+//	        DeclaredCashTipMoney: &square.Money{
+//	            Amount: square.Int64(
+//	                int64(500),
+//	            ),
+//	            Currency: square.CurrencyUsd.Ptr(),
+//	        },
+//	    },
+//	}
+//	_, err := client.Labor.UpdateTimecard(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateTimecard(
 	ctx context.Context,
 	request *square.UpdateTimecardRequest,
@@ -284,6 +572,16 @@ func (c *Client) UpdateTimecard(
 }
 
 // Deletes a `Timecard`.
+//
+// Example:
+//
+//	request := &square.DeleteTimecardRequest{
+//	    ID: "id",
+//	}
+//	_, err := client.Labor.DeleteTimecard(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteTimecard(
 	ctx context.Context,
 	request *square.DeleteTimecardRequest,

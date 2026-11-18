@@ -92,10 +92,12 @@ type ObtainTokenRequest struct {
 }
 
 func (o *ObtainTokenRequest) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetClientID sets the ClientID field and marks it as non-optional;
@@ -223,10 +225,12 @@ type RevokeTokenRequest struct {
 }
 
 func (r *RevokeTokenRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetClientID sets the ClientID field and marks it as non-optional;
@@ -278,7 +282,6 @@ func (r *RevokeTokenRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Represents an [ObtainToken](api-endpoint:OAuth-ObtainToken) response.
 var (
 	obtainTokenResponseFieldAccessToken           = big.NewInt(1 << 0)
 	obtainTokenResponseFieldTokenType             = big.NewInt(1 << 1)
@@ -293,6 +296,7 @@ var (
 	obtainTokenResponseFieldRefreshTokenExpiresAt = big.NewInt(1 << 10)
 )
 
+// Represents an [ObtainToken](api-endpoint:OAuth-ObtainToken) response.
 type ObtainTokenResponse struct {
 	// An OAuth access token used to authorize Square API requests on behalf of the seller.
 	// Include this token as a bearer token in the `Authorization` header of your API requests.
@@ -435,10 +439,12 @@ func (o *ObtainTokenResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *ObtainTokenResponse) require(field *big.Int) {
-	if o.explicitFields == nil {
-		o.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if o.explicitFields != nil {
+		next.Set(o.explicitFields)
 	}
-	o.explicitFields.Or(o.explicitFields, field)
+	next.Or(next, field)
+	o.explicitFields = next
 }
 
 // SetAccessToken sets the AccessToken field and marks it as non-optional;
@@ -560,8 +566,6 @@ func (o *ObtainTokenResponse) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `RetrieveTokenStatus` endpoint.
 var (
 	retrieveTokenStatusResponseFieldScopes     = big.NewInt(1 << 0)
 	retrieveTokenStatusResponseFieldExpiresAt  = big.NewInt(1 << 1)
@@ -570,6 +574,8 @@ var (
 	retrieveTokenStatusResponseFieldErrors     = big.NewInt(1 << 4)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `RetrieveTokenStatus` endpoint.
 type RetrieveTokenStatusResponse struct {
 	// The list of scopes associated with an access token.
 	Scopes []string `json:"scopes,omitempty" url:"scopes,omitempty"`
@@ -632,10 +638,12 @@ func (r *RetrieveTokenStatusResponse) GetExtraProperties() map[string]interface{
 }
 
 func (r *RetrieveTokenStatusResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetScopes sets the Scopes field and marks it as non-optional;
@@ -755,10 +763,12 @@ func (r *RevokeTokenResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (r *RevokeTokenResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetSuccess sets the Success field and marks it as non-optional;

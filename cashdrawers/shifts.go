@@ -23,10 +23,12 @@ type GetShiftsRequest struct {
 }
 
 func (g *GetShiftsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetShiftID sets the ShiftID field and marks it as non-optional;
@@ -73,10 +75,12 @@ type ListShiftsRequest struct {
 }
 
 func (l *ListShiftsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -144,10 +148,12 @@ type ListEventsShiftsRequest struct {
 }
 
 func (l *ListEventsShiftsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetShiftID sets the ShiftID field and marks it as non-optional;

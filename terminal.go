@@ -22,10 +22,12 @@ type DismissTerminalActionRequest struct {
 }
 
 func (d *DismissTerminalActionRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetActionID sets the ActionID field and marks it as non-optional;
@@ -48,10 +50,12 @@ type DismissTerminalCheckoutRequest struct {
 }
 
 func (d *DismissTerminalCheckoutRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetCheckoutID sets the CheckoutID field and marks it as non-optional;
@@ -74,10 +78,12 @@ type DismissTerminalRefundRequest struct {
 }
 
 func (d *DismissTerminalRefundRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetTerminalRefundID sets the TerminalRefundID field and marks it as non-optional;
@@ -127,10 +133,12 @@ func (d *DismissTerminalActionResponse) GetExtraProperties() map[string]interfac
 }
 
 func (d *DismissTerminalActionResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -229,10 +237,12 @@ func (d *DismissTerminalCheckoutResponse) GetExtraProperties() map[string]interf
 }
 
 func (d *DismissTerminalCheckoutResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -331,10 +341,12 @@ func (d *DismissTerminalRefundResponse) GetExtraProperties() map[string]interfac
 }
 
 func (d *DismissTerminalRefundResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;

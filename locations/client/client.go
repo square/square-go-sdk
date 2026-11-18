@@ -4,6 +4,8 @@ package client
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
@@ -11,7 +13,6 @@ import (
 	customattributes "github.com/square/square-go-sdk/v5/locations/customattributes"
 	transactions "github.com/square/square-go-sdk/v5/locations/transactions"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -41,8 +42,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:                    options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -50,6 +52,12 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Provides details about all of the seller's [locations](https://developer.squareup.com/docs/locations-api),
 // including those with an inactive status. Locations are listed alphabetically by `name`.
+//
+// Example:
+//
+//	_, err := client.Locations.List(
+//	    context.TODO(),
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -71,6 +79,37 @@ func (c *Client) List(
 // Locations created programmatically with the Locations API last forever and
 // are visible to the seller for their own management. Therefore, ensure that
 // each location has a sensible and unique name.
+//
+// Example:
+//
+//	request := &square.CreateLocationRequest{
+//	    Location: &square.Location{
+//	        Name: square.String(
+//	            "Midtown",
+//	        ),
+//	        Address: &square.Address{
+//	            AddressLine1: square.String(
+//	                "1234 Peachtree St. NE",
+//	            ),
+//	            Locality: square.String(
+//	                "Atlanta",
+//	            ),
+//	            AdministrativeDistrictLevel1: square.String(
+//	                "GA",
+//	            ),
+//	            PostalCode: square.String(
+//	                "30309",
+//	            ),
+//	        },
+//	        Description: square.String(
+//	            "Midtown Atlanta store",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Locations.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *square.CreateLocationRequest,
@@ -89,6 +128,16 @@ func (c *Client) Create(
 
 // Retrieves details of a single location. Specify "main"
 // as the location ID to retrieve details of the [main location](https://developer.squareup.com/docs/locations-api#about-the-main-location).
+//
+// Example:
+//
+//	request := &square.GetLocationsRequest{
+//	    LocationID: "location_id",
+//	}
+//	_, err := client.Locations.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetLocationsRequest,
@@ -106,6 +155,52 @@ func (c *Client) Get(
 }
 
 // Updates a [location](https://developer.squareup.com/docs/locations-api).
+//
+// Example:
+//
+//	request := &square.UpdateLocationRequest{
+//	    LocationID: "location_id",
+//	    Location: &square.Location{
+//	        BusinessHours: &square.BusinessHours{
+//	            Periods: []*square.BusinessHoursPeriod{
+//	                &square.BusinessHoursPeriod{
+//	                    DayOfWeek: square.DayOfWeekFri.Ptr(),
+//	                    StartLocalTime: square.String(
+//	                        "07:00",
+//	                    ),
+//	                    EndLocalTime: square.String(
+//	                        "18:00",
+//	                    ),
+//	                },
+//	                &square.BusinessHoursPeriod{
+//	                    DayOfWeek: square.DayOfWeekSat.Ptr(),
+//	                    StartLocalTime: square.String(
+//	                        "07:00",
+//	                    ),
+//	                    EndLocalTime: square.String(
+//	                        "18:00",
+//	                    ),
+//	                },
+//	                &square.BusinessHoursPeriod{
+//	                    DayOfWeek: square.DayOfWeekSun.Ptr(),
+//	                    StartLocalTime: square.String(
+//	                        "09:00",
+//	                    ),
+//	                    EndLocalTime: square.String(
+//	                        "15:00",
+//	                    ),
+//	                },
+//	            },
+//	        },
+//	        Description: square.String(
+//	            "Midtown Atlanta store - Open weekends",
+//	        ),
+//	    },
+//	}
+//	_, err := client.Locations.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *square.UpdateLocationRequest,
@@ -128,6 +223,154 @@ func (c *Client) Update(
 //
 // NOTE: The Checkout API has been updated with new features.
 // For more information, see [Checkout API highlights](https://developer.squareup.com/docs/checkout-api#checkout-api-highlights).
+//
+// Example:
+//
+//	request := &square.CreateCheckoutRequest{
+//	    LocationID: "location_id",
+//	    IdempotencyKey: "86ae1696-b1e3-4328-af6d-f1e04d947ad6",
+//	    Order: &square.CreateOrderRequest{
+//	        Order: &square.Order{
+//	            LocationID: "location_id",
+//	            ReferenceID: square.String(
+//	                "reference_id",
+//	            ),
+//	            CustomerID: square.String(
+//	                "customer_id",
+//	            ),
+//	            LineItems: []*square.OrderLineItem{
+//	                &square.OrderLineItem{
+//	                    Name: square.String(
+//	                        "Printed T Shirt",
+//	                    ),
+//	                    Quantity: "2",
+//	                    AppliedTaxes: []*square.OrderLineItemAppliedTax{
+//	                        &square.OrderLineItemAppliedTax{
+//	                            TaxUID: "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
+//	                        },
+//	                    },
+//	                    AppliedDiscounts: []*square.OrderLineItemAppliedDiscount{
+//	                        &square.OrderLineItemAppliedDiscount{
+//	                            DiscountUID: "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
+//	                        },
+//	                    },
+//	                    BasePriceMoney: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(1500),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                },
+//	                &square.OrderLineItem{
+//	                    Name: square.String(
+//	                        "Slim Jeans",
+//	                    ),
+//	                    Quantity: "1",
+//	                    BasePriceMoney: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(2500),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                },
+//	                &square.OrderLineItem{
+//	                    Name: square.String(
+//	                        "Woven Sweater",
+//	                    ),
+//	                    Quantity: "3",
+//	                    BasePriceMoney: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(3500),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                },
+//	            },
+//	            Taxes: []*square.OrderLineItemTax{
+//	                &square.OrderLineItemTax{
+//	                    UID: square.String(
+//	                        "38ze1696-z1e3-5628-af6d-f1e04d947fg3",
+//	                    ),
+//	                    Type: square.OrderLineItemTaxTypeInclusive.Ptr(),
+//	                    Percentage: square.String(
+//	                        "7.75",
+//	                    ),
+//	                    Scope: square.OrderLineItemTaxScopeLineItem.Ptr(),
+//	                },
+//	            },
+//	            Discounts: []*square.OrderLineItemDiscount{
+//	                &square.OrderLineItemDiscount{
+//	                    UID: square.String(
+//	                        "56ae1696-z1e3-9328-af6d-f1e04d947gd4",
+//	                    ),
+//	                    Type: square.OrderLineItemDiscountTypeFixedAmount.Ptr(),
+//	                    AmountMoney: &square.Money{
+//	                        Amount: square.Int64(
+//	                            int64(100),
+//	                        ),
+//	                        Currency: square.CurrencyUsd.Ptr(),
+//	                    },
+//	                    Scope: square.OrderLineItemDiscountScopeLineItem.Ptr(),
+//	                },
+//	            },
+//	        },
+//	        IdempotencyKey: square.String(
+//	            "12ae1696-z1e3-4328-af6d-f1e04d947gd4",
+//	        ),
+//	    },
+//	    AskForShippingAddress: square.Bool(
+//	        true,
+//	    ),
+//	    MerchantSupportEmail: square.String(
+//	        "merchant+support@website.com",
+//	    ),
+//	    PrePopulateBuyerEmail: square.String(
+//	        "example@email.com",
+//	    ),
+//	    PrePopulateShippingAddress: &square.Address{
+//	        AddressLine1: square.String(
+//	            "1455 Market St.",
+//	        ),
+//	        AddressLine2: square.String(
+//	            "Suite 600",
+//	        ),
+//	        Locality: square.String(
+//	            "San Francisco",
+//	        ),
+//	        AdministrativeDistrictLevel1: square.String(
+//	            "CA",
+//	        ),
+//	        PostalCode: square.String(
+//	            "94103",
+//	        ),
+//	        Country: square.CountryUs.Ptr(),
+//	        FirstName: square.String(
+//	            "Jane",
+//	        ),
+//	        LastName: square.String(
+//	            "Doe",
+//	        ),
+//	    },
+//	    RedirectURL: square.String(
+//	        "https://merchant.website.com/order-confirm",
+//	    ),
+//	    AdditionalRecipients: []*square.ChargeRequestAdditionalRecipient{
+//	        &square.ChargeRequestAdditionalRecipient{
+//	            LocationID: "057P5VYJ4A5X1",
+//	            Description: "Application fees",
+//	            AmountMoney: &square.Money{
+//	                Amount: square.Int64(
+//	                    int64(60),
+//	                ),
+//	                Currency: square.CurrencyUsd.Ptr(),
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Locations.Checkouts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Checkouts(
 	ctx context.Context,
 	request *square.CreateCheckoutRequest,

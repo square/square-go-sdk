@@ -6,13 +6,14 @@ import (
 	bytes "bytes"
 	context "context"
 	json "encoding/json"
+	http "net/http"
+	os "os"
+	testing "testing"
+
 	square "github.com/square/square-go-sdk/v5"
 	client "github.com/square/square-go-sdk/v5/client"
 	option "github.com/square/square-go-sdk/v5/option"
 	require "github.com/stretchr/testify/require"
-	http "net/http"
-	os "os"
-	testing "testing"
 )
 
 func VerifyRequestCount(
@@ -20,7 +21,7 @@ func VerifyRequestCount(
 	testId string,
 	method string,
 	urlPath string,
-	queryParams map[string]string,
+	queryParams map[string]any,
 	expected int,
 ) {
 	wiremockURL := os.Getenv("WIREMOCK_URL")
@@ -45,9 +46,23 @@ func VerifyRequestCount(
 			}
 			reqBody.WriteString(`"`)
 			reqBody.WriteString(key)
-			reqBody.WriteString(`":{"equalTo":"`)
-			reqBody.WriteString(value)
-			reqBody.WriteString(`"}`)
+			switch v := value.(type) {
+			case string:
+				reqBody.WriteString(`":{"equalTo":"`)
+				reqBody.WriteString(v)
+				reqBody.WriteString(`"}`)
+			case []string:
+				reqBody.WriteString(`":{"hasExactly":[`)
+				for i, item := range v {
+					if i > 0 {
+						reqBody.WriteString(",")
+					}
+					reqBody.WriteString(`{"equalTo":"`)
+					reqBody.WriteString(item)
+					reqBody.WriteString(`"}`)
+				}
+				reqBody.WriteString(`]}`)
+			}
 			first = false
 		}
 		reqBody.WriteString("}")
@@ -71,6 +86,7 @@ func TestCatalogBatchDeleteWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchDeleteCatalogObjectsRequest{
 		ObjectIDs: []string{
@@ -99,6 +115,7 @@ func TestCatalogBatchGetWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchGetCatalogObjectsRequest{
 		ObjectIDs: []string{
@@ -130,6 +147,7 @@ func TestCatalogBatchUpsertWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.BatchUpsertCatalogObjectsRequest{
 		IdempotencyKey: "789ff020-f723-43a9-b4b5-43b5dc1fa3dc",
@@ -147,9 +165,7 @@ func TestCatalogBatchUpsertWithWireMock(
 						},
 					},
 					&square.CatalogObject{
-						Item: &square.CatalogObjectItem{
-							ID: "id",
-						},
+						Category: &square.CatalogObjectCategory{},
 					},
 					&square.CatalogObject{
 						Tax: &square.CatalogObjectTax{
@@ -181,6 +197,7 @@ func TestCatalogInfoWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	_, invocationErr := client.Catalog.Info(
 		context.TODO(),
@@ -202,6 +219,7 @@ func TestCatalogListWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.ListCatalogRequest{
 		Cursor: square.String(
@@ -223,7 +241,7 @@ func TestCatalogListWithWireMock(
 	)
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
-	VerifyRequestCount(t, "TestCatalogListWithWireMock", "GET", "/v2/catalog/list", map[string]string{"cursor": "cursor", "types": "types", "catalog_version": "1000000"}, 1)
+	VerifyRequestCount(t, "TestCatalogListWithWireMock", "GET", "/v2/catalog/list", map[string]interface{}{"cursor": "cursor", "types": "types", "catalog_version": "1000000"}, 1)
 }
 
 func TestCatalogSearchWithWireMock(
@@ -235,6 +253,7 @@ func TestCatalogSearchWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SearchCatalogObjectsRequest{
 		ObjectTypes: []square.CatalogObjectType{
@@ -271,6 +290,7 @@ func TestCatalogSearchItemsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.SearchCatalogItemsRequest{
 		TextFilter: square.String(
@@ -351,6 +371,7 @@ func TestCatalogUpdateItemModifierListsWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateItemModifierListsRequest{
 		ItemIDs: []string{
@@ -386,6 +407,7 @@ func TestCatalogUpdateItemTaxesWithWireMock(
 	}
 	client := client.NewClient(
 		option.WithBaseURL(WireMockBaseURL),
+		option.WithToken("test-token"),
 	)
 	request := &square.UpdateItemTaxesRequest{
 		ItemIDs: []string{

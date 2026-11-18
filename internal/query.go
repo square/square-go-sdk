@@ -11,6 +11,11 @@ import (
 	"github.com/google/uuid"
 )
 
+// RFC3339Milli is a time format string for RFC 3339 with millisecond precision.
+// Go's time.RFC3339 omits fractional seconds and time.RFC3339Nano trims trailing
+// zeros, so neither produces the fixed ".000" millisecond suffix that many APIs expect.
+const RFC3339Milli = "2006-01-02T15:04:05.000Z07:00"
+
 var (
 	bytesType        = reflect.TypeOf([]byte{})
 	queryEncoderType = reflect.TypeOf(new(QueryEncoder)).Elem()
@@ -28,7 +33,7 @@ type QueryEncoder interface {
 func prepareValue(v interface{}) (reflect.Value, url.Values, error) {
 	values := make(url.Values)
 	val := reflect.ValueOf(v)
-	for val.Kind() == reflect.Ptr {
+	for val.Kind() == reflect.Pointer {
 		if val.IsNil() {
 			return reflect.Value{}, values, nil
 		}
@@ -62,6 +67,11 @@ func QueryValues(v interface{}) (url.Values, error) {
 	return values, err
 }
 
+// applyQueryDefaultsOnNilRequest reports whether query parameter defaults are applied when the
+// request is nil. It is enabled by the applyQueryDefaultsOnNilRequest generator option, which
+// emits an init function that sets it to true.
+var applyQueryDefaultsOnNilRequest = false
+
 // QueryValuesWithDefaults encodes url.Values from request objects
 // and default values, merging the defaults into the request.
 // It's expected that the values of defaults are wire names.
@@ -71,6 +81,12 @@ func QueryValuesWithDefaults(v interface{}, defaults map[string]interface{}) (ur
 		return values, err
 	}
 	if !val.IsValid() {
+		if applyQueryDefaultsOnNilRequest {
+			// A nil request carries no explicit values, so every default applies.
+			for wireName, defaultVal := range defaults {
+				values.Set(wireName, valueString(reflect.ValueOf(defaultVal), tagOptions{}, reflect.StructField{}))
+			}
+		}
 		return values, nil
 	}
 
@@ -151,7 +167,7 @@ func reflectValue(values url.Values, val reflect.Value, scope string) error {
 		}
 
 		// Recursively dereference pointers, but stop at nil pointers.
-		for sv.Kind() == reflect.Ptr {
+		for sv.Kind() == reflect.Pointer {
 			if sv.IsNil() {
 				break
 			}
@@ -215,7 +231,7 @@ func reflectMap(values url.Values, val reflect.Value, scope string) error {
 		key := fmt.Sprint(k.Interface())
 		paramName := scope + "[" + key + "]"
 
-		for v.Kind() == reflect.Ptr {
+		for v.Kind() == reflect.Pointer {
 			if v.IsNil() {
 				break
 			}
@@ -265,7 +281,7 @@ func reflectMap(values url.Values, val reflect.Value, scope string) error {
 
 // valueString returns the string representation of a value.
 func valueString(v reflect.Value, opts tagOptions, sf reflect.StructField) string {
-	for v.Kind() == reflect.Ptr {
+	for v.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return ""
 		}
@@ -277,7 +293,7 @@ func valueString(v reflect.Value, opts tagOptions, sf reflect.StructField) strin
 		if format := sf.Tag.Get("format"); format == "date" {
 			return t.Format("2006-01-02")
 		}
-		return t.Format(time.RFC3339)
+		return t.Format(RFC3339Milli)
 	}
 
 	if v.Type() == uuidType {
@@ -317,7 +333,7 @@ func isEmptyValue(v reflect.Value) bool {
 		return v.Uint() == 0
 	case reflect.Float32, reflect.Float64:
 		return v.Float() == 0
-	case reflect.Interface, reflect.Ptr:
+	case reflect.Interface, reflect.Pointer:
 		return v.IsNil()
 	case reflect.Invalid, reflect.Complex64, reflect.Complex128, reflect.Chan, reflect.Func, reflect.Struct, reflect.UnsafePointer:
 		return false
@@ -328,7 +344,7 @@ func isEmptyValue(v reflect.Value) bool {
 
 // isStructPointer returns true if the given reflect.Value is a pointer to a struct.
 func isStructPointer(v reflect.Value) bool {
-	return v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Struct
+	return v.Kind() == reflect.Pointer && v.Elem().Kind() == reflect.Struct
 }
 
 // tagOptions is the string following a comma in a struct field's "url" tag, or

@@ -4,12 +4,13 @@ package refunds
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -33,8 +34,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -46,6 +48,46 @@ func NewClient(options *core.RequestOptions) *Client {
 // seconds to appear.
 //
 // The maximum results per page is 100.
+//
+// Example:
+//
+//	request := &square.ListRefundsRequest{
+//	    BeginTime: square.String(
+//	        "begin_time",
+//	    ),
+//	    EndTime: square.String(
+//	        "end_time",
+//	    ),
+//	    SortOrder: square.String(
+//	        "sort_order",
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    LocationID: square.String(
+//	        "location_id",
+//	    ),
+//	    Status: square.String(
+//	        "status",
+//	    ),
+//	    SourceType: square.String(
+//	        "source_type",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    UpdatedAtBeginTime: square.String(
+//	        "updated_at_begin_time",
+//	    ),
+//	    UpdatedAtEndTime: square.String(
+//	        "updated_at_end_time",
+//	    ),
+//	    SortField: square.ListPaymentRefundsRequestSortFieldCreatedAt.Ptr(),
+//	}
+//	_, err := client.Refunds.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListRefundsRequest,
@@ -79,6 +121,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -93,7 +136,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -108,6 +151,34 @@ func (c *Client) List(
 // portion of it. You can use this endpoint to refund a card payment or record a
 // refund of a cash or external payment. For more information, see
 // [Refund Payment](https://developer.squareup.com/docs/payments-api/refund-payments).
+//
+// Example:
+//
+//	request := &square.RefundPaymentRequest{
+//	    IdempotencyKey: "9b7f2dcf-49da-4411-b23e-a2d6af21333a",
+//	    AmountMoney: &square.Money{
+//	        Amount: square.Int64(
+//	            int64(1000),
+//	        ),
+//	        Currency: square.CurrencyUsd.Ptr(),
+//	    },
+//	    AppFeeMoney: &square.Money{
+//	        Amount: square.Int64(
+//	            int64(10),
+//	        ),
+//	        Currency: square.CurrencyUsd.Ptr(),
+//	    },
+//	    PaymentID: square.String(
+//	        "R2B3Z8WMVt3EAmzYWLZvz7Y69EbZY",
+//	    ),
+//	    Reason: square.String(
+//	        "Example",
+//	    ),
+//	}
+//	_, err := client.Refunds.RefundPayment(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RefundPayment(
 	ctx context.Context,
 	request *square.RefundPaymentRequest,
@@ -125,6 +196,16 @@ func (c *Client) RefundPayment(
 }
 
 // Retrieves a specific refund using the `refund_id`.
+//
+// Example:
+//
+//	request := &square.GetRefundsRequest{
+//	    RefundID: "refund_id",
+//	}
+//	_, err := client.Refunds.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *square.GetRefundsRequest,

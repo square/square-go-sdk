@@ -97,10 +97,12 @@ type CreateCheckoutRequest struct {
 }
 
 func (c *CreateCheckoutRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -209,10 +211,12 @@ type CreateLocationRequest struct {
 }
 
 func (c *CreateLocationRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetLocation sets the Location field and marks it as non-optional;
@@ -257,10 +261,12 @@ type GetLocationsRequest struct {
 }
 
 func (g *GetLocationsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -270,11 +276,16 @@ func (g *GetLocationsRequest) SetLocationID(locationID string) {
 	g.require(getLocationsRequestFieldLocationID)
 }
 
-// The hours of operation for a location.
 var (
 	businessHoursFieldPeriods = big.NewInt(1 << 0)
 )
 
+// businessHoursNullableFields maps the wire names of BusinessHours's nullable fields (required or optional) to their field bits.
+var businessHoursNullableFields = map[string]*big.Int{
+	"periods": businessHoursFieldPeriods,
+}
+
+// The hours of operation for a location.
 type BusinessHours struct {
 	// The list of time periods during which the business is open. There can be at most 10 periods per day.
 	Periods []*BusinessHoursPeriod `json:"periods,omitempty" url:"periods,omitempty"`
@@ -301,10 +312,12 @@ func (b *BusinessHours) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BusinessHours) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetPeriods sets the Periods field and marks it as non-optional;
@@ -326,6 +339,13 @@ func (b *BusinessHours) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, businessHoursNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -356,13 +376,19 @@ func (b *BusinessHours) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents a period of time during which a business location is open.
 var (
 	businessHoursPeriodFieldDayOfWeek      = big.NewInt(1 << 0)
 	businessHoursPeriodFieldStartLocalTime = big.NewInt(1 << 1)
 	businessHoursPeriodFieldEndLocalTime   = big.NewInt(1 << 2)
 )
 
+// businessHoursPeriodNullableFields maps the wire names of BusinessHoursPeriod's nullable fields (required or optional) to their field bits.
+var businessHoursPeriodNullableFields = map[string]*big.Int{
+	"start_local_time": businessHoursPeriodFieldStartLocalTime,
+	"end_local_time":   businessHoursPeriodFieldEndLocalTime,
+}
+
+// Represents a period of time during which a business location is open.
 type BusinessHoursPeriod struct {
 	// The day of the week for this time period.
 	// See [DayOfWeek](#type-dayofweek) for possible values
@@ -412,10 +438,12 @@ func (b *BusinessHoursPeriod) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BusinessHoursPeriod) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetDayOfWeek sets the DayOfWeek field and marks it as non-optional;
@@ -451,6 +479,13 @@ func (b *BusinessHoursPeriod) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	b.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, businessHoursPeriodNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		b.require(presentFields)
+	}
 	b.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -481,14 +516,14 @@ func (b *BusinessHoursPeriod) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Represents an additional recipient (other than the merchant) entitled to a portion of the tender.
-// Support is currently limited to USD, CAD and GBP currencies
 var (
 	chargeRequestAdditionalRecipientFieldLocationID  = big.NewInt(1 << 0)
 	chargeRequestAdditionalRecipientFieldDescription = big.NewInt(1 << 1)
 	chargeRequestAdditionalRecipientFieldAmountMoney = big.NewInt(1 << 2)
 )
 
+// Represents an additional recipient (other than the merchant) entitled to a portion of the tender.
+// Support is currently limited to USD, CAD and GBP currencies
 type ChargeRequestAdditionalRecipient struct {
 	// The location ID for a recipient (other than the merchant) receiving a portion of the tender.
 	LocationID string `json:"location_id" url:"location_id"`
@@ -533,10 +568,12 @@ func (c *ChargeRequestAdditionalRecipient) GetExtraProperties() map[string]inter
 }
 
 func (c *ChargeRequestAdditionalRecipient) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;
@@ -602,8 +639,6 @@ func (c *ChargeRequestAdditionalRecipient) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Square Checkout lets merchants accept online payments for supported
-// payment types using a checkout workflow hosted on squareup.com.
 var (
 	checkoutFieldID                         = big.NewInt(1 << 0)
 	checkoutFieldCheckoutPageURL            = big.NewInt(1 << 1)
@@ -617,6 +652,18 @@ var (
 	checkoutFieldAdditionalRecipients       = big.NewInt(1 << 9)
 )
 
+// checkoutNullableFields maps the wire names of Checkout's nullable fields (required or optional) to their field bits.
+var checkoutNullableFields = map[string]*big.Int{
+	"checkout_page_url":        checkoutFieldCheckoutPageURL,
+	"ask_for_shipping_address": checkoutFieldAskForShippingAddress,
+	"merchant_support_email":   checkoutFieldMerchantSupportEmail,
+	"pre_populate_buyer_email": checkoutFieldPrePopulateBuyerEmail,
+	"redirect_url":             checkoutFieldRedirectURL,
+	"additional_recipients":    checkoutFieldAdditionalRecipients,
+}
+
+// Square Checkout lets merchants accept online payments for supported
+// payment types using a checkout workflow hosted on squareup.com.
 type Checkout struct {
 	// ID generated by Square Checkout when a new checkout is requested.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -753,10 +800,12 @@ func (c *Checkout) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Checkout) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -841,6 +890,13 @@ func (c *Checkout) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, checkoutNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -871,12 +927,18 @@ func (c *Checkout) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Latitude and longitude coordinates.
 var (
 	coordinatesFieldLatitude  = big.NewInt(1 << 0)
 	coordinatesFieldLongitude = big.NewInt(1 << 1)
 )
 
+// coordinatesNullableFields maps the wire names of Coordinates's nullable fields (required or optional) to their field bits.
+var coordinatesNullableFields = map[string]*big.Int{
+	"latitude":  coordinatesFieldLatitude,
+	"longitude": coordinatesFieldLongitude,
+}
+
+// Latitude and longitude coordinates.
 type Coordinates struct {
 	// The latitude of the coordinate expressed in degrees.
 	Latitude *float64 `json:"latitude,omitempty" url:"latitude,omitempty"`
@@ -912,10 +974,12 @@ func (c *Coordinates) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *Coordinates) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetLatitude sets the Latitude field and marks it as non-optional;
@@ -944,6 +1008,13 @@ func (c *Coordinates) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	c.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, coordinatesNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		c.require(presentFields)
+	}
 	c.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -974,13 +1045,13 @@ func (c *Coordinates) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that are included in the response body of
-// a request to the `CreateCheckout` endpoint.
 var (
 	createCheckoutResponseFieldCheckout = big.NewInt(1 << 0)
 	createCheckoutResponseFieldErrors   = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of
+// a request to the `CreateCheckout` endpoint.
 type CreateCheckoutResponse struct {
 	// The newly created `checkout` object associated with the provided idempotency key.
 	Checkout *Checkout `json:"checkout,omitempty" url:"checkout,omitempty"`
@@ -1016,10 +1087,12 @@ func (c *CreateCheckoutResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateCheckoutResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetCheckout sets the Checkout field and marks it as non-optional;
@@ -1078,12 +1151,12 @@ func (c *CreateCheckoutResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// The response object returned by the [CreateLocation](api-endpoint:Locations-CreateLocation) endpoint.
 var (
 	createLocationResponseFieldErrors   = big.NewInt(1 << 0)
 	createLocationResponseFieldLocation = big.NewInt(1 << 1)
 )
 
+// The response object returned by the [CreateLocation](api-endpoint:Locations-CreateLocation) endpoint.
 type CreateLocationResponse struct {
 	// Information about [errors](https://developer.squareup.com/docs/build-basics/handling-errors) encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1119,10 +1192,12 @@ func (c *CreateLocationResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (c *CreateLocationResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1181,13 +1256,13 @@ func (c *CreateLocationResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
-// endpoint returns in a response.
 var (
 	getLocationResponseFieldErrors   = big.NewInt(1 << 0)
 	getLocationResponseFieldLocation = big.NewInt(1 << 1)
 )
 
+// Defines the fields that the [RetrieveLocation](api-endpoint:Locations-RetrieveLocation)
+// endpoint returns in a response.
 type GetLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1223,10 +1298,12 @@ func (g *GetLocationResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetLocationResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1285,15 +1362,15 @@ func (g *GetLocationResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines the fields that are included in the response body of a request
-// to the [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
-//
-// Either `errors` or `locations` is present in a given response (never both).
 var (
 	listLocationsResponseFieldErrors    = big.NewInt(1 << 0)
 	listLocationsResponseFieldLocations = big.NewInt(1 << 1)
 )
 
+// Defines the fields that are included in the response body of a request
+// to the [ListLocations](api-endpoint:Locations-ListLocations) endpoint.
+//
+// Either `errors` or `locations` is present in a given response (never both).
 type ListLocationsResponse struct {
 	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1329,10 +1406,12 @@ func (l *ListLocationsResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *ListLocationsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1391,7 +1470,6 @@ func (l *ListLocationsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Represents one of a business' [locations](https://developer.squareup.com/docs/locations-api).
 var (
 	locationFieldID                = big.NewInt(1 << 0)
 	locationFieldName              = big.NewInt(1 << 1)
@@ -1424,6 +1502,25 @@ var (
 	locationFieldReturnPolicy      = big.NewInt(1 << 28)
 )
 
+// locationNullableFields maps the wire names of Location's nullable fields (required or optional) to their field bits.
+var locationNullableFields = map[string]*big.Int{
+	"name":                locationFieldName,
+	"timezone":            locationFieldTimezone,
+	"language_code":       locationFieldLanguageCode,
+	"phone_number":        locationFieldPhoneNumber,
+	"business_name":       locationFieldBusinessName,
+	"website_url":         locationFieldWebsiteURL,
+	"business_email":      locationFieldBusinessEmail,
+	"description":         locationFieldDescription,
+	"twitter_username":    locationFieldTwitterUsername,
+	"instagram_username":  locationFieldInstagramUsername,
+	"facebook_url":        locationFieldFacebookURL,
+	"mcc":                 locationFieldMcc,
+	"custom_receipt_text": locationFieldCustomReceiptText,
+	"return_policy":       locationFieldReturnPolicy,
+}
+
+// Represents one of a business' [locations](https://developer.squareup.com/docs/locations-api).
 type Location struct {
 	// A short generated string of letters and numbers that uniquely identifies this location instance.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -1726,10 +1823,12 @@ func (l *Location) GetExtraProperties() map[string]interface{} {
 }
 
 func (l *Location) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -1947,6 +2046,13 @@ func (l *Location) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	l.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, locationNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		l.require(presentFields)
+	}
 	l.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2049,7 +2155,6 @@ func (l LocationType) Ptr() *LocationType {
 	return &l
 }
 
-// Identifiers for the location used by various governments for tax purposes.
 var (
 	taxIDsFieldEuVat   = big.NewInt(1 << 0)
 	taxIDsFieldFrSiret = big.NewInt(1 << 1)
@@ -2058,6 +2163,7 @@ var (
 	taxIDsFieldJpQii   = big.NewInt(1 << 4)
 )
 
+// Identifiers for the location used by various governments for tax purposes.
 type TaxIDs struct {
 	// The EU VAT number for this location. For example, `IE3426675K`.
 	// If the EU VAT number is present, it is well-formed and has been
@@ -2127,10 +2233,12 @@ func (t *TaxIDs) GetExtraProperties() map[string]interface{} {
 }
 
 func (t *TaxIDs) require(field *big.Int) {
-	if t.explicitFields == nil {
-		t.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if t.explicitFields != nil {
+		next.Set(t.explicitFields)
 	}
-	t.explicitFields.Or(t.explicitFields, field)
+	next.Or(next, field)
+	t.explicitFields = next
 }
 
 // SetEuVat sets the EuVat field and marks it as non-optional;
@@ -2210,12 +2318,12 @@ func (t *TaxIDs) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// The response object returned by the [UpdateLocation](api-endpoint:Locations-UpdateLocation) endpoint.
 var (
 	updateLocationResponseFieldErrors   = big.NewInt(1 << 0)
 	updateLocationResponseFieldLocation = big.NewInt(1 << 1)
 )
 
+// The response object returned by the [UpdateLocation](api-endpoint:Locations-UpdateLocation) endpoint.
 type UpdateLocationResponse struct {
 	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2251,10 +2359,12 @@ func (u *UpdateLocationResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (u *UpdateLocationResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2329,10 +2439,12 @@ type UpdateLocationRequest struct {
 }
 
 func (u *UpdateLocationRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetLocationID sets the LocationID field and marks it as non-optional;

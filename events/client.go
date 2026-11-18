@@ -4,11 +4,12 @@ package events
 
 import (
 	context "context"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	os "os"
 )
 
 type Client struct {
@@ -32,14 +33,23 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Search for Square API events that occur within a 28-day timeframe.
+//
+// Example:
+//
+//	request := &square.SearchEventsRequest{}
+//	_, err := client.Events.SearchEvents(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchEvents(
 	ctx context.Context,
 	request *square.SearchEventsRequest,
@@ -59,6 +69,12 @@ func (c *Client) SearchEvents(
 // Disables events to prevent them from being searchable.
 // All events are disabled by default. You must enable events to make them searchable.
 // Disabling events for a specific time period prevents them from being searchable, even if you re-enable them later.
+//
+// Example:
+//
+//	_, err := client.Events.DisableEvents(
+//	    context.TODO(),
+//	)
 func (c *Client) DisableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -74,6 +90,12 @@ func (c *Client) DisableEvents(
 }
 
 // Enables events to make them searchable. Only events that occur while in the enabled state are searchable.
+//
+// Example:
+//
+//	_, err := client.Events.EnableEvents(
+//	    context.TODO(),
+//	)
 func (c *Client) EnableEvents(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -89,6 +111,18 @@ func (c *Client) EnableEvents(
 }
 
 // Lists all event types that you can subscribe to as webhooks or query using the Events API.
+//
+// Example:
+//
+//	request := &square.ListEventTypesRequest{
+//	    APIVersion: square.String(
+//	        "api_version",
+//	    ),
+//	}
+//	_, err := client.Events.ListEventTypes(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListEventTypes(
 	ctx context.Context,
 	request *square.ListEventTypesRequest,

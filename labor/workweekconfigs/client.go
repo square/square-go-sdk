@@ -4,13 +4,14 @@ package workweekconfigs
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	labor "github.com/square/square-go-sdk/v5/labor"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Returns a list of `WorkweekConfig` instances for a business.
+//
+// Example:
+//
+//	request := &labor.ListWorkweekConfigsRequest{
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	}
+//	_, err := client.Labor.WorkweekConfigs.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *labor.ListWorkweekConfigsRequest,
@@ -75,6 +92,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +107,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -101,6 +119,23 @@ func (c *Client) List(
 }
 
 // Updates a `WorkweekConfig`.
+//
+// Example:
+//
+//	request := &labor.UpdateWorkweekConfigRequest{
+//	    ID: "id",
+//	    WorkweekConfig: &square.WorkweekConfig{
+//	        StartOfWeek: square.WeekdayMon,
+//	        StartOfDayLocalTime: "10:00",
+//	        Version: square.Int(
+//	            10,
+//	        ),
+//	    },
+//	}
+//	_, err := client.Labor.WorkweekConfigs.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *labor.UpdateWorkweekConfigRequest,

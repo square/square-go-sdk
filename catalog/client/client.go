@@ -4,14 +4,15 @@ package client
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	images "github.com/square/square-go-sdk/v5/catalog/images"
 	object "github.com/square/square-go-sdk/v5/catalog/object"
 	core "github.com/square/square-go-sdk/v5/core"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -39,8 +40,9 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
@@ -60,6 +62,19 @@ func NewClient(options *core.RequestOptions) *Client {
 // To ensure consistency, only one delete request is processed at a time per seller account.
 // While one (batch or non-batch) delete request is being processed, other (batched and non-batched)
 // delete requests are rejected with the `429` error code.
+//
+// Example:
+//
+//	request := &square.BatchDeleteCatalogObjectsRequest{
+//	    ObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	        "AA27W3M2GGTF3H6AVPNB77CK",
+//	    },
+//	}
+//	_, err := client.Catalog.BatchDelete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchDelete(
 	ctx context.Context,
 	request *square.BatchDeleteCatalogObjectsRequest,
@@ -82,6 +97,22 @@ func (c *Client) BatchDelete(
 // [CatalogItemVariation](entity:CatalogItemVariation) objects, references to
 // its [CatalogModifierList](entity:CatalogModifierList) objects, and the ids of
 // any [CatalogTax](entity:CatalogTax) objects that apply to it.
+//
+// Example:
+//
+//	request := &square.BatchGetCatalogObjectsRequest{
+//	    ObjectIDs: []string{
+//	        "W62UWFY35CWMYGVWK6TWJDNI",
+//	        "AA27W3M2GGTF3H6AVPNB77CK",
+//	    },
+//	    IncludeRelatedObjects: square.Bool(
+//	        true,
+//	    ),
+//	}
+//	_, err := client.Catalog.BatchGet(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchGet(
 	ctx context.Context,
 	request *square.BatchGetCatalogObjectsRequest,
@@ -117,6 +148,40 @@ func (c *Client) BatchGet(
 // update requests are rejected with the `429` error code. Prefer batching related changes into a
 // single call rather than issuing many small writes, since each write acquires the lock separately
 // and parallel writes to the same seller will contend with each other, producing `429` errors.
+//
+// Example:
+//
+//	request := &square.BatchUpsertCatalogObjectsRequest{
+//	    IdempotencyKey: "789ff020-f723-43a9-b4b5-43b5dc1fa3dc",
+//	    Batches: []*square.CatalogObjectBatch{
+//	        &square.CatalogObjectBatch{
+//	            Objects: []*square.CatalogObject{
+//	                &square.CatalogObject{
+//	                    Item: &square.CatalogObjectItem{
+//	                        ID: "id",
+//	                    },
+//	                },
+//	                &square.CatalogObject{
+//	                    Item: &square.CatalogObjectItem{
+//	                        ID: "id",
+//	                    },
+//	                },
+//	                &square.CatalogObject{
+//	                    Category: &square.CatalogObjectCategory{},
+//	                },
+//	                &square.CatalogObject{
+//	                    Tax: &square.CatalogObjectTax{
+//	                        ID: "id",
+//	                    },
+//	                },
+//	            },
+//	        },
+//	    },
+//	}
+//	_, err := client.Catalog.BatchUpsert(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) BatchUpsert(
 	ctx context.Context,
 	request *square.BatchUpsertCatalogObjectsRequest,
@@ -135,6 +200,12 @@ func (c *Client) BatchUpsert(
 
 // Retrieves information about the Square Catalog API, such as batch size
 // limits that can be used by the `BatchUpsertCatalogObjects` endpoint.
+//
+// Example:
+//
+//	_, err := client.Catalog.Info(
+//	    context.TODO(),
+//	)
 func (c *Client) Info(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -159,6 +230,24 @@ func (c *Client) Info(
 // __Important:__ ListCatalog does not return deleted catalog items. To retrieve
 // deleted catalog items, use [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects)
 // and set the `include_deleted_objects` attribute value to `true`.
+//
+// Example:
+//
+//	request := &square.ListCatalogRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Types: square.String(
+//	        "types",
+//	    ),
+//	    CatalogVersion: square.Int64(
+//	        int64(1000000),
+//	    ),
+//	}
+//	_, err := client.Catalog.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *square.ListCatalogRequest,
@@ -192,6 +281,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -206,7 +296,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -232,6 +322,27 @@ func (c *Client) List(
 // Always specify `object_types` explicitly. When upgrading to a newer API version, omitting
 // `object_types` may cause new object types to appear in results that were not returned under
 // the previous version.
+//
+// Example:
+//
+//	request := &square.SearchCatalogObjectsRequest{
+//	    ObjectTypes: []square.CatalogObjectType{
+//	        square.CatalogObjectTypeItem,
+//	    },
+//	    Query: &square.CatalogQuery{
+//	        PrefixQuery: &square.CatalogQueryPrefix{
+//	            AttributeName: "name",
+//	            AttributePrefix: "tea",
+//	        },
+//	    },
+//	    Limit: square.Int(
+//	        100,
+//	    ),
+//	}
+//	_, err := client.Catalog.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *square.SearchCatalogObjectsRequest,
@@ -258,6 +369,71 @@ func (c *Client) Search(
 // - `SearchCatalogItems` supports the custom attribute query filters to return items or item variations that contain custom attribute values, where `SearchCatalogObjects` does not.
 // - `SearchCatalogItems` does not support the `include_deleted_objects` filter to search for deleted items or item variations, whereas `SearchCatalogObjects` does.
 // - The both endpoints use different call conventions, including the query filter formats.
+//
+// Example:
+//
+//	request := &square.SearchCatalogItemsRequest{
+//	    TextFilter: square.String(
+//	        "red",
+//	    ),
+//	    CategoryIDs: []string{
+//	        "WINE_CATEGORY_ID",
+//	    },
+//	    StockLevels: []square.SearchCatalogItemsRequestStockLevel{
+//	        square.SearchCatalogItemsRequestStockLevelOut,
+//	        square.SearchCatalogItemsRequestStockLevelLow,
+//	    },
+//	    EnabledLocationIDs: []string{
+//	        "ATL_LOCATION_ID",
+//	    },
+//	    Limit: square.Int(
+//	        100,
+//	    ),
+//	    SortOrder: square.SortOrderAsc.Ptr(),
+//	    ProductTypes: []square.CatalogItemProductType{
+//	        square.CatalogItemProductTypeRegular,
+//	    },
+//	    CustomAttributeFilters: []*square.CustomAttributeFilter{
+//	        &square.CustomAttributeFilter{
+//	            CustomAttributeDefinitionID: square.String(
+//	                "VEGAN_DEFINITION_ID",
+//	            ),
+//	            BoolFilter: square.Bool(
+//	                true,
+//	            ),
+//	        },
+//	        &square.CustomAttributeFilter{
+//	            CustomAttributeDefinitionID: square.String(
+//	                "BRAND_DEFINITION_ID",
+//	            ),
+//	            StringFilter: square.String(
+//	                "Dark Horse",
+//	            ),
+//	        },
+//	        &square.CustomAttributeFilter{
+//	            Key: square.String(
+//	                "VINTAGE",
+//	            ),
+//	            NumberFilter: &square.Range{
+//	                Min: square.String(
+//	                    "min",
+//	                ),
+//	                Max: square.String(
+//	                    "max",
+//	                ),
+//	            },
+//	        },
+//	        &square.CustomAttributeFilter{
+//	            CustomAttributeDefinitionID: square.String(
+//	                "VARIETAL_DEFINITION_ID",
+//	            ),
+//	        },
+//	    },
+//	}
+//	_, err := client.Catalog.SearchItems(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SearchItems(
 	ctx context.Context,
 	request *square.SearchCatalogItemsRequest,
@@ -277,6 +453,26 @@ func (c *Client) SearchItems(
 // Updates the [CatalogModifierList](entity:CatalogModifierList) objects
 // that apply to the targeted [CatalogItem](entity:CatalogItem) without having
 // to perform an upsert on the entire item.
+//
+// Example:
+//
+//	request := &square.UpdateItemModifierListsRequest{
+//	    ItemIDs: []string{
+//	        "H42BRLUJ5KTZTTMPVSLFAACQ",
+//	        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+//	    },
+//	    ModifierListsToEnable: []string{
+//	        "H42BRLUJ5KTZTTMPVSLFAACQ",
+//	        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+//	    },
+//	    ModifierListsToDisable: []string{
+//	        "7WRC16CJZDVLSNDQ35PP6YAD",
+//	    },
+//	}
+//	_, err := client.Catalog.UpdateItemModifierLists(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateItemModifierLists(
 	ctx context.Context,
 	request *square.UpdateItemModifierListsRequest,
@@ -296,6 +492,25 @@ func (c *Client) UpdateItemModifierLists(
 // Updates the [CatalogTax](entity:CatalogTax) objects that apply to the
 // targeted [CatalogItem](entity:CatalogItem) without having to perform an
 // upsert on the entire item.
+//
+// Example:
+//
+//	request := &square.UpdateItemTaxesRequest{
+//	    ItemIDs: []string{
+//	        "H42BRLUJ5KTZTTMPVSLFAACQ",
+//	        "2JXOBJIHCWBQ4NZ3RIXQGJA6",
+//	    },
+//	    TaxesToEnable: []string{
+//	        "4WRCNHCJZDVLSNDQ35PP6YAD",
+//	    },
+//	    TaxesToDisable: []string{
+//	        "AQCEGCEBBQONINDOHRGZISEX",
+//	    },
+//	}
+//	_, err := client.Catalog.UpdateItemTaxes(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateItemTaxes(
 	ctx context.Context,
 	request *square.UpdateItemTaxesRequest,

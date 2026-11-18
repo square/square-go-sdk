@@ -4,13 +4,14 @@ package groups
 
 import (
 	context "context"
+	http "net/http"
+	os "os"
+
 	square "github.com/square/square-go-sdk/v5"
 	core "github.com/square/square-go-sdk/v5/core"
 	customers "github.com/square/square-go-sdk/v5/customers"
 	internal "github.com/square/square-go-sdk/v5/internal"
 	option "github.com/square/square-go-sdk/v5/option"
-	http "net/http"
-	os "os"
 )
 
 type Client struct {
@@ -34,14 +35,30 @@ func NewClient(options *core.RequestOptions) *Client {
 		baseURL:         options.BaseURL,
 		caller: internal.NewCaller(
 			&internal.CallerParams{
-				Client:      options.HTTPClient,
-				MaxAttempts: options.MaxAttempts,
+				Client:         options.HTTPClient,
+				MaxAttempts:    options.MaxAttempts,
+				DisableRetries: options.DisableRetries,
 			},
 		),
 	}
 }
 
 // Retrieves the list of customer groups of a business.
+//
+// Example:
+//
+//	request := &customers.ListGroupsRequest{
+//	    Cursor: square.String(
+//	        "cursor",
+//	    ),
+//	    Limit: square.Int(
+//	        1,
+//	    ),
+//	}
+//	_, err := client.Customers.Groups.List(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) List(
 	ctx context.Context,
 	request *customers.ListGroupsRequest,
@@ -75,6 +92,7 @@ func (c *Client) List(
 			Method:          http.MethodGet,
 			Headers:         headers,
 			MaxAttempts:     options.MaxAttempts,
+			DisableRetries:  options.DisableRetries,
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
@@ -89,7 +107,7 @@ func (c *Client) List(
 			Results:  results,
 			Response: response,
 			Next:     next,
-			Done:     next == zeroValue,
+			Done:     next == zeroValue || *next == "",
 		}
 	}
 	pager := internal.NewCursorPager(
@@ -103,6 +121,18 @@ func (c *Client) List(
 // Creates a new customer group for a business.
 //
 // The request must include the `name` value of the group.
+//
+// Example:
+//
+//	request := &customers.CreateCustomerGroupRequest{
+//	    Group: &square.CustomerGroup{
+//	        Name: "Loyal Customers",
+//	    },
+//	}
+//	_, err := client.Customers.Groups.Create(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Create(
 	ctx context.Context,
 	request *customers.CreateCustomerGroupRequest,
@@ -120,6 +150,16 @@ func (c *Client) Create(
 }
 
 // Retrieves a specific customer group as identified by the `group_id` value.
+//
+// Example:
+//
+//	request := &customers.GetGroupsRequest{
+//	    GroupID: "group_id",
+//	}
+//	_, err := client.Customers.Groups.Get(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Get(
 	ctx context.Context,
 	request *customers.GetGroupsRequest,
@@ -137,6 +177,19 @@ func (c *Client) Get(
 }
 
 // Updates a customer group as identified by the `group_id` value.
+//
+// Example:
+//
+//	request := &customers.UpdateCustomerGroupRequest{
+//	    GroupID: "group_id",
+//	    Group: &square.CustomerGroup{
+//	        Name: "Loyal Customers",
+//	    },
+//	}
+//	_, err := client.Customers.Groups.Update(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Update(
 	ctx context.Context,
 	request *customers.UpdateCustomerGroupRequest,
@@ -154,6 +207,16 @@ func (c *Client) Update(
 }
 
 // Deletes a customer group as identified by the `group_id` value.
+//
+// Example:
+//
+//	request := &customers.DeleteGroupsRequest{
+//	    GroupID: "group_id",
+//	}
+//	_, err := client.Customers.Groups.Delete(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Delete(
 	ctx context.Context,
 	request *customers.DeleteGroupsRequest,
@@ -174,6 +237,17 @@ func (c *Client) Delete(
 //
 // The customer is identified by the `customer_id` value
 // and the customer group is identified by the `group_id` value.
+//
+// Example:
+//
+//	request := &customers.AddGroupsRequest{
+//	    CustomerID: "customer_id",
+//	    GroupID: "group_id",
+//	}
+//	_, err := client.Customers.Groups.Add(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Add(
 	ctx context.Context,
 	request *customers.AddGroupsRequest,
@@ -194,6 +268,17 @@ func (c *Client) Add(
 //
 // The customer is identified by the `customer_id` value
 // and the customer group is identified by the `group_id` value.
+//
+// Example:
+//
+//	request := &customers.RemoveGroupsRequest{
+//	    CustomerID: "customer_id",
+//	    GroupID: "group_id",
+//	}
+//	_, err := client.Customers.Groups.Remove(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Remove(
 	ctx context.Context,
 	request *customers.RemoveGroupsRequest,

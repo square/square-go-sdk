@@ -32,10 +32,12 @@ type BulkSwapPlanRequest struct {
 }
 
 func (b *BulkSwapPlanRequest) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetNewPlanVariationID sets the NewPlanVariationID field and marks it as non-optional;
@@ -103,10 +105,12 @@ type ChangeBillingAnchorDateRequest struct {
 }
 
 func (c *ChangeBillingAnchorDateRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -167,10 +171,12 @@ type DeleteActionSubscriptionsRequest struct {
 }
 
 func (d *DeleteActionSubscriptionsRequest) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -208,10 +214,12 @@ type SwapPlanRequest struct {
 }
 
 func (s *SwapPlanRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -269,10 +277,12 @@ type CancelSubscriptionsRequest struct {
 }
 
 func (c *CancelSubscriptionsRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -353,10 +363,12 @@ type CreateSubscriptionRequest struct {
 }
 
 func (c *CreateSubscriptionRequest) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
@@ -491,10 +503,12 @@ type GetSubscriptionsRequest struct {
 }
 
 func (g *GetSubscriptionsRequest) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -535,10 +549,12 @@ type ListEventsSubscriptionsRequest struct {
 }
 
 func (l *ListEventsSubscriptionsRequest) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -600,10 +616,12 @@ type PauseSubscriptionRequest struct {
 }
 
 func (p *PauseSubscriptionRequest) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -690,10 +708,12 @@ type ResumeSubscriptionRequest struct {
 }
 
 func (r *ResumeSubscriptionRequest) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
@@ -771,10 +791,12 @@ type SearchSubscriptionsRequest struct {
 }
 
 func (s *SearchSubscriptionsRequest) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCursor sets the Cursor field and marks it as non-optional;
@@ -826,13 +848,13 @@ func (s *SearchSubscriptionsRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-// Defines output parameters in a response of the
-// [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
 var (
 	bulkSwapPlanResponseFieldErrors                = big.NewInt(1 << 0)
 	bulkSwapPlanResponseFieldAffectedSubscriptions = big.NewInt(1 << 1)
 )
 
+// Defines output parameters in a response of the
+// [BulkSwapPlan](api-endpoint:Subscriptions-BulkSwapPlan) endpoint.
 type BulkSwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -868,10 +890,12 @@ func (b *BulkSwapPlanResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (b *BulkSwapPlanResponse) require(field *big.Int) {
-	if b.explicitFields == nil {
-		b.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if b.explicitFields != nil {
+		next.Set(b.explicitFields)
 	}
-	b.explicitFields.Or(b.explicitFields, field)
+	next.Or(next, field)
+	b.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -930,14 +954,14 @@ func (b *BulkSwapPlanResponse) String() string {
 	return fmt.Sprintf("%#v", b)
 }
 
-// Defines output parameters in a response from the
-// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
 var (
 	cancelSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	cancelSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 	cancelSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response from the
+// [CancelSubscription](api-endpoint:Subscriptions-CancelSubscription) endpoint.
 type CancelSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -982,10 +1006,12 @@ func (c *CancelSubscriptionResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (c *CancelSubscriptionResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1051,14 +1077,14 @@ func (c *CancelSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines output parameters in a request to the
-// [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
 var (
 	changeBillingAnchorDateResponseFieldErrors       = big.NewInt(1 << 0)
 	changeBillingAnchorDateResponseFieldSubscription = big.NewInt(1 << 1)
 	changeBillingAnchorDateResponseFieldActions      = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a request to the
+// [ChangeBillingAnchorDate](api-endpoint:Subscriptions-ChangeBillingAnchorDate) endpoint.
 type ChangeBillingAnchorDateResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1103,10 +1129,12 @@ func (c *ChangeBillingAnchorDateResponse) GetExtraProperties() map[string]interf
 }
 
 func (c *ChangeBillingAnchorDateResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1195,13 +1223,13 @@ func (c ChangeTiming) Ptr() *ChangeTiming {
 	return &c
 }
 
-// Defines output parameters in a response from the
-// [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
 var (
 	createSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	createSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 )
 
+// Defines output parameters in a response from the
+// [CreateSubscription](api-endpoint:Subscriptions-CreateSubscription) endpoint.
 type CreateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1240,10 +1268,12 @@ func (c *CreateSubscriptionResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (c *CreateSubscriptionResponse) require(field *big.Int) {
-	if c.explicitFields == nil {
-		c.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if c.explicitFields != nil {
+		next.Set(c.explicitFields)
 	}
-	c.explicitFields.Or(c.explicitFields, field)
+	next.Or(next, field)
+	c.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1302,13 +1332,13 @@ func (c *CreateSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
-// endpoint.
 var (
 	deleteSubscriptionActionResponseFieldErrors       = big.NewInt(1 << 0)
 	deleteSubscriptionActionResponseFieldSubscription = big.NewInt(1 << 1)
 )
 
+// Defines output parameters in a response of the [DeleteSubscriptionAction](api-endpoint:Subscriptions-DeleteSubscriptionAction)
+// endpoint.
 type DeleteSubscriptionActionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1344,10 +1374,12 @@ func (d *DeleteSubscriptionActionResponse) GetExtraProperties() map[string]inter
 }
 
 func (d *DeleteSubscriptionActionResponse) require(field *big.Int) {
-	if d.explicitFields == nil {
-		d.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if d.explicitFields != nil {
+		next.Set(d.explicitFields)
 	}
-	d.explicitFields.Or(d.explicitFields, field)
+	next.Or(next, field)
+	d.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1406,13 +1438,13 @@ func (d *DeleteSubscriptionActionResponse) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// Defines output parameters in a response from the
-// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
 var (
 	getSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	getSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 )
 
+// Defines output parameters in a response from the
+// [RetrieveSubscription](api-endpoint:Subscriptions-RetrieveSubscription) endpoint.
 type GetSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1448,10 +1480,12 @@ func (g *GetSubscriptionResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (g *GetSubscriptionResponse) require(field *big.Int) {
-	if g.explicitFields == nil {
-		g.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if g.explicitFields != nil {
+		next.Set(g.explicitFields)
 	}
-	g.explicitFields.Or(g.explicitFields, field)
+	next.Or(next, field)
+	g.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1510,14 +1544,14 @@ func (g *GetSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// Defines output parameters in a response from the
-// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
 var (
 	listSubscriptionEventsResponseFieldErrors             = big.NewInt(1 << 0)
 	listSubscriptionEventsResponseFieldSubscriptionEvents = big.NewInt(1 << 1)
 	listSubscriptionEventsResponseFieldCursor             = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response from the
+// [ListSubscriptionEvents](api-endpoint:Subscriptions-ListSubscriptionEvents).
 type ListSubscriptionEventsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1566,10 +1600,12 @@ func (l *ListSubscriptionEventsResponse) GetExtraProperties() map[string]interfa
 }
 
 func (l *ListSubscriptionEventsResponse) require(field *big.Int) {
-	if l.explicitFields == nil {
-		l.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if l.explicitFields != nil {
+		next.Set(l.explicitFields)
 	}
-	l.explicitFields.Or(l.explicitFields, field)
+	next.Or(next, field)
+	l.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1635,14 +1671,14 @@ func (l *ListSubscriptionEventsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// Defines output parameters in a response from the
-// [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
 var (
 	pauseSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	pauseSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 	pauseSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response from the
+// [PauseSubscription](api-endpoint:Subscriptions-PauseSubscription) endpoint.
 type PauseSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -1687,10 +1723,12 @@ func (p *PauseSubscriptionResponse) GetExtraProperties() map[string]interface{} 
 }
 
 func (p *PauseSubscriptionResponse) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -1756,7 +1794,6 @@ func (p *PauseSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Represents a phase, which can override subscription phases as defined by plan_id
 var (
 	phaseFieldUID             = big.NewInt(1 << 0)
 	phaseFieldOrdinal         = big.NewInt(1 << 1)
@@ -1764,6 +1801,15 @@ var (
 	phaseFieldPlanPhaseUID    = big.NewInt(1 << 3)
 )
 
+// phaseNullableFields maps the wire names of Phase's nullable fields (required or optional) to their field bits.
+var phaseNullableFields = map[string]*big.Int{
+	"uid":               phaseFieldUID,
+	"ordinal":           phaseFieldOrdinal,
+	"order_template_id": phaseFieldOrderTemplateID,
+	"plan_phase_uid":    phaseFieldPlanPhaseUID,
+}
+
+// Represents a phase, which can override subscription phases as defined by plan_id
 type Phase struct {
 	// id of subscription phase
 	UID *string `json:"uid,omitempty" url:"uid,omitempty"`
@@ -1817,10 +1863,12 @@ func (p *Phase) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *Phase) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetUID sets the UID field and marks it as non-optional;
@@ -1863,6 +1911,13 @@ func (p *Phase) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, phaseNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1893,12 +1948,17 @@ func (p *Phase) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Represents the arguments used to construct a new phase.
 var (
 	phaseInputFieldOrdinal         = big.NewInt(1 << 0)
 	phaseInputFieldOrderTemplateID = big.NewInt(1 << 1)
 )
 
+// phaseInputNullableFields maps the wire names of PhaseInput's nullable fields (required or optional) to their field bits.
+var phaseInputNullableFields = map[string]*big.Int{
+	"order_template_id": phaseInputFieldOrderTemplateID,
+}
+
+// Represents the arguments used to construct a new phase.
 type PhaseInput struct {
 	// index of phase in total subscription plan
 	Ordinal int64 `json:"ordinal" url:"ordinal"`
@@ -1934,10 +1994,12 @@ func (p *PhaseInput) GetExtraProperties() map[string]interface{} {
 }
 
 func (p *PhaseInput) require(field *big.Int) {
-	if p.explicitFields == nil {
-		p.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if p.explicitFields != nil {
+		next.Set(p.explicitFields)
 	}
-	p.explicitFields.Or(p.explicitFields, field)
+	next.Or(next, field)
+	p.explicitFields = next
 }
 
 // SetOrdinal sets the Ordinal field and marks it as non-optional;
@@ -1966,6 +2028,13 @@ func (p *PhaseInput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	p.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, phaseInputNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		p.require(presentFields)
+	}
 	p.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1996,14 +2065,14 @@ func (p *PhaseInput) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// Defines output parameters in a response from the
-// [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
 var (
 	resumeSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	resumeSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 	resumeSubscriptionResponseFieldActions      = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response from the
+// [ResumeSubscription](api-endpoint:Subscriptions-ResumeSubscription) endpoint.
 type ResumeSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2048,10 +2117,12 @@ func (r *ResumeSubscriptionResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (r *ResumeSubscriptionResponse) require(field *big.Int) {
-	if r.explicitFields == nil {
-		r.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if r.explicitFields != nil {
+		next.Set(r.explicitFields)
 	}
-	r.explicitFields.Or(r.explicitFields, field)
+	next.Or(next, field)
+	r.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2117,14 +2188,21 @@ func (r *ResumeSubscriptionResponse) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
-// the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 var (
 	searchSubscriptionsFilterFieldCustomerIDs = big.NewInt(1 << 0)
 	searchSubscriptionsFilterFieldLocationIDs = big.NewInt(1 << 1)
 	searchSubscriptionsFilterFieldSourceNames = big.NewInt(1 << 2)
 )
 
+// searchSubscriptionsFilterNullableFields maps the wire names of SearchSubscriptionsFilter's nullable fields (required or optional) to their field bits.
+var searchSubscriptionsFilterNullableFields = map[string]*big.Int{
+	"customer_ids": searchSubscriptionsFilterFieldCustomerIDs,
+	"location_ids": searchSubscriptionsFilterFieldLocationIDs,
+	"source_names": searchSubscriptionsFilterFieldSourceNames,
+}
+
+// Represents a set of query expressions (filters) to narrow the scope of targeted subscriptions returned by
+// the [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 type SearchSubscriptionsFilter struct {
 	// A filter to select subscriptions based on the subscribing customer IDs.
 	CustomerIDs []string `json:"customer_ids,omitempty" url:"customer_ids,omitempty"`
@@ -2169,10 +2247,12 @@ func (s *SearchSubscriptionsFilter) GetExtraProperties() map[string]interface{} 
 }
 
 func (s *SearchSubscriptionsFilter) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetCustomerIDs sets the CustomerIDs field and marks it as non-optional;
@@ -2208,6 +2288,13 @@ func (s *SearchSubscriptionsFilter) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, searchSubscriptionsFilterNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2238,11 +2325,11 @@ func (s *SearchSubscriptionsFilter) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents a query, consisting of specified query expressions, used to search for subscriptions.
 var (
 	searchSubscriptionsQueryFieldFilter = big.NewInt(1 << 0)
 )
 
+// Represents a query, consisting of specified query expressions, used to search for subscriptions.
 type SearchSubscriptionsQuery struct {
 	// A list of query expressions.
 	Filter *SearchSubscriptionsFilter `json:"filter,omitempty" url:"filter,omitempty"`
@@ -2269,10 +2356,12 @@ func (s *SearchSubscriptionsQuery) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SearchSubscriptionsQuery) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetFilter sets the Filter field and marks it as non-optional;
@@ -2324,14 +2413,14 @@ func (s *SearchSubscriptionsQuery) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines output parameters in a response from the
-// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 var (
 	searchSubscriptionsResponseFieldErrors        = big.NewInt(1 << 0)
 	searchSubscriptionsResponseFieldSubscriptions = big.NewInt(1 << 1)
 	searchSubscriptionsResponseFieldCursor        = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response from the
+// [SearchSubscriptions](api-endpoint:Subscriptions-SearchSubscriptions) endpoint.
 type SearchSubscriptionsResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -2380,10 +2469,12 @@ func (s *SearchSubscriptionsResponse) GetExtraProperties() map[string]interface{
 }
 
 func (s *SearchSubscriptionsResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -2449,10 +2540,6 @@ func (s *SearchSubscriptionsResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents a subscription purchased by a customer.
-//
-// For more information, see
-// [Manage Subscriptions](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions).
 var (
 	subscriptionFieldID                       = big.NewInt(1 << 0)
 	subscriptionFieldLocationID               = big.NewInt(1 << 1)
@@ -2476,6 +2563,19 @@ var (
 	subscriptionFieldCompletedDate            = big.NewInt(1 << 19)
 )
 
+// subscriptionNullableFields maps the wire names of Subscription's nullable fields (required or optional) to their field bits.
+var subscriptionNullableFields = map[string]*big.Int{
+	"canceled_date":  subscriptionFieldCanceledDate,
+	"tax_percentage": subscriptionFieldTaxPercentage,
+	"card_id":        subscriptionFieldCardID,
+	"actions":        subscriptionFieldActions,
+	"completed_date": subscriptionFieldCompletedDate,
+}
+
+// Represents a subscription purchased by a customer.
+//
+// For more information, see
+// [Manage Subscriptions](https://developer.squareup.com/docs/subscriptions-api/manage-subscriptions).
 type Subscription struct {
 	// The Square-assigned ID of the subscription.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -2703,10 +2803,12 @@ func (s *Subscription) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *Subscription) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -2861,6 +2963,13 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, subscriptionNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2891,7 +3000,6 @@ func (s *Subscription) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Represents an action as a pending change to a subscription.
 var (
 	subscriptionActionFieldID                       = big.NewInt(1 << 0)
 	subscriptionActionFieldType                     = big.NewInt(1 << 1)
@@ -2901,6 +3009,15 @@ var (
 	subscriptionActionFieldNewPlanVariationID       = big.NewInt(1 << 5)
 )
 
+// subscriptionActionNullableFields maps the wire names of SubscriptionAction's nullable fields (required or optional) to their field bits.
+var subscriptionActionNullableFields = map[string]*big.Int{
+	"effective_date":              subscriptionActionFieldEffectiveDate,
+	"monthly_billing_anchor_date": subscriptionActionFieldMonthlyBillingAnchorDate,
+	"phases":                      subscriptionActionFieldPhases,
+	"new_plan_variation_id":       subscriptionActionFieldNewPlanVariationID,
+}
+
+// Represents an action as a pending change to a subscription.
 type SubscriptionAction struct {
 	// The ID of an action scoped to a subscription.
 	ID *string `json:"id,omitempty" url:"id,omitempty"`
@@ -2973,10 +3090,12 @@ func (s *SubscriptionAction) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SubscriptionAction) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3033,6 +3152,13 @@ func (s *SubscriptionAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, subscriptionActionNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3098,7 +3224,6 @@ func (s SubscriptionActionType) Ptr() *SubscriptionActionType {
 	return &s
 }
 
-// Describes changes to a subscription and the subscription status.
 var (
 	subscriptionEventFieldID                       = big.NewInt(1 << 0)
 	subscriptionEventFieldSubscriptionEventType    = big.NewInt(1 << 1)
@@ -3109,6 +3234,12 @@ var (
 	subscriptionEventFieldPlanVariationID          = big.NewInt(1 << 6)
 )
 
+// subscriptionEventNullableFields maps the wire names of SubscriptionEvent's nullable fields (required or optional) to their field bits.
+var subscriptionEventNullableFields = map[string]*big.Int{
+	"phases": subscriptionEventFieldPhases,
+}
+
+// Describes changes to a subscription and the subscription status.
 type SubscriptionEvent struct {
 	// The ID of the subscription event.
 	ID string `json:"id" url:"id"`
@@ -3190,10 +3321,12 @@ func (s *SubscriptionEvent) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SubscriptionEvent) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetID sets the ID field and marks it as non-optional;
@@ -3257,6 +3390,13 @@ func (s *SubscriptionEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, subscriptionEventNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3287,12 +3427,17 @@ func (s *SubscriptionEvent) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Provides information about the subscription event.
 var (
 	subscriptionEventInfoFieldDetail = big.NewInt(1 << 0)
 	subscriptionEventInfoFieldCode   = big.NewInt(1 << 1)
 )
 
+// subscriptionEventInfoNullableFields maps the wire names of SubscriptionEventInfo's nullable fields (required or optional) to their field bits.
+var subscriptionEventInfoNullableFields = map[string]*big.Int{
+	"detail": subscriptionEventInfoFieldDetail,
+}
+
+// Provides information about the subscription event.
 type SubscriptionEventInfo struct {
 	// A human-readable explanation for the event.
 	Detail *string `json:"detail,omitempty" url:"detail,omitempty"`
@@ -3329,10 +3474,12 @@ func (s *SubscriptionEventInfo) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SubscriptionEventInfo) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetDetail sets the Detail field and marks it as non-optional;
@@ -3361,6 +3508,13 @@ func (s *SubscriptionEventInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, subscriptionEventInfoNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3464,11 +3618,16 @@ func (s SubscriptionEventSubscriptionEventType) Ptr() *SubscriptionEventSubscrip
 	return &s
 }
 
-// The origination details of the subscription.
 var (
 	subscriptionSourceFieldName = big.NewInt(1 << 0)
 )
 
+// subscriptionSourceNullableFields maps the wire names of SubscriptionSource's nullable fields (required or optional) to their field bits.
+var subscriptionSourceNullableFields = map[string]*big.Int{
+	"name": subscriptionSourceFieldName,
+}
+
+// The origination details of the subscription.
 type SubscriptionSource struct {
 	// The name used to identify the place (physical or digital) that
 	// a subscription originates. If unset, the name defaults to the name
@@ -3497,10 +3656,12 @@ func (s *SubscriptionSource) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SubscriptionSource) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetName sets the Name field and marks it as non-optional;
@@ -3522,6 +3683,13 @@ func (s *SubscriptionSource) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.extraProperties = extraProperties
+	presentFields, err := internal.ExplicitFieldsFromJSON(data, subscriptionSourceNullableFields)
+	if err != nil {
+		return err
+	}
+	if presentFields != nil {
+		s.require(presentFields)
+	}
 	s.rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3587,14 +3755,14 @@ func (s SubscriptionStatus) Ptr() *SubscriptionStatus {
 	return &s
 }
 
-// Defines output parameters in a response of the
-// [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
 var (
 	swapPlanResponseFieldErrors       = big.NewInt(1 << 0)
 	swapPlanResponseFieldSubscription = big.NewInt(1 << 1)
 	swapPlanResponseFieldActions      = big.NewInt(1 << 2)
 )
 
+// Defines output parameters in a response of the
+// [SwapPlan](api-endpoint:Subscriptions-SwapPlan) endpoint.
 type SwapPlanResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3639,10 +3807,12 @@ func (s *SwapPlanResponse) GetExtraProperties() map[string]interface{} {
 }
 
 func (s *SwapPlanResponse) require(field *big.Int) {
-	if s.explicitFields == nil {
-		s.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if s.explicitFields != nil {
+		next.Set(s.explicitFields)
 	}
-	s.explicitFields.Or(s.explicitFields, field)
+	next.Or(next, field)
+	s.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3708,13 +3878,13 @@ func (s *SwapPlanResponse) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// Defines output parameters in a response from the
-// [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
 var (
 	updateSubscriptionResponseFieldErrors       = big.NewInt(1 << 0)
 	updateSubscriptionResponseFieldSubscription = big.NewInt(1 << 1)
 )
 
+// Defines output parameters in a response from the
+// [UpdateSubscription](api-endpoint:Subscriptions-UpdateSubscription) endpoint.
 type UpdateSubscriptionResponse struct {
 	// Errors encountered during the request.
 	Errors []*Error `json:"errors,omitempty" url:"errors,omitempty"`
@@ -3750,10 +3920,12 @@ func (u *UpdateSubscriptionResponse) GetExtraProperties() map[string]interface{}
 }
 
 func (u *UpdateSubscriptionResponse) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetErrors sets the Errors field and marks it as non-optional;
@@ -3830,10 +4002,12 @@ type UpdateSubscriptionRequest struct {
 }
 
 func (u *UpdateSubscriptionRequest) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
+	next := new(big.Int)
+	if u.explicitFields != nil {
+		next.Set(u.explicitFields)
 	}
-	u.explicitFields.Or(u.explicitFields, field)
+	next.Or(next, field)
+	u.explicitFields = next
 }
 
 // SetSubscriptionID sets the SubscriptionID field and marks it as non-optional;
