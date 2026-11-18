@@ -14,7 +14,7 @@ import (
 // VerifySignature verifies and validates an event notification.
 func (c *Client) VerifySignature(_ context.Context, request *v2.VerifySignatureRequest) error {
 	if request.RequestBody == "" {
-		return nil
+		return errors.New("request body is required")
 	}
 	if err := validateVerifySignatureRequest(request); err != nil {
 		return err
